@@ -1,0 +1,37 @@
+.imageRadio {
+
+}
+
+.imageRadio > span {
+    align-self: flex-start;
+    position: relative;
+    float: left;
+    top: -10px;
+    left: -10px;
+}
+
+.imageRadio > span:last-child {
+    position: relative;
+    float: left;
+    top: 6px;
+    left: -19px;
+    font-weight: 600;
+}
+
+label.imageRadio {
+    opacity: 0.4;
+    height: 120px;
+    margin-left: 0;
+    margin-right: 0;
+    width: 49%;
+    background-size: 130px 90px;
+    background-repeat: no-repeat;
+    background-position: center 23px;
+}
+
+label.imageRadio.optionSelected {
+    opacity: 1;
+    border: dashed 1px;
+    border-radius: 7px;
+    background-color: #f7f7f7;
+}

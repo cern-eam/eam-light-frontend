@@ -1,0 +1,15 @@
+@media ( min-width: 651px) {
+    .booklabours {
+        margin-left: 20px;
+    }
+}
+
+@media( max-width: 650px) {
+    .booklabours {
+        margin-left: 10px;
+    }
+}
+
+.booklabours .table tr, .booklabours .table th {
+    height: 30px
+}

@@ -1,0 +1,158 @@
+#layout-tab-menu {
+    width: 58px;
+    height: auto;
+    min-height: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-color: #242021;
+    position: absolute;
+    left: 0px;
+    padding-bottom: 100px;
+    box-sizing: border-box;
+  }
+
+  #layout-tab-menu>li {
+    width: 58px;
+    height: 50px;
+    
+  }
+
+  #layout-tab-menu>li:first-child {
+    padding: 1.5rem 0px 0px 0px;
+  }
+
+  #layout-tab-menu>li>div {
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    display: flex;
+    width: 58px;
+    height: 50px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+  }
+
+  #layout-tab-menu>li>div:hover,
+  #layout-tab-menu>li>div:focus,
+  #layout-tab-menu>li>div.active {
+    background-color: #282828;
+    color: #ffffff;
+    -webkit-box-shadow: inset 2px 0 0 0 #00aaff;
+    box-shadow: inset 2px 0 0 0 #00aaff;
+  }
+
+  .layout-tab-submenu {
+    padding: 10px;
+    margin: 0px;
+    width: 220px;
+    box-sizing: border-box;
+    height: auto;
+    min-height: 100%;
+    margin-left: 58px;
+    background-color: #282828;
+    padding-bottom: 100px;
+    display: none;
+  }
+
+  .layout-tab-submenu.active {
+    display: block;
+  }
+
+  .layout-tab-submenu>li {
+    display: block;
+    margin: 0px;
+    padding: 0px;
+    margin-bottom: 10px;
+  }
+
+  .layout-tab-submenu>li:first-child {
+    margin-top: 0.5rem;
+  }
+
+  .layout-tab-submenu>li>a {
+    display: block;
+    padding: 5px;
+    font-size: 13px;
+    color: #ffffff;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .layout-tab-submenu>li ul {
+    margin: 0px;
+    padding: 0px;
+    display: block;
+  }
+
+  .layout-tab-submenu>li ul li {
+    display: block;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .layout-tab-submenu > li ul li a {
+    display: block;
+    padding: 5px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    position: relative;
+  }
+
+  .layout-tab-submenu>li ul li a:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  #menuHeader {
+    height: 45px;
+    background-color: #00aaff;
+    display: flex;
+    align-items: center;
+  }
+
+  #menu {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #menuscrollable {
+    overflow-y: auto;
+    height: 100%;
+    margin-right: -17px;
+    overflow: scroll;
+    overflow-x: hidden;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    position: relative;
+    background-color: #242021;
+  }
+
+  .numberOfWorkOrders {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 45%;
+    top: 2px;
+    right: 2px;
+    width: 11px;
+    height: 11px;
+    padding: 4px;
+    background: #0aa2f2;
+    border: 0px solid #666;
+    color: #fff;
+    text-align: center;
+    font: 10px Arial, sans-serif;
+    vertical-align: center;
+}

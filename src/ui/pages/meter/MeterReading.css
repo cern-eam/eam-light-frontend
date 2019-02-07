@@ -1,0 +1,68 @@
+.meterContentSummary {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.meterContentTitle {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.meterContentTitleContentH {
+    font-weight: 500;
+}
+
+.meterContentTitleContentC {
+    padding-left: 8px;
+}
+
+.meterContentDetails {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    user-select: text;
+    flex-flow: wrap;
+    padding-right: 0;
+}
+
+.meterContentDetail {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    justify-content: flex-start;
+}
+
+@media (max-width: 640px) {
+    .meterContentDetails {
+        flex-direction: column;
+    }
+
+    .meterContentTitleContentH {
+        width: 150px;
+    }
+
+    .meterContentTitleContentC {
+        width: calc(100% - 150px);
+    }
+
+    .meterContentDetail {
+        width: 100%;
+    }
+}
+
+input[type='number']#readingValue {
+    -moz-appearance: textfield;
+}
+
+input#readingValue::-webkit-outer-spin-button,
+input#readingValue::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.readingValueUOM{
+    width: 20%;
+    justify-content: flex-end;
+}

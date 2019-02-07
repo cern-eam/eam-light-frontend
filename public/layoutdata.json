@@ -1,0 +1,29 @@
+{
+  "errors": [
+    {
+      "code": "",
+      "location": "EAMID_WorkOrder_TYPE",
+      "title": "Permission to create work order denied due to insufficient work order authorization."
+    },
+    {
+      "code": "",
+      "location": "EAMID_WorkOrder_EQUIPMENTID_EQUIPMENTCODE",
+      "title": "Equipment is invalid."
+    },
+    {
+      "code": "",
+      "location": "EAMID_WorkOrder_TYPE_TYPECODE",
+      "title": "Type is invalid."
+    },
+    {
+      "code": "",
+      "location": "EAMID_WorkOrder_DEPARTMENTID_DEPARTMENTCODE",
+      "title": "Department is invalid."
+    },
+    {
+      "code": "",
+      "location": "EAMID_WorkOrder_LOCATIONID_LOCATIONCODE",
+      "title": "Location is invalid."
+    }
+  ]
+}

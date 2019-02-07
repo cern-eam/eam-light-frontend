@@ -1,0 +1,14 @@
+#activities {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#activities #actions {
+    display: flex;
+    flex-direction: row;
+}
+
+#activities #actions button {
+    flex-grow: 1;
+}

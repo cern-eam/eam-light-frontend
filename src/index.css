@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+html {
+  height: 100%;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0px;
+    overflow: hidden;
+    height: 100%;
+}
+
+canvas.drawingBuffer {
+    z-index	: 11;
+    position: absolute;
+    width	: 320px;
+    height	: 240px;
+    top		: 24px;
+    bottom	: 0;
+    left	: 24px;
+    right	: 0
+}
+
+video {
+    max-width: 320px;
+    max-height: 320px;
+}
+

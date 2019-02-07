@@ -1,0 +1,122 @@
+#maindiv {
+    margin: 0px;
+    height: 100%;
+    width: 100%;
+    font-size: 14px;
+}
+
+#layout-topbar-cover {
+    width: 100%;
+    display: table;
+    box-sizing: border-box;
+    position: fixed;
+    table-layout: fixed;
+    top: 0px;
+    z-index: 999;
+    height: 40px;
+    background-color: #00aaff
+}
+
+#layout-container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    padding-top: 48px;
+}
+
+#layout-container-row {
+    height: 100%;
+    width: 100%;
+}
+
+#layout-menu-cover {
+    z-index: 1100;
+    width: 280px;
+    height: 100%;
+    box-sizing: border-box;
+    display: table-cell;
+    position: fixed;
+    background-color: #282828;
+    vertical-align: top;
+    transition: all 0.3s ease;
+}
+
+
+#layout-portlets-cover {
+    display: block;
+    height: 100%;
+    font-size: 14px;
+    color: #282828;
+    margin-left: 280px;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+
+.SlimMenu #layout-portlets-cover {
+    margin-left: 58px;
+}
+
+#layout-topbar-row {
+    display: flex;
+}
+
+#layout-topbar-left {
+    color: white;
+    flex: 0 0 280px;
+    font-weight: 500;
+    line-height: 48px;
+    font-size: 18px;
+}
+
+#eqp-tree-btn {
+    display: inline;
+    display: flex;
+    align-items: center;
+}
+
+@media (min-width: 960px) {
+    #menu-resize-btn {
+        display: inline-block;
+      }
+    #mobile-menu-btn {
+        display: none;
+    }
+    .SlimMenu #layout-menu-cover {
+        width: 58px;
+    }
+    
+    .SlimMenu #layout-menu-cover:hover,
+    .SlimMenu #layout-menu-cover:focus {
+      width: 280px;
+    }
+}
+
+@media (max-width: 959px) {
+    #layout-topbar-left {
+        flex: 0 0 120px;
+    }
+    #menu-resize-btn {
+        display: none;
+      }
+    #mobile-menu-btn {
+        display: inline-block;
+    }
+    #layout-menu-cover {
+        width: 280px;
+        left: -280px;
+    }
+    #layout-menu-cover.active {
+        left: 0px;
+    }
+    .SlimMenu #layout-portlets-cover {
+        margin-left: 0px;
+    }
+    #layout-portlets-cover {
+        margin-left: 0px;
+    }
+}
+
+#layout-topbar-right {
+    background-color: rgba(40, 40, 40, 0.06);
+    display: flex;
+}
