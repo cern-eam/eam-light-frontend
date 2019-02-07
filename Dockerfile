@@ -7,8 +7,9 @@ COPY package.json /usr/src/app/
 RUN npm install
 RUN npm install react-scripts@2.1.3 -g
 COPY . /usr/src/app
-ENV REACT_APP_BACKEND "/SSO/eamlightws/rest"
+ENV REACT_APP_BACKEND "/apis/rest"
 ENV PUBLIC_URL "/"
+ENV REACT_APP_LOGIN_METHOD "STD"
 RUN npm run build
 
 # production environment
