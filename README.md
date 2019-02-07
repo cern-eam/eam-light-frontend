@@ -4,13 +4,10 @@ EAM Light Frontend is Web application that provides the core functionality of In
 ## Configuration
 You need to define the following environment variables before building the docker image
 
-
 | Variable        | Required?  | Default value |
 | ------------- | -----:|---------:|
 | REACT_APP_BACKEND           | **Yes** | /SSO/eamlightws/rest |
 | PUBLIC_URL         | **Yes** | / |
-
-You can for instance store your environment variables in a dedicated .env file:
 
 ## Run
 
