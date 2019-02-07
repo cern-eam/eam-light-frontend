@@ -1,5 +1,5 @@
 # EAM Light Frontend
-EAM Light Frontend is Web application that providing the core functionality of Infor EAM Extended. 
+EAM Light Frontend is Web application providing the core functionality of Infor EAM Extended. 
 
 ## Configuration
 You need to define the following environment variables before building the docker image
