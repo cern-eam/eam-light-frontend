@@ -7,7 +7,7 @@ COPY package.json /usr/src/app/
 RUN npm install
 RUN npm install react-scripts@2.1.3 -g
 COPY . /usr/src/app
-ENV REACT_APP_BACKEND "http://macen35644.cern.ch/SSO/eamlightws/rest"
+ENV REACT_APP_BACKEND "/SSO/eamlightws/rest"
 ENV PUBLIC_URL "/"
 RUN npm run build
 
