@@ -15,7 +15,7 @@ The docker container exposes the following ports:
 
 | Port        | Description  |
 | ------------- | -----:|
-| 8082          | EAM Light Frontend | 
+| 8080          | EAM Light Frontend | 
 
 Once you have your own environment variables set up, plese do the following to start a new docker container:
 ```

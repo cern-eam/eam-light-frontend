@@ -17,5 +17,5 @@ RUN rm -rf /etc/nginx/conf.d
 RUN mkdir /etc/nginx/conf.d
 COPY docker/default.conf /etc/nginx/conf.d
 COPY --from=builder /usr/src/app/build /usr/share/nginx/html/
-EXPOSE 8082
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
