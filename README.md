@@ -22,7 +22,7 @@ Once you have your own environment variables set up, plese do the following to s
 git clone https://github.com/cern-eam/eam-light-frontend.git
 cd eam-light-frontend
 docker build . -t eam-light-frontend
-docker run -p 8082:8082 eam-light-frontend
+docker run -p 8080:8080 eam-light-frontend
 ``` 
 
 Once the docker container is started, the REST web services are available at the endpoint `/SSO/eamlightws/rest`
