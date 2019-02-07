@@ -14,7 +14,7 @@ REACT_APP_BACKEND - Defines EAM Light Backend URL. Properly formatted REACT_APP_
 
 PUBLIC_URL - By default EAM Light Frontend should be hosted at the web server's root. Please change this variable if EAM Light will be served from a sub-directory on your server.  
 
-REACT_APP_LOGIN_METHOD - Change this parameter if you would like to disable to standard login prompt window and secure EAM Light with shared authentication schema of your enterprise. This requires further configuration of EAM Light Backend (explained on the project's website).
+REACT_APP_LOGIN_METHOD - Change this parameter if you would like to disable the standard login prompt window and secure EAM Light with shared authentication schema of your enterprise. This requires further configuration of EAM Light Backend (explained on the project's website).
 
 ## Run
 
