@@ -11,7 +11,6 @@ import PositionGeneral from './PositionGeneral'
 import PositionDetails from './PositionDetails'
 import PositionHierarchy from './PositionHierarchy'
 import CommentsContainer from 'eam-components/dist/ui/components/comments/CommentsContainer';
-//import EDMSWidgetContainer from "eam-components/dist/ui/components/edms/EDMSWidgetContainer";
 import EDMSWidgetContainer from 'eam-components/dist/ui/components/edms/EDMSWidgetContainer';
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
@@ -19,6 +18,7 @@ import EquipmentTools from "../EquipmentTools";
 import {PositionIcon} from 'eam-components/dist/ui/components/icons'
 import EquipmentToolbar from "../components/EquipmentToolbar";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
+import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 
 export default class Position extends Entity {
 
@@ -219,8 +219,7 @@ export default class Position extends Entity {
 
                             {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
                              !this.state.layout.newEntity &&
-                            <EDMSWidgetContainer objectID={this.state.equipment.code} objectType="S"
-                                                 edmsDocListLink={this.props.edmsDocListLink}/>}
+                             <EDMSDoclightIframeContainer objectType="S" objectID={this.state.equipment.code}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().NCRS.code] &&
                             !this.state.layout.newEntity &&
