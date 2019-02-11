@@ -8,7 +8,7 @@ You can modify the following environment variables in the `Dockerfile` before bu
 
 | Variable        | Required?  | Default value |
 | ------------- | -----:|---------:|
-| REACT_APP_BACKEND           | No | /eam-light-apis/rest |
+| REACT_APP_BACKEND           | No | /apis/rest |
 | PUBLIC_URL         | No | / |
 | REACT_APP_LOGIN_METHOD | No | STD |
 
