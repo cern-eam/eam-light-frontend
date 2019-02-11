@@ -94,6 +94,8 @@ export default class Activities extends Component {
     };
 
     render() {
+
+
         const blockUiStyleDiv = {
             position: "absolute",
             top: '35%',
@@ -143,6 +145,7 @@ export default class Activities extends Component {
                         activities={this.state.activities}
                         workorderNumber={this.props.workorder}
                         department={this.props.department}
+                        defaultEmployee={this.props.defaultEmployee}
                         onChange={() => this.readBookLabours(this.props.workorder)}
                         onClose={this.handleCloseBookLaborModal}/>
 

@@ -56,6 +56,7 @@ export default class AddActivityDialog extends Component {
                     this.setState({
                         formValues: {
                             ...response.body.data,
+                            employeeCode: this.props.defaultEmployee,
                             activityCode: '5'
                         },
                         loading: false
@@ -63,7 +64,8 @@ export default class AddActivityDialog extends Component {
                 } else {
                     this.setState({
                         formValues: {
-                            ...response.body.data
+                            ...response.body.data,
+                            employeeCode: this.props.defaultEmployee,
                         },
                         loading: false
                     });

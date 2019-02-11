@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import FontIcon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
+import Menu from 'mdi-material-ui/Menu'
 import './ApplicationLayout.css'
 import UserInfoContainer from './UserInfoContainer'
 import {FileTree,
@@ -77,7 +78,7 @@ class ApplicationLayout extends Component {
                 </div>
                 <div id="mobile-menu-btn">
                   <IconButton onClick={this.handleMenuMobileClick}>
-                      <FontIcon style={menuIconStyle} className="fa fa-align-justify"/>
+                      <Menu style={menuIconStyle}/>
                   </IconButton>
                 </div>
 

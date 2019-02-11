@@ -119,4 +119,5 @@
 #layout-topbar-right {
     background-color: rgba(40, 40, 40, 0.06);
     display: flex;
+    align-items: center;
 }

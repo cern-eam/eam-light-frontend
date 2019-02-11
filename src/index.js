@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import './index.css';
 import EamlightContainer from './EamlightContainer';
-import registerServiceWorker from './registerServiceWorker';
 import {applyMiddleware, createStore} from "redux";
 import thunk from 'redux-thunk';
 import rootReducer from "./reducers";
@@ -45,4 +44,3 @@ ReactDOM.render(
         </Provider>
     </JssProvider>
     ,document.getElementById('root'));
-registerServiceWorker();

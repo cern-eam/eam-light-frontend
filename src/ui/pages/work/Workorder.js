@@ -288,6 +288,7 @@ class Workorder extends Entity {
                                     workorder={this.state.workorder.number}
                                     department={this.state.workorder.departmentCode}
                                     layout={this.props.workOrderLayout.tabs}
+                                    defaultEmployee={this.props.userData.eamAccount.customField.length > 0 ? this.props.userData.eamAccount.customField[0].value : ''}
                                     postAddActivityHandler={this.postAddActivityHandler}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().CHECKLISTS.code] &&
