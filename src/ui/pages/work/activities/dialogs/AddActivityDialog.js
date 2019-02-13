@@ -88,7 +88,7 @@ export default class AddActivityDialog extends Component {
                         aria-labelledby="form-dialog-title"
                         disableBackdropClick={true}>
 
-                        <DialogTitle id="form-dialog-title">Add a new activity</DialogTitle>
+                        <DialogTitle id="form-dialog-title">Add Activity</DialogTitle>
 
                         <DialogContent id="content">
                             <div>

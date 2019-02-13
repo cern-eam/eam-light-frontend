@@ -129,7 +129,7 @@ export default class Activities extends Component {
                         </Button>
 
                         <Button onClick={this.handleOpenBookLaborModal} color="primary">
-                            Add booked labor
+                            Book Labor
                         </Button>
                     </div>
 
