@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import WSImpact from '../../../tools/WSImpact';
 import EISPanel from 'eam-components/dist/ui/components/panel';
-import {EAMInputMUI} from 'eam-components/dist/ui/components/inputs/EAMInput';
+import EAMInputMUI from 'eam-components/dist/ui/components/inputs/EAMInput';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import EISTable from 'eam-components/dist/ui/components/table';
