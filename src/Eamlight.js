@@ -69,7 +69,7 @@ class Eamlight extends Component {
             <Router basename={process.env.PUBLIC_URL}>
                 <MuiThemeProvider theme={theme}>
                     <Switch>
-                    <Route path="impact"
+                    <Route path="/impact"
                            component={ImpactContainer}/>
                     <ApplicationLayoutContainer>
                         <EamlightMenuContainer/>
