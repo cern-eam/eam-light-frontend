@@ -83,7 +83,10 @@ class Workorder extends Entity {
     postCreate() {
         this.setStatuses(this.state.workorder.statusCode, this.state.workorder.typeCode, false);
         this.setTypes(this.state.workorder.statusCode, this.state.workorder.typeCode, false);
-        this.comments.wrappedInstance.createCommentForNewEntity();
+        // Comments panel might be hidden
+        if (this.comments) {
+            this.comments.wrappedInstance.createCommentForNewEntity();
+        }
         this.initWorkorderToolbar()
     }
 
@@ -98,7 +101,10 @@ class Workorder extends Entity {
         } else {
             this.enableChildren()
         }
-        this.comments.wrappedInstance.createCommentForNewEntity();
+        // Comments panel might be hidden
+        if (this.comments) {
+            this.comments.wrappedInstance.createCommentForNewEntity();
+        }
         this.initWorkorderToolbar()
     }
 

@@ -32,12 +32,12 @@ class ImpactActGrid extends Component {
     };
 
     render() {
-        const data = this.props.applicationData;
+        const data = this.props.data;
         return (
             <div style={{marginTop:70,height:'calc(100% - 80px)'}}>
                 <EAMGrid
-                    gridId={data.existingImpactActivitiesGridId}
-                    screenCode={data.existingImpactActivitiesGridName}
+                    gridId={data.impactActivitiesGridId}
+                    screenCode={data.impactActivitiesGridName}
                     handleError={this.props.handleError}
                     cellRenderer={this._cellRenderer}
                     extraColumns={[

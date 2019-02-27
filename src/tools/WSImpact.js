@@ -5,6 +5,10 @@ import ajax from 'eam-components/dist/tools/ajax';
  */
 class WSImpact {
 
+    getData(config = {}) {
+        return ajax.get(process.env.REACT_APP_BACKEND.replace('/eamlightws/rest', '/cern-eam-services/rest') + `/impact/data`, config);
+    }
+
     getLayoutInfo(facility, activityType, config = {}) {
         facility = encodeURIComponent(facility);
         activityType = encodeURIComponent(activityType);

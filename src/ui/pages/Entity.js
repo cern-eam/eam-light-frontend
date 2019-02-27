@@ -286,14 +286,19 @@ export default class readEntityEquipment extends Component {
     // VALIDATION
     //
     processError(children, error) {
-        error.response.body.errors.forEach(error => {
-            if (children[error.location]) {
-                children[error.location].setState({
-                    error: true,
-                    helperText: error.message
-                })
-            }
-        })
+        if (error.response) {
+            // Error came from the server
+            error.response.body.errors.forEach(error => {
+                if (children[error.location]) {
+                    children[error.location].setState({
+                        error: true,
+                        helperText: error.message
+                    })
+                }
+            })
+        } else {
+            console.log('Error in Entity.processError', error)
+        }
     }
 
     validateFields(children) {
