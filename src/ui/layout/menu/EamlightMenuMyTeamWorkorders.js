@@ -9,7 +9,8 @@ import StyledTab from './StyledTab'
 class EamlightMenuMyTeamWorkorders extends Component {
     state = {
         days: 'ALL',
-        department: 'ALL'
+        department: 'ALL',
+        departments: null
     };
 
     headingStyle = {
@@ -18,6 +19,12 @@ class EamlightMenuMyTeamWorkorders extends Component {
         fontSize: 13,
         color: "#ffffff",
         textAlign: "center"
+    }
+
+    componentWillMount() {
+        //if (this.props.myTeamWorkOrders) {
+        //    this.props.myTeamWorkOrders.map(workorder => workorder.mrc).filter((v, i, a) => a.indexOf(v) === i)
+        //}
     }
 
     handleDaysChange = (event, value) => {
@@ -38,11 +45,11 @@ class EamlightMenuMyTeamWorkorders extends Component {
     }
 
     renderHeading() {
-        if (!this.props.eamAccount.userDepartments || this.props.eamAccount.userDepartments.length === 0) {
+        if (!this.state.departments || this.state.departments.length === 0) {
             return <div style={this.headingStyle}>No department defined</div>
         }
 
-        if (this.props.eamAccount.userDepartments.length === 1) {
+        if (this.state.departments.length === 1) {
             return <div style={this.headingStyle}>WOs FOR DEPARTMENT {this.props.eamAccount.userDepartments[0]}</div>
         }
 
@@ -59,7 +66,7 @@ class EamlightMenuMyTeamWorkorders extends Component {
                             onChange={this.handleDepartmentChange.bind(this)}
                     >
                         <MenuItem value="ALL">ALL</MenuItem>
-                        {this.props.eamAccount.userDepartments.map(department => (
+                        {this.state.departments.map(department => (
                             <MenuItem key={department} value={department}>{department}</MenuItem>
                         ))}
                     </Select>
