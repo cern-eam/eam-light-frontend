@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import WSImpact from '../../../tools/WSImpact';
-import {EAMInputMUI} from 'eam-components/dist/ui/components/inputs/EAMInput';
-import {EAMDatePickerMUI} from 'eam-components/dist/ui/components/inputs/EAMDatePicker';
+import EAMInputMUI from 'eam-components/dist/ui/components/inputs/EAMInput';
+import EAMDatePickerMUI from 'eam-components/dist/ui/components/inputs/EAMDatePicker';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import BlockUi from 'react-block-ui';
-import {format} from "date-fns";
-import {EAMSelectMUI} from 'eam-components/dist/ui/components/inputs/EAMSelect';
+import EAMSelectMUI from 'eam-components/dist/ui/components/inputs/EAMSelect';
 
 class ImpactActCreation extends Component {
 
@@ -50,6 +49,7 @@ class ImpactActCreation extends Component {
 
     populateFacility = facility => {
         const data = this.props.woInfo;
+        console.log('data', data)
         this.setState((prevState) => ({
             facility: facility,
             loading: true,
@@ -68,11 +68,11 @@ class ImpactActCreation extends Component {
                     loading:false,
                     activity: {
                         ...prevState.activity,
-                        proposedStartDate: layout.proposedDate !== 'H' && data.evtTarget ?  format(data.evtTarget, "DD-MMM-YYYY") : '',
-                        latestEndDate: layout.latestEndDate !== 'H' && data.evtSchedEnd ? format(data.evtSchedEnd, "DD-MMM-YYYY") : '',
-                        earliestStartDate: layout.earliestStartDate !== 'H' && data.evtTarget ? format(data.evtTarget, "DD-MMM-YYYY") : '',
-                        scheduledStartDate: layout.proposedDate === 'H' && layout.scheduledStartDate !== 'H' && data.evtTarget ?  format(data.evtTarget, "DD-MMM-YYYY") : '',
-                        scheduledEndDate: layout.proposedDate === 'H' && layout.scheduledEndDate !== 'H' && data.evtSchedEnd ?  format(data.evtSchedEnd, "DD-MMM-YYYY") : '',
+                        proposedStartDate: layout.proposedDate !== 'H' && data.evtTarget ?  data.evtTarget : '',
+                        latestEndDate: layout.latestEndDate !== 'H' && data.evtSchedEnd ? data.evtSchedEnd : '',
+                        earliestStartDate: layout.earliestStartDate !== 'H' && data.evtTarget ? data.evtTarget : '',
+                        scheduledStartDate: layout.proposedDate === 'H' && layout.scheduledStartDate !== 'H' && data.evtTarget ?  data.evtTarget : '',
+                        scheduledEndDate: layout.proposedDate === 'H' && layout.scheduledEndDate !== 'H' && data.evtSchedEnd ?  data.evtSchedEnd : '',
                         duration: duration ? duration : ''
                     }
                 }));

@@ -15,7 +15,6 @@ export function getUserInfo() {
         //Get URL parameters
         const values = queryString.parse(window.location.search)
         const screenCode = values.screen;
-        console.log('value: ', values.screen)
         const currentScreen = window.location.pathname.replace(process.env.PUBLIC_URL,'').split('/')[0];
         return WS.getUserData(currentScreen, screenCode)
             .then(response => {

@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import EISTable from 'eam-components/dist/ui/components/table';
 import EAMLinkInput from "eam-components/dist/ui/components/inputs/EAMLinkInput";
 import ImpactActCreation from "./ImpactActCreation";
-import ImpactActGridContainer from "./ImpactActGridContainer";
+import ImpactActGrid from "./ImpactActGrid";
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import BlockUi from 'react-block-ui';
@@ -53,12 +53,13 @@ class Impact extends Component {
             additionalWorkorderVisible: false,
             detachActivityConfirmationDialogVisible: false,
             loading: false,
-            loaded: false
+            loaded: false,
+            data: null,
         };
     }
 
     componentDidMount() {
-        this.loadWOInfo();
+        this.loadData();
     }
 
     updateProperty = (key, value) => {
@@ -66,6 +67,13 @@ class Impact extends Component {
             [key]: value
         }));
     };
+
+    loadData() {
+        WSImpact.getData(this.props.workorderNumber).then(response => {
+            this.setState({data: response.body.data});
+            this.loadWOInfo();
+        })
+    }
 
     loadWOInfo = () => {
         this.setState(() => ({loading: true}), () => {
@@ -282,7 +290,7 @@ class Impact extends Component {
                                 </Button>
                             </Toolbar>
                         </AppBar>
-                        <ImpactActGridContainer attachToExistingActivity={this.attachToExistingActivity}/>
+                        <ImpactActGrid attachToExistingActivity={this.attachToExistingActivity} data={this.state.data}/>
                     </BlockUi>
                 </Dialog>
             </div>

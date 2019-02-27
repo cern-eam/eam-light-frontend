@@ -47,14 +47,14 @@ class WorkorderScheduling extends Component {
 
                     <EAMDatePicker children={children}
                                    elementInfo={workOrderLayout.fields['schedstartdate']}
-                                   valueKey="schedulingStartDate"
-                                   value={workorder.schedulingStartDate || ''}
+                                   valueKey="scheduledStartDate"
+                                   value={workorder.scheduledStartDate || ''}
                                    updateProperty={updateWorkorderProperty}/>
 
                     <EAMDatePicker children={children}
                                    elementInfo={workOrderLayout.fields['schedenddate']}
-                                   valueKey="schedulingEndDate"
-                                   value={workorder.schedulingEndDate || ''}
+                                   valueKey="scheduledEndDate"
+                                   value={workorder.scheduledEndDate || ''}
                                    updateProperty={updateWorkorderProperty}/>
 
                     <EAMDateTimePicker children={children}
