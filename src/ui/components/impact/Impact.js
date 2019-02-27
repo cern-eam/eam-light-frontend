@@ -16,6 +16,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import {withStyles} from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
+import {format} from 'date-fns'
 
 const styles = () => ({
     paperWidthSm: {
@@ -115,8 +116,8 @@ class Impact extends Component {
                     currentActivity: {
                         id: impactActivity.activityId,
                         title: impactActivityProperties.title,
-                        schedulingStart: impactActivityProperties.start,
-                        schedulingEnd: impactActivityProperties.end,
+                        schedulingStart: impactActivityProperties.scheduledStartDate ? format(impactActivityProperties.scheduledStartDate, "dd-MMM-yyyy") : '',
+                        schedulingEnd: impactActivityProperties.scheduledEndDate ? format(impactActivityProperties.scheduledEndDate, "dd-MMM-yyyy") : '',
                         facility: impactActivityProperties.facility.label,
                         responsible: impactActivityProperties.creator.fullName,
                         status: impactActivityProperties.status.label
