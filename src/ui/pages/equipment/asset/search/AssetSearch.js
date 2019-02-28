@@ -18,6 +18,13 @@ export default class AssetSearch extends Component {
         return false;
     }
 
+    gridRequestAdapter = gridRequest => {
+       return {
+            ...gridRequest,
+            useNative: false
+        }
+    };
+
     render() {
         return (
             <div className="entityContainer">
@@ -26,6 +33,7 @@ export default class AssetSearch extends Component {
                     screenCode={this.props.assetScreen.screenCode}
                     handleError={this.props.handleError}
                     cellRenderer={this._cellRenderer}
+                    gridRequestAdapter={this.gridRequestAdapter}
                 />
             </div>
         )

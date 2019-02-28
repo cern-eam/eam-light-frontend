@@ -1,11 +1,11 @@
-import React from 'react';
+import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
-import {Link} from 'react-router-dom'
-import {WorkorderIcon} from 'eam-components/dist/ui/components/icons'
-import Divider from '@material-ui/core/Divider';
-import {ContentCopy, EmailOutline, Map, OpenInNew} from 'mdi-material-ui'
+import { WorkorderIcon } from 'eam-components/dist/ui/components/icons';
+import { ContentCopy, EmailOutline, Map, OpenInNew, Video } from 'mdi-material-ui';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 class EquipmentToolbar {
 
@@ -68,6 +68,11 @@ class EquipmentToolbar {
         window.open(extendedLink, '_blank');
     }
 
+    showInPanoramasHandler () {
+        //TODO - maybe fetch slotName and on response go to page?
+        window.open(`${this.applicationData.panoramasViewerLink}?slotName=${this.equipment.udfnum01}`, '_blank');
+    }
+
     renderMenuItems() {
         return (
             <div >
@@ -100,6 +105,7 @@ class EquipmentToolbar {
     }
 
     renderToolbarIconsRow() {
+
         return (
             <div style={this.toolbarIconsStyle}>
                 <div style={this.verticalLineStyle}/>
@@ -135,6 +141,15 @@ class EquipmentToolbar {
                         <OpenInNew style={this.iconStyle} />
                     </IconButton>
                 </Tooltip>
+
+                {this.equipment.typeCode === 'P' && this.applicationData.panoramasViewerLink &&
+                <Tooltip title="Panoramas">
+                    <IconButton onClick={this.showInPanoramasHandler.bind(this)}>
+                    
+                        <Video style={this.iconStyle} />
+                    </IconButton>
+                </Tooltip>
+                }
             </div>
         );
     }
