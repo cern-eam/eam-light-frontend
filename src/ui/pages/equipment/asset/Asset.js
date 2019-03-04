@@ -13,13 +13,12 @@ import AssetHierarchy from './AssetHierarchy'
 import CommentsContainer from 'eam-components/dist/ui/components/comments/CommentsContainer';
 import EquipmentToolbar from '../components/EquipmentToolbar'
 import EDMSWidgetContainer from 'eam-components/dist/ui/components/edms/EDMSWidgetContainer';
-//import EDMSWidgetContainer from "eam-components/dist/ui/components/edms/EDMSWidgetContainer";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
 import EquipmentTools from "../EquipmentTools";
 import {AssetIcon} from 'eam-components/dist/ui/components/icons'
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
-
+import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 
 export default class Asset extends Entity {
 
@@ -29,12 +28,6 @@ export default class Asset extends Entity {
         this.state = {
             ...this.state
         }
-    }
-
-    docLightStyle = {
-        width: "100%",
-        borderWidth: 0,
-        boxShadow: "0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12)"
     }
 
     settings = {
@@ -240,19 +233,10 @@ export default class Asset extends Entity {
                         </Grid>
                         <Grid item xs={xs} sm={sm} md={md} lg={lg}>
 
-                            {/*
                             {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
                             !this.state.layout.newEntity &&
-                            <iframe style={this.docLightStyle}
-                                src={"https://testedms.cern.ch/components/doclight?objectType=A&mode=write&profile=EAMLIGHT&objectID=" + this.state.equipment.code}/>
+                            <EDMSDoclightIframeContainer objectType="A" objectID={this.state.equipment.code}/>
                             }
-                            */}
-
-                            {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
-                            !this.state.layout.newEntity &&
-                            <EDMSWidgetContainer objectID={this.state.equipment.code} objectType="A"
-                                                 edmsDocListLink={this.props.edmsDocListLink}/>}
-
 
                             {!this.props.hiddenRegions[this.getRegions().NCRS.code] &&
                              !this.state.layout.newEntity &&

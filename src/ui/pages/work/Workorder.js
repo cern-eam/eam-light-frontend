@@ -20,6 +20,7 @@ import WSEquipment from "../../../tools/WSEquipment";
 import {WorkorderIcon} from 'eam-components/dist/ui/components/icons';
 import CommentsContainer from 'eam-components/dist/ui/components/comments/CommentsContainer';
 import WorkorderToolbar from "./WorkorderToolbar";
+import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 
 class Workorder extends Entity {
 
@@ -269,9 +270,7 @@ class Workorder extends Entity {
 
                                 {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
                                  !this.state.layout.newEntity &&
-                                <EDMSWidgetContainer objectID={this.state.workorder.number} objectType="J"
-                                                     creationMode="EDMS"
-                                                     edmsDocListLink={this.props.edmsDocListLink}/>}
+                                 <EDMSDoclightIframeContainer objectType="J" objectID={this.state.workorder.number}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().NCRS.code] &&
                                 !this.state.layout.newEntity &&
