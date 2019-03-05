@@ -200,6 +200,7 @@ class Workorder extends Entity {
                 this.setLayout.bind(this),
                 prevState.layout.newEntity,
                 this.props.applicationData,
+                this.props.userData.eamAccount.userGroup,
                 this.props.userData.screens[this.props.userData.workOrderScreen].screenCode)
         }))
     }
