@@ -11,14 +11,14 @@ import SystemGeneral from './SystemGeneral'
 import SystemDetails from './SystemDetails'
 import SystemHierarchy from './SystemHierarchy'
 import CommentsContainer from 'eam-components/dist/ui/components/comments/CommentsContainer';
-import EDMSWidgetContainer from 'eam-components/dist/ui/components/edms/EDMSWidgetContainer';
-//import EDMSWidgetContainer from "eam-components/dist/ui/components/edms/EDMSWidgetContainer";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
 import EquipmentTools from "../EquipmentTools";
 import {SystemIcon} from 'eam-components/dist/ui/components/icons'
 import EquipmentToolbar from "../components/EquipmentToolbar";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
+import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
+
 
 export default class System extends Entity {
 
@@ -210,9 +210,9 @@ export default class System extends Entity {
                         <Grid item xs={xs} sm={sm} md={md} lg={lg}>
 
                             {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
-                             !this.state.layout.newEntity &&
-                            <EDMSWidgetContainer objectID={this.state.equipment.code} objectType="X"
-                                                 edmsDocListLink={this.props.edmsDocListLink}/>}
+                            !this.state.layout.newEntity &&
+                            <EDMSDoclightIframeContainer objectType="X" objectID={this.state.equipment.code}/>
+                            }
 
                             {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                             <CommentsContainer ref={comments => this.comments = comments}

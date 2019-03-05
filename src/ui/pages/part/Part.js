@@ -9,12 +9,12 @@ import UserDefinedFields from "../../components/userdefinedfields/UserDefinedFie
 import PartStock from "./PartStock";
 import CommentsContainer from 'eam-components/dist/ui/components/comments/CommentsContainer';
 import CustomFields from '../../components/customfields/CustomFields';
-import EDMSWidgetContainer from 'eam-components/dist/ui/components/edms/EDMSWidgetContainer';
 import PartWhereUsed from "./PartWhereUsed";
 import Entity from '../Entity';
 import PartTools from "./PartTools";
 import {PartIcon} from 'eam-components/dist/ui/components/icons'
 import PartToolbar from "./PartToolbar";
+import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 
 const PART = 'PART';
 const SSPART = 'SSPART';
@@ -166,9 +166,9 @@ class Part extends Entity {
                             <Grid item sm={6} xs={12}>
 
                                 {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
-                                 !this.state.layout.newEntity &&
-                                <EDMSWidgetContainer objectID={this.state.part.code} objectType={PART}
-                                                     edmsDocListLink={this.props.edmsDocListLink}/>}
+                                !this.state.layout.newEntity &&
+                                <EDMSDoclightIframeContainer objectType={PART} objectID={this.state.part.code}/>
+                                }
 
                                 {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                                 <CommentsContainer ref={comments => this.comments = comments}
