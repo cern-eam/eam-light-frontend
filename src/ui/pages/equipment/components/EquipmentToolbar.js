@@ -70,7 +70,7 @@ class EquipmentToolbar {
 
     showInPanoramasHandler () {
         //TODO - maybe fetch slotName and on response go to page?
-        window.open(`${this.applicationData.panoramasViewerLink}?slotName=${this.equipment.udfnum01}`, '_blank');
+        window.open(`${this.applicationData.panoramasViewerLink}?slotId=${this.equipment.udfnum01}`, '_blank');
     }
 
     renderMenuItems() {

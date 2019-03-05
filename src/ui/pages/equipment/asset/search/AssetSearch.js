@@ -21,7 +21,7 @@ export default class AssetSearch extends Component {
     gridRequestAdapter = gridRequest => {
        return {
             ...gridRequest,
-            useNative: false
+            //useNative: false
         }
     };
 
