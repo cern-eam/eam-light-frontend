@@ -4,7 +4,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import MenuItem from '@material-ui/core/MenuItem';
 import '../../../ui/components/EamlightToolbar.css'
 import Divider from '@material-ui/core/Divider';
-import {ContentCopy, EmailOutline, Printer, Map, OpenInNew, Domain} from 'mdi-material-ui'
+import {ContentCopy, EmailOutline, Printer, Map, OpenInNew, Domain, Camera} from 'mdi-material-ui'
 
 class WorkorderToolbar {
 
@@ -35,13 +35,14 @@ class WorkorderToolbar {
         margin: 5
     }
 
-    constructor(workorder, postInit, setLayout, newWorkorder, applicationData, screencode) {
+    constructor(workorder, postInit, setLayout, newWorkorder, applicationData, userGroup, screencode) {
         this.workorder = workorder;
         this.postInit = postInit;
         this.setLayout = setLayout;
-        this.newWorkorder = newWorkorder
-        this.applicationData = applicationData
-        this.screencode = screencode
+        this.newWorkorder = newWorkorder;
+        this.applicationData = applicationData;
+        this.userGroup = userGroup;
+        this.screencode = screencode;
     }
 
     copyWorkorderHandler() {
@@ -76,6 +77,16 @@ class WorkorderToolbar {
         window.open(osvcLink, '_blank');
     }
 
+    dismacHandler() {
+        const dismacLink = this.applicationData.dismacURL.replace('{{workOrderId}}', this.workorder.number);
+        window.open(dismacLink, '_blank');
+    }
+
+    isDismacVisible() {
+        const { dismacUserGroups } = this.applicationData;
+        return dismacUserGroups && dismacUserGroups.map(group => group.toLowerCase()).indexOf(this.userGroup.toLowerCase()) !== -1;
+    }
+
     renderMenuItems() {
         return (
            <div >
@@ -104,6 +115,12 @@ class WorkorderToolbar {
                     <Domain style={this.iconMenuStyle} />
                     <div >OSVC</div>
                 </MenuItem>
+                {this.isDismacVisible() &&
+                <MenuItem onClick={this.dismacHandler.bind(this)} disabled={this.newWorkorder}>
+                    <Camera style={this.iconMenuStyle} />
+                    <div >DISMAC</div>
+                </MenuItem>
+                }
            </div>
         );
     }
@@ -147,6 +164,15 @@ class WorkorderToolbar {
                         <Domain style={this.iconStyle} />
                     </IconButton>
                 </Tooltip>
+
+                {this.isDismacVisible() &&
+                <Tooltip title="DISMAC">
+                    <IconButton onClick={this.dismacHandler.bind(this)} disabled={this.newWorkorder}>
+                        <Camera style={this.iconStyle} />
+                    </IconButton>
+                </Tooltip>
+                }
+
             </div>
         );
     }
