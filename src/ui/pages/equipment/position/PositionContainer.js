@@ -12,7 +12,6 @@ function mapStateToProps(state) {
         showEqpTree: state.ui.layout.showEqpTree,
         hiddenRegions: state.ui.hiddenRegions,
         eqp: state.ui.layout.equipment,
-        edmsDocListLink: state.application.applicationData.edmsdocListLink,
         applicationData: state.application.applicationData,
     }
 }

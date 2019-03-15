@@ -10,7 +10,6 @@ function mapStateToProps(state) {
         workOrderLayout: state.application.workOrderLayout,
         userData: state.application.userData,
         hiddenRegions: state.ui.hiddenRegions,
-        edmsDocListLink: state.application.applicationData.edmsdocListLink,
         applicationData: state.application.applicationData
     }
 }
