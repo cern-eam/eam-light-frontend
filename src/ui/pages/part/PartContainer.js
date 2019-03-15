@@ -10,7 +10,6 @@ function mapStateToProps(state) {
         partLayout: state.application.partLayout,
         hiddenRegions: state.ui.hiddenRegions,
         userData: state.application.userData,
-        edmsDocListLink: state.application.applicationData.edmsdocListLink,
         applicationData: state.application.applicationData
     }
 }

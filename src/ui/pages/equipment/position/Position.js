@@ -226,7 +226,7 @@ export default class Position extends Entity {
                             <EDMSWidgetContainer objectID={this.state.equipment.code} objectType="S"
                                                  creationMode="NCR"
                                                  title="NCRs"
-                                                 edmsDocListLink={this.props.edmsDocListLink}/>}
+                                                 edmsDocListLink={this.props.applicationData.edmsDocListLink}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                             <CommentsContainer ref={comments => this.comments = comments}
