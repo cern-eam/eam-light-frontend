@@ -278,7 +278,7 @@ class Workorder extends Entity {
                                 <EDMSWidgetContainer objectID={this.state.workorder.number} objectType="J"
                                                      creationMode="NCR"
                                                      title="NCRs"
-                                                     edmsDocListLink={this.props.edmsDocListLink}/>}
+                                                     edmsDocListLink={this.props.applicationData.edmsDocListLink}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                                 <CommentsContainer ref={comments => this.comments = comments}
