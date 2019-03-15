@@ -10,12 +10,13 @@ class EDMSDoclightIframe extends Component {
     }
 
     render() {
-        const { objectType, objectID, mode, profile } = this.props;
+        const { objectType, objectID, mode, profile, collapsible } = this.props;
         const queryParams = queryString.stringify({
             objectType,
             objectID,
             mode,
-            profile
+            profile,
+            collapsible,
         })
         const src = `${this.props.edmsdoclightURL}?${queryParams}`
 
@@ -24,7 +25,7 @@ class EDMSDoclightIframe extends Component {
                 iframeResizerOptions={{
                     scrolling: false,
                     checkOrigin: false, // CHECK: disable this option or list allowed origins
-                    heightCalculationMethod: 'bodyScroll'
+                    heightCalculationMethod: 'bodyOffset'
                 }}
                 src={src}
                 style={this.docLightStyle}/>
@@ -34,7 +35,8 @@ class EDMSDoclightIframe extends Component {
 
 EDMSDoclightIframe.defaultProps = {
     mode: 'write',
-    profile: 'EAMLIGHT'
+    profile: 'EAMLIGHT',
+    collapsible: true,
 }
 
 export default EDMSDoclightIframe;
