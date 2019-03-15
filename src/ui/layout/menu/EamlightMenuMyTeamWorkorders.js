@@ -5,6 +5,16 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import StyledTab from './StyledTab'
+import {withStyles} from "@material-ui/core/styles/index";
+
+const styles = {
+    root: {
+        marginLeft: 10
+    },
+    icon: {
+        color: 'white'
+    },
+};
 
 class EamlightMenuMyTeamWorkorders extends Component {
     state = {
@@ -14,17 +24,18 @@ class EamlightMenuMyTeamWorkorders extends Component {
     };
 
     headingStyle = {
-        display: "block",
+        display: "flex",
         padding: 5,
         fontSize: 13,
         color: "#ffffff",
-        textAlign: "center"
+        alignItems: "center",
+        justifyContent: "center"
     }
 
     componentWillMount() {
-        //if (this.props.myTeamWorkOrders) {
-        //    this.props.myTeamWorkOrders.map(workorder => workorder.mrc).filter((v, i, a) => a.indexOf(v) === i)
-        //}
+        if (this.props.myTeamWorkOrders) {
+            this.setState({departments: [...new Set(this.props.myTeamWorkOrders.map(workorder => workorder.mrc))]})
+        }
     }
 
     handleDaysChange = (event, value) => {
@@ -50,7 +61,7 @@ class EamlightMenuMyTeamWorkorders extends Component {
         }
 
         if (this.state.departments.length === 1) {
-            return <div style={this.headingStyle}>WOs FOR DEPARTMENT {this.props.eamAccount.userDepartments[0]}</div>
+            return <div style={this.headingStyle}>WOs FOR DEPARTMENT {this.state.departments[0]}</div>
         }
 
         return (
@@ -100,4 +111,4 @@ class EamlightMenuMyTeamWorkorders extends Component {
     }
 }
 
-export default EamlightMenuMyTeamWorkorders;
+export default withStyles(styles)(EamlightMenuMyTeamWorkorders);
