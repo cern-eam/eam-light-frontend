@@ -31,6 +31,14 @@ class PositionGeneral extends Component {
 
                     <EAMInput
                         children = {children}
+                        elementInfo={positionLayout.fields['udfchar45']}
+                        value={equipment.userDefinedFields.udfchar45}
+                        updateProperty={updateEquipmentProperty}
+                        valueKey="userDefinedFields.udfchar45"
+                    />
+
+                    <EAMInput
+                        children = {children}
                         elementInfo={positionLayout.fields['equipmentdesc']}
                         value={equipment.description}
                         updateProperty={updateEquipmentProperty}

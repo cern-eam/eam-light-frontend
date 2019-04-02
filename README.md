@@ -14,6 +14,8 @@ You can modify the following environment variables in the `Dockerfile` before bu
 
 REACT_APP_BACKEND - Defines EAM Light Backend URL. Properly formatted REACT_APP_BACKEND should have a leading, but no trailing slash. 
 
+**Note:** In case you are locally deploying the frontend and backend server, you have to change this value to: http://your_machine:8081/apis/rest.
+
 PUBLIC_URL - By default EAM Light Frontend should be hosted at the web server's root. Please change this variable if EAM Light will be served from a sub-directory on your server.  
 
 REACT_APP_LOGIN_METHOD - Change this parameter if you would like to disable the standard login prompt window and secure EAM Light with shared authentication schema of your enterprise. This requires further configuration of EAM Light Backend (explained on the project's website).
