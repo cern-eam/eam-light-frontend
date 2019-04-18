@@ -5,7 +5,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BlockUi from 'react-block-ui'
-
 import './AddActivityDialog.css'
 import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
 import WSWorkorders from "../../../../../tools/WSWorkorders";
@@ -95,21 +94,28 @@ export default class AddActivityDialog extends Component {
             tradeCode = filteredActivities[0].tradeCode;
         }
 
-        this.setState({loading: true});
-        this.props.handleSave({
+        let bookingLabour = {
             ...this.state.formValues,
             tradeCode
-        })
+        }
+        delete bookingLabour.departmentDesc;
+
+        this.setState({loading: true});
+        WSWorkorders.createBookingLabour(bookingLabour)
             .then(result => {
                 this.setState({loading: false});
+                this.props.showNotification("Booking labour successfully created")
                 this.handleClose();
                 this.props.onChange();
                 this.init();
+
             })
             .catch(error => {
                 this.setState({loading: false});
+                this.props.handleError(error)
             });
     };
+
 
     updateFormValues = (key, value) => {
         this.setState((prevState) => ({
