@@ -58,7 +58,7 @@ class Equipment extends Component {
                     }
                 </div>
 
-                    <div ref={eqp => this.eqp = eqp} style={{backgroundColor: "white", height: "100%", width: "100%", minWidth: 400}}>
+                    <div ref={eqp => this.eqp = eqp} style={{backgroundColor: "white", height: "100%", width: "100%"}}>
                         <Switch>
                             <Route path={"/asset/:code(.+)?"}
                                    component={AssetContainer}/>

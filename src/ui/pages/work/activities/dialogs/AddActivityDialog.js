@@ -11,6 +11,7 @@ import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAuto
 import WSWorkorders from "../../../../../tools/WSWorkorders";
 import EAMDatePicker from "eam-components/dist/ui/components/muiinputs/EAMDatePicker";
 import KeyCode from "../../../../../enums/KeyCode";
+import {handleError, showNotification} from "../../../../../actions/uiActions";
 
 /**
  * Display detail of an activity
@@ -46,20 +47,29 @@ export default class AddActivityDialog extends Component {
     };
 
     handleSave = () => {
+        let activity = {...this.state.formValues}
+        delete activity.taskDesc;
+        delete activity.tradeDesc;
+        delete activity.materialListDesc;
+
         this.setState({loading: true});
-        this.props.handleSave(this.state.formValues)
+        WSWorkorders.createWorkOrderActivity(activity)
             .then(result => {
                 //Post add handler
                 this.props.postAddActivityHandler();
                 this.setState({loading: false});
+                this.props.showNotification("Activity successfully created");
                 this.handleClose();
                 this.props.onChange();
                 this.init(this.props);
+
             })
             .catch(error => {
                 this.setState({loading: false});
+                this.props.handleError(error)
             });
     };
+
 
     updateFormValues = (key, value) => {
         this.setState((prevState) => ({
