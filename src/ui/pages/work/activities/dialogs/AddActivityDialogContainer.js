@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import AddActivityDialog from './AddActivityDialog'
 import { createWorkOrderActivity } from '../../../../../actions/workorderActions';
+import {handleError, showError, showNotification} from "../../../../../actions/uiActions";
 
 
 const mapStateToProps = (state, ownProps) => {
@@ -9,13 +10,10 @@ const mapStateToProps = (state, ownProps) => {
   }
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    handleSave: activity => dispatch(createWorkOrderActivity(activity))
-  }
-};
-
 export default connect(
-  mapStateToProps, mapDispatchToProps
+  mapStateToProps, {
+      showNotification,
+      showError,
+      handleError}
 )(AddActivityDialog);
 
