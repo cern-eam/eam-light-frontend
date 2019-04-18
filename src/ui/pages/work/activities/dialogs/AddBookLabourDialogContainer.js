@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import AddBookLabourDialog from './AddBookLabourDialog'
 import { createBookLabour } from '../../../../../actions/workorderActions';
+import {handleError, showError, showNotification} from "../../../../../actions/uiActions";
 
 
 const mapStateToProps = (state, ownProps) => {
@@ -10,13 +11,11 @@ const mapStateToProps = (state, ownProps) => {
   }
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    handleSave: bookLabour => dispatch(createBookLabour(bookLabour))
-  }
-};
 
-export default connect(
-  mapStateToProps, mapDispatchToProps
+
+export default connect(mapStateToProps, {
+  showNotification,
+  showError,
+  handleError}
 )(AddBookLabourDialog);
 

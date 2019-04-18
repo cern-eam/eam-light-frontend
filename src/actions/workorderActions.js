@@ -85,36 +85,3 @@ export function updateMyWorkOrders(workorder) {
         }))
     }
 }
-
-/**
- * Activities and booked labours
- */
-export function createWorkOrderActivity(activity) {
-    //Remove descs
-    delete activity.taskDesc;
-    delete activity.tradeDesc;
-    delete activity.materialListDesc;
-    return (dispatch, state) => {
-        return WSWorkorders.createWorkOrderActivity(activity).then(response => {
-            dispatch(showNotification("Activity successfully created"));
-        })
-            .catch(error => {
-                dispatch(handleError(error));
-                throw error;
-            });
-    }
-}
-
-export function createBookLabour(activity) {
-    //Remove departmentDesc
-    delete activity.departmentDesc;
-    return (dispatch, state) => {
-        return WSWorkorders.createBookingLabour(activity).then(response => {
-            dispatch(showNotification("Booking labour successfully created"));
-        })
-            .catch(error => {
-                dispatch(handleError(error));
-                throw error;
-            });
-    }
-}
