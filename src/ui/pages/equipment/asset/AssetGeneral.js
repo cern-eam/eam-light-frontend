@@ -9,7 +9,7 @@ class AssetGeneral extends Component {
 
     render() {
         let {equipment, children, assetLayout, updateEquipmentProperty, layout} = this.props
-        
+
         return (
             <EISPanel heading="GENERAL">
                 <div style={{width: "100%", marginTop: 0}}>
