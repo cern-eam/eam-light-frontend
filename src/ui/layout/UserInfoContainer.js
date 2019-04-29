@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import UserInfo from './UserInfo'
+import {updateInforContext} from "../../actions/inforContextActions";
 
 const mapStateToProps = (state) => {
     return {
@@ -7,8 +8,8 @@ const mapStateToProps = (state) => {
     }
 };
 
-const UserInfoContainer = connect(mapStateToProps)(UserInfo);
+const UserInfoContainer = connect(mapStateToProps, {
+    updateInforContext
+})(UserInfo);
 
 export default UserInfoContainer
-
-
