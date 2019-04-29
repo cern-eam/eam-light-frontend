@@ -69,7 +69,8 @@ export default class Position extends Entity {
     }
 
     setStatuses(neweqp) {
-        WSEquipment.getEquipmentStatusValues(neweqp)
+        const oldStatusCode = this.state.equipment && this.state.equipment.statusCode;
+        WSEquipment.getEquipmentStatusValues(neweqp, oldStatusCode)
             .then(response => {
                 this.setLayout({statusValues: response.body.data})
             })
