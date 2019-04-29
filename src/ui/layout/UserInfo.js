@@ -21,13 +21,16 @@ export default class UserInfo extends Component {
 
    logoutIcon = {
        color: "rgba(255, 255, 255, 0.8)",
-       height: 22,
-       paddingLeft: 9,
        paddingRight: 9,
-       borderLeft: "1px solid rgba(255, 255, 255, 0.8)",
-       marginLeft: 14,
        fontSize: 18,
        lineHeight: '22px'
+   }
+
+   separatorStyle = {
+       borderLeft: "1px solid rgba(255, 255, 255, 0.8)",
+       width: 1,
+       height: 22,
+       marginLeft: 14
    }
 
     logoutHandler() {
@@ -45,7 +48,8 @@ export default class UserInfo extends Component {
             <div style={this.userInfoStyle}>
                 <Account style={this.accountIcon}/>
                 {this.props.userData.eamAccount.userCode}
-                <IconButton onClick={this.logoutHandler.bind(this)}>
+                <span style={this.separatorStyle}/>
+                <IconButton onClick={this.logoutHandler.bind(this)} style={this.logoutIcon}>
                     <Logout style={{fontSize: 20}}/>
                 </IconButton>
             </div>
