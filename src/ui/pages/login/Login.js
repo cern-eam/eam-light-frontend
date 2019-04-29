@@ -71,7 +71,7 @@ class Login extends Component {
                 INFOR_ORGANIZATION: this.state.infor_organization,
                 INFOR_USER: this.state.infor_user.toUpperCase(),
                 INFOR_PASSWORD: this.state.infor_password,
-                INFOR_SESSIONID: "",
+                INFOR_SESSIONID: response.body.data,
             }
             // Store in the redux store (used by axios)
             this.props.updateInforContext(inforContext)
