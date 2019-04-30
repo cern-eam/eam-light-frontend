@@ -129,7 +129,7 @@ export default class System extends Entity {
             WORKORDERS: {label: "Work Orders", code: user + "_" + screen + "_WORKORDERS"},
             HISTORY: {label: "History", code: user + "_" + screen + "_HISTORY"},
             PARTS: {label: "Parts Associated", code: user + "_" + screen + "_PARTS"},
-            EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen + "_EDMSDOCS"},
+            //EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen + "_EDMSDOCS"},
             COMMENTS: {label: "Comments", code: user + "_" + screen + "_COMMENTS"},
             USERDEFFIELDS: {label: "User Defined Fields", code: user + "_" + screen + "_USERDEFFIELDS"},
             CUSTOMFIELDS: {label: "Custom Fields", code: user + "_" + screen + "_CUSTOMFIELDS"}
@@ -209,11 +209,6 @@ export default class System extends Entity {
 
                         </Grid>
                         <Grid item xs={xs} sm={sm} md={md} lg={lg}>
-
-                            {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
-                            !this.state.layout.newEntity &&
-                            <EDMSDoclightIframeContainer objectType="X" objectID={this.state.equipment.code}/>
-                            }
 
                             {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                             <CommentsContainer ref={comments => this.comments = comments}
