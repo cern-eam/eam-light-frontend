@@ -46,26 +46,22 @@ export default class Position extends Entity {
     postInit() {
         this.setStatuses(true)
         this.props.setLayoutProperty('showEqpTreeButton', false)
-        this.initEquipmentToolbar()
     }
 
     postCreate() {
         this.setStatuses(false);
         this.comments.wrappedInstance.createCommentForNewEntity();
         this.props.setLayoutProperty('showEqpTreeButton', true)
-        this.initEquipmentToolbar()
     }
 
     postUpdate() {
         this.comments.wrappedInstance.createCommentForNewEntity();
-        this.initEquipmentToolbar()
     }
 
     postRead() {
         this.setStatuses(false)
         this.props.setLayoutProperty('showEqpTreeButton', true)
         this.props.setLayoutProperty('equipment', this.state.equipment)
-        this.initEquipmentToolbar()
     }
 
     setStatuses(neweqp) {
@@ -113,18 +109,6 @@ export default class Position extends Entity {
         }
         return equipment;
     };
-
-    initEquipmentToolbar() {
-        this.setState((prevState) => ({
-            equipmentToolbar: new EquipmentToolbar(this.settings.entityDesc,
-                this.state.equipment,
-                this.postInit.bind(this),
-                this.setLayout.bind(this),
-                prevState.layout.newEntity,
-                this.props.applicationData,
-                this.props.userData.screens[this.props.userData.positionScreen].screenCode)
-        }))
-    }
 
     //
     //
@@ -181,7 +165,15 @@ export default class Position extends Entity {
                                  saveHandler={this.saveHandler.bind(this)}
                                  newHandler={() => this.props.history.push('/position')}
                                  deleteHandler={this.deleteEntity.bind(this, this.state.equipment.code)}
-                                 entityToolbar={this.state.equipmentToolbar}
+                                 entityToolbar={<EquipmentToolbar entityDesc={this.settings.entityDesc}
+                                                                  equipment={this.state.equipment}
+                                                                  postInit={this.postInit.bind(this)}
+                                                                  setLayout={this.setLayout.bind(this)}
+                                                                  newEquipment={this.state.layout.newEntity}
+                                                                  applicationData={this.props.applicationData}
+                                                                  extendedLink={this.props.applicationData.extendedPositionLink}
+                                                                  screencode={this.props.userData.screens[this.props.userData.positionScreen].screenCode}
+                                 />}
                                  width={730}
                                  entityIcon={<PositionIcon style={{height: 18}}/>}
                                  toggleHiddenRegion={this.props.toggleHiddenRegion}
@@ -203,15 +195,15 @@ export default class Position extends Entity {
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().WORKORDERS.code] &&
-                             !this.state.layout.newEntity &&
-                             <EquipmentWorkOrders equipmentcode={this.state.equipment.code}/>}
+                            !this.state.layout.newEntity &&
+                            <EquipmentWorkOrders equipmentcode={this.state.equipment.code}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().HISTORY.code] &&
-                             !this.state.layout.newEntity &&
-                             <EquipmentHistory equipmentcode={this.state.equipment.code}/>}
+                            !this.state.layout.newEntity &&
+                            <EquipmentHistory equipmentcode={this.state.equipment.code}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().PARTS.code] &&
-                              EquipmentTools.isRegionAvailable('PAS', props.positionLayout, 'P') && !this.state.layout.newEntity &&
+                            EquipmentTools.isRegionAvailable('PAS', props.positionLayout, 'P') && !this.state.layout.newEntity &&
                             <EquipmentPartsAssociated equipmentcode={this.state.equipment.code}
                                                       parentScreen={this.props.userData.positionScreen.parentScreen}/>}
 
@@ -233,7 +225,7 @@ export default class Position extends Entity {
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
-                             EquipmentTools.isRegionAvailable('CUSTOM_FIELDS', props.positionLayout, 'P') &&
+                            EquipmentTools.isRegionAvailable('CUSTOM_FIELDS', props.positionLayout, 'P') &&
                             <CustomFields entityCode='OBJ'
                                           entityKeyCode={this.state.equipment.code}
                                           classCode={this.state.equipment.classCode}
