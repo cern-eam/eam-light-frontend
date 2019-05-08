@@ -49,26 +49,22 @@ export default class Asset extends Entity {
     postInit() {
         this.setStatuses(true)
         this.props.setLayoutProperty('showEqpTreeButton', false)
-        this.initEquipmentToolbar()
     }
 
     postCreate() {
         this.setStatuses(false);
         this.comments.wrappedInstance.createCommentForNewEntity();
         this.props.setLayoutProperty('showEqpTreeButton', true)
-        this.initEquipmentToolbar()
     }
 
     postUpdate() {
         this.comments.wrappedInstance.createCommentForNewEntity();
-        this.initEquipmentToolbar()
     }
 
     postRead() {
         this.setStatuses(false)
         this.props.setLayoutProperty('showEqpTreeButton', true)
         this.props.setLayoutProperty('equipment', this.state.equipment)
-        this.initEquipmentToolbar()
     }
 
     setStatuses(neweqp) {
@@ -126,18 +122,6 @@ export default class Asset extends Entity {
         return equipment;
     };
 
-    initEquipmentToolbar() {
-        this.setState((prevState) => ({
-            equipmentToolbar: new EquipmentToolbar(this.settings.entityDesc,
-                                                   this.state.equipment,
-                                                   this.postInit.bind(this),
-                                                   this.setLayout.bind(this),
-                                                   prevState.layout.newEntity,
-                                                   this.props.applicationData,
-                                                   this.props.userData.screens[this.props.userData.assetScreen].screenCode)
-        }))
-    }
-
     //
     //
     //
@@ -157,8 +141,6 @@ export default class Asset extends Entity {
             CUSTOMFIELDS: {label: "Custom Fields", code: user + "_" + screen+ "_CUSTOMFIELDS"}
         }
     }
-
-
 
     //
     // RENDER
@@ -195,7 +177,15 @@ export default class Asset extends Entity {
                                  saveHandler={this.saveHandler.bind(this)}
                                  newHandler={() => this.props.history.push('/asset')}
                                  deleteHandler={this.deleteEntity.bind(this, this.state.equipment.code)}
-                                 entityToolbar={this.state.equipmentToolbar}
+                                 entityToolbar={<EquipmentToolbar entityDesc={this.settings.entityDesc}
+                                                                  equipment={this.state.equipment}
+                                                                  postInit={this.postInit.bind(this)}
+                                                                  setLayout={this.setLayout.bind(this)}
+                                                                  newEquipment={this.state.layout.newEntity}
+                                                                  applicationData={this.props.applicationData}
+                                                                  extendedLink={this.props.applicationData.extendedAssetLink}
+                                                                  screencode={this.props.userData.screens[this.props.userData.assetScreen].screenCode}
+                                 />}
                                  width={730}
                                  entityIcon={<AssetIcon style={{height: 18}}/>}
                                  toggleHiddenRegion={this.props.toggleHiddenRegion}
@@ -211,7 +201,7 @@ export default class Asset extends Entity {
                             <AssetGeneral {...props} />
 
                             {!this.props.hiddenRegions[this.getRegions().DETAILS.code] &&
-                              <AssetDetails {...props} />
+                            <AssetDetails {...props} />
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().HIERARCHY.code] &&
@@ -219,42 +209,42 @@ export default class Asset extends Entity {
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().WORKORDERS.code] &&
-                              !this.state.layout.newEntity &&
-                              <EquipmentWorkOrders equipmentcode={this.state.equipment.code}/>}
+                            !this.state.layout.newEntity &&
+                            <EquipmentWorkOrders equipmentcode={this.state.equipment.code}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().HISTORY.code] &&
-                                !this.state.layout.newEntity &&
+                            !this.state.layout.newEntity &&
                             <EquipmentHistory equipmentcode={this.state.equipment.code}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().PARTS.code] &&
-                              EquipmentTools.isRegionAvailable('PAS', props.assetLayout, 'A') && !this.state.layout.newEntity &&
-                              <EquipmentPartsAssociated equipmentcode={this.state.equipment.code}
+                            EquipmentTools.isRegionAvailable('PAS', props.assetLayout, 'A') && !this.state.layout.newEntity &&
+                            <EquipmentPartsAssociated equipmentcode={this.state.equipment.code}
                                                       parentScreen={this.props.userData.assetScreen.parentScreen}/>}
 
                         </Grid>
                         <Grid item xs={xs} sm={sm} md={md} lg={lg}>
 
                             {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
-                             <CommentsContainer ref={comments => this.comments = comments}
-                                                entityCode='OBJ'
-                                                entityKeyCode={!this.state.layout.newEntity ? this.state.equipment.code : undefined}
-                                                userDesc={this.props.userData.eamAccount.userDesc}/>
+                            <CommentsContainer ref={comments => this.comments = comments}
+                                               entityCode='OBJ'
+                                               entityKeyCode={!this.state.layout.newEntity ? this.state.equipment.code : undefined}
+                                               userDesc={this.props.userData.eamAccount.userDesc}/>
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().USERDEFFIELDS.code] &&
-                             <UserDefinedFields fields={this.state.equipment.userDefinedFields}
-                                                entityLayout={this.props.assetLayout.fields}
-                                                updateUDFProperty={this.updateEntityProperty}
-                                                children={this.children}/>
+                            <UserDefinedFields fields={this.state.equipment.userDefinedFields}
+                                               entityLayout={this.props.assetLayout.fields}
+                                               updateUDFProperty={this.updateEntityProperty}
+                                               children={this.children}/>
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
-                              EquipmentTools.isRegionAvailable('CUSTOM_FIELDS', props.assetLayout, 'A') &&
-                              <CustomFields entityCode='OBJ'
-                                            entityKeyCode={this.state.equipment.code}
-                                            classCode={this.state.equipment.classCode}
-                                            customFields={this.state.equipment.customField}
-                                            updateEntityProperty={this.updateEntityProperty.bind(this)}/>}
+                            EquipmentTools.isRegionAvailable('CUSTOM_FIELDS', props.assetLayout, 'A') &&
+                            <CustomFields entityCode='OBJ'
+                                          entityKeyCode={this.state.equipment.code}
+                                          classCode={this.state.equipment.classCode}
+                                          customFields={this.state.equipment.customField}
+                                          updateEntityProperty={this.updateEntityProperty.bind(this)}/>}
 
                         </Grid>
 
