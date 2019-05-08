@@ -46,26 +46,22 @@ export default class System extends Entity {
     postInit() {
         this.setStatuses(true);
         this.props.setLayoutProperty('showEqpTreeButton', false)
-        this.initEquipmentToolbar()
     }
 
     postCreate() {
         this.setStatuses(false);
         this.comments.wrappedInstance.createCommentForNewEntity();
         this.props.setLayoutProperty('showEqpTreeButton', true)
-        this.initEquipmentToolbar()
     }
 
     postUpdate() {
         this.comments.wrappedInstance.createCommentForNewEntity();
-        this.initEquipmentToolbar()
     }
 
     postRead() {
         this.setStatuses(false);
         this.props.setLayoutProperty('showEqpTreeButton', true)
         this.props.setLayoutProperty('equipment', this.state.equipment)
-        this.initEquipmentToolbar()
     }
 
     setStatuses(neweqp) {
@@ -105,18 +101,6 @@ export default class System extends Entity {
         return equipment;
     };
 
-    initEquipmentToolbar() {
-        this.setState((prevState) => ({
-            equipmentToolbar: new EquipmentToolbar(this.settings.entityDesc,
-                this.state.equipment,
-                this.postInit.bind(this),
-                this.setLayout.bind(this),
-                prevState.layout.newEntity,
-                this.props.applicationData,
-                this.props.userData.screens[this.props.userData.systemScreen].screenCode)
-        }))
-    }
-
     //
     //
     //
@@ -129,7 +113,7 @@ export default class System extends Entity {
             WORKORDERS: {label: "Work Orders", code: user + "_" + screen + "_WORKORDERS"},
             HISTORY: {label: "History", code: user + "_" + screen + "_HISTORY"},
             PARTS: {label: "Parts Associated", code: user + "_" + screen + "_PARTS"},
-            EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen + "_EDMSDOCS"},
+            //EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen + "_EDMSDOCS"},
             COMMENTS: {label: "Comments", code: user + "_" + screen + "_COMMENTS"},
             USERDEFFIELDS: {label: "User Defined Fields", code: user + "_" + screen + "_USERDEFFIELDS"},
             CUSTOMFIELDS: {label: "Custom Fields", code: user + "_" + screen + "_CUSTOMFIELDS"}
@@ -173,7 +157,15 @@ export default class System extends Entity {
                                  saveHandler={this.saveHandler.bind(this)}
                                  newHandler={() => this.props.history.push('/system')}
                                  deleteHandler={this.deleteEntity.bind(this, this.state.equipment.code)}
-                                 entityToolbar={this.state.equipmentToolbar}
+                                 entityToolbar={<EquipmentToolbar entityDesc={this.settings.entityDesc}
+                                                                  equipment={this.state.equipment}
+                                                                  postInit={this.postInit.bind(this)}
+                                                                  setLayout={this.setLayout.bind(this)}
+                                                                  newEquipment={this.state.layout.newEntity}
+                                                                  applicationData={this.props.applicationData}
+                                                                  extendedLink={this.props.applicationData.extendedSystemLink}
+                                                                  screencode={this.props.userData.screens[this.props.userData.systemScreen].screenCode}
+                                 />}
                                  width={730}
                                  entityIcon={<SystemIcon style={{height: 18}}/>}
                                  toggleHiddenRegion={this.props.toggleHiddenRegion}
@@ -195,25 +187,20 @@ export default class System extends Entity {
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().WORKORDERS.code] &&
-                             !this.state.layout.newEntity &&
-                             <EquipmentWorkOrders equipmentcode={this.state.equipment.code}/>}
+                            !this.state.layout.newEntity &&
+                            <EquipmentWorkOrders equipmentcode={this.state.equipment.code}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().HISTORY.code] &&
-                             !this.state.layout.newEntity &&
+                            !this.state.layout.newEntity &&
                             <EquipmentHistory equipmentcode={this.state.equipment.code}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().PARTS.code] &&
-                              EquipmentTools.isRegionAvailable('PAS', props.systemLayout, 'S') && !this.state.layout.newEntity &&
+                            EquipmentTools.isRegionAvailable('PAS', props.systemLayout, 'S') && !this.state.layout.newEntity &&
                             <EquipmentPartsAssociated equipmentcode={this.state.equipment.code}
                                                       parentScreen={this.props.userData.systemScreen.parentScreen}/>}
 
                         </Grid>
                         <Grid item xs={xs} sm={sm} md={md} lg={lg}>
-
-                            {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
-                            !this.state.layout.newEntity &&
-                            <EDMSDoclightIframeContainer objectType="X" objectID={this.state.equipment.code}/>
-                            }
 
                             {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                             <CommentsContainer ref={comments => this.comments = comments}
@@ -230,7 +217,7 @@ export default class System extends Entity {
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
-                             EquipmentTools.isRegionAvailable('CUSTOM_FIELDS', props.systemLayout, 'S') &&
+                            EquipmentTools.isRegionAvailable('CUSTOM_FIELDS', props.systemLayout, 'S') &&
                             <CustomFields entityCode='OBJ'
                                           entityKeyCode={this.state.equipment.code}
                                           classCode={this.state.equipment.classCode}
