@@ -78,7 +78,6 @@ class Workorder extends Entity {
         this.setStatuses('', '', true)
         this.setTypes('', '', true, false)
         this.enableChildren()
-        this.initWorkorderToolbar()
     }
 
     postCreate() {
@@ -88,7 +87,6 @@ class Workorder extends Entity {
         if (this.comments) {
             this.comments.wrappedInstance.createCommentForNewEntity();
         }
-        this.initWorkorderToolbar()
     }
 
     postUpdate() {
@@ -106,7 +104,6 @@ class Workorder extends Entity {
         if (this.comments) {
             this.comments.wrappedInstance.createCommentForNewEntity();
         }
-        this.initWorkorderToolbar()
     }
 
     postRead(workorder) {
@@ -122,7 +119,6 @@ class Workorder extends Entity {
         }
         //Set work order equipment
         this.setWOEquipment(workorder.equipmentCode);
-        this.initWorkorderToolbar()
     }
 
     //
@@ -193,17 +189,6 @@ class Workorder extends Entity {
         this.checklists.wrappedInstance.readActivities(this.state.workorder.number);
     };
 
-    initWorkorderToolbar() {
-        this.setState((prevState) => ({
-            workorderToolbar: new WorkorderToolbar(this.state.workorder,
-                this.postInit.bind(this),
-                this.setLayout.bind(this),
-                prevState.layout.newEntity,
-                this.props.applicationData,
-                this.props.userData.eamAccount.userGroup,
-                this.props.userData.screens[this.props.userData.workOrderScreen].screenCode)
-        }))
-    }
 
     //
     //
@@ -232,7 +217,14 @@ class Workorder extends Entity {
                                      newHandler={() => this.props.history.push('/workorder')}
                                      deleteHandler={this.deleteEntity.bind(this, this.state.workorder.number)}
                                      width={790}
-                                     entityToolbar={this.state.workorderToolbar}
+                                     entityToolbar={<WorkorderToolbar workorder={this.state.workorder}
+                                                                      postInit={this.postInit.bind(this)}
+                                                                      setLayout={this.setLayout.bind(this)}
+                                                                      newWorkorder={this.state.layout.newEntity}
+                                                                      applicationData={this.props.applicationData}
+                                                                      userGroup={this.props.userData.eamAccount.userGroup}
+                                                                      screencode={this.props.userData.screens[this.props.userData.workOrderScreen].screenCode}
+                                     />}
                                      entityIcon={<WorkorderIcon style={{height: 18}}/>}
                                      toggleHiddenRegion={this.props.toggleHiddenRegion}
                                      regions={this.getRegions()}
@@ -247,23 +239,23 @@ class Workorder extends Entity {
 
 
                                 {!this.props.hiddenRegions[this.getRegions().SCHEDULING.code] &&
-                                  WorkorderTools.isRegionAvailable('SCHEDULING', props.workOrderLayout) &&
+                                WorkorderTools.isRegionAvailable('SCHEDULING', props.workOrderLayout) &&
                                 <WorkorderScheduling {...props}/>}
 
 
                                 {!this.props.hiddenRegions[this.getRegions().CLOSINGCODES.code] &&
-                                  WorkorderTools.isRegionAvailable('CLOSING_CODES', props.workOrderLayout) &&
+                                WorkorderTools.isRegionAvailable('CLOSING_CODES', props.workOrderLayout) &&
                                 <WorkorderClosingCodes {...props}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().PARTUSAGE.code] &&
-                                  WorkorderTools.isRegionAvailable('PAR', props.workOrderLayout) &&
-                                 !this.state.layout.newEntity &&
+                                WorkorderTools.isRegionAvailable('PAR', props.workOrderLayout) &&
+                                !this.state.layout.newEntity &&
                                 <PartUsageContainer workorder={this.state.workorder}
                                                     tabLayout={this.props.workOrderLayout.tabs.PAR.fields}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().CHILDRENWOS.code] &&
-                                  WorkorderTools.isRegionAvailable('CWO', props.workOrderLayout) &&
-                                 !this.state.layout.newEntity &&
+                                WorkorderTools.isRegionAvailable('CWO', props.workOrderLayout) &&
+                                !this.state.layout.newEntity &&
                                 <WorkorderChildren workorder={this.state.workorder.number}/>}
 
                             </Grid>
@@ -277,8 +269,8 @@ class Workorder extends Entity {
                                 }
 
                                 {!this.props.hiddenRegions[this.getRegions().ACTIVITIES.code] &&
-                                  WorkorderTools.isRegionAvailable('ACT_BOO', props.workOrderLayout) &&
-                                 !this.state.layout.newEntity &&
+                                WorkorderTools.isRegionAvailable('ACT_BOO', props.workOrderLayout) &&
+                                !this.state.layout.newEntity &&
                                 <Activities
                                     workorder={this.state.workorder.number}
                                     department={this.state.workorder.departmentCode}
@@ -287,20 +279,20 @@ class Workorder extends Entity {
                                     postAddActivityHandler={this.postAddActivityHandler}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().CHECKLISTS.code] &&
-                                  WorkorderTools.isRegionAvailable('ACK', props.workOrderLayout) &&
-                                 !this.state.layout.newEntity &&
-                                  <ChecklistsContainer workorder={this.state.workorder.number}
-                                                       printingChecklistLinkToAIS={this.props.applicationData.printingChecklistLinkToAIS}
-                                                       ref={checklists => this.checklists = checklists}/>}
+                                WorkorderTools.isRegionAvailable('ACK', props.workOrderLayout) &&
+                                !this.state.layout.newEntity &&
+                                <ChecklistsContainer workorder={this.state.workorder.number}
+                                                     printingChecklistLinkToAIS={this.props.applicationData.printingChecklistLinkToAIS}
+                                                     ref={checklists => this.checklists = checklists}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
-                                  WorkorderTools.isRegionAvailable('CUSTOM_FIELDS', props.workOrderLayout) &&
-                                  <CustomFields children={this.children}
-                                                entityCode='EVNT'
-                                                entityKeyCode={this.state.workorder.number}
-                                                classCode={this.state.workorder.classCode}
-                                                customFields={this.state.workorder.customField}
-                                                updateEntityProperty={this.updateEntityProperty.bind(this)}/>}
+                                WorkorderTools.isRegionAvailable('CUSTOM_FIELDS', props.workOrderLayout) &&
+                                <CustomFields children={this.children}
+                                              entityCode='EVNT'
+                                              entityKeyCode={this.state.workorder.number}
+                                              classCode={this.state.workorder.classCode}
+                                              customFields={this.state.workorder.customField}
+                                              updateEntityProperty={this.updateEntityProperty.bind(this)}/>}
 
                                 {WorkorderTools.isRegionAvailable('CUSTOM_FIELDS_EQP', props.workOrderLayout) &&
                                 this.state.layout.woEquipment &&

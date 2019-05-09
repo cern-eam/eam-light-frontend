@@ -127,6 +127,8 @@ class EamlightToolbar extends Component {
     //
     //
     renderCompactMenu() {
+        this.props.entityToolbar.props.renderOption = 'MENUITEMS'
+
         return (
             <div>
                 <Button
@@ -151,13 +153,14 @@ class EamlightToolbar extends Component {
                         <DeleteIcon className="iconButton" style={this.iconMenuStyle}/>
                         <div style={this.menuLabelStyle}> Delete</div>
                     </MenuItem>
-                    {this.props.entityToolbar && this.props.entityToolbar.renderMenuItems()}
+                    {this.props.entityToolbar}
                 </Menu>
             </div>
         )
     }
 
     renderDesktopMenu() {
+        this.props.entityToolbar.props.renderOption = 'TOOLBARICONS'
         return (
             <div style={{display: "flex"}}>
                 <Button className="button" onClick={this.newHandler} disabled={this.isNewButtonDisabled()}>
@@ -169,7 +172,7 @@ class EamlightToolbar extends Component {
                     <DeleteIcon className="iconButton" style={this.iconButtonStyle}/>
                     Delete
                 </Button>
-                {this.props.entityToolbar && this.props.entityToolbar.renderToolbarIconsRow()}
+                {this.props.entityToolbar}
             </div>
         )
     }
