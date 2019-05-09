@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -7,7 +7,7 @@ import {WorkorderIcon} from 'eam-components/dist/ui/components/icons'
 import Divider from '@material-ui/core/Divider';
 import {ContentCopy, EmailOutline, Map, OpenInNew} from 'mdi-material-ui'
 
-class EquipmentToolbar {
+class EquipmentToolbar extends Component {
 
     divStyle = {
         width: "100%",
@@ -126,6 +126,19 @@ class EquipmentToolbar {
                 </Tooltip>
             </div>
         );
+    }
+
+
+    render() {
+        if (this.props.renderOption === 'MENUITEMS') {
+            return this.renderMenuItems()
+        } else if (this.props.renderOption === 'TOOLBARICONS') {
+            return this.renderToolbarIconsRow();
+        } else {
+            return (
+                <div/>
+            )
+        }
     }
 
 }

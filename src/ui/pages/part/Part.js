@@ -48,21 +48,18 @@ class Part extends Entity {
     //
     postInit() {
         this.setTrackingMethods();
-        this.initPartToolbar()
     }
 
     postCreate() {
         this.comments.wrappedInstance.createCommentForNewEntity();
-        this.initPartToolbar()
     }
 
     postUpdate() {
         this.comments.wrappedInstance.createCommentForNewEntity();
-        this.initPartToolbar()
     }
 
     postRead(part) {
-        this.initPartToolbar()
+        //
     }
 
     //
@@ -76,20 +73,6 @@ class Part extends Entity {
             this.setLayout({blocking: false});
         });
     };
-
-    initPartToolbar() {
-        this.setState((prevState) => ({
-            partToolbar: new PartToolbar(this.state.part,
-                                         this.postInit.bind(this),
-                                         this.setLayout.bind(this),
-                                         prevState.layout.newEntity,
-                                         this.props.applicationData,
-                                         this.props.userData.screens[this.props.userData.partScreen].screenCode,
-                                         this.props.handleError,
-                                         this.props.showNotification,
-                                         this.props.showError)
-        }))
-    }
 
     //
     //
@@ -133,7 +116,16 @@ class Part extends Entity {
                                      saveHandler={this.saveHandler.bind(this)}
                                      newHandler={() => this.props.history.push('/part')}
                                      deleteHandler={this.deleteEntity.bind(this, this.state.part.code)}
-                                     entityToolbar={this.state.partToolbar}
+                                     entityToolbar={<PartToolbar part={this.state.part}
+                                                                 postInit={this.postInit.bind(this)}
+                                                                 setLayout={this.setLayout.bind(this)}
+                                                                 newPart={this.state.layout.newEntity}
+                                                                 applicationData={this.props.applicationData}
+                                                                 screencode={this.props.userData.screens[this.props.userData.partScreen].screenCode}
+                                                                 handleError={this.props.handleError}
+                                                                 showNotification={this.props.showNotification}
+                                                                 showError={this.props.showError}
+                                     />}
                                      width={730}
                                      entityIcon={<PartIcon style={{height: 18}}/>}
                                      toggleHiddenRegion={this.props.toggleHiddenRegion}
@@ -154,13 +146,13 @@ class Part extends Entity {
                                 }
 
                                 {!this.props.hiddenRegions[this.getRegions().PARTSTOCK.code] &&
-                                 !this.state.layout.newEntity &&
+                                !this.state.layout.newEntity &&
                                 <PartStock {...props}/>
                                 }
 
                                 {!this.props.hiddenRegions[this.getRegions().WHEREUSED.code] &&
-                                  PartTools.isRegionAvailable('EPA', props.partLayout) &&
-                                 !this.state.layout.newEntity &&
+                                PartTools.isRegionAvailable('EPA', props.partLayout) &&
+                                !this.state.layout.newEntity &&
                                 <PartWhereUsed {...props}/>}
                             </Grid>
                             <Grid item sm={6} xs={12}>
@@ -173,7 +165,7 @@ class Part extends Entity {
                                 }
 
                                 {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
-                                  PartTools.isRegionAvailable('CUSTOM_FIELDS', props.partLayout) &&
+                                PartTools.isRegionAvailable('CUSTOM_FIELDS', props.partLayout) &&
                                 <CustomFields entityCode={PART}
                                               entityKeyCode={this.state.part.code}
                                               classCode={this.state.part.classCode}
