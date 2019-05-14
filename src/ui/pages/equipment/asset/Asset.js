@@ -1,24 +1,25 @@
-import React from 'react';
-import Entity from '../../Entity'
-import EquipmentHistory from '../components/EquipmentHistory.js'
-import EamlightToolbar from './../../../components/EamlightToolbar'
-import CustomFields from '../../../components/customfields/CustomFields'
-import WSEquipment from "../../../../tools/WSEquipment"
-import BlockUi from 'react-block-ui'
-import 'react-block-ui/style.css'
 import Grid from '@material-ui/core/Grid';
-import AssetGeneral from './AssetGeneral'
-import AssetDetails from './AssetDetails'
-import AssetHierarchy from './AssetHierarchy'
 import CommentsContainer from 'eam-components/dist/ui/components/comments/CommentsContainer';
-import EquipmentToolbar from '../components/EquipmentToolbar'
 import EDMSWidgetContainer from 'eam-components/dist/ui/components/edms/EDMSWidgetContainer';
-import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
-import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
-import EquipmentTools from "../EquipmentTools";
-import {AssetIcon} from 'eam-components/dist/ui/components/icons'
-import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
+import { AssetIcon } from 'eam-components/dist/ui/components/icons';
+import React from 'react';
+import BlockUi from 'react-block-ui';
+import 'react-block-ui/style.css';
+import WSEquipment from "../../../../tools/WSEquipment";
+import { TOOLBARS } from "../../../components/AbstractToolbar";
+import CustomFields from '../../../components/customfields/CustomFields';
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
+import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
+import Entity from '../../Entity';
+import EquipmentHistory from '../components/EquipmentHistory.js';
+import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
+import EquipmentToolbar from '../components/EquipmentToolbar';
+import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
+import EquipmentTools from "../EquipmentTools";
+import EamlightToolbar from './../../../components/EamlightToolbar';
+import AssetDetails from './AssetDetails';
+import AssetGeneral from './AssetGeneral';
+import AssetHierarchy from './AssetHierarchy';
 
 export default class Asset extends Entity {
 
@@ -177,15 +178,17 @@ export default class Asset extends Entity {
                                  saveHandler={this.saveHandler.bind(this)}
                                  newHandler={() => this.props.history.push('/asset')}
                                  deleteHandler={this.deleteEntity.bind(this, this.state.equipment.code)}
-                                 entityToolbar={<EquipmentToolbar entityDesc={this.settings.entityDesc}
-                                                                  equipment={this.state.equipment}
-                                                                  postInit={this.postInit.bind(this)}
-                                                                  setLayout={this.setLayout.bind(this)}
-                                                                  newEquipment={this.state.layout.newEntity}
-                                                                  applicationData={this.props.applicationData}
-                                                                  extendedLink={this.props.applicationData.extendedAssetLink}
-                                                                  screencode={this.props.userData.screens[this.props.userData.assetScreen].screenCode}
-                                 />}
+                                toolbarProps={{
+                                    _toolbarType: TOOLBARS.EQUIPMENT,
+                                    entityDesc: this.settings.entityDesc,
+                                    equipment: this.state.equipment,
+                                    postInit: this.postInit.bind(this),
+                                    setLayout: this.setLayout.bind(this),
+                                    newEquipment: this.state.layout.newEntity,
+                                    applicationData: this.props.applicationData,
+                                    extendedLink: this.props.applicationData.extendedAssetLink,
+                                    screencode: this.props.userData.screens[this.props.userData.assetScreen].screenCode
+                                }}
                                  width={730}
                                  entityIcon={<AssetIcon style={{height: 18}}/>}
                                  toggleHiddenRegion={this.props.toggleHiddenRegion}
