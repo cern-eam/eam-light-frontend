@@ -15,6 +15,7 @@ import PartTools from "./PartTools";
 import {PartIcon} from 'eam-components/dist/ui/components/icons'
 import PartToolbar from "./PartToolbar";
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
+import { TOOLBARS } from '../../components/AbstractToolbar';
 
 const PART = 'PART';
 const SSPART = 'SSPART';
@@ -116,16 +117,18 @@ class Part extends Entity {
                                      saveHandler={this.saveHandler.bind(this)}
                                      newHandler={() => this.props.history.push('/part')}
                                      deleteHandler={this.deleteEntity.bind(this, this.state.part.code)}
-                                     entityToolbar={<PartToolbar part={this.state.part}
-                                                                 postInit={this.postInit.bind(this)}
-                                                                 setLayout={this.setLayout.bind(this)}
-                                                                 newPart={this.state.layout.newEntity}
-                                                                 applicationData={this.props.applicationData}
-                                                                 screencode={this.props.userData.screens[this.props.userData.partScreen].screenCode}
-                                                                 handleError={this.props.handleError}
-                                                                 showNotification={this.props.showNotification}
-                                                                 showError={this.props.showError}
-                                     />}
+                                     toolbarProps={{ 
+                                                    _toolbarType: TOOLBARS.PART, 
+                                                    part: this.state.part,
+                                                    postInit: this.postInit.bind(this),
+                                                    setLayout: this.setLayout.bind(this),
+                                                    newPart: this.state.layout.newEntity,
+                                                    applicationData: this.props.applicationData,
+                                                    screencode: this.props.userData.screens[this.props.userData.partScreen].screenCode,
+                                                    handleError: this.props.handleError,
+                                                    showNotification: this.props.showNotification,
+                                                    showError: this.props.showError            
+                                     }}
                                      width={730}
                                      entityIcon={<PartIcon style={{height: 18}}/>}
                                      toggleHiddenRegion={this.props.toggleHiddenRegion}

@@ -11,6 +11,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
+//import WorkorderToolbar from '../pages/work/WorkorderToolbarContainer';
+//import EquipmentToolbar from '../../ui/pages/equipment/components/EquipmentToolbar';
+import AbstractToolbar from './AbstractToolbar';
 
 
 class EamlightToolbar extends Component {
@@ -116,7 +119,7 @@ class EamlightToolbar extends Component {
     //
     getRegions = () => {
         return Object.values(this.props.regions).map(
-            region => <MenuItem onClick={() => this.props.toggleHiddenRegion(region.code)}>
+            region => <MenuItem key={region.code} onClick={() => this.props.toggleHiddenRegion(region.code)}>
                          <Checkbox disabled checked={!this.props.hiddenRegions[region.code]}/>
                          {region.label}
                       </MenuItem>
@@ -127,8 +130,7 @@ class EamlightToolbar extends Component {
     //
     //
     renderCompactMenu() {
-        this.props.entityToolbar.props.renderOption = 'MENUITEMS'
-
+        //this.props.entityToolbar.props.renderOption = 'MENUITEMS'
         return (
             <div>
                 <Button
@@ -153,14 +155,16 @@ class EamlightToolbar extends Component {
                         <DeleteIcon className="iconButton" style={this.iconMenuStyle}/>
                         <div style={this.menuLabelStyle}> Delete</div>
                     </MenuItem>
-                    {this.props.entityToolbar}
+                    {this.getToolbar('MENUITEMS')}
                 </Menu>
             </div>
         )
     }
 
+    getToolbar = renderOption => 
+        <AbstractToolbar {...this.props.toolbarProps} renderOption={renderOption}/>
+
     renderDesktopMenu() {
-        this.props.entityToolbar.props.renderOption = 'TOOLBARICONS'
         return (
             <div style={{display: "flex"}}>
                 <Button className="button" onClick={this.newHandler} disabled={this.isNewButtonDisabled()}>
@@ -172,7 +176,7 @@ class EamlightToolbar extends Component {
                     <DeleteIcon className="iconButton" style={this.iconButtonStyle}/>
                     Delete
                 </Button>
-                {this.props.entityToolbar}
+                {this.getToolbar('TOOLBARICONS')}
             </div>
         )
     }
