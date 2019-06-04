@@ -128,7 +128,7 @@ class WSWorkorders {
     // ACTIVITIES AND BOOKED LABOURS
     //
     getWorkOrderActivities(number, config = {}) {
-        return WS._get('/activities/read/?workorder=' + number, config);
+        return WS._get('/activities/read/?workorder=' + number + '&includeChecklists=false', config);
     }
 
     // Get default values for next activity for one work order
