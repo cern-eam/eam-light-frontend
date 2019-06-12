@@ -19,8 +19,7 @@ const styles = {
 class EamlightMenuMyTeamWorkorders extends Component {
     state = {
         days: 'ALL',
-        department: 'ALL',
-        departments: null
+        department: 'ALL'
     };
 
     headingStyle = {
@@ -30,12 +29,6 @@ class EamlightMenuMyTeamWorkorders extends Component {
         color: "#ffffff",
         alignItems: "center",
         justifyContent: "center"
-    }
-
-    componentWillMount() {
-        if (this.props.myTeamWorkOrders) {
-            this.setState({departments: [...new Set(this.props.myTeamWorkOrders.map(workorder => workorder.mrc))]})
-        }
     }
 
     handleDaysChange = (event, value) => {
@@ -56,16 +49,18 @@ class EamlightMenuMyTeamWorkorders extends Component {
     }
 
     renderHeading() {
-        if (!this.state.departments || this.state.departments.length === 0) {
+        let departments = this.props.eamAccount.userDepartments;
+
+        if (!departments || departments.length === 0) {
             return <div style={this.headingStyle}>No department defined</div>
         }
 
-        if (this.state.departments.length === 1) {
-            return <div style={this.headingStyle}>WOs FOR DEPARTMENT {this.state.departments[0]}</div>
+        if (departments.length === 1) {
+            return <div style={this.headingStyle}>WOs FOR DEP: {departments[0]}</div>
         }
 
         return (
-            <div style={this.headingStyle}>WOs FOR DEP.
+            <div style={this.headingStyle}>WOs FOR DEP:
                 <FormControl>
                     <Select style={{color: "white"}}
                             classes={{
@@ -77,7 +72,7 @@ class EamlightMenuMyTeamWorkorders extends Component {
                             onChange={this.handleDepartmentChange.bind(this)}
                     >
                         <MenuItem value="ALL">ALL</MenuItem>
-                        {this.state.departments.map(department => (
+                        {departments.map(department => (
                             <MenuItem key={department} value={department}>{department}</MenuItem>
                         ))}
                     </Select>
