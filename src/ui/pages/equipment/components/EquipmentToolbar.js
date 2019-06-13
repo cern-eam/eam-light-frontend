@@ -49,7 +49,7 @@ class EquipmentToolbar extends Component {
     }
 
     showOnMapHandler() {
-        window.open(this.props.applicationData.gisprocedureLinkEQP + this.props.equipment.code, '_blank');
+        window.open(this.props.applicationData.EL_GISEQ + this.props.equipment.code, '_blank');
     }
 
     showInExtendedHandler() {

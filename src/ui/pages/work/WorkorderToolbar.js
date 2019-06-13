@@ -45,7 +45,7 @@ class WorkorderToolbar extends Component {
     }
 
     printWorkOrderHandler() {
-        let url = this.props.applicationData.printingLinkToAIS + this.props.workorder.number;
+        let url = this.props.applicationData.EL_PRTWO + this.props.workorder.number;
         let w = window.open(url, "winLov", "Scrollbars=1,resizable=1");
         if (w.opener == null) {
             w.opener = window.self;
@@ -54,27 +54,26 @@ class WorkorderToolbar extends Component {
     }
 
     showOnMapWorkOrderHandler() {
-        window.open(this.props.applicationData.gisprocedureLinkWO + this.props.workorder.number, '_blank');
+        window.open(this.props.applicationData.EL_GISWO + this.props.workorder.number, '_blank');
     }
 
     showInExtendedHandler() {
-        const extendedLink = this.props.applicationData.extendedWOLink.replace("&1", this.props.screencode).replace("&2", this.props.workorder.number);
+        const extendedLink = this.props.applicationData.EL_WOLIN.replace("&1", this.props.screencode).replace("&2", this.props.workorder.number);
         window.open(extendedLink, '_blank');
     }
 
     OSVCHandler() {
-        const osvcLink = this.props.applicationData.linkToEAMIntegration + "/osvc.xhtml?workordernum=" + this.props.workorder.number;
+        const osvcLink = this.props.applicationData.EL_INTEG + "/osvc.xhtml?workordernum=" + this.props.workorder.number;
         window.open(osvcLink, '_blank');
     }
 
     dismacHandler() {
-        const dismacLink = this.props.applicationData.dismacURL.replace('{{workOrderId}}', this.props.workorder.number);
+        const dismacLink = this.props.applicationData.EL_DMURL.replace('{{workOrderId}}', this.props.workorder.number);
         window.open(dismacLink, '_blank');
     }
 
     isDismacVisible() {
-        const { dismacUserGroups } = this.props.applicationData;
-        return dismacUserGroups && dismacUserGroups.map(group => group.toLowerCase()).indexOf(this.props.userGroup.toLowerCase()) !== -1;
+        return this.props.applicationData.EL_DMUSG.includes(this.props.userGroup);
     }
 
     renderMenuItems() {
