@@ -3,16 +3,50 @@ import EISPanel from 'eam-components/dist/ui/components/panel';
 import WSEquipment from '../../../../tools/WSEquipment';
 import EISTable from 'eam-components/dist/ui/components/table';
 
-
 export default class EquipmentWorkOrders extends Component {
+    
+    workOrderFilterTypes = {
+        ALL: 'ALL',
+        OPEN: 'OPEN',
+        MTF: 'MTF'
+    }
+
+    workOrderFilters = {
+        [this.workOrderFilterTypes.ALL]: {
+            text: 'All',
+            process: (data) => {
+                return [...data];
+            }
+        },
+        [this.workOrderFilterTypes.OPEN]: {
+            text: 'Open',
+            process: (data) => {
+                return data.filter((workOrder) => !workOrder.statusCode.startsWith("T"));
+            }
+        },
+        [this.workOrderFilterTypes.MTF]: {
+            text: 'MTF',
+            process: (data) => {
+                return data.filter((workOrder) => {
+                    return workOrder.jobType.startsWith("ICF") || workOrder.jobType.startsWith("MTF");
+                })
+            }
+        }
+    }
+    
+    state = {
+        data: [],
+        workOrderFilter: this.workOrderFilterTypes.ALL
+    };
 
     headers = ['Work Order', 'Description', 'Status', 'Creation Date'];
     propCodes = ['number', 'desc', 'status', 'createdDate'];
     linksMap = new Map([['number', {linkType: 'fixed', linkValue: 'workorder/', linkPrefix: '/'}]]);
 
-    state = {
-        data: []
-    };
+
+    getFilteredWorkOrderList = (workOrders) => {
+        return this.workOrderFilters[this.state.workOrderFilter].process(workOrders)
+    }
 
     componentWillMount() {
         this.fetchData(this.props);
@@ -49,6 +83,14 @@ export default class EquipmentWorkOrders extends Component {
                 }))
             });
     }
+    
+    handleWorkOrderFilterChange = (newFilter) => {
+        this.setState(() => ({ workOrderFilter: newFilter }));
+    }
+    
+    detailsStyle = {
+        display: 'flex', flexDirection: 'column'
+    }
 
     render() {
         if (this.state.data.length === 0) {
@@ -56,13 +98,17 @@ export default class EquipmentWorkOrders extends Component {
         }
 
         return (
-            <EISPanel heading="WORK ORDERS">
+            <EISPanel
+                detailsStyle={this.detailsStyle}
+                heading="WORK ORDERS">        
                 <EISTable
-                    data={this.state.data}
-                    headers={this.headers}
-                    propCodes={this.propCodes}
-                    linksMap={this.linksMap}
-                />
+                   data={this.getFilteredWorkOrderList(this.state.data)}
+                   headers={this.headers}
+                   propCodes={this.propCodes}
+                   filters={this.workOrderFilters}
+                   activeFilter={this.state.workOrderFilter}
+                   handleFilterChange={this.handleWorkOrderFilterChange}
+                   linksMap={this.linksMap} />
             </EISPanel>
         )
     }
