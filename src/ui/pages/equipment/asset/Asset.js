@@ -183,7 +183,7 @@ export default class Asset extends Entity {
                                                                   setLayout={this.setLayout.bind(this)}
                                                                   newEquipment={this.state.layout.newEntity}
                                                                   applicationData={this.props.applicationData}
-                                                                  extendedLink={this.props.applicationData.extendedAssetLink}
+                                                                  extendedLink={this.props.applicationData.EL_ASSLI}
                                                                   screencode={this.props.userData.screens[this.props.userData.assetScreen].screenCode}
                                  />}
                                  width={730}

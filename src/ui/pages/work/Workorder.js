@@ -282,7 +282,7 @@ class Workorder extends Entity {
                                 WorkorderTools.isRegionAvailable('ACK', props.workOrderLayout) &&
                                 !this.state.layout.newEntity &&
                                 <ChecklistsContainer workorder={this.state.workorder.number}
-                                                     printingChecklistLinkToAIS={this.props.applicationData.printingChecklistLinkToAIS}
+                                                     printingChecklistLinkToAIS={this.props.applicationData.EL_PRTCL}
                                                      ref={checklists => this.checklists = checklists}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&

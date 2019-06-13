@@ -3,7 +3,7 @@ import EDMSDoclightIframe from './EDMSDoclightIframe'
 
 function mapStateToProps(state) {
     return {
-        edmsdoclightURL: state.application.applicationData.edmsdoclightURL
+        edmsdoclightURL: state.application.applicationData.EL_DOCLI
     }
 }
 
