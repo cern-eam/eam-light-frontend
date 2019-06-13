@@ -19,6 +19,7 @@ import {PositionIcon} from 'eam-components/dist/ui/components/icons'
 import EquipmentToolbar from "../components/EquipmentToolbar";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
+import {TOOLBARS} from "../../../components/AbstractToolbar";
 
 export default class Position extends Entity {
 
@@ -165,15 +166,17 @@ export default class Position extends Entity {
                                  saveHandler={this.saveHandler.bind(this)}
                                  newHandler={() => this.props.history.push('/position')}
                                  deleteHandler={this.deleteEntity.bind(this, this.state.equipment.code)}
-                                 entityToolbar={<EquipmentToolbar entityDesc={this.settings.entityDesc}
-                                                                  equipment={this.state.equipment}
-                                                                  postInit={this.postInit.bind(this)}
-                                                                  setLayout={this.setLayout.bind(this)}
-                                                                  newEquipment={this.state.layout.newEntity}
-                                                                  applicationData={this.props.applicationData}
-                                                                  extendedLink={this.props.applicationData.EL_POSLI}
-                                                                  screencode={this.props.userData.screens[this.props.userData.positionScreen].screenCode}
-                                 />}
+                                 toolbarProps={{
+                                     _toolbarType: TOOLBARS.EQUIPMENT,
+                                     entityDesc: this.settings.entityDesc,
+                                     equipment: this.state.equipment,
+                                     postInit: this.postInit.bind(this),
+                                     setLayout: this.setLayout.bind(this),
+                                     newEquipment: this.state.layout.newEntity,
+                                     applicationData: this.props.applicationData,
+                                     extendedLink: this.props.applicationData.EL_POSLI,
+                                     screencode: this.props.userData.screens[this.props.userData.positionScreen].screenCode
+                                 }}
                                  width={730}
                                  entityIcon={<PositionIcon style={{height: 18}}/>}
                                  toggleHiddenRegion={this.props.toggleHiddenRegion}
@@ -219,7 +222,7 @@ export default class Position extends Entity {
                             <EDMSWidgetContainer objectID={this.state.equipment.code} objectType="S"
                                                  creationMode="NCR"
                                                  title="NCRs"
-                                                 edmsDocListLink={this.props.applicationData.edmsDocListLink}/>}
+                                                 edmsDocListLink={this.props.applicationData.EL_EDMSL}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                             <CommentsContainer ref={comments => this.comments = comments}

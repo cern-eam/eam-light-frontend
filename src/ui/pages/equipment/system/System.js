@@ -18,6 +18,7 @@ import {SystemIcon} from 'eam-components/dist/ui/components/icons'
 import EquipmentToolbar from "../components/EquipmentToolbar";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
+import {TOOLBARS} from "../../../components/AbstractToolbar";
 
 
 export default class System extends Entity {
@@ -157,15 +158,17 @@ export default class System extends Entity {
                                  saveHandler={this.saveHandler.bind(this)}
                                  newHandler={() => this.props.history.push('/system')}
                                  deleteHandler={this.deleteEntity.bind(this, this.state.equipment.code)}
-                                 entityToolbar={<EquipmentToolbar entityDesc={this.settings.entityDesc}
-                                                                  equipment={this.state.equipment}
-                                                                  postInit={this.postInit.bind(this)}
-                                                                  setLayout={this.setLayout.bind(this)}
-                                                                  newEquipment={this.state.layout.newEntity}
-                                                                  applicationData={this.props.applicationData}
-                                                                  extendedLink={this.props.applicationData.extendedSystemLink}
-                                                                  screencode={this.props.userData.screens[this.props.userData.systemScreen].screenCode}
-                                 />}
+                                 toolbarProps={{
+                                     _toolbarType: TOOLBARS.EQUIPMENT,
+                                     entityDesc: this.settings.entityDesc,
+                                     equipment: this.state.equipment,
+                                     postInit: this.postInit.bind(this),
+                                     setLayout: this.setLayout.bind(this),
+                                     newEquipment: this.state.layout.newEntity,
+                                     applicationData: this.props.applicationData,
+                                     extendedLink: this.props.applicationData.EL_SYSLI,
+                                     screencode: this.props.userData.screens[this.props.userData.systemScreen].screenCode
+                                 }}
                                  width={730}
                                  entityIcon={<SystemIcon style={{height: 18}}/>}
                                  toggleHiddenRegion={this.props.toggleHiddenRegion}
