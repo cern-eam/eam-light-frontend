@@ -188,7 +188,7 @@ export default class Asset extends Entity {
                                     applicationData: this.props.applicationData,
                                     extendedLink: this.props.applicationData.EL_ASSLI,
                                     screencode: this.props.userData.screens[this.props.userData.assetScreen].screenCode
-                                }}
+                                 }}
                                  width={730}
                                  entityIcon={<AssetIcon style={{height: 18}}/>}
                                  toggleHiddenRegion={this.props.toggleHiddenRegion}
@@ -237,7 +237,7 @@ export default class Asset extends Entity {
                             <EDMSWidgetContainer objectID={this.state.equipment.code} objectType="A"
                                                  creationMode="NCR"
                                                  title="NCRs"
-                                                 edmsDocListLink={this.props.applicationData.edmsDocListLink}/>}
+                                                 edmsDocListLink={this.props.applicationData.EL_EDMSL}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                             <CommentsContainer ref={comments => this.comments = comments}
