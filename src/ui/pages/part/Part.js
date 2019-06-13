@@ -15,6 +15,7 @@ import PartTools from "./PartTools";
 import {PartIcon} from 'eam-components/dist/ui/components/icons'
 import PartToolbar from "./PartToolbar";
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
+import { TOOLBARS } from '../../components/AbstractToolbar';
 
 const PART = 'PART';
 const SSPART = 'SSPART';
@@ -84,7 +85,7 @@ class Part extends Entity {
             PARTSTOCK: {label: "Part Stock", code: user + "_" + screen+ "_PARTSTOCK"},
             WHEREUSED: {label: "Where Used", code: user + "_" + screen+ "_WHEREUSED"},
             USERDEFFIELDS: {label: "User Defined Fields", code: user + "_" + screen+ "_USERDEFFIELDS"},
-            //EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen+ "_EDMSDOCS"},
+            EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen+ "_EDMSDOCS"},
             COMMENTS: {label: "Comments", code: user + "_" + screen+ "_COMMENTS"},
             CUSTOMFIELDS: {label: "Custom Fields", code: user + "_" + screen+ "_CUSTOMFIELDS"}
         }
@@ -116,16 +117,18 @@ class Part extends Entity {
                                      saveHandler={this.saveHandler.bind(this)}
                                      newHandler={() => this.props.history.push('/part')}
                                      deleteHandler={this.deleteEntity.bind(this, this.state.part.code)}
-                                     entityToolbar={<PartToolbar part={this.state.part}
-                                                                 postInit={this.postInit.bind(this)}
-                                                                 setLayout={this.setLayout.bind(this)}
-                                                                 newPart={this.state.layout.newEntity}
-                                                                 applicationData={this.props.applicationData}
-                                                                 screencode={this.props.userData.screens[this.props.userData.partScreen].screenCode}
-                                                                 handleError={this.props.handleError}
-                                                                 showNotification={this.props.showNotification}
-                                                                 showError={this.props.showError}
-                                     />}
+                                     toolbarProps={{ 
+                                                    _toolbarType: TOOLBARS.PART, 
+                                                    part: this.state.part,
+                                                    postInit: this.postInit.bind(this),
+                                                    setLayout: this.setLayout.bind(this),
+                                                    newPart: this.state.layout.newEntity,
+                                                    applicationData: this.props.applicationData,
+                                                    screencode: this.props.userData.screens[this.props.userData.partScreen].screenCode,
+                                                    handleError: this.props.handleError,
+                                                    showNotification: this.props.showNotification,
+                                                    showError: this.props.showError            
+                                     }}
                                      width={730}
                                      entityIcon={<PartIcon style={{height: 18}}/>}
                                      toggleHiddenRegion={this.props.toggleHiddenRegion}
@@ -156,6 +159,11 @@ class Part extends Entity {
                                 <PartWhereUsed {...props}/>}
                             </Grid>
                             <Grid item sm={6} xs={12}>
+
+                                {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
+                                !this.state.layout.newEntity &&
+                                <EDMSDoclightIframeContainer objectType={PART} objectID={this.state.part.code}/>
+                                }
 
                                 {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                                 <CommentsContainer ref={comments => this.comments = comments}

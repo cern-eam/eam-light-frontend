@@ -1,26 +1,27 @@
-import React from 'react';
-import Entity from '../Entity'
 import Grid from '@material-ui/core/Grid';
-import WorkorderDetails from './WorkorderGeneral'
-import WorkorderScheduling from './WorkorderScheduling'
-import WorkorderClosingCodes from './WorkorderClosingCodes'
-import EamlightToolbar from './../../components/EamlightToolbar'
-import CustomFields from '../../components/customfields/CustomFields'
-import WSWorkorder from "../../../tools/WSWorkorders"
-import BlockUi from 'react-block-ui'
-import Activities from './activities/Activities'
 import ChecklistsContainer from 'eam-components/dist/ui/components/checklists/ChecklistsContainer';
+import CommentsContainer from 'eam-components/dist/ui/components/comments/CommentsContainer';
 import EDMSWidgetContainer from 'eam-components/dist/ui/components/edms/EDMSWidgetContainer';
-import PartUsageContainer from "./partusage/PartUsageContainer";
-import WorkorderTools from "./WorkorderTools"
-import WorkorderMultiequipment from "./multiequipmentwo/WorkorderMultiequipment";
+import { WorkorderIcon } from 'eam-components/dist/ui/components/icons';
+import React from 'react';
+import BlockUi from 'react-block-ui';
+import WSEquipment from "../../../tools/WSEquipment";
+import WSWorkorder from "../../../tools/WSWorkorders";
+import { TOOLBARS } from "../../components/AbstractToolbar";
+import CustomFields from '../../components/customfields/CustomFields';
+import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
+import Entity from '../Entity';
+import EamlightToolbar from './../../components/EamlightToolbar';
+import Activities from './activities/Activities';
 import WorkorderChildren from "./childrenwo/WorkorderChildren";
 import MeterReadingContainerWO from './meter/MeterReadingContainerWO';
-import WSEquipment from "../../../tools/WSEquipment";
-import {WorkorderIcon} from 'eam-components/dist/ui/components/icons';
-import CommentsContainer from 'eam-components/dist/ui/components/comments/CommentsContainer';
-import WorkorderToolbar from "./WorkorderToolbar";
-import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
+import WorkorderMultiequipment from "./multiequipmentwo/WorkorderMultiequipment";
+import PartUsageContainer from "./partusage/PartUsageContainer";
+import WorkorderClosingCodes from './WorkorderClosingCodes';
+import WorkorderDetails from './WorkorderGeneral';
+import WorkorderScheduling from './WorkorderScheduling';
+import WorkorderTools from "./WorkorderTools";
+import WorkorderToolbar from './WorkorderToolbar';
 
 class Workorder extends Entity {
 
@@ -62,8 +63,8 @@ class Workorder extends Entity {
             CLOSINGCODES: {label: "Closing Codes", code: user + "_" + screen+ "_CLOSINGCODES"},
             PARTUSAGE: {label: "Part Usage", code: user + "_" + screen+ "_PARTUSAGE"},
             CHILDRENWOS: {label: "Children WOs", code: user + "_" + screen+ "_CHILDRENWOS"},
-            //EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen+ "_EDMSDOCS"},
-            //NCRS: {label: "NCRs", code: user + "_" + screen+ "_NCRS"},
+            EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen+ "_EDMSDOCS"},
+            NCRS: {label: "NCRs", code: user + "_" + screen+ "_NCRS"},
             COMMENTS: {label: "Comments", code: user + "_" + screen+ "_COMMENTS"},
             ACTIVITIES: {label: "Activities and BL", code: user + "_" + screen+ "_ACTIVITIES"},
             CHECKLISTS: {label: "Checklists", code: user + "_" + screen+ "_CHECKLISTS"},
@@ -217,14 +218,16 @@ class Workorder extends Entity {
                                      newHandler={() => this.props.history.push('/workorder')}
                                      deleteHandler={this.deleteEntity.bind(this, this.state.workorder.number)}
                                      width={790}
-                                     entityToolbar={<WorkorderToolbar workorder={this.state.workorder}
-                                                                      postInit={this.postInit.bind(this)}
-                                                                      setLayout={this.setLayout.bind(this)}
-                                                                      newWorkorder={this.state.layout.newEntity}
-                                                                      applicationData={this.props.applicationData}
-                                                                      userGroup={this.props.userData.eamAccount.userGroup}
-                                                                      screencode={this.props.userData.screens[this.props.userData.workOrderScreen].screenCode}
-                                     />}
+                                     toolbarProps={{
+                                            _toolbarType: TOOLBARS.WORKORDER,
+                                            workorder: this.state.workorder,
+                                            postInit: this.postInit.bind(this),
+                                            setLayout: this.setLayout.bind(this),
+                                            newWorkorder: this.state.layout.newEntity,
+                                            applicationData: this.props.applicationData,
+                                            userGroup: this.props.userData.eamAccount.userGroup,
+                                            screencode: this.props.userData.screens[this.props.userData.workOrderScreen].screenCode}
+                                     }
                                      entityIcon={<WorkorderIcon style={{height: 18}}/>}
                                      toggleHiddenRegion={this.props.toggleHiddenRegion}
                                      regions={this.getRegions()}
@@ -261,6 +264,17 @@ class Workorder extends Entity {
                             </Grid>
                             <Grid item md={6} sm={12} xs={12}>
 
+                                {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
+                                 !this.state.layout.newEntity &&
+                                 <EDMSDoclightIframeContainer objectType="J" objectID={this.state.workorder.number}/>}
+
+                                {!this.props.hiddenRegions[this.getRegions().NCRS.code] &&
+                                !this.state.layout.newEntity &&
+                                <EDMSWidgetContainer objectID={this.state.workorder.number} objectType="J"
+                                                     creationMode="NCR"
+                                                     title="NCRs"
+                                                     edmsDocListLink={this.props.edmsDocListLink}/>}
+
                                 {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                                 <CommentsContainer ref={comments => this.comments = comments}
                                                    entityCode='EVNT'
@@ -283,6 +297,7 @@ class Workorder extends Entity {
                                 !this.state.layout.newEntity &&
                                 <ChecklistsContainer workorder={this.state.workorder.number}
                                                      printingChecklistLinkToAIS={this.props.applicationData.EL_PRTCL}
+                                                     getWoLink={wo => '/workorder/' + wo}
                                                      ref={checklists => this.checklists = checklists}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
