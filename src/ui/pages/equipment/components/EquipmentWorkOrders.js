@@ -21,7 +21,7 @@ export default class EquipmentWorkOrders extends Component {
         [this.workOrderFilterTypes.OPEN]: {
             text: 'Open',
             process: (data) => {
-                return data.filter((workOrder) => !workOrder.statusCode.startsWith("T"));
+                return data.filter((workOrder) => !workOrder.status.startsWith("T"));
             }
         },
         [this.workOrderFilterTypes.MTF]: {

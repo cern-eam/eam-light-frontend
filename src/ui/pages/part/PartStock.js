@@ -17,7 +17,7 @@ class PartStock extends Component {
     };
 
     headers = ['Store', 'Description', 'Bin', 'Lot', 'Qty on Hand', 'Qty for Repair', 'Asset ID'];
-    propCodes = ['storeCode', 'storeDesc', 'bin', 'lot', 'quantity', 'repairQuantity', 'assetCode'];
+    propCodes = ['storeCode', 'storeDesc', 'bin', 'lot', 'qtyOnHand', 'repairQuantity', 'assetCode'];
 
     state = {
         data: []
