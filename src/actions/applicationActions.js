@@ -14,7 +14,6 @@ export function getUserInfo() {
     return (dispatch) => {
         //Get URL parameters
         const values = queryString.parse(window.location.search)
-        console.log('values', values)
         const screenCode = values.screen;
         const currentScreen = window.location.pathname.replace(process.env.PUBLIC_URL,'').split('/')[1];
         return WS.getUserData(currentScreen, screenCode)
@@ -37,7 +36,6 @@ export function getUserInfo() {
             })
     }
 }
-
 
 
 export function updateWorkOrderScreenLayout(screenCode) {

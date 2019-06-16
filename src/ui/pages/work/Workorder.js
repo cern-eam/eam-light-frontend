@@ -63,11 +63,10 @@ class Workorder extends Entity {
             CLOSINGCODES: {label: "Closing Codes", code: user + "_" + screen+ "_CLOSINGCODES"},
             PARTUSAGE: {label: "Part Usage", code: user + "_" + screen+ "_PARTUSAGE"},
             CHILDRENWOS: {label: "Children WOs", code: user + "_" + screen+ "_CHILDRENWOS"},
-            EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen+ "_EDMSDOCS"},
-            NCRS: {label: "NCRs", code: user + "_" + screen+ "_NCRS"},
             COMMENTS: {label: "Comments", code: user + "_" + screen+ "_COMMENTS"},
             ACTIVITIES: {label: "Activities and BL", code: user + "_" + screen+ "_ACTIVITIES"},
             CHECKLISTS: {label: "Checklists", code: user + "_" + screen+ "_CHECKLISTS"},
+            METERREADINGS: {label: "Meter Readings", code: user + "_" + screen+ "_METER_READINGS"},
             CUSTOMFIELDS: {label: "Custom Fields", code: user + "_" + screen+ "_CUSTOMFIELDS"}
         }
     }
@@ -264,17 +263,6 @@ class Workorder extends Entity {
                             </Grid>
                             <Grid item md={6} sm={12} xs={12}>
 
-                                {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
-                                 !this.state.layout.newEntity &&
-                                 <EDMSDoclightIframeContainer objectType="J" objectID={this.state.workorder.number}/>}
-
-                                {!this.props.hiddenRegions[this.getRegions().NCRS.code] &&
-                                !this.state.layout.newEntity &&
-                                <EDMSWidgetContainer objectID={this.state.workorder.number} objectType="J"
-                                                     creationMode="NCR"
-                                                     title="NCRs"
-                                                     edmsDocListLink={this.props.applicationData.EL_EDMSL}/>}
-
                                 {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                                 <CommentsContainer ref={comments => this.comments = comments}
                                                    entityCode='EVNT'
@@ -320,7 +308,8 @@ class Workorder extends Entity {
                                               title="CUSTOM FIELDS EQUIPMENT"
                                               readonly={true}/>}
 
-                                {!this.state.layout.newEntity &&
+                                {!this.props.hiddenRegions[this.getRegions().METERREADINGS.code] &&
+                                !this.state.layout.newEntity &&
                                 <MeterReadingContainerWO workorder={this.state.workorder.number}/>}
 
                                 {WorkorderTools.isRegionAvailable('MEC', props.workOrderLayout) &&
