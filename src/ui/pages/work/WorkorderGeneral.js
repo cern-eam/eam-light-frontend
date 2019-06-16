@@ -49,8 +49,8 @@ class WorkorderDetails extends Component {
                         valueKey="description"/>
 
 
-                    <EAMLinkInput value={workorder.equipmentCode} link="/equipment/" right={0} top={25}>
-                        <EAMBarcodeInput updateProperty={value => updateWorkorderProperty('equipmentCode', value)} right={30} top={25}>
+                    <EAMLinkInput value={workorder.equipmentCode} link="/equipment/" right={0} top={20}>
+                        <EAMBarcodeInput updateProperty={value => updateWorkorderProperty('equipmentCode', value)} right={30} top={20}>
                             <EAMAutocomplete children={children}
                                              elementInfo={workOrderLayout.fields['equipment']}
                                              value={workorder.equipmentCode}
