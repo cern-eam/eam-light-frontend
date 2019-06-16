@@ -104,11 +104,7 @@ export default class Activities extends Component {
 
         if (this.state.isLoading) {
             return (
-                <EISPanel heading="ACTIVITIES AND BOOKED LABOR">
-                    <BlockUi tag="div" blocking={true} className="galleriaContainer">
-                        <div style={blockUiStyleDiv}><p>Loading activities...</p></div>
-                    </BlockUi>
-                </EISPanel>
+                <div></div>
             );
         }
 
