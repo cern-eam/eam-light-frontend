@@ -227,7 +227,7 @@ class PartUsageDialog extends Component {
                                 <EAMBarcodeInput updateProperty={value => {
                                     this.handlePartChange(value);
                                     this.updatePartUsageLineProperty('partCode', value);
-                                }} >
+                                }} right={0} top={20}>
                                     <EAMAutocomplete elementInfo={this.props.tabLayout['partcode']}
                                                      value={this.state.partUsageLine.partCode}
                                                      updateProperty={this.updatePartUsageLineProperty}
@@ -242,7 +242,7 @@ class PartUsageDialog extends Component {
                                 <EAMBarcodeInput updateProperty={value => {
                                     this.handleAssetChange(value);
                                     this.updatePartUsageLineProperty('assetIDCode', value);
-                                }} >
+                                }} right={0} top={20}>
                                 <EAMAutocomplete elementInfo={this.props.tabLayout['assetid']}
                                                  value={this.state.partUsageLine.assetIDCode}
                                                  updateProperty={this.updatePartUsageLineProperty}
