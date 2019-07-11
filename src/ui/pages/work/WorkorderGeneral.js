@@ -7,8 +7,7 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAuto
 import WS from "../../../tools/WS";
 import WSWorkorders from "../../../tools/WSWorkorders";
 import UDFChar from "../../components/userdefinedfields/UDFChar";
-import EAMBarcodeInput from "eam-components/dist/ui/components/inputs/EAMBarcodeInput";
-import EAMLinkInput from "eam-components/dist/ui/components/inputs/EAMLinkInput";
+import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
 
 class WorkorderDetails extends Component {
 
@@ -48,8 +47,6 @@ class WorkorderDetails extends Component {
                         updateProperty={updateWorkorderProperty}
                         valueKey="description"/>
 
-
-                    <EAMLinkInput value={workorder.equipmentCode} link="/equipment/" right={0} top={20}>
                         <EAMBarcodeInput updateProperty={value => updateWorkorderProperty('equipmentCode', value)} right={30} top={20}>
                             <EAMAutocomplete children={children}
                                              elementInfo={workOrderLayout.fields['equipment']}
@@ -60,9 +57,9 @@ class WorkorderDetails extends Component {
                                              updateProperty={updateWorkorderProperty}
                                              autocompleteHandler={WSWorkorders.autocompleteWorkorderEquipment}
                                              onChangeValue={this.onChangeEquipment}
+                                             link={() => workorder.equipmentCode ? process.env.PUBLIC_URL + "/equipment/" + workorder.equipmentCode : null}
                             />
                         </EAMBarcodeInput>
-                    </EAMLinkInput>
 
                     <EAMAutocomplete children={children}
                                      elementInfo={workOrderLayout.fields['location']}
@@ -127,7 +124,9 @@ class WorkorderDetails extends Component {
                              fieldKey={`userDefinedFields.udfchar01`}
                              descKey={`userDefinedFields.udfchar01Desc`}
                              updateUDFProperty={updateWorkorderProperty}
-                             children={children}/>
+                             children={children}
+                             link={() => workorder.userDefinedFields.udfchar01 ? "https://cern.service-now.com/task.do?sysparm_query=number=" + workorder.userDefinedFields.udfchar01 : null}
+                    />
 
                     <UDFChar fieldInfo={workOrderLayout.fields['udfchar20']}
                              fieldValue={workorder.userDefinedFields.udfchar20}

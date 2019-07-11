@@ -17,7 +17,7 @@ const buttonStyle = {
 class PartUsage extends Component {
 
     headers = ['Transaction', 'Part', 'Activity', 'Store', 'Quantity'];
-    propCodes = ['transType', 'partCode', 'activity', 'storeCode', 'quantity'];
+    propCodes = ['transType', 'partCode', 'activityDesc', 'storeCode', 'quantity'];
     linksMap = new Map([['partCode', {linkType: 'fixed', linkValue: 'part/', linkPrefix: '/'}]]);
 
     state = {

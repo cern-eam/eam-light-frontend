@@ -57,7 +57,9 @@ class UDFChar extends Component {
                         values={this.state.dropdownValues}
                         value={this.props.fieldValue}
                         updateProperty={this.props.updateUDFProperty}
-                        children={this.props.children}/>
+                        children={this.props.children}
+                        link={this.props.link}
+                    />
                 );
             case RENT:
                 return (
@@ -68,7 +70,9 @@ class UDFChar extends Component {
                                      valueDesc={this.props.fieldValueDesc}
                                      descKey={`${this.props.fieldKey}Desc`}
                                      autocompleteHandler={(value, config) => WSUDF.autocompleteUserDefinedField(this.props.fieldInfo.udfLookupEntity, value, config)}
-                                     children={this.props.children}/>
+                                     children={this.props.children}
+                                     link={this.props.link}
+                    />
                 );
             case NONE:
             default:
@@ -77,7 +81,9 @@ class UDFChar extends Component {
                               value={this.props.fieldValue}
                               updateProperty={this.props.updateUDFProperty}
                               valueKey={this.props.fieldKey}
-                              children={this.props.children}/>
+                              children={this.props.children}
+                              link={this.props.link}
+                    />
                 );
         }
     }
