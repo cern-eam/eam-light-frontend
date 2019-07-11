@@ -3,6 +3,7 @@ import EISPanel from 'eam-components/dist/ui/components/panel';
 import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
 import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
 import WSEquipment from "../../../../tools/WSEquipment";
+import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
 
 class AssetHierarchy extends Component {
 
@@ -27,35 +28,42 @@ class AssetHierarchy extends Component {
                         updateProperty={updateEquipmentProperty}
                         valueKey="userDefinedFields.udfchar11"/>
 
-                    <EAMAutocomplete
-                        children = {children}
-                        elementInfo={assetLayout.fields['parentasset']}
-                        value={equipment.hierarchyAssetCode}
-                        updateProperty={updateEquipmentProperty}
-                        valueKey="hierarchyAssetCode"
-                        valueDesc={equipment.hierarchyAssetDesc}
-                        descKey="hierarchyAssetDesc"
-                        autocompleteHandler={WSEquipment.autocompleteEquipmentParent}/>
+                    <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyAssetCode', value)} right={0} top={20}>
+                        <EAMAutocomplete
+                            children = {children}
+                            elementInfo={assetLayout.fields['parentasset']}
+                            value={equipment.hierarchyAssetCode}
+                            updateProperty={updateEquipmentProperty}
+                            valueKey="hierarchyAssetCode"
+                            valueDesc={equipment.hierarchyAssetDesc}
+                            descKey="hierarchyAssetDesc"
+                            autocompleteHandler={WSEquipment.autocompleteEquipmentParent}/>
+                    </EAMBarcodeInput>
 
-                    <EAMAutocomplete
-                        children = {children}
-                        elementInfo={assetLayout.fields['position']}
-                        value={equipment.hierarchyPositionCode}
-                        updateProperty={updateEquipmentProperty}
-                        valueKey="hierarchyPositionCode"
-                        valueDesc={equipment.hierarchyPositionDesc}
-                        descKey="hierarchyPositionDesc"
-                        autocompleteHandler={WSEquipment.autocompleteEquipmentPosition}/>
+                    <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyPositionCode', value)} right={0} top={20}>
+                        <EAMAutocomplete
+                            children = {children}
+                            elementInfo={assetLayout.fields['position']}
+                            value={equipment.hierarchyPositionCode}
+                            updateProperty={updateEquipmentProperty}
+                            valueKey="hierarchyPositionCode"
+                            valueDesc={equipment.hierarchyPositionDesc}
+                            descKey="hierarchyPositionDesc"
+                            autocompleteHandler={WSEquipment.autocompleteEquipmentPosition}/>
+                    </EAMBarcodeInput>
 
-                    <EAMAutocomplete
-                        children = {children}
-                        elementInfo={assetLayout.fields['primarysystem']}
-                        value={equipment.hierarchyPrimarySystemCode}
-                        updateProperty={updateEquipmentProperty}
-                        valueKey="hierarchyPrimarySystemCode"
-                        valueDesc={equipment.hierarchyPrimarySystemDesc}
-                        descKey="hierarchyPrimarySystemDesc"
-                        autocompleteHandler={WSEquipment.autocompletePrimarySystem}/>
+
+                    <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyPrimarySystemCode', value)} right={0} top={20}>
+                        <EAMAutocomplete
+                            children = {children}
+                            elementInfo={assetLayout.fields['primarysystem']}
+                            value={equipment.hierarchyPrimarySystemCode}
+                            updateProperty={updateEquipmentProperty}
+                            valueKey="hierarchyPrimarySystemCode"
+                            valueDesc={equipment.hierarchyPrimarySystemDesc}
+                            descKey="hierarchyPrimarySystemDesc"
+                            autocompleteHandler={WSEquipment.autocompletePrimarySystem}/>
+                    </EAMBarcodeInput>
 
                     <EAMAutocomplete
                         children = {children}
