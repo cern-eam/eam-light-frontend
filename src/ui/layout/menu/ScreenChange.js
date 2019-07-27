@@ -33,7 +33,7 @@ class ScreenChange extends Component {
                             value={this.props.screen}
                             onChange={this.handleScreenChange.bind(this)}
                     >
-                    {this.props.screens.map(screen => (
+                    {this.props.screens.filter(screen => screen.hidden !== "+").map(screen => (
                         <MenuItem key={screen.screenCode} value={screen.screenCode}>{screen.screenDesc}</MenuItem>
                     ))}
                     </Select>
