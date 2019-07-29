@@ -34,7 +34,10 @@ class WorkorderDetails extends Component {
     };
 
     render() {
-        let {children, workOrderLayout, workorder, updateWorkorderProperty, layout} = this.props;
+        let { children, workOrderLayout, workorder, updateWorkorderProperty, layout, applicationData } = this.props;
+
+        const rpawClassesList = (applicationData && applicationData.EL_TRPAC && applicationData.EL_TRPAC.split(',')) || [];
+        const rpawLink = applicationData && applicationData.EL_TRPAW;
 
         return (
             <EISPanel heading="GENERAL">
@@ -47,19 +50,19 @@ class WorkorderDetails extends Component {
                         updateProperty={updateWorkorderProperty}
                         valueKey="description"/>
 
-                        <EAMBarcodeInput updateProperty={value => updateWorkorderProperty('equipmentCode', value)} right={30} top={20}>
-                            <EAMAutocomplete children={children}
-                                             elementInfo={workOrderLayout.fields['equipment']}
-                                             value={workorder.equipmentCode}
-                                             valueKey="equipmentCode"
-                                             valueDesc={workorder.equipmentDesc}
-                                             descKey="equipmentDesc"
-                                             updateProperty={updateWorkorderProperty}
-                                             autocompleteHandler={WSWorkorders.autocompleteWorkorderEquipment}
-                                             onChangeValue={this.onChangeEquipment}
-                                             link={() => workorder.equipmentCode ? process.env.PUBLIC_URL + "/equipment/" + workorder.equipmentCode : null}
-                            />
-                        </EAMBarcodeInput>
+                    <EAMBarcodeInput updateProperty={value => updateWorkorderProperty('equipmentCode', value)} right={30} top={20}>
+                        <EAMAutocomplete children={children}
+                                            elementInfo={workOrderLayout.fields['equipment']}
+                                            value={workorder.equipmentCode}
+                                            valueKey="equipmentCode"
+                                            valueDesc={workorder.equipmentDesc}
+                                            descKey="equipmentDesc"
+                                            updateProperty={updateWorkorderProperty}
+                                            autocompleteHandler={WSWorkorders.autocompleteWorkorderEquipment}
+                                            onChangeValue={this.onChangeEquipment}
+                                            link={() => workorder.equipmentCode ? process.env.PUBLIC_URL + "/equipment/" + workorder.equipmentCode : null}
+                        />
+                    </EAMBarcodeInput>
 
                     <EAMAutocomplete children={children}
                                      elementInfo={workOrderLayout.fields['location']}
@@ -112,11 +115,13 @@ class WorkorderDetails extends Component {
                                      updateProperty={updateWorkorderProperty}
                                      autocompleteHandler={(filter, config) => WS.autocompleteClass('EVNT', filter, config)}/>
 
-                    <EAMInput
-                        elementInfo={{...workOrderLayout.fields['parentwo'], readonly: true}}
-                        value={workorder.parentWO}
-                        updateProperty={updateWorkorderProperty}
-                        valueKey="parentWO"/>
+                    <EAMInput 
+                            elementInfo={{...workOrderLayout.fields['parentwo'], readonly: true}}
+                            value={workorder.parentWO}
+                            valueKey="parentWO"
+                            updateProperty={updateWorkorderProperty}
+                            link={() => workorder.parentWO && rpawClassesList.includes(workorder.classCode) ? rpawLink + workorder.parentWO : null}
+                    />
 
                     <UDFChar fieldInfo={workOrderLayout.fields['udfchar01']}
                              fieldValue={workorder.userDefinedFields.udfchar01}
