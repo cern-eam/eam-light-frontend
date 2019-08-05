@@ -1,3 +1,6 @@
+import "core-js";
+import "regenerator-runtime";
+import { polyfill } from 'es6-promise';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
@@ -6,7 +9,6 @@ import EamlightContainer from './EamlightContainer';
 import {applyMiddleware, createStore} from "redux";
 import thunk from 'redux-thunk';
 import rootReducer from "./reducers";
-import 'babel-polyfill';
 import { unregister } from './registerServiceWorker';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { create } from 'jss';
@@ -18,6 +20,7 @@ const generateClassName = createGenerateClassName();
 const jss = create(jssPreset());
 
 unregister();
+polyfill();
 
 function createAxiosAuthMiddleware() {
     return ({ getState }) => next => (action) => {
