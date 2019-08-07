@@ -57,7 +57,7 @@ class WorkorderDetails extends Component {
                                              updateProperty={updateWorkorderProperty}
                                              autocompleteHandler={WSWorkorders.autocompleteWorkorderEquipment}
                                              onChangeValue={this.onChangeEquipment}
-                                             link={() => workorder.equipmentCode ? process.env.PUBLIC_URL + "/equipment/" + workorder.equipmentCode : null}
+                                             link={() => workorder.equipmentCode ? "/equipment/" + workorder.equipmentCode : null}
                             />
                         </EAMBarcodeInput>
 
