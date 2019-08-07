@@ -52,15 +52,15 @@ class WorkorderDetails extends Component {
 
                     <EAMBarcodeInput updateProperty={value => updateWorkorderProperty('equipmentCode', value)} right={30} top={20}>
                         <EAMAutocomplete children={children}
-                                            elementInfo={workOrderLayout.fields['equipment']}
-                                            value={workorder.equipmentCode}
-                                            valueKey="equipmentCode"
-                                            valueDesc={workorder.equipmentDesc}
-                                            descKey="equipmentDesc"
-                                            updateProperty={updateWorkorderProperty}
-                                            autocompleteHandler={WSWorkorders.autocompleteWorkorderEquipment}
-                                            onChangeValue={this.onChangeEquipment}
-                                            link={() => workorder.equipmentCode ? process.env.PUBLIC_URL + "/equipment/" + workorder.equipmentCode : null}
+                                         elementInfo={workOrderLayout.fields['equipment']}
+                                         value={workorder.equipmentCode}
+                                         valueKey="equipmentCode"
+                                         valueDesc={workorder.equipmentDesc}
+                                         descKey="equipmentDesc"
+                                         updateProperty={updateWorkorderProperty}
+                                         autocompleteHandler={WSWorkorders.autocompleteWorkorderEquipment}
+                                         onChangeValue={this.onChangeEquipment}
+                                         link={() => workorder.equipmentCode ? "/equipment/" + workorder.equipmentCode : null}
                         />
                     </EAMBarcodeInput>
 
