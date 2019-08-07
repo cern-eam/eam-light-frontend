@@ -239,7 +239,7 @@ class Workorder extends Entity {
                         <Grid container spacing={8}>
                             <Grid item md={6} sm={12} xs={12}>
 
-                                <WorkorderDetails {...props}/>
+                                <WorkorderDetails {...props} applicationData={this.props.applicationData}/>
 
 
                                 {!this.props.hiddenRegions[this.getRegions().SCHEDULING.code] &&
