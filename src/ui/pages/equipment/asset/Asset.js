@@ -44,7 +44,7 @@ export default class Asset extends Entity {
         deleteEntity: WSEquipment.deleteEquipment.bind(WSEquipment),
         initNewEntity: () => WSEquipment.initEquipment("OBJ", "A", "OSOBJA",
             this.props.userData.screens[this.props.userData.assetScreen].screenCode,
-            this.props.location.search)
+            this.props.location.search && this.props.location.search.replace('newCode=', 'code='))
     }
 
     postInit() {
