@@ -136,6 +136,16 @@ class WorkorderDetails extends Component {
                              updateUDFProperty={updateWorkorderProperty}
                              children={children}/>
 
+                    <UDFChar fieldInfo={workOrderLayout.fields['udfchar24']}
+                             fieldValue={workorder.userDefinedFields.udfchar24}
+                             fieldValueDesc={workorder.userDefinedFields.udfchar24Desc}
+                             fieldKey={`userDefinedFields.udfchar24`}
+                             descKey={`userDefinedFields.udfchar01Desc`}
+                             updateUDFProperty={updateWorkorderProperty}
+                             children={children}
+                             link={() => workorder.userDefinedFields.udfchar24 ? "https://its.cern.ch/jira/browse/" + workorder.userDefinedFields.udfchar24 : null}
+                    />
+
                     <EAMCheckbox elementInfo={workOrderLayout.fields['udfchkbox02']}
                                  value={workorder.userDefinedFields.udfchkbox02}
                                  updateProperty={updateWorkorderProperty}
