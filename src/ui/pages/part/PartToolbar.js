@@ -50,7 +50,7 @@ class PartToolbar extends Component {
     }
 
     showInExtendedHandler() {
-        const extendedLink = this.props.applicationData.EXT_PARTLINK.replace("&1", this.props.screencode).replace("&2", this.props.part.code);
+        const extendedLink = this.props.applicationData.EL_PARTL.replace("&1", this.props.screencode).replace("&2", this.props.part.code);
         window.open(extendedLink, '_blank');
     }
 
