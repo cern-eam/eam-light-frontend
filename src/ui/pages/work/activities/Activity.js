@@ -19,7 +19,7 @@ export default class Activity extends Component {
 
 
   render() {
-    const layout = this.props.layout.ACT.fields;
+    const layout = this.props.layout.ACT;
 
     return (
       <div className="activity" >
@@ -49,7 +49,7 @@ export default class Activity extends Component {
           {this.props.bookLabours && this.props.bookLabours.length > 0 &&
             <BookLabours
                 bookLabours={this.props.bookLabours}
-                layout={this.props.layout.BOO.fields} />
+                layout={this.props.layout.BOO} />
           }
 
         </div>
