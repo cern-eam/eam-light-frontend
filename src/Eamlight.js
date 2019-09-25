@@ -54,6 +54,8 @@ class Eamlight extends Component {
                     <div style={this.blockUiStyleDiv}>Loading EAM Light ...</div>
                 </BlockUi>
             )
+        } else {
+            console.log('user data still there');
         }
 
         // User has no valid EAM account

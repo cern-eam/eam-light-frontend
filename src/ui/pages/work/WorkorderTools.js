@@ -36,7 +36,8 @@ class WorkorderTools {
                     && "H" === fields.costcode.attribute);
             case 'ACT_BOO':
                 //Check the two tabs
-                return tabs['ACT'] && tabs['ACT'].alwaysAvailable && tabs['BOO'] && tabs['BOO'].alwaysAvailable;
+                //return tabs['ACT'] && tabs['ACT'].alwaysAvailable && tabs['BOO'] && tabs['BOO'].alwaysAvailable;
+                return true;
             default:/*All other regions*/
                 //Regions in here:
                 // Part Usage, MultiEquipment, Checklists, Children WO, Equipment Custom Fields

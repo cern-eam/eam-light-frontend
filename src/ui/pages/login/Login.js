@@ -47,6 +47,7 @@ class Login extends Component {
         infor_user: "",
         infor_password: "",
         infor_organization: "",
+        infor_tenant: "",
         loginInProgress: false,
     }
 
@@ -66,11 +67,12 @@ class Login extends Component {
         }
         // Login
         this.setState({loginInProgress: true})
-        WS.login(this.state.infor_user, this.state.infor_password, this.state.infor_organization).then(response => {
+        WS.login(this.state.infor_user, this.state.infor_password, this.state.infor_organization, this.state.infor_tenant).then(response => {
             let inforContext = {
                 INFOR_ORGANIZATION: this.state.infor_organization,
                 INFOR_USER: this.state.infor_user.toUpperCase(),
                 INFOR_PASSWORD: this.state.infor_password,
+                INFOR_TENANT: this.state.infor_tenant,
                 INFOR_SESSIONID: response.body.data,
             }
             // Store in the redux store (used by axios)
@@ -122,6 +124,12 @@ class Login extends Component {
                                    value={this.state.INFOR_ORGANIZATION}
                                    onChange ={event => {this.setState({infor_organization: event.target.value})}}
                                    disabled={this.state.loginInProgress}
+                            />
+
+                            <TextField fullWidth required label="Tenant" margin="normal"
+                                       value={this.state.INFOR_TENANT}
+                                       onChange ={event => {this.setState({infor_tenant: event.target.value})}}
+                                       disabled={this.state.loginInProgress}
                             />
                         <Button
                             fullWidth

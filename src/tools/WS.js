@@ -26,12 +26,13 @@ class WS {
         return this._get('/workordersmisc/gislink?workorder=' + workorderNumber + "&location=" + locationCode, config);
     }
 
-    login(username, password, organization, config = {}) {
+    login(username, password, organization, tenant, config = {}) {
         return this._get('/login', {
             headers: {
                 INFOR_USER: username,
                 INFOR_PASSWORD: password,
-                INFOR_ORGANIZATION: organization
+                INFOR_ORGANIZATION: organization,
+                INFOR_TENANT: tenant
             }
         });
     }

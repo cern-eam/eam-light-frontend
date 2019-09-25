@@ -55,6 +55,8 @@ class EamlightMenu extends Component {
     // HEADERS
     //
     getWorkOrdersHeader() {
+
+        console.log('screens', this.props.userData);
         return (
             <ScreenChange
                 updateScreenLayout={this.props.updateWorkOrderScreenLayout}
