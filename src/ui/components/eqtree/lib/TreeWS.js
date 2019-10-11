@@ -12,19 +12,19 @@ class TreeWS {
     }
 
     _get(url, config = {}) {
-        return ajax.get(process.env.REACT_APP_BACKEND + url, config);
+        return ajax.get(window.environment.REACT_APP_BACKEND_URL + url, config);
     }
 
     _post(url, data, config = {}) {
-        return ajax.post(process.env.REACT_APP_BACKEND + url, data, config);
+        return ajax.post(window.environment.REACT_APP_BACKEND_URL + url, data, config);
     }
 
     _put(url, data, config = {}) {
-        return ajax.put(process.env.REACT_APP_BACKEND + url, data, config);
+        return ajax.put(window.environment.REACT_APP_BACKEND_URL + url, data, config);
     }
 
     _delete(url, config = {}) {
-        return ajax.delete(process.env.REACT_APP_BACKEND + url, config);
+        return ajax.delete(window.environment.REACT_APP_BACKEND_URL + url, config);
     }
 
 }
