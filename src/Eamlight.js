@@ -40,7 +40,7 @@ class Eamlight extends Component {
 
     render() {
         // Display login screen
-        if (!this.props.inforContext && process.env.REACT_APP_LOGIN_METHOD === 'STD') {
+        if (!this.props.inforContext && window.environment.REACT_APP_LOGIN_METHOD === 'STD') {
             return (
                 <LoginContainer/>
             )
@@ -68,7 +68,7 @@ class Eamlight extends Component {
 
         // Render real application once user data is there and user has an EAM account
         return (
-            <Router basename={process.env.PUBLIC_URL}>
+            <Router basename={window.environment.CUSTOM_URL_PATH}>
                 <MuiThemeProvider theme={theme}>
                     <Switch>
                     <Route path="/impact"

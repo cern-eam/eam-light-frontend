@@ -35,12 +35,12 @@ export default class UserInfo extends Component {
    }
 
     logoutHandler() {
-        if (process.env.REACT_APP_LOGIN_METHOD === 'STD') {
+        if (window.environment.REACT_APP_LOGIN_METHOD === 'STD') {
             this.props.updateInforContext(null);
             this.props.updateApplication({userData: null})
             sessionStorage.removeItem('inforContext');
         }
-        if (process.env.REACT_APP_LOGIN_METHOD === 'CERNSSO') {
+        if (window.environment.REACT_APP_LOGIN_METHOD === 'CERNSSO') {
             window.location.href = "https://espace.cern.ch/authentication/_layouts/15/SignOut.aspx";
         }
     }
