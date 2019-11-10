@@ -73,7 +73,7 @@ class WorkorderToolbar extends Component {
     }
 
     isDismacVisible() {
-        return this.props.applicationData.EL_DMUSG.includes(this.props.userGroup);
+        return this.props.applicationData.EL_DMUSG && this.props.applicationData.EL_DMUSG.includes(this.props.userGroup);
     }
 
     renderMenuItems() {
@@ -88,22 +88,35 @@ class WorkorderToolbar extends Component {
                     <EmailOutline style={this.iconMenuStyle} />
                     <div >Email Work Order</div>
                 </MenuItem>
-                <MenuItem onClick={this.printWorkOrderHandler.bind(this)} disabled={this.props.newWorkorder}>
-                    <Printer style={this.iconMenuStyle} />
-                    <div >Print Work Order</div>
-                </MenuItem>
-                <MenuItem onClick={this.showOnMapWorkOrderHandler.bind(this)} disabled={this.props.newWorkorder}>
-                    <Map style={this.iconMenuStyle} />
-                    <div >Show on Map</div>
-                </MenuItem>
-                <MenuItem onClick={this.showInExtendedHandler.bind(this)} disabled={this.props.newWorkorder}>
-                    <OpenInNew style={this.iconMenuStyle} />
-                    <div >Show in Infor EAM</div>
-                </MenuItem>
-                <MenuItem onClick={this.OSVCHandler.bind(this)} disabled={this.props.newWorkorder}>
-                    <Domain style={this.iconMenuStyle} />
-                    <div >OSVC</div>
-                </MenuItem>
+
+               {this.props.applicationData.EL_PRTWO &&
+               <MenuItem onClick={this.printWorkOrderHandler.bind(this)} disabled={this.props.newWorkorder}>
+                   <Printer style={this.iconMenuStyle}/>
+                   <div>Print Work Order</div>
+               </MenuItem>
+               }
+
+               {this.props.applicationData.EL_GISWO &&
+               <MenuItem onClick={this.showOnMapWorkOrderHandler.bind(this)} disabled={this.props.newWorkorder}>
+                   <Map style={this.iconMenuStyle}/>
+                   <div>Show on Map</div>
+               </MenuItem>
+               }
+
+               {this.props.applicationData.EL_WOLIN &&
+               <MenuItem onClick={this.showInExtendedHandler.bind(this)} disabled={this.props.newWorkorder}>
+                   <OpenInNew style={this.iconMenuStyle}/>
+                   <div>Show in Infor EAM</div>
+               </MenuItem>
+               }
+
+               {this.props.applicationData.EL_INTEG &&
+               <MenuItem onClick={this.OSVCHandler.bind(this)} disabled={this.props.newWorkorder}>
+                   <Domain style={this.iconMenuStyle}/>
+                   <div>OSVC</div>
+               </MenuItem>
+               }
+
                 {this.isDismacVisible() &&
                 <MenuItem onClick={this.dismacHandler.bind(this)} disabled={this.props.newWorkorder}>
                     <Camera style={this.iconMenuStyle} />
@@ -130,29 +143,37 @@ class WorkorderToolbar extends Component {
                     </IconButton>
                 </Tooltip>
 
+                {this.props.applicationData.EL_PRTWO &&
                 <Tooltip title="Print Work Order">
                     <IconButton onClick={this.printWorkOrderHandler.bind(this)} disabled={this.props.newWorkorder}>
-                        <Printer style={this.iconStyle} />
+                        <Printer style={this.iconStyle}/>
                     </IconButton>
                 </Tooltip>
+                }
 
+                {this.props.applicationData.EL_GISWO &&
                 <Tooltip title="Show on Map">
                     <IconButton onClick={this.showOnMapWorkOrderHandler.bind(this)} disabled={this.props.newWorkorder}>
-                        <Map style={this.iconStyle} />
+                        <Map style={this.iconStyle}/>
                     </IconButton>
                 </Tooltip>
+                }
 
+                {this.props.applicationData.EL_WOLIN &&
                 <Tooltip title="Show in Infor EAM">
                     <IconButton onClick={this.showInExtendedHandler.bind(this)} disabled={this.props.newWorkorder}>
-                        <OpenInNew style={this.iconStyle} />
+                        <OpenInNew style={this.iconStyle}/>
                     </IconButton>
                 </Tooltip>
+                }
 
+                {this.props.applicationData.EL_INTEG &&
                 <Tooltip title="OSVC">
                     <IconButton onClick={this.OSVCHandler.bind(this)} disabled={this.props.newWorkorder}>
-                        <Domain style={this.iconStyle} />
+                        <Domain style={this.iconStyle}/>
                     </IconButton>
                 </Tooltip>
+                }
 
                 {this.isDismacVisible() &&
                 <Tooltip title="DISMAC">

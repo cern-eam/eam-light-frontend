@@ -90,6 +90,12 @@ class CustomFields extends Component {
     }
 
     render() {
+        if (!this.props.customFields || this.props.customFields.length === 0) {
+            return (
+                <div/>
+            )
+        }
+
         return (
             <EISPanel heading={this.props.title}>
                 <div style={{width: "100%", marginTop: 0}}>
