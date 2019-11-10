@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Account, Logout} from "mdi-material-ui"
 import {IconButton} from "@material-ui/core";
+import {updateApplication} from "../../actions/applicationActions";
 
 export default class UserInfo extends Component {
 
@@ -36,6 +37,7 @@ export default class UserInfo extends Component {
     logoutHandler() {
         if (process.env.REACT_APP_LOGIN_METHOD === 'STD') {
             this.props.updateInforContext(null);
+            this.props.updateApplication({userData: null})
             sessionStorage.removeItem('inforContext');
         }
         if (process.env.REACT_APP_LOGIN_METHOD === 'CERNSSO') {
