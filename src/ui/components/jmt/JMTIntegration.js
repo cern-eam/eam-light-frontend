@@ -80,7 +80,7 @@ class JMTIntegration extends React.Component {
     }
 
     createJMTJob (woCode) {
-        const { showNotification, handleError, showError } = this.props;
+        const { showNotification, handleError } = this.props;
         this.setState({loading: true});
 
         WSJMTIntegration.createJMTJob(woCode)
@@ -96,7 +96,7 @@ class JMTIntegration extends React.Component {
     }
 
     addCostLinesToJMTJob (woCode, jmtJobNo, costType) {
-        const { showNotification, handleError, showError } = this.props;
+        const { showNotification, handleError } = this.props;
         this.setState({loading: true});
 
         WSJMTIntegration.addCostLines(woCode, jmtJobNo, costType)
@@ -111,7 +111,7 @@ class JMTIntegration extends React.Component {
     }
 
     render () {
-        const { loaded, woCode, jmtJobNo, loading, message } = this.state;
+        const { loaded, woCode, jmtJobNo, loading } = this.state;
         let component = null;
         if (!loaded) {
             component = <div>Loading...</div> 
@@ -137,7 +137,7 @@ class JMTIntegration extends React.Component {
                     </Button>
                     <Button 
                         color="primary" 
-                        onClick={() => this.addCostLinesToJMTJob(woCode, '123', 'REAL')}
+                        onClick={() => this.addCostLinesToJMTJob(woCode, jmtJobNo, 'REAL')}
                     >
                         Add Real Cost
                     </Button>
