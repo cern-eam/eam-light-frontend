@@ -27,12 +27,6 @@ class EamlightToolbar extends Component {
         width: 20
     };
 
-    iconStyle = {
-        width: 20,
-        height: 20
-    };
-
-
 
     componentDidMount() {
         window.addEventListener("resize", this.updateDimensions.bind(this));
@@ -167,13 +161,16 @@ class EamlightToolbar extends Component {
     renderDesktopMenu() {
         return (
             <div style={{display: "flex"}}>
-                <Button className="button" onClick={this.newHandler} disabled={this.isNewButtonDisabled()}>
-                    <AddIcon className="iconButton" style={this.iconButtonStyle}/>
+                <Button onClick={this.newHandler}
+                        disabled={this.isNewButtonDisabled()}
+                        startIcon={<AddIcon/>}
+                >
                     New
                 </Button>
-                <Button className="button" onClick={() => this.deleteConfirmation.show()}
-                        disabled={this.isDeleteButtonDisabled()}>
-                    <DeleteIcon className="iconButton" style={this.iconButtonStyle}/>
+                <Button onClick={() => this.deleteConfirmation.show()}
+                        disabled={this.isDeleteButtonDisabled()}
+                        startIcon={<DeleteIcon/>}
+                >
                     Delete
                 </Button>
                 {this.getToolbar('TOOLBARICONS')}
@@ -215,8 +212,10 @@ class EamlightToolbar extends Component {
 
                     <div style={verticalLineStyle}/>
 
-                    <Button className="button" onClick={this.props.saveHandler} disabled={this.isSaveButtonDisabled()}>
-                        <SaveIcon className="iconButton" style={this.iconButtonStyle}/>
+                    <Button onClick={this.props.saveHandler}
+                            disabled={this.isSaveButtonDisabled()}
+                            startIcon={<SaveIcon className="iconButton"/>}
+                    >
                         Save
                     </Button>
 

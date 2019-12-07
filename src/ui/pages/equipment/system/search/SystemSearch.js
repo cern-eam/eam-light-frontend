@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import EAMGrid from 'eam-components/dist/ui/components/eamgrid';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 
 export default class SystemSearch extends Component {

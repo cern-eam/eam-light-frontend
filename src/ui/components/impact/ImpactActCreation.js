@@ -49,7 +49,6 @@ class ImpactActCreation extends Component {
 
     populateFacility = facility => {
         const data = this.props.woInfo;
-        console.log('data', data)
         this.setState((prevState) => ({
             facility: facility,
             loading: true,
@@ -155,7 +154,7 @@ class ImpactActCreation extends Component {
         return (
             <div style={{margin: 15}}>
                 <BlockUi tag="div" blocking={this.state.loading} style={{height: "100%", width: "100%"}}>
-                    <Grid container spacing={8}>
+                    <Grid container spacing={1}>
                         <Grid item sm={12} xs={12}>
                             <EAMInputMUI label="Title"
                                          value={activity.title}

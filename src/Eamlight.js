@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import ApplicationLayoutContainer from './ui/layout/ApplicationLayoutContainer';
+import ApplicationLayout from './ui/layout/ApplicationLayout';
 import EamlightMenuContainer from './ui/layout/menu/EamlightMenuContainer';
 import WorkorderContainer from './ui/pages/work/WorkorderContainer';
 import WorkorderSearchContainer from './ui/pages/work/search/WorkorderSearchContainer';
@@ -17,12 +17,13 @@ import 'react-resizable/css/styles.css';
 import PartContainer from "./ui/pages/part/PartContainer";
 import SearchContainer from "./ui/pages/search/SearchContainer";
 import ReplaceEqpContainer from "./ui/pages/equipment/replaceeqp/ReplaceEqpContainer";
-import {MuiThemeProvider} from '@material-ui/core/styles';
+import {ThemeProvider} from '@material-ui/core/styles';
 import EquipmentRedirect from "./ui/pages/equipment/EquipmentRedirect";
 import MeterReadingContainer from './ui/pages/meter/MeterReadingContainer';
 import EquipmentContainer from "./ui/pages/equipment/EquipmentContainer";
 import {theme} from 'eam-components/dist/ui/components/theme';
 import LoginContainer from "./ui/pages/login/LoginContainer";
+import Grid from "./ui/pages/grid/Grid";
 
 class Eamlight extends Component {
 
@@ -54,6 +55,8 @@ class Eamlight extends Component {
                     <div style={this.blockUiStyleDiv}>Loading EAM Light ...</div>
                 </BlockUi>
             )
+        } else {
+            console.log('userdata', this.props.userData)
         }
 
         // User has no valid EAM account
@@ -67,11 +70,11 @@ class Eamlight extends Component {
         // Render real application once user data is there and user has an EAM account
         return (
             <Router basename={process.env.PUBLIC_URL}>
-                <MuiThemeProvider theme={theme}>
+                <ThemeProvider theme={theme}>
                     <Switch>
                     <Route path="/impact"
                            component={ImpactContainer}/>
-                    <ApplicationLayoutContainer>
+                    <ApplicationLayout>
                         <EamlightMenuContainer/>
                         <div style={{height: "100%"}}>
 
@@ -80,12 +83,14 @@ class Eamlight extends Component {
 
                                 <Route path="/workorder/:code?"
                                        component={WorkorderContainer}/>
+
                                 <Route path="/wosearch"
                                        component={WorkorderSearchContainer}/>
 
                                 <Route path="/part/:code?"
                                        component={PartContainer}/>
-                                <Route path="/partsearch"
+
+                                       <Route path="/partsearch"
                                        component={PartSearchContainer}/>
 
                                 <Route path="/assetsearch"
@@ -106,12 +111,15 @@ class Eamlight extends Component {
                                 <Route path="/meterreading"
                                        component={MeterReadingContainer}/>
 
+                                <Route path="/grid"
+                                       component={Grid}/>
+
                                 <Route path={eqpRegex}
                                        component={EquipmentContainer}/>
                         </div>
-                    </ApplicationLayoutContainer>
+                    </ApplicationLayout>∂
                     </Switch>
-                </MuiThemeProvider>
+                </ThemeProvider>
             </Router>
         )
     }

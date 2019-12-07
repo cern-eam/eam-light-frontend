@@ -1,13 +1,13 @@
 import Grid from '@material-ui/core/Grid';
-import ChecklistsContainer from 'eam-components/dist/ui/components/checklists/ChecklistsContainer';
-import CommentsContainer from 'eam-components/dist/ui/components/comments/CommentsContainer';
-import EDMSWidgetContainer from 'eam-components/dist/ui/components/edms/EDMSWidgetContainer';
-import { WorkorderIcon } from 'eam-components/dist/ui/components/icons';
+import Checklists from 'eam-components/dist/ui/components/checklists/Checklists';
+import Comments from 'eam-components/dist/ui/components/comments/Comments';
+import EDMSWidget from 'eam-components/dist/ui/components/edms/EDMSWidget';
+import {WorkorderIcon} from 'eam-components/dist/ui/components/icons';
 import React from 'react';
 import BlockUi from 'react-block-ui';
 import WSEquipment from "../../../tools/WSEquipment";
 import WSWorkorder from "../../../tools/WSWorkorders";
-import { TOOLBARS } from "../../components/AbstractToolbar";
+import {TOOLBARS} from "../../components/AbstractToolbar";
 import CustomFields from '../../components/customfields/CustomFields';
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import Entity from '../Entity';
@@ -21,7 +21,6 @@ import WorkorderClosingCodes from './WorkorderClosingCodes';
 import WorkorderDetails from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
 import WorkorderTools from "./WorkorderTools";
-import WorkorderToolbar from './WorkorderToolbar';
 
 class Workorder extends Entity {
 
@@ -127,14 +126,14 @@ class Workorder extends Entity {
     // DROP DOWN VALUES
     //
     setStatuses(status, type, newwo) {
-        WSWorkorder.getWorkOrderStatusValues(status, type, newwo)
+        WSWorkorder.getWorkOrderStatusValues(this.props.userData.eamAccount.userGroup, status, type, newwo)
             .then(response => {
                 this.setLayout({statusValues: response.body.data})
             })
     }
 
     setTypes(status, type, newwo, ppmwo) {
-        WSWorkorder.getWorkOrderTypeValues(status, type, newwo, ppmwo)
+        WSWorkorder.getWorkOrderTypeValues(this.props.userData.eamAccount.userGroup)
             .then(response => {
                 this.setLayout({typeValues: response.body.data})
             })
@@ -236,7 +235,7 @@ class Workorder extends Entity {
                     </EamlightToolbar>
 
                     <div className="entityMain">
-                        <Grid container spacing={8}>
+                        <Grid container spacing={1}>
                             <Grid item md={6} sm={12} xs={12}>
 
                                 <WorkorderDetails {...props} applicationData={this.props.applicationData}/>
@@ -255,7 +254,7 @@ class Workorder extends Entity {
                                 WorkorderTools.isRegionAvailable('PAR', props.workOrderLayout) &&
                                 !this.state.layout.newEntity &&
                                 <PartUsageContainer workorder={this.state.workorder}
-                                                    tabLayout={this.props.workOrderLayout.tabs.PAR.fields}/>}
+                                                    tabLayout={this.props.workOrderLayout.tabs.PAR}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().CHILDRENWOS.code] &&
                                 WorkorderTools.isRegionAvailable('CWO', props.workOrderLayout) &&
@@ -271,20 +270,21 @@ class Workorder extends Entity {
 
                                 {!this.props.hiddenRegions[this.getRegions().NCRS.code] &&
                                 !this.state.layout.newEntity &&
-                                <EDMSWidgetContainer objectID={this.state.workorder.number} objectType="J"
+                                <EDMSWidget objectID={this.state.workorder.number} objectType="J"
                                                      creationMode="NCR"
                                                      title="NCRs"
-                                                     edmsDocListLink={this.props.edmsDocListLink}/>}
+                                                     edmsDocListLink={this.props.edmsDocListLink}
+                                                     showSuccess={this.props.showSuccess}
+                                                     showError={this.props.showError}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
-                                <CommentsContainer ref={comments => this.comments = comments}
+                                <Comments ref={comments => this.comments = comments}
                                                    entityCode='EVNT'
                                                    entityKeyCode={!this.state.layout.newEntity ? this.state.workorder.number : undefined}
                                                    userDesc={this.props.userData.eamAccount.userDesc}/>
                                 }
 
                                 {!this.props.hiddenRegions[this.getRegions().ACTIVITIES.code] &&
-                                WorkorderTools.isRegionAvailable('ACT_BOO', props.workOrderLayout) &&
                                 !this.state.layout.newEntity &&
                                 <Activities
                                     workorder={this.state.workorder.number}
@@ -294,15 +294,16 @@ class Workorder extends Entity {
                                     postAddActivityHandler={this.postAddActivityHandler}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().CHECKLISTS.code] &&
-                                WorkorderTools.isRegionAvailable('ACK', props.workOrderLayout) &&
                                 !this.state.layout.newEntity &&
-                                <ChecklistsContainer workorder={this.state.workorder.number}
+                                <Checklists workorder={this.state.workorder.number}
                                                      printingChecklistLinkToAIS={this.props.applicationData.EL_PRTCL}
                                                      getWoLink={wo => '/workorder/' + wo}
-                                                     ref={checklists => this.checklists = checklists}/>}
+                                                     ref={checklists => this.checklists = checklists}
+                                                     showSuccess={this.props.showSuccess}
+                                                     showError={this.props.showError}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
-                                WorkorderTools.isRegionAvailable('CUSTOM_FIELDS', props.workOrderLayout) &&
+                                  this.props.workOrderLayout.fields.block_5.attribute !== 'H' &&
                                 <CustomFields children={this.children}
                                               entityCode='EVNT'
                                               entityKeyCode={this.state.workorder.number}

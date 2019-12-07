@@ -1,4 +1,4 @@
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import WorkorderToolbar from './WorkorderToolbar'
 
 const mapStateToProps = (state, ownProps) => {

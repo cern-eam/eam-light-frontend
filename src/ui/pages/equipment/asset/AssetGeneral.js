@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import EISPanel from 'eam-components/dist/ui/components/panel';
 import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect'
 import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
@@ -9,7 +9,7 @@ class AssetGeneral extends Component {
 
     render() {
         let {equipment, children, assetLayout, updateEquipmentProperty, layout} = this.props
-        
+
         return (
             <EISPanel heading="GENERAL">
                 <div style={{width: "100%", marginTop: 0}}>

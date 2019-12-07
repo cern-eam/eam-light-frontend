@@ -246,7 +246,7 @@ class Impact extends Component {
         const {classes} = this.props;
         return (
             <div>
-                <Grid container spacing={8}>
+                <Grid container spacing={1}>
                     <Grid item sm={12} xs={12}>
                         <EISPanel heading="IMPACT Activity">
                             <Button color="primary" onClick={() => this.setActivityCreationVisibility(true)}
@@ -318,7 +318,7 @@ class Impact extends Component {
         const {classes} = this.props;
         return (
             <div>
-                <Grid container spacing={8}>
+                <Grid container spacing={1}>
                     <Grid item sm={12} xs={12}>
 
                         <EISPanel heading="IMPACT Activity">

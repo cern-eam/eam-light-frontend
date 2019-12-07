@@ -4,7 +4,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import MenuItem from '@material-ui/core/MenuItem';
 import '../../../ui/components/EamlightToolbar.css'
 import Divider from '@material-ui/core/Divider';
-import {ContentCopy, EmailOutline, Printer, Map, OpenInNew, Domain, Camera} from 'mdi-material-ui'
+import {Camera, ContentCopy, Domain, EmailOutline, Map, OpenInNew, Printer} from 'mdi-material-ui'
 
 class WorkorderToolbar extends Component {
 
@@ -13,7 +13,6 @@ class WorkorderToolbar extends Component {
     };
 
     toolbarIconsStyle = {
-        width: "100%",
         alignItems: "center",
         display: "flex"
     }

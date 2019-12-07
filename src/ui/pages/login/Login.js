@@ -5,9 +5,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
 import TextField from '@material-ui/core/TextField'
 import WS from "../../../tools/WS";
+
 
 const styles = theme => ({
     main: {
@@ -40,6 +40,7 @@ const styles = theme => ({
         marginTop: theme.spacing.unit * 3,
     },
 });
+
 
 class Login extends Component {
 
@@ -148,4 +149,4 @@ class Login extends Component {
     }
 }
 
-export default withStyles(styles)(Login);
+export default Login;

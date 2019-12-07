@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import Login from './Login'
-import {showNotification, showError, handleError} from '../../../actions/uiActions'
+import {handleError, showError, showNotification} from '../../../actions/uiActions'
 import {updateInforContext} from "../../../actions/inforContextActions";
 
 function mapStateToProps(state) {

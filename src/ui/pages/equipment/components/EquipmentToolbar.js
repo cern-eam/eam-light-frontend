@@ -27,7 +27,6 @@ class EquipmentToolbar extends Component {
     }
 
     toolbarIconsStyle = {
-        width: "100%",
         alignItems: "center",
         display: "flex"
     }

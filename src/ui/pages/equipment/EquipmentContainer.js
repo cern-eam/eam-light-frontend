@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import Equipment from './Equipment'
-import { withRouter } from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import {setLayoutProperty} from "../../../actions/uiActions";
 
 function mapStateToProps(state) {

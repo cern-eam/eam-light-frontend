@@ -6,7 +6,6 @@ import Button from '@material-ui/core/Button';
 import EISPanel from 'eam-components/dist/ui/components/panel';
 import AddActivityDialogContainer from "./dialogs/AddActivityDialogContainer";
 import AddBookLabourDialogContainer from "./dialogs/AddBookLabourDialogContainer";
-import BlockUi from 'react-block-ui';
 
 /**
  * Panel Activities and Book labor
@@ -94,13 +93,6 @@ export default class Activities extends Component {
     };
 
     render() {
-
-
-        const blockUiStyleDiv = {
-            position: "absolute",
-            top: '35%',
-        }
-
 
         if (this.state.isLoading) {
             return (

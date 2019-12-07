@@ -3,7 +3,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
 import Divider from '@material-ui/core/Divider';
-import {ContentCopy, EmailOutline, OpenInNew, Barcode} from 'mdi-material-ui';
+import {Barcode, ContentCopy, EmailOutline, OpenInNew} from 'mdi-material-ui';
 import WSParts from '../../../tools/WSParts';
 
 class PartToolbar extends Component {
@@ -25,7 +25,6 @@ class PartToolbar extends Component {
     };
 
     toolbarIconsStyle = {
-        width: "100%",
         alignItems: "center",
         display: "flex"
     };

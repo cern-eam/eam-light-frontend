@@ -13,9 +13,8 @@ import PartWhereUsed from "./PartWhereUsed";
 import Entity from '../Entity';
 import PartTools from "./PartTools";
 import {PartIcon} from 'eam-components/dist/ui/components/icons'
-import PartToolbar from "./PartToolbar";
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
-import { TOOLBARS } from '../../components/AbstractToolbar';
+import {TOOLBARS} from '../../components/AbstractToolbar';
 
 const PART = 'PART';
 const SSPART = 'SSPART';
@@ -137,7 +136,7 @@ class Part extends Entity {
 
 
                     <div className="entityMain">
-                        <Grid container spacing={8}>
+                        <Grid container spacing={1}>
                             <Grid item sm={6} xs={12}>
                                 <PartGeneral {...props}/>
 

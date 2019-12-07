@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { iframeResizer } from 'iframe-resizer';
+import React, {Component} from 'react';
+import {iframeResizer} from 'iframe-resizer';
 
 class ResizableIFrame extends Component {
     componentWillUnmount() {

@@ -1,7 +1,10 @@
 import {connect} from 'react-redux';
 import Part from './Part';
 import {
-    handleError, setLayoutProperty, showError, showNotification,
+    handleError,
+    setLayoutProperty,
+    showError,
+    showNotification,
     toggleHiddenRegion
 } from '../../../actions/uiActions';
 

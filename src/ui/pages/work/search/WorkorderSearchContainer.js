@@ -1,6 +1,6 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import WorkorderSearch from './WorkorderSearch';
-import { handleError } from "../../../../actions/uiActions";
+import {handleError} from "../../../../actions/uiActions";
 
 function mapStateToProps(state) {
     return {

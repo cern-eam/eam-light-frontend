@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {Account, Logout} from "mdi-material-ui"
 import {IconButton} from "@material-ui/core";
-import {updateApplication} from "../../actions/applicationActions";
 
 export default class UserInfo extends Component {
 

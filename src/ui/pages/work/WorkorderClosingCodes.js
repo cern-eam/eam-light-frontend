@@ -9,6 +9,15 @@ class WorkorderClosingCodes extends Component {
     render() {
         let {children, workOrderLayout, workorder, updateWorkorderProperty, layout} = this.props;
 
+        //
+        if ("H" === workOrderLayout.fields.problemcode.attribute
+            && "H" === workOrderLayout.fields.failurecode.attribute
+            && "H" === workOrderLayout.fields.causecode.attribute
+            && "H" === workOrderLayout.fields.actioncode.attribute
+            && "H" === workOrderLayout.fields.costcode.attribute) {
+            return null;
+        }
+
         return (
             <EISPanel heading="CLOSING CODES">
                 <div style={{width: "100%", marginTop: 0}}>

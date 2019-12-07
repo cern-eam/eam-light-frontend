@@ -1,21 +1,19 @@
 import Grid from '@material-ui/core/Grid';
-import CommentsContainer from 'eam-components/dist/ui/components/comments/CommentsContainer';
-import EDMSWidgetContainer from 'eam-components/dist/ui/components/edms/EDMSWidgetContainer';
-import { AssetIcon } from 'eam-components/dist/ui/components/icons';
+import Comments from 'eam-components/dist/ui/components/comments/Comments';
+import EDMSWidget from 'eam-components/dist/ui/components/edms/EDMSWidget';
+import {AssetIcon} from 'eam-components/dist/ui/components/icons';
 import React from 'react';
 import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';
 import WSEquipment from "../../../../tools/WSEquipment";
-import { TOOLBARS } from "../../../components/AbstractToolbar";
+import {TOOLBARS} from "../../../components/AbstractToolbar";
 import CustomFields from '../../../components/customfields/CustomFields';
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import Entity from '../../Entity';
 import EquipmentHistory from '../components/EquipmentHistory.js';
 import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
-import EquipmentToolbar from '../components/EquipmentToolbar';
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
-import EquipmentTools from "../EquipmentTools";
 import EamlightToolbar from './../../../components/EamlightToolbar';
 import AssetDetails from './AssetDetails';
 import AssetGeneral from './AssetGeneral';
@@ -198,7 +196,7 @@ export default class Asset extends Entity {
 
                 <div className="entityMain">
 
-                    <Grid container spacing={8}>
+                    <Grid container spacing={1}>
                         <Grid item xs={xs} sm={sm} md={md} lg={lg}>
 
                             <AssetGeneral {...props} />
@@ -212,15 +210,15 @@ export default class Asset extends Entity {
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().WORKORDERS.code] &&
-                            !this.state.layout.newEntity &&
+                             !this.state.layout.newEntity &&
                             <EquipmentWorkOrders equipmentcode={this.state.equipment.code}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().HISTORY.code] &&
-                            !this.state.layout.newEntity &&
+                             !this.state.layout.newEntity &&
                             <EquipmentHistory equipmentcode={this.state.equipment.code}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().PARTS.code] &&
-                            EquipmentTools.isRegionAvailable('PAS', props.assetLayout, 'A') && !this.state.layout.newEntity &&
+                             !this.state.layout.newEntity &&
                             <EquipmentPartsAssociated equipmentcode={this.state.equipment.code}
                                                       parentScreen={this.props.userData.assetScreen.parentScreen}/>}
 
@@ -234,13 +232,13 @@ export default class Asset extends Entity {
 
                             {!this.props.hiddenRegions[this.getRegions().NCRS.code] &&
                             !this.state.layout.newEntity &&
-                            <EDMSWidgetContainer objectID={this.state.equipment.code} objectType="A"
+                            <EDMSWidget objectID={this.state.equipment.code} objectType="A"
                                                  creationMode="NCR"
                                                  title="NCRs"
                                                  edmsDocListLink={this.props.applicationData.edmsDocListLink}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
-                            <CommentsContainer ref={comments => this.comments = comments}
+                            <Comments ref={comments => this.comments = comments}
                                                entityCode='OBJ'
                                                entityKeyCode={!this.state.layout.newEntity ? this.state.equipment.code : undefined}
                                                userDesc={this.props.userData.eamAccount.userDesc}/>
@@ -254,7 +252,6 @@ export default class Asset extends Entity {
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
-                            EquipmentTools.isRegionAvailable('CUSTOM_FIELDS', props.assetLayout, 'A') &&
                             <CustomFields entityCode='OBJ'
                                           entityKeyCode={this.state.equipment.code}
                                           classCode={this.state.equipment.classCode}

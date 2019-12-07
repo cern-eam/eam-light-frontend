@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class EamlightSubmenu extends Component {
+export default function EamlightSubmenu(props) {
 
-    render() {
-        return (
-            <ul className="layout-tab-submenu" id={this.props.id}>
-                <li>
-                    {this.props.header}
-                    <ul>
-                        {this.props.children}
-                    </ul>
-                </li>
-            </ul>
-        )
-    }
+    return (
+        <ul className="layout-tab-submenu" id={props.id}>
+            <li>
+                {props.header}
+                <ul>
+                    {props.children}
+                </ul>
+            </li>
+        </ul>
+    )
+
 }
