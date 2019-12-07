@@ -11,6 +11,18 @@ class WorkorderScheduling extends Component {
     render() {
         let {children, workOrderLayout, workorder, updateWorkorderProperty} = this.props;
 
+        if ("H" === workOrderLayout.fields.reqstartdate.attribute &&
+            "H" === workOrderLayout.fields.reqenddate.attribute &&
+            "H" === workOrderLayout.fields.schedstartdate.attribute &&
+            "H" === workOrderLayout.fields.schedenddate.attribute &&
+            "H" === workOrderLayout.fields.datecompleted.attribute &&
+            "H" === workOrderLayout.fields.startdate.attribute &&
+            "H" === workOrderLayout.fields.reportedby.attribute &&
+            "H" === workOrderLayout.fields.assignedto.attribute &&
+            "H" === workOrderLayout.fields.udfchar17.attribute) {
+            return null;
+        }
+
         return (
             <EISPanel heading="SCHEDULING">
                 <div style={{width: "100%", marginTop: 0}}>

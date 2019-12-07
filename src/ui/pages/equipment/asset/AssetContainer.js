@@ -1,7 +1,12 @@
 import {connect} from 'react-redux'
 import Asset from './Asset'
-import {showNotification, showError, handleError, setLayoutProperty} from '../../../../actions/uiActions'
-import {toggleHiddenRegion} from "../../../../actions/uiActions";
+import {
+    handleError,
+    setLayoutProperty,
+    showError,
+    showNotification,
+    toggleHiddenRegion
+} from '../../../../actions/uiActions'
 
 function mapStateToProps(state) {
     return {

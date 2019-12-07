@@ -119,8 +119,10 @@ class PartUsage extends Component {
                 <PartUsageDialog handleSave={this.handleAddPartUsage}
                                  showNotification={this.props.showNotification}
                                  handleError={this.props.handleError}
-                                 handleCancel={this.closePartUsageDialog} tabLayout={this.props.tabLayout}
-                                 isDialogOpen={this.state.isDialogOpen} workorder={this.props.workorder}
+                                 handleCancel={this.closePartUsageDialog}
+                                 tabLayout={this.props.tabLayout}
+                                 isDialogOpen={this.state.isDialogOpen}
+                                 workorder={this.props.workorder}
                                  isLoading={this.state.isLoading}
                                  children={this.children}/>
             </EISPanel>

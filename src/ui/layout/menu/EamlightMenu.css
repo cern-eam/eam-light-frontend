@@ -75,7 +75,7 @@
     margin-top: 0.5rem;
   }
 
-  .layout-tab-submenu>li>a {
+  .layout-tab-submenu>li>span {
     display: block;
     padding: 5px;
     font-size: 13px;

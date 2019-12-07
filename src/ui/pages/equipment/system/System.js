@@ -13,9 +13,7 @@ import SystemHierarchy from './SystemHierarchy'
 import CommentsContainer from 'eam-components/dist/ui/components/comments/CommentsContainer';
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
-import EquipmentTools from "../EquipmentTools";
 import {SystemIcon} from 'eam-components/dist/ui/components/icons'
-import EquipmentToolbar from "../components/EquipmentToolbar";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import {TOOLBARS} from "../../../components/AbstractToolbar";
@@ -176,7 +174,7 @@ export default class System extends Entity {
                                  hiddenRegions={this.props.hiddenRegions}/>
 
                 <div className="entityMain">
-                    <Grid container spacing={8}>
+                    <Grid container spacing={1}>
                         <Grid item xs={xs} sm={sm} md={md} lg={lg}>
 
                             <SystemGeneral {...props} />
@@ -198,7 +196,7 @@ export default class System extends Entity {
                             <EquipmentHistory equipmentcode={this.state.equipment.code}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().PARTS.code] &&
-                            EquipmentTools.isRegionAvailable('PAS', props.systemLayout, 'S') && !this.state.layout.newEntity &&
+                             !this.state.layout.newEntity &&
                             <EquipmentPartsAssociated equipmentcode={this.state.equipment.code}
                                                       parentScreen={this.props.userData.systemScreen.parentScreen}/>}
 
@@ -225,7 +223,6 @@ export default class System extends Entity {
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
-                            EquipmentTools.isRegionAvailable('CUSTOM_FIELDS', props.systemLayout, 'S') &&
                             <CustomFields entityCode='OBJ'
                                           entityKeyCode={this.state.equipment.code}
                                           classCode={this.state.equipment.classCode}

@@ -16,10 +16,10 @@ class WS {
         return this._get('/application/applicationdata', config);
     }
 
-    getScreenLayout(entity, systemFunction, userFunction, tabs, config = {}) {
+    getScreenLayout(userGroup, entity, systemFunction, userFunction, tabs, config = {}) {
         if (tabs)
             tabs = 'tabname=' + tabs.join('&tabname=');
-        return this._get('/application/screenlayout/' + entity + '/' + systemFunction + '/' + userFunction + '?' + tabs, config)
+        return this._get(`/users/screenlayout/${userGroup}/${entity}/${systemFunction}/${userFunction}?${tabs}`, config)
     }
 
     getGISLink(workorderNumber, locationCode, config = {}) {

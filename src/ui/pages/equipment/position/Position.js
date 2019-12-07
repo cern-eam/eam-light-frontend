@@ -14,9 +14,7 @@ import CommentsContainer from 'eam-components/dist/ui/components/comments/Commen
 import EDMSWidgetContainer from 'eam-components/dist/ui/components/edms/EDMSWidgetContainer';
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
-import EquipmentTools from "../EquipmentTools";
 import {PositionIcon} from 'eam-components/dist/ui/components/icons'
-import EquipmentToolbar from "../components/EquipmentToolbar";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import {TOOLBARS} from "../../../components/AbstractToolbar";
@@ -184,7 +182,7 @@ export default class Position extends Entity {
                                  hiddenRegions={this.props.hiddenRegions}/>
 
                 <div className="entityMain">
-                    <Grid container spacing={8}>
+                    <Grid container spacing={1}>
                         <Grid item xs={xs} sm={sm} md={md} lg={lg}>
 
                             <PositionGeneral {...props} />
@@ -206,7 +204,7 @@ export default class Position extends Entity {
                             <EquipmentHistory equipmentcode={this.state.equipment.code}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().PARTS.code] &&
-                            EquipmentTools.isRegionAvailable('PAS', props.positionLayout, 'P') && !this.state.layout.newEntity &&
+                             !this.state.layout.newEntity &&
                             <EquipmentPartsAssociated equipmentcode={this.state.equipment.code}
                                                       parentScreen={this.props.userData.positionScreen.parentScreen}/>}
 
@@ -239,7 +237,6 @@ export default class Position extends Entity {
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
-                            EquipmentTools.isRegionAvailable('CUSTOM_FIELDS', props.positionLayout, 'P') &&
                             <CustomFields entityCode='OBJ'
                                           entityKeyCode={this.state.equipment.code}
                                           classCode={this.state.equipment.classCode}

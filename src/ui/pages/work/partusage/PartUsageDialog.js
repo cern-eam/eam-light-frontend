@@ -185,6 +185,8 @@ class PartUsageDialog extends Component {
     };
 
     render() {
+        console.log(this.props.tabLayout)
+
         return (
             <div>
                 <Dialog

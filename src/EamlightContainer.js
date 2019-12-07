@@ -1,4 +1,4 @@
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import Eamlight from './Eamlight'
 import {initializeApplication} from "./actions/actions";
 

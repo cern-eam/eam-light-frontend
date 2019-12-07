@@ -1,6 +1,6 @@
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import AddActivityDialog from './AddActivityDialog'
-import { createWorkOrderActivity } from '../../../../../actions/workorderActions';
+import {createWorkOrderActivity} from '../../../../../actions/workorderActions';
 import {handleError, showError, showNotification} from "../../../../../actions/uiActions";
 
 

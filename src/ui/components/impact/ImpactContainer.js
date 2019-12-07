@@ -1,7 +1,7 @@
-import { connect } from 'react-redux';
-import { withRouter } from "react-router-dom";
+import {connect} from 'react-redux';
+import {withRouter} from "react-router-dom";
 import Impact from "./Impact";
-import { handleError, showError } from "../../../actions/uiActions";
+import {handleError, showError} from "../../../actions/uiActions";
 
 /**
  * To get the value of a parameter from the URL

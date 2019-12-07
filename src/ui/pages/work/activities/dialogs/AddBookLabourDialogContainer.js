@@ -1,6 +1,6 @@
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import AddBookLabourDialog from './AddBookLabourDialog'
-import { createBookLabour } from '../../../../../actions/workorderActions';
+import {createBookLabour} from '../../../../../actions/workorderActions';
 import {handleError, showError, showNotification} from "../../../../../actions/uiActions";
 
 

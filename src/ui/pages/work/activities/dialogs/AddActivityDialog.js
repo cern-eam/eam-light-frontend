@@ -11,7 +11,6 @@ import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAuto
 import WSWorkorders from "../../../../../tools/WSWorkorders";
 import EAMDatePicker from "eam-components/dist/ui/components/muiinputs/EAMDatePicker";
 import KeyCode from "../../../../../enums/KeyCode";
-import {handleError, showNotification} from "../../../../../actions/uiActions";
 
 /**
  * Display detail of an activity

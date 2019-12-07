@@ -1,7 +1,10 @@
 import {connect} from 'react-redux';
 import System from './System';
 import {
-    handleError, setLayoutProperty, showError, showNotification,
+    handleError,
+    setLayoutProperty,
+    showError,
+    showNotification,
     toggleHiddenRegion
 } from '../../../../actions/uiActions';
 

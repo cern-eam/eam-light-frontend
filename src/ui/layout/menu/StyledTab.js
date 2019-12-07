@@ -6,10 +6,6 @@ const StyledTab = withStyles({
         width: 50,
         minWidth: 50,
         color: "white"
-    },
-    labelContainer: {
-        paddingRight: 6,
-        paddingLeft: 6,
     }
 })(Tab)
 

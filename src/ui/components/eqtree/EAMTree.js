@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {withStyles} from "@material-ui/core/styles/index";
 import TreeWS from './lib/TreeWS';
 import ErrorTypes from 'eam-components/dist/ui/components/eamgrid/lib/GridErrorTypes';
 import {connect} from "react-redux";
@@ -9,10 +8,6 @@ import TreeTheme from './theme/TreeTheme';
 import TreeIcon from './components/TreeIcon';
 import TreeSelectParent from "./components/TreeSelectParent";
 import BlockUi from 'react-block-ui';
-
-const styles = (theme) => ({
-  ...theme
-});
 
 class EAMTree extends Component {
   constructor(props) {
@@ -191,7 +186,7 @@ class EAMTree extends Component {
   }
 }
 
-EAMTree = withStyles(styles)(EAMTree);
+//EAMTree = withStyles(styles)(EAMTree);
 
 function mapStateToProps(state) {
   return {}

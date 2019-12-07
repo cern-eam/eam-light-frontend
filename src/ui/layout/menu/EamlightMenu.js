@@ -2,21 +2,18 @@ import React, {Component} from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import '../ApplicationLayout.css'
 import './EamlightMenu.css'
-import EamlightMenuMyWorkorders from './EamlightMenuMyWorkorders'
-import EamlightMenuMyTeamWorkorders from './EamlightMenuMyTeamWorkorders'
-import EamlightMenuItem from './EamlightMenuItem'
+import MenuMyWorkorders from './MenuMyWorkorders'
+import MenuMyTeamWorkorders from './MenuMyTeamWorkorders'
+import MenuItem from './MenuItem'
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import EamlightSubmenu from "./EamlightSubmenu";
 import SpeedometerIcon from 'mdi-material-ui/Speedometer'
 import AutorenewIcon from 'mdi-material-ui/Autorenew'
-import {PartIcon, WorkorderIcon} from 'eam-components/dist/ui/components/icons'
+import {AssetIcon, PartIcon, PositionIcon, SystemIcon, WorkorderIcon} from 'eam-components/dist/ui/components/icons'
 import {Account, AccountMultiple, Settings} from "mdi-material-ui"
 import ScreenChange from "./ScreenChange";
-import {AssetIcon} from 'eam-components/dist/ui/components/icons'
-import {PositionIcon} from 'eam-components/dist/ui/components/icons'
-import {SystemIcon} from 'eam-components/dist/ui/components/icons'
 
 class EamlightMenu extends Component {
     constructor(props) {
@@ -171,59 +168,56 @@ class EamlightMenu extends Component {
                         }
                     </ul>
 
+                    <MenuMyWorkorders myOpenWorkOrders={this.props.myOpenWorkOrders}/>
 
-                    <EamlightMenuMyWorkorders myOpenWorkOrders={this.props.myOpenWorkOrders}/>
-
-
-                    <EamlightMenuMyTeamWorkorders myTeamWorkOrders={this.props.myTeamWorkOrders} eamAccount={this.props.userData.eamAccount}/>
-
+                    <MenuMyTeamWorkorders myTeamWorkOrders={this.props.myTeamWorkOrders} eamAccount={this.props.userData.eamAccount}/>
 
                     {this.props.userData.workOrderScreen &&
                     <EamlightSubmenu id="workorders" header={this.getWorkOrdersHeader()}>
 
                         {this.props.userData.screens[this.props.userData.workOrderScreen].creationAllowed &&
-                        <EamlightMenuItem label="New Work Order"
-                                          icon={<AddIcon style={menuIconStyle}/>}
-                                          link="workorder"/>
+                        <MenuItem label="New Work Order"
+                                  icon={<AddIcon style={menuIconStyle}/>}
+                                  link="workorder"/>
                         }
 
                         {this.props.userData.screens[this.props.userData.workOrderScreen].readAllowed &&
-                        <EamlightMenuItem label={"Search " + this.props.userData.screens[this.props.userData.workOrderScreen].screenDesc}
-                                          icon={<SearchIcon style={menuIconStyle}/>}
-                                          link="wosearch"/>
+                        <MenuItem label={"Search " + this.props.userData.screens[this.props.userData.workOrderScreen].screenDesc}
+                                  icon={<SearchIcon style={menuIconStyle}/>}
+                                  link="wosearch"/>
                         }
 
-                        <EamlightMenuItem label="Meter Reading"
-                                          icon={<SpeedometerIcon style={menuIconStyle}/>}
-                                          link="meterreading"/>
+                        <MenuItem label="Meter Reading"
+                                  icon={<SpeedometerIcon style={menuIconStyle}/>}
+                                  link="meterreading"/>
                     </EamlightSubmenu>}
 
 
                     {(this.props.userData.assetScreen || this.props.userData.positionScreen || this.props.userData.systemScreen) &&
-                    <EamlightSubmenu id="equipment" header={<a href="#">EQUIPMENT</a>}>
+                    <EamlightSubmenu id="equipment" header={<span>EQUIPMENT</span>}>
 
                         {this.props.userData.assetScreen &&
-                        <EamlightMenuItem label="Assets"
-                                          icon={<AssetIcon style={menuIconStyle}/>}
-                                          onClick={this.openSubMenu.bind(this, 'assets')}/>
+                        <MenuItem label="Assets"
+                                  icon={<AssetIcon style={menuIconStyle}/>}
+                                  onClick={this.openSubMenu.bind(this, 'assets')}/>
                         }
 
                         { this.props.userData.positionScreen &&
-                        <EamlightMenuItem label="Positions"
-                                          icon={<PositionIcon style={menuIconStyle}/>}
-                                          onClick={this.openSubMenu.bind(this, 'positions')}/>
+                        <MenuItem label="Positions"
+                                  icon={<PositionIcon style={menuIconStyle}/>}
+                                  onClick={this.openSubMenu.bind(this, 'positions')}/>
                         }
 
                         { this.props.userData.systemScreen &&
-                        <EamlightMenuItem label="Systems"
-                                          icon={<SystemIcon style={menuIconStyle}/>}
-                                          onClick={this.openSubMenu.bind(this, 'systems')}/>
+                        <MenuItem label="Systems"
+                                  icon={<SystemIcon style={menuIconStyle}/>}
+                                  onClick={this.openSubMenu.bind(this, 'systems')}/>
                         }
 
                         {this.props.userData.assetScreen && this.props.userData.screens[this.props.userData.assetScreen].updateAllowed &&
-                        <EamlightMenuItem label="Replace Equipment"
-                                          icon={<AutorenewIcon style={menuIconStyle}/>}
-                                          link="replaceeqp"/>}
+                        <MenuItem label="Replace Equipment"
+                                  icon={<AutorenewIcon style={menuIconStyle}/>}
+                                  link="replaceeqp"/>}
                     </EamlightSubmenu>
                     }
 
@@ -231,21 +225,21 @@ class EamlightMenu extends Component {
                     <EamlightSubmenu id="assets" header={this.getAssetsHeader()}>
 
                         {this.creationAllowed(this.props.userData.assetScreen) &&
-                        <EamlightMenuItem label="New Asset"
-                                           icon={<AddIcon style={menuIconStyle}/>}
-                                           link="asset"/>
+                        <MenuItem label="New Asset"
+                                  icon={<AddIcon style={menuIconStyle}/>}
+                                  link="asset"/>
                         }
 
                         {this.readAllowed(this.props.userData.assetScreen) &&
-                        <EamlightMenuItem label={"Search " + this.props.userData.screens[this.props.userData.assetScreen].screenDesc}
-                                          icon={<SearchIcon style={menuIconStyle}/>}
-                                          link="assetsearch"/>
+                        <MenuItem label={"Search " + this.props.userData.screens[this.props.userData.assetScreen].screenDesc}
+                                  icon={<SearchIcon style={menuIconStyle}/>}
+                                  link="assetsearch"/>
                         }
 
 
-                        <EamlightMenuItem label="Back to Equipment"
-                                          icon={<ArrowBackIcon style={menuIconStyle}/>}
-                                          onClick={this.openSubMenu.bind(this, 'equipment')}/>
+                        <MenuItem label="Back to Equipment"
+                                  icon={<ArrowBackIcon style={menuIconStyle}/>}
+                                  onClick={this.openSubMenu.bind(this, 'equipment')}/>
                     </EamlightSubmenu>
                     }
 
@@ -253,21 +247,21 @@ class EamlightMenu extends Component {
                     <EamlightSubmenu id="positions" header={this.getPositionsHeader()}>
 
                         {this.creationAllowed(this.props.userData.positionScreen)  &&
-                        <EamlightMenuItem label="New Position"
-                                          icon={<AddIcon style={menuIconStyle}/>}
-                                          link="position"/>
+                        <MenuItem label="New Position"
+                                  icon={<AddIcon style={menuIconStyle}/>}
+                                  link="position"/>
                         }
 
                         {this.readAllowed(this.props.userData.positionScreen) &&
-                        <EamlightMenuItem
+                        <MenuItem
                             label={"Search " + this.props.userData.screens[this.props.userData.positionScreen].screenDesc}
                             icon={<SearchIcon style={menuIconStyle}/>}
                             link="positionsearch"/>
                         }
 
-                        <EamlightMenuItem label="Back to Equipment"
-                                          icon={<ArrowBackIcon style={menuIconStyle}/>}
-                                          onClick={this.openSubMenu.bind(this, 'equipment')}/>
+                        <MenuItem label="Back to Equipment"
+                                  icon={<ArrowBackIcon style={menuIconStyle}/>}
+                                  onClick={this.openSubMenu.bind(this, 'equipment')}/>
                     </EamlightSubmenu>
                     }
 
@@ -275,20 +269,20 @@ class EamlightMenu extends Component {
                     <EamlightSubmenu id="systems" header={this.getSystemsHeader()}>
 
                         {this.creationAllowed(this.props.userData.systemScreen)  &&
-                        <EamlightMenuItem label="New System"
-                                          icon={<AddIcon style={menuIconStyle}/>}
-                                          link="system"/>
+                        <MenuItem label="New System"
+                                  icon={<AddIcon style={menuIconStyle}/>}
+                                  link="system"/>
                         }
 
                         {this.readAllowed(this.props.userData.systemScreen) &&
-                        <EamlightMenuItem label={"Search " + this.props.userData.screens[this.props.userData.systemScreen].screenDesc}
-                                          icon={<SearchIcon style={menuIconStyle}/>}
-                                          link="systemsearch"/>
+                        <MenuItem label={"Search " + this.props.userData.screens[this.props.userData.systemScreen].screenDesc}
+                                  icon={<SearchIcon style={menuIconStyle}/>}
+                                  link="systemsearch"/>
                         }
 
-                        <EamlightMenuItem label="Back to Equipment"
-                                          icon={<ArrowBackIcon style={menuIconStyle}/>}
-                                          onClick={this.openSubMenu.bind(this, 'equipment')}/>
+                        <MenuItem label="Back to Equipment"
+                                  icon={<ArrowBackIcon style={menuIconStyle}/>}
+                                  onClick={this.openSubMenu.bind(this, 'equipment')}/>
                     </EamlightSubmenu>
                     }
 
@@ -296,15 +290,15 @@ class EamlightMenu extends Component {
                     {this.props.userData.partScreen &&
                     <EamlightSubmenu id="materials" header={this.getPartsHeader()}>
                         {this.props.userData.screens[this.props.userData.partScreen].creationAllowed &&
-                        <EamlightMenuItem label="New Part"
-                                          icon={<AddIcon style={menuIconStyle}/>}
-                                          link="part"/>
+                        <MenuItem label="New Part"
+                                  icon={<AddIcon style={menuIconStyle}/>}
+                                  link="part"/>
                         }
 
                         {this.props.userData.screens[this.props.userData.partScreen].readAllowed &&
-                        <EamlightMenuItem label={"Search " + this.props.userData.screens[this.props.userData.partScreen].screenDesc}
-                                          icon={<SearchIcon style={menuIconStyle}/>}
-                                          link="partsearch"/>
+                        <MenuItem label={"Search " + this.props.userData.screens[this.props.userData.partScreen].screenDesc}
+                                  icon={<SearchIcon style={menuIconStyle}/>}
+                                  link="partsearch"/>
                         }
                     </EamlightSubmenu>
                     }

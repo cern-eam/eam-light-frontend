@@ -27,7 +27,7 @@ export default class Activity extends Component {
 
           <h3>Activity {this.props.activity.activityCode}</h3>
 
-          <Grid container spacing={8} className="activityDetails">
+          <Grid container spacing={1} className="activityDetails">
 
             <Grid item xs={6} md={6} lg={2}>{layout.task.text}</Grid>
             <Grid item xs={6} md={6} lg={4}>{this.props.activity.taskCode}</Grid>

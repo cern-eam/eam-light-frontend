@@ -37,80 +37,41 @@ export function getUserInfo() {
     }
 }
 
+export function updateScreenLayout(entity, entityDesc, systemFunction, userFunction, tabs) {
+    return (dispatch, getState) => {
+        let userData = getState().application.userData;
+        WS.getScreenLayout(userData.eamAccount.userGroup, entity, systemFunction, userFunction, tabs)
+            .then(response => {
+                dispatch(updateApplication({
+                    [entityDesc + 'Layout']: response.body.data,
+                    userData: {
+                        ...userData,
+                        [entityDesc + 'Screen']: userFunction
+                    }
+                }))
+            })
+    }
+}
 
 export function updateWorkOrderScreenLayout(screenCode) {
-    return (dispatch, getState) => {
-        WS.getScreenLayout('EVNT', "WSJOBS", screenCode, ['ACT', 'BOO', 'PAR', 'ACK', 'MEC', 'CWO'])
-          .then(response => {
-            dispatch(updateApplication({
-                workOrderLayout: response.body.data,
-                userData: {
-                    ...getState().application.userData,
-                    workOrderScreen: screenCode
-                }
-            }))
-        })
-    }
+    return updateScreenLayout('EVNT', 'WorkOrder', 'WSJOBS', screenCode,
+                         ['ACT', 'BOO', 'PAR', 'ACK', 'MEC', 'CWO'])
 }
 
 export function updateAssetScreenLayout(screenCode) {
-    return (dispatch, getState) => {
-        WS.getScreenLayout('OBJ', 'OSOBJA', screenCode, ['PAS'])
-          .then(response => {
-            dispatch(updateApplication({
-                assetLayout: response.body.data,
-                userData: {
-                    ...getState().application.userData,
-                    assetScreen: screenCode
-                }
-            }))
-        })
-    }
+    return updateScreenLayout('OBJ', 'asset', 'OSOBJA', screenCode,['PAS']);
 }
 
 export function updatePositionScreenLayout(screenCode) {
-    return (dispatch, getState) => {
-        WS.getScreenLayout('OBJ', 'OSOBJP', screenCode, ['PAS'])
-            .then(response => {
-                dispatch(updateApplication({
-                    positionLayout: response.body.data,
-                    userData: {
-                        ...getState().application.userData,
-                        positionScreen: screenCode
-                    }
-                }))
-            })
-    }
+    return updateScreenLayout('OBJ', 'position', 'OSOBJP', screenCode,['PAS']);
 }
 
 export function updateSystemScreenLayout(screenCode) {
-    return (dispatch, getState) => {
-        WS.getScreenLayout('OBJ', 'OSOBJS', screenCode, ['PAS'])
-            .then(response => {
-                dispatch(updateApplication({
-                    systemLayout: response.body.data,
-                    userData: {
-                        ...getState().application.userData,
-                        systemScreen: screenCode
-                    }
-                }))
-            })
-    }
+    return updateScreenLayout('OBJ', 'system', 'OSOBJS', screenCode,['PAS']);
 }
 
 export function updatePartScreenLayout(screenCode) {
-    return (dispatch, getState) => {
-        WS.getScreenLayout('PART', "SSPART", screenCode, ['EPA'])
-            .then(response => {
-                dispatch(updateApplication({
-                    partLayout: response.body.data,
-                    userData: {
-                        ...getState().application.userData,
-                        partScreen: screenCode
-                    }
-                }))
-            })
-    }
+    return updateScreenLayout('PART', 'part', 'SSPART', screenCode,['EPA']);
 }
 
 
@@ -126,31 +87,31 @@ function createPromiseArray(userdata) {
     //
     let assetScreenPromise = Promise.resolve(false);
     if (userdata.assetScreen) {
-        assetScreenPromise = WS.getScreenLayout('OBJ', 'OSOBJA',
+        assetScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup, 'OBJ', 'OSOBJA',
             userdata.assetScreen, ['PAS'])
     }
     //
     let positionScreenPromise = Promise.resolve(false);
     if (userdata.positionScreen) {
-        positionScreenPromise = WS.getScreenLayout('OBJ', 'OSOBJP',
+        positionScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup,'OBJ', 'OSOBJP',
             userdata.positionScreen, ['PAS'])
     }
     //
     let systemScreenPromise = Promise.resolve(false);
     if (userdata.systemScreen) {
-        systemScreenPromise = WS.getScreenLayout('OBJ', 'OSOBJS',
+        systemScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup,'OBJ', 'OSOBJS',
             userdata.systemScreen, ['PAS'])
     }
     //
     let partScreenPromise = Promise.resolve(false);
     if (userdata.partScreen) {
-        partScreenPromise = WS.getScreenLayout('PART', "SSPART",
+        partScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup,'PART', "SSPART",
             userdata.partScreen, ['EPA'])
     }
     //
     let woScreenPromise = Promise.resolve(false);
     if (userdata.workOrderScreen) {
-        woScreenPromise = WS.getScreenLayout('EVNT', "WSJOBS",
+        woScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup,'EVNT', "WSJOBS",
             userdata.workOrderScreen,
             ['ACT', 'BOO', 'PAR', 'ACK', 'MEC', 'CWO'])
     }
@@ -162,3 +123,4 @@ function createPromiseArray(userdata) {
         partScreenPromise,
         woScreenPromise]
 }
+

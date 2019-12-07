@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import PositionSearch from './PositionSearch';
-import { handleError } from "../../../../../actions/uiActions";
+import {handleError} from "../../../../../actions/uiActions";
 
 function mapStateToProps(state) {
     return {

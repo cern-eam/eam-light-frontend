@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import EISPanel from 'eam-components/dist/ui/components/panel';
 import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect'
 import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'

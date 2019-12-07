@@ -1,7 +1,10 @@
 import {connect} from 'react-redux'
 import Position from './Position'
 import {
-    showNotification, showError, handleError, setLayoutProperty,
+    handleError,
+    setLayoutProperty,
+    showError,
+    showNotification,
     toggleHiddenRegion
 } from '../../../../actions/uiActions'
 

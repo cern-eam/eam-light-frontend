@@ -1,10 +1,12 @@
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import EamlightMenu from './EamlightMenu'
-import {updateWorkOrderScreenLayout,
-        updateAssetScreenLayout,
-        updatePositionScreenLayout,
-        updateSystemScreenLayout,
-        updatePartScreenLayout} from '../../../actions/applicationActions'
+import {
+    updateAssetScreenLayout,
+    updatePartScreenLayout,
+    updatePositionScreenLayout,
+    updateSystemScreenLayout,
+    updateWorkOrderScreenLayout
+} from '../../../actions/applicationActions'
 
 const mapStateToProps = (state) => {
     return {

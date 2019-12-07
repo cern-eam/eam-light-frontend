@@ -1,4 +1,4 @@
-import {SET_SNACKBAR_MESSAGE, SET_LAYOUT, TOGGLE_HIDDEN_REGION} from "../actions/uiActions";
+import {SET_LAYOUT, SET_SNACKBAR_MESSAGE, TOGGLE_HIDDEN_REGION} from "../actions/uiActions";
 
 export default function ui(state = buildDefaultUiObject(), action) {
     switch(action.type) {

@@ -1,9 +1,14 @@
 import {connect} from 'react-redux'
 import Workorder from './Workorder'
-import {showNotification, showError, handleError, setLayoutProperty} from '../../../actions/uiActions'
+import {
+    handleError,
+    setLayoutProperty,
+    showError,
+    showNotification,
+    toggleHiddenRegion
+} from '../../../actions/uiActions'
 import {updateMyWorkOrders} from '../../../actions/workorderActions'
 import {updateApplication} from '../../../actions/applicationActions'
-import {toggleHiddenRegion} from "../../../actions/uiActions";
 
 function mapStateToProps(state) {
     return {

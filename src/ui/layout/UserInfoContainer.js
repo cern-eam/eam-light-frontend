@@ -1,4 +1,4 @@
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import UserInfo from './UserInfo'
 import {updateInforContext} from "../../actions/inforContextActions";
 import {updateApplication} from "../../actions/applicationActions";
