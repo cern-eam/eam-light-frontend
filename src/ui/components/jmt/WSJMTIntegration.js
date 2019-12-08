@@ -32,6 +32,4 @@ class WSJMTIntegration {
     }
 }
 
-// eamlightws/rest/workorders/27151046
-
 export default new WSJMTIntegration(process.env.REACT_APP_BACKEND.replace('/eamlightws/rest', '/cern-eam-services/rest'));
