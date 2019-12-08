@@ -18,7 +18,7 @@ class AbstractToolbar extends React.Component {
     }
 
     render() {
-        const { _toolbarType, ...other } = this.props;
+        const { _toolbarType} = this.props;
         const Toolbar = this.toolbarComponents[_toolbarType];
         if(!Toolbar) return null;
 

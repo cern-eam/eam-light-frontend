@@ -12,8 +12,9 @@ import EamlightSubmenu from "./EamlightSubmenu";
 import SpeedometerIcon from 'mdi-material-ui/Speedometer'
 import AutorenewIcon from 'mdi-material-ui/Autorenew'
 import {AssetIcon, PartIcon, PositionIcon, SystemIcon, WorkorderIcon} from 'eam-components/dist/ui/components/icons'
-import {Account, AccountMultiple, Settings} from "mdi-material-ui"
+import {Account, AccountMultiple, Settings, Tune, DatabaseRefresh} from "mdi-material-ui"
 import ScreenChange from "./ScreenChange";
+import MenuTools from './MenuTools'
 
 class EamlightMenu extends Component {
     constructor(props) {
@@ -121,6 +122,7 @@ class EamlightMenu extends Component {
             }}>
                 <div id="menuscrollable">
                     <ul id="layout-tab-menu">
+
                         <li>
                             <div rel="mywos" className="active" onClick={this.mainMenuClickHandler}>
                                 <Tooltip title="MY OPEN WOs" placement="right">
@@ -130,6 +132,7 @@ class EamlightMenu extends Component {
                                     {this.props.myOpenWorkOrders.length < 100 ? this.props.myOpenWorkOrders.length : '99+'}</div>}
                             </div>
                         </li>
+
                         <li>
                             <div rel="myteamwos" onClick={this.mainMenuClickHandler}>
                                 <Tooltip title="MY TEAM's WOs" placement="right">
@@ -139,6 +142,7 @@ class EamlightMenu extends Component {
                                     {this.props.myTeamWorkOrders.length < 100 ? this.props.myTeamWorkOrders.length : '99+'}</div>}
                             </div>
                         </li>
+
                         {this.props.userData.workOrderScreen &&
                         <li>
                             <div rel="workorders" onClick={this.mainMenuClickHandler}>
@@ -148,6 +152,7 @@ class EamlightMenu extends Component {
                             </div>
                         </li>
                         }
+
                         {(this.props.userData.assetScreen || this.props.userData.positionScreen || this.props.userData.systemScreen) &&
                         <li>
                             <div rel="equipment" onClick={this.mainMenuClickHandler}>
@@ -157,11 +162,22 @@ class EamlightMenu extends Component {
                             </div>
                         </li>
                         }
+
                         {this.props.userData.partScreen &&
                         <li>
                             <div rel="materials" onClick={this.mainMenuClickHandler}>
                                 <Tooltip title="MATERIALS" placement="right">
                                     <PartIcon style={iconStyles} />
+                                </Tooltip>
+                            </div>
+                        </li>
+                        }
+
+                        {this.props.userData.eamAccount.userGroup === 'R5' &&
+                        <li>
+                            <div rel="settings" onClick={this.mainMenuClickHandler}>
+                                <Tooltip title="ADMIN SETTINGS" placement="right">
+                                    <Tune style={iconStyles} />
                                 </Tooltip>
                             </div>
                         </li>
@@ -299,6 +315,16 @@ class EamlightMenu extends Component {
                         <MenuItem label={"Search " + this.props.userData.screens[this.props.userData.partScreen].screenDesc}
                                   icon={<SearchIcon style={menuIconStyle}/>}
                                   link="partsearch"/>
+                        }
+                    </EamlightSubmenu>
+                    }
+
+                    {this.props.userData.eamAccount.userGroup === 'R5' &&
+                    <EamlightSubmenu id="settings" header={<span>ADMIN SETTINGS</span>}>
+                        {this.props.userData.screens[this.props.userData.partScreen].creationAllowed &&
+                        <MenuItem label="Refresh EAM Light Cache"
+                                  icon={<DatabaseRefresh style={menuIconStyle}/>}
+                                  onClick={MenuTools.refreshCache.bind(null, this.props.showNotification, this.props.showError)}/>
                         }
                     </EamlightSubmenu>
                     }

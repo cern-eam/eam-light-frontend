@@ -20,7 +20,7 @@ class WorkorderDetails extends Component {
                 const data = response.body.data[0];
                 //Assign values
                 updateWorkorderProperty('departmentCode', data.department);
-                updateWorkorderProperty('departmentDesc', data.departmentdisc); // 'disc' is not a typo
+                updateWorkorderProperty('departmentDesc', data.departmentdisc); // 'disc' is not a typo (well, it is in Infor's response ;-) )
                 updateWorkorderProperty('locationCode', data.parentlocation);
                 updateWorkorderProperty('locationDesc', data.locationdesc);
                 updateWorkorderProperty('costCode', data.equipcostcode);

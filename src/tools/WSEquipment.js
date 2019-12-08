@@ -37,8 +37,8 @@ class WSEquipment {
         return WS._get(`/equipment/init/${entity}/${eqpType}/${systemFunction}/${userFunction}${params}`, config);
     }
 
-    getEquipmentStatusValues(neweqp, oldStatusCode, config = {}) {
-        return WS._get(`/eqplists/statuscodes?neweqp=${neweqp}&oldStatusCode=${oldStatusCode}`, config);
+    getEquipmentStatusValues(userGroup, neweqp, oldStatusCode, config = {}) {
+        return WS._get(`/eqplists/statuscodes?userGroup=${userGroup}&neweqp=${neweqp}&oldStatusCode=${oldStatusCode}`, config);
     }
 
     getEquipmentCriticalityValues(config = {}) {

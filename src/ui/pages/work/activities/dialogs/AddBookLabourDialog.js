@@ -116,7 +116,6 @@ export default class AddActivityDialog extends Component {
             });
     };
 
-
     updateFormValues = (key, value) => {
         this.setState((prevState) => ({
             formValues: {
