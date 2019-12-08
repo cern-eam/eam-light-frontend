@@ -54,7 +54,7 @@ export function updateScreenLayout(entity, entityDesc, systemFunction, userFunct
 }
 
 export function updateWorkOrderScreenLayout(screenCode) {
-    return updateScreenLayout('EVNT', 'WorkOrder', 'WSJOBS', screenCode,
+    return updateScreenLayout('EVNT', 'workOrder', 'WSJOBS', screenCode,
                          ['ACT', 'BOO', 'PAR', 'ACK', 'MEC', 'CWO'])
 }
 

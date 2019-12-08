@@ -28,7 +28,7 @@ export default class EquipmentWorkOrders extends Component {
             text: 'MTF',
             process: (data) => {
                 return data.filter((workOrder) => {
-                    return workOrder.jobType.startsWith("ICF") || workOrder.jobType.startsWith("MTF");
+                    return workOrder.type.startsWith("ICF") || workOrder.type.startsWith("MTF");
                 })
             }
         }

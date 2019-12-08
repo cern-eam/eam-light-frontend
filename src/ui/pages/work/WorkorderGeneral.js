@@ -17,13 +17,13 @@ class WorkorderDetails extends Component {
         //and custom fields
         if (value) {
             WSWorkorders.autocompleteWorkorderEquipmentSelected(value).then(response => {
-                const data = response.body.data;
+                const data = response.body.data[0];
                 //Assign values
-                updateWorkorderProperty('departmentCode', data[2]);
-                updateWorkorderProperty('departmentDesc', data[3]);
-                updateWorkorderProperty('locationCode', data[4]);
-                updateWorkorderProperty('locationDesc', data[5]);
-                updateWorkorderProperty('costCode', data[6]);
+                updateWorkorderProperty('departmentCode', data.department);
+                updateWorkorderProperty('departmentDesc', data.departmentdisc); // 'disc' is not a typo
+                updateWorkorderProperty('locationCode', data.parentlocation);
+                updateWorkorderProperty('locationDesc', data.locationdesc);
+                updateWorkorderProperty('costCode', data.equipcostcode);
                 updateWorkorderProperty('costCodeDesc', '');
                 //Set the equipment work order
                 setWOEquipment(value);
@@ -162,6 +162,13 @@ class WorkorderDetails extends Component {
                                  updateProperty={updateWorkorderProperty}
                                  valueKey={`userDefinedFields.udfchkbox04`}
                                  children={children}/>
+
+                    <EAMInput
+                        children={children}
+                        elementInfo={workOrderLayout.fields['downtimehours']}
+                        value={workorder.downtimeHours}
+                        updateProperty={updateWorkorderProperty}
+                        valueKey="downtimeHours"/>
 
                 </div>
             </EISPanel>
