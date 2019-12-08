@@ -9,7 +9,7 @@ class WS {
     // GENERAL
     //
     getUserData(currentScreen, screenCode, config = {}) {
-        return this._get(`/users?currentScreen=${currentScreen}&screenCode=${screenCode}`, config);
+        return this._get(`/users?currentScreen=${currentScreen ? currentScreen : ""}&screenCode=${screenCode ? screenCode : ""}`, config);
     }
 
     getApplicationData(config = {}) {
