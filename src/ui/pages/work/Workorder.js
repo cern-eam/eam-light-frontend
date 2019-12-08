@@ -21,6 +21,7 @@ import WorkorderClosingCodes from './WorkorderClosingCodes';
 import WorkorderDetails from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
 import WorkorderTools from "./WorkorderTools";
+import {handleError} from "../../../actions/uiActions";
 
 class Workorder extends Entity {
 
@@ -86,7 +87,7 @@ class Workorder extends Entity {
         this.setTypes(this.state.workorder.statusCode, this.state.workorder.typeCode, false);
         // Comments panel might be hidden
         if (this.comments) {
-            this.comments.wrappedInstance.createCommentForNewEntity();
+            this.comments.createCommentForNewEntity();
         }
     }
 
@@ -103,7 +104,7 @@ class Workorder extends Entity {
         }
         // Comments panel might be hidden
         if (this.comments) {
-            this.comments.wrappedInstance.createCommentForNewEntity();
+            this.comments.createCommentForNewEntity();
         }
     }
 
@@ -187,9 +188,8 @@ class Workorder extends Entity {
 
     postAddActivityHandler = () => {
         //Refresh the activities in the checklist
-        this.checklists.wrappedInstance.readActivities(this.state.workorder.number);
+        this.checklists.readActivities(this.state.workorder.number);
     };
-
 
     //
     //
@@ -281,7 +281,8 @@ class Workorder extends Entity {
                                 <Comments ref={comments => this.comments = comments}
                                                    entityCode='EVNT'
                                                    entityKeyCode={!this.state.layout.newEntity ? this.state.workorder.number : undefined}
-                                                   userDesc={this.props.userData.eamAccount.userDesc}/>
+                                                   userDesc={this.props.userData.eamAccount.userDesc}
+                                                   handleError={this.props.handleError}/>
                                 }
 
                                 {!this.props.hiddenRegions[this.getRegions().ACTIVITIES.code] &&
@@ -296,11 +297,11 @@ class Workorder extends Entity {
                                 {!this.props.hiddenRegions[this.getRegions().CHECKLISTS.code] &&
                                 !this.state.layout.newEntity &&
                                 <Checklists workorder={this.state.workorder.number}
-                                                     printingChecklistLinkToAIS={this.props.applicationData.EL_PRTCL}
-                                                     getWoLink={wo => '/workorder/' + wo}
-                                                     ref={checklists => this.checklists = checklists}
-                                                     showSuccess={this.props.showSuccess}
-                                                     showError={this.props.showError}/>}
+                                            printingChecklistLinkToAIS={this.props.applicationData.EL_PRTCL}
+                                            getWoLink={wo => '/workorder/' + wo}
+                                            ref={checklists => this.checklists = checklists}
+                                            showSuccess={this.props.showSuccess}
+                                            showError={this.props.showError}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
                                   this.props.workOrderLayout.fields.block_5.attribute !== 'H' &&

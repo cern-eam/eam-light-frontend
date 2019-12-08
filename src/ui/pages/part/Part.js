@@ -51,11 +51,11 @@ class Part extends Entity {
     }
 
     postCreate() {
-        this.comments.wrappedInstance.createCommentForNewEntity();
+        this.comments.createCommentForNewEntity();
     }
 
     postUpdate() {
-        this.comments.wrappedInstance.createCommentForNewEntity();
+        this.comments.createCommentForNewEntity();
     }
 
     postRead(part) {

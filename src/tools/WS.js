@@ -16,6 +16,10 @@ class WS {
         return this._get('/application/applicationdata', config);
     }
 
+    refreshCache(config = {}) {
+        return this._get('/application/refreshCache', config);
+    }
+
     getScreenLayout(userGroup, entity, systemFunction, userFunction, tabs, config = {}) {
         if (tabs)
             tabs = 'tabname=' + tabs.join('&tabname=');

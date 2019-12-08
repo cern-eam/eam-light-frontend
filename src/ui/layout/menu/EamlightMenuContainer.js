@@ -7,6 +7,10 @@ import {
     updateSystemScreenLayout,
     updateWorkOrderScreenLayout
 } from '../../../actions/applicationActions'
+import {
+    showError,
+    showNotification
+} from '../../../actions/uiActions'
 
 const mapStateToProps = (state) => {
     return {
@@ -21,7 +25,9 @@ const EamlightMenuContainer = connect(mapStateToProps, {
     updateAssetScreenLayout,
     updatePositionScreenLayout,
     updateSystemScreenLayout,
-    updatePartScreenLayout
+    updatePartScreenLayout,
+    showError,
+    showNotification
 })(EamlightMenu);
 
 export default EamlightMenuContainer

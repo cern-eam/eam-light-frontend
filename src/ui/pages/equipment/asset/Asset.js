@@ -52,12 +52,12 @@ export default class Asset extends Entity {
 
     postCreate() {
         this.setStatuses(false);
-        this.comments.wrappedInstance.createCommentForNewEntity();
+        this.comments.createCommentForNewEntity();
         this.props.setLayoutProperty('showEqpTreeButton', true)
     }
 
     postUpdate() {
-        this.comments.wrappedInstance.createCommentForNewEntity();
+        this.comments.createCommentForNewEntity();
     }
 
     postRead() {
@@ -68,7 +68,7 @@ export default class Asset extends Entity {
 
     setStatuses(neweqp) {
         const oldStatusCode = this.state.equipment && this.state.equipment.statusCode;
-        WSEquipment.getEquipmentStatusValues(neweqp, oldStatusCode)
+        WSEquipment.getEquipmentStatusValues(this.props.userData.eamAccount.userGroup, neweqp, oldStatusCode)
             .then(response => {
                 this.setLayout({statusValues: response.body.data})
             })

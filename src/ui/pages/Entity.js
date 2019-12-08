@@ -46,13 +46,13 @@ export default class readEntityEquipment extends Component {
     /**
      * Triggered by React. Used to read existing entity or init new one depending on the URL
      *
-     * @param nextProps
+     * @param prevProps
      */
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps) {
         // Execute only when the URL was 'pushed'
-        if (nextProps.location.key !== this.props.location.key) {
-            let previousCode = this.props.match.params.code;
-            let nextCode = nextProps.match.params.code;
+        if (prevProps.location.key !== this.props.location.key) {
+            let nextCode = this.props.match.params.code;
+            let previousCode = prevProps.match.params.code;
 
             if (nextCode && (nextCode !== previousCode)) {
                 nextCode = decodeURIComponent(nextCode);
@@ -197,7 +197,7 @@ export default class readEntityEquipment extends Component {
                     isModified: false
                 });
 
-                // Set new URL (pushState does not trigger componentWillReceiveProps)
+                // Set new URL (pushState does not trigger componentDidUpdate)
                 window.history.pushState({}, this.settings.entityDesc + ' ' + response.body.data,
                     this.settings.entityURL + encodeURIComponent(createdEntity[this.settings.entityCodeProperty]));
 
