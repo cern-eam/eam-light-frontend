@@ -1,18 +1,20 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import ApplicationLayout from './ui/layout/ApplicationLayout';
-import JMTIntegrationContainer from "./ui/components/jmt/JMTIntegrationContainer";
 import EamlightMenuContainer from './ui/layout/menu/EamlightMenuContainer';
-import AssetSearchContainer from './ui/pages/equipment/asset/search/AssetSearchContainer';
-import EquipmentContainer from "./ui/pages/equipment/EquipmentContainer";
-import EquipmentRedirect from "./ui/pages/equipment/EquipmentRedirect";
-import PositionSearchContainer from './ui/pages/equipment/position/search/PositionSearchContainer';
-import ReplaceEqpContainer from "./ui/pages/equipment/replaceeqp/ReplaceEqpContainer";
-import SystemSearchContainer from './ui/pages/equipment/system/search/SystemSearchContainer';
-import LoginContainer from "./ui/pages/login/LoginContainer";
-import MeterReadingContainer from './ui/pages/meter/MeterReadingContainer';
-import PartContainer from "./ui/pages/part/PartContainer";
+import WorkorderContainer from './ui/pages/work/WorkorderContainer';
+import WorkorderSearchContainer from './ui/pages/work/search/WorkorderSearchContainer';
 import PartSearchContainer from './ui/pages/part/search/PartSearchContainer';
+import AssetSearchContainer from './ui/pages/equipment/asset/search/AssetSearchContainer';
+import PositionSearchContainer from './ui/pages/equipment/position/search/PositionSearchContainer';
+import SystemSearchContainer from './ui/pages/equipment/system/search/SystemSearchContainer';
+import BlockUi from 'react-block-ui';
+import InfoPage from './ui/components/infopage/InfoPage';
+import ImpactContainer from './ui/components/impact/ImpactContainer';
+import './Eamlight.css';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+import PartContainer from "./ui/pages/part/PartContainer";
 import SearchContainer from "./ui/pages/search/SearchContainer";
 import ReplaceEqpContainer from "./ui/pages/equipment/replaceeqp/ReplaceEqpContainer";
 import {ThemeProvider} from '@material-ui/core/styles';
@@ -22,7 +24,7 @@ import EquipmentContainer from "./ui/pages/equipment/EquipmentContainer";
 import {theme} from 'eam-components/dist/ui/components/theme';
 import LoginContainer from "./ui/pages/login/LoginContainer";
 import Grid from "./ui/pages/grid/Grid";
-
+import JMTIntegrationContainer from "./ui/components/jmt/JMTIntegrationContainer";
 
 class Eamlight extends Component {
 
@@ -71,13 +73,11 @@ class Eamlight extends Component {
                     <Switch>
                     <Route path="/impact"
                            component={ImpactContainer}/>
+                    <Route path="/jmt"
+                           component={JMTIntegrationContainer}/>
                     <ApplicationLayout>
                         <EamlightMenuContainer/>
                         <div style={{height: "100%"}}>
-
-                                <Route path="/jmt"
-                                       component={JMTIntegrationContainer}/>
-
                                 <Route exact path="/"
                                        component={SearchContainer}/>
 
