@@ -24,6 +24,7 @@ import EquipmentContainer from "./ui/pages/equipment/EquipmentContainer";
 import {theme} from 'eam-components/dist/ui/components/theme';
 import LoginContainer from "./ui/pages/login/LoginContainer";
 import Grid from "./ui/pages/grid/Grid";
+import JMTIntegrationContainer from "./ui/components/jmt/JMTIntegrationContainer";
 
 class Eamlight extends Component {
 
@@ -72,10 +73,11 @@ class Eamlight extends Component {
                     <Switch>
                     <Route path="/impact"
                            component={ImpactContainer}/>
+                    <Route path="/jmt"
+                           component={JMTIntegrationContainer}/>
                     <ApplicationLayout>
                         <EamlightMenuContainer/>
                         <div style={{height: "100%"}}>
-
                                 <Route exact path="/"
                                        component={SearchContainer}/>
 
