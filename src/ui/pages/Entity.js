@@ -299,7 +299,7 @@ export default class readEntityEquipment extends Component {
 
     resetValidation(children) {
         Object.keys(children).forEach(key => {
-            if (children[key]) {
+            if (children[key] && children[key].setState) {
                 children[key].setState({
                     error: false,
                     helperText: null
@@ -345,6 +345,9 @@ export default class readEntityEquipment extends Component {
         if (!this.state[this.settings.entity]) {
             return <BlockUi tag="div" blocking={true} style={{height: "100%", width: "100%"}}/>
         }
+
+        // Remove all children before the render (depending on the layout settings fields might have changed)
+        this.children = {}
 
         return (
             <div onKeyDown={this.onKeyDownHandler.bind(this)} tabIndex={0} style={{width: '100%', height: '100%'}}>
