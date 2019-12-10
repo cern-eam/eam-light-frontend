@@ -5,21 +5,11 @@ import WSCustomFields from "../../../tools/WSCustomFields";
 
 function CustomFields(props) {
 
-    let children = {};
     let [lookupValues, setLookupValues] = useState(null);
-    let {updateEntityProperty, title, customFields, readonly} = props;
-
-    let validators = {
-        enable: () => Object.keys(children).forEach(key => {children[key].enable()}),
-        disable: () => Object.keys(children).forEach(key => {children[key].disable()}),
-        validate: () => true
-    }
+    let {updateEntityProperty, title, customFields, readonly, children} = props;
 
     useEffect(() => {
         fetchLookupValues(props.entityCode, props.classCode)
-        if (props.children) {
-            props.children.customFields = validators;
-        }
     },[props.entityCode, props.entityKeyCode])
 
 
@@ -48,7 +38,6 @@ function CustomFields(props) {
                 }
                 updateEntityProperty('customField', newCustomFields)
                 fetchLookupValues(entityCode, classCode)
-                children = {}
             })
     }
 
