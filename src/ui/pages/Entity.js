@@ -5,6 +5,7 @@ import 'react-block-ui/style.css'
 import Ajax from 'eam-components/dist/tools/ajax'
 import ErrorTypes from "../../enums/ErrorTypes";
 import queryString from "query-string";
+import set from "set-value";
 
 export default class readEntityEquipment extends Component {
 
@@ -260,26 +261,11 @@ export default class readEntityEquipment extends Component {
         this.setLayout({
             isModified: true
         })
-        //
-        if (key.indexOf('userDefinedFields') !== -1) {
-            let udf = key.split('.')[1]
-            this.setState((prevState) => ({
-                [this.settings.entity]: {
-                    ...prevState[this.settings.entity],
-                    userDefinedFields: {
-                        ...prevState[this.settings.entity].userDefinedFields,
-                        [udf]: value
-                    }
-                }
-            }))
-        } else {
-            this.setState((prevState) => ({
-                [this.settings.entity]: {
-                    ...prevState[this.settings.entity],
-                    [key]: value
-                }
-            }))
-        }
+
+        // Set state with the clone of the entity that got the key set
+        this.setState((prevState) => ({
+                     [this.settings.entity]: set({...prevState[this.settings.entity]}, key, value)
+                 }));
     };
 
     //

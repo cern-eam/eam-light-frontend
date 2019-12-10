@@ -1,60 +1,45 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import EISPanel from 'eam-components/dist/ui/components/panel';
 import WSEquipment from '../../../../tools/WSEquipment';
 import EISTable from 'eam-components/dist/ui/components/table';
 
+function EquipmentHistory(props)  {
 
-export default class EquipmentHistory extends Component {
+    let headers = ['Date', 'Type', 'Related Value', 'Done By'];
+    let propCodes = ['completedDate', 'desc', 'relatedObject', 'enteredBy'];
+    let [historyData, setHistoryData] = useState([]);
 
-    headers = ['Date', 'Type', 'Related Value', 'Done By'];
-    propCodes = ['completedDate', 'desc', 'relatedObject', 'enteredBy'];
-
-    state = {
-        historyData: []
-    };
-
-    componentWillMount() {
-        this.fetchData(this.props);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.equipmentcode && nextProps.equipmentcode !== this.props.equipmentcode)
-            this.fetchData(nextProps);
-        else if (!nextProps.equipmentcode) {
-            this.setState(() => ({
-                data: []
-            }));
+    useEffect(() => {
+        if (props.equipmentcode) {
+            fetchData(props.equipmentcode);
+        } else {
+            setHistoryData([])
         }
+    },[props.equipmentcode])
+
+    let fetchData = (equipmentcode) => {
+            WSEquipment.getEquipmentHistory(equipmentcode)
+                .then(response => {
+                    setHistoryData(response.body.data.map(line => ({
+                        ...line,
+                        relatedObject: (line.jobType === 'EDH') ? <a target="_blank"
+                                                                     href={"https://edh.cern.ch/Document/" + line.relatedObject}>{line.relatedObject}</a> : line.relatedObject
+                    })))
+                });
     }
 
-    fetchData(props) {
-        WSEquipment.getEquipmentHistory(props.equipmentcode)
-            .then(response => {
-                let historyData = response.body.data.map(line => ({
-                    ...line,
-                    relatedObject: (line.jobType === 'EDH') ? <a target="_blank" href={"https://edh.cern.ch/Document/" + line.relatedObject}>{line.relatedObject}</a> : line.relatedObject
-                    })
-                )
-
-                this.setState(() => ({
-                    historyData
-                }))
-            });
+    if (historyData.length === 0) {
+        return null;
     }
 
-    render() {
-        if (this.state.historyData.length === 0) {
-            return null;
-        }
-
-        return (
-            <EISPanel heading="HISTORY">
-                <EISTable
-                    data={this.state.historyData}
-                    headers={this.headers}
-                    propCodes={this.propCodes}
-                />
-            </EISPanel>
-        )
-    }
+    return (
+        <EISPanel heading="HISTORY">
+            <EISTable data={historyData}
+                      headers={headers}
+                      propCodes={propCodes}
+            />
+        </EISPanel>
+    )
 }
+
+export default React.memo(EquipmentHistory);

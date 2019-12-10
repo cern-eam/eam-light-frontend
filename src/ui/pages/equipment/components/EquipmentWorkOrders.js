@@ -1,30 +1,30 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import EISPanel from 'eam-components/dist/ui/components/panel';
 import WSEquipment from '../../../../tools/WSEquipment';
 import EISTable from 'eam-components/dist/ui/components/table';
 
-export default class EquipmentWorkOrders extends Component {
+function EquipmentWorkOrders(props) {
     
-    workOrderFilterTypes = {
+    let workOrderFilterTypes = {
         ALL: 'ALL',
         OPEN: 'OPEN',
         MTF: 'MTF'
     }
 
-    workOrderFilters = {
-        [this.workOrderFilterTypes.ALL]: {
+    let workOrderFilters = {
+        [workOrderFilterTypes.ALL]: {
             text: 'All',
             process: (data) => {
                 return [...data];
             }
         },
-        [this.workOrderFilterTypes.OPEN]: {
+        [workOrderFilterTypes.OPEN]: {
             text: 'Open',
             process: (data) => {
                 return data.filter((workOrder) => !workOrder.status.startsWith("T"));
             }
         },
-        [this.workOrderFilterTypes.MTF]: {
+        [workOrderFilterTypes.MTF]: {
             text: 'MTF',
             process: (data) => {
                 return data.filter((workOrder) => {
@@ -33,37 +33,28 @@ export default class EquipmentWorkOrders extends Component {
             }
         }
     }
-    
-    state = {
-        data: [],
-        workOrderFilter: this.workOrderFilterTypes.ALL
-    };
 
-    headers = ['Work Order', 'Description', 'Status', 'Creation Date'];
-    propCodes = ['number', 'desc', 'status', 'createdDate'];
-    linksMap = new Map([['number', {linkType: 'fixed', linkValue: 'workorder/', linkPrefix: '/'}]]);
+    let headers = ['Work Order', 'Description', 'Status', 'Creation Date'];
+    let propCodes = ['number', 'desc', 'status', 'createdDate'];
+    let linksMap = new Map([['number', {linkType: 'fixed', linkValue: 'workorder/', linkPrefix: '/'}]]);
 
+    let [data, setData] = useState([]);
+    let [workOrderFilter, setWorkOrderFilter] = useState(workOrderFilterTypes.ALL)
 
-    getFilteredWorkOrderList = (workOrders) => {
-        return this.workOrderFilters[this.state.workOrderFilter].process(workOrders)
+    let getFilteredWorkOrderList = (workOrders) => {
+        return workOrderFilters[workOrderFilter].process(workOrders)
     }
 
-    componentWillMount() {
-        this.fetchData(this.props);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.equipmentcode && nextProps.equipmentcode !== this.props.equipmentcode)
-            this.fetchData(nextProps);
-        else if (!nextProps.equipmentcode) {
-            this.setState(() => ({
-                data: []
-            }));
+    useEffect(() => {
+        if (props.equipmentcode) {
+            fetchData(props.equipmentcode)
+        } else {
+            setData([]);
         }
-    }
+    },[props.equipmentcode])
 
-    fetchData(props) {
-        WSEquipment.getEquipmentWorkOrders(props.equipmentcode)
+    let fetchData = (equipmentcode) => {
+        WSEquipment.getEquipmentWorkOrders(equipmentcode)
             .then(response => {
                 response.body.data.forEach(element => {
                     // convert the dates from UNIX time to readable format
@@ -78,38 +69,29 @@ export default class EquipmentWorkOrders extends Component {
                     element.createdDate = [year, month, day].join('-');
                 });
 
-                this.setState(() => ({
-                    data: response.body.data
-                }))
+                setData(response.body.data)
             });
     }
-    
-    handleWorkOrderFilterChange = (newFilter) => {
-        this.setState(() => ({ workOrderFilter: newFilter }));
-    }
-    
-    detailsStyle = {
-        display: 'flex', flexDirection: 'column'
+
+    if (data.length === 0) {
+        return null;
     }
 
-    render() {
-        if (this.state.data.length === 0) {
-            return null;
-        }
+    return (
+        <EISPanel
+            detailsStyle={{display: 'flex', flexDirection: 'column'}}
+            heading="WORK ORDERS">
+            <EISTable
+               data={getFilteredWorkOrderList(data)}
+               headers={headers}
+               propCodes={propCodes}
+               filters={workOrderFilters}
+               activeFilter={workOrderFilter}
+               handleFilterChange={newFilter => setWorkOrderFilter(newFilter)}
+               linksMap={linksMap} />
+        </EISPanel>
+    )
 
-        return (
-            <EISPanel
-                detailsStyle={this.detailsStyle}
-                heading="WORK ORDERS">        
-                <EISTable
-                   data={this.getFilteredWorkOrderList(this.state.data)}
-                   headers={this.headers}
-                   propCodes={this.propCodes}
-                   filters={this.workOrderFilters}
-                   activeFilter={this.state.workOrderFilter}
-                   handleFilterChange={this.handleWorkOrderFilterChange}
-                   linksMap={this.linksMap} />
-            </EISPanel>
-        )
-    }
 }
+
+export default React.memo(EquipmentWorkOrders)
