@@ -214,7 +214,7 @@ export default class Asset extends Entity {
                             <EquipmentWorkOrders equipmentcode={this.state.equipment.code}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().HISTORY.code] &&
-                             !this.state.layout.newEntity &&
+                             //!this.state.layout.newEntity &&
                             <EquipmentHistory equipmentcode={this.state.equipment.code}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().PARTS.code] &&

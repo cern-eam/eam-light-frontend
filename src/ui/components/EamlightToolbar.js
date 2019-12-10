@@ -11,8 +11,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
-//import WorkorderToolbar from '../pages/work/WorkorderToolbarContainer';
-//import EquipmentToolbar from '../../ui/pages/equipment/components/EquipmentToolbar';
 import AbstractToolbar from './AbstractToolbar';
 
 
@@ -160,7 +158,7 @@ class EamlightToolbar extends Component {
 
     renderDesktopMenu() {
         return (
-            <div style={{display: "flex"}}>
+            <div style={{display: "flex", height: 36}}>
                 <Button onClick={this.newHandler}
                         disabled={this.isNewButtonDisabled()}
                         startIcon={<AddIcon/>}

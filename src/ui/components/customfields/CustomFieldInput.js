@@ -6,10 +6,11 @@ import CustomFieldDATI from './inputs/CustomFieldDATI'
 import CustomFieldNUM from './inputs/CustomFieldNUM'
 import CustomFieldCODE from './inputs/CustomFieldCODE'
 
-class CustomFieldInput extends Component {
+function CustomFieldInput(props) {
 
-    generateFieldInfo() {
-        let {customField} = this.props
+    let {customField, children, updateCustomFieldValue, updateCustomFieldDesc, index, lookupValues, readonly} = props
+
+    let generateFieldInfo = () => {
         return {
             text: customField.label,
             elementId: customField.code,
@@ -17,18 +18,17 @@ class CustomFieldInput extends Component {
         }
     }
 
-    renderCustomFieldSpecificInput() {
+    let renderCustomFieldSpecificInput = () => {
         let props = {
-            children: this.props.children,
-            customField: this.props.customField,
-            updateCustomFieldValue: this.props.updateCustomFieldValue,
-            updateCustomFieldDesc: this.props.updateCustomFieldDesc,
-            index: this.props.index,
-            lookupValues: this.props.lookupValues,
-            elementInfo: this.generateFieldInfo(),
-            readonly:this.props.readonly,
+            children: children,
+            customField: customField,
+            updateCustomFieldValue: updateCustomFieldValue,
+            updateCustomFieldDesc: updateCustomFieldDesc,
+            index: index,
+            lookupValues: lookupValues,
+            elementInfo: generateFieldInfo(),
+            readonly: readonly,
         };
-        let {customField} = this.props;
 
         switch (customField.type) {
             case "RENT":
@@ -49,9 +49,8 @@ class CustomFieldInput extends Component {
 
     }
 
-    render() {
-        return this.renderCustomFieldSpecificInput()
-    }
+    return renderCustomFieldSpecificInput()
+
 }
 
 export default CustomFieldInput;

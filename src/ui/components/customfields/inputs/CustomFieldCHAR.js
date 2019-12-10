@@ -1,34 +1,34 @@
-import React, {Component} from 'react';
+import React from 'react';
 import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
 import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect'
 import tools from '../CustomFieldTools'
 
-class CustomFieldCHAR extends Component {
+function CustomFieldCHAR(props) {
 
-    render() {
-        let {customField, updateCustomFieldValue, elementInfo, children} = this.props;
-        elementInfo = {...elementInfo, readonly: this.props.readonly};
-        if (tools.isLookupCustomField(customField)) {
-            return <EAMSelect
+    let {customField, updateCustomFieldValue, elementInfo, children, lookupValues} = props;
+    elementInfo = {...elementInfo, readonly: props.readonly};
+
+    if (tools.isLookupCustomField(customField)) {
+        return <EAMSelect
+            children={children}
+            elementInfo={elementInfo}
+            valueKey="value"
+            values={lookupValues && lookupValues[customField.code]}
+            value={customField.value}
+            updateProperty={updateCustomFieldValue}
+        />
+    } else {
+        return (
+            <EAMInput
                 children={children}
                 elementInfo={elementInfo}
-                valueKey="value"
-                values={this.props.lookupValues[customField.code]}
                 value={customField.value}
                 updateProperty={updateCustomFieldValue}
-            />
-        } else {
-            return (
-                <EAMInput
-                    children={children}
-                    elementInfo={elementInfo}
-                    value={customField.value}
-                    updateProperty={updateCustomFieldValue}
-                    valueKey="value"
-                    readonly={this.props.readonly}/>
-            )
-        }
+                valueKey="value"
+                readonly={props.readonly}/>
+        )
     }
+
 }
 
-export default CustomFieldCHAR;
+export default React.memo(CustomFieldCHAR);
