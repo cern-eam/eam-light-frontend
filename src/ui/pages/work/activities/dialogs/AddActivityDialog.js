@@ -55,9 +55,7 @@ export default class AddActivityDialog extends Component {
         WSWorkorders.createWorkOrderActivity(activity)
             .then(result => {
                 //Post add handler
-                console.log("saved");
                 this.props.postAddActivityHandler();
-                console.log("saved 2");
                 this.setState({loading: false});
                 this.props.showNotification("Activity successfully created");
                 this.handleClose();
