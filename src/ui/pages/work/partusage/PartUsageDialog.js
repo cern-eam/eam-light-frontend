@@ -124,13 +124,12 @@ class PartUsageDialog extends Component {
             //Complete data for change Asset
             WSWorkorders.getPartUsageSelectedAsset(this.props.workorder.number, this.state.partUsage.transactionType,
                 this.state.partUsage.storeCode, value).then(response => {
-                const completeData = response.body.data;
-                //Bin code
-                this.updatePartUsageLineProperty('bin', completeData.binCode);
-                //Part Code
-                this.updatePartUsageLineProperty('partCode', completeData.partCode);
-                //Load the list of bins
-                this.loadBinList(completeData.binCode, completeData.partCode);
+                const completeData = response.body.data[0];
+                if (completeData) {
+                    this.updatePartUsageLineProperty('bin', completeData.bin);
+                    this.updatePartUsageLineProperty('partCode', completeData.part);
+                    this.loadBinList(completeData.bin, completeData.part);
+                }
             }).catch(error => {
                 this.props.handleError(error);
             });

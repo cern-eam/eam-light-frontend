@@ -37,7 +37,7 @@ class AssetHierarchy extends Component {
                             valueKey="hierarchyAssetCode"
                             valueDesc={equipment.hierarchyAssetDesc}
                             descKey="hierarchyAssetDesc"
-                            autocompleteHandler={WSEquipment.autocompleteEquipmentParent}/>
+                            autocompleteHandler={WSEquipment.autocompleteAssetParent}/>
                     </EAMBarcodeInput>
 
                     <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyPositionCode', value)} right={0} top={20}>
@@ -49,7 +49,7 @@ class AssetHierarchy extends Component {
                             valueKey="hierarchyPositionCode"
                             valueDesc={equipment.hierarchyPositionDesc}
                             descKey="hierarchyPositionDesc"
-                            autocompleteHandler={WSEquipment.autocompleteEquipmentPosition}/>
+                            autocompleteHandler={WSEquipment.autocompletePositionParent}/>
                     </EAMBarcodeInput>
 
 
@@ -62,7 +62,7 @@ class AssetHierarchy extends Component {
                             valueKey="hierarchyPrimarySystemCode"
                             valueDesc={equipment.hierarchyPrimarySystemDesc}
                             descKey="hierarchyPrimarySystemDesc"
-                            autocompleteHandler={WSEquipment.autocompletePrimarySystem}/>
+                            autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}/>
                     </EAMBarcodeInput>
 
                     <EAMAutocomplete

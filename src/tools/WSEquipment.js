@@ -74,25 +74,32 @@ class WSEquipment {
         return WS._get(`/autocomplete/department/${filter}`, config);
     }
 
-    autocompleteEquipmentParent(filter, config = {}) {
+    //
+    // HIERARCHY
+    //
+    autocompleteAssetParent(filter, config = {}) {
         filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/eqp/parent/${filter}`, config);
+        return WS._get(`/autocomplete/eqp/parent/A/${filter}`, config);
     }
 
-    autocompleteEquipmentPosition(filter, config = {}) {
+    autocompletePositionParent(filter, config = {}) {
         filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/eqp/position/${filter}`, config);
+        return WS._get(`/autocomplete/eqp/parent/P/${filter}`, config);
+    }
+
+    autocompletePrimarySystemParent(filter, config = {}) {
+        filter = encodeURIComponent(filter);
+        return WS._get(`/autocomplete/eqp/parent/S/${filter}`, config);
     }
 
     autocompleteLocation = (filter, config = {}) => {
         filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/location/?code=${filter}`, config);
+        return WS._get(`/autocomplete/eqp/location/?s=${filter}`, config);
     };
 
-    autocompletePrimarySystem(filter, config = {}) {
-        filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/eqp/primsystem/${filter}`, config);
-    }
+    //
+    //
+    //
 
     getEquipmentPartsAssociated(equipment, parentScreen, config = {}) {
         equipment = encodeURIComponent(equipment);

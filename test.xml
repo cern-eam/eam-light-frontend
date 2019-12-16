@@ -1,556 +1,293 @@
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
-    <soapenv:Header/>
-    <soapenv:Body>
-        <ns1:MP0024_GetWorkOrder_001_Result xmlns:ns1="http://schemas.datastream.net/MP_results/MP0024_001"
-                                            act_has_trans="false" equip_in_mec_wo="false" jtauth_can_update="true"
-                                            multiorg="false" standwo_has_activity="false">
-            <ns1:ResultData>
-                <ns2:WorkOrder xmlns:ns2="http://schemas.datastream.net/MP_entities/WorkOrder_001"
-                               has_department_security="false" is_cancelled="false" is_completed="false"
-                               is_parentpmwo="false" is_room_occupied="false" recordid="62730">
-                    <ns3:WORKORDERID xmlns:ns3="http://schemas.datastream.net/MP_fields" auto_generated="true">
-                        <ns3:JOBNUM>25316908</ns3:JOBNUM>
-                        <ns3:ORGANIZATIONID>
-                            <ns3:ORGANIZATIONCODE>*</ns3:ORGANIZATIONCODE>
-                        </ns3:ORGANIZATIONID>
-                        <ns3:DESCRIPTION>MONITORING WO / 10-Dec-2019 19-10-45</ns3:DESCRIPTION>
-                    </ns3:WORKORDERID>
-                    <ns4:STATUS xmlns:ns4="http://schemas.datastream.net/MP_fields">
-                        <ns4:STATUSCODE>R</ns4:STATUSCODE>
-                        <ns4:DESCRIPTION>R - Lance</ns4:DESCRIPTION>
-                    </ns4:STATUS>
-                    <ns5:EQUIPMENTID xmlns:ns5="http://schemas.datastream.net/MP_fields">
-                        <ns5:EQUIPMENTCODE>CR-MONITORING</ns5:EQUIPMENTCODE>
-                        <ns5:ORGANIZATIONID>
-                            <ns5:ORGANIZATIONCODE>*</ns5:ORGANIZATIONCODE>
-                        </ns5:ORGANIZATIONID>
-                        <ns5:DESCRIPTION>MONITORING ASSET / 10-Dec-2019 19-10-44</ns5:DESCRIPTION>
-                    </ns5:EQUIPMENTID>
-                    <ns6:CREATEDBY xmlns:ns6="http://schemas.datastream.net/MP_fields">
-                        <ns6:USERCODE>R5</ns6:USERCODE>
-                    </ns6:CREATEDBY>
-                    <ns7:ENTEREDBY xmlns:ns7="http://schemas.datastream.net/MP_fields">R5</ns7:ENTEREDBY>
-                    <ns8:TYPE xmlns:ns8="http://schemas.datastream.net/MP_fields">
-                        <ns8:TYPECODE>CD</ns8:TYPECODE>
-                        <ns8:DESCRIPTION>CD - Correctif Depannage</ns8:DESCRIPTION>
-                    </ns8:TYPE>
-                    <ns9:DEPARTMENTID xmlns:ns9="http://schemas.datastream.net/MP_fields">
-                        <ns9:DEPARTMENTCODE>1ALICE</ns9:DEPARTMENTCODE>
-                        <ns9:ORGANIZATIONID>
-                            <ns9:ORGANIZATIONCODE>*</ns9:ORGANIZATIONCODE>
-                        </ns9:ORGANIZATIONID>
-                    </ns9:DEPARTMENTID>
-                    <ns10:CLASSID xmlns:ns10="http://schemas.datastream.net/MP_fields">
-                        <ns10:CLASSCODE>ETH2</ns10:CLASSCODE>
-                        <ns10:ORGANIZATIONID>
-                            <ns10:ORGANIZATIONCODE>*</ns10:ORGANIZATIONCODE>
-                        </ns10:ORGANIZATIONID>
-                    </ns10:CLASSID>
-                    <ns11:PRIORITY xmlns:ns11="http://schemas.datastream.net/MP_fields">
-                        <ns11:PRIORITYCODE>M</ns11:PRIORITYCODE>
-                        <ns11:DESCRIPTION>Moyenne</ns11:DESCRIPTION>
-                    </ns11:PRIORITY>
-                    <ns12:LOCATIONID xmlns:ns12="http://schemas.datastream.net/MP_fields">
-                        <ns12:LOCATIONCODE>112</ns12:LOCATIONCODE>
-                        <ns12:ORGANIZATIONID>
-                            <ns12:ORGANIZATIONCODE>*</ns12:ORGANIZATIONCODE>
-                        </ns12:ORGANIZATIONID>
-                        <ns12:DESCRIPTION>112=ATELIER W1 SOUS STATION 59 &amp; 74</ns12:DESCRIPTION>
-                    </ns12:LOCATIONID>
-                    <ns13:TARGETVALUE xmlns:ns13="http://schemas.datastream.net/MP_fields" qualifier="OTHER">
-                        <ns14:VALUE xmlns:ns14="http://www.openapplications.org/oagis_fields">1234</ns14:VALUE>
-                        <ns15:NUMOFDEC xmlns:ns15="http://www.openapplications.org/oagis_fields">0</ns15:NUMOFDEC>
-                        <ns16:SIGN xmlns:ns16="http://www.openapplications.org/oagis_fields">+</ns16:SIGN>
-                        <ns17:CURRENCY xmlns:ns17="http://www.openapplications.org/oagis_fields">XXX</ns17:CURRENCY>
-                        <ns18:DRCR xmlns:ns18="http://www.openapplications.org/oagis_fields">D</ns18:DRCR>
-                    </ns13:TARGETVALUE>
-                    <ns19:SAFETY xmlns:ns19="http://schemas.datastream.net/MP_fields">true</ns19:SAFETY>
-                    <ns20:WARRANTY xmlns:ns20="http://schemas.datastream.net/MP_fields">false</ns20:WARRANTY>
-                    <ns21:REQUESTEDBY xmlns:ns21="http://schemas.datastream.net/MP_fields">
-                        <ns21:PERSONCODE>41245</ns21:PERSONCODE>
-                        <ns21:DESCRIPTION>MARTEL PEDRO 74372</ns21:DESCRIPTION>
-                    </ns21:REQUESTEDBY>
-                    <ns22:REPORTED xmlns:ns22="http://schemas.datastream.net/MP_fields" qualifier="OTHER">
-                        <ns23:YEAR xmlns:ns23="http://www.openapplications.org/oagis_fields">2018</ns23:YEAR>
-                        <ns24:MONTH xmlns:ns24="http://www.openapplications.org/oagis_fields">6</ns24:MONTH>
-                        <ns25:DAY xmlns:ns25="http://www.openapplications.org/oagis_fields">1</ns25:DAY>
-                        <ns26:HOUR xmlns:ns26="http://www.openapplications.org/oagis_fields">22</ns26:HOUR>
-                        <ns27:MINUTE xmlns:ns27="http://www.openapplications.org/oagis_fields">34</ns27:MINUTE>
-                        <ns28:SECOND xmlns:ns28="http://www.openapplications.org/oagis_fields">0</ns28:SECOND>
-                        <ns29:SUBSECOND xmlns:ns29="http://www.openapplications.org/oagis_fields">0</ns29:SUBSECOND>
-                        <ns30:TIMEZONE xmlns:ns30="http://www.openapplications.org/oagis_fields">+0100</ns30:TIMEZONE>
-                    </ns22:REPORTED>
-                    <ns31:ASSIGNEDTO xmlns:ns31="http://schemas.datastream.net/MP_fields">
-                        <ns31:PERSONCODE>109615</ns31:PERSONCODE>
-                    </ns31:ASSIGNEDTO>
-                    <ns32:TARGETDATE xmlns:ns32="http://schemas.datastream.net/MP_fields" qualifier="OTHER">
-                        <ns33:YEAR xmlns:ns33="http://www.openapplications.org/oagis_fields">2018</ns33:YEAR>
-                        <ns34:MONTH xmlns:ns34="http://www.openapplications.org/oagis_fields">6</ns34:MONTH>
-                        <ns35:DAY xmlns:ns35="http://www.openapplications.org/oagis_fields">1</ns35:DAY>
-                        <ns36:HOUR xmlns:ns36="http://www.openapplications.org/oagis_fields">0</ns36:HOUR>
-                        <ns37:MINUTE xmlns:ns37="http://www.openapplications.org/oagis_fields">0</ns37:MINUTE>
-                        <ns38:SECOND xmlns:ns38="http://www.openapplications.org/oagis_fields">0</ns38:SECOND>
-                        <ns39:SUBSECOND xmlns:ns39="http://www.openapplications.org/oagis_fields">0</ns39:SUBSECOND>
-                        <ns40:TIMEZONE xmlns:ns40="http://www.openapplications.org/oagis_fields">+0100</ns40:TIMEZONE>
-                    </ns32:TARGETDATE>
-                    <ns41:SCHEDEND xmlns:ns41="http://schemas.datastream.net/MP_fields" qualifier="OTHER">
-                        <ns42:YEAR xmlns:ns42="http://www.openapplications.org/oagis_fields">2018</ns42:YEAR>
-                        <ns43:MONTH xmlns:ns43="http://www.openapplications.org/oagis_fields">6</ns43:MONTH>
-                        <ns44:DAY xmlns:ns44="http://www.openapplications.org/oagis_fields">2</ns44:DAY>
-                        <ns45:HOUR xmlns:ns45="http://www.openapplications.org/oagis_fields">0</ns45:HOUR>
-                        <ns46:MINUTE xmlns:ns46="http://www.openapplications.org/oagis_fields">0</ns46:MINUTE>
-                        <ns47:SECOND xmlns:ns47="http://www.openapplications.org/oagis_fields">0</ns47:SECOND>
-                        <ns48:SUBSECOND xmlns:ns48="http://www.openapplications.org/oagis_fields">0</ns48:SUBSECOND>
-                        <ns49:TIMEZONE xmlns:ns49="http://www.openapplications.org/oagis_fields">+0100</ns49:TIMEZONE>
-                    </ns41:SCHEDEND>
-                    <ns50:PARENTWO xmlns:ns50="http://schemas.datastream.net/MP_fields" auto_generated="true">
-                        <ns50:JOBNUM>20384406</ns50:JOBNUM>
-                    </ns50:PARENTWO>
-                    <ns51:REQUESTEDSTART xmlns:ns51="http://schemas.datastream.net/MP_fields" qualifier="OTHER">
-                        <ns52:YEAR xmlns:ns52="http://www.openapplications.org/oagis_fields">2019</ns52:YEAR>
-                        <ns53:MONTH xmlns:ns53="http://www.openapplications.org/oagis_fields">11</ns53:MONTH>
-                        <ns54:DAY xmlns:ns54="http://www.openapplications.org/oagis_fields">1</ns54:DAY>
-                        <ns55:HOUR xmlns:ns55="http://www.openapplications.org/oagis_fields">0</ns55:HOUR>
-                        <ns56:MINUTE xmlns:ns56="http://www.openapplications.org/oagis_fields">0</ns56:MINUTE>
-                        <ns57:SECOND xmlns:ns57="http://www.openapplications.org/oagis_fields">0</ns57:SECOND>
-                        <ns58:SUBSECOND xmlns:ns58="http://www.openapplications.org/oagis_fields">0</ns58:SUBSECOND>
-                        <ns59:TIMEZONE xmlns:ns59="http://www.openapplications.org/oagis_fields">+0100</ns59:TIMEZONE>
-                    </ns51:REQUESTEDSTART>
-                    <ns60:REQUESTEDEND xmlns:ns60="http://schemas.datastream.net/MP_fields" qualifier="OTHER">
-                        <ns61:YEAR xmlns:ns61="http://www.openapplications.org/oagis_fields">2019</ns61:YEAR>
-                        <ns62:MONTH xmlns:ns62="http://www.openapplications.org/oagis_fields">11</ns62:MONTH>
-                        <ns63:DAY xmlns:ns63="http://www.openapplications.org/oagis_fields">2</ns63:DAY>
-                        <ns64:HOUR xmlns:ns64="http://www.openapplications.org/oagis_fields">0</ns64:HOUR>
-                        <ns65:MINUTE xmlns:ns65="http://www.openapplications.org/oagis_fields">0</ns65:MINUTE>
-                        <ns66:SECOND xmlns:ns66="http://www.openapplications.org/oagis_fields">0</ns66:SECOND>
-                        <ns67:SUBSECOND xmlns:ns67="http://www.openapplications.org/oagis_fields">0</ns67:SUBSECOND>
-                        <ns68:TIMEZONE xmlns:ns68="http://www.openapplications.org/oagis_fields">+0100</ns68:TIMEZONE>
-                    </ns60:REQUESTEDEND>
-                    <ns69:MSPROJECT xmlns:ns69="http://schemas.datastream.net/MP_fields">-</ns69:MSPROJECT>
-                    <ns70:FIXED xmlns:ns70="http://schemas.datastream.net/MP_fields">V</ns70:FIXED>
-                    <ns71:DEPEND xmlns:ns71="http://schemas.datastream.net/MP_fields">false</ns71:DEPEND>
-                    <ns72:CREATEDDATE xmlns:ns72="http://schemas.datastream.net/MP_fields" qualifier="OTHER">
-                        <ns73:YEAR xmlns:ns73="http://www.openapplications.org/oagis_fields">2018</ns73:YEAR>
-                        <ns74:MONTH xmlns:ns74="http://www.openapplications.org/oagis_fields">6</ns74:MONTH>
-                        <ns75:DAY xmlns:ns75="http://www.openapplications.org/oagis_fields">1</ns75:DAY>
-                        <ns76:HOUR xmlns:ns76="http://www.openapplications.org/oagis_fields">22</ns76:HOUR>
-                        <ns77:MINUTE xmlns:ns77="http://www.openapplications.org/oagis_fields">34</ns77:MINUTE>
-                        <ns78:SECOND xmlns:ns78="http://www.openapplications.org/oagis_fields">28</ns78:SECOND>
-                        <ns79:SUBSECOND xmlns:ns79="http://www.openapplications.org/oagis_fields">0</ns79:SUBSECOND>
-                        <ns80:TIMEZONE xmlns:ns80="http://www.openapplications.org/oagis_fields">+0100</ns80:TIMEZONE>
-                    </ns72:CREATEDDATE>
-                    <ns81:OBJTYPE xmlns:ns81="http://schemas.datastream.net/MP_fields">A</ns81:OBJTYPE>
-                    <ns82:STARTDATE xmlns:ns82="http://schemas.datastream.net/MP_fields" qualifier="OTHER">
-                        <ns83:YEAR xmlns:ns83="http://www.openapplications.org/oagis_fields">2019</ns83:YEAR>
-                        <ns84:MONTH xmlns:ns84="http://www.openapplications.org/oagis_fields">11</ns84:MONTH>
-                        <ns85:DAY xmlns:ns85="http://www.openapplications.org/oagis_fields">3</ns85:DAY>
-                        <ns86:HOUR xmlns:ns86="http://www.openapplications.org/oagis_fields">9</ns86:HOUR>
-                        <ns87:MINUTE xmlns:ns87="http://www.openapplications.org/oagis_fields">44</ns87:MINUTE>
-                        <ns88:SECOND xmlns:ns88="http://www.openapplications.org/oagis_fields">0</ns88:SECOND>
-                        <ns89:SUBSECOND xmlns:ns89="http://www.openapplications.org/oagis_fields">0</ns89:SUBSECOND>
-                        <ns90:TIMEZONE xmlns:ns90="http://www.openapplications.org/oagis_fields">+0100</ns90:TIMEZONE>
-                    </ns82:STARTDATE>
-                    <ns91:COMPLETEDDATE xmlns:ns91="http://schemas.datastream.net/MP_fields" qualifier="OTHER">
-                        <ns92:YEAR xmlns:ns92="http://www.openapplications.org/oagis_fields">2019</ns92:YEAR>
-                        <ns93:MONTH xmlns:ns93="http://www.openapplications.org/oagis_fields">11</ns93:MONTH>
-                        <ns94:DAY xmlns:ns94="http://www.openapplications.org/oagis_fields">30</ns94:DAY>
-                        <ns95:HOUR xmlns:ns95="http://www.openapplications.org/oagis_fields">9</ns95:HOUR>
-                        <ns96:MINUTE xmlns:ns96="http://www.openapplications.org/oagis_fields">44</ns96:MINUTE>
-                        <ns97:SECOND xmlns:ns97="http://www.openapplications.org/oagis_fields">0</ns97:SECOND>
-                        <ns98:SUBSECOND xmlns:ns98="http://www.openapplications.org/oagis_fields">0</ns98:SUBSECOND>
-                        <ns99:TIMEZONE xmlns:ns99="http://www.openapplications.org/oagis_fields">+0100</ns99:TIMEZONE>
-                    </ns91:COMPLETEDDATE>
-                    <ns100:DOWNTIMEHOURS xmlns:ns100="http://schemas.datastream.net/MP_fields" qualifier="OTHER">
-                        <ns101:VALUE xmlns:ns101="http://www.openapplications.org/oagis_fields">23450</ns101:VALUE>
-                        <ns102:NUMOFDEC xmlns:ns102="http://www.openapplications.org/oagis_fields">1</ns102:NUMOFDEC>
-                        <ns103:SIGN xmlns:ns103="http://www.openapplications.org/oagis_fields">+</ns103:SIGN>
-                        <ns104:UOM xmlns:ns104="http://www.openapplications.org/oagis_fields">default</ns104:UOM>
-                    </ns100:DOWNTIMEHOURS>
-                    <ns105:REOPENED xmlns:ns105="http://schemas.datastream.net/MP_fields">false</ns105:REOPENED>
-                    <ns106:USERDEFINEDAREA xmlns:ns106="http://schemas.datastream.net/MP_fields">
-                        <ns106:CUSTOMFIELD entity="EVNT" index="1" type="RENT">
-                            <ns106:PROPERTYCODE>0001</ns106:PROPERTYCODE>
-                            <ns106:PROPERTYLABEL>Opérateur (ID CERN)</ns106:PROPERTYLABEL>
-                            <ns106:CLASSID>
-                                <ns106:CLASSCODE>*</ns106:CLASSCODE>
-                                <ns106:ORGANIZATIONID>
-                                    <ns106:ORGANIZATIONCODE>*</ns106:ORGANIZATIONCODE>
-                                </ns106:ORGANIZATIONID>
-                            </ns106:CLASSID>
-                            <ns106:ENTITYCODEFIELD entity="PERS">
-                                <ns106:CODEVALUE>109617</ns106:CODEVALUE>
-                            </ns106:ENTITYCODEFIELD>
-                            <ns106:LOVSETTINGS>
-                                <ns106:LOV_TYPE>P</ns106:LOV_TYPE>
-                                <ns106:LOV_VALIDATE>-</ns106:LOV_VALIDATE>
-                            </ns106:LOVSETTINGS>
-                        </ns106:CUSTOMFIELD>
-                        <ns106:CUSTOMFIELD entity="EVNT" index="20" type="NUM">
-                            <ns106:PROPERTYCODE>ET191</ns106:PROPERTYCODE>
-                            <ns106:PROPERTYLABEL>H2O corrigée</ns106:PROPERTYLABEL>
-                            <ns106:CLASSID>
-                                <ns106:CLASSCODE>ETH2</ns106:CLASSCODE>
-                                <ns106:ORGANIZATIONID>
-                                    <ns106:ORGANIZATIONCODE>*</ns106:ORGANIZATIONCODE>
-                                </ns106:ORGANIZATIONID>
-                            </ns106:CLASSID>
-                            <ns106:UOM>ppm</ns106:UOM>
-                            <ns106:LOVSETTINGS>
-                                <ns106:LOV_TYPE>-</ns106:LOV_TYPE>
-                                <ns106:LOV_VALIDATE>+</ns106:LOV_VALIDATE>
-                            </ns106:LOVSETTINGS>
-                        </ns106:CUSTOMFIELD>
-                        <ns106:CUSTOMFIELD entity="EVNT" index="10" type="NUM">
-                            <ns106:PROPERTYCODE>ET190</ns106:PROPERTYCODE>
-                            <ns106:PROPERTYLABEL>TENEUR EN EAU mesurée</ns106:PROPERTYLABEL>
-                            <ns106:CLASSID>
-                                <ns106:CLASSCODE>ETH2</ns106:CLASSCODE>
-                                <ns106:ORGANIZATIONID>
-                                    <ns106:ORGANIZATIONCODE>*</ns106:ORGANIZATIONCODE>
-                                </ns106:ORGANIZATIONID>
-                            </ns106:CLASSID>
-                            <ns106:UOM>ppm</ns106:UOM>
-                            <ns106:LOVSETTINGS>
-                                <ns106:LOV_TYPE>-</ns106:LOV_TYPE>
-                                <ns106:LOV_VALIDATE>+</ns106:LOV_VALIDATE>
-                            </ns106:LOVSETTINGS>
-                        </ns106:CUSTOMFIELD>
-                        <ns106:CUSTOMFIELD entity="EVNT" index="30" type="NUM">
-                            <ns106:PROPERTYCODE>ET192</ns106:PROPERTYCODE>
-                            <ns106:PROPERTYLABEL>H2O SATURATION</ns106:PROPERTYLABEL>
-                            <ns106:CLASSID>
-                                <ns106:CLASSCODE>ETH2</ns106:CLASSCODE>
-                                <ns106:ORGANIZATIONID>
-                                    <ns106:ORGANIZATIONCODE>*</ns106:ORGANIZATIONCODE>
-                                </ns106:ORGANIZATIONID>
-                            </ns106:CLASSID>
-                            <ns106:UOM>%</ns106:UOM>
-                            <ns106:LOVSETTINGS>
-                                <ns106:LOV_TYPE>-</ns106:LOV_TYPE>
-                                <ns106:LOV_VALIDATE>+</ns106:LOV_VALIDATE>
-                            </ns106:LOVSETTINGS>
-                        </ns106:CUSTOMFIELD>
-                        <ns106:CUSTOMFIELD entity="EVNT" index="40" type="NUM">
-                            <ns106:PROPERTYCODE>ET193</ns106:PROPERTYCODE>
-                            <ns106:PROPERTYLABEL>INDICE D'ACIDITE mg KOH/g</ns106:PROPERTYLABEL>
-                            <ns106:CLASSID>
-                                <ns106:CLASSCODE>ETH2</ns106:CLASSCODE>
-                                <ns106:ORGANIZATIONID>
-                                    <ns106:ORGANIZATIONCODE>*</ns106:ORGANIZATIONCODE>
-                                </ns106:ORGANIZATIONID>
-                            </ns106:CLASSID>
-                            <ns106:UOM>mg</ns106:UOM>
-                            <ns106:LOVSETTINGS>
-                                <ns106:LOV_TYPE>-</ns106:LOV_TYPE>
-                                <ns106:LOV_VALIDATE>+</ns106:LOV_VALIDATE>
-                            </ns106:LOVSETTINGS>
-                        </ns106:CUSTOMFIELD>
-                        <ns106:CUSTOMFIELD entity="EVNT" index="50" type="NUM">
-                            <ns106:PROPERTYCODE>ET194</ns106:PROPERTYCODE>
-                            <ns106:PROPERTYLABEL>RIGIDITE DIELECTRIQUE</ns106:PROPERTYLABEL>
-                            <ns106:CLASSID>
-                                <ns106:CLASSCODE>ETH2</ns106:CLASSCODE>
-                                <ns106:ORGANIZATIONID>
-                                    <ns106:ORGANIZATIONCODE>*</ns106:ORGANIZATIONCODE>
-                                </ns106:ORGANIZATIONID>
-                            </ns106:CLASSID>
-                            <ns106:UOM>kV</ns106:UOM>
-                            <ns106:LOVSETTINGS>
-                                <ns106:LOV_TYPE>-</ns106:LOV_TYPE>
-                                <ns106:LOV_VALIDATE>+</ns106:LOV_VALIDATE>
-                            </ns106:LOVSETTINGS>
-                        </ns106:CUSTOMFIELD>
-                        <ns106:CUSTOMFIELD entity="EVNT" index="60" type="NUM">
-                            <ns106:PROPERTYCODE>ET195</ns106:PROPERTYCODE>
-                            <ns106:PROPERTYLABEL>TANGENTE DELTA</ns106:PROPERTYLABEL>
-                            <ns106:CLASSID>
-                                <ns106:CLASSCODE>ETH2</ns106:CLASSCODE>
-                                <ns106:ORGANIZATIONID>
-                                    <ns106:ORGANIZATIONCODE>*</ns106:ORGANIZATIONCODE>
-                                </ns106:ORGANIZATIONID>
-                            </ns106:CLASSID>
-                            <ns106:LOVSETTINGS>
-                                <ns106:LOV_TYPE>-</ns106:LOV_TYPE>
-                                <ns106:LOV_VALIDATE>+</ns106:LOV_VALIDATE>
-                            </ns106:LOVSETTINGS>
-                        </ns106:CUSTOMFIELD>
-                        <ns106:CUSTOMFIELD entity="EVNT" index="70" type="NUM">
-                            <ns106:PROPERTYCODE>ET196</ns106:PROPERTYCODE>
-                            <ns106:PROPERTYLABEL>DPv MOYEN</ns106:PROPERTYLABEL>
-                            <ns106:CLASSID>
-                                <ns106:CLASSCODE>ETH2</ns106:CLASSCODE>
-                                <ns106:ORGANIZATIONID>
-                                    <ns106:ORGANIZATIONCODE>*</ns106:ORGANIZATIONCODE>
-                                </ns106:ORGANIZATIONID>
-                            </ns106:CLASSID>
-                            <ns106:LOVSETTINGS>
-                                <ns106:LOV_TYPE>-</ns106:LOV_TYPE>
-                                <ns106:LOV_VALIDATE>+</ns106:LOV_VALIDATE>
-                            </ns106:LOVSETTINGS>
-                        </ns106:CUSTOMFIELD>
-                        <ns106:CUSTOMFIELD entity="EVNT" index="80" type="NUM">
-                            <ns106:PROPERTYCODE>ET197</ns106:PROPERTYCODE>
-                            <ns106:PROPERTYLABEL>DEGRE DE POLYMERISATION</ns106:PROPERTYLABEL>
-                            <ns106:CLASSID>
-                                <ns106:CLASSCODE>ETH2</ns106:CLASSCODE>
-                                <ns106:ORGANIZATIONID>
-                                    <ns106:ORGANIZATIONCODE>*</ns106:ORGANIZATIONCODE>
-                                </ns106:ORGANIZATIONID>
-                            </ns106:CLASSID>
-                            <ns106:LOVSETTINGS>
-                                <ns106:LOV_TYPE>-</ns106:LOV_TYPE>
-                                <ns106:LOV_VALIDATE>+</ns106:LOV_VALIDATE>
-                            </ns106:LOVSETTINGS>
-                        </ns106:CUSTOMFIELD>
-                        <ns106:CUSTOMFIELD entity="EVNT" index="80" type="CODE">
-                            <ns106:PROPERTYCODE>ET107</ns106:PROPERTYCODE>
-                            <ns106:PROPERTYLABEL>Niveau d'huile</ns106:PROPERTYLABEL>
-                            <ns106:CLASSID>
-                                <ns106:CLASSCODE>ETH2</ns106:CLASSCODE>
-                                <ns106:ORGANIZATIONID>
-                                    <ns106:ORGANIZATIONCODE>*</ns106:ORGANIZATIONCODE>
-                                </ns106:ORGANIZATIONID>
-                            </ns106:CLASSID>
-                            <ns106:CODEDESCFIELD>
-                                <ns106:CODEVALUE>FAIB</ns106:CODEVALUE>
-                                <ns106:DESCRIPTION>Niveau FAIBle et appoint non fait</ns106:DESCRIPTION>
-                            </ns106:CODEDESCFIELD>
-                            <ns106:LOVSETTINGS>
-                                <ns106:LOV_TYPE>C</ns106:LOV_TYPE>
-                                <ns106:LOV_VALIDATE>+</ns106:LOV_VALIDATE>
-                            </ns106:LOVSETTINGS>
-                        </ns106:CUSTOMFIELD>
-                        <ns106:CUSTOMFIELD entity="EVNT" index="85" type="NUM">
-                            <ns106:PROPERTYCODE>ET106</ns106:PROPERTYCODE>
-                            <ns106:PROPERTYLABEL>Quantité d'huile ajoutée</ns106:PROPERTYLABEL>
-                            <ns106:CLASSID>
-                                <ns106:CLASSCODE>ETH2</ns106:CLASSCODE>
-                                <ns106:ORGANIZATIONID>
-                                    <ns106:ORGANIZATIONCODE>*</ns106:ORGANIZATIONCODE>
-                                </ns106:ORGANIZATIONID>
-                            </ns106:CLASSID>
-                            <ns106:MAXVALUE>1000</ns106:MAXVALUE>
-                            <ns106:MINVALUE>0</ns106:MINVALUE>
-                            <ns106:UOM>LTR</ns106:UOM>
-                            <ns106:LOVSETTINGS>
-                                <ns106:LOV_TYPE>-</ns106:LOV_TYPE>
-                                <ns106:LOV_VALIDATE>+</ns106:LOV_VALIDATE>
-                            </ns106:LOVSETTINGS>
-                        </ns106:CUSTOMFIELD>
-                    </ns106:USERDEFINEDAREA>
-                    <ns107:EVTISSTYPE xmlns:ns107="http://schemas.datastream.net/MP_fields">F</ns107:EVTISSTYPE>
-                    <ns108:BILLABLE xmlns:ns108="http://schemas.datastream.net/MP_fields">-</ns108:BILLABLE>
-                    <ns109:PRINTED xmlns:ns109="http://schemas.datastream.net/MP_fields">false</ns109:PRINTED>
-                    <ns110:PRINT xmlns:ns110="http://schemas.datastream.net/MP_fields">true</ns110:PRINT>
-                    <ns111:ACDCODE xmlns:ns111="http://schemas.datastream.net/MP_fields">6.5970857E7</ns111:ACDCODE>
-                    <ns2:Activities>
-                        <ns112:Activity xmlns:ns112="http://schemas.datastream.net/MP_entities/Activity_001"
-                                        copyvmrsfields="false" has_active_po="false" has_active_req="false"
-                                        has_booked_hours="false" has_checklistitems_updated="false"
-                                        has_jobs_or_multiple_trades="false" has_transaction="false"
-                                        has_wo_act_detail_records="false"
-                                        has_wo_act_detail_records_including_qual="false" is_new="false"
-                                        is_ppm_act="false" is_warranty_claim="false" number_of_plan_labor_records="1"
-                                        recordid="28234" task_has_enhanced_planning="false">
-                            <ns113:ACTIVITYID xmlns:ns113="http://schemas.datastream.net/MP_fields">
-                                <ns113:WORKORDERID auto_generated="true">
-                                    <ns113:JOBNUM>25316908</ns113:JOBNUM>
-                                    <ns113:ORGANIZATIONID>
-                                        <ns113:ORGANIZATIONCODE>*</ns113:ORGANIZATIONCODE>
-                                    </ns113:ORGANIZATIONID>
-                                    <ns113:DESCRIPTION>MONITORING WO / 10-Dec-2019 19-10-45</ns113:DESCRIPTION>
-                                </ns113:WORKORDERID>
-                                <ns113:ACTIVITYCODE auto_generated="false">5</ns113:ACTIVITYCODE>
-                            </ns113:ACTIVITYID>
-                            <ns114:TRADEID xmlns:ns114="http://schemas.datastream.net/MP_fields">
-                                <ns114:TRADECODE>KC-SANITAIRE</ns114:TRADECODE>
-                            </ns114:TRADEID>
-                            <ns115:MULTIPLETRADES xmlns:ns115="http://schemas.datastream.net/MP_fields">false
-                            </ns115:MULTIPLETRADES>
-                            <ns116:PLANNINGLEVEL xmlns:ns116="http://schemas.datastream.net/MP_fields">TP
-                            </ns116:PLANNINGLEVEL>
-                            <ns117:DEPARTMENTID xmlns:ns117="http://schemas.datastream.net/MP_fields">
-                                <ns117:DEPARTMENTCODE>1ALICE</ns117:DEPARTMENTCODE>
-                            </ns117:DEPARTMENTID>
-                            <ns118:ESTIMATEDHOURS xmlns:ns118="http://schemas.datastream.net/MP_fields">1.0
-                            </ns118:ESTIMATEDHOURS>
-                            <ns119:HOURSREMAINING xmlns:ns119="http://schemas.datastream.net/MP_fields">1.0
-                            </ns119:HOURSREMAINING>
-                            <ns120:PERSONS xmlns:ns120="http://schemas.datastream.net/MP_fields">1</ns120:PERSONS>
-                            <ns121:COMPLETED xmlns:ns121="http://schemas.datastream.net/MP_fields">false
-                            </ns121:COMPLETED>
-                            <ns122:ACTIVITYSTARTDATE xmlns:ns122="http://schemas.datastream.net/MP_fields"
-                                                     qualifier="OTHER">
-                                <ns123:YEAR xmlns:ns123="http://www.openapplications.org/oagis_fields">2016</ns123:YEAR>
-                                <ns124:MONTH xmlns:ns124="http://www.openapplications.org/oagis_fields">11</ns124:MONTH>
-                                <ns125:DAY xmlns:ns125="http://www.openapplications.org/oagis_fields">5</ns125:DAY>
-                                <ns126:HOUR xmlns:ns126="http://www.openapplications.org/oagis_fields">0</ns126:HOUR>
-                                <ns127:MINUTE xmlns:ns127="http://www.openapplications.org/oagis_fields">0
-                                </ns127:MINUTE>
-                                <ns128:SECOND xmlns:ns128="http://www.openapplications.org/oagis_fields">0
-                                </ns128:SECOND>
-                                <ns129:SUBSECOND xmlns:ns129="http://www.openapplications.org/oagis_fields">0
-                                </ns129:SUBSECOND>
-                                <ns130:TIMEZONE xmlns:ns130="http://www.openapplications.org/oagis_fields">+0100
-                                </ns130:TIMEZONE>
-                            </ns122:ACTIVITYSTARTDATE>
-                            <ns131:ACTIVITYENDDATE xmlns:ns131="http://schemas.datastream.net/MP_fields"
-                                                   qualifier="OTHER">
-                                <ns132:YEAR xmlns:ns132="http://www.openapplications.org/oagis_fields">2018</ns132:YEAR>
-                                <ns133:MONTH xmlns:ns133="http://www.openapplications.org/oagis_fields">6</ns133:MONTH>
-                                <ns134:DAY xmlns:ns134="http://www.openapplications.org/oagis_fields">2</ns134:DAY>
-                                <ns135:HOUR xmlns:ns135="http://www.openapplications.org/oagis_fields">0</ns135:HOUR>
-                                <ns136:MINUTE xmlns:ns136="http://www.openapplications.org/oagis_fields">0
-                                </ns136:MINUTE>
-                                <ns137:SECOND xmlns:ns137="http://www.openapplications.org/oagis_fields">0
-                                </ns137:SECOND>
-                                <ns138:SUBSECOND xmlns:ns138="http://www.openapplications.org/oagis_fields">0
-                                </ns138:SUBSECOND>
-                                <ns139:TIMEZONE xmlns:ns139="http://www.openapplications.org/oagis_fields">+0100
-                                </ns139:TIMEZONE>
-                            </ns131:ACTIVITYENDDATE>
-                            <ns140:HIREDLABOR xmlns:ns140="http://schemas.datastream.net/MP_fields">false
-                            </ns140:HIREDLABOR>
-                            <ns141:WARRANTY xmlns:ns141="http://schemas.datastream.net/MP_fields">false</ns141:WARRANTY>
-                            <ns142:DEFERMAINTENANCE xmlns:ns142="http://schemas.datastream.net/MP_fields">false
-                            </ns142:DEFERMAINTENANCE>
-                            <ns143:DEFERACTDIRECTMATS xmlns:ns143="http://schemas.datastream.net/MP_fields">false
-                            </ns143:DEFERACTDIRECTMATS>
-                            <ns112:UserDefinedFields>
-                                <ns144:UDFCHKBOX01 xmlns:ns144="http://schemas.datastream.net/MP_fields">false
-                                </ns144:UDFCHKBOX01>
-                                <ns145:UDFCHKBOX02 xmlns:ns145="http://schemas.datastream.net/MP_fields">false
-                                </ns145:UDFCHKBOX02>
-                                <ns146:UDFCHKBOX03 xmlns:ns146="http://schemas.datastream.net/MP_fields">false
-                                </ns146:UDFCHKBOX03>
-                                <ns147:UDFCHKBOX04 xmlns:ns147="http://schemas.datastream.net/MP_fields">false
-                                </ns147:UDFCHKBOX04>
-                                <ns148:UDFCHKBOX05 xmlns:ns148="http://schemas.datastream.net/MP_fields">false
-                                </ns148:UDFCHKBOX05>
-                            </ns112:UserDefinedFields>
-                            <ns149:ISWORKORDERJOB xmlns:ns149="http://schemas.datastream.net/MP_fields">false
-                            </ns149:ISWORKORDERJOB>
-                            <ns150:REUSABLE xmlns:ns150="http://schemas.datastream.net/MP_fields">true</ns150:REUSABLE>
-                            <ns151:ASSIGNMENTSTATUS xmlns:ns151="http://schemas.datastream.net/MP_fields">
-                                <ns151:STATUSCODE>U</ns151:STATUSCODE>
-                            </ns151:ASSIGNMENTSTATUS>
-                        </ns112:Activity>
-                    </ns2:Activities>
-                    <ns152:MULTIEQUIP xmlns:ns152="http://schemas.datastream.net/MP_fields">false</ns152:MULTIEQUIP>
-                    <ns153:CCTRSPCVALIDATION xmlns:ns153="http://schemas.datastream.net/MP_fields">D
-                    </ns153:CCTRSPCVALIDATION>
-                    <ns2:UserDefinedFields>
-                        <ns154:UDFCHAR01 xmlns:ns154="http://schemas.datastream.net/MP_fields">INC12345
-                        </ns154:UDFCHAR01>
-                        <ns155:UDFCHAR11 xmlns:ns155="http://schemas.datastream.net/MP_fields">FR</ns155:UDFCHAR11>
-                        <ns156:UDFCHKBOX01 xmlns:ns156="http://schemas.datastream.net/MP_fields">false
-                        </ns156:UDFCHKBOX01>
-                        <ns157:UDFCHKBOX02 xmlns:ns157="http://schemas.datastream.net/MP_fields">false
-                        </ns157:UDFCHKBOX02>
-                        <ns158:UDFCHKBOX03 xmlns:ns158="http://schemas.datastream.net/MP_fields">false
-                        </ns158:UDFCHKBOX03>
-                        <ns159:UDFCHKBOX04 xmlns:ns159="http://schemas.datastream.net/MP_fields">false
-                        </ns159:UDFCHKBOX04>
-                        <ns160:UDFCHKBOX05 xmlns:ns160="http://schemas.datastream.net/MP_fields">false
-                        </ns160:UDFCHKBOX05>
-                    </ns2:UserDefinedFields>
-                    <ns161:SURVEY xmlns:ns161="http://schemas.datastream.net/MP_fields">false</ns161:SURVEY>
-                    <ns162:PRESERVECALCPRIORITY xmlns:ns162="http://schemas.datastream.net/MP_fields">false
-                    </ns162:PRESERVECALCPRIORITY>
-                    <ns163:CURRENCYCODE xmlns:ns163="http://schemas.datastream.net/MP_fields">CHF</ns163:CURRENCYCODE>
-                    <ns2:ComplianceDetail>
-                        <ns164:ABOVECEILINGPERMIT xmlns:ns164="http://schemas.datastream.net/MP_fields">false
-                        </ns164:ABOVECEILINGPERMIT>
-                        <ns165:INTERIMLIFESAFETY xmlns:ns165="http://schemas.datastream.net/MP_fields">false
-                        </ns165:INTERIMLIFESAFETY>
-                        <ns166:INTERIMINFECTIONCONTROL xmlns:ns166="http://schemas.datastream.net/MP_fields">false
-                        </ns166:INTERIMINFECTIONCONTROL>
-                        <ns167:PRECONSTRUCTIONRISKASSESSMENT xmlns:ns167="http://schemas.datastream.net/MP_fields">
-                            false
-                        </ns167:PRECONSTRUCTIONRISKASSESSMENT>
-                        <ns168:PLANIMPROVEMENT xmlns:ns168="http://schemas.datastream.net/MP_fields">false
-                        </ns168:PLANIMPROVEMENT>
-                        <ns169:STATEMENTOFCOND xmlns:ns169="http://schemas.datastream.net/MP_fields">false
-                        </ns169:STATEMENTOFCOND>
-                        <ns170:BUILDMAINTPROGRAM xmlns:ns170="http://schemas.datastream.net/MP_fields">false
-                        </ns170:BUILDMAINTPROGRAM>
-                        <ns171:PERSONALPROTECTIVEEQUIP xmlns:ns171="http://schemas.datastream.net/MP_fields">false
-                        </ns171:PERSONALPROTECTIVEEQUIP>
-                        <ns172:LOCKOUT xmlns:ns172="http://schemas.datastream.net/MP_fields">false</ns172:LOCKOUT>
-                        <ns173:BURNPERMIT xmlns:ns173="http://schemas.datastream.net/MP_fields">false</ns173:BURNPERMIT>
-                        <ns174:CONFINEDSPACE xmlns:ns174="http://schemas.datastream.net/MP_fields">false
-                        </ns174:CONFINEDSPACE>
-                        <ns175:PATIENTSAFETY xmlns:ns175="http://schemas.datastream.net/MP_fields">false
-                        </ns175:PATIENTSAFETY>
-                        <ns176:RECALLNOTICE xmlns:ns176="http://schemas.datastream.net/MP_fields">false
-                        </ns176:RECALLNOTICE>
-                        <ns177:SMDA xmlns:ns177="http://schemas.datastream.net/MP_fields">false</ns177:SMDA>
-                        <ns178:HIPAACONFIDENTIALITY xmlns:ns178="http://schemas.datastream.net/MP_fields">false
-                        </ns178:HIPAACONFIDENTIALITY>
-                    </ns2:ComplianceDetail>
-                    <ns2:IncidentTracking>
-                        <ns179:PATIENT xmlns:ns179="http://schemas.datastream.net/MP_fields">false</ns179:PATIENT>
-                        <ns180:STAFFINJURY xmlns:ns180="http://schemas.datastream.net/MP_fields">false
-                        </ns180:STAFFINJURY>
-                        <ns181:SECURITYINCIDENT xmlns:ns181="http://schemas.datastream.net/MP_fields">false
-                        </ns181:SECURITYINCIDENT>
-                        <ns182:PROPERTYDAMAGE xmlns:ns182="http://schemas.datastream.net/MP_fields">false
-                        </ns182:PROPERTYDAMAGE>
-                        <ns183:HAZARDOUSMATERIALSINCIDENT xmlns:ns183="http://schemas.datastream.net/MP_fields">false
-                        </ns183:HAZARDOUSMATERIALSINCIDENT>
-                        <ns184:FIRESAFETYINCIDENT xmlns:ns184="http://schemas.datastream.net/MP_fields">false
-                        </ns184:FIRESAFETYINCIDENT>
-                        <ns185:MEDICALEQUIPMENTINCIDENT xmlns:ns185="http://schemas.datastream.net/MP_fields">false
-                        </ns185:MEDICALEQUIPMENTINCIDENT>
-                        <ns186:UTILITYSYSTEMINCIDENT xmlns:ns186="http://schemas.datastream.net/MP_fields">false
-                        </ns186:UTILITYSYSTEMINCIDENT>
-                    </ns2:IncidentTracking>
-                    <ns187:MINOR xmlns:ns187="http://schemas.datastream.net/MP_fields">false</ns187:MINOR>
-                </ns2:WorkOrder>
-                <ns1:EQUIPMENTINFO>
-                    <ns188:EQUIPMENTID xmlns:ns188="http://schemas.datastream.net/MP_fields">
-                        <ns188:EQUIPMENTCODE>CR-MONITORING</ns188:EQUIPMENTCODE>
-                        <ns188:ORGANIZATIONID>
-                            <ns188:ORGANIZATIONCODE>*</ns188:ORGANIZATIONCODE>
-                        </ns188:ORGANIZATIONID>
-                        <ns188:DESCRIPTION>MONITORING ASSET / 10-Dec-2019 19-10-44</ns188:DESCRIPTION>
-                    </ns188:EQUIPMENTID>
-                    <ns189:PREVENTWOCOMPLETION xmlns:ns189="http://schemas.datastream.net/MP_fields">false
-                    </ns189:PREVENTWOCOMPLETION>
-                    <ns1:OBJTYPE>
-                        <ns190:OBJTYPE xmlns:ns190="http://schemas.datastream.net/MP_fields">A</ns190:OBJTYPE>
-                        <ns191:DESCRIPTION xmlns:ns191="http://schemas.datastream.net/MP_fields">Equipement
-                        </ns191:DESCRIPTION>
-                    </ns1:OBJTYPE>
-                    <ns192:STATECODE xmlns:ns192="http://schemas.datastream.net/MP_fields">GOOD</ns192:STATECODE>
-                    <ns193:SDMFLAG xmlns:ns193="http://schemas.datastream.net/MP_fields">false</ns193:SDMFLAG>
-                    <ns194:STARTINGAT xmlns:ns194="http://schemas.datastream.net/MP_fields" qualifier="OTHER">
-                        <ns195:VALUE xmlns:ns195="http://www.openapplications.org/oagis_fields">0</ns195:VALUE>
-                        <ns196:NUMOFDEC xmlns:ns196="http://www.openapplications.org/oagis_fields">0</ns196:NUMOFDEC>
-                        <ns197:SIGN xmlns:ns197="http://www.openapplications.org/oagis_fields">+</ns197:SIGN>
-                        <ns198:UOM xmlns:ns198="http://www.openapplications.org/oagis_fields">default</ns198:UOM>
-                    </ns194:STARTINGAT>
-                </ns1:EQUIPMENTINFO>
-                <ns199:WORKDAY xmlns:ns199="http://schemas.datastream.net/MP_fields">8</ns199:WORKDAY>
-                <ns1:PMRVCTRL>false</ns1:PMRVCTRL>
-                <ns200:CURRENCYCODE xmlns:ns200="http://schemas.datastream.net/MP_fields">CHF</ns200:CURRENCYCODE>
-                <ns1:REOPENPM>true</ns1:REOPENPM>
-                <ns1:EVENTTYPE>JOB</ns1:EVENTTYPE>
-                <ns1:SYSTEMCOMPLETESTATUS>
-                    <ns201:STATUSCODE xmlns:ns201="http://schemas.datastream.net/MP_fields">T</ns201:STATUSCODE>
-                </ns1:SYSTEMCOMPLETESTATUS>
-                <ns202:CURRENTDATETIME xmlns:ns202="http://schemas.datastream.net/MP_fields" qualifier="OTHER">
-                    <ns203:YEAR xmlns:ns203="http://www.openapplications.org/oagis_fields">2019</ns203:YEAR>
-                    <ns204:MONTH xmlns:ns204="http://www.openapplications.org/oagis_fields">12</ns204:MONTH>
-                    <ns205:DAY xmlns:ns205="http://www.openapplications.org/oagis_fields">10</ns205:DAY>
-                    <ns206:HOUR xmlns:ns206="http://www.openapplications.org/oagis_fields">19</ns206:HOUR>
-                    <ns207:MINUTE xmlns:ns207="http://www.openapplications.org/oagis_fields">14</ns207:MINUTE>
-                    <ns208:SECOND xmlns:ns208="http://www.openapplications.org/oagis_fields">47</ns208:SECOND>
-                    <ns209:SUBSECOND xmlns:ns209="http://www.openapplications.org/oagis_fields">0</ns209:SUBSECOND>
-                    <ns210:TIMEZONE xmlns:ns210="http://www.openapplications.org/oagis_fields">+0100</ns210:TIMEZONE>
-                </ns202:CURRENTDATETIME>
-                <ns1:GROUP>R5</ns1:GROUP>
-            </ns1:ResultData>
-        </ns1:MP0024_GetWorkOrder_001_Result>
-    </soapenv:Body>
-</soapenv:Envelope>
+<?xml version="1.0" encoding="UTF-8"?>
+<saml2p:Response Destination="https://inforos-test.cern.ch:9543/saml/loginresponse"
+                 ID="_bc9f51ef980f76ede0891050089cfd70" InResponseTo="s264bddb350b8e9092d52a32cfac1c4d51710d3a0a"
+                 IssueInstant="2019-12-12T16:29:21.870Z" Version="2.0"
+                 xmlns:saml2p="urn:oasis:names:tc:SAML:2.0:protocol">
+    <saml2:Issuer xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">
+        https://inforos-test.cern.ch:9553/inforsts/infor/00000000000000000000000000000000
+    </saml2:Issuer>
+    <saml2p:Status>
+        <saml2p:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
+    </saml2p:Status>
+    <saml2:Assertion ID="_22dbbea97a2ea2f26964f167e887fe7a" IssueInstant="2019-12-12T16:29:21.870Z" Version="2.0"
+                     xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <saml2:Issuer>https://inforos-test.cern.ch:9553/inforsts/infor/00000000000000000000000000000000</saml2:Issuer>
+        <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+            <ds:SignedInfo>
+                <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+                <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+                <ds:Reference URI="#_22dbbea97a2ea2f26964f167e887fe7a">
+                    <ds:Transforms>
+                        <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+                        <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#">
+                            <ec:InclusiveNamespaces PrefixList="xsd"
+                                                    xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+                        </ds:Transform>
+                    </ds:Transforms>
+                    <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <ds:DigestValue>4OwK0rEAycrd0ZFsBOiAo6mlnI05htGwNptrJOV/zno=</ds:DigestValue>
+                </ds:Reference>
+            </ds:SignedInfo>
+            <ds:SignatureValue>hxpYM2EuGRFBc6jWf4SYexkGrkH+ws8RWsjRRGyPl1/Grk3sasi1sRJR8A8zNPGuHOT7wEzn85fj&#xd;
+                6WI+9xXfZjOZ4aX3RoRur47vAaSyx67fSg1+1myYlbYBX25qjeD+zlBezx2y954a1jVhMcM5axw5&#xd;
+                KAQ8StDr5N/a8n2yel0Ku5Ul4ovd+LujW2bk58t4NlYJGfrbMx5f3cvrHhl1YnHle73CL0Vfehnp&#xd;
+                6dq68fWss8j18pMvJkGLKcfdhV+x4ZiHixVvoB34pex664EDWLp6PSxCiPurmnaHN6I4k5hiWO/n&#xd;
+                AGAf/xxWlpSDtf5OrWCPgi1p+BrDHak0+ftN2A==
+            </ds:SignatureValue>
+            <ds:KeyInfo>
+                <ds:X509Data>
+                    <ds:X509Certificate>MIICqjCCAZKgAwIBAgIGQX2fPMyEMA0GCSqGSIb3DQEBCwUAMBYxFDASBgNVBAMMC3N0cy1zaWdu
+                        aW5nMB4XDTE5MTEyOTA5NDgyOVoXDTIyMTEyODA5NDgzMFowFjEUMBIGA1UEAwwLc3RzLXNpZ25p
+                        bmcwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC2JCPT3GkC8cG3a+EvTbykdnxkycpi
+                        LYZfkw9ryUOzm7vbLbwejIl7FFG4wfOlLrMDjnUFzNWlM5vQ0XFXekTLqfzv5YN4LPQsm7bS/Wve
+                        7tkbofamleFoNOKdBhF3+h+CpPw1Zn34cR9oVl83rcADsdKHguk1TRCIZoS9I185wq1tMfuCxhWx
+                        FaelgTu3JYBxfi2ydA38Bolaw/VZ0Wsi3NQFfat6AiOBceSOVyecC9YzD3/hxEOx17oSgV/JW7Yu
+                        4ZRv2XoWPNpI290s6qguuoaWeSLVKXOz8SIeQsbZXdpj0DSgl2EKagQoU+B4SRvPtI+vnIASRknG
+                        lw24LqaPAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAEe4b4k4UUGGRvrLhqLqVL8g6sUhQ6amrNXw
+                        mpIt+/SKUT4CN+3KXRHtiAfV7iDmkYEOCDCPHTTYb2Kg4L3JukqYqcVQDiSZjBX0n/eWchvQMSYJ
+                        QrHDlHoovMcTQEwWw8vQqDCpJa1p6Y3jK/kDJ1DzYQY0tOs8qpdht/oi4VfrqyG5zyLqJr7MpZOY
+                        YD9Mv2u0T0/hgSeti24E+tvy3XK7gG5dplMhdTpTCCZQc0hpoJwbf2cQLKnLU4rgKGhQoX0W75he
+                        D8HIY3Iv7bI+QUF4m9f498p1pdXhGMmKxxC0te+VmWhkIhM0SDWXzv5UAQZttQnBa7ViMiaxy2yy
+                        kv0=
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </ds:Signature>
+        <saml2:Subject>
+            <saml2:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+                          NameQualifier="https://inforos-test.cern.ch:9553/inforsts/infor/00000000000000000000000000000000"
+                          SPNameQualifier="urn:Infor_test_M1575019523:Grid_XiPlatform">19351192762985770171576168151664
+            </saml2:NameID>
+            <saml2:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+                <saml2:SubjectConfirmationData InResponseTo="s264bddb350b8e9092d52a32cfac1c4d51710d3a0a"
+                                               NotOnOrAfter="2019-12-12T16:34:21.870Z"
+                                               Recipient="https://inforos-test.cern.ch:9543/saml/loginresponse"/>
+            </saml2:SubjectConfirmation>
+        </saml2:Subject>
+        <saml2:Conditions NotBefore="2019-12-12T16:29:21.870Z" NotOnOrAfter="2019-12-13T08:29:12.870Z">
+            <saml2:AudienceRestriction>
+                <saml2:Audience>urn:Infor_test_M1575019523:Grid_XiPlatform</saml2:Audience>
+            </saml2:AudienceRestriction>
+        </saml2:Conditions>
+        <saml2:AttributeStatement>
+            <saml2:Attribute Name="http://schemas.infor.com/claims/ExtendedGrantScopes">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    Infor-Mingle Infor-LN Infor-EAM
+                </saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="http://schemas.infor.com/claims/Tenant">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    infor
+                </saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="http://schemas.infor.com/claims/EnvironmentType">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">PRD
+                </saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    lukasz.pater@cern.ch
+                </saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="http://schemas.infor.com/claims/IFSPersonIdentifier">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    lpater
+                </saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    Lukasz.Pater@cern.ch
+                </saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="http://schemas.infor.com/claims/Identity2">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    lukasz.pater@cern.ch
+                </saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="http://schemas.infor.com/claims/SecurityRole">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    UserAdmin
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    DataAdministrator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    AttributeServiceCaller
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    Infor-SystemAdministrator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IFS-ReadOnlyUser
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IFS-AuditReportUser
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IFS-AuditAdministrator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IFS-MonitorReportUser
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IFS-MonitorAdministrator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IFS-PasswordAdmin
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    MingleEnterprise
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    Infor-SuiteUser
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    MingleIONEnabled
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    MingleAdministrator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    MingleStreamsTemplateCreator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    MingleDataAdministrator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    DECISIONSERVICE-Editor
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    DECISIONSERVICE-Approver
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IONDeskSecurityAdmin
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IONDeskAdmin
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IONContentProvider
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IONDeskOAuthGenerator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    Mingle-LocatorView
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IONAPI-Tracing
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IONAPI-User
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IONAPI-Administrator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IFS-ExternalEntityAdmin
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    EEU-IFS-PasswordAdmin
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IFS-EEPasswordAdmin
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    GRID-SystemAdministrator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    GRID-Viewer
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    GRID-Administrator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    HOMEPAGES-Administrator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    HOMEPAGES-ContentAdministrator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    HOMEPAGES-User
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    DATALAKE-User
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    DATALAKE-DataAdministrator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    DATALAKE-SystemAdministrator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IDM-User
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IDM-AdvancedUser
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IDM-Administrator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IDM-SuperUser
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IDM-RelatedInformationUser
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    APPBUILDER-Administrator
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    APPBUILDER-User
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    APPBUILDER-Designer
+                </saml2:AttributeValue>
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    IFSApplicationAdmin
+                </saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="http://schemas.infor.com/claims/Customer">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    DEFAULT
+                </saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="http://schemas.infor.com/claims/Identity">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    lpater
+                </saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="http://schemas.xmlsoap.org/claims/CommonName">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">Lukasz
+                    Piotr Pater
+                </saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="http://schemas.infor.com/claims/SessionId">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    infor~4384aa16-ab74-465f-9f4a-da56c54af4fb
+                </saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="http://schemas.infor.com/claims/IFSAuthenticationMode">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    SAMLToken
+                </saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="http://schemas.infor.com/claims/IFSUserLookupValue">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    CERN\lpater
+                </saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="http://schemas.infor.com/claims/MaxSessionTimeout">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">
+                    2019-12-13T08:29:13.208Z
+                </saml2:AttributeValue>
+            </saml2:Attribute>
+        </saml2:AttributeStatement>
+        <saml2:AuthnStatement AuthnInstant="2019-12-12T16:29:21.870Z" SessionIndex="-84342181640358560201576168151661">
+            <saml2:AuthnContext>
+                <saml2:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport
+                </saml2:AuthnContextClassRef>
+            </saml2:AuthnContext>
+        </saml2:AuthnStatement>
+    </saml2:Assertion>
+</saml2p:Response>

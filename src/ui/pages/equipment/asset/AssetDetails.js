@@ -14,22 +14,14 @@ class AssetDetails extends Component {
         //Fetch the category data
         if (code) {
             WSEquipment.getCategoryData(code).then(response => {
-                const categoryData = response.body.data;
-                if (categoryData && categoryData.length > 2) {
-                    //Set the class and manufacturer
-                    const classCode = categoryData[2];
-                    const classDesc = categoryData[3];
-                    const manufacturerCode = categoryData[4];
-                    //Update fields
-                    if (classCode) {
-                        updateEquipmentProperty('classCode', classCode);
+                const categoryData = response.body.data[0];
+                if (categoryData) {
+                    if (categoryData.categoryclass) {
+                        updateEquipmentProperty('classCode', categoryData.categoryclass);
+                        updateEquipmentProperty('classDesc', categoryData.categoryclassdesc);
                     }
-                    if (classDesc) {
-                        updateEquipmentProperty('classDesc', classDesc);
-                    }
-                    if (manufacturerCode) {
-                        updateEquipmentProperty('manufacturerCode', manufacturerCode);
-                        updateEquipmentProperty('manufacturerDesc', '');
+                    if (categoryData.manufacturer) {
+                        updateEquipmentProperty('manufacturerCode', categoryData.manufacturer);
                     }
                 }
             }).catch(error => {
