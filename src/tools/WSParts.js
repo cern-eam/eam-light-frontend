@@ -34,11 +34,6 @@ class WSParts {
     // AUTOCOMPLETE PARTS
     //
 
-    autocompletePartClass = (filter, config = {}) => {
-        filter = encodeURIComponent(filter);
-        return WS._get('/autocomplete/part/class/' + filter, config);
-    };
-
     autocompletePartCategory = (filter, config = {}) => {
         filter = encodeURIComponent(filter);
         return WS._get('/autocomplete/part/category/' + filter, config);

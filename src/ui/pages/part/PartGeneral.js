@@ -5,6 +5,7 @@ import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
 import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete';
 import WSParts from "../../../tools/WSParts";
 import EAMCheckbox from "eam-components/dist/ui/components/muiinputs/EAMCheckbox";
+import WS from "../../../tools/WS";
 
 class PartGeneral extends Component {
     render() {
@@ -33,7 +34,8 @@ class PartGeneral extends Component {
                                      valueKey="classCode"
                                      valueDesc={part.classDesc}
                                      descKey="classDesc"
-                                     autocompleteHandler={WSParts.autocompletePartClass} children={children}/>
+                                     autocompleteHandler={(filter, config) => WS.autocompleteClass('PART', filter, config)}
+                                     children={children}/>
 
                     <EAMAutocomplete elementInfo={partLayout.fields['category']}
                                      value={part.categoryCode}
@@ -41,7 +43,8 @@ class PartGeneral extends Component {
                                      valueKey="categoryCode"
                                      valueDesc={part.categoryDesc}
                                      descKey="categoryDesc"
-                                     autocompleteHandler={WSParts.autocompletePartCategory} children={children}/>
+                                     autocompleteHandler={WSParts.autocompletePartCategory}
+                                     children={children}/>
 
                     <EAMAutocomplete elementInfo={partLayout.fields['uom']}
                                      value={part.uom}
@@ -49,7 +52,8 @@ class PartGeneral extends Component {
                                      valueKey="uom"
                                      valueDesc={part.uomdesc}
                                      descKey="uomdesc"
-                                     autocompleteHandler={WSParts.autocompletePartUOM} children={children}/>
+                                     autocompleteHandler={WSParts.autocompletePartUOM}
+                                     children={children}/>
 
                     <EAMSelect
                         elementInfo={partLayout.fields['trackingtype']}
