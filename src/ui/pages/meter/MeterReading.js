@@ -43,7 +43,7 @@ class MeterReading extends React.Component {
             this.setState(() => ({blocking: true}));
             WSMeters.getReadingsByMeterCode(code).then(response => {
                 //Set readings
-                this.setState(() => ({meterReadings: [response.body.data]}));
+                this.setState(() => ({meterReadings: response.body.data}));
                 //Empty Equipment search criteria
                 this.updateSearchProperty('equipmentCode', '');
                 this.updateSearchProperty('equipmentDesc', '');
@@ -76,21 +76,12 @@ class MeterReading extends React.Component {
         }
     };
 
-    saveHandler = (meterReading) => {
+    saveHandler = (meterReading, isRollover) => {
         this.meterReading = meterReading;
-        //Check the rollover first
-        WSMeters.checkValueRollOver(meterReading.equipmentCode,
-            meterReading.uom, meterReading.actualValue).then(response => {
-            //Display dialog of confirmation
-            const isRollOver = response.body.data;
-            const createMessage = isRollOver ? rollOverMessageCreate : defaultMessageCreate;
-            this.setState(() => ({
-                dialogOpen: true,
-                createMessage
-            }));
-        }).catch(error => {
-            this.props.handleError(error);
-        });
+        this.setState(() => ({
+            dialogOpen: true,
+            createMessage: isRollover ? rollOverMessageCreate : defaultMessageCreate
+        }));
     };
 
 
@@ -100,6 +91,7 @@ class MeterReading extends React.Component {
     createMeterReadingHandler = () => {
         //Blocking
         this.setState(() => ({blocking: true}));
+
         //Call service to create the reading
         WSMeters.createMeterReading(this.meterReading).then(response => {
             //Close the dialog

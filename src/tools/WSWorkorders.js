@@ -47,11 +47,11 @@ class WSWorkorders {
     // DROP DOWN VALUES FOR WOS
     //
     getWorkOrderStatusValues(userGroup, status, type, newWorkOrder, config = {}) {
-        return WS._get('/wolists/statuscodes?wostatus=' + status + '&wotype=' + type + '&newwo=' + newWorkOrder + '&userGroup=' + userGroup, config)
+        return WS._get(`/wolists/statuscodes?wostatus=${status}&wotype=${type}&newwo=${newWorkOrder}&userGroup=${encodeURIComponent(userGroup)}`, config)
     }
 
     getWorkOrderTypeValues(userGroup, config = {}) {
-        return WS._get('/wolists/typecodes?userGroup=' + userGroup, config)
+        return WS._get(`/wolists/typecodes?userGroup=${encodeURIComponent(userGroup)}`, config)
     }
 
     getWorkOrderProblemCodeValues(woclass, objclass, config = {}) {

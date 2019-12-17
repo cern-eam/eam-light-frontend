@@ -25,37 +25,28 @@ class MeterReadingWO extends React.Component {
 
     componentWillMount() {
         //If there is work order, then read
-        if (this.props.workorder) {
-            this.loadMeterReadings(this.props.workorder);
+        if (this.props.equipment) {
+            this.loadMeterReadings(this.props.equipment);
         }
     }
 
     componentWillReceiveProps(nextProps) {
         //Reload if the work order change
-        if (nextProps.workorder && nextProps.workorder !== this.props.workorder) {
-            this.loadMeterReadings(nextProps.workorder);
-        } else if (!nextProps.workorder) {
+        if (nextProps.equipment && nextProps.equipment !== this.props.equipment) {
+            this.loadMeterReadings(nextProps.equipment);
+        } else if (!nextProps.equipment) {
             //No work order, so clear readings
             this.setState(() => ({meterReadings: []}));
         }
     }
 
 
-    saveHandler = (meterReading) => {
+    saveHandler = (meterReading, isRollover) => {
         this.meterReading = meterReading;
-        //Check the rollover first
-        WSMeters.checkValueRollOver(meterReading.equipmentCode,
-            meterReading.uom, meterReading.actualValue).then(response => {
-            //Display dialog of confirmation
-            const isRollOver = response.body.data;
-            const createMessage = isRollOver ? rollOverMessageCreate : defaultMessageCreate;
-            this.setState(() => ({
-                dialogOpen: true,
-                createMessage
-            }));
-        }).catch(error => {
-            this.props.handleError(error);
-        });
+        this.setState(() => ({
+            dialogOpen: true,
+            createMessage: isRollover ? rollOverMessageCreate : defaultMessageCreate
+        }));
     };
 
 
@@ -71,7 +62,7 @@ class MeterReadingWO extends React.Component {
             //Close the dialog
             this.closeDialog();
             //Reload the data
-            this.loadMeterReadings(this.props.workorder);
+            this.loadMeterReadings(this.props.equipment);
             //Message
             this.props.showNotification('Meter Reading created successfully');
         }).catch(error => {
@@ -83,12 +74,12 @@ class MeterReadingWO extends React.Component {
     /**
      * To load the meter reading
      */
-    loadMeterReadings = (woNumber) => {
+    loadMeterReadings = (equipment) => {
         //Loading
         this.setState(() => ({blocking: true}));
-        WSMeters.getReadingsByWorkOrder(woNumber).then(response => {
+        WSMeters.getReadingsByEquipment(equipment).then(response => {
             //Readings
-            const meterReadings = response.body.data.length > 0 ? response.body.data[0].meterReadings : [];
+            const meterReadings = response.body.data ? response.body.data : [];
             //Set readings
             this.setState(() => ({meterReadings}));
             //Not Loading
