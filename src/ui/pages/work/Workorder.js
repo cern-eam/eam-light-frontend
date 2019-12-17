@@ -21,7 +21,6 @@ import WorkorderClosingCodes from './WorkorderClosingCodes';
 import WorkorderDetails from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
 import WorkorderTools from "./WorkorderTools";
-import {handleError} from "../../../actions/uiActions";
 
 class Workorder extends Entity {
 
@@ -33,6 +32,13 @@ class Workorder extends Entity {
         this.setCauseCodes(null, null);
         this.setPriorityValues();
         this.props.setLayoutProperty('showEqpTreeButton', false);
+    }
+
+    //
+    //
+    //
+    layoutPropertiesMap = {
+        "workorderstatus": "statusCode"
     }
 
     //
@@ -52,8 +58,11 @@ class Workorder extends Entity {
         deleteEntity: WSWorkorder.deleteWorkOrder.bind(WSWorkorder),
         initNewEntity: () => WSWorkorder.initWorkOrder("EVNT", "WSJOBS",
             this.props.userData && this.props.userData.screens[this.props.userData.workOrderScreen].screenCode,
-            this.props.location.search)
+            this.props.location.search),
+        layout: this.props.workOrderLayout,
+        layoutPropertiesMap: this.layoutPropertiesMap
     }
+
 
     getRegions = () => {
         let user = this.props.userData.eamAccount.userCode
@@ -325,7 +334,7 @@ class Workorder extends Entity {
 
                                 {!this.props.hiddenRegions[this.getRegions().METERREADINGS.code] &&
                                 !this.state.layout.newEntity &&
-                                <MeterReadingContainerWO workorder={this.state.workorder.number}/>}
+                                <MeterReadingContainerWO equipment={this.state.workorder.equipmentCode}/>}
 
                                 {WorkorderTools.isRegionAvailable('MEC', props.workOrderLayout) &&
                                 !this.state.layout.newEntity &&

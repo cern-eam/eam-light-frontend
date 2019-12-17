@@ -84,10 +84,16 @@ export default class readEntityEquipment extends Component {
                     blocking: false,
                     isModified: false
                 })
+
+                // Assign default values
+                let entity = this.assignDefaultValues(response.body.data);
+
+                // Save to the state
                 this.setState({
-                    [this.settings.entity]: response.body.data,
+                    [this.settings.entity]: entity,
                     readError: null
                 })
+
                 // Invoke entity specific logic on the subclass
                 this.postInit()
             })
@@ -306,6 +312,25 @@ export default class readEntityEquipment extends Component {
                 })
             }
         })
+    }
+
+    //
+    // ASSIGN DEFAULT VALUES
+    //
+    assignDefaultValues(entity) {
+        let layout = this.settings.layout;
+        let layoutPropertiesMap = this.settings.layoutPropertiesMap;
+
+        if (!layout || !layoutPropertiesMap || !entity) {
+            return;
+        }
+
+        // Assign default values defined in the layout.fields to the entity object
+        Object.values(layout.fields).filter(field => field.defaultValue && layoutPropertiesMap[field.elementId]).forEach(field => {
+            entity[layoutPropertiesMap[field.elementId]] = field.defaultValue
+        });
+
+        return entity;
     }
 
     //

@@ -3,7 +3,6 @@ import EISPanel from 'eam-components/dist/ui/components/panel';
 import MeterReadingContent from "./MeterReadingContent";
 import './MeterReading.css';
 
-
 class MeterReadingList extends React.Component {
 
     renderMetersList = () => {

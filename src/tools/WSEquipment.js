@@ -38,7 +38,7 @@ class WSEquipment {
     }
 
     getEquipmentStatusValues(userGroup, neweqp, oldStatusCode, config = {}) {
-        return WS._get(`/eqplists/statuscodes?userGroup=${userGroup}&neweqp=${neweqp}&oldStatusCode=${oldStatusCode}`, config);
+        return WS._get(`/eqplists/statuscodes?userGroup=${encodeURIComponent(userGroup)}&neweqp=${neweqp}&oldStatusCode=${oldStatusCode}`, config);
     }
 
     getEquipmentCriticalityValues(config = {}) {
