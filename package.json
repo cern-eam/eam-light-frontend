@@ -1,6 +1,6 @@
 {
   "name": "eamlight",
-  "version": "3.3.1",
+  "version": "3.3.2",
   "private": true,
   "dependencies": {
     "@babel/polyfill": "7.7.0",
