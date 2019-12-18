@@ -21,14 +21,14 @@ function EquipmentWorkOrders(props) {
         [workOrderFilterTypes.OPEN]: {
             text: 'Open',
             process: (data) => {
-                return data.filter((workOrder) => !workOrder.status.startsWith("T"));
+                return data.filter((workOrder) => workOrder.status && !workOrder.status.startsWith("T"));
             }
         },
         [workOrderFilterTypes.MTF]: {
             text: 'MTF',
             process: (data) => {
                 return data.filter((workOrder) => {
-                    return workOrder.type.startsWith("ICF") || workOrder.type.startsWith("MTF");
+                    return workOrder.mrc && (workOrder.mrc.startsWith("ICF") || workOrder.mrc.startsWith("MTF"));
                 })
             }
         }
