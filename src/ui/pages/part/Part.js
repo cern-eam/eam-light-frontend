@@ -84,7 +84,6 @@ class Part extends Entity {
             PARTSTOCK: {label: "Part Stock", code: user + "_" + screen+ "_PARTSTOCK"},
             WHEREUSED: {label: "Where Used", code: user + "_" + screen+ "_WHEREUSED"},
             USERDEFFIELDS: {label: "User Defined Fields", code: user + "_" + screen+ "_USERDEFFIELDS"},
-            EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen+ "_EDMSDOCS"},
             COMMENTS: {label: "Comments", code: user + "_" + screen+ "_COMMENTS"},
             CUSTOMFIELDS: {label: "Custom Fields", code: user + "_" + screen+ "_CUSTOMFIELDS"}
         }
@@ -158,11 +157,6 @@ class Part extends Entity {
                                 <PartWhereUsed {...props}/>}
                             </Grid>
                             <Grid item sm={6} xs={12}>
-
-                                {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
-                                !this.state.layout.newEntity &&
-                                <EDMSDoclightIframeContainer objectType={PART} objectID={this.state.part.code}/>
-                                }
 
                                 {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                                 <CommentsContainer ref={comments => this.comments = comments}
