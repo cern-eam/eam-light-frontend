@@ -119,8 +119,6 @@ export default class Position extends Entity {
             WORKORDERS: {label: "Work Orders", code: user + "_" + screen+ "_WORKORDERS"},
             HISTORY: {label: "History", code: user + "_" + screen+ "_HISTORY"},
             PARTS: {label: "Parts Associated", code: user + "_" + screen+ "_PARTS"},
-            EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen+ "_EDMSDOCS"},
-            NCRS: {label: "NCRs", code: user + "_" + screen+ "_NCRS"},
             COMMENTS: {label: "Comments", code: user + "_" + screen+ "_COMMENTS"},
             USERDEFFIELDS: {label: "User Defined Fields", code: user + "_" + screen+ "_USERDEFFIELDS"},
             CUSTOMFIELDS: {label: "Custom Fields", code: user + "_" + screen+ "_CUSTOMFIELDS"}
@@ -208,17 +206,6 @@ export default class Position extends Entity {
 
                         </Grid>
                         <Grid item xs={xs} sm={sm} md={md} lg={lg}>
-
-                            {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
-                            !this.state.layout.newEntity &&
-                            <EDMSDoclightIframeContainer objectType="S" objectID={this.state.equipment.code}/>}
-
-                            {!this.props.hiddenRegions[this.getRegions().NCRS.code] &&
-                            !this.state.layout.newEntity &&
-                            <EDMSWidgetContainer objectID={this.state.equipment.code} objectType="S"
-                                                 creationMode="NCR"
-                                                 title="NCRs"
-                                                 edmsDocListLink={this.props.applicationData.edmsDocListLink}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                             <CommentsContainer ref={comments => this.comments = comments}
