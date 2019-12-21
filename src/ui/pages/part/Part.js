@@ -40,7 +40,7 @@ class Part extends Entity {
         updateEntity: WSParts.updatePart.bind(WSParts),
         createEntity: WSParts.createPart.bind(WSParts),
         deleteEntity: WSParts.deletePart.bind(WSParts),
-        initNewEntity: () => WSParts.initPart(PART, SSPART, this.props.userData.screens[this.props.userData.partScreen].screenCode, this.props.location.search)
+        initNewEntity: () => WSParts.initPart(PART, this.props.location.search)
     };
 
     //
@@ -173,7 +173,8 @@ class Part extends Entity {
 
                                 {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
                                 PartTools.isRegionAvailable('CUSTOM_FIELDS', props.partLayout) &&
-                                <CustomFields entityCode={PART}
+                                <CustomFields children={this.children}
+                                              entityCode={PART}
                                               entityKeyCode={this.state.part.code}
                                               classCode={this.state.part.classCode}
                                               customFields={this.state.part.customField}

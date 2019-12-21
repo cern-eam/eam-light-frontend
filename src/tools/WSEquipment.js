@@ -33,8 +33,8 @@ class WSEquipment {
         return WS._delete('/equipment/' + equipment, config);
     }
 
-    initEquipment(entity, eqpType, systemFunction, userFunction, params, config = {}) {
-        return WS._get(`/equipment/init/${entity}/${eqpType}/${systemFunction}/${userFunction}${params}`, config);
+    initEquipment(entity, eqpType, params, config = {}) {
+        return WS._get(`/equipment/init/${entity}/${eqpType}${params}`, config);
     }
 
     getEquipmentStatusValues(userGroup, neweqp, oldStatusCode, config = {}) {

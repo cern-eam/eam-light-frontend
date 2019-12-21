@@ -35,10 +35,14 @@ class Workorder extends Entity {
     }
 
     //
-    //
+    // MAPPING BETWEEN ENTITY KEYS AND LAYOUT ID
     //
     layoutPropertiesMap = {
-        "workorderstatus": "statusCode"
+        workorderstatus: "statusCode",
+        department: "departmentCode",
+        udfchar01: "userDefinedFields.udfchar01",
+        udfchar02: "userDefinedFields.udfchar02"
+        //TODO to be further extended
     }
 
     //
@@ -56,9 +60,7 @@ class Workorder extends Entity {
         updateEntity: WSWorkorder.updateWorkOrder.bind(WSWorkorder),
         createEntity: WSWorkorder.createWorkOrder.bind(WSWorkorder),
         deleteEntity: WSWorkorder.deleteWorkOrder.bind(WSWorkorder),
-        initNewEntity: () => WSWorkorder.initWorkOrder("EVNT", "WSJOBS",
-            this.props.userData && this.props.userData.screens[this.props.userData.workOrderScreen].screenCode,
-            this.props.location.search),
+        initNewEntity: () => WSWorkorder.initWorkOrder("EVNT", this.props.location.search),
         layout: this.props.workOrderLayout,
         layoutPropertiesMap: this.layoutPropertiesMap
     }

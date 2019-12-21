@@ -40,9 +40,7 @@ export default class Asset extends Entity {
         updateEntity: WSEquipment.updateEquipment.bind(WSEquipment),
         createEntity: WSEquipment.createEquipment.bind(WSEquipment),
         deleteEntity: WSEquipment.deleteEquipment.bind(WSEquipment),
-        initNewEntity: () => WSEquipment.initEquipment("OBJ", "A", "OSOBJA",
-            this.props.userData.screens[this.props.userData.assetScreen].screenCode,
-            this.props.location.search && this.props.location.search.replace('newCode=', 'code='))
+        initNewEntity: () => WSEquipment.initEquipment("OBJ", "A", this.props.location.search)
     }
 
     postInit() {
@@ -252,7 +250,8 @@ export default class Asset extends Entity {
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
-                            <CustomFields entityCode='OBJ'
+                            <CustomFields children={this.children}
+                                          entityCode='OBJ'
                                           entityKeyCode={this.state.equipment.code}
                                           classCode={this.state.equipment.classCode}
                                           customFields={this.state.equipment.customField}
