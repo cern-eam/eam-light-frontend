@@ -320,17 +320,43 @@ export default class readEntityEquipment extends Component {
     assignDefaultValues(entity) {
         let layout = this.settings.layout;
         let layoutPropertiesMap = this.settings.layoutPropertiesMap;
+        let queryParams = queryString.parse(window.location.search);
 
-        if (!layout || !layoutPropertiesMap || !entity) {
-            return;
+        // Populate the entity object with query params keys matching the custom field code
+        if (entity.customField) {
+            entity.customField.filter(cf => queryParams[cf.code]).forEach(cf => cf.value = queryParams[cf.code])
         }
 
-        // Assign default values defined in the layout.fields to the entity object
-        Object.values(layout.fields).filter(field => field.defaultValue && layoutPropertiesMap[field.elementId]).forEach(field => {
-            entity[layoutPropertiesMap[field.elementId]] = field.defaultValue
-        });
+        // Create an entity-like object with the default values from the screen's layout
+        let defaultValues = {};
+        if (layout && layoutPropertiesMap) {
+             defaultValues = Object.values(layout.fields)
+                 .filter(field => field.defaultValue && layoutPropertiesMap[field.elementId])
+                 .reduce((result, field) => set(result, layoutPropertiesMap[field.elementId], field.defaultValue === 'NULL' ? '' : field.defaultValue), {})
+        }
 
-        return entity;
+        // Create an entity-like object with the values from the query parameters
+        let queryValues = Object.keys(queryParams).reduce( (result, qkey) => {
+            if (qkey.startsWith("udf")) {
+                set(result, `userDefinedFields.${qkey}`, queryParams[qkey])
+            } else {
+                // Transform the query key (qkey) to match exactly the key name in the entity (ekey)
+                result[Object.keys(entity).find(ekey => ekey.toUpperCase() === qkey.toUpperCase())] = queryParams[qkey];
+            }
+            return result;
+        }, {})
+        delete queryValues.undefined;
+
+        return {
+            ...entity,
+            ...defaultValues,
+            ...queryValues,
+            userDefinedFields: {
+                ...entity.userDefinedFields,
+                ...defaultValues.userDefinedFields,
+                ...queryValues.userDefinedFields
+            }
+        }
     }
 
     //

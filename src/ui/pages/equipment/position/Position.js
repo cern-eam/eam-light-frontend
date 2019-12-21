@@ -37,9 +37,7 @@ export default class Position extends Entity {
         updateEntity: WSEquipment.updateEquipment.bind(WSEquipment),
         createEntity: WSEquipment.createEquipment.bind(WSEquipment),
         deleteEntity: WSEquipment.deleteEquipment.bind(WSEquipment),
-        initNewEntity: () => WSEquipment.initEquipment("OBJ", "P", "OSOBJP",
-            this.props.userData.screens[this.props.userData.positionScreen].screenCode,
-            this.props.location.search)
+        initNewEntity: () => WSEquipment.initEquipment("OBJ", "P", this.props.location.search)
     }
 
     postInit() {
@@ -237,7 +235,8 @@ export default class Position extends Entity {
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
-                            <CustomFields entityCode='OBJ'
+                            <CustomFields children={this.children}
+                                          entityCode='OBJ'
                                           entityKeyCode={this.state.equipment.code}
                                           classCode={this.state.equipment.classCode}
                                           customFields={this.state.equipment.customField}

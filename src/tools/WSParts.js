@@ -9,8 +9,8 @@ class WSParts {
     // PARTS
     //
 
-    initPart(entity, systemFunction, userFunction, params, config = {}) {
-        return WS._get(`/parts/init/${entity}/${systemFunction}/${userFunction}${params}`, config);
+    initPart(entity, params, config = {}) {
+        return WS._get(`/parts/init/${entity}${params}`, config);
     }
 
     getPart(code, config = {}) {
@@ -33,7 +33,6 @@ class WSParts {
     //
     // AUTOCOMPLETE PARTS
     //
-
     autocompletePartCategory = (filter, config = {}) => {
         filter = encodeURIComponent(filter);
         return WS._get('/autocomplete/part/category/' + filter, config);

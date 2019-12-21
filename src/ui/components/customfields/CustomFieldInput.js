@@ -14,7 +14,7 @@ function CustomFieldInput(props) {
         return {
             text: customField.label,
             elementId: customField.code,
-            xpath: 'CF_' + customField.code,
+            xpath: 'EAMID_' + customField.code,
             fieldType: customField.type === 'NUM' ? 'number' : 'text'
         }
     }
