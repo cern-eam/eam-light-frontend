@@ -7,7 +7,7 @@ import WSParts from '../../../tools/WSParts';
 import PartGeneral from "./PartGeneral";
 import UserDefinedFields from "../../components/userdefinedfields/UserDefinedFields";
 import PartStock from "./PartStock";
-import CommentsContainer from 'eam-components/dist/ui/components/comments/CommentsContainer';
+import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import CustomFields from '../../components/customfields/CustomFields';
 import PartWhereUsed from "./PartWhereUsed";
 import Entity from '../Entity';
@@ -115,8 +115,8 @@ class Part extends Entity {
                                      saveHandler={this.saveHandler.bind(this)}
                                      newHandler={() => this.props.history.push('/part')}
                                      deleteHandler={this.deleteEntity.bind(this, this.state.part.code)}
-                                     toolbarProps={{ 
-                                                    _toolbarType: TOOLBARS.PART, 
+                                     toolbarProps={{
+                                                    _toolbarType: TOOLBARS.PART,
                                                     part: this.state.part,
                                                     postInit: this.postInit.bind(this),
                                                     setLayout: this.setLayout.bind(this),
@@ -125,7 +125,7 @@ class Part extends Entity {
                                                     screencode: this.props.userData.screens[this.props.userData.partScreen].screenCode,
                                                     handleError: this.props.handleError,
                                                     showNotification: this.props.showNotification,
-                                                    showError: this.props.showError            
+                                                    showError: this.props.showError
                                      }}
                                      width={730}
                                      entityIcon={<PartIcon style={{height: 18}}/>}
@@ -159,10 +159,13 @@ class Part extends Entity {
                             <Grid item sm={6} xs={12}>
 
                                 {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
-                                <CommentsContainer ref={comments => this.comments = comments}
-                                                   entityCode={PART}
-                                                   entityKeyCode={!this.state.layout.newEntity ? this.state.part.code : undefined}
-                                                   userDesc={this.props.userData.eamAccount.userDesc}/>
+                                    <Comments ref={comments => this.comments = comments}
+                                                    entityCode={PART}
+                                                    entityKeyCode={!this.state.layout.newEntity ? this.state.part.code : undefined}
+                                                    userDesc={this.props.userData.eamAccount.userDesc}
+                                                    handleError={this.props.handleError}
+                                                    allowHtml={true}
+                                    />
                                 }
 
                                 {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
