@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import PositionGeneral from './PositionGeneral'
 import PositionDetails from './PositionDetails'
 import PositionHierarchy from './PositionHierarchy'
-import CommentsContainer from 'eam-components/dist/ui/components/comments/CommentsContainer';
+import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import EDMSWidgetContainer from 'eam-components/dist/ui/components/edms/EDMSWidgetContainer';
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
@@ -208,10 +208,12 @@ export default class Position extends Entity {
                         <Grid item xs={xs} sm={sm} md={md} lg={lg}>
 
                             {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
-                            <CommentsContainer ref={comments => this.comments = comments}
+                            <Comments ref={comments => this.comments = comments}
                                                entityCode='OBJ'
                                                entityKeyCode={!this.state.layout.newEntity ? this.state.equipment.code : undefined}
-                                               userDesc={this.props.userData.eamAccount.userDesc}/>
+                                               userDesc={this.props.userData.eamAccount.userDesc}
+                                               handleError={this.props.handleError}
+                                               allowHtml={true}/>
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().USERDEFFIELDS.code] &&
