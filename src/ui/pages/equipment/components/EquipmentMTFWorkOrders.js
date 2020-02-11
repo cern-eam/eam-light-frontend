@@ -6,6 +6,8 @@ import { MUITableHeader, MUITableBody } from "eam-components/dist/ui/components/
 import { Table, TableCell, TableContainer, withStyles } from "@material-ui/core";
 import Fade from '@material-ui/core/Fade';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Link } from 'react-router-dom';
+
 
 const flattenGridRow = row => row.map(row => row &&row.cell &&
     row.cell.reduce(
@@ -29,13 +31,11 @@ const bodyCellRender = ({ row, column, key, getValue, CustomTableCell }) =>
         <CustomTableCell style={{ backgroundColor: getValue() }} key={key} />
     ) : column.id === "mtf_step" ? (
         <CustomTableCell key={key}>
-            <a
-                href={`/workorder/${row["evt_code"]}`}
-                // target="_blank"
-                // rel="noopener noreferrer"
+            <Link
+                to={{ pathname:`/workorder/${row["evt_code"]}` }}
             >
                 {getValue()}
-            </a>
+            </Link>
         </CustomTableCell>
     ) : (
         <CustomTableCell key={key}>
@@ -101,7 +101,8 @@ const EquipmentMTFWorkOrders = props => {
         "mtf_step": DATA_GRID_SORT_TYPES.NUMERIC
     }
 
-    const sortableColumns = columns.filter(c => !["last_repeated_status_color"].includes(c.id))
+    const sortableColumns = columns
+        .filter(c => !["last_repeated_status_color"].includes(c.id))
         .map(e => ({
             id: e.id,
             sortType: sortTypesMap[e.id]
