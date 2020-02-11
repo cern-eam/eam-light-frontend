@@ -2,30 +2,32 @@ import React, {useState, useEffect} from 'react';
 import EISPanel from 'eam-components/dist/ui/components/panel';
 import WSEquipment from '../../../../tools/WSEquipment';
 import EISTable from 'eam-components/dist/ui/components/table';
+import EISTableFilter from 'eam-components/dist/ui/components/table/EISTableFilter';
+import EquipmentMTFWorkOrders from "./EquipmentMTFWorkOrders"
 
 function EquipmentWorkOrders(props) {
     
     let workOrderFilterTypes = {
-        ALL: 'ALL',
-        OPEN: 'OPEN',
+        ALL: 'All',
+        OPEN: 'Open',
         MTF: 'MTF'
     }
 
     let workOrderFilters = {
         [workOrderFilterTypes.ALL]: {
-            text: 'All',
+            text: workOrderFilterTypes.ALL,
             process: (data) => {
                 return [...data];
             }
         },
         [workOrderFilterTypes.OPEN]: {
-            text: 'Open',
+            text: workOrderFilterTypes.OPEN,
             process: (data) => {
                 return data.filter((workOrder) => workOrder.status && !workOrder.status.startsWith("T"));
             }
         },
         [workOrderFilterTypes.MTF]: {
-            text: 'MTF',
+            text: workOrderFilterTypes.MTF,
             process: (data) => {
                 return data.filter((workOrder) => {
                     return workOrder.mrc && (workOrder.mrc.startsWith("ICF") || workOrder.mrc.startsWith("MTF"));
@@ -81,14 +83,23 @@ function EquipmentWorkOrders(props) {
         <EISPanel
             detailsStyle={{display: 'flex', flexDirection: 'column'}}
             heading="WORK ORDERS">
-            <EISTable
-               data={getFilteredWorkOrderList(data)}
-               headers={headers}
-               propCodes={propCodes}
-               filters={workOrderFilters}
-               activeFilter={workOrderFilter}
-               handleFilterChange={newFilter => setWorkOrderFilter(newFilter)}
-               linksMap={linksMap} />
+            <EISTableFilter
+                filters={workOrderFilters}
+                handleFilterChange={newFilter =>
+                    setWorkOrderFilter(newFilter)
+                }
+                activeFilter={workOrderFilter}
+            />
+            {workOrderFilter === workOrderFilterTypes.MTF ?
+                <EquipmentMTFWorkOrders equipmentcode={props.equipmentcode} />
+                :
+                <EISTable
+                    data={getFilteredWorkOrderList(data)}
+                    headers={headers}
+                    propCodes={propCodes}
+                    linksMap={linksMap}
+                />
+            }
         </EISPanel>
     )
 
