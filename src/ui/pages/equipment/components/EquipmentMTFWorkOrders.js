@@ -69,6 +69,7 @@ const EquipmentMTFWorkOrders = props => {
 
     useEffect(() => {
         (async () => {
+            setLoading(true);
             const gridRequest = {
                 rowCount: 1000,
                 cursorPosition: 1,
@@ -91,7 +92,7 @@ const EquipmentMTFWorkOrders = props => {
             setColumns(getGridFieldsColumns(result.gridField, headers));
             setLoading(false);
         })();
-    }, []);
+    }, [equipmentcode]);
 
     const visibleColumns = columns.filter(
         e => !["evt_code", "last_repeated_status"].includes(e.id)
