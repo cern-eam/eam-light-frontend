@@ -312,7 +312,7 @@ class Workorder extends Entity {
                                             getWoLink={wo => '/workorder/' + wo}
                                             ref={checklists => this.checklists = checklists}
                                             showSuccess={this.props.showSuccess}
-                                            showError={this.props.showError}/>}
+                                            handleError={this.props.handleError}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
                                   this.props.workOrderLayout.fields.block_5.attribute !== 'H' &&
