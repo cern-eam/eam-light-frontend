@@ -112,7 +112,9 @@ class AssetDetails extends Component {
                                      updateProperty={updateEquipmentProperty}
                                      valueKey="partCode"
                                      descKey="partDesc"
-                                     autocompleteHandler={WSEquipment.autocompleteEquipmentPart}/>
+                                     autocompleteHandler={WSEquipment.autocompleteEquipmentPart}
+                                     link={() => equipment.partCode ? "/part/" + equipment.partCode: null}
+                                     />
 
                     <EAMAutocomplete children={children}
                                      elementInfo={assetLayout.fields['store']}
