@@ -233,13 +233,16 @@ export default class Asset extends Entity {
                             <EDMSWidget objectID={this.state.equipment.code} objectType="A"
                                                  creationMode="NCR"
                                                  title="NCRs"
-                                                 edmsDocListLink={this.props.applicationData.edmsDocListLink}/>}
+                                                 edmsDocListLink={this.props.applicationData.edmsDocListLink}
+                                                 showError={this.props.showError}
+                                                 showSuccess={this.props.showSuccess}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                             <Comments ref={comments => this.comments = comments}
                                                entityCode='OBJ'
                                                entityKeyCode={!this.state.layout.newEntity ? this.state.equipment.code : undefined}
-                                               userDesc={this.props.userData.eamAccount.userDesc}/>
+                                               userDesc={this.props.userData.eamAccount.userDesc}
+                                               allowHtml={true}/>
                             }
 
                             {!this.props.hiddenRegions[this.getRegions().USERDEFFIELDS.code] &&
