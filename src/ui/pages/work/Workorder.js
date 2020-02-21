@@ -293,7 +293,9 @@ class Workorder extends Entity {
                                                    entityCode='EVNT'
                                                    entityKeyCode={!this.state.layout.newEntity ? this.state.workorder.number : undefined}
                                                    userDesc={this.props.userData.eamAccount.userDesc}
-                                                   handleError={this.props.handleError}/>
+                                                   handleError={this.props.handleError}
+                                                   allowHtml={true}
+                                                   />
                                 }
 
                                 {!this.props.hiddenRegions[this.getRegions().ACTIVITIES.code] &&

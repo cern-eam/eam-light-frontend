@@ -7,7 +7,7 @@ import WSParts from '../../../tools/WSParts';
 import PartGeneral from "./PartGeneral";
 import UserDefinedFields from "../../components/userdefinedfields/UserDefinedFields";
 import PartStock from "./PartStock";
-import CommentsContainer from 'eam-components/dist/ui/components/comments/CommentsContainer';
+import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import CustomFields from '../../components/customfields/CustomFields';
 import PartWhereUsed from "./PartWhereUsed";
 import Entity from '../Entity';
@@ -163,12 +163,14 @@ class Part extends Entity {
                                 !this.state.layout.newEntity &&
                                 <EDMSDoclightIframeContainer objectType={PART} objectID={this.state.part.code}/>
                                 }
-
                                 {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
-                                <CommentsContainer ref={comments => this.comments = comments}
-                                                   entityCode={PART}
-                                                   entityKeyCode={!this.state.layout.newEntity ? this.state.part.code : undefined}
-                                                   userDesc={this.props.userData.eamAccount.userDesc}/>
+                                    <Comments ref={comments => this.comments = comments}
+                                                    entityCode={PART}
+                                                    entityKeyCode={!this.state.layout.newEntity ? this.state.part.code : undefined}
+                                                    userDesc={this.props.userData.eamAccount.userDesc}
+                                                    handleError={this.props.handleError}
+                                                    allowHtml={true}
+                                    />
                                 }
 
                                 {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
