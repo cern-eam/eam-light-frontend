@@ -206,7 +206,7 @@ export default class readEntityEquipment extends Component {
 
                 // Set new URL (pushState does not trigger componentDidUpdate)
                 window.history.pushState({}, this.settings.entityDesc + ' ' + response.body.data,
-                    this.settings.entityURL + encodeURIComponent(createdEntity[this.settings.entityCodeProperty]));
+                   process.env.PUBLIC_URL + this.settings.entityURL + encodeURIComponent(createdEntity[this.settings.entityCodeProperty]));
 
                 this.props.showNotification(this.settings.entityDesc + ' ' + createdEntity[this.settings.entityCodeProperty] + ' has been successfully created.');
                 // Invoke entity specific logic on the subclass
