@@ -28,6 +28,10 @@ class WSWorkorders {
         return WS._delete('/workorders/' + number, config);
     }
 
+    getStandardWorkOrder(code, config = {}) {
+        return WS._get('/stdworkorders/' + code, config);
+    }
+
     autocompleteWorkorderEquipment(filter, config = {}) {
         filter = encodeURIComponent(filter);
         return WS._get('/autocomplete/wo/eqp?s=' + filter, config);

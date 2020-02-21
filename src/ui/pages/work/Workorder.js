@@ -91,6 +91,7 @@ class Workorder extends Entity {
         this.setStatuses('', '', true)
         this.setTypes('', '', true, false)
         this.enableChildren()
+        this.readStandardWorkOrder();
     }
 
     postCreate() {
@@ -201,6 +202,27 @@ class Workorder extends Entity {
         //Refresh the activities in the checklist
         this.checklists.readActivities(this.state.workorder.number);
     };
+
+    readStandardWorkOrder() {
+        let workorder = this.state.workorder;
+        if (workorder.standardWO) {
+            WSWorkorder.getStandardWorkOrder(this.state.workorder.standardWO).then(response => {
+
+            const mapping = {
+              classCode: "woClassCode",
+              typeCode: "workOrderTypeCode",
+              description: "desc"
+            }
+
+              var standardWOProps = Object.keys(mapping).filter(k => !workorder[k]).reduce((result, k) => {
+                  result[k] = response.body.data[mapping[k]]
+                  return result;
+              }, {})
+
+              //TODO merge standardWOProps
+            })
+        }
+    }
 
     //
     //
