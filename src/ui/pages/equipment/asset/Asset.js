@@ -233,7 +233,9 @@ export default class Asset extends Entity {
                             <EDMSWidget objectID={this.state.equipment.code} objectType="A"
                                                  creationMode="NCR"
                                                  title="NCRs"
-                                                 edmsDocListLink={this.props.applicationData.edmsDocListLink}/>}
+                                                 edmsDocListLink={this.props.applicationData.edmsDocListLink}
+                                                 showError={this.props.showError}
+                                                 showSuccess={this.props.showSuccess}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                             <Comments ref={comments => this.comments = comments}

@@ -10,14 +10,14 @@ import Grid from '@material-ui/core/Grid';
 import PositionGeneral from './PositionGeneral'
 import PositionDetails from './PositionDetails'
 import PositionHierarchy from './PositionHierarchy'
-import Comments from 'eam-components/dist/ui/components/comments/Comments';
-import EDMSWidgetContainer from 'eam-components/dist/ui/components/edms/EDMSWidgetContainer';
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
 import {PositionIcon} from 'eam-components/dist/ui/components/icons'
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import {TOOLBARS} from "../../../components/AbstractToolbar";
+import Comments from 'eam-components/dist/ui/components/comments/Comments';
+import EDMSWidget from 'eam-components/dist/ui/components/edms/EDMSWidget';
 
 export default class Position extends Entity {
 
@@ -215,10 +215,12 @@ export default class Position extends Entity {
 
                             {!this.props.hiddenRegions[this.getRegions().NCRS.code] &&
                             !this.state.layout.newEntity &&
-                            <EDMSWidgetContainer objectID={this.state.equipment.code} objectType="S"
+                            <EDMSWidget objectID={this.state.equipment.code} objectType="S"
                                                  creationMode="NCR"
                                                  title="NCRs"
-                                                 edmsDocListLink={this.props.applicationData.edmsDocListLink}/>}
+                                                 edmsDocListLink={this.props.applicationData.edmsDocListLink}
+                                                 showError={this.props.showError}
+                                                 showSuccess={this.props.showSuccess}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                             <Comments ref={comments => this.comments = comments}
