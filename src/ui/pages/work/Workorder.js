@@ -333,10 +333,11 @@ class Workorder extends Entity {
                                 !this.state.layout.newEntity &&
                                 <Checklists workorder={this.state.workorder.number}
                                             printingChecklistLinkToAIS={this.props.applicationData.EL_PRTCL}
+                                            maxExpandedChecklistItems={Math.abs(parseInt(this.props.applicationData.EL_MCHLS)) || 50}
                                             getWoLink={wo => '/workorder/' + wo}
                                             ref={checklists => this.checklists = checklists}
                                             showSuccess={this.props.showSuccess}
-                                            showError={this.props.showError}/>}
+                                            handleError={this.props.handleError}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
                                   this.props.workOrderLayout.fields.block_5.attribute !== 'H' &&
