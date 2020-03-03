@@ -4,12 +4,16 @@ import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
 import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
 import WSEquipment from "../../../../tools/WSEquipment";
 import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
+import EAMCheckbox from 'eam-components/dist/ui/components/muiinputs/EAMCheckbox';
+import DependencyButton from './DependencyButton'
 
 class AssetHierarchy extends Component {
 
+    
+
     render() {
         let {equipment, children, assetLayout, updateEquipmentProperty} = this.props
-        
+
         return (
             <EISPanel heading="HIERARCHY">
                 <div style={{width: "100%", marginTop: 0}}>
@@ -28,17 +32,26 @@ class AssetHierarchy extends Component {
                         updateProperty={updateEquipmentProperty}
                         valueKey="userDefinedFields.udfchar11"/>
 
-                    <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyAssetCode', value)} right={0} top={20}>
-                        <EAMAutocomplete
-                            children = {children}
-                            elementInfo={assetLayout.fields['parentasset']}
-                            value={equipment.hierarchyAssetCode}
-                            updateProperty={updateEquipmentProperty}
-                            valueKey="hierarchyAssetCode"
-                            valueDesc={equipment.hierarchyAssetDesc}
-                            descKey="hierarchyAssetDesc"
-                            autocompleteHandler={WSEquipment.autocompleteAssetParent}/>
-                    </EAMBarcodeInput>
+                    <DependencyButton right={30} top={20} value={equipment.hierarchyAssetDependent} valueKey='hierarchyAssetDependent' updateProperty={updateEquipmentProperty}>
+                        <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyAssetCode', value)} right={0} top={20}>
+                            <EAMAutocomplete
+                                children = {children}
+                                elementInfo={assetLayout.fields['parentasset']}
+                                value={equipment.hierarchyAssetCode}
+                                updateProperty={updateEquipmentProperty}
+                                valueKey="hierarchyAssetCode"
+                                valueDesc={equipment.hierarchyAssetDesc}
+                                descKey="hierarchyAssetDesc"
+                                autocompleteHandler={WSEquipment.autocompleteAssetParent}/>
+                        </EAMBarcodeInput>
+                    </DependencyButton>
+
+                    <EAMCheckbox 
+                        children = {children}
+                        elementInfo={{...assetLayout.fields['dependentonparentasset'], text: 'Asset dependent'}}
+                        updateProperty={updateEquipmentProperty}
+                        value={equipment.hierarchyAssetDependent}
+                        valueKey="hierarchyAssetDependent"/>
 
                     <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyPositionCode', value)} right={0} top={20}>
                         <EAMAutocomplete
@@ -51,6 +64,13 @@ class AssetHierarchy extends Component {
                             descKey="hierarchyPositionDesc"
                             autocompleteHandler={WSEquipment.autocompletePositionParent}/>
                     </EAMBarcodeInput>
+
+                    <EAMCheckbox 
+                        children = {children}
+                        elementInfo={{...assetLayout.fields['dependentonparentposition'], text: 'Position dependent'}}
+                        updateProperty={updateEquipmentProperty}
+                        value={equipment.hierarchyPositionDependent}
+                        valueKey="hierarchyPositionDependent"/>
 
 
                     <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyPrimarySystemCode', value)} right={0} top={20}>
@@ -65,6 +85,13 @@ class AssetHierarchy extends Component {
                             autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}/>
                     </EAMBarcodeInput>
 
+                    <EAMCheckbox 
+                        children = {children}
+                        elementInfo={{...assetLayout.fields['dependentonparentprimarysystem'], text: 'System dependent'}}
+                        updateProperty={updateEquipmentProperty}
+                        value={equipment.hierarchyPrimarySystemDependent}
+                        valueKey="hierarchyPrimarySystemDependent"/>
+
                     <EAMAutocomplete
                         children = {children}
                         elementInfo={assetLayout.fields['location']}
@@ -74,6 +101,13 @@ class AssetHierarchy extends Component {
                         valueDesc={equipment.hierarchyLocationDesc}
                         descKey="hierarchyLocationDesc"
                         autocompleteHandler={WSEquipment.autocompleteLocation}/>
+
+                    <EAMCheckbox 
+                        children = {children}
+                        elementInfo={{...assetLayout.fields['dependentonparentasset'], text: 'Asset dependent'}}
+                        updateProperty={updateEquipmentProperty}
+                        value={equipment.hierarchyAssetDependent}
+                        valueKey="hierarchyAssetDependent"/>
 
                 </div>
             </EISPanel>

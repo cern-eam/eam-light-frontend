@@ -86,23 +86,24 @@ export default class Asset extends Entity {
 
     preUpdateEntity(equipment) {
         //Check hierarchy
+
         return this.setValuesHierarchy(equipment);
     }
 
     setValuesHierarchy = (equipment) => {
         //If there is parent asset
-        if (equipment.hierarchyAssetCode) {
-            equipment.hierarchyAssetDependent = !equipment.hierarchyAssetDependent ? 'true' : equipment.hierarchyAssetDependent;
-            equipment.hierarchyAssetCostRollUp = !equipment.hierarchyAssetCostRollUp ? 'true' : equipment.hierarchyAssetCostRollUp;
-        } else {
-            equipment.hierarchyAssetDependent = 'false';
-            equipment.hierarchyAssetCostRollUp = 'false';
-        }
+        // if (equipment.hierarchyAssetCode) {
+        //     equipment.hierarchyAssetDependent = equipment.hierarchyAssetDependent === 'false' ? 'true' : equipment.hierarchyAssetDependent;
+        //     equipment.hierarchyAssetCostRollUp = equipment.hierarchyAssetCostRollUp === 'false' ? 'true' : equipment.hierarchyAssetCostRollUp;
+        // } else {
+        //     equipment.hierarchyAssetDependent = 'false';
+        //     equipment.hierarchyAssetCostRollUp = 'false';
+        // }
 
         //Position
         if (equipment.hierarchyPositionCode) {
-            equipment.hierarchyPositionDependent = !equipment.hierarchyPositionDependent ? 'true' : equipment.hierarchyPositionDependent;
-            equipment.hierarchyPositionCostRollUp = !equipment.hierarchyPositionCostRollUp ? 'true' : equipment.hierarchyPositionCostRollUp;
+            equipment.hierarchyPositionDependent = equipment.hierarchyPositionDependent === 'false' ? 'true' : equipment.hierarchyPositionDependent;
+            equipment.hierarchyPositionCostRollUp = equipment.hierarchyPositionCostRollUp === 'false' ? 'true' : equipment.hierarchyPositionCostRollUp;
         } else {
             equipment.hierarchyPositionDependent = 'false';
             equipment.hierarchyPositionCostRollUp = 'false';
@@ -110,8 +111,8 @@ export default class Asset extends Entity {
 
         //If there is primary system
         if (equipment.hierarchyPrimarySystemCode) {
-            equipment.hierarchyPrimarySystemDependent = !equipment.hierarchyPrimarySystemDependent ? 'true' : equipment.hierarchyPrimarySystemDependent;
-            equipment.hierarchyPrimarySystemCostRollUp = !equipment.hierarchyPrimarySystemCostRollUp ? 'true' : equipment.hierarchyPrimarySystemCostRollUp;
+            equipment.hierarchyPrimarySystemDependent = equipment.hierarchyPrimarySystemDependent === 'false' ? 'true' : equipment.hierarchyPrimarySystemDependent;
+            equipment.hierarchyPrimarySystemCostRollUp = equipment.hierarchyPrimarySystemCostRollUp === 'false' ? 'true' : equipment.hierarchyPrimarySystemCostRollUp;
         } else {
             equipment.hierarchyPrimarySystemDependent = 'false';
             equipment.hierarchyPrimarySystemCostRollUp = 'false';
