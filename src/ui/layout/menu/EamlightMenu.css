@@ -43,7 +43,7 @@
   #layout-tab-menu>li>div.active {
     background-color: #282828;
     color: #ffffff;
-    -webkit-box-shadow: inset 2px 0 0 0 #00aaff;
+    -webkit-box-shadow: inset 2px 0 0 0 #00ff40;
     box-shadow: inset 2px 0 0 0 #00aaff;
   }
 

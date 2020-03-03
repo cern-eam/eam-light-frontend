@@ -21,12 +21,22 @@ import {ThemeProvider} from '@material-ui/core/styles';
 import EquipmentRedirect from "./ui/pages/equipment/EquipmentRedirect";
 import MeterReadingContainer from './ui/pages/meter/MeterReadingContainer';
 import EquipmentContainer from "./ui/pages/equipment/EquipmentContainer";
-import {theme} from 'eam-components/dist/ui/components/theme';
+import themes from 'eam-components/dist/ui/components/theme';
 import LoginContainer from "./ui/pages/login/LoginContainer";
 import Grid from "./ui/pages/grid/Grid";
+import  colorConfig  from './ThemesConfig';
 import JMTIntegrationContainer from "./ui/components/jmt/JMTIntegrationContainer";
+import { createMuiTheme } from '@material-ui/core/styles';
+
+const environmentColor = (environment) =>{
+       let theme = getTheme(colorConfig[environment] || colorConfig.DEFAULT);
+       return createMuiTheme(theme);
+    }
+
+const getTheme = (themeName) => themes[themeName];
 
 class Eamlight extends Component {
+    
 
     blockUiStyle = {
         height: "100%",
@@ -49,7 +59,7 @@ class Eamlight extends Component {
         }
 
         // User data still not there, display loading page
-        if (!this.props.userData) {
+        if (!this.props.userData || !this.props.applicationData) {
             this.props.initializeApplication();
             return (
                 <BlockUi tag="div" blocking={true} style={this.blockUiStyle}>
@@ -57,6 +67,9 @@ class Eamlight extends Component {
                 </BlockUi>
             )
         }
+        
+        const selectedTheme = environmentColor(this.props.applicationData.EL_ENVIR);
+        console.log(this.props.applicationData.EL_ENVIR);
 
         // User has no valid EAM account
         if (this.props.userData.invalidAccount) {
@@ -69,7 +82,7 @@ class Eamlight extends Component {
         // Render real application once user data is there and user has an EAM account
         return (
             <Router basename={process.env.PUBLIC_URL}>
-                <ThemeProvider theme={theme}>
+                <ThemeProvider theme={selectedTheme}>
                     <Switch>
                     <Route path="/impact"
                            component={ImpactContainer}/>

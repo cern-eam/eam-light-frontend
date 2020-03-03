@@ -7,13 +7,28 @@ import Menu from 'mdi-material-ui/Menu'
 import './ApplicationLayout.css'
 import UserInfoContainer from './UserInfoContainer'
 import {FileTree, FormatHorizontalAlignLeft, FormatHorizontalAlignRight} from 'mdi-material-ui';
+import {withStyles} from "@material-ui/core/styles/index";
 
-export default function ApplicationLayout(props) {
+const styles = theme => ({
+    layoutTopbarCover: {
+        width: '100%',
+        display: 'table',
+        boxSizing: 'border-box',
+        position: 'fixed',
+        tableLayout: 'fixed',
+        top: '0px',
+        zIndex: 999,
+        height: '40px',
+        backgroundColor: theme.palette.primary.main
+    }
+});
+
+function ApplicationLayout(props) {
     const [menuCompacted, setMenuCompacted] = useState(true)
     const [mobileMenuActive, setMobileMenuActive] = useState(false)
-    const dispatch = useDispatch();
     const showEqpTree = useSelector(state => state.ui.layout.showEqpTree)
     const showEqpTreeButton = useSelector(state => state.ui.layout.showEqpTreeButton)
+    const {classes} = props;
 
     const headerLinkStyle = {
         color: "white",
@@ -30,7 +45,7 @@ export default function ApplicationLayout(props) {
 
     return (
         <div id="maindiv" className={(menuCompacted) ? '' : 'SlimMenu'} onClick={() => menuCompacted && mobileMenuActive && setMobileMenuActive(false)}>
-            <div id="layout-topbar-cover">
+            <div className={classes.layoutTopbarCover}>
                 <div id="layout-topbar-row">
                     <div id="layout-topbar-left">
                         <Link style={headerLinkStyle} to="/">EAM Light</Link>
@@ -54,7 +69,7 @@ export default function ApplicationLayout(props) {
                         {showEqpTreeButton &&
                         <div id="eqp-tree-btn">
                             <div style={{borderLeft: "1px solid rgba(255, 255, 255, 0.8)", height: 22}}/>
-                            <IconButton onClick={() => dispatch(setLayoutProperty('showEqpTree', !showEqpTree))}>
+                            <IconButton onClick={() => this.dispatch(setLayoutProperty('showEqpTree', !showEqpTree))}>
                                 <FileTree style={menuIconStyle}/>
                             </IconButton>
                         </div>}
@@ -81,3 +96,5 @@ export default function ApplicationLayout(props) {
 
     )
 }
+
+export default withStyles(styles)(ApplicationLayout)
