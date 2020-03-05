@@ -97,6 +97,8 @@ class EAMTree extends Component {
             return 'position';
         case 'S':
             return 'system';
+        case 'L':
+            return 'location';
     }
   }
 
@@ -134,7 +136,7 @@ class EAMTree extends Component {
                 return {
                   isNodeSelected: this._isNodeSelected,
                   onClick: (event) => {
-                    if (event.target.className === `rowTitle` && (rowInfo.node.type === 'A' || rowInfo.node.type === 'P' || rowInfo.node.type === 'S')) {
+                    if (event.target.className === `rowTitle` && ["A", "P", "S", "L"].includes(rowInfo.node.type)) {
                       if (this.props.history) {
                           this.props.history.push("/" + this._getURLForType(rowInfo.node.type) + `/${rowInfo.node.id}`);
                       }
