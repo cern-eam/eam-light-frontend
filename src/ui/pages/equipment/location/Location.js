@@ -34,8 +34,7 @@ export default class Location extends Entity {
     }
 
     postInit() {
-        this.setStatuses(true)
-        this.props.setLayoutProperty("showEqpTreeButton", false)
+        this.props.setLayoutProperty('showEqpTreeButton', false)
     }
 
     postCreate() {
