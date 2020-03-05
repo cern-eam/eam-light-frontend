@@ -8,6 +8,7 @@ import PartSearchContainer from './ui/pages/part/search/PartSearchContainer';
 import AssetSearchContainer from './ui/pages/equipment/asset/search/AssetSearchContainer';
 import PositionSearchContainer from './ui/pages/equipment/position/search/PositionSearchContainer';
 import SystemSearchContainer from './ui/pages/equipment/system/search/SystemSearchContainer';
+import LocationSearchContainer from './ui/pages/equipment/location/search/LocationSearchContainer';
 import BlockUi from 'react-block-ui';
 import InfoPage from './ui/components/infopage/InfoPage';
 import ImpactContainer from './ui/components/impact/ImpactContainer';
@@ -101,6 +102,9 @@ class Eamlight extends Component {
 
                                 <Route path="/systemsearch"
                                        component={SystemSearchContainer}/>
+
+                                <Route path="/locationsearch"
+                                       component={LocationSearchContainer}/>
 
                                 <Route path="/equipment/:code?"
                                        component={EquipmentRedirect}/>
