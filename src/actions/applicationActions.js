@@ -28,6 +28,7 @@ export function getUserInfo() {
                         systemLayout: values[3] ? values[3].body.data : null,
                         partLayout: values[4] ? values[4].body.data : null,
                         workOrderLayout: values[5] ? values[5].body.data : null,
+                        locationLayout: values[6] ? values[6].body.data : null
                     }))
                 })
             })
@@ -74,6 +75,10 @@ export function updatePartScreenLayout(screenCode) {
     return updateScreenLayout('PART', 'part', 'SSPART', screenCode,['EPA']);
 }
 
+export function updateLocationScreenLayout(screenCode) {
+    return updateScreenLayout('OBJ', 'location', 'OSOBJL', screenCode, ['PAS'])
+}
+
 
 /**
  * Create promise array with layout information for main screens
@@ -116,11 +121,21 @@ function createPromiseArray(userdata) {
             ['ACT', 'BOO', 'PAR', 'ACK', 'MEC', 'CWO'])
     }
 
+     //
+     let locationScreenPromise = Promise.resolve(false);
+     if (userdata.locationScreen) {
+        locationScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup,'LOC', "OSOBJL",
+             userdata.locationScreen,
+             ['PAS'])
+     }
+
     return [applicationDataPromise,
         assetScreenPromise,
         positionScreenPromise,
         systemScreenPromise,
         partScreenPromise,
-        woScreenPromise]
+        woScreenPromise,
+        locationScreenPromise
+    ]
 }
 

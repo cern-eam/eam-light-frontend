@@ -64,7 +64,7 @@ class Eamlight extends Component {
                              message="You don't have valid EAM account. "/>
         }
 
-        var eqpRegex = ["/asset/:code(.+)?", "/position/:code(.+)?", "/system/:code(.+)?"]
+        const eqpRegex = ["/asset", "/position", "/system", "/location"].map(e => `${e}/:code(.+)?`)
 
         // Render real application once user data is there and user has an EAM account
         return (
@@ -117,7 +117,7 @@ class Eamlight extends Component {
                                 <Route path={eqpRegex}
                                        component={EquipmentContainer}/>
                         </div>
-                    </ApplicationLayout>∂
+                    </ApplicationLayout>
                     </Switch>
                 </ThemeProvider>
             </Router>
