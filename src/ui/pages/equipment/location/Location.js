@@ -34,7 +34,7 @@ export default class Location extends Entity {
     }
 
     postInit() {
-        this.props.setLayoutProperty('showEqpTreeButton', false)
+        this.props.setLayoutProperty("showEqpTreeButton", false)
     }
 
     postCreate() {
@@ -60,6 +60,7 @@ export default class Location extends Entity {
             WORKORDERS: {label: "Work Orders", code: user + "_" + screen+ "_WORKORDERS"},
             HISTORY: {label: "History", code: user + "_" + screen+ "_HISTORY"},
             EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen+ "_EDMSDOCS"},
+            NCRS: {label: "NCRs", code: user + "_" + screen+ "_NCRS"},
             COMMENTS: {label: "Comments", code: user + "_" + screen+ "_COMMENTS"},
             USERDEFFIELDS: {label: "User Defined Fields", code: user + "_" + screen+ "_USERDEFFIELDS"},
             CUSTOMFIELDS: {label: "Custom Fields", code: user + "_" + screen+ "_CUSTOMFIELDS"}
@@ -140,6 +141,15 @@ export default class Location extends Entity {
                             !this.state.layout.newEntity &&
                             <EDMSDoclightIframeContainer objectType="L" objectID={this.state.location.code}/>
                             }
+
+                            {!this.props.hiddenRegions[this.getRegions().NCRS.code] &&
+                            !this.state.layout.newEntity &&
+                            <EDMSWidget objectID={this.state.location.code} objectType="L"
+                                                 creationMode="NCR"
+                                                 title="NCRs"
+                                                 edmsDocListLink={this.props.applicationData.edmsDocListLink}
+                                                 showError={this.props.showError}
+                                                 showSuccess={this.props.showSuccess}/>}
 
                             {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
                             <Comments ref={comments => this.comments = comments}
