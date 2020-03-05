@@ -52,11 +52,15 @@ class AssetHierarchy extends Component {
                     .findIndex(value => value && value !== false.toString())
                 //index of edited hierarchy field
                 let indexAfter = Object.keys(hierarchyMap).findIndex(prop => prop === key)
-
+                
                 if (indexAfter > indexExistant) {
-                    updateEquipmentProperty(hierarchyMap[key], value ? true.toString(): false.toString())
+                    if(indexExistant !== -1){
+                        Object.values(hierarchyMap).forEach(hierarchyProp => {
+                            updateEquipmentProperty(hierarchyProp, false.toString());
+                        })
+                    }
+                    updateEquipmentProperty(hierarchyMap[key], true.toString())
                 }
-
             }else{
                 updateEquipmentProperty(hierarchyMap[key], false.toString());
             }
@@ -143,7 +147,7 @@ class AssetHierarchy extends Component {
                             children = {children}
                             elementInfo={assetLayout.fields['primarysystem']}
                             value={equipment.hierarchyPrimarySystemCode}
-                            updateProperty={(key, value) => this.updateDependencyProperty(key,value)}
+                            updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
                             valueKey="hierarchyPrimarySystemCode"
                             valueDesc={equipment.hierarchyPrimarySystemDesc}
                             descKey="hierarchyPrimarySystemDesc"
