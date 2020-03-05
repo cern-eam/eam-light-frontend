@@ -15,6 +15,7 @@ import {AssetIcon, PartIcon, PositionIcon, SystemIcon, WorkorderIcon} from 'eam-
 import {Account, AccountMultiple, Settings, Tune, DatabaseRefresh} from "mdi-material-ui"
 import ScreenChange from "./ScreenChange";
 import MenuTools from './MenuTools'
+import RoomIcon from '@material-ui/icons/Room';
 
 const getScreenHeaderFunction = (screens = {}) => ({ screenName, screen, updateScreenLayout }) =>
     <ScreenChange
@@ -72,8 +73,8 @@ class EamlightMenu extends Component {
 
   
         const { myOpenWorkOrders, myTeamWorkOrders, userData, showNotification, showError, updateWorkOrderScreenLayout, 
-            updateAssetScreenLayout, updatePositionScreenLayout, updateSystemScreenLayout, updatePartScreenLayout } = this.props;
-        const { workOrderScreen, assetScreen, positionScreen, systemScreen, partScreen, eamAccount, screens } = userData;
+            updateAssetScreenLayout, updatePositionScreenLayout, updateSystemScreenLayout, updatePartScreenLayout, updateLocationScreenLayout } = this.props;
+        const { workOrderScreen, assetScreen, positionScreen, systemScreen, partScreen, locationScreen, eamAccount, screens } = userData;
         
         const currentPartScreen = screens[partScreen] || {};
         const currentWorkOrderScreen = screens[workOrderScreen] || {};
@@ -98,6 +99,11 @@ class EamlightMenu extends Component {
                 screenName: 'OSOBJS',
                 updateScreenLayout: updateSystemScreenLayout,
                 screen: systemScreen
+            },
+            location: {
+                screenName: 'OSOBJL',
+                updateScreenLayout: updateLocationScreenLayout,
+                screen: locationScreen
             },
             part: {
                 screenName: 'SSPART',
@@ -145,7 +151,7 @@ class EamlightMenu extends Component {
                         </li>
                         }
 
-                        {(assetScreen || positionScreen || systemScreen) &&
+                        {(assetScreen || positionScreen || systemScreen || locationScreen) &&
                         <li>
                             <div rel="equipment" onClick={this.mainMenuClickHandler}>
                                 <Tooltip title="EQUIPMENT" placement="right">
@@ -222,6 +228,12 @@ class EamlightMenu extends Component {
                                   onClick={this.openSubMenu.bind(this, 'systems')}/>
                         }
 
+                        { locationScreen &&
+                        <MenuItem label="Locations"
+                                  icon={<RoomIcon style={menuIconStyle}/>}
+                                  onClick={this.openSubMenu.bind(this, 'locations')}/>
+                        }
+
                         {assetScreen && screens[assetScreen].updateAllowed &&
                         <MenuItem label="Replace Equipment"
                                   icon={<AutorenewIcon style={menuIconStyle}/>}
@@ -286,6 +298,21 @@ class EamlightMenu extends Component {
                         <MenuItem label={"Search " + screens[systemScreen].screenDesc}
                                   icon={<SearchIcon style={menuIconStyle}/>}
                                   link="systemsearch"/>
+                        }
+
+                        <MenuItem label="Back to Equipment"
+                                  icon={<ArrowBackIcon style={menuIconStyle}/>}
+                                  onClick={this.openSubMenu.bind(this, 'equipment')}/>
+                    </EamlightSubmenu>
+                    }
+
+                    {locationScreen &&
+                    <EamlightSubmenu id="locations" header={getScreenHeader(screenProps.location)}>
+
+                        {this.readAllowed(screens, locationScreen) &&
+                        <MenuItem label={"Search " + screens[locationScreen].screenDesc}
+                                  icon={<SearchIcon style={menuIconStyle}/>}
+                                  link="locationsearch"/>
                         }
 
                         <MenuItem label="Back to Equipment"

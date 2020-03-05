@@ -61,6 +61,9 @@ class EquipmentRedirect extends Component {
                     case 'S':
                         this.props.history.replace(`/system/${code}`);
                         break;
+                    case 'L':
+                        this.props.history.replace(`/location/${code}`);
+                        break;
                     default: /*Not supported*/
                         this.setState(() => ({
                             isLoading: false,
