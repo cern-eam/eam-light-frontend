@@ -47,6 +47,11 @@ class WSWorkorders {
         return WS._get('/autocomplete/wo/costcode/' + filter, config);
     };
 
+    autocompleteStandardWorkOrder = (userGroup, filter, config = {}) => {
+        filter = encodeURIComponent(filter);
+        return WS._get(`/autocomplete/standardworkorder?userGroup=${encodeURIComponent(userGroup)}&s=${filter}`, config);
+    };
+
     //
     // DROP DOWN VALUES FOR WOS
     //
