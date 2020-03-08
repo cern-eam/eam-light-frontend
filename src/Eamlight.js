@@ -8,6 +8,7 @@ import PartSearchContainer from './ui/pages/part/search/PartSearchContainer';
 import AssetSearchContainer from './ui/pages/equipment/asset/search/AssetSearchContainer';
 import PositionSearchContainer from './ui/pages/equipment/position/search/PositionSearchContainer';
 import SystemSearchContainer from './ui/pages/equipment/system/search/SystemSearchContainer';
+import LocationSearchContainer from './ui/pages/equipment/location/search/LocationSearchContainer';
 import BlockUi from 'react-block-ui';
 import InfoPage from './ui/components/infopage/InfoPage';
 import ImpactContainer from './ui/components/impact/ImpactContainer';
@@ -64,7 +65,7 @@ class Eamlight extends Component {
                              message="You don't have valid EAM account. "/>
         }
 
-        var eqpRegex = ["/asset/:code(.+)?", "/position/:code(.+)?", "/system/:code(.+)?"]
+        const eqpRegex = ["/asset", "/position", "/system", "/location"].map(e => `${e}/:code(.+)?`)
 
         // Render real application once user data is there and user has an EAM account
         return (
@@ -102,6 +103,9 @@ class Eamlight extends Component {
                                 <Route path="/systemsearch"
                                        component={SystemSearchContainer}/>
 
+                                <Route path="/locationsearch"
+                                       component={LocationSearchContainer}/>
+
                                 <Route path="/equipment/:code?"
                                        component={EquipmentRedirect}/>
 
@@ -117,7 +121,7 @@ class Eamlight extends Component {
                                 <Route path={eqpRegex}
                                        component={EquipmentContainer}/>
                         </div>
-                    </ApplicationLayout>∂
+                    </ApplicationLayout>
                     </Switch>
                 </ThemeProvider>
             </Router>

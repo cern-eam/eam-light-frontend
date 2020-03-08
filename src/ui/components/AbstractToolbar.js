@@ -1,12 +1,14 @@
 import EquipmentToolbar from "../pages/equipment/components/EquipmentToolbar";
 import WorkorderToolbar from "../pages/work/WorkorderToolbar";
 import PartToolbar from "../pages/part/PartToolbar";
+import LocationToolbar from "../pages/equipment/location/components/LocationToolbar";
 import React from 'react';
 
 export const TOOLBARS = {
     WORKORDER: 'WORKORDER',
     EQUIPMENT: 'EQUIPMENT',
-    PART: 'PART'
+    PART: 'PART',
+    LOCATION: 'LOCATION'
 }
 
 class AbstractToolbar extends React.Component {
@@ -14,7 +16,8 @@ class AbstractToolbar extends React.Component {
     toolbarComponents = {
         [TOOLBARS.WORKORDER]: WorkorderToolbar,
         [TOOLBARS.EQUIPMENT]: EquipmentToolbar,
-        [TOOLBARS.PART]: PartToolbar
+        [TOOLBARS.PART]: PartToolbar,
+        [TOOLBARS.LOCATION]: LocationToolbar
     }
 
     render() {

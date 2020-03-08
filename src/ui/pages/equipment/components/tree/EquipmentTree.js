@@ -22,7 +22,6 @@ class EquipmentTree extends Component {
     }
 
     render() {
-
         return (
 
             <div style={{height: "100%"}}>

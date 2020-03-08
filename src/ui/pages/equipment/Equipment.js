@@ -4,6 +4,7 @@ import EquipmentTree from './components/tree/EquipmentTree'
 import PositionContainer from "./position/PositionContainer";
 import AssetContainer from "./asset/AssetContainer";
 import SystemContainer from "./system/SystemContainer";
+import LocationContainer from "./location/LocationContainer";
 import Split from 'split.js'
 
 class Equipment extends Component {
@@ -46,13 +47,12 @@ class Equipment extends Component {
     }
 
     render() {
-
         return (
             <div className="entityContainer">
 
                 <div style={this.mainDivStyle()} ref={tree => this.tree = tree}>
-                    {this.props.eqp &&
-                        <EquipmentTree equipment={this.props.eqp}
+                    {
+                        <EquipmentTree equipment={{ code: this.props.match.params.code }}
                                        history={this.props.history}
                         />
                     }
@@ -66,6 +66,8 @@ class Equipment extends Component {
                                    component={PositionContainer}/>
                             <Route path={"/system/:code(.+)?"}
                                    component={SystemContainer}/>
+                            <Route path={"/location/:code(.+)?"}
+                                   component={LocationContainer}/>
                         </Switch>
                     </div>
 
