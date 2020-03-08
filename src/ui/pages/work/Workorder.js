@@ -203,10 +203,9 @@ class Workorder extends Entity {
         this.checklists.readActivities(this.state.workorder.number);
     };
 
-    readStandardWorkOrder() {
-        let workorder = this.state.workorder;
-        if (workorder.standardWO) {
-            WSWorkorder.getStandardWorkOrder(this.state.workorder.standardWO).then(response => {
+    readStandardWorkOrder(standardWorkOrder) {
+        if (standardWorkOrder) {
+            WSWorkorder.getStandardWorkOrder(standardWorkOrder).then(response => {
 
             const mapping = {
               classCode: "woClassCode",
@@ -214,12 +213,17 @@ class Workorder extends Entity {
               description: "desc"
             }
 
-              var standardWOProps = Object.keys(mapping).filter(k => !workorder[k]).reduce((result, k) => {
+              var standardWOProps = Object.keys(mapping).filter(k => !this.state.workorder[k]).reduce((result, k) => {
                   result[k] = response.body.data[mapping[k]]
                   return result;
               }, {})
 
-              //TODO merge standardWOProps
+            const workorder = {
+                ...this.state.workorder,
+                ...standardWOProps
+            }
+
+            this.setState({workorder})
             })
         }
     }
@@ -235,7 +239,8 @@ class Workorder extends Entity {
             layout: this.state.layout,
             workOrderLayout: this.props.workOrderLayout,
             children: this.children,
-            setWOEquipment: this.setWOEquipment
+            setWOEquipment: this.setWOEquipment,
+            userData: this.props.userData
         };
 
         return (
@@ -271,8 +276,7 @@ class Workorder extends Entity {
                         <Grid container spacing={1}>
                             <Grid item md={6} sm={12} xs={12}>
 
-                                <WorkorderDetails {...props} applicationData={this.props.applicationData}/>
-
+                                <WorkorderDetails {...props} readStandardWorkOrder={this.readStandardWorkOrder.bind(this)} applicationData={this.props.applicationData}/>
 
                                 {!this.props.hiddenRegions[this.getRegions().SCHEDULING.code] &&
                                 WorkorderTools.isRegionAvailable('SCHEDULING', props.workOrderLayout) &&
