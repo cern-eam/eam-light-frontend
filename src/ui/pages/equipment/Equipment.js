@@ -47,12 +47,13 @@ class Equipment extends Component {
     }
 
     render() {
+        const equipmentCode = this.props.eqp && this.props.eqp.code || this.props.match.params.code;
         return (
             <div className="entityContainer">
 
                 <div style={this.mainDivStyle()} ref={tree => this.tree = tree}>
-                    {
-                        <EquipmentTree equipment={{ code: this.props.match.params.code }}
+                    {equipmentCode &&
+                        <EquipmentTree equipmentCode={equipmentCode}
                                        history={this.props.history}
                         />
                     }
