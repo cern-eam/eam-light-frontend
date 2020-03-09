@@ -29,7 +29,7 @@ class EquipmentTree extends Component {
                     <div>Equipment Tree</div>
                 </div>
                 <div style={this.treeDivStyle}>
-                    <EAMTree code={this.props.equipment.code}
+                    <EAMTree code={this.props.equipmentCode}
                              history={this.props.history}/>
                 </div>
             </div>
