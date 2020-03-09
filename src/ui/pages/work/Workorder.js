@@ -34,16 +34,6 @@ class Workorder extends Entity {
         this.props.setLayoutProperty('showEqpTreeButton', false);
     }
 
-    //
-    // MAPPING BETWEEN ENTITY KEYS AND LAYOUT ID
-    //
-    layoutPropertiesMap = {
-        workorderstatus: "statusCode",
-        department: "departmentCode",
-        udfchar01: "userDefinedFields.udfchar01",
-        udfchar02: "userDefinedFields.udfchar02"
-        //TODO to be further extended
-    }
 
     //
     // SETTINGS OBJECT USED BY ENTITY CLASS
@@ -62,7 +52,7 @@ class Workorder extends Entity {
         deleteEntity: WSWorkorder.deleteWorkOrder.bind(WSWorkorder),
         initNewEntity: () => WSWorkorder.initWorkOrder("EVNT", this.props.location.search),
         layout: this.props.workOrderLayout,
-        layoutPropertiesMap: this.layoutPropertiesMap
+        layoutPropertiesMap: WorkorderTools.layoutPropertiesMap
     }
 
 
@@ -91,7 +81,6 @@ class Workorder extends Entity {
         this.setStatuses('', '', true)
         this.setTypes('', '', true, false)
         this.enableChildren()
-        this.readStandardWorkOrder();
     }
 
     postCreate() {
@@ -205,7 +194,12 @@ class Workorder extends Entity {
 
     readStandardWorkOrder(standardWorkOrder) {
         if (standardWorkOrder) {
+            //TODO support standard work order change
+            /*
             WSWorkorder.getStandardWorkOrder(standardWorkOrder).then(response => {
+
+            let workorder = this.state.workorder;
+            let standardWorkorder = response.body.data
 
             const mapping = {
               classCode: "woClassCode",
@@ -213,18 +207,33 @@ class Workorder extends Entity {
               description: "desc"
             }
 
-              var standardWOProps = Object.keys(mapping).filter(k => !this.state.workorder[k]).reduce((result, k) => {
-                  result[k] = response.body.data[mapping[k]]
+            const standardWOProps = Object.keys(mapping).filter(k => !workorder[k]).reduce((result, k) => {
+                  result[k] = standardWorkorder[mapping[k]]
                   return result;
-              }, {})
+            }, {})
 
-            const workorder = {
-                ...this.state.workorder,
-                ...standardWOProps
+            const userDefinedFields = Object.keys(workorder.userDefinedFields).reduce((result, udf) => {
+                result[udf] = workorder.userDefinedFields[udf] ? workorder.userDefinedFields[udf] : standardWorkorder.userDefinedFields[udf]
+                return result;
+            }, {})
+
+            const customField = workorder.customField.map(cf => {
+                if (!cf.value) {
+                    cf.value = standardWorkorder.customField.find(scf => scf.code = cf.code).value
+                }
+                return cf;
+            })
+
+            const newWorkorder = {
+                ...workorder,
+                ...standardWOProps,
+                customField,
+                userDefinedFields
             }
 
-            this.setState({workorder})
+            this.setState({workorder: newWorkorder})
             })
+            */
         }
     }
 
