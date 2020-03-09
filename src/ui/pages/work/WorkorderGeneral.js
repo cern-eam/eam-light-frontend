@@ -112,15 +112,15 @@ function WorkorderDetails(props) {
                                  updateProperty={updateWorkorderProperty}
                                  autocompleteHandler={(filter, config) => WS.autocompleteClass('EVNT', filter, config)}/>
 
-                <EAMAutocomplete children={children}
-                                 elementInfo={workOrderLayout.fields['standardwo']}
-                                 value={workorder.standardWO}
-                                 valueKey="standardWO"
-                                 valueDesc={workorder.standardWODesc}
-                                 descKey="standardWODesc"
-                                 updateProperty={updateWorkorderProperty}
-                                 onChangeValue={props.readStandardWorkOrder}
-                                 autocompleteHandler={WSWorkorders.autocompleteStandardWorkOrder.bind(null, userData.eamAccount.userGroup)}/>
+                {/*<EAMAutocomplete children={children}*/}
+                                 {/*elementInfo={workOrderLayout.fields['standardwo']}*/}
+                                 {/*value={workorder.standardWO}*/}
+                                 {/*valueKey="standardWO"*/}
+                                 {/*valueDesc={workorder.standardWODesc}*/}
+                                 {/*descKey="standardWODesc"*/}
+                                 {/*updateProperty={updateWorkorderProperty}*/}
+                                 {/*onChangeValue={props.readStandardWorkOrder}*/}
+                                 {/*autocompleteHandler={WSWorkorders.autocompleteStandardWorkOrder.bind(null, userData.eamAccount.userGroup)}/>*/}
 
                 <EAMInput
                         elementInfo={{...workOrderLayout.fields['parentwo'], readonly: true}}
