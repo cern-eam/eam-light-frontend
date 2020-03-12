@@ -62,6 +62,13 @@ class AssetGeneral extends Component {
                         values={layout.statusValues}
                         updateProperty={updateEquipmentProperty}
                         valueKey="statusCode"/>
+                    
+                    <EAMInput
+                        children={children}
+                        elementInfo={assetLayout.fields['state']}
+                        value={equipment.stateCode}
+                        updateProperty={updateEquipmentProperty}
+                        valueKey="stateCode"/>
 
                 </div>
             </EISPanel>
