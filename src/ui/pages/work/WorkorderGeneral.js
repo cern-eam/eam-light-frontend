@@ -85,6 +85,8 @@ function WorkorderDetails(props) {
                     valueKey="typeCode"
                     values={layout.typeValues}
                     value={workorder.typeCode}
+                    renderSuggestion={suggestion => suggestion.desc}
+                    renderValue={value => value.desc || value.code}
                     updateProperty={updateWorkorderProperty}/>
 
                 <EAMSelect
@@ -93,6 +95,8 @@ function WorkorderDetails(props) {
                     valueKey="statusCode"
                     values={layout.statusValues}
                     value={workorder.statusCode}
+                    renderSuggestion={suggestion => suggestion.desc}
+                    renderValue={value => value.desc || value.code}
                     updateProperty={updateWorkorderProperty}/>
 
                 <EAMSelect
