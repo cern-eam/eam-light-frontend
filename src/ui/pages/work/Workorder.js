@@ -327,7 +327,7 @@ class Workorder extends Entity {
                                 <Comments ref={comments => this.comments = comments}
                                                    entityCode='EVNT'
                                                    entityKeyCode={!this.state.layout.newEntity ? this.state.workorder.number : undefined}
-                                                   userDesc={this.props.userData.eamAccount.userDesc}
+                                                   userCode={this.props.userData.eamAccount.userCode}
                                                    handleError={this.props.handleError}
                                                    allowHtml={true}
                                                    />

@@ -145,7 +145,7 @@ export default class Location extends Entity {
                             <Comments ref={comments => this.comments = comments}
                                                entityCode="LOC"
                                                entityKeyCode={!this.state.layout.newEntity ? this.state.location.code : undefined}
-                                               userDesc={this.props.userData.eamAccount.userDesc}
+                                               userCode={this.props.userData.eamAccount.userCode}
                                                allowHtml={true}/>
                             }
 
