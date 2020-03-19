@@ -167,7 +167,7 @@ class Part extends Entity {
                                     <Comments ref={comments => this.comments = comments}
                                                     entityCode={PART}
                                                     entityKeyCode={!this.state.layout.newEntity ? this.state.part.code : undefined}
-                                                    userDesc={this.props.userData.eamAccount.userDesc}
+                                                    userCode={this.props.userData.eamAccount.userCode}
                                                     handleError={this.props.handleError}
                                                     allowHtml={true}
                                     />
