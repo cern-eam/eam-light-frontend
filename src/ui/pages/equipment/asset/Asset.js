@@ -252,7 +252,7 @@ export default class Asset extends Entity {
                             <Comments ref={comments => this.comments = comments}
                                                entityCode='OBJ'
                                                entityKeyCode={!this.state.layout.newEntity ? this.state.equipment.code : undefined}
-                                               userDesc={this.props.userData.eamAccount.userDesc}
+                                               userCode={this.props.userData.eamAccount.userCode}
                                                allowHtml={true}/>
                             }
 
