@@ -13,7 +13,6 @@ import EAMDatePicker from "eam-components/dist/ui/components/muiinputs/EAMDatePi
 import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
 import KeyCode from "../../../../../enums/KeyCode";
 
-
 /**
  * Display detail of an activity
  */
@@ -35,47 +34,20 @@ export default class AddActivityDialog extends Component {
         }
     }
 
-    getDepartment() {
-        if (!this.props.user.eamAccount.userDepartments && this.props.user.eamAccount.userDepartments.length > 0) {
-            return this.props.user.eamAccount.userDepartments[0];
-        } else if (this.props.department) {
-            return this.props.department;
-        } else {
-            return '*';
-        }
-    }
-
     init = (props) => {
-        WSWorkorders.initBookingLabour(props.workorderNumber, this.getDepartment())
-            .then(response => {
-                
-                // if only one activity set the select to
-                // this activity
-                if(props.activities.length === 1) {
-                    this.setState({
-                        formValues: {
-                            ...response.body.data,
-                            employeeCode: this.props.defaultEmployee,
-                            activityCode: '5'
-                        },
-                        loading: false
-                    });
-                } else {
-                    this.setState({
-                        formValues: {
-                            ...response.body.data,
-                            employeeCode: this.props.defaultEmployee,
-                        },
-                        loading: false
-                    });
-                }
-
-            })
-            .catch(error => {
-                this.setState({
-                    loading: false
-                });
-            });
+        this.setState({
+            formValues: {
+                workOrderNumber: this.props.workorderNumber,
+                departmentCode: this.props.department,
+                departmentDesc: this.props.departmentDesc,
+                employeeCode: this.props.defaultEmployee,
+                employeeDesc: this.props.defaultEmployeeDesc,
+                activityCode: props.activities.length === 1 ? '5' : null,
+                typeOfHours: 'N',
+                dateWorked: new Date()
+            },
+            loading: false
+        });
 
         WSWorkorders.getTypesOfHours().then(response => {
             this.setState({typesOfHour: response.body.data});

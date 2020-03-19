@@ -18,12 +18,14 @@ import EamlightToolbar from './../../../components/EamlightToolbar';
 import AssetDetails from './AssetDetails';
 import AssetGeneral from './AssetGeneral';
 import AssetHierarchy from './AssetHierarchy';
+import EquipmentTools from "../EquipmentTools";
 
 export default class Asset extends Entity {
 
     constructor(props) {
         super(props)
-        this.setCriticalities()
+        this.setCriticalityValues()
+        this.setStateValues();
         this.state = {
             ...this.state
         }
@@ -40,7 +42,9 @@ export default class Asset extends Entity {
         updateEntity: WSEquipment.updateEquipment.bind(WSEquipment),
         createEntity: WSEquipment.createEquipment.bind(WSEquipment),
         deleteEntity: WSEquipment.deleteEquipment.bind(WSEquipment),
-        initNewEntity: () => WSEquipment.initEquipment("OBJ", "A", this.props.location.search)
+        initNewEntity: () => WSEquipment.initEquipment("OBJ", "A", this.props.location.search),
+        layout: this.props.assetLayout,
+        layoutPropertiesMap: EquipmentTools.assetLayoutPropertiesMap
     }
 
     postInit() {
@@ -72,10 +76,17 @@ export default class Asset extends Entity {
             })
     }
 
-    setCriticalities() {
+    setCriticalityValues() {
         WSEquipment.getEquipmentCriticalityValues()
             .then(response => {
                 this.setLayout({criticalityValues: response.body.data})
+            })
+    }
+
+    setStateValues() {
+        WSEquipment.getEquipmentStateValues()
+            .then(response => {
+                this.setLayout({stateValues: response.body.data})
             })
     }
 

@@ -347,6 +347,8 @@ export default class readEntityEquipment extends Component {
         }, {})
         delete queryValues.undefined;
 
+        console.log(layout.fields.state, layoutPropertiesMap)
+
         return {
             ...entity,
             ...defaultValues,
