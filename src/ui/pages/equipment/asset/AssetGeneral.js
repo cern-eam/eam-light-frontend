@@ -63,10 +63,11 @@ class AssetGeneral extends Component {
                         updateProperty={updateEquipmentProperty}
                         valueKey="statusCode"/>
                     
-                    <EAMInput
+                    <EAMSelect
                         children={children}
                         elementInfo={assetLayout.fields['state']}
                         value={equipment.stateCode}
+                        values={layout.stateValues}
                         updateProperty={updateEquipmentProperty}
                         valueKey="stateCode"/>
 

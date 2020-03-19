@@ -64,7 +64,7 @@ class PartUsageDialog extends Component {
         this.setLoading(true);
         Promise.all([WSWorkorders.getPartUsageStores(),
             WSWorkorders.getWorkOrderActivities(workorder.number)]).then(responses => {
-            this.setState(() => ({storeList: this.transformStores(responses[0].body.data)}));
+            this.setState(() => ({storeList: responses[0].body.data}));
             this.setState(() => ({activityList: this.transformActivities(responses[1].body.data)}));
             this.setLoading(false);
         }).catch(error => {
@@ -153,7 +153,11 @@ class PartUsageDialog extends Component {
             return;
         WSWorkorders.getPartUsageBin(this.state.partUsage.transactionType,
             binCode, partCode, this.state.partUsage.storeCode).then(response => {
-            this.setState(() => ({binList: this.transformBinList(response.body.data)}))
+            let binList = response.body.data;
+            this.setState(() => ({binList}))
+            if (binList.length === 1) {
+                this.updatePartUsageLineProperty('bin', binList[0].code);
+            }
         }).catch(error => {
             this.props.handleError(error);
         });
@@ -166,18 +170,8 @@ class PartUsageDialog extends Component {
 
     transformActivities = (activities) => {
         return activities.map(activity => ({code: activity.activityCode,
-                                            desc: `${activity.activityCode} - ${activity.tradeCode}`}));
+                                            desc: activity.tradeCode}));
     }
-
-    transformStores = (stores) => {
-        return stores.map(store => ({code: store.code,
-                                     desc: `${store.code} - ${store.desc}`}));
-    };
-
-    transformBinList = (bins) => {
-        return bins.map(bin => ({code: bin.code, desc: `${bin.code} - ${bin.desc}`}));
-
-    };
 
     setLoading = (loadingDialog) => {
         this.setState(() => ({loadingDialog}));

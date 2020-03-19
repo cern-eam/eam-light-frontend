@@ -241,7 +241,6 @@ class Workorder extends Entity {
     //
     //
     renderWorkOrder() {
-
         let props = {
             workorder: this.state.workorder,
             updateWorkorderProperty: this.updateEntityProperty.bind(this),
@@ -338,8 +337,10 @@ class Workorder extends Entity {
                                 <Activities
                                     workorder={this.state.workorder.number}
                                     department={this.state.workorder.departmentCode}
+                                    departmentDesc={this.state.workorder.departmentDesc}
                                     layout={this.props.workOrderLayout.tabs}
-                                    defaultEmployee={this.props.userData.eamAccount.customField.length > 0 ? this.props.userData.eamAccount.customField[0].value : ''}
+                                    defaultEmployee={this.props.userData.eamAccount.employeeCode}
+                                    defaultEmployeeDesc={this.props.userData.eamAccount.employeeDesc}
                                     postAddActivityHandler={this.postAddActivityHandler}/>}
 
                                 {!this.props.hiddenRegions[this.getRegions().CHECKLISTS.code] &&

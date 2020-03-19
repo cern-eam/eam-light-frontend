@@ -16,6 +16,10 @@ class EquipmentTools {
                 return tabs[regionCode] && tabs[regionCode].alwaysAvailable;
         }
     }
+
+    assetLayoutPropertiesMap = {
+        state: "stateCode"
+    }
 }
 
 export default new EquipmentTools();

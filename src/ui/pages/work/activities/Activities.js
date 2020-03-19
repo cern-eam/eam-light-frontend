@@ -133,7 +133,9 @@ export default class Activities extends Component {
                         activities={this.state.activities}
                         workorderNumber={this.props.workorder}
                         department={this.props.department}
+                        departmentDesc={this.props.departmentDesc}
                         defaultEmployee={this.props.defaultEmployee}
+                        defaultEmployeeDesc={this.props.defaultEmployeeDesc}
                         onChange={() => this.readBookLabours(this.props.workorder)}
                         onClose={this.handleCloseBookLaborModal}/>
 
