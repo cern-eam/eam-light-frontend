@@ -130,6 +130,7 @@ export default class Asset extends Entity {
         return equipment;
     };
 
+
     //
     //
     //
