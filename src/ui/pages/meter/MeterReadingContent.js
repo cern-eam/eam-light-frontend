@@ -11,7 +11,7 @@ import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import Save from '@material-ui/icons/Save';
 import './MeterReading.css';
-import KeyCode from "../../../enums/KeyCode";
+import KeyCode from "../../../enums/KeyCode";;
 
 function MeterReadingContent(props) {
 
@@ -48,6 +48,7 @@ function MeterReadingContent(props) {
         return null;
     }
 
+
     return (
         <div style={{width: '100%', height: '100%'}}>
             <ExpansionPanel defaultExpanded>
@@ -63,6 +64,7 @@ function MeterReadingContent(props) {
                             <div className={`meterContentTitleContentC`}>{reading.meterName}</div>
                         </div>
                         }
+                        
                     </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
