@@ -200,10 +200,6 @@ class EamlightMenu extends Component {
                                   icon={<SearchIcon style={menuIconStyle}/>}
                                   link="wosearch"/>
                         }
-
-                        <MenuItem label="Meter Reading"
-                                  icon={<SpeedometerIcon style={menuIconStyle}/>}
-                                  link="meterreading"/>
                     </EamlightSubmenu>}
 
 
@@ -238,6 +234,10 @@ class EamlightMenu extends Component {
                         <MenuItem label="Replace Equipment"
                                   icon={<AutorenewIcon style={menuIconStyle}/>}
                                   link="replaceeqp"/>}
+                                                      
+                        <MenuItem label="Meter Reading"
+                                  icon={<SpeedometerIcon style={menuIconStyle}/>}
+                                  link="meterreading"/>         
                     </EamlightSubmenu>
                     }
 
