@@ -10,6 +10,7 @@ import PartStock from "./PartStock";
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import CustomFields from '../../components/customfields/CustomFields';
 import PartWhereUsed from "./PartWhereUsed";
+import PartAssets from "./PartAssets";
 import Entity from '../Entity';
 import PartTools from "./PartTools";
 import {PartIcon} from 'eam-components/dist/ui/components/icons'
@@ -84,6 +85,7 @@ class Part extends Entity {
             PARTSTOCK: {label: "Part Stock", code: user + "_" + screen+ "_PARTSTOCK"},
             WHEREUSED: {label: "Where Used", code: user + "_" + screen+ "_WHEREUSED"},
             USERDEFFIELDS: {label: "User Defined Fields", code: user + "_" + screen+ "_USERDEFFIELDS"},
+            ASSETS: {label: "Assets", code: user + "_" + screen + "_ASSETS"},
             EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen+ "_EDMSDOCS"},
             COMMENTS: {label: "Comments", code: user + "_" + screen+ "_COMMENTS"},
             CUSTOMFIELDS: {label: "Custom Fields", code: user + "_" + screen+ "_CUSTOMFIELDS"}
@@ -156,6 +158,9 @@ class Part extends Entity {
                                 PartTools.isRegionAvailable('EPA', props.partLayout) &&
                                 !this.state.layout.newEntity &&
                                 <PartWhereUsed {...props}/>}
+
+                                {!this.props.hiddenRegions[this.getRegions().ASSETS.code] &&
+                                <PartAssets partCode={this.state.part.code} heading={this.getRegions().ASSETS.label.toUpperCase()}/>}
                             </Grid>
                             <Grid item sm={6} xs={12}>
 

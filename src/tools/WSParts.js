@@ -82,6 +82,16 @@ class WSParts {
         return WS._put('/barcode/printBarcode/', barcodeInput, config);
     }
 
+
+    //
+    // ASSETS LIST
+    //
+
+    getAssetsList(partCode, config = {}) {
+        partCode = encodeURIComponent(partCode);
+        return WS._get('/partlists/assets/' + partCode, config)
+    }
+
 }
 
 export default new WSParts();
