@@ -16,6 +16,7 @@ import {Account, AccountMultiple, Settings, Tune, DatabaseRefresh} from "mdi-mat
 import ScreenChange from "./ScreenChange";
 import MenuTools from './MenuTools'
 import RoomIcon from '@material-ui/icons/Room';
+import BuildIcon from '@material-ui/icons/Build';
 
 const getScreenHeaderFunction = (screens = {}) => ({ screenName, screen, updateScreenLayout }) =>
     <ScreenChange
@@ -237,7 +238,11 @@ class EamlightMenu extends Component {
                                                       
                         <MenuItem label="Meter Reading"
                                   icon={<SpeedometerIcon style={menuIconStyle}/>}
-                                  link="meterreading"/>         
+                                  link="meterreading"/>  
+                        
+                        <MenuItem label="Install Equipment"
+                                  icon={<BuildIcon style={menuIconStyle}/>}
+                                  link="installeqp"/>         
                     </EamlightSubmenu>
                     }
 

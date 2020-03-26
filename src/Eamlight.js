@@ -26,6 +26,7 @@ import {theme} from 'eam-components/dist/ui/components/theme';
 import LoginContainer from "./ui/pages/login/LoginContainer";
 import Grid from "./ui/pages/grid/Grid";
 import JMTIntegrationContainer from "./ui/components/jmt/JMTIntegrationContainer";
+import InstallEqpContainer from "./ui/pages/equipment/installeqp/InstallEqpContainer";
 
 class Eamlight extends Component {
 
@@ -114,6 +115,9 @@ class Eamlight extends Component {
 
                                 <Route path="/meterreading"
                                        component={MeterReadingContainer}/>
+
+                                   <Route path="/installeqp"
+                                       component={InstallEqpContainer}/>
 
                                 <Route path="/grid"
                                        component={Grid}/>
