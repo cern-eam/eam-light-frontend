@@ -17,7 +17,10 @@ function Activity(props){
 
           <h3>Activity {activity.activityCode}</h3>
 
-          <Grid container spacing={1} className="activityDetails">
+            <Grid container spacing={1} className="activityDetails">
+
+            <Grid item xs={6} md={6} lg={2}>{layout.ACT.activitynote.text}</Grid>
+            <Grid item xs={6} md={6} lg={4}>{activity.activityNote}</Grid>
 
             <Grid item xs={6} md={6} lg={2}>{layout.ACT.task.text}</Grid>
             <Grid item xs={6} md={6} lg={4}>{activity.taskCode}</Grid>
@@ -33,9 +36,6 @@ function Activity(props){
 
             <Grid item xs={6} md={6} lg={2}>{layout.ACT.actstartdate.text}</Grid>
             <Grid item xs={6} md={6} lg={4}>{activity.startDate}</Grid>
-
-            <Grid item xs={6} md={6} lg={2}>{layout.ACT.activitynote.text}</Grid>
-            <Grid item xs={6} md={6} lg={4}>{activity.activityNote}</Grid>
 
           </Grid>
 

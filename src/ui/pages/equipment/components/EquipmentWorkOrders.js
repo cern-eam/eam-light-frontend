@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {format} from 'date-fns'
 import EISPanel from 'eam-components/dist/ui/components/panel';
 import WSEquipment from '../../../../tools/WSEquipment';
 import EISTable from 'eam-components/dist/ui/components/table';
@@ -59,18 +60,8 @@ function EquipmentWorkOrders(props) {
         WSEquipment.getEquipmentWorkOrders(equipmentcode)
             .then(response => {
                 response.body.data.forEach(element => {
-                    // convert the dates from UNIX time to readable format
-                    let date = new Date(element.createdDate);
-                    let year = date.getFullYear().toString();
-                    let month = (date.getMonth() + 1).toString();
-                    let day = (date.getDate()).toString();
-
-                    if (month.length < 2) month = '0' + month;
-                    if (day.length < 2) day = '0' + day;
-
-                    element.createdDate = [year, month, day].join('-');
+                    element.createdDate = element.createdDate && format(new Date(element.createdDate),'dd-MMM-yyyy');
                 });
-
                 setData(response.body.data)
             });
     }
