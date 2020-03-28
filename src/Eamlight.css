@@ -13,7 +13,6 @@
 }
 
 .entityContainer {
-    position: relative;
     display: flex;
     flex-direction: row;
     height: 100%;
@@ -21,7 +20,7 @@
 }
 
 .entityMain {
-    height: calc(100% - 109px);
+    height: calc(100% - 60px);
     overflow-y: scroll;
     overflow-x: hidden;
     padding-top: 8px;
