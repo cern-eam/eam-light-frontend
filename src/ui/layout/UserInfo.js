@@ -6,12 +6,11 @@ export default class UserInfo extends Component {
 
     userInfoStyle = {
        color: "rgba(255, 255, 255, 0.8)",
-       width: "100%",
+       flexGrow: 1,
        height: 48,
        display: "flex",
        alignItems: "center",
-       justifyContent: 'flex-end',
-       backgroundColor: "rgba(40, 40, 40, 0.06)"
+       justifyContent: 'flex-end'
    }
 
    accountIcon = {

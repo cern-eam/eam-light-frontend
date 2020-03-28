@@ -23,45 +23,42 @@ export default function ApplicationLayout(props) {
     }
 
     const menuIconStyle = {
-        display: "inline-block",
         color: "white",
         fontSize: 18
     }
 
     return (
         <div id="maindiv" className={(menuCompacted) ? '' : 'SlimMenu'} onClick={() => menuCompacted && mobileMenuActive && setMobileMenuActive(false)}>
-            <div id="layout-topbar-cover">
-                <div id="layout-topbar-row">
-                    <div id="layout-topbar-left">
-                        <Link style={headerLinkStyle} to="/">EAM Light</Link>
-                    </div>
-                    <div id="layout-topbar-right">
-                        <div id="menu-resize-btn">
-                            <IconButton onClick={() => setMenuCompacted(!menuCompacted)}>
-                                {(menuCompacted) ? (
-                                    <FormatHorizontalAlignLeft style={menuIconStyle}/>
-                                ) : (
-                                    <FormatHorizontalAlignRight style={menuIconStyle}/>
-                                )}
-                            </IconButton>
-                        </div>
-                        <div id="mobile-menu-btn">
-                            <IconButton onClick={() => setMobileMenuActive(!mobileMenuActive)}>
-                                <Menu style={menuIconStyle}/>
-                            </IconButton>
-                        </div>
+            <div id="topbar">
+                <div id="topbar-left">
+                    <Link style={headerLinkStyle} to="/">EAM Light</Link>
+                </div>
 
-                        {showEqpTreeButton &&
-                        <div id="eqp-tree-btn">
-                            <div style={{borderLeft: "1px solid rgba(255, 255, 255, 0.8)", height: 22}}/>
-                            <IconButton onClick={() => dispatch(setLayoutProperty('showEqpTree', !showEqpTree))}>
-                                <FileTree style={menuIconStyle}/>
-                            </IconButton>
-                        </div>}
+                <div id="topbar-right">
+                    <div id="menu-resize-btn">
+                        <IconButton onClick={() => setMenuCompacted(!menuCompacted)}>
+                            {(menuCompacted) ? (
+                                <FormatHorizontalAlignLeft style={menuIconStyle}/>
+                            ) : (
+                                <FormatHorizontalAlignRight style={menuIconStyle}/>
+                            )}
+                        </IconButton>
                     </div>
+                    <div id="mobile-menu-btn">
+                        <IconButton onClick={() => setMobileMenuActive(!mobileMenuActive)}>
+                            <Menu style={menuIconStyle}/>
+                        </IconButton>
+                    </div>
+
+                    {showEqpTreeButton &&
+                    <div id="eqp-tree-btn">
+                        <div style={{borderLeft: "1px solid rgba(255, 255, 255, 0.8)", height: 22}}/>
+                        <IconButton onClick={() => dispatch(setLayoutProperty('showEqpTree', !showEqpTree))}>
+                            <FileTree style={menuIconStyle}/>
+                        </IconButton>
+                    </div>}
 
                     <UserInfoContainer/>
-
                 </div>
             </div>
 
