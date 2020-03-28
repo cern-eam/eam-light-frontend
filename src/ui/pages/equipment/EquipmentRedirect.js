@@ -51,7 +51,7 @@ class EquipmentRedirect extends Component {
                     isValidCode: true,
                 }));
                 //Redirect according to the typeCode
-                switch (equipment.typeCode) {
+                switch (equipment.systemTypeCode) {
                     case 'A':
                         this.props.history.replace(`/asset/${code}`);
                         break;

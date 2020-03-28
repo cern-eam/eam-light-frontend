@@ -109,6 +109,13 @@ export default class AddActivityDialog extends Component {
                                         updateProperty={this.updateFormValues}
                                     />
 
+                                    <EAMInput
+                                        elementInfo={this.props.layout.activitynote}
+                                        valueKey="activityNote"
+                                        value={this.state.formValues['activityNote']}
+                                        updateProperty={this.updateFormValues}
+                                    />
+
                                     <EAMAutocomplete
                                         autocompleteHandler={WSWorkorders.autocompleteACTTrade}
                                         elementInfo={this.props.layout.trade}

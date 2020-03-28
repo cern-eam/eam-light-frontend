@@ -66,15 +66,11 @@ export default function ApplicationLayout(props) {
             </div>
 
             <div id="layout-container">
-                <div id="layout-container-row">
-                    <div id="layout-menu-cover" className={(mobileMenuActive) ? 'active' : ''}
-                         onClick={(event) => event.stopPropagation()}>
-                        {props.children[0]}
-                    </div>
-
-                    <div id="layout-portlets-cover">
-                        {props.children[1]}
-                    </div>
+                <div id="layout-menu-cover" className={(mobileMenuActive) ? 'active' : ''} onClick={(event) => event.stopPropagation()}>
+                    {props.children[0]}
+                </div>
+                <div id="layout-portlets-cover">
+                    {props.children[1]}
                 </div>
             </div>
         </div>
