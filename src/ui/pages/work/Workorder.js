@@ -280,7 +280,7 @@ class Workorder extends Entity {
                                      hiddenRegions={this.props.hiddenRegions}>
                     </EamlightToolbar>
 
-                    <div id="entityMain">
+                    <div id="entityContent">
                         <Grid container spacing={1}>
                             <Grid item md={6} sm={12} xs={12}>
 

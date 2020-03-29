@@ -123,7 +123,7 @@ class ReplaceEqp extends Component {
         return (
             <div className="entityContainer" >
                 <BlockUi tag="div" blocking={this.state.blocking} style={{height: "100%", width: "100%"}}>
-                    <div id="entityMain" style={{height: "calc(100% - 70px)"}}>
+                    <div id="entityContent" style={{height: "calc(100% - 70px)"}}>
                         <Grid container spacing={1}>
                             <Grid item sm={6} xs={12}>
                                 <ReplaceEqpGeneral replaceEquipment={this.state.replaceEquipment}

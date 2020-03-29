@@ -19,7 +19,7 @@
     background-color: #eeeeee;
 }
 
-#entityMain {
+#entityContent {
     height: calc(100% - 60px);
     overflow-y: scroll;
     overflow-x: hidden;
