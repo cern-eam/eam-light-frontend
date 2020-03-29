@@ -16,9 +16,9 @@ import PartTools from "./PartTools";
 import {PartIcon} from 'eam-components/dist/ui/components/icons'
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import {TOOLBARS} from '../../components/AbstractToolbar';
+import WorkorderTools from "../work/WorkorderTools";
 
 const PART = 'PART';
-const SSPART = 'SSPART';
 
 class Part extends Entity {
 
@@ -41,7 +41,9 @@ class Part extends Entity {
         updateEntity: WSParts.updatePart.bind(WSParts),
         createEntity: WSParts.createPart.bind(WSParts),
         deleteEntity: WSParts.deletePart.bind(WSParts),
-        initNewEntity: () => WSParts.initPart(PART, this.props.location.search)
+        initNewEntity: () => WSParts.initPart(PART, this.props.location.search),
+        layout: this.props.partLayout,
+        layoutPropertiesMap: PartTools.layoutPropertiesMap
     };
 
     //
@@ -159,7 +161,7 @@ class Part extends Entity {
                                 !this.state.layout.newEntity &&
                                 <PartWhereUsed {...props}/>}
 
-                                {!this.props.hiddenRegions[this.getRegions().ASSETS.code] &&
+                                {!this.props.hiddenRegions[this.getRegions().ASSETS.code] && !this.state.layout.newEntity &&
                                 <PartAssets partCode={this.state.part.code} heading={this.getRegions().ASSETS.label.toUpperCase()}/>}
                             </Grid>
                             <Grid item sm={6} xs={12}>

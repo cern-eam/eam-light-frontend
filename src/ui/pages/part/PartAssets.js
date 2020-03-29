@@ -38,7 +38,7 @@ const customCellRenderer = ({ row, columnMetadata, getDisplayValue, CellComponen
 const columnsMetadata = [
     {
         id: "equipmentno",
-        header: "Asset Code"
+        header: "Asset"
     },
     {
         id: "equipmentdesc",
@@ -54,7 +54,7 @@ const columnsMetadata = [
     },
     {
         id: "location",
-        header: "Location Code"
+        header: "Location"
     }
 ]
 
