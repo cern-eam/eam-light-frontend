@@ -204,7 +204,7 @@ export default class Asset extends Entity {
                                  hiddenRegions={this.props.hiddenRegions}>
                 </EamlightToolbar>
 
-                <div className="entityMain">
+                <div id="entityMain">
 
                     <Grid container spacing={1}>
                         <Grid item xs={xs} sm={sm} md={md} lg={lg}>

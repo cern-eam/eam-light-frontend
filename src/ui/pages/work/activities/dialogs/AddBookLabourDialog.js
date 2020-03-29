@@ -126,7 +126,7 @@ export default class AddActivityDialog extends Component {
                                     values={this.props.activities.map(activity => {
                                         return {
                                             code: activity.activityCode,
-                                            desc: activity.activityCode + ' - ' + activity.tradeCode
+                                            desc: activity.tradeCode
                                         }
                                     })}
                                     updateProperty={this.updateFormValues}
