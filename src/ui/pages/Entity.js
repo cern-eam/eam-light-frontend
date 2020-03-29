@@ -42,6 +42,7 @@ export default class readEntityEquipment extends Component {
         } else {
             this.initNewEntity()
         }
+
     }
 
     /**
@@ -403,7 +404,7 @@ export default class readEntityEquipment extends Component {
         this.children = {}
 
         return (
-            <div onKeyDown={this.onKeyDownHandler.bind(this)} tabIndex={0} style={{width: '100%', height: '100%'}}>
+            <div onKeyDown={this.onKeyDownHandler.bind(this)} tabIndex={0} style={{width: '100%', height: '100%', outline: "none"}}>
                 {this.settings.renderEntity()}
             </div>
         )
