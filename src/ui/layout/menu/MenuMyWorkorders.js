@@ -1,13 +1,15 @@
 import React, {useState} from 'react';
 import MenuWorkorder from './MenuWorkorder'
-import MyTeamWorkOrdersTab from './MyTeamWorkOrdersTab'
+import MyWorkOrdersTimeFilter from './MyWorkOrdersTimeFilter'
+import MenuTools from './MenuTools'
+import {isToday, isPast, differenceInDays} from "date-fns";
 
 export default function MenuMyWorkorders(props) {
     const [days, setDays] = useState('ALL')
 
     const generateMyOpenWorkOrders = () => {
         return props.myOpenWorkOrders
-            .filter(wo => days === 'ALL' || wo.days === days)
+            .filter(MenuTools.daysFilterFunctions[days])
             .map(wo => (
                 <MenuWorkorder key={wo.number} wo={wo} />
             ))
@@ -16,7 +18,7 @@ export default function MenuMyWorkorders(props) {
     return (
         <ul className="layout-tab-submenu active" id="mywos">
             <li><span>MY OPEN WORK ORDERS</span>
-                <MyTeamWorkOrdersTab days={days} onChange={(event, value) => setDays(value)}/>
+                <MyWorkOrdersTimeFilter days={days} onChange={(event, value) => setDays(value)}/>
                 <ul>
                     {generateMyOpenWorkOrders()}
                 </ul>
