@@ -171,7 +171,7 @@ export default class System extends Entity {
                                  regions={this.getRegions()}
                                  hiddenRegions={this.props.hiddenRegions}/>
 
-                <div id="entityMain">
+                <div id="entityContent">
                     <Grid container spacing={1}>
                         <Grid item xs={xs} sm={sm} md={md} lg={lg}>
 

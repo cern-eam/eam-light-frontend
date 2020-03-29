@@ -135,7 +135,7 @@ class Part extends Entity {
                                      hiddenRegions={this.props.hiddenRegions}/>
 
 
-                    <div id="entityMain">
+                    <div id="entityContent">
                         <Grid container spacing={1}>
                             <Grid item sm={6} xs={12}>
                                 <PartGeneral {...props}/>
