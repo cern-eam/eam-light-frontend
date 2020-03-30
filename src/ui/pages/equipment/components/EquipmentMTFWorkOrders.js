@@ -1,9 +1,16 @@
 import React from "react";
-import { DATA_GRID_SORT_TYPES } from "eam-components/dist/ui/components/datagrid/Constants";
+import { DATA_GRID_SORT_TYPES, DATA_GRID_SORT_DIRECTIONS } from "eam-components/dist/ui/components/datagrid/Constants";
 import EAMTable from "eam-components/dist/ui/components/eamtable/EAMTable";
 import { Link } from 'react-router-dom';
 import EAMTableGridRequestAdapter from "eam-components/dist/ui/components/eamtable/EAMTableGridRequestAdapter";
+import compareAsc from 'date-fns/compareAsc'
+import parse from 'date-fns/parse'
 
+const DATE_FORMAT = "dd-LLL-yyyy";
+
+const customCellStyle = {
+    whiteSpace: "nowrap"
+}
 
 const customCellRenderer = ({ row, columnMetadata, getDisplayValue, CellComponent }) => {
     const customRenders = {
@@ -13,16 +20,19 @@ const customCellRenderer = ({ row, columnMetadata, getDisplayValue, CellComponen
             />
         ),
         "mtf_step": (
-            <CellComponent >
+            <CellComponent>
                 <Link
                     to={{ pathname: `/workorder/${row["evt_code"]}` }}
                 >
                     {getDisplayValue()}
                 </Link>
             </CellComponent>
+        ),
+        "evt_desc": (
+            <CellComponent>{getDisplayValue()}</CellComponent>
         )
     }
-    return customRenders[columnMetadata.id];
+    return customRenders[columnMetadata.id] || <CellComponent style={customCellStyle}>{getDisplayValue()}</CellComponent>;
 }
 
 const headers = {
@@ -31,19 +41,29 @@ const headers = {
     mtf_step_result: "Result",
     last_repeated_status_color: "NC",
     evt_desc: "Description",
+    evt_completed: "Completed On"
 };
 
 const sortTypesMap = {
     "mtf_step": DATA_GRID_SORT_TYPES.NUMERIC
 }
 
+const comparatorsMap = {
+    "evt_completed": ({ direction, property }) => {
+        return (a, b) => (direction === DATA_GRID_SORT_DIRECTIONS.DESC ? 1 : -1) * compareAsc(parse(a[property], DATE_FORMAT, new Date()), parse(b[property], DATE_FORMAT, new Date()))   
+    }
+}
+
 const getComputedColumnsMetadata = ({ columnsMetadata }) => {
-    return columnsMetadata.filter(e => !["evt_code", "last_repeated_status"].includes(e.id))
+    const availableHeaders = Object.keys(headers);
+    return columnsMetadata.filter(e => availableHeaders.includes(e.id))
         .map(c => ({
             ...c,
-            sortType: sortTypesMap[c.id]
+            sortType: sortTypesMap[c.id],
+            comparator: comparatorsMap[c.id]
         }));
 }
+
 
 const EquipmentMTFWorkOrders = props => {
     const { equipmentcode } = props;
