@@ -44,6 +44,7 @@ class WorkorderToolbar extends Component {
 
     copyWorkorderHandler() {
         this.props.setLayout({ newEntity: true });
+        this.props.defaultStatus();
         this.props.postInit();
     }
 

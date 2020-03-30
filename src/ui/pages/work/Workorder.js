@@ -74,6 +74,11 @@ class Workorder extends Entity {
         }
     }
 
+    defaultStatus() {
+        const defaultStatusValue = this.props.workOrderLayout.fields['workorderstatus'].defaultValue;
+        this.updateEntityProperty('statusCode', defaultStatusValue === null ? 'R' : defaultStatusValue);
+    }
+
     //
     // CALLBACKS FOR ENTITY CLASS
     //
@@ -269,6 +274,7 @@ class Workorder extends Entity {
                                             workorder: this.state.workorder,
                                             postInit: this.postInit.bind(this),
                                             setLayout: this.setLayout.bind(this),
+                                            defaultStatus: this.defaultStatus.bind(this),
                                             newWorkorder: this.state.layout.newEntity,
                                             applicationData: this.props.applicationData,
                                             userGroup: this.props.userData.eamAccount.userGroup,
