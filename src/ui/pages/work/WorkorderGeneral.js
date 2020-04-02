@@ -4,8 +4,7 @@ import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect'
 import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
 import EAMCheckbox from 'eam-components/dist/ui/components/muiinputs/EAMCheckbox'
 import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
-import WS from "../../../tools/WS";
-import WSWorkorders from "../../../tools/WSWorkorders";
+import WS from '../../../tools/WS'
 import UDFChar from "../../components/userdefinedfields/UDFChar";
 import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
 
@@ -19,7 +18,7 @@ function WorkorderDetails(props) {
         //If there is a value, fetch location, department, cost code
         //and custom fields
         if (value) {
-            WSWorkorders.autocompleteWorkorderEquipmentSelected(value).then(response => {
+            WS.autocompleteEquipmentSelected(value).then(response => {
                 const data = response.body.data[0];
                 //Assign values
                 updateWorkorderProperty('departmentCode', data.department);
@@ -55,7 +54,7 @@ function WorkorderDetails(props) {
                                      valueDesc={workorder.equipmentDesc}
                                      descKey="equipmentDesc"
                                      updateProperty={updateWorkorderProperty}
-                                     autocompleteHandler={WSWorkorders.autocompleteWorkorderEquipment}
+                                     autocompleteHandler={WS.autocompleteEquipment}
                                      onChangeValue={onChangeEquipment}
                                      link={() => workorder.equipmentCode ? "/equipment/" + workorder.equipmentCode : null}
                     />
