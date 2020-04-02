@@ -130,6 +130,13 @@ class WSEquipment {
         equipment = encodeURIComponent(equipment);
         return WS._get(`/equipment/children/${equipment}`, config);
     }
+
+    //
+    //INSTALL EQUIPMENT
+    //
+    installEquipment(equipmentStructure, config = {}) {
+        return WS._post('/eqstructure/attach', equipmentStructure, config);
+    }
 }
 
 export default new WSEquipment();

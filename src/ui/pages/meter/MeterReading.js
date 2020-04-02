@@ -136,7 +136,7 @@ class MeterReading extends React.Component {
         };
 
         return (
-            <div id="entityContainer">
+            <div id="entityContainer" style={{height: "100%"}}>
                 <BlockUi tag="div" blocking={this.state.blocking} style={{height: "100%", width: "100%"}}>
                     <div id="entityContent" style={{height: "100%", overflowY: "hidden"}}>
                         <Grid container spacing={1}>

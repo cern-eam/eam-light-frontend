@@ -32,16 +32,6 @@ class WSWorkorders {
         return WS._get('/stdworkorders/' + code, config);
     }
 
-    autocompleteWorkorderEquipment(filter, config = {}) {
-        filter = encodeURIComponent(filter);
-        return WS._get('/autocomplete/wo/eqp?s=' + filter, config);
-    }
-
-    autocompleteWorkorderEquipmentSelected(filter, config = {}) {
-        filter = encodeURIComponent(filter);
-        return WS._get('/autocomplete/wo/eqp/selected?code=' + filter, config);
-    }
-
     autocompleteCostCode = (filter, config = {}) => {
         filter = encodeURIComponent(filter);
         return WS._get('/autocomplete/wo/costcode/' + filter, config);

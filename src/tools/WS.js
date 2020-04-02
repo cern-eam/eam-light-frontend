@@ -83,6 +83,15 @@ class WS {
         return this._get(`/autocomplete/location?s=${filter}`, config);
     };
 
+    autocompleteEquipment = (filter, config = {}) => {
+        filter = encodeURIComponent(filter);
+        return this._get('/autocomplete/eqp?s=' + filter, config);
+    };
+
+    autocompleteEquipmentSelected = (filter, config) => {
+        filter = encodeURIComponent(filter);
+        return this._get('/autocomplete/eqp/selected?code=' + filter, config);
+    };
 
     //
     //
