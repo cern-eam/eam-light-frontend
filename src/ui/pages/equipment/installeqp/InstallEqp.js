@@ -45,8 +45,7 @@ export default function NameForm(props) {
                             <EISPanel heading="Install Equipment">
                                 <div style={{width: "100%", marginTop: 0}}>
                                     <EAMBarcodeInput updateProperty={setParentEq} right={0} top={16}>
-                                        <EAMAutocomplete elementInfo={{attribute: "O", text: "Parent Equipment"}}
-                                                         tabIndex={0}
+                                        <EAMAutocomplete elementInfo={{attribute: "O", text: "Parent"}}
                                                          value={parentEq}
                                                          valueKey="parent"
                                                          updateProperty={(key, value) => (key === 'parent') && setParentEq(value)}
@@ -54,8 +53,7 @@ export default function NameForm(props) {
                                     </EAMBarcodeInput>
 
                                     <EAMBarcodeInput updateProperty={setChildEq} right={0} top={16}>
-                                        <EAMAutocomplete elementInfo={{attribute: "O", text: "Child Equipment"}}
-                                                         tabIndex={1}
+                                        <EAMAutocomplete elementInfo={{attribute: "O", text: "Child"}}
                                                          value={childEq}
                                                          valueKey="child"
                                                          updateProperty={(key, value) => (key === 'child') && setChildEq(value)}
@@ -64,10 +62,9 @@ export default function NameForm(props) {
 
                                     <Button
                                         style={{marginTop: 10}}
-                                        tabIndex={2}
                                         onClick={() => installEqpHandler(createEquipmentStructure(parentEq, childEq))}
                                         color="primary">
-                                        INSTALL CHILD EQUIPMENT
+                                        LINK EQUIPMENT
                                     </Button>
                                 </div>
                             </EISPanel>
