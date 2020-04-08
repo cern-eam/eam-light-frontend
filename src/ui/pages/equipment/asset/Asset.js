@@ -195,7 +195,8 @@ export default class Asset extends Entity {
                                     newEquipment: this.state.layout.newEntity,
                                     applicationData: this.props.applicationData,
                                     extendedLink: this.props.applicationData.EL_ASSLI,
-                                    screencode: this.props.userData.screens[this.props.userData.assetScreen].screenCode
+                                    screencode: this.props.userData.screens[this.props.userData.assetScreen].screenCode,
+                                    copyHandler: this.copyEntity.bind(this)
                                  }}
                                  width={730}
                                  entityIcon={<AssetIcon style={{height: 18}}/>}

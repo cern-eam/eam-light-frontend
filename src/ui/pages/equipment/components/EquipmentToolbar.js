@@ -37,14 +37,8 @@ class EquipmentToolbar extends Component {
         margin: 5
     }
 
-    copyEquipmentHandler() {
-        this.props.setLayout({newEntity: true});
-        this.props.postInit();
-    }
-
     emailEquipmentHandler() {
         window.open("mailto:?Subject=" + this.props.entityDesc + " Code " + this.props.equipment.code + "&body=http://www.cern.ch/eam-light/equipment/" + this.props.equipment.code, '_self');
-
     }
 
     showOnMapHandler() {
@@ -60,7 +54,7 @@ class EquipmentToolbar extends Component {
         return (
             <div >
                 <Divider/>
-                <MenuItem onClick={this.copyEquipmentHandler.bind(this)} disabled={this.props.newEquipment}>
+                <MenuItem onClick={this.props.copyHandler} disabled={this.props.newEquipment}>
                     <ContentCopy style={this.iconMenuStyle}/>
                     <div style={this.menuLabelStyle}> Copy {this.props.entityDesc}</div>
                 </MenuItem>
@@ -92,7 +86,7 @@ class EquipmentToolbar extends Component {
             <div style={this.toolbarIconsStyle}>
                 <div style={this.verticalLineStyle}/>
                 <Tooltip title={"Copy " + this.props.entityDesc}>
-                    <IconButton onClick={this.copyEquipmentHandler.bind(this)} disabled={this.props.newEquipment}>
+                    <IconButton onClick={this.props.copyHandler} disabled={this.props.newEquipment}>
                         <ContentCopy style={this.iconStyle}/>
                     </IconButton>
                 </Tooltip>

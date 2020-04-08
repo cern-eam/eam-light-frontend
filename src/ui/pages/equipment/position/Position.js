@@ -140,7 +140,8 @@ export default class Position extends Entity {
                                      newEquipment: this.state.layout.newEntity,
                                      applicationData: this.props.applicationData,
                                      extendedLink: this.props.applicationData.EL_POSLI,
-                                     screencode: this.props.userData.screens[this.props.userData.positionScreen].screenCode
+                                     screencode: this.props.userData.screens[this.props.userData.positionScreen].screenCode,
+                                     copyHandler: this.copyEntity.bind(this)
                                  }}
                                  width={730}
                                  entityIcon={<PositionIcon style={{height: 18}}/>}
