@@ -57,6 +57,7 @@ class WorkorderTools {
             udfchar28:	"userDefinedFields.udfchar28",
             udfchar29:	"userDefinedFields.udfchar29",
             udfchar30:	"userDefinedFields.udfchar30",
+            udfchar40:	"userDefinedFields.udfchar40",
         }
 
 

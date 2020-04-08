@@ -124,6 +124,12 @@ class Workorder extends Entity {
         this.setWOEquipment(workorder.equipmentCode);
     }
 
+    postCopy = () => {
+        let fields = this.props.workOrderLayout.fields;
+        this.updateEntityProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
+        this.updateEntityProperty("typeCode", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD")
+    }
+
     //
     // DROP DOWN VALUES
     //
@@ -272,7 +278,8 @@ class Workorder extends Entity {
                                             newWorkorder: this.state.layout.newEntity,
                                             applicationData: this.props.applicationData,
                                             userGroup: this.props.userData.eamAccount.userGroup,
-                                            screencode: this.props.userData.screens[this.props.userData.workOrderScreen].screenCode}
+                                            screencode: this.props.userData.screens[this.props.userData.workOrderScreen].screenCode,
+                                            copyHandler: this.copyEntity.bind(this)}
                                      }
                                      entityIcon={<WorkorderIcon style={{height: 18}}/>}
                                      toggleHiddenRegion={this.props.toggleHiddenRegion}

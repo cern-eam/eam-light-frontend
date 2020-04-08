@@ -39,11 +39,6 @@ class PartToolbar extends Component {
         margin: 5
     };
 
-    copyPartHandler() {
-        this.props.setLayout({newEntity: true});
-        this.props.postInit();
-    }
-
     emailPartHandler() {
         window.open("mailto:?Subject=Part Code " + this.props.part.code + "&body=http://www.cern.ch/eam-light/part/" + this.props.part.code, '_self');
     }
@@ -83,7 +78,7 @@ class PartToolbar extends Component {
         return (
             <div >
                 <Divider/>
-                <MenuItem onClick={this.copyPartHandler.bind(this)} disabled={this.props.newPart}>
+                <MenuItem onClick={this.props.copyHandler} disabled={this.props.newPart}>
                     <ContentCopy style={this.iconMenuStyle}/>
                     <div style={this.menuLabelStyle}> Copy Part</div>
                 </MenuItem>
@@ -108,7 +103,7 @@ class PartToolbar extends Component {
             <div style={this.toolbarIconsStyle}>
                 <div style={this.verticalLineStyle}/>
                 <Tooltip title="Copy Part" >
-                    <IconButton onClick={this.copyPartHandler.bind(this)} disabled={this.props.newPart}>
+                    <IconButton onClick={this.props.copyHandler} disabled={this.props.newPart}>
                         <ContentCopy style={this.iconStyle}/>
                     </IconButton>
                 </Tooltip>

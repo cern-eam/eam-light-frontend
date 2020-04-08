@@ -87,7 +87,7 @@ export default class readEntityEquipment extends Component {
                 })
 
                 // Assign default values
-                let entity = this.assignDefaultValues(response.body.data);
+                let entity = this.assignValues(response.body.data);
 
                 // Save to the state
                 this.setState({
@@ -239,6 +239,21 @@ export default class readEntityEquipment extends Component {
             })
     }
 
+    copyEntity() {
+        //TODO clean the URL
+        let code = this.state[this.settings.entity][this.settings.entityCodeProperty];
+        this.setLayout({ newEntity: true });
+        this.setState({[this.settings.entity]: {
+            ...this.assignDefaultValues(this.state[this.settings.entity],
+                                        this.settings.layout,
+                                        this.settings.layoutPropertiesMap),
+            copyFrom: code}});
+        this.postInit();
+        if (this.postCopy) {
+            this.postCopy();
+        }
+    }
+
     /**
      *
      */
@@ -316,24 +331,19 @@ export default class readEntityEquipment extends Component {
     }
 
     //
-    // ASSIGN DEFAULT VALUES
+    // ASSIGN VALUES
     //
-    assignDefaultValues(entity) {
+    assignValues(entity) {
         let layout = this.settings.layout;
         let layoutPropertiesMap = this.settings.layoutPropertiesMap;
         let queryParams = queryString.parse(window.location.search);
+        return this.assignQueryParamValues(this.assignDefaultValues(entity, layout, layoutPropertiesMap), queryParams)
+    }
 
+    assignQueryParamValues(entity, queryParams) {
         // Populate the entity object with query params keys matching the custom field code
         if (entity.customField) {
             entity.customField.filter(cf => queryParams[cf.code]).forEach(cf => cf.value = queryParams[cf.code])
-        }
-
-        // Create an entity-like object with the default values from the screen's layout
-        let defaultValues = {};
-        if (layout && layoutPropertiesMap) {
-             defaultValues = Object.values(layout.fields)
-                 .filter(field => field.defaultValue && layoutPropertiesMap[field.elementId])
-                 .reduce((result, field) => set(result, layoutPropertiesMap[field.elementId], field.defaultValue === 'NULL' ? '' : field.defaultValue), {})
         }
 
         // Create an entity-like object with the values from the query parameters
@@ -350,15 +360,33 @@ export default class readEntityEquipment extends Component {
 
         return {
             ...entity,
-            ...defaultValues,
             ...queryValues,
             userDefinedFields: {
                 ...entity.userDefinedFields,
-                ...defaultValues.userDefinedFields,
                 ...queryValues.userDefinedFields
             }
         }
     }
+
+    assignDefaultValues(entity, layout, layoutPropertiesMap) {
+        // Create an entity-like object with the default values from the screen's layout
+        let defaultValues = {};
+        if (layout && layoutPropertiesMap) {
+            defaultValues = Object.values(layout.fields)
+                .filter(field => field.defaultValue && layoutPropertiesMap[field.elementId])
+                .reduce((result, field) => set(result, layoutPropertiesMap[field.elementId], field.defaultValue === 'NULL' ? '' : field.defaultValue), {})
+        }
+
+        return {
+            ...entity,
+            ...defaultValues,
+            userDefinedFields: {
+                ...entity.userDefinedFields,
+                ...defaultValues.userDefinedFields
+            }
+        }
+    }
+
 
     //
     // HELPER METHODS

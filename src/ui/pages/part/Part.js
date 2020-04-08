@@ -130,7 +130,8 @@ class Part extends Entity {
                                                     screencode: this.props.userData.screens[this.props.userData.partScreen].screenCode,
                                                     handleError: this.props.handleError,
                                                     showNotification: this.props.showNotification,
-                                                    showError: this.props.showError            
+                                                    showError: this.props.showError,
+                                                    copyHandler: this.copyEntity.bind(this)
                                      }}
                                      width={730}
                                      entityIcon={<PartIcon style={{height: 18}}/>}

@@ -163,7 +163,8 @@ export default class System extends Entity {
                                      newEquipment: this.state.layout.newEntity,
                                      applicationData: this.props.applicationData,
                                      extendedLink: this.props.applicationData.EL_SYSLI,
-                                     screencode: this.props.userData.screens[this.props.userData.systemScreen].screenCode
+                                     screencode: this.props.userData.screens[this.props.userData.systemScreen].screenCode,
+                                     copyHandler: this.copyEntity.bind(this)
                                  }}
                                  width={730}
                                  entityIcon={<SystemIcon style={{height: 18}}/>}

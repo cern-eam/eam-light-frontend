@@ -42,10 +42,7 @@ class WorkorderToolbar extends Component {
         margin: 5
     };
 
-    copyWorkorderHandler() {
-        this.props.setLayout({ newEntity: true });
-        this.props.postInit();
-    }
+
 
     emailWorkorderHandler() {
         window.open(
@@ -133,7 +130,7 @@ class WorkorderToolbar extends Component {
             <div>
                 <Divider />
                 <MenuItem
-                    onClick={this.copyWorkorderHandler.bind(this)}
+                    onClick={this.props.copyHander}
                     disabled={this.props.newWorkorder}
                 >
                     <ContentCopy style={this.iconMenuStyle} />
@@ -215,7 +212,7 @@ class WorkorderToolbar extends Component {
                 <div style={this.verticalLineStyle} />
                 <Tooltip title="Copy Work Order">
                     <IconButton
-                        onClick={this.copyWorkorderHandler.bind(this)}
+                        onClick={this.props.copyHandler}
                         disabled={this.props.newWorkorder}
                     >
                         <ContentCopy style={this.iconStyle} />
