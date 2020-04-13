@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import EAMTable from "eam-components/dist/ui/components/eamtable/EAMTable";
 import EAMTableDataAdapter from "eam-components/dist/ui/components/eamtable/EAMTableDataAdapter";
 import { Link } from 'react-router-dom';

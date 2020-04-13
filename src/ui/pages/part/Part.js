@@ -16,7 +16,6 @@ import PartTools from "./PartTools";
 import {PartIcon} from 'eam-components/dist/ui/components/icons'
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import {TOOLBARS} from '../../components/AbstractToolbar';
-import WorkorderTools from "../work/WorkorderTools";
 
 const PART = 'PART';
 
@@ -158,7 +157,6 @@ class Part extends Entity {
                                 }
 
                                 {!this.props.hiddenRegions[this.getRegions().WHEREUSED.code] &&
-                                PartTools.isRegionAvailable('EPA', props.partLayout) &&
                                 !this.state.layout.newEntity &&
                                 <PartWhereUsed {...props}/>}
 

@@ -5,7 +5,7 @@ class EquipmentTree extends Component {
 
 
     treeDivStyle= {
-        height: "calc(100% - 100px)",
+        height: "calc(100% - 56px)",
         backgroundColor: 'white',
         width: "100%"
     }

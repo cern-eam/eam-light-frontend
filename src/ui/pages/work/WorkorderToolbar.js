@@ -130,7 +130,7 @@ class WorkorderToolbar extends Component {
             <div>
                 <Divider />
                 <MenuItem
-                    onClick={this.props.copyHander}
+                    onClick={this.props.copyHandler}
                     disabled={this.props.newWorkorder}
                 >
                     <ContentCopy style={this.iconMenuStyle} />

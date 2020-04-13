@@ -114,7 +114,7 @@ export default class Location extends Entity {
                                  hiddenRegions={this.props.hiddenRegions}>
                 </EamlightToolbar>
 
-                <div id="entityMain">
+                <div id="entityContent">
                     <Grid container spacing={1}>
                         <Grid item xs={xs} sm={sm} md={md} lg={lg}>
                             <LocationGeneral {...panelProps} />
