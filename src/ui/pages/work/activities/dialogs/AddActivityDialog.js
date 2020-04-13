@@ -53,7 +53,6 @@ function AddActivityDialog(props) {
                 props.showNotification("Activity successfully created");
                 handleClose();
                 props.onChange();
-                init();
             })
             .catch(error => {
                 setLoading(false);
@@ -70,6 +69,7 @@ function AddActivityDialog(props) {
 
     let onKeyDown = (e) => {
         if (e.keyCode === KeyCode.ENTER) {
+            e.stopPropagation();
             handleSave();
         }
     }
