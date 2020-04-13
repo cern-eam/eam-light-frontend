@@ -71,7 +71,6 @@ function PartUsageDialog(props) {
     };
 
     let handleTransactionChange = (value) => {
-        console.log('transaction change')
         //Init all properties
         updatePartUsageLineProperty('partCode', '');
         updatePartUsageLineProperty('partDesc', '');
@@ -83,7 +82,6 @@ function PartUsageDialog(props) {
     };
 
     let handleStoreChange = (value) => {
-        console.log('store change')
         updatePartUsageLineProperty('partCode', '');
         updatePartUsageLineProperty('partDesc', '');
         updatePartUsageLineProperty('assetIDCode', '');
@@ -184,7 +182,7 @@ function PartUsageDialog(props) {
                                        values={storeList}
                                        value={partUsage.storeCode}
                                        updateProperty={updatePartUsageProperty}
-                                       onChangeValue={() => console.log('kura')}
+                                       onChangeValue={handleStoreChange}
                                        children={props.children}/>
 
                             <EAMSelect elementInfo={{...props.tabLayout['activity'], attribute: 'R'}}
