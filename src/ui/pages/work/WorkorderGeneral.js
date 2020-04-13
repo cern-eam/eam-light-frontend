@@ -10,7 +10,7 @@ import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarc
 
 function WorkorderDetails(props) {
 
-    const { children, workOrderLayout, workorder, updateWorkorderProperty, layout, applicationData, setWOEquipment, userData } = props;
+    const { children, workOrderLayout, workorder, updateWorkorderProperty, layout, applicationData, setWOEquipment } = props;
     const rpawClassesList = (applicationData && applicationData.EL_TRPAC && applicationData.EL_TRPAC.split(',')) || [];
     const rpawLink = applicationData && applicationData.EL_TRPAW;
 

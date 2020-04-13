@@ -6,20 +6,22 @@ import WSCustomFields from "../../../tools/WSCustomFields";
 function CustomFields(props) {
 
     let [lookupValues, setLookupValues] = useState(null);
-    let {updateEntityProperty, title, customFields, readonly, children} = props;
+    let {updateEntityProperty, title, customFields, readonly, children, classCode, entityCode} = props;
+
 
     useEffect(() => {
-        fetchLookupValues(props.entityCode, props.classCode)
-    },[props.entityCode, props.entityKeyCode])
+        if (customFields) {
+            fetchLookupValues(entityCode, classCode)
+        }
+    },[customFields])
 
 
     // Class has changed, but the entity key code did not; update custom fields
     useEffect(() => {
         if (lookupValues) {
-            updateCustomFields(props.entityCode, props.classCode)
+            updateCustomFields(entityCode, classCode)
         }
-    },[props.classCode])
-
+    },[entityCode, classCode])
 
     let fetchLookupValues = (entityCode, classCode) => {
         WSCustomFields.getCustomFieldsLookupValues(entityCode, classCode)
@@ -37,7 +39,6 @@ function CustomFields(props) {
                     }
                 }
                 updateEntityProperty('customField', newCustomFields)
-                fetchLookupValues(entityCode, classCode)
             })
     }
 
