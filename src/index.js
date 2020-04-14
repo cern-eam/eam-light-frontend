@@ -14,6 +14,7 @@ import {create} from "jss";
 import {StylesProvider, jssPreset} from '@material-ui/core/styles';
 import SnackbarContainer from "./ui/components/snackbar/SnackbarContainer";
 import Ajax from 'eam-components/dist/tools/ajax'
+
 const jss = create(jssPreset());
 
 unregister();

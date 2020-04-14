@@ -27,7 +27,7 @@ export default class readEntityEquipment extends Component {
      *
      * @param nextProps
      */
-    componentDidMount() {
+    componentDidMount() { 
         const values = queryString.parse(window.location.search)
         // If code param is present, open it
         if (values.code) {
@@ -51,19 +51,14 @@ export default class readEntityEquipment extends Component {
      * @param prevProps
      */
     componentDidUpdate(prevProps) {
+        const nextCode = this.props.match.params.code;
+        const previousCode = prevProps.match.params.code;
         // Execute only when the URL was 'pushed'
-        if (prevProps.location.key !== this.props.location.key) {
-            let nextCode = this.props.match.params.code;
-            let previousCode = prevProps.match.params.code;
-
-            if (nextCode && (nextCode !== previousCode)) {
-                nextCode = decodeURIComponent(nextCode);
-                this.readEntity(nextCode)
-            }
-
-            if (!nextCode) {
-                this.initNewEntity()
-            }
+        if (nextCode === previousCode) return;
+        if (nextCode) {
+            this.readEntity(decodeURIComponent(nextCode))
+        } else {
+            this.initNewEntity()
         }
     }
 

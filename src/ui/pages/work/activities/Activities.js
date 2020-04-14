@@ -3,7 +3,6 @@ import WSWorkorders from "../../../../tools/WSWorkorders";
 import Activity from "./Activity";
 import './Activities.css';
 import Button from '@material-ui/core/Button';
-import EISPanel from 'eam-components/dist/ui/components/panel';
 import AddActivityDialogContainer from "./dialogs/AddActivityDialogContainer";
 import AddBookLabourDialogContainer from "./dialogs/AddBookLabourDialogContainer";
 
@@ -64,46 +63,43 @@ function Activities(props) {
     }
 
     return (
-        <EISPanel heading="ACTIVITIES AND BOOKED LABOR">
-            <div id="activities">
-                {activities.map((activity, index) => {
-                    return <Activity
-                        key={activity.activityCode}
-                        activity={activity}
-                        bookLabours={bookLaboursByActivity[activity.activityCode]}
-                        layout={props.layout}/>
-                })}
+        <div id="activities">
+            {activities.map((activity, index) => {
+                return <Activity
+                    key={activity.activityCode}
+                    activity={activity}
+                    bookLabours={bookLaboursByActivity[activity.activityCode]}
+                    layout={props.layout}/>
+            })}
 
-                <div id="actions">
-                    <Button onClick={() => setIsActivityModalOpen(true)} color="primary">
-                        Add activity
-                    </Button>
+            <div id="actions">
+                <Button onClick={() => setIsActivityModalOpen(true)} color="primary">
+                    Add activity
+                </Button>
 
-                    <Button onClick={() => setIsBookLaborModalOpen(true)} color="primary">
-                        Book Labor
-                    </Button>
-                </div>
-
-                <AddActivityDialogContainer
-                    open={isActivityModalOpen}
-                    workorderNumber={props.workorder}
-                    onChange={() => readActivities(props.workorder)}
-                    onClose={() => setIsActivityModalOpen(false)}
-                    postAddActivityHandler={props.postAddActivityHandler}/>
-
-                <AddBookLabourDialogContainer
-                    open={isBookLaborModalOpen}
-                    activities={activities}
-                    workorderNumber={props.workorder}
-                    department={props.department}
-                    departmentDesc={props.departmentDesc}
-                    defaultEmployee={props.defaultEmployee}
-                    defaultEmployeeDesc={props.defaultEmployeeDesc}
-                    onChange={() => readBookLabours(props.workorder)}
-                    onClose={() => setIsBookLaborModalOpen(false)}/>
+                <Button onClick={() => setIsBookLaborModalOpen(true)} color="primary">
+                    Book Labor
+                </Button>
             </div>
-        </EISPanel>
 
+            <AddActivityDialogContainer
+                open={isActivityModalOpen}
+                workorderNumber={props.workorder}
+                onChange={() => readActivities(props.workorder)}
+                onClose={() => setIsActivityModalOpen(false)}
+                postAddActivityHandler={props.postAddActivityHandler}/>
+
+            <AddBookLabourDialogContainer
+                open={isBookLaborModalOpen}
+                activities={activities}
+                workorderNumber={props.workorder}
+                department={props.department}
+                departmentDesc={props.departmentDesc}
+                defaultEmployee={props.defaultEmployee}
+                defaultEmployeeDesc={props.defaultEmployeeDesc}
+                onChange={() => readBookLabours(props.workorder)}
+                onClose={() => setIsBookLaborModalOpen(false)}/>
+        </div>
     )
 }
 
