@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import WSParts from "../../../tools/WSParts";
 import EISTable from 'eam-components/dist/ui/components/table';
-import EISPanel from 'eam-components/dist/ui/components/panel';
 
 function PartWhereUsed(props) {
 
@@ -29,10 +28,11 @@ function PartWhereUsed(props) {
         return null;
 
     return (
-        <EISPanel heading="WHERE USED">
-            <EISTable data={data} headers={headers} propCodes={propCodes}
-                      linksMap={linksMap}/>
-        </EISPanel>
+        <EISTable
+            data={data}
+            headers={headers}
+            propCodes={propCodes}
+            linksMap={linksMap} />
     );
 }
 

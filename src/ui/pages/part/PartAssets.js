@@ -2,7 +2,6 @@ import React from 'react'
 import EAMTable from "eam-components/dist/ui/components/eamtable/EAMTable";
 import EAMTableDataAdapter from "eam-components/dist/ui/components/eamtable/EAMTableDataAdapter";
 import { Link } from 'react-router-dom';
-import EISPanel from 'eam-components/dist/ui/components/panel';
 import WSParts from "../../../tools/WSParts";
 
 
@@ -63,30 +62,28 @@ const convertRowData = (responseBody) => responseBody.data || [];
 const convertColumnMetadata = () => columnsMetadata;
 
 const PartAssets = (props) => {
-    const { partCode, heading } = props
+    const { partCode } = props
 
     return (
-        <EISPanel heading={heading} detailsStyle={{ display: 'flex', flexDirection: 'column' }}>
-            <EAMTableDataAdapter
-                fetchData={async () => WSParts.getAssetsList(partCode)}
-                convertRowData={convertRowData}
-                convertColumnMetadata={convertColumnMetadata}>
-                {({ loading, requestError, rows, columnsMetadata }) =>
-                    <EAMTable
-                        loading={loading}
-                        rows={rows}
-                        columnsMetadata={columnsMetadata}
-                        isSortEnabled={() => true}
-                        cellRenderer={customCellRenderer}
-                        extraBodyRender={() =>
-                            <>
-                                {!loading && !requestError && !rows.length && <caption>No Assets to show.</caption>}
-                                {!loading && requestError && <caption>Failed to load Assets</caption>}
-                            </>
-                        } />
-                 }
-            </EAMTableDataAdapter>
-        </EISPanel>
+        <EAMTableDataAdapter
+            fetchData={async () => WSParts.getAssetsList(partCode)}
+            convertRowData={convertRowData}
+            convertColumnMetadata={convertColumnMetadata}>
+            {({ loading, requestError, rows, columnsMetadata }) =>
+                <EAMTable
+                    loading={loading}
+                    rows={rows}
+                    columnsMetadata={columnsMetadata}
+                    isSortEnabled={() => true}
+                    cellRenderer={customCellRenderer}
+                    extraBodyRender={() =>
+                        <>
+                            {!loading && !requestError && !rows.length && <caption>No Assets to show.</caption>}
+                            {!loading && requestError && <caption>Failed to load Assets</caption>}
+                        </>
+                    } />
+                }
+        </EAMTableDataAdapter>
     )
 }
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {setLayoutProperty} from '../../actions/uiActions'
 import {Link} from 'react-router-dom'
@@ -7,13 +7,15 @@ import Menu from 'mdi-material-ui/Menu'
 import './ApplicationLayout.css'
 import UserInfoContainer from './UserInfoContainer'
 import {FileTree, FormatHorizontalAlignLeft, FormatHorizontalAlignRight} from 'mdi-material-ui';
+import { useLocation } from 'react-router-dom';
 
 export default function ApplicationLayout(props) {
-    const [menuCompacted, setMenuCompacted] = useState(true)
+    const [menuCompacted, setMenuCompacted] = useState(false)
     const [mobileMenuActive, setMobileMenuActive] = useState(false)
     const dispatch = useDispatch();
     const showEqpTree = useSelector(state => state.ui.layout.showEqpTree)
     const showEqpTreeButton = useSelector(state => state.ui.layout.showEqpTreeButton)
+    const location = useLocation()
 
     const headerLinkStyle = {
         color: "white",
@@ -27,8 +29,13 @@ export default function ApplicationLayout(props) {
         fontSize: 18
     }
 
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        searchParams.get('maximize') && setMenuCompacted(true);
+    }, [])
+
     return (
-        <div id="maindiv" className={(menuCompacted) ? '' : 'SlimMenu'} onClick={() => menuCompacted && mobileMenuActive && setMobileMenuActive(false)}>
+        <div id="maindiv" className={(menuCompacted) ? 'SlimMenu' : ''} onClick={() => !menuCompacted && mobileMenuActive && setMobileMenuActive(false)}>
             <div id="topbar">
                 <div id="topbar-left">
                     <Link style={headerLinkStyle} to="/">EAM Light</Link>
@@ -38,9 +45,9 @@ export default function ApplicationLayout(props) {
                     <div id="menu-resize-btn">
                         <IconButton onClick={() => setMenuCompacted(!menuCompacted)}>
                             {(menuCompacted) ? (
-                                <FormatHorizontalAlignLeft style={menuIconStyle}/>
-                            ) : (
                                 <FormatHorizontalAlignRight style={menuIconStyle}/>
+                            ) : (
+                                <FormatHorizontalAlignLeft style={menuIconStyle}/>
                             )}
                         </IconButton>
                     </div>
