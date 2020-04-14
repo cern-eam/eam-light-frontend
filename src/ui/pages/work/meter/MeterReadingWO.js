@@ -1,8 +1,9 @@
 import React from 'react';
 import WSMeters from '../../../../tools/WSMeters';
-import EISPanel from 'eam-components/dist/ui/components/panel';
 import MeterReadingContent from "../../meter/MeterReadingContent";
 import EAMConfirmDialog from "../../../components/EAMConfirmDialog";
+import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/SimpleEmptyState';
+import BlockUi from 'react-block-ui';
 
 /**
  * Meter Readings inside the work order number (workorder).
@@ -14,7 +15,7 @@ const rollOverMessageCreate = 'Value is less than the Last Reading, which indica
 class MeterReadingWO extends React.Component {
 
     state = {
-        blocking: false,
+        blocking: true,
         meterReadings: [],
         dialogOpen: false,
         createMessage: defaultMessageCreate
@@ -108,31 +109,31 @@ class MeterReadingWO extends React.Component {
             meterReadings.map((reading, index) => {
                 return (
                     <div key={`meter_${index}`}>
-                        <MeterReadingContent key={`meter_${index}`} reading={reading}
-                                             parentProps={parentProps}/>
+                        <MeterReadingContent
+                            reading={reading}
+                            parentProps={parentProps}/>
                     </div>);
             }));
     };
 
     render() {
-        //Render if there are readings
-        if (this.state.meterReadings.length === 0) {
-            return <div/>;
-        }
-
-        //Readings, so render the region
+        const { blocking, meterReadings } = this.state;
+        const isEmptyState = !blocking && meterReadings.length === 0;
         return (
-            <EISPanel heading="METER READINGS"
-                           detailsStyle={{padding: '0'}}>
-                <div style={{width: "100%", marginTop: 0}}>
+            isEmptyState
+            ? (
+                <SimpleEmptyState message="No Meter Readings to show"/>
+            )
+            : (
+                <BlockUi blocking={blocking} style={{width: "100%", marginTop: 0}}>
                     {this.renderMetersList()}
-                </div>
-                <EAMConfirmDialog isOpen={this.state.dialogOpen} title={`Create Meter Reading`}
-                                  message={this.state.createMessage} cancelHandler={this.closeDialog}
-                                  confirmHandler={this.createMeterReadingHandler}
-                                  blocking={this.state.blocking}
-                />
-            </EISPanel>
+                    <EAMConfirmDialog isOpen={this.state.dialogOpen} title={`Create Meter Reading`}
+                                    message={this.state.createMessage} cancelHandler={this.closeDialog}
+                                    confirmHandler={this.createMeterReadingHandler}
+                                    blocking={this.state.blocking}
+                    />
+                </BlockUi>
+            )
         )
     }
 }

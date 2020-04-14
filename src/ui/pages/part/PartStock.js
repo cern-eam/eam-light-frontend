@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import WSParts from '../../../tools/WSParts'
 import EISTable from 'eam-components/dist/ui/components/table';
-import EISPanel from 'eam-components/dist/ui/components/panel';
 import {Link} from 'react-router-dom';
 
 function PartStock(props) {
@@ -39,9 +38,7 @@ function PartStock(props) {
         return null;
 
     return (
-        <EISPanel heading="PART STOCK">
-            <EISTable data={data} headers={headers} propCodes={propCodes}/>
-        </EISPanel>
+        <EISTable data={data} headers={headers} propCodes={propCodes}/>
     );
 
 }
