@@ -11,9 +11,9 @@ const MenuWorkorder = (props) => {
     }
 
     const iconColors = {
-        H: 'red',
-        M: 'orange',
-        L: 'green'
+        'Haute': 'red',
+        'Moyenne': 'orange',
+        'Basse': 'green'
     }
 
     const iconStyle = {
