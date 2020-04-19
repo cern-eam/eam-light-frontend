@@ -104,7 +104,7 @@ export default class Location extends Entity {
                                     setLayout: this.setLayout.bind(this),
                                     newEquipment: this.state.layout.newEntity,
                                     applicationData: this.props.applicationData,
-                                    extendedLink: this.props.applicationData.EL_ASSLI,
+                                    extendedLink: this.props.applicationData.EL_LOCLI,
                                     screencode: this.props.userData.screens[this.props.userData.locationScreen].screenCode
                                  }}
                                  width={730}

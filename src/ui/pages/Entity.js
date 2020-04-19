@@ -387,7 +387,6 @@ export default class readEntityEquipment extends Component {
         }
     }
 
-
     //
     // HELPER METHODS
     //
