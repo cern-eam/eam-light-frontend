@@ -7,10 +7,11 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAuto
 import WS from '../../../tools/WS'
 import UDFChar from "../../components/userdefinedfields/UDFChar";
 import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
+import WSWorkorders from "../../../tools/WSWorkorders"
 
 function WorkorderDetails(props) {
 
-    const { children, workOrderLayout, workorder, updateWorkorderProperty, layout, applicationData, setWOEquipment } = props;
+    const { children, workOrderLayout, workorder, updateWorkorderProperty, layout, applicationData, setWOEquipment, userData } = props;
     const rpawClassesList = (applicationData && applicationData.EL_TRPAC && applicationData.EL_TRPAC.split(',')) || [];
     const rpawLink = applicationData && applicationData.EL_TRPAW;
 
@@ -115,15 +116,15 @@ function WorkorderDetails(props) {
                                  updateProperty={updateWorkorderProperty}
                                  autocompleteHandler={(filter, config) => WS.autocompleteClass('EVNT', filter, config)}/>
 
-                {/*<EAMAutocomplete children={children}*/}
-                                 {/*elementInfo={workOrderLayout.fields['standardwo']}*/}
-                                 {/*value={workorder.standardWO}*/}
-                                 {/*valueKey="standardWO"*/}
-                                 {/*valueDesc={workorder.standardWODesc}*/}
-                                 {/*descKey="standardWODesc"*/}
-                                 {/*updateProperty={updateWorkorderProperty}*/}
-                                 {/*onChangeValue={props.readStandardWorkOrder}*/}
-                                 {/*autocompleteHandler={WSWorkorders.autocompleteStandardWorkOrder.bind(null, userData.eamAccount.userGroup)}/>*/}
+                <EAMAutocomplete children={children}
+                    elementInfo={workOrderLayout.fields['standardwo']}
+                    value={workorder.standardWO}
+                    valueKey="standardWO"
+                    valueDesc={workorder.standardWODesc}
+                    descKey="standardWODesc"
+                    updateProperty={updateWorkorderProperty}
+                    onChangeValue={props.readStandardWorkOrder}
+                    autocompleteHandler={WSWorkorders.autocompleteStandardWorkOrder.bind(null, userData.eamAccount.userGroup)}/>
 
                 <EAMInput
                         elementInfo={{...workOrderLayout.fields['parentwo'], readonly: true}}

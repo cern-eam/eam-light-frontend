@@ -6,6 +6,7 @@ import Ajax from 'eam-components/dist/tools/ajax'
 import ErrorTypes from "../../enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
+import {assignDefaultValues, assignQueryParamValues} from './EntityTools';
 
 export default class readEntityEquipment extends Component {
 
@@ -337,54 +338,10 @@ export default class readEntityEquipment extends Component {
         let layout = this.settings.layout;
         let layoutPropertiesMap = this.settings.layoutPropertiesMap;
         let queryParams = queryString.parse(window.location.search);
-        return this.assignQueryParamValues(this.assignDefaultValues(entity, layout, layoutPropertiesMap), queryParams)
-    }
 
-    assignQueryParamValues(entity, queryParams) {
-        // Populate the entity object with query params keys matching the custom field code
-        if (entity.customField) {
-            entity.customField.filter(cf => queryParams[cf.code]).forEach(cf => cf.value = queryParams[cf.code])
-        }
-
-        // Create an entity-like object with the values from the query parameters
-        let queryValues = Object.keys(queryParams).reduce( (result, qkey) => {
-            if (qkey.startsWith("udf")) {
-                set(result, `userDefinedFields.${qkey}`, queryParams[qkey])
-            } else {
-                // Transform the query key (qkey) to match exactly the key name in the entity (ekey)
-                result[Object.keys(entity).find(ekey => ekey.toUpperCase() === qkey.toUpperCase())] = queryParams[qkey];
-            }
-            return result;
-        }, {})
-        delete queryValues.undefined;
-
-        return {
-            ...entity,
-            ...queryValues,
-            userDefinedFields: {
-                ...entity.userDefinedFields,
-                ...queryValues.userDefinedFields
-            }
-        }
-    }
-
-    assignDefaultValues(entity, layout, layoutPropertiesMap) {
-        // Create an entity-like object with the default values from the screen's layout
-        let defaultValues = {};
-        if (layout && layoutPropertiesMap) {
-            defaultValues = Object.values(layout.fields)
-                .filter(field => field.defaultValue && layoutPropertiesMap[field.elementId])
-                .reduce((result, field) => set(result, layoutPropertiesMap[field.elementId], field.defaultValue === 'NULL' ? '' : field.defaultValue), {})
-        }
-
-        return {
-            ...entity,
-            ...defaultValues,
-            userDefinedFields: {
-                ...entity.userDefinedFields,
-                ...defaultValues.userDefinedFields
-            }
-        }
+        entity = assignDefaultValues(entity, layout, layoutPropertiesMap);
+        entity = assignQueryParamValues(entity, queryParams);
+        return entity;
     }
 
     //
