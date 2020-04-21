@@ -339,9 +339,8 @@ export default class readEntityEquipment extends Component {
         let layoutPropertiesMap = this.settings.layoutPropertiesMap;
         let queryParams = queryString.parse(window.location.search);
 
-        const config = {forced: true};
-        entity = assignDefaultValues(entity, layout, layoutPropertiesMap, config);
-        entity = assignQueryParamValues(entity, queryParams, config);
+        entity = assignDefaultValues(entity, layout, layoutPropertiesMap);
+        entity = assignQueryParamValues(entity, queryParams);
         return entity;
     }
 
