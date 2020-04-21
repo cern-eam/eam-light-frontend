@@ -13,49 +13,63 @@ export const cloneEntity = entity => ({
 });
 
 // assigns the user defined fields from userDefinedFields to the entity
-export const assignUserDefinedFields = (entity, userDefinedFields) => {
+export const assignUserDefinedFields = (entity, userDefinedFields, {forced = false} = {}) => {
     const newEntity = cloneEntity(entity);
-    newEntity.userDefinedFields = Object.assign({}, 
-        ...Object.entries(newEntity.userDefinedFields)
-            .map(([key, value]) => ({[key]: value ? value : userDefinedFields[key]})));
-    return newEntity;
+    let expr = Object.entries(userDefinedFields);
 
+    if(!forced) {
+        expr = expr.filter(([key]) => !newEntity.userDefinedFields[key])
+    }
+    
+    expr.forEach(([key, value]) => newEntity.userDefinedFields[key] = value);
+    return newEntity;
 }
 
-// assigns the custom fields from the customField object to the ones that are present in the entity
+// assigns the custom fields from an object to the ones that are present in the entity
 // if the specified custom fields are not present in the entity, nothing is done
-export const assignCustomField = (entity, customField) => {
+export const assignCustomFieldFromObject = (entity, object, {forced = false} = {}) => {
     const newEntity = cloneEntity(entity);
-    newEntity.customField = newEntity.customField.map(cf => ({...cf,
-        value: ((customField || []).find(cf2 => cf.code === cf2.code) || {}).value || cf.value
-    }));
+    let expr = newEntity.customField.filter(cf => object[cf.code]);
+
+    if(!forced) {
+        expr = expr.filter(cf => !cf.value);
+    }
+
+    expr.forEach(cf => cf.value = object[cf.code]);
     return newEntity;
 }
 
 // assigns the custom fields from the customField object to the entity, merging old values
-export const assignNewCustomField = (entity, customField) => {
+export const assignCustomFieldFromCustomField = (entity, customField, {forced = false} = {}) => {
+    const getCustomField = code => customField.find(cf => code === cf.code);
+
     const newEntity = cloneEntity(entity);
-    newEntity.customField = customField.map(cf => ({...cf,
-        value: ((entity.customField || []).find(cf2 => cf.code == cf2.code) || {}).value || cf.value
-    }));
+    let expr = newEntity.customField.filter(cf => getCustomField(cf.code));
+    
+    if(!forced) {
+        expr = expr.filter(cf => !cf.value);
+    }
+
+    expr.forEach(cf => cf.value = getCustomField(cf.code).value);
     return newEntity;
 }
 
 // assigns the values in values to the entity
 // values that do not exist in the entity are not copied
 // if the entity has a non-empty value, that value is not copied, unless forced is truthy
-export const assignValues = (entity, values, forced) => {
+export const assignValues = (entity, values, {forced = false} = {}) => {
     const newEntity = cloneEntity(entity);
-    Object.keys(entity)
-        .filter(key => values.hasOwnProperty(key))
-        .forEach(key => {
-            newEntity[key] = forced || !entity[key] ? values[key] : entity[key];
-        });
+    let expr = Object.keys(newEntity).filter(key => values.hasOwnProperty(key));
 
+    if(!forced) {
+        expr = expr.filter(key => !newEntity[key]);
+    }
+
+    expr.forEach(key => newEntity[key] = values[key]);
     return newEntity;
 };
 
-export const assignQueryParamValues = (entity, queryParams) => {
+export const assignQueryParamValues = (entity, queryParams, config = {forced: true}) => {
     // this function converts an object with case insensitive keys to an object with
     // case sensitive keys, based on a target object
     const toSensitive = (target, insensitive) => {
@@ -67,33 +81,32 @@ export const assignQueryParamValues = (entity, queryParams) => {
             .filter(([key]) => key !== undefined));
     }
 
-    queryParams = {...queryParams};
+    const caseSensitiveQueryParams = toSensitive(entity, queryParams);
 
     // delete values that we cannot touch
-    delete queryParams.userDefinedFields;
-    delete queryParams.customField;
+    delete caseSensitiveQueryParams.userDefinedFields;
+    delete caseSensitiveQueryParams.customField;
 
-    entity = assignValues(entity, toSensitive(entity, queryParams));
-    entity = assignCustomField(entity, queryParams);
+    entity = assignValues(entity, caseSensitiveQueryParams, config);
+    entity = assignCustomFieldFromObject(entity, queryParams, config);
 
     const userDefinedFields = Object.assign({}, ...Object.entries(queryParams)
         .filter(([key]) => key.toLowerCase().startsWith("udf")) // only include keys prepended with udf
         .map(([key, value]) => ({[key.toLowerCase()]: value}))); // remove udf substring at the beginning from key
 
-    return assignUserDefinedFields(entity, userDefinedFields);
+    return assignUserDefinedFields(entity, userDefinedFields, config);
 }
 
-export const assignDefaultValues = (entity, layout, layoutPropertiesMap) => {
+export const assignDefaultValues = (entity, layout, layoutPropertiesMap, config = {forced: false}) => {
     // Create an entity-like object with the default values from the screen's layout
     let defaultValues = {};
     if (layout && layoutPropertiesMap) {
         defaultValues = Object.values(layout.fields)
             .filter(field => field.defaultValue && layoutPropertiesMap[field.elementId])
-            .map(field => (console.log(field), field))
             .reduce((result, field) => set(result, layoutPropertiesMap[field.elementId], 
                     field.defaultValue === 'NULL' ? '' : field.defaultValue), {});
     }
 
-    entity = assignValues(entity, defaultValues);
-    return assignUserDefinedFields(entity, defaultValues.userDefinedFields);
+    entity = assignValues(entity, defaultValues, config);
+    return assignUserDefinedFields(entity, defaultValues.userDefinedFields, config);
 }
