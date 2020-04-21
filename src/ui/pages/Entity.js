@@ -245,7 +245,7 @@ export default class readEntityEquipment extends Component {
         let code = this.state[this.settings.entity][this.settings.entityCodeProperty];
         this.setLayout({ newEntity: true });
         this.setState({[this.settings.entity]: {
-            ...this.assignDefaultValues(this.state[this.settings.entity],
+            ...assignDefaultValues(this.state[this.settings.entity],
                                         this.settings.layout,
                                         this.settings.layoutPropertiesMap),
             copyFrom: code}});

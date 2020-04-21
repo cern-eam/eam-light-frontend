@@ -41,16 +41,21 @@ export const assignCustomFieldFromObject = (entity, object, {forced = false} = {
 
 // assigns the custom fields from the customField object to the entity, merging old values
 export const assignCustomFieldFromCustomField = (entity, customField, {forced = false} = {}) => {
-    const getCustomField = code => customField.find(cf => code === cf.code);
-
     const newEntity = cloneEntity(entity);
-    let expr = newEntity.customField.filter(cf => getCustomField(cf.code));
-    
-    if(!forced) {
-        expr = expr.filter(cf => !cf.value);
+    const oldCustomField = newEntity.customField;
+    newEntity.customField = customField.map(cf => ({...cf})); // ensure custom field is not modified
+
+    if(forced) {
+        return newEntity;
     }
 
-    expr.forEach(cf => cf.value = getCustomField(cf.code).value);
+    const getOldCustomField = ({code}) => oldCustomField.find(cf => code === cf.code);
+
+    newEntity.customField.filter(cf => {
+            const field = getOldCustomField(cf);
+            return field && field.value;
+        }).forEach(cf => cf.value = getOldCustomField(cf).value);
+
     return newEntity;
 }
 
