@@ -221,17 +221,18 @@ class Workorder extends Entity {
         this.checklists.readActivities(this.state.workorder.number);
     };
 
-    readStandardWorkOrder = async standardWorkOrderCode => {
-        if (!standardWorkOrderCode) {
+    readStandardWorkOrder = (standardWorkOrderCode, firstTime) => {
+        if (!standardWorkOrderCode || ((firstTime && !this.state.layout.newEntity))) {
             return;
         }
 
-        const response = await WSWorkorder.getStandardWorkOrder(standardWorkOrderCode);
-        const standardWorkOrder = response.body.data;
+        WSWorkorder.getStandardWorkOrder(standardWorkOrderCode).then(response => {
+            const standardWorkOrder = response.body.data;
         
-        this.setState(state => ({
-            workorder: assignStandardWorkOrderValues({...state.workorder}, standardWorkOrder)
-        }));
+            this.setState(state => ({
+                workorder: assignStandardWorkOrderValues({...state.workorder}, standardWorkOrder)
+            }));
+        })
     }
 
     //
@@ -286,7 +287,8 @@ class Workorder extends Entity {
                                     {...props}
                                     readStandardWorkOrder={this.readStandardWorkOrder}
                                     applicationData={this.props.applicationData} 
-                                    userData={this.props.userData} />
+                                    userData={this.props.userData} 
+                                    newEntity={this.state.layout.newEntity} />
 
                                 {!this.props.hiddenRegions[this.getRegions().SCHEDULING.code] &&
                                 WorkorderTools.isRegionAvailable('SCHEDULING', props.workOrderLayout) &&
