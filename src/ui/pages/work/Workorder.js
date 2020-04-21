@@ -21,10 +21,10 @@ import WorkorderClosingCodes from './WorkorderClosingCodes';
 import WorkorderDetails from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
 import WorkorderTools from "./WorkorderTools";
-import {assignValues, assignUserDefinedFields, assignNewCustomField} from '../EntityTools';
+import {assignValues, assignUserDefinedFields, assignCustomFieldFromCustomField} from '../EntityTools';
 
 const assignStandardWorkOrderValues = (workOrder, standardWorkOrder) => {
-    const swo = swoKey => standardWorkOrder[swoKey];
+    const swoToWoMap = ([k, v]) => [k, standardWorkOrder[v]];
 
     // forced assign values
     workOrder = assignValues(workOrder, Object.fromEntries([
@@ -32,15 +32,15 @@ const assignStandardWorkOrderValues = (workOrder, standardWorkOrder) => {
         ['typeCode', 'workOrderTypeCode'],
         ['problemCode', 'problemCode'],
         ['priorityCode', 'priorityCode']
-    ].map(([k, v]) => [k, swo(v)])), true);
+    ].map(swoToWoMap), {forced: true}));
 
     // non-forced assign values
     workOrder = assignValues(workOrder, Object.fromEntries([
         ['description', 'desc'],
-    ].map(([k, v]) => [k, swo(v)])));
+    ].map(swoToWoMap)));
 
     workOrder = assignUserDefinedFields(workOrder, standardWorkOrder.userDefinedFields);
-    workOrder = assignNewCustomField(workOrder, standardWorkOrder.customField);
+    workOrder = assignCustomFieldFromCustomField(workOrder, standardWorkOrder.customField);
 
     return workOrder;
 };
