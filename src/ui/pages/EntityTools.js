@@ -102,7 +102,7 @@ export const assignQueryParamValues = (entity, queryParams, config = {forced: tr
     return assignUserDefinedFields(entity, userDefinedFields, config);
 }
 
-export const assignDefaultValues = (entity, layout, layoutPropertiesMap, config = {forced: false}) => {
+export const assignDefaultValues = (entity, layout, layoutPropertiesMap, config = {forced: true}) => {
     // Create an entity-like object with the default values from the screen's layout
     let defaultValues = {};
     if (layout && layoutPropertiesMap) {
