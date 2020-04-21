@@ -32,7 +32,7 @@ const assignStandardWorkOrderValues = (workOrder, standardWorkOrder) => {
         ['typeCode', 'workOrderTypeCode'],
         ['problemCode', 'problemCode'],
         ['priorityCode', 'priorityCode']
-    ].map(swoToWoMap), {forced: true}));
+    ].map(swoToWoMap)), {forced: true});
 
     // non-forced assign values
     workOrder = assignValues(workOrder, Object.fromEntries([
