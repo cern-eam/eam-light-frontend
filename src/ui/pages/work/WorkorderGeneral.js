@@ -11,11 +11,15 @@ import WSWorkorders from "../../../tools/WSWorkorders"
 
 function WorkorderDetails(props) {
 
-    const { children, workOrderLayout, workorder, updateWorkorderProperty, layout, applicationData, setWOEquipment, userData } = props;
+    const { children, workOrderLayout, workorder, updateWorkorderProperty, layout, applicationData, setWOEquipment, userData, newEntity } = props;
     const rpawClassesList = (applicationData && applicationData.EL_TRPAC && applicationData.EL_TRPAC.split(',')) || [];
     const rpawLink = applicationData && applicationData.EL_TRPAW;
 
-    let onChangeEquipment = (value) => {
+    let onChangeEquipment = (value, firstTime) => {
+        if(firstTime && !newEntity) {
+            return;
+        }
+
         //If there is a value, fetch location, department, cost code
         //and custom fields
         if (value) {

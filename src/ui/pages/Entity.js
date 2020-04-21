@@ -127,15 +127,15 @@ export default class readEntityEquipment extends Component {
         //
         this.settings.readEntity(code, {cancelToken: this.cancelSource.token})
             .then(response => {
-                this.setState(() => ({
-                    [this.settings.entity]: response.body.data,
-                     readError: null
-                }))
                 this.setLayout({
                     newEntity: false,
                     blocking: false,
                     isModified: false
                 })
+                this.setState(() => ({
+                    [this.settings.entity]: response.body.data,
+                     readError: null
+                }))
                 // Invoke entity specific logic on the subclass
                 this.postRead(response.body.data)
                 // Disable all children when updates not allowed
