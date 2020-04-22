@@ -29,13 +29,6 @@ class ReplaceEqp extends Component {
         oldEquipment: undefined
     };
 
-    componentWillMount() {
-        //Load list of statuses
-        WSEquipment.getEquipmentStatusValues(false).then(response => {
-            this.setState(() => ({statusList: response.body.data}))
-        }).catch(error => this.props.handleError(error));
-    }
-
     componentDidMount() {
         //Check URL parameters
         const values = queryString.parse(window.location.search)
@@ -50,6 +43,24 @@ class ReplaceEqp extends Component {
         }
     }
 
+    loadStatuses = () => {
+        if(!this.state.replaceEquipment.oldEquipment) {
+            this.setState({statusList: []})
+            return;
+        }
+
+        const oldEquipmentStatus = this.state.replaceEquipment.oldEquipmentStatus;
+        const userGroup = this.props.userData.eamAccount.userGroup;
+
+        //Load list of statuses
+        WSEquipment.getEquipmentStatusValues(userGroup, false, oldEquipmentStatus)
+            .then(response => {
+                const data = response.body.data;
+                data.sort(({desc: a}, {desc: b}) => a < b ? -1 : a > b ? 1 : 0);
+                this.setState({statusList: data})
+        }).catch(error => this.props.handleError(error));
+    }
+
     updateEqpReplacementProp = (key, value) => {
         this.setState((prevState) => ({
             replaceEquipment: {...prevState.replaceEquipment, [key]: value}
@@ -57,15 +68,16 @@ class ReplaceEqp extends Component {
     };
 
     onChangeOldEquipment = (value) => {
-        if (value && this.state.replaceEquipment.oldEquipment !== value) {
+        if (value) {
             this.loadEquipmentData(value, 'oldEquipment');
         } else if (!value) {
             this.setState(() => ({oldEquipment: undefined}));
+            this.loadStatuses();
         }
     };
 
     onChangeNewEquipment = (value) => {
-        if (value && this.state.replaceEquipment.newEquipment !== value) {
+        if (value) {
             this.loadEquipmentData(value, 'newEquipment');
         } else if (!value) {
             this.setState(() => ({newEquipment: undefined}));
@@ -94,6 +106,7 @@ class ReplaceEqp extends Component {
                         oldEquipmentStatus: response.body.data.statusCode
                     }
                 }));
+                this.loadStatuses();
             }
             this.setState(() => ({blocking: false}));
         }).then().catch(error => {
