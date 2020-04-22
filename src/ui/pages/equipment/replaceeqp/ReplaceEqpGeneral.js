@@ -126,13 +126,14 @@ class ReplaceEqpGeneral extends Component {
                         elementInfo={{
                             ...this.props.equipmentLayout.fields['assetstatus'],
                             attribute: "R",
-                            text: "Old Equipment Status after replacement"
+                            text: "Old Equipment Status after replacement",
+                            readonly: this.props.statusList.length === 0
                         }}
                         valueKey="oldEquipmentStatus"
                         values={this.props.statusList}
                         value={this.props.replaceEquipment.oldEquipmentStatus}
                         updateProperty={this.props.updateProperty}
-                        children={this.children}/>
+                        children={this.children} />
 
                     <EAMBarcodeInput updateProperty={value => this.props.updateProperty('newEquipment', value)} right={0} top={20}>
                         <EAMAutocomplete elementInfo={{
