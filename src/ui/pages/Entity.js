@@ -6,6 +6,7 @@ import Ajax from 'eam-components/dist/tools/ajax'
 import ErrorTypes from "../../enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
+import ParametrizedURLDialog from '../../ui/components/parametrization/ParametrizedURLDialog'
 
 export default class readEntityEquipment extends Component {
 
@@ -16,7 +17,8 @@ export default class readEntityEquipment extends Component {
                 blocking: false,
                 newEntity: true,
                 isModified: false
-            }
+            },
+            isURLGenerationOpen: false
         }
         // map of all children components (the children are responsible for registration)
         this.children = {}
@@ -83,10 +85,10 @@ export default class readEntityEquipment extends Component {
 
                 // Assign default values
                 let entity = this.assignValues(response.body.data);
-
+                const queryParams = queryString.parse(window.location.search, { parseBooleans: true });
                 // Save to the state
                 this.setState({
-                    [this.settings.entity]: entity,
+                    [this.settings.entity]: this.mergeEntityWithParams(entity, queryParams),
                     readError: null
                 })
 
@@ -403,6 +405,39 @@ export default class readEntityEquipment extends Component {
         }
     }
 
+    getQueryParamsSet() {
+        const { userDefinedFields, customField, ...otherProperties} = this.state[this.settings.entity];
+        const customFields = customField.reduce((acc, cf) => ({ ...acc, ['_CF_' + cf.code]: cf.value }), {});
+        return Object.entries({ ...otherProperties, ...userDefinedFields, ...customFields }).reduce((a,[key, value]) => (value == null || value === "" ? a : { ...a, [key]: value }), {});
+    }
+
+    filterObjectByKeys = (keys, obj, predicate = (obj, key) => obj[key]) => 
+        keys.reduce((acc, key) => ({ ...acc, ...(predicate(obj, key) && { [key]: obj[key] }) }), {});
+
+
+    mergeEntityWithParams = (entity, params = {}) => {
+        const availableParams = Object.keys(entity).filter(e => !['userDefinedFields', 'customField'].includes(e));
+        const availableUDFParams = Object.keys(entity.userDefinedFields);
+        debugger
+        return {
+            ...entity,
+            ...this.filterObjectByKeys(availableParams, params),
+            userDefinedFields: { ...this.filterObjectByKeys(availableUDFParams, params) },
+            customField: entity.customField.reduce((acc, customField) => (
+                [
+                    ...acc,
+                    {
+                        ...customField,
+                        value: params['_CF_' + customField.code] || customField.value
+                    }
+                ]
+            ), [])
+
+        };
+    }
+
+
+
     //
     // RENDER
     //
@@ -425,7 +460,15 @@ export default class readEntityEquipment extends Component {
 
         return (
             <div onKeyDown={this.onKeyDownHandler.bind(this)} tabIndex={0} style={{width: '100%', height: '100%', outline: "none"}}>
+                <button onClick={() => this.setState({ isURLGenerationOpen: true })}>Generate URL</button>
                 {this.settings.renderEntity()}
+                <ParametrizedURLDialog
+                        title="Generate Parametrized URL"
+                        open={this.state.isURLGenerationOpen}
+                        onClose={() => this.setState({ isURLGenerationOpen: false })}
+                        params={this.getQueryParamsSet()}
+                        url={`${window.origin}${process.env.PUBLIC_URL}${window.location.pathname}`} />
+
             </div>
         )
     }
