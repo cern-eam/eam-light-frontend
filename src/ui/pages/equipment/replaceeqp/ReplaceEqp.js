@@ -149,9 +149,9 @@ class ReplaceEqp extends Component {
                                                    showError={this.props.showError}/>
                             </Grid>
                             <Grid item sm={6} xs={12}>
-                                <ReplaceEqpHierarchy equipment={this.state.oldEquipment} title="OLD EQUIPMENT HIERARCHY"
+                                <ReplaceEqpHierarchy equipment={this.state.oldEquipment} title="CURRENT HIERARCHY OF THE OLD EQUIPMENT"
                                                      equipmentLayout={this.props.equipmentLayout}/>
-                                <ReplaceEqpHierarchy equipment={this.state.newEquipment} title="NEW EQUIPMENT HIERARCHY"
+                                <ReplaceEqpHierarchy equipment={this.state.newEquipment} title="CURRENT HIERARCHY OF THE NEW EQUIPMENT"
                                                      equipmentLayout={this.props.equipmentLayout}/>
                             </Grid>
                         </Grid>
