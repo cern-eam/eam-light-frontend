@@ -132,7 +132,7 @@ export default class Asset extends Entity {
 
 
     getRegions = () => {
-        const { assetLayout, userData, applicationData, showError, showSuccess } = this.props;
+        const { assetLayout, userData, applicationData, showError, showNotification } = this.props;
         const { equipment, layout } = this.state;
 
         const commonProps = {
@@ -245,7 +245,7 @@ export default class Asset extends Entity {
                         creationMode="NCR"
                         edmsDocListLink={applicationData.edmsDocListLink}
                         showError={showError}
-                        showSuccess={showSuccess} />
+                        showSuccess={showNotification} />
                 ,
                 column: 2,
                 order: 8

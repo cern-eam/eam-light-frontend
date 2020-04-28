@@ -85,7 +85,7 @@ class Workorder extends Entity {
             edmsDocListLink,
             handleError,
             showError,
-            showSuccess,
+            showNotification,
             userData,
             workOrderLayout
         } = this.props;
@@ -196,7 +196,7 @@ class Workorder extends Entity {
                         creationMode="NCR"
                         edmsDocListLink={edmsDocListLink}
                         showError={showError}
-                        showSuccess={showSuccess} />
+                        showSuccess={showNotification} />
                 ,
                 column: 2,
                 order: 6
@@ -251,7 +251,7 @@ class Workorder extends Entity {
                         maxExpandedChecklistItems={Math.abs(parseInt(applicationData.EL_MCHLS)) || 50}
                         getWoLink={wo => '/workorder/' + wo}
                         ref={checklists => this.checklists = checklists}
-                        showSuccess={showSuccess}
+                        showSuccess={showNotification}
                         showError={showError}
                         handleError={handleError}
                         topSlot={
