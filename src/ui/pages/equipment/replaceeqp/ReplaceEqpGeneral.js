@@ -112,14 +112,14 @@ class ReplaceEqpGeneral extends Component {
                             attribute: "R",
                             text: "Old Equipment", xpath: "OldEquipment"
                         }}
-                                         value={this.props.replaceEquipment.oldEquipment}
-                                         updateProperty={this.props.updateProperty}
-                                         valueKey="oldEquipment"
-                                         autocompleteHandler={WSEquipment.autocompleteEquipmentReplacement}
-                                         onChangeValue={this.props.onChangeOldEquipment}
-                                         children={this.children}
-                                         valueDesc={this.props.replaceEquipment.oldEquipmentDesc}
-                                         descKey="oldEquipmentDesc"/>
+                            value={this.props.replaceEquipment.oldEquipment}
+                            updateProperty={this.props.updateProperty}
+                            valueKey="oldEquipment"
+                            autocompleteHandler={WSEquipment.autocompleteEquipmentReplacement}
+                            onChangeValue={this.props.onChangeOldEquipment}
+                            children={this.children}
+                            valueDesc={this.props.replaceEquipment.oldEquipmentDesc}
+                            descKey="oldEquipmentDesc"/>
                     </EAMBarcodeInput>
 
                     <EAMSelect
@@ -141,14 +141,14 @@ class ReplaceEqpGeneral extends Component {
                             attribute: "R",
                             text: "New Equipment", xpath: "NewEquipment"
                         }}
-                                         value={this.props.replaceEquipment.newEquipment}
-                                         updateProperty={this.props.updateProperty}
-                                         valueKey="newEquipment"
-                                         autocompleteHandler={WSEquipment.autocompleteEquipmentReplacement}
-                                         onChangeValue={this.props.onChangeNewEquipment}
-                                         children={this.children}
-                                         valueDesc={this.props.replaceEquipment.newEquipmentDesc}
-                                         descKey="newEquipmentDesc"/>
+                            value={this.props.replaceEquipment.newEquipment}
+                            updateProperty={this.props.updateProperty}
+                            valueKey="newEquipment"
+                            autocompleteHandler={WSEquipment.autocompleteEquipmentReplacement}
+                            onChangeValue={this.props.onChangeNewEquipment}
+                            children={this.children}
+                            valueDesc={this.props.replaceEquipment.newEquipmentDesc}
+                            descKey="newEquipmentDesc"/>
                     </EAMBarcodeInput>
 
                     {this.renderImageMode()}
