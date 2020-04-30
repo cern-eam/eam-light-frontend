@@ -71,7 +71,7 @@ class Workorder extends Entity {
         updateEntity: WSWorkorder.updateWorkOrder.bind(WSWorkorder),
         createEntity: WSWorkorder.createWorkOrder.bind(WSWorkorder),
         deleteEntity: WSWorkorder.deleteWorkOrder.bind(WSWorkorder),
-        initNewEntity: () => WSWorkorder.initWorkOrder("EVNT", this.props.location.search),
+        initNewEntity: WSWorkorder.initWorkOrder.bind(WSWorkorder, "EVNT"),
         layout: this.props.workOrderLayout,
         layoutPropertiesMap: WorkorderTools.layoutPropertiesMap
     }
