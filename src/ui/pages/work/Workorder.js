@@ -21,6 +21,27 @@ import WorkorderClosingCodes from './WorkorderClosingCodes';
 import WorkorderDetails from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
 import WorkorderTools from "./WorkorderTools";
+import {assignValues, assignUserDefinedFields, assignCustomFieldFromCustomField, AssignmentType} from '../EntityTools';
+
+const assignStandardWorkOrderValues = (workOrder, standardWorkOrder) => {
+    const swoToWoMap = ([k, v]) => [k, standardWorkOrder[v]];
+
+    workOrder = assignValues(workOrder, Object.fromEntries([
+        ['classCode', 'woClassCode'],
+        ['typeCode', 'workOrderTypeCode'],
+        ['problemCode', 'problemCode'],
+        ['priorityCode', 'priorityCode']
+    ].map(swoToWoMap)), AssignmentType.SOURCE_NOT_EMPTY);
+
+    workOrder = assignValues(workOrder, Object.fromEntries([
+        ['description', 'desc'],
+    ].map(swoToWoMap)), AssignmentType.DESTINATION_EMPTY);
+
+    workOrder = assignUserDefinedFields(workOrder, standardWorkOrder.userDefinedFields, AssignmentType.DESTINATION_EMPTY);
+    workOrder = assignCustomFieldFromCustomField(workOrder, standardWorkOrder.customField, AssignmentType.DESTINATION_EMPTY);
+
+    return workOrder;
+};
 
 class Workorder extends Entity {
 
@@ -50,7 +71,7 @@ class Workorder extends Entity {
         updateEntity: WSWorkorder.updateWorkOrder.bind(WSWorkorder),
         createEntity: WSWorkorder.createWorkOrder.bind(WSWorkorder),
         deleteEntity: WSWorkorder.deleteWorkOrder.bind(WSWorkorder),
-        initNewEntity: () => WSWorkorder.initWorkOrder("EVNT", this.props.location.search),
+        initNewEntity: WSWorkorder.initWorkOrder.bind(WSWorkorder, "EVNT"),
         layout: this.props.workOrderLayout,
         layoutPropertiesMap: WorkorderTools.layoutPropertiesMap
     }
@@ -198,49 +219,18 @@ class Workorder extends Entity {
         this.checklists.readActivities(this.state.workorder.number);
     };
 
-    readStandardWorkOrder(standardWorkOrder) {
-        if (standardWorkOrder) {
-            //TODO support standard work order change
-            /*
-            WSWorkorder.getStandardWorkOrder(standardWorkOrder).then(response => {
-
-            let workorder = this.state.workorder;
-            let standardWorkorder = response.body.data
-
-            const mapping = {
-              classCode: "woClassCode",
-              typeCode: "workOrderTypeCode",
-              description: "desc"
-            }
-
-            const standardWOProps = Object.keys(mapping).filter(k => !workorder[k]).reduce((result, k) => {
-                  result[k] = standardWorkorder[mapping[k]]
-                  return result;
-            }, {})
-
-            const userDefinedFields = Object.keys(workorder.userDefinedFields).reduce((result, udf) => {
-                result[udf] = workorder.userDefinedFields[udf] ? workorder.userDefinedFields[udf] : standardWorkorder.userDefinedFields[udf]
-                return result;
-            }, {})
-
-            const customField = workorder.customField.map(cf => {
-                if (!cf.value) {
-                    cf.value = standardWorkorder.customField.find(scf => scf.code = cf.code).value
-                }
-                return cf;
-            })
-
-            const newWorkorder = {
-                ...workorder,
-                ...standardWOProps,
-                customField,
-                userDefinedFields
-            }
-
-            this.setState({workorder: newWorkorder})
-            })
-            */
+    readStandardWorkOrder = (standardWorkOrderCode, firstTime) => {
+        if (!standardWorkOrderCode || ((firstTime && !this.state.layout.newEntity))) {
+            return;
         }
+
+        WSWorkorder.getStandardWorkOrder(standardWorkOrderCode).then(response => {
+            const standardWorkOrder = response.body.data;
+        
+            this.setState(state => ({
+                workorder: assignStandardWorkOrderValues({...state.workorder}, standardWorkOrder)
+            }));
+        })
     }
 
     //
@@ -291,7 +281,12 @@ class Workorder extends Entity {
                         <Grid container spacing={1}>
                             <Grid item md={6} sm={12} xs={12}>
 
-                                <WorkorderDetails {...props} readStandardWorkOrder={this.readStandardWorkOrder.bind(this)} applicationData={this.props.applicationData}/>
+                                <WorkorderDetails
+                                    {...props}
+                                    readStandardWorkOrder={this.readStandardWorkOrder}
+                                    applicationData={this.props.applicationData} 
+                                    userData={this.props.userData} 
+                                    newEntity={this.state.layout.newEntity} />
 
                                 {!this.props.hiddenRegions[this.getRegions().SCHEDULING.code] &&
                                 WorkorderTools.isRegionAvailable('SCHEDULING', props.workOrderLayout) &&
