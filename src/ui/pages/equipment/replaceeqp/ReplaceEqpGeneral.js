@@ -112,27 +112,28 @@ class ReplaceEqpGeneral extends Component {
                             attribute: "R",
                             text: "Old Equipment", xpath: "OldEquipment"
                         }}
-                                         value={this.props.replaceEquipment.oldEquipment}
-                                         updateProperty={this.props.updateProperty}
-                                         valueKey="oldEquipment"
-                                         autocompleteHandler={WSEquipment.autocompleteEquipmentReplacement}
-                                         onChangeValue={this.props.onChangeOldEquipment}
-                                         children={this.children}
-                                         valueDesc={this.props.replaceEquipment.oldEquipmentDesc}
-                                         descKey="oldEquipmentDesc"/>
+                            value={this.props.replaceEquipment.oldEquipment}
+                            updateProperty={this.props.updateProperty}
+                            valueKey="oldEquipment"
+                            autocompleteHandler={WSEquipment.autocompleteEquipmentReplacement}
+                            onChangeValue={this.props.onChangeOldEquipment}
+                            children={this.children}
+                            valueDesc={this.props.replaceEquipment.oldEquipmentDesc}
+                            descKey="oldEquipmentDesc"/>
                     </EAMBarcodeInput>
 
                     <EAMSelect
                         elementInfo={{
                             ...this.props.equipmentLayout.fields['assetstatus'],
                             attribute: "R",
-                            text: "Old Equipment Status after replacement"
+                            text: "Old Equipment Status after replacement",
+                            readonly: this.props.statusList.length === 0
                         }}
                         valueKey="oldEquipmentStatus"
                         values={this.props.statusList}
                         value={this.props.replaceEquipment.oldEquipmentStatus}
                         updateProperty={this.props.updateProperty}
-                        children={this.children}/>
+                        children={this.children} />
 
                     <EAMBarcodeInput updateProperty={value => this.props.updateProperty('newEquipment', value)} right={0} top={20}>
                         <EAMAutocomplete elementInfo={{
@@ -140,14 +141,14 @@ class ReplaceEqpGeneral extends Component {
                             attribute: "R",
                             text: "New Equipment", xpath: "NewEquipment"
                         }}
-                                         value={this.props.replaceEquipment.newEquipment}
-                                         updateProperty={this.props.updateProperty}
-                                         valueKey="newEquipment"
-                                         autocompleteHandler={WSEquipment.autocompleteEquipmentReplacement}
-                                         onChangeValue={this.props.onChangeNewEquipment}
-                                         children={this.children}
-                                         valueDesc={this.props.replaceEquipment.newEquipmentDesc}
-                                         descKey="newEquipmentDesc"/>
+                            value={this.props.replaceEquipment.newEquipment}
+                            updateProperty={this.props.updateProperty}
+                            valueKey="newEquipment"
+                            autocompleteHandler={WSEquipment.autocompleteEquipmentReplacement}
+                            onChangeValue={this.props.onChangeNewEquipment}
+                            children={this.children}
+                            valueDesc={this.props.replaceEquipment.newEquipmentDesc}
+                            descKey="newEquipmentDesc"/>
                     </EAMBarcodeInput>
 
                     {this.renderImageMode()}

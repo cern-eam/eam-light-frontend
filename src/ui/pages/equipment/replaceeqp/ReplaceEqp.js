@@ -29,13 +29,6 @@ class ReplaceEqp extends Component {
         oldEquipment: undefined
     };
 
-    componentWillMount() {
-        //Load list of statuses
-        WSEquipment.getEquipmentStatusValues(false).then(response => {
-            this.setState(() => ({statusList: response.body.data}))
-        }).catch(error => this.props.handleError(error));
-    }
-
     componentDidMount() {
         //Check URL parameters
         const values = queryString.parse(window.location.search)
@@ -50,6 +43,30 @@ class ReplaceEqp extends Component {
         }
     }
 
+    loadStatuses = () => {
+        if(!this.state.replaceEquipment.oldEquipment) {
+            this.setState(prevState => ({
+                statusList: [],
+                replaceEquipment: {
+                    ...prevState.replaceEquipment,
+                    oldEquipmentStatus: ''
+                }
+            }));
+            return;
+        }
+
+        const oldEquipmentStatus = this.state.replaceEquipment.oldEquipmentStatus;
+        const userGroup = this.props.userData.eamAccount.userGroup;
+
+        //Load list of statuses
+        WSEquipment.getEquipmentStatusValues(userGroup, false, oldEquipmentStatus)
+            .then(response => {
+                const data = response.body.data;
+                data.sort(({desc: a}, {desc: b}) => a < b ? -1 : a > b ? 1 : 0);
+                this.setState({statusList: data});
+        }).catch(error => this.props.handleError(error));
+    }
+
     updateEqpReplacementProp = (key, value) => {
         this.setState((prevState) => ({
             replaceEquipment: {...prevState.replaceEquipment, [key]: value}
@@ -57,18 +74,19 @@ class ReplaceEqp extends Component {
     };
 
     onChangeOldEquipment = (value) => {
-        if (value && this.state.replaceEquipment.oldEquipment !== value) {
+        if (value) {
             this.loadEquipmentData(value, 'oldEquipment');
-        } else if (!value) {
-            this.setState(() => ({oldEquipment: undefined}));
+        } else {
+            this.setState({oldEquipment: undefined});
+            this.loadStatuses();
         }
     };
 
     onChangeNewEquipment = (value) => {
-        if (value && this.state.replaceEquipment.newEquipment !== value) {
+        if (value) {
             this.loadEquipmentData(value, 'newEquipment');
-        } else if (!value) {
-            this.setState(() => ({newEquipment: undefined}));
+        } else {
+            this.setState({newEquipment: undefined});
         }
     };
 
@@ -78,45 +96,47 @@ class ReplaceEqp extends Component {
      * @param destination The property destination
      */
     loadEquipmentData = (code, destination) => {
-        this.setState(() => ({blocking: true}));
+        this.setState({blocking: true});
+
         //Read equipment
         WSEquipment.getEquipment(code).then(response => {
-            //Set equipment data
-            this.setState(() => ({
-                [destination]: response.body.data
-            }));
-            //Set status for old equipment
-            if (destination === 'oldEquipment') {
-                //Set the status
-                this.setState((prevState) => ({
-                    replaceEquipment: {
+            const setStateCallback = destination === 'oldEquipment' ?
+                this.loadStatuses : undefined;
+
+            this.setState(prevState => {
+                const newState = {
+                    [destination]: response.body.data, //Set equipment data
+                    blocking: false
+                };
+
+                //Set status for old equipment
+                if(destination === 'oldEquipment') {
+                    newState.replaceEquipment = {
                         ...prevState.replaceEquipment,
                         oldEquipmentStatus: response.body.data.statusCode
                     }
-                }));
-            }
-            this.setState(() => ({blocking: false}));
-        }).then().catch(error => {
-            this.setState(() => ({blocking: false}));
-        });
+                }
+
+                return newState;
+            }, setStateCallback);
+        }).catch(error => this.setState({blocking: false}));
     };
 
     replaceEquipmentHandler = () => {
-        this.setState(() => ({blocking: true}));
+        this.setState({blocking: true});
         //Remove desc properties
         let replaceEquipment = {...this.state.replaceEquipment};
         delete replaceEquipment.oldEquipmentDesc;
         delete replaceEquipment.newEquipmentDesc;
-        WSEquipment.replaceEquipment(replaceEquipment).then(response => {
-            this.setState(() => ({blocking: false}));
-            //Load the new data from old and new equipment
-            this.loadEquipmentData(this.state.replaceEquipment.oldEquipment, 'oldEquipment');
-            this.loadEquipmentData(this.state.replaceEquipment.newEquipment, 'newEquipment');
-            this.props.showNotification(response.body.data);
-        }).catch(error => {
-            this.props.handleError(error);
-            this.setState(() => ({blocking: false}));
-        });
+        WSEquipment.replaceEquipment(replaceEquipment)
+            .then(response => {
+                //Load the new data from old and new equipment
+                this.loadEquipmentData(this.state.replaceEquipment.oldEquipment, 'oldEquipment');
+                this.loadEquipmentData(this.state.replaceEquipment.newEquipment, 'newEquipment');
+                this.props.showNotification(response.body.data);
+            })
+            .catch(error => this.props.handleError(error))
+            .finally(() => this.setState({blocking: false}));
     };
 
     render() {
@@ -136,9 +156,9 @@ class ReplaceEqp extends Component {
                                                    showError={this.props.showError}/>
                             </Grid>
                             <Grid item sm={6} xs={12}>
-                                <ReplaceEqpHierarchy equipment={this.state.oldEquipment} title="OLD EQUIPMENT HIERARCHY"
+                                <ReplaceEqpHierarchy equipment={this.state.oldEquipment} title="CURRENT HIERARCHY OF THE OLD EQUIPMENT"
                                                      equipmentLayout={this.props.equipmentLayout}/>
-                                <ReplaceEqpHierarchy equipment={this.state.newEquipment} title="NEW EQUIPMENT HIERARCHY"
+                                <ReplaceEqpHierarchy equipment={this.state.newEquipment} title="CURRENT HIERARCHY OF THE NEW EQUIPMENT"
                                                      equipmentLayout={this.props.equipmentLayout}/>
                             </Grid>
                         </Grid>
