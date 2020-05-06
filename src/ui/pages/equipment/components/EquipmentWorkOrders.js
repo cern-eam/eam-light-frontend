@@ -1,13 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {format} from 'date-fns'
-import EISPanel from 'eam-components/dist/ui/components/panel';
 import WSEquipment from '../../../../tools/WSEquipment';
 import EISTable from 'eam-components/dist/ui/components/table';
 import EISTableFilter from 'eam-components/dist/ui/components/table/EISTableFilter';
 import EquipmentMTFWorkOrders from "./EquipmentMTFWorkOrders"
+import BlockUi from 'react-block-ui';
 
-function EquipmentWorkOrders(props) {
-    
+function EquipmentWorkOrders(props) {    
     let workOrderFilterTypes = {
         ALL: 'All',
         OPEN: 'Open',
@@ -43,6 +42,7 @@ function EquipmentWorkOrders(props) {
 
     let [data, setData] = useState([]);
     let [workOrderFilter, setWorkOrderFilter] = useState(workOrderFilterTypes.ALL)
+    const [loadingData, setLoadingData] = useState(true);
 
     let getFilteredWorkOrderList = (workOrders) => {
         return workOrderFilters[workOrderFilter].process(workOrders)
@@ -63,35 +63,33 @@ function EquipmentWorkOrders(props) {
                     element.createdDate = element.createdDate && format(new Date(element.createdDate),'dd-MMM-yyyy');
                 });
                 setData(response.body.data)
-            });
-    }
-
-    if (data.length === 0) {
-        return null;
+            })
+            .finally(() => setLoadingData(false));
     }
 
     return (
-        <EISPanel
-            detailsStyle={{display: 'flex', flexDirection: 'column'}}
-            heading="WORK ORDERS">
+        <div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
             <EISTableFilter
                 filters={workOrderFilters}
                 handleFilterChange={newFilter =>
                     setWorkOrderFilter(newFilter)
                 }
                 activeFilter={workOrderFilter}
-            />
+                />
+                
             {workOrderFilter === workOrderFilterTypes.MTF ?
                 <EquipmentMTFWorkOrders equipmentcode={props.equipmentcode} />
                 :
-                <EISTable
+                <BlockUi blocking={loadingData}>
+                    <EISTable
                     data={getFilteredWorkOrderList(data)}
                     headers={headers}
                     propCodes={propCodes}
                     linksMap={linksMap}
-                />
+                    />
+                </BlockUi>
             }
-        </EISPanel>
+        </div>
     )
 
 }

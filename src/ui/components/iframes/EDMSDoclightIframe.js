@@ -11,12 +11,13 @@ class EDMSDoclightIframe extends Component {
     }
 
     render() {
-        const { objectType, objectID, mode, profile, collapsible } = this.props;
+        const { objectType, objectID, mode, profile, collapsible, title } = this.props;
         const queryParams = queryString.stringify({
             objectType,
             objectID,
             mode,
             profile,
+            title,
             collapsible,
         })
         const src = `${this.props.edmsdoclightURL}?${queryParams}`
@@ -37,7 +38,8 @@ class EDMSDoclightIframe extends Component {
 EDMSDoclightIframe.defaultProps = {
     mode: 'write',
     profile: 'EAMLIGHT',
-    collapsible: true,
+    collapsible: false,
+    title: '',
 }
 
 export default EDMSDoclightIframe;

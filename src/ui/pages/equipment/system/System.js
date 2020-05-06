@@ -6,7 +6,6 @@ import CustomFields from '../../../components/customfields/CustomFields'
 import WSEquipment from "../../../../tools/WSEquipment"
 import BlockUi from 'react-block-ui'
 import 'react-block-ui/style.css'
-import Grid from '@material-ui/core/Grid';
 import SystemGeneral from './SystemGeneral'
 import SystemDetails from './SystemDetails'
 import SystemHierarchy from './SystemHierarchy'
@@ -17,6 +16,7 @@ import {SystemIcon} from 'eam-components/dist/ui/components/icons'
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import {TOOLBARS} from "../../../components/AbstractToolbar";
+import EntityRegions from "../../../components/entityregions/EntityRegions";
 
 
 export default class System extends Entity {
@@ -102,138 +102,210 @@ export default class System extends Entity {
     //
     //
     getRegions = () => {
-        let user = this.props.userData.eamAccount.userCode
-        let screen = this.props.userData.screens[this.props.userData.systemScreen].screenCode
-        return {
-            DETAILS: {label: "Details", code: user + "_" + screen + "_DETAILS"},
-            HIERARCHY: {label: "Hierarchy", code: user + "_" + screen + "_HIERARCHY"},
-            WORKORDERS: {label: "Work Orders", code: user + "_" + screen + "_WORKORDERS"},
-            HISTORY: {label: "History", code: user + "_" + screen + "_HISTORY"},
-            PARTS: {label: "Parts Associated", code: user + "_" + screen + "_PARTS"},
-            EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen + "_EDMSDOCS"},
-            COMMENTS: {label: "Comments", code: user + "_" + screen + "_COMMENTS"},
-            USERDEFFIELDS: {label: "User Defined Fields", code: user + "_" + screen + "_USERDEFFIELDS"},
-            CUSTOMFIELDS: {label: "Custom Fields", code: user + "_" + screen + "_CUSTOMFIELDS"}
-        }
-    }
+        const { userData, systemLayout, handleError } = this.props;
+        const { equipment, layout } = this.state;
 
-    //
-    // RENDER
-    //
-    renderSystem() {
-
-        //Props
-        let props = {
-            equipment: this.state.equipment,
+        let commonProps = {
+            equipment,
+            layout,
+            systemLayout,
             updateEquipmentProperty: this.updateEntityProperty.bind(this),
-            layout: this.state.layout,
-            systemLayout: this.props.systemLayout,
             children: this.children
         };
 
-        // Adapt the grid layout depending on the visibility of the tree
-        let xs = 12;  // 0   - 600 px
-        let sm = 12;  // 600 - 960 px
-        let md = 6;   // 690 - 1280 px
-        let lg = 6;   // 1280 - ...
-        if (this.props.showEqpTree) {
-            sm = 12;
-            md = 12;
-            lg = 6;
-        }
+        return [
+            {
+                id: 'GENERAL',
+                label: 'General',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <SystemGeneral
+                        {...commonProps}/>
+                ,
+                column: 1,
+                order: 1
+            },
+            {
+                id: 'DETAILS',
+                label: 'Details',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <SystemDetails
+                        {...commonProps} />
+                ,
+                column: 1,
+                order: 2
+            },
+            {
+                id: 'HIERARCHY',
+                label: 'Hierarchy',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <SystemHierarchy
+                        {...commonProps} />
+                ,
+                column: 1,
+                order: 3
+            },
+            {
+                id: 'WORKORDERS',
+                label: 'Work Orders',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () => 
+                    <EquipmentWorkOrders
+                        equipmentcode={equipment.code} />
+                ,
+                column: 1,
+                order: 4
+            },
+            {
+                id: 'HISTORY',
+                label: 'History',
+                isVisibleWhenNewEntity: false,
+                maximizable: false,
+                render: () => 
+                    <EquipmentHistory
+                        equipmentcode={equipment.code} />
+                ,
+                column: 1,
+                order: 5
+            },
+            {
+                id: 'PARTS',
+                label: 'Parts',
+                isVisibleWhenNewEntity: false,
+                maximizable: false,
+                render: () => 
+                    <EquipmentPartsAssociated
+                        equipmentcode={equipment.code}
+                        parentScreen={userData.systemScreen.parentScreen} />
+                ,
+                column: 1,
+                order: 6
+            },
+            {
+                id: 'EDMSDOCUMENTS',
+                label: 'EDMS Documents',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () => 
+                    <EDMSDoclightIframeContainer
+                        objectType="X"
+                        objectID={equipment.code} />
+                ,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0 }
+                },
+                column: 2,
+                order: 7
+            },
+            {
+                id: 'COMMENTS',
+                label: 'Comments',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <Comments
+                        ref={comments => this.comments = comments}
+                        entityCode='OBJ'
+                        entityKeyCode={!layout.newEntity ? equipment.code : undefined}
+                        userCode={userData.eamAccount.userCode}
+                        handleError={handleError}
+                        allowHtml={true} />
+                ,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0 }
+                },
+                column: 2,
+                order: 8
+            },
+            {
+                id: 'USERDEFINEDFIELDS',
+                label: 'User Defined Fields',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <UserDefinedFields
+                        fields={equipment.userDefinedFields}
+                        entityLayout={systemLayout.fields}
+                        updateUDFProperty={this.updateEntityProperty}
+                        children={this.children} />
+                ,
+                column: 2,
+                order: 9
+            },
+            {
+                id: 'CUSTOMFIELDS',
+                label: 'Custom Fields',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <CustomFields
+                        children={this.children}
+                        entityCode='OBJ'
+                        entityKeyCode={equipment.code}
+                        classCode={equipment.classCode}
+                        customFields={equipment.customField}
+                        updateEntityProperty={this.updateEntityProperty.bind(this)} />
+                ,
+                column: 2,
+                order: 10
+            },
+        ]
+    }
 
-        //Render page
+
+    renderSystem() {
+        const {
+            applicationData,
+            history,
+            showEqpTree,
+            toggleHiddenRegion,
+            userData,
+            isHiddenRegion,
+            getUniqueRegionID
+        } = this.props;
+        const { equipment, layout } = this.state;
+        const regions = this.getRegions();        
+
         return (
-            <BlockUi tag="div" blocking={this.state.layout.blocking} style={{width: '100%', height: "100%"}}>
-
-                <EamlightToolbar isModified={this.state.layout.isModified}
-                                 newEntity={this.state.layout.newEntity}
-                                 entityScreen={this.props.userData.screens[this.props.userData.systemScreen]}
-                                 entityName={this.settings.entityDesc}
-                                 entityKeyCode={this.state.equipment.code}
-                                 saveHandler={this.saveHandler.bind(this)}
-                                 newHandler={() => this.props.history.push('/system')}
-                                 deleteHandler={this.deleteEntity.bind(this, this.state.equipment.code)}
-                                 toolbarProps={{
-                                     _toolbarType: TOOLBARS.EQUIPMENT,
-                                     entityDesc: this.settings.entityDesc,
-                                     equipment: this.state.equipment,
-                                     postInit: this.postInit.bind(this),
-                                     setLayout: this.setLayout.bind(this),
-                                     newEquipment: this.state.layout.newEntity,
-                                     applicationData: this.props.applicationData,
-                                     extendedLink: this.props.applicationData.EL_SYSLI,
-                                     screencode: this.props.userData.screens[this.props.userData.systemScreen].screenCode,
-                                     copyHandler: this.copyEntity.bind(this)
-                                 }}
-                                 width={730}
-                                 entityIcon={<SystemIcon style={{height: 18}}/>}
-                                 toggleHiddenRegion={this.props.toggleHiddenRegion}
-                                 regions={this.getRegions()}
-                                 hiddenRegions={this.props.hiddenRegions}/>
-
-                <div id="entityContent">
-                    <Grid container spacing={1}>
-                        <Grid item xs={xs} sm={sm} md={md} lg={lg}>
-
-                            <SystemGeneral {...props} />
-
-                            {!this.props.hiddenRegions[this.getRegions().DETAILS.code] &&
-                            <SystemDetails {...props} />
-                            }
-
-                            {!this.props.hiddenRegions[this.getRegions().HIERARCHY.code] &&
-                            <SystemHierarchy {...props} />
-                            }
-
-                            {!this.props.hiddenRegions[this.getRegions().WORKORDERS.code] &&
-                            !this.state.layout.newEntity &&
-                            <EquipmentWorkOrders equipmentcode={this.state.equipment.code}/>}
-
-                            {!this.props.hiddenRegions[this.getRegions().HISTORY.code] &&
-                            !this.state.layout.newEntity &&
-                            <EquipmentHistory equipmentcode={this.state.equipment.code}/>}
-
-                            {!this.props.hiddenRegions[this.getRegions().PARTS.code] &&
-                             !this.state.layout.newEntity &&
-                            <EquipmentPartsAssociated equipmentcode={this.state.equipment.code}
-                                                      parentScreen={this.props.userData.systemScreen.parentScreen}/>}
-
-                        </Grid>
-                        <Grid item xs={xs} sm={sm} md={md} lg={lg}>
-
-                            {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
-                            !this.state.layout.newEntity &&
-                            <EDMSDoclightIframeContainer objectType="X" objectID={this.state.equipment.code}/>
-                            }
-
-                            {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
-                            <Comments ref={comments => this.comments = comments}
-                                               entityCode='OBJ'
-                                               entityKeyCode={!this.state.layout.newEntity ? this.state.equipment.code : undefined}
-                                               userCode={this.props.userData.eamAccount.userCode}
-                                               handleError={this.props.handleError}
-                                               allowHtml={true}/>
-                            }
-
-                            {!this.props.hiddenRegions[this.getRegions().USERDEFFIELDS.code] &&
-                            <UserDefinedFields fields={this.state.equipment.userDefinedFields}
-                                               entityLayout={this.props.systemLayout.fields}
-                                               updateUDFProperty={this.updateEntityProperty}
-                                               children={this.children}/>
-                            }
-
-                            {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
-                            <CustomFields children={this.children}
-                                          entityCode='OBJ'
-                                          entityKeyCode={this.state.equipment.code}
-                                          classCode={this.state.equipment.classCode}
-                                          customFields={this.state.equipment.customField}
-                                          updateEntityProperty={this.updateEntityProperty.bind(this)}/>}
-
-                        </Grid>
-                    </Grid>
-                </div>
+            <BlockUi tag="div" blocking={layout.blocking} style={{width: '100%', height: "100%"}}>
+                <EamlightToolbar
+                    isModified={layout.isModified}
+                    newEntity={layout.newEntity}
+                    entityScreen={userData.screens[userData.systemScreen]}
+                    entityName={this.settings.entityDesc}
+                    entityKeyCode={equipment.code}
+                    saveHandler={this.saveHandler.bind(this)}
+                    newHandler={() => history.push('/system')}
+                    deleteHandler={this.deleteEntity.bind(this, equipment.code)}
+                    toolbarProps={{
+                        _toolbarType: TOOLBARS.EQUIPMENT,
+                        entityDesc: this.settings.entityDesc,
+                        equipment: equipment,
+                        postInit: this.postInit.bind(this),
+                        setLayout: this.setLayout.bind(this),
+                        newEquipment: layout.newEntity,
+                        applicationData: applicationData,
+                        extendedLink: applicationData.EL_SYSLI,
+                        screencode: userData.systemScreen,
+                        copyHandler: this.copyEntity.bind(this)
+                    }}
+                    width={730}
+                    entityIcon={<SystemIcon style={{height: 18}}/>}
+                    toggleHiddenRegion={toggleHiddenRegion}
+                    getUniqueRegionID={getUniqueRegionID}
+                    regions={regions}
+                    isHiddenRegion={isHiddenRegion} />
+                <EntityRegions
+                    showEqpTree={showEqpTree}
+                    regions={regions}
+                    isNewEntity={layout.newEntity} 
+                    isHiddenRegion={isHiddenRegion}/>
             </BlockUi>
         )
     }
