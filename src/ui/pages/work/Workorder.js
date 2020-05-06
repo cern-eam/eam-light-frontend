@@ -1,4 +1,3 @@
-import Grid from '@material-ui/core/Grid';
 import Checklists from 'eam-components/dist/ui/components/checklists/Checklists';
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import EDMSWidget from 'eam-components/dist/ui/components/edms/EDMSWidget';
@@ -21,6 +20,9 @@ import WorkorderClosingCodes from './WorkorderClosingCodes';
 import WorkorderDetails from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
 import WorkorderTools from "./WorkorderTools";
+import EntityRegions from '../../components/entityregions/EntityRegions';
+import IconButton from '@material-ui/core/IconButton';
+import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
 import {assignValues, assignUserDefinedFields, assignCustomFieldFromCustomField, AssignmentType} from '../EntityTools';
 
 const assignStandardWorkOrderValues = (workOrder, standardWorkOrder) => {
@@ -78,21 +80,261 @@ class Workorder extends Entity {
 
 
     getRegions = () => {
-        let user = this.props.userData.eamAccount.userCode
-        let screen = this.props.userData.screens[this.props.userData.workOrderScreen].screenCode
-        return {
-            SCHEDULING: {label: "Scheduling", code: user + "_" + screen+ "_SCHEDULING"},
-            CLOSINGCODES: {label: "Closing Codes", code: user + "_" + screen+ "_CLOSINGCODES"},
-            PARTUSAGE: {label: "Part Usage", code: user + "_" + screen+ "_PARTUSAGE"},
-            CHILDRENWOS: {label: "Children WOs", code: user + "_" + screen+ "_CHILDRENWOS"},
-            EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen+ "_EDMSDOCS"},
-            NCRS: {label: "NCRs", code: user + "_" + screen+ "_NCRS"},
-            COMMENTS: {label: "Comments", code: user + "_" + screen+ "_COMMENTS"},
-            ACTIVITIES: {label: "Activities and BL", code: user + "_" + screen+ "_ACTIVITIES"},
-            CHECKLISTS: {label: "Checklists", code: user + "_" + screen+ "_CHECKLISTS"},
-            METERREADINGS: {label: "Meter Readings", code: user + "_" + screen+ "_METER_READINGS"},
-            CUSTOMFIELDS: {label: "Custom Fields", code: user + "_" + screen+ "_CUSTOMFIELDS"}
-        }
+        const {
+            applicationData,
+            edmsDocListLink,
+            handleError,
+            showError,
+            showSuccess,
+            userData,
+            workOrderLayout
+        } = this.props;
+        const { layout, workorder } = this.state;
+        const { newEntity } = layout;
+
+        const commonProps = {
+            workorder,
+            layout,
+            workOrderLayout,
+            userData,
+            updateWorkorderProperty: this.updateEntityProperty.bind(this),
+            children: this.children,
+            setWOEquipment: this.setWOEquipment
+        };
+        return [
+            {
+                id: 'DETAILS',
+                label: 'Details',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <WorkorderDetails
+                        {...commonProps}
+                        readStandardWorkOrder={this.readStandardWorkOrder}
+                        applicationData={applicationData}
+                        userData={userData} 
+                        newEntity={newEntity} />
+                ,
+                column: 1,
+                order: 1
+            },
+            {
+                id: 'SCHEDULING',
+                label: 'Scheduling',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                customVisibility: () => WorkorderTools.isRegionAvailable('SCHEDULING', commonProps.workOrderLayout),
+                render: () => 
+                    <WorkorderScheduling {...commonProps} />
+                ,
+                column: 1,
+                order: 2
+            },
+            {
+                id: 'CLOSINGCODES',
+                label: 'Closing Codes',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                customVisibility: () => WorkorderTools.isRegionAvailable('CLOSING_CODES', commonProps.workOrderLayout),
+                render: () => 
+                    <WorkorderClosingCodes {...commonProps} />
+                ,
+                column: 1,
+                order: 3
+            },
+            {
+                id: 'PARTUSAGE',
+                label: 'Part Usage',
+                isVisibleWhenNewEntity: false,
+                maximizable: false,
+                customVisibility: () => WorkorderTools.isRegionAvailable('PAR', commonProps.workOrderLayout),
+                render: () => 
+                    <PartUsageContainer
+                        workorder={workorder}
+                        tabLayout={commonProps.workOrderLayout.tabs.PAR} />
+                ,
+                column: 1,
+                order: 4
+            },
+            {
+                id: 'CHILDRENWOS',
+                label: 'Child Work Orders',
+                isVisibleWhenNewEntity: false,
+                maximizable: false,
+                customVisibility: () => WorkorderTools.isRegionAvailable('CWO', commonProps.workOrderLayout),
+                render: () => 
+                    <WorkorderChildren workorder={workorder.number} />
+                ,
+                column: 1,
+                order: 4
+            },
+            {
+                id: 'EDMSDOCUMENTS',
+                label: 'EDMS Documents',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () => 
+                    <EDMSDoclightIframeContainer
+                        objectType="J"
+                        objectID={workorder.number} />
+                ,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0 }
+                },
+                column: 2,
+                order: 5
+            },
+            {
+                id: 'NCRS',
+                label: 'NCRs',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () => 
+                    <EDMSWidget
+                        objectID={workorder.number}
+                        objectType="J"
+                        creationMode="NCR"
+                        edmsDocListLink={edmsDocListLink}
+                        showError={showError}
+                        showSuccess={showSuccess} />
+                ,
+                column: 2,
+                order: 6
+            },
+            {
+                id: 'COMMENTS',
+                label: 'Comments',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <Comments
+                        ref={comments => this.comments = comments}
+                        entityCode='EVNT'
+                        entityKeyCode={!layout.newEntity ? workorder.number : undefined}
+                        userCode={userData.eamAccount.userCode}
+                        handleError={handleError}
+                        allowHtml={true} />
+                ,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0 }
+                },
+                column: 2,
+                order: 7
+            },
+            {
+                id: 'ACTIVITIES',
+                label: 'Activities and Booked Labor',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () => 
+                    <Activities
+                        workorder={workorder.number}
+                        department={workorder.departmentCode}
+                        departmentDesc={workorder.departmentDesc}
+                        layout={workOrderLayout.tabs}
+                        defaultEmployee={userData.eamAccount.employeeCode}
+                        defaultEmployeeDesc={userData.eamAccount.employeeDesc}
+                        postAddActivityHandler={this.postAddActivityHandler} />
+                ,
+                column: 2,
+                order: 8
+            },
+            {
+                id: 'CHECKLISTS',
+                label: 'Checklists',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () =>  (                     
+                    <Checklists
+                        workorder={workorder.number}
+                        printingChecklistLinkToAIS={applicationData.EL_PRTCL}
+                        maxExpandedChecklistItems={Math.abs(parseInt(applicationData.EL_MCHLS)) || 50}
+                        getWoLink={wo => '/workorder/' + wo}
+                        ref={checklists => this.checklists = checklists}
+                        showSuccess={showSuccess}
+                        showError={showError}
+                        handleError={handleError}
+                        topSlot={
+                            applicationData.EL_PRTCL &&
+                                <div style={{
+                                    width: "100%",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                }}>
+                                    <IconButton
+                                        onClick={() => window.open(applicationData.EL_PRTCL + workorder.number, '_blank', 'noopener noreferrer')}
+                                        style={{ color: "#00aaff" }}>
+                                        <OpenInNewIcon />
+                                    </IconButton>
+                                </div>
+                        }/>
+                )
+                ,
+                column: 2,
+                order: 9
+            },
+            {
+                id: 'CUSTOMFIELDS',
+                label: 'Custom Fields',
+                isVisibleWhenNewEntity: true,
+                customVisibility: () => workOrderLayout.fields.block_5.attribute !== 'H',
+                maximizable: false,
+                render: () => 
+                    <CustomFields
+                        children={this.children}
+                        entityCode='EVNT'
+                        entityKeyCode={workorder.number}
+                        classCode={workorder.classCode}
+                        customFields={workorder.customField}
+                        updateEntityProperty={this.updateEntityProperty.bind(this)} />
+                ,
+                column: 2,
+                order: 10
+            },
+            {
+                id: 'CUSTOMFIELDSEQP',
+                label: 'Custom Fields Equipment',
+                isVisibleWhenNewEntity: true,
+                customVisibility: () => WorkorderTools.isRegionAvailable('CUSTOM_FIELDS_EQP', commonProps.workOrderLayout) && layout.woEquipment,
+                maximizable: false,
+                render: () => 
+                    <CustomFields children={this.children}
+                        entityCode='OBJ'
+                        entityKeyCode={layout.woEquipment.code}
+                        classCode={layout.woEquipment.classCode}
+                        customFields={layout.woEquipment.customField}
+                        updateEntityProperty={this.updateEntityProperty.bind(this)}
+                        readonly={true} />
+                ,
+                column: 2,
+                order: 11
+            },
+            {
+                id: 'METERREADINGS',
+                label: 'Meter Readings',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () => 
+                    <MeterReadingContainerWO equipment={workorder.equipmentCode}/>
+                ,
+                column: 2,
+                order: 12
+            },
+            {
+                id: 'MULTIPLEEQUIPMENT',
+                label: 'Equipment',
+                isVisibleWhenNewEntity: false,
+                customVisibility: () => WorkorderTools.isRegionAvailable('MEC', commonProps.workOrderLayout),
+                maximizable: false,
+                render: () => 
+                    <WorkorderMultiequipment workorder={workorder.number} />
+                ,
+                column: 2,
+                order: 13
+            },
+        ]
+
+
     }
 
     //
@@ -233,159 +475,51 @@ class Workorder extends Entity {
         })
     }
 
-    //
-    //
-    //
     renderWorkOrder() {
-        let props = {
-            workorder: this.state.workorder,
-            updateWorkorderProperty: this.updateEntityProperty.bind(this),
-            layout: this.state.layout,
-            workOrderLayout: this.props.workOrderLayout,
-            children: this.children,
-            setWOEquipment: this.setWOEquipment,
-            userData: this.props.userData
-        };
-
+        const { layout, workorder } = this.state;
+        const {
+            applicationData,
+            getUniqueRegionID,
+            history,
+            isHiddenRegion,
+            toggleHiddenRegion,
+            userData
+        } = this.props;
+        const regions = this.getRegions();
         return (
             <div className="entityContainer">
-                <BlockUi tag="div" blocking={this.state.layout.blocking} style={{height: "100%", width: "100%"}}>
+                <BlockUi tag="div" blocking={layout.blocking} style={{height: "100%", width: "100%"}}>
 
-                    <EamlightToolbar isModified={this.state.layout.isModified}
-                                     newEntity={this.state.layout.newEntity}
-                                     entityScreen={this.props.userData.screens[this.props.userData.workOrderScreen]}
+                    <EamlightToolbar isModified={layout.isModified}
+                                     newEntity={layout.newEntity}
+                                     entityScreen={userData.screens[userData.workOrderScreen]}
                                      entityName="Work Order"
-                                     entityKeyCode={this.state.workorder.number}
+                                     entityKeyCode={workorder.number}
                                      saveHandler={this.saveHandler.bind(this)}
-                                     newHandler={() => this.props.history.push('/workorder')}
-                                     deleteHandler={this.deleteEntity.bind(this, this.state.workorder.number)}
+                                     newHandler={() => history.push('/workorder')}
+                                     deleteHandler={this.deleteEntity.bind(this, workorder.number)}
                                      width={790}
                                      toolbarProps={{
                                             _toolbarType: TOOLBARS.WORKORDER,
-                                            workorder: this.state.workorder,
+                                            workorder: workorder,
                                             postInit: this.postInit.bind(this),
                                             setLayout: this.setLayout.bind(this),
-                                            newWorkorder: this.state.layout.newEntity,
-                                            applicationData: this.props.applicationData,
-                                            userGroup: this.props.userData.eamAccount.userGroup,
-                                            screencode: this.props.userData.screens[this.props.userData.workOrderScreen].screenCode,
+                                            newWorkorder: layout.newEntity,
+                                            applicationData: applicationData,
+                                            userGroup: userData.eamAccount.userGroup,
+                                            screencode: userData.screens[userData.workOrderScreen].screenCode,
                                             copyHandler: this.copyEntity.bind(this)}
                                      }
                                      entityIcon={<WorkorderIcon style={{height: 18}}/>}
-                                     toggleHiddenRegion={this.props.toggleHiddenRegion}
-                                     regions={this.getRegions()}
-                                     hiddenRegions={this.props.hiddenRegions}>
+                                     toggleHiddenRegion={toggleHiddenRegion}
+                                     regions={regions}
+                                     getUniqueRegionID={getUniqueRegionID}
+                                     isHiddenRegion={isHiddenRegion}>
                     </EamlightToolbar>
-
-                    <div id="entityContent">
-                        <Grid container spacing={1}>
-                            <Grid item md={6} sm={12} xs={12}>
-
-                                <WorkorderDetails
-                                    {...props}
-                                    readStandardWorkOrder={this.readStandardWorkOrder}
-                                    applicationData={this.props.applicationData} 
-                                    userData={this.props.userData} 
-                                    newEntity={this.state.layout.newEntity} />
-
-                                {!this.props.hiddenRegions[this.getRegions().SCHEDULING.code] &&
-                                WorkorderTools.isRegionAvailable('SCHEDULING', props.workOrderLayout) &&
-                                <WorkorderScheduling {...props}/>}
-
-
-                                {!this.props.hiddenRegions[this.getRegions().CLOSINGCODES.code] &&
-                                WorkorderTools.isRegionAvailable('CLOSING_CODES', props.workOrderLayout) &&
-                                <WorkorderClosingCodes {...props}/>}
-
-                                {!this.props.hiddenRegions[this.getRegions().PARTUSAGE.code] &&
-                                WorkorderTools.isRegionAvailable('PAR', props.workOrderLayout) &&
-                                !this.state.layout.newEntity &&
-                                <PartUsageContainer workorder={this.state.workorder}
-                                                    tabLayout={this.props.workOrderLayout.tabs.PAR}/>}
-
-                                {!this.props.hiddenRegions[this.getRegions().CHILDRENWOS.code] &&
-                                WorkorderTools.isRegionAvailable('CWO', props.workOrderLayout) &&
-                                !this.state.layout.newEntity &&
-                                <WorkorderChildren workorder={this.state.workorder.number}/>}
-
-                            </Grid>
-                            <Grid item md={6} sm={12} xs={12}>
-
-                                {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
-                                 !this.state.layout.newEntity &&
-                                 <EDMSDoclightIframeContainer objectType="J" objectID={this.state.workorder.number}/>}
-
-                                {!this.props.hiddenRegions[this.getRegions().NCRS.code] &&
-                                !this.state.layout.newEntity &&
-                                <EDMSWidget objectID={this.state.workorder.number} objectType="J"
-                                                     creationMode="NCR"
-                                                     title="NCRs"
-                                                     edmsDocListLink={this.props.edmsDocListLink}
-                                                     showSuccess={this.props.showSuccess}
-                                                     showError={this.props.showError}/>}
-
-                                {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
-                                <Comments ref={comments => this.comments = comments}
-                                                   entityCode='EVNT'
-                                                   entityKeyCode={!this.state.layout.newEntity ? this.state.workorder.number : undefined}
-                                                   userCode={this.props.userData.eamAccount.userCode}
-                                                   handleError={this.props.handleError}
-                                                   allowHtml={true}
-                                                   />
-                                }
-
-                                {!this.props.hiddenRegions[this.getRegions().ACTIVITIES.code] &&
-                                !this.state.layout.newEntity &&
-                                <Activities
-                                    workorder={this.state.workorder.number}
-                                    department={this.state.workorder.departmentCode}
-                                    departmentDesc={this.state.workorder.departmentDesc}
-                                    layout={this.props.workOrderLayout.tabs}
-                                    defaultEmployee={this.props.userData.eamAccount.employeeCode}
-                                    defaultEmployeeDesc={this.props.userData.eamAccount.employeeDesc}
-                                    postAddActivityHandler={this.postAddActivityHandler}/>}
-
-                                {!this.props.hiddenRegions[this.getRegions().CHECKLISTS.code] &&
-                                !this.state.layout.newEntity &&
-                                <Checklists workorder={this.state.workorder.number}
-                                            printingChecklistLinkToAIS={this.props.applicationData.EL_PRTCL}
-                                            maxExpandedChecklistItems={Math.abs(parseInt(this.props.applicationData.EL_MCHLS)) || 50}
-                                            getWoLink={wo => '/workorder/' + wo}
-                                            ref={checklists => this.checklists = checklists}
-                                            showSuccess={this.props.showSuccess}
-                                            handleError={this.props.handleError}/>}
-
-                                {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
-                                  this.props.workOrderLayout.fields.block_5.attribute !== 'H' &&
-                                <CustomFields children={this.children}
-                                              entityCode='EVNT'
-                                              entityKeyCode={this.state.workorder.number}
-                                              classCode={this.state.workorder.classCode}
-                                              customFields={this.state.workorder.customField}
-                                              updateEntityProperty={this.updateEntityProperty.bind(this)}/>}
-
-                                {WorkorderTools.isRegionAvailable('CUSTOM_FIELDS_EQP', props.workOrderLayout) &&
-                                this.state.layout.woEquipment &&
-                                <CustomFields children={this.children}
-                                              entityCode='OBJ'
-                                              entityKeyCode={this.state.layout.woEquipment.code}
-                                              classCode={this.state.layout.woEquipment.classCode}
-                                              customFields={this.state.layout.woEquipment.customField}
-                                              updateEntityProperty={this.updateEntityProperty.bind(this)}
-                                              title="CUSTOM FIELDS EQUIPMENT"
-                                              readonly={true}/>}
-
-                                {!this.props.hiddenRegions[this.getRegions().METERREADINGS.code] &&
-                                !this.state.layout.newEntity &&
-                                <MeterReadingContainerWO equipment={this.state.workorder.equipmentCode}/>}
-
-                                {WorkorderTools.isRegionAvailable('MEC', props.workOrderLayout) &&
-                                !this.state.layout.newEntity &&
-                                <WorkorderMultiequipment workorder={this.state.workorder.number}/>}
-
-                            </Grid>
-                        </Grid>
-                    </div>
+                    <EntityRegions
+                        regions={regions}
+                        isNewEntity={layout.newEntity} 
+                        isHiddenRegion={this.props.isHiddenRegion} />
                 </BlockUi>
             </div>
         )

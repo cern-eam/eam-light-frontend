@@ -7,8 +7,10 @@ import {
     showNotification,
     toggleHiddenRegion
 } from '../../../../actions/uiActions';
+import { isHiddenRegion, getUniqueRegionID } from '../../../../selectors/uiSelectors'
 
 function mapStateToProps(state) {
+    const entityScreenCode = state.application.userData.systemScreen;
     return {
         systemLayout: state.application.systemLayout,
         userData: state.application.userData,
@@ -16,6 +18,8 @@ function mapStateToProps(state) {
         hiddenRegions: state.ui.hiddenRegions,
         eqp: state.ui.layout.equipment,
         applicationData: state.application.applicationData,
+        isHiddenRegion: isHiddenRegion(state)(entityScreenCode),
+        getUniqueRegionID: getUniqueRegionID(state)(entityScreenCode),
     }
 }
 

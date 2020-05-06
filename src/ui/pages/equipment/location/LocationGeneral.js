@@ -1,7 +1,7 @@
 import React from "react";
-import EISPanel from "eam-components/dist/ui/components/panel";
 import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
 import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
+import WS from "../../../../tools/WS";
 
 const AssetGeneral = props => {
     const {
@@ -13,45 +13,44 @@ const AssetGeneral = props => {
     } = props;
 
     return (
-        <EISPanel heading="GENERAL">
-            <div style={{ width: "100%", marginTop: 0 }}>
-                {layout.newEntity && (
-                    <EAMInput
-                        children={children}
-                        elementInfo={locationLayout.fields["equipmentno"]}
-                        value={location.code}
-                        updateProperty={updateEquipmentProperty}
-                        valueKey="code"
-                    />
-                )}
-
+        <div style={{ width: "100%", marginTop: 0 }}>
+            {layout.newEntity && (
                 <EAMInput
                     children={children}
-                    elementInfo={locationLayout.fields["udfchar45"]}
-                    value={location.userDefinedFields.udfchar45}
+                    elementInfo={locationLayout.fields["equipmentno"]}
+                    value={location.code}
                     updateProperty={updateEquipmentProperty}
-                    valueKey="userDefinedFields.udfchar45"
+                    valueKey="code"
                 />
+            )}
 
-                <EAMInput
-                    children={children}
-                    elementInfo={locationLayout.fields["equipmentdesc"]}
-                    value={location.description}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="description"
-                />
+            <EAMInput
+                children={children}
+                elementInfo={locationLayout.fields["udfchar45"]}
+                value={location.userDefinedFields.udfchar45}
+                updateProperty={updateEquipmentProperty}
+                valueKey="userDefinedFields.udfchar45"
+            />
 
-                <EAMAutocomplete
-                    children={children}
-                    elementInfo={locationLayout.fields["department"]}
-                    value={location.departmentCode}
-                    valueDesc={location.departmentDesc}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="departmentCode"
-                    descKey="departmentDesc"
-                />
-            </div>
-        </EISPanel>
+            <EAMInput
+                children={children}
+                elementInfo={locationLayout.fields["equipmentdesc"]}
+                value={location.description}
+                updateProperty={updateEquipmentProperty}
+                valueKey="description"
+            />
+
+            <EAMAutocomplete
+                children={children}
+                elementInfo={locationLayout.fields["department"]}
+                value={location.departmentCode}
+                valueDesc={location.departmentDesc}
+                updateProperty={updateEquipmentProperty}
+                valueKey="departmentCode"
+                descKey="departmentDesc"
+                autocompleteHandler={WS.autocompleteDepartment}
+            />
+        </div>
     );
 };
 

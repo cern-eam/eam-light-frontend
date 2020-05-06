@@ -1,8 +1,6 @@
-import Grid from "@material-ui/core/Grid";
-import Comments from "eam-components/dist/ui/components/comments/Comments";
-import EDMSWidget from "eam-components/dist/ui/components/edms/EDMSWidget";
-import LocationIcon from "@material-ui/icons/Room";
 import React from "react";
+import Comments from "eam-components/dist/ui/components/comments/Comments";
+import LocationIcon from "@material-ui/icons/Room";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import WSLocation from "../../../../tools/WSLocation";
@@ -17,6 +15,7 @@ import EamlightToolbar from "./../../../components/EamlightToolbar";
 import LocationDetails from "./LocationDetails";
 import LocationGeneral from "./LocationGeneral";
 import LocationHierarchy from "./LocationHierarchy";
+import EntityRegions from "../../../components/entityregions/EntityRegions";
 
 export default class Location extends Entity {
     settings = {
@@ -52,120 +51,211 @@ export default class Location extends Entity {
     }
 
     getRegions = () => {
-        let user = this.props.userData.eamAccount.userCode
-        let screen = this.props.userData.screens[this.props.userData.locationScreen].screenCode
-        return {
-            DETAILS: {label: "Details", code: user + "_" + screen + "_DETAILS"},
-            HIERARCHY: {label: "Hierarchy", code: user + "_" + screen+ "_HIERARCHY"},
-            WORKORDERS: {label: "Work Orders", code: user + "_" + screen+ "_WORKORDERS"},
-            HISTORY: {label: "History", code: user + "_" + screen+ "_HISTORY"},
-            EDMSDOCS: {label: "EDMS Documents", code: user + "_" + screen+ "_EDMSDOCS"},
-            COMMENTS: {label: "Comments", code: user + "_" + screen+ "_COMMENTS"},
-            USERDEFFIELDS: {label: "User Defined Fields", code: user + "_" + screen+ "_USERDEFFIELDS"},
-            CUSTOMFIELDS: {label: "Custom Fields", code: user + "_" + screen+ "_CUSTOMFIELDS"}
-        }
-    }
-
-    renderLocation() {
-        const panelProps = {
-            location: this.state.location,
+        const { locationLayout, userData } = this.props;
+        const { location, layout } = this.state;
+        const commonProps = {
+            location,
+            layout,
+            locationLayout,
             updateEquipmentProperty: this.updateEntityProperty.bind(this),
-            layout: this.state.layout,
-            locationLayout: this.props.locationLayout,
             children: this.children
         }
 
-        // Adapt the grid layout depending on the visibility of the tree
-        let xs = 12;  // 0   - 600 px
-        let sm = 12;  // 600 - 960 px
-        let md = 6;   // 690 - 1280 px
-        let lg = 6;   // 1280 - ...
-        if (this.props.showEqpTree) {
-            sm = 12;
-            md = 12;
-            lg = 6;
-        }
+        return [
+            {
+                id: 'GENERAL',
+                label: 'General',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <LocationGeneral
+                        {...commonProps}/>
+                ,
+                column: 1,
+                order: 1
+            },
+            {
+                id: 'DETAILS',
+                label: 'Details',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <LocationDetails
+                        {...commonProps} />
+                ,
+                column: 1,
+                order: 2
+            },
+            {
+                id: 'HIERARCHY',
+                label: 'Hierarchy',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <LocationHierarchy
+                        {...commonProps} />
+                ,
+                column: 1,
+                order: 3
+            },
+            {
+                id: 'WORKORDERS',
+                label: 'Work Orders',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () => 
+                    <EquipmentWorkOrders
+                        equipmentcode={location.code} />
+                ,
+                column: 1,
+                order: 4
+            },
+            {
+                id: 'HISTORY',
+                label: 'History',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () => 
+                    <EquipmentHistory
+                        equipmentcode={location.code} />
+                ,
+                column: 1,
+                order: 5
+            },
+            {
+                id: 'EDMSDOCUMENTS',
+                label: 'EDMS Documents',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () => 
+                    <EDMSDoclightIframeContainer
+                        objectType="L"
+                        objectID={location.code} />
+                ,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0 }
+                },
+                column: 2,
+                order: 6
+            },
+            // {
+            //     id: 'NCRS',
+            //     label: 'NCRs',
+            //     isVisibleWhenNewEntity: false,
+            //     maximizable: false,
+            //     render: () => 
+            //         <EDMSWidget
+            //             objectID={location.code}
+            //             objectType="L"
+            //             creationMode="NCR"
+            //             edmsDocListLink={applicationData.edmsDocListLink}
+            //             showError={showError}
+            //             showSuccess={showSuccess} />
+            //     ,
+            //     column: 2,
+            //     order: 7
+            // },
+            {
+                id: 'COMMENTS',
+                label: 'Comments',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <Comments ref={comments => this.comments = comments}
+                        entityCode="LOC"
+                        entityKeyCode={!layout.newEntity ? location.code : undefined}
+                        userCode={userData.eamAccount.userCode}
+                        allowHtml={true}/>
+                ,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0 }
+                },
+                column: 2,
+                order: 8
+            },
+            {
+                id: 'USERDEFINEDFIELDS',
+                label: 'User Defined Fields',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <UserDefinedFields
+                        fields={location.userDefinedFields}
+                        entityLayout={locationLayout.fields}
+                        updateUDFProperty={this.updateEntityProperty}
+                        children={this.children} />
+                ,
+                column: 2,
+                order: 9
+            },
+            {
+                id: 'CUSTOMFIELDS',
+                label: 'Custom Fields',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <CustomFields
+                        children={this.children}
+                        entityCode='LOC'
+                        entityKeyCode={location.code}
+                        classCode={location.classCode}
+                        customFields={location.customField}
+                        updateEntityProperty={this.updateEntityProperty.bind(this)} />
+                ,
+                column: 2,
+                order: 10
+            },
+        ]
+
+    }
+
+    renderLocation() {
+        const {
+            applicationData,
+            history,
+            showEqpTree,
+            toggleHiddenRegion,
+            userData,
+            isHiddenRegion,
+            getUniqueRegionID
+        } = this.props;
+        const { location, layout } = this.state
+        const regions = this.getRegions();        
+
 
         return (
-            <BlockUi tag="div" blocking={this.state.layout.blocking} style={{height: "100%", width: "100%"}}>
-                <EamlightToolbar isModified={this.state.layout.isModified}
-                                 newEntity={this.state.layout.newEntity}
-                                 entityScreen={this.props.userData.screens[this.props.userData.locationScreen]}
+            <BlockUi tag="div" blocking={layout.blocking} style={{height: "100%", width: "100%"}}>
+                <EamlightToolbar isModified={layout.isModified}
+                                 newEntity={layout.newEntity}
+                                 entityScreen={userData.screens[userData.locationScreen]}
                                  entityName="Location"
-                                 entityKeyCode={this.state.location.code}
+                                 entityKeyCode={location.code}
                                  saveHandler={this.saveHandler.bind(this)}
-                                 newHandler={() => this.props.history.push("/location")}
-                                 deleteHandler={this.deleteEntity.bind(this, this.state.location.code)}
+                                 newHandler={() => history.push("/location")}
+                                 deleteHandler={this.deleteEntity.bind(this, location.code)}
                                  toolbarProps={{
                                     _toolbarType: TOOLBARS.LOCATION,
                                     entityDesc: this.settings.entityDesc,
-                                    equipment: this.state.location,
+                                    equipment: location,
                                     postInit: this.postInit.bind(this),
                                     setLayout: this.setLayout.bind(this),
-                                    newEquipment: this.state.layout.newEntity,
-                                    applicationData: this.props.applicationData,
-                                    extendedLink: this.props.applicationData.EL_LOCLI,
-                                    screencode: this.props.userData.screens[this.props.userData.locationScreen].screenCode
+                                    newEquipment: layout.newEntity,
+                                    applicationData: applicationData,
+                                    extendedLink: applicationData.EL_LOCLI,
+                                    screencode: userData.screens[userData.locationScreen].screenCode
                                  }}
                                  width={730}
                                  entityIcon={<LocationIcon style={{height: 18}}/>}
-                                 toggleHiddenRegion={this.props.toggleHiddenRegion}
-                                 regions={this.getRegions()}
-                                 hiddenRegions={this.props.hiddenRegions}>
+                                 toggleHiddenRegion={toggleHiddenRegion}
+                                 getUniqueRegionID={getUniqueRegionID}
+                                 regions={regions}
+                                 isHiddenRegion={isHiddenRegion}>
                 </EamlightToolbar>
-
-                <div id="entityContent">
-                    <Grid container spacing={1}>
-                        <Grid item xs={xs} sm={sm} md={md} lg={lg}>
-                            <LocationGeneral {...panelProps} />
-
-                            {!this.props.hiddenRegions[this.getRegions().DETAILS.code] &&
-                            <LocationDetails {...panelProps} />
-                            }
-
-                            {!this.props.hiddenRegions[this.getRegions().HIERARCHY.code] &&
-                            <LocationHierarchy {...panelProps} />
-                            }
-
-                            {!this.props.hiddenRegions[this.getRegions().WORKORDERS.code] &&
-                             !this.state.layout.newEntity &&
-                            <EquipmentWorkOrders equipmentcode={this.state.location.code}/>}
-
-                            {!this.props.hiddenRegions[this.getRegions().HISTORY.code] &&
-                             !this.state.layout.newEntity &&
-                            <EquipmentHistory equipmentcode={this.state.location.code}/>}
-                        </Grid>
-                        <Grid item xs={xs} sm={sm} md={md} lg={lg}>
-                            {!this.props.hiddenRegions[this.getRegions().EDMSDOCS.code] &&
-                            !this.state.layout.newEntity &&
-                            <EDMSDoclightIframeContainer objectType="L" objectID={this.state.location.code}/>
-                            }
-
-                            {!this.props.hiddenRegions[this.getRegions().COMMENTS.code] &&
-                            <Comments ref={comments => this.comments = comments}
-                                               entityCode="LOC"
-                                               entityKeyCode={!this.state.layout.newEntity ? this.state.location.code : undefined}
-                                               userCode={this.props.userData.eamAccount.userCode}
-                                               allowHtml={true}/>
-                            }
-
-                            {!this.props.hiddenRegions[this.getRegions().USERDEFFIELDS.code] &&
-                            <UserDefinedFields fields={this.state.location.userDefinedFields}
-                                               entityLayout={this.props.locationLayout.fields}
-                                               updateUDFProperty={this.updateEntityProperty}
-                                               children={this.children}/>
-                            }
-
-                            {!this.props.hiddenRegions[this.getRegions().CUSTOMFIELDS.code] &&
-                            <CustomFields children={this.children}
-                                          entityCode="LOC"
-                                          entityKeyCode={this.state.location.code}
-                                          classCode={this.state.location.classCode}
-                                          customFields={this.state.location.customField}
-                                          updateEntityProperty={this.updateEntityProperty.bind(this)}/>}
-                        </Grid>
-                    </Grid>
-                </div>
+                <EntityRegions
+                    showEqpTree={showEqpTree}
+                    regions={regions}
+                    isNewEntity={layout.newEntity} 
+                    isHiddenRegion={isHiddenRegion}/>
             </BlockUi>
         )
     }
