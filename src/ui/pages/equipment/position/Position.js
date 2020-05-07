@@ -77,7 +77,7 @@ export default class Position extends Entity {
     }
 
     getRegions = () => {
-        const { positionLayout, userData, applicationData, showError, showSuccess } = this.props;
+        const { positionLayout, userData, applicationData, showError, showNotification } = this.props;
         const { equipment, layout } = this.state;
 
         const commonProps = {
@@ -190,7 +190,7 @@ export default class Position extends Entity {
                         creationMode="NCR"
                         edmsDocListLink={applicationData.edmsDocListLink}
                         showError={showError}
-                        showSuccess={showSuccess} />
+                        showSuccess={showNotification} />
                 ,
                 column: 2,
                 order: 8
