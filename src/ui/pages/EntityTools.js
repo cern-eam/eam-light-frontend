@@ -39,12 +39,13 @@ export const AssignmentType = {
 };
 
 const throwIfInvalidAssignmentType = assignmentType => {
-    if(!Object.values(AssignmentType).includes(assignmentType))
+    if(!Object.values(AssignmentType).includes(assignmentType)) {
         throw new Error('You must specify a valid assigment type');
+    }
 };
 
 // assigns the user defined fields from userDefinedFields to the entity
-export const assignUserDefinedFields = (entity, userDefinedFields, assignmentType) => {
+export const assignUserDefinedFields = (entity, userDefinedFields = {}, assignmentType) => {
     throwIfInvalidAssignmentType(assignmentType);
     const {sourceNotEmpty, destinationEmpty} = assignmentType;
 
@@ -65,7 +66,7 @@ export const assignUserDefinedFields = (entity, userDefinedFields, assignmentTyp
 
 // assigns the custom fields from an object to the ones that are present in the entity
 // if the specified custom fields are not present in the entity, nothing is done
-export const assignCustomFieldFromObject = (entity, object, assignmentType) => {
+export const assignCustomFieldFromObject = (entity, object = {}, assignmentType) => {
     throwIfInvalidAssignmentType(assignmentType);
     const {sourceNotEmpty, destinationEmpty} = assignmentType;
 
@@ -85,7 +86,7 @@ export const assignCustomFieldFromObject = (entity, object, assignmentType) => {
 }
 
 // assigns the custom fields from the customField object to the entity, merging old values
-export const assignCustomFieldFromCustomField = (entity, customField, assignmentType) => {
+export const assignCustomFieldFromCustomField = (entity, customField = [], assignmentType) => {
     throwIfInvalidAssignmentType(assignmentType);
     const {sourceNotEmpty, destinationEmpty} = assignmentType;
 
@@ -115,7 +116,7 @@ export const assignCustomFieldFromCustomField = (entity, customField, assignment
 // assigns the values in values to the entity
 // values that do not exist in the entity are not copied
 // if the entity has a non-empty value, that value is not copied, unless forced is truthy
-export const assignValues = (entity, values, assignmentType) => {
+export const assignValues = (entity, values = {}, assignmentType) => {
     throwIfInvalidAssignmentType(assignmentType);
     const {sourceNotEmpty, destinationEmpty} = assignmentType;
 
@@ -134,7 +135,7 @@ export const assignValues = (entity, values, assignmentType) => {
     return newEntity;
 };
 
-export const assignQueryParamValues = (entity, queryParams, assignmentType = AssignmentType.FORCED) => {
+export const assignQueryParamValues = (entity, queryParams = {}, assignmentType = AssignmentType.FORCED) => {
     throwIfInvalidAssignmentType(assignmentType);
 
     // this function converts an object with case insensitive keys to an object with
@@ -169,6 +170,7 @@ export const assignDefaultValues = (entity, layout, layoutPropertiesMap, assignm
 
     // Create an entity-like object with the default values from the screen's layout
     let defaultValues = {};
+
     if (layout && layoutPropertiesMap) {
         defaultValues = Object.values(layout.fields)
             .filter(field => field.defaultValue && layoutPropertiesMap[field.elementId])
