@@ -3,7 +3,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
 import Divider from '@material-ui/core/Divider';
-import {Barcode, ContentCopy, EmailOutline, OpenInNew} from 'mdi-material-ui';
+import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
+import {Barcode, ContentCopy, EmailOutline} from 'mdi-material-ui';
 import WSParts from '../../../tools/WSParts';
 
 class PartToolbar extends Component {
@@ -87,7 +88,7 @@ class PartToolbar extends Component {
                     <div style={this.menuLabelStyle}>Email Part</div>
                 </MenuItem>
                 <MenuItem onClick={this.showInExtendedHandler.bind(this)} disabled={this.props.newPart}>
-                    <OpenInNew style={this.iconMenuStyle} />
+                    <OpenInNewIcon style={this.iconMenuStyle} />
                     <div style={this.menuLabelStyle}>Show in Infor EAM</div>
                 </MenuItem>
                 <MenuItem onClick={this.printBarcode.bind(this)} disabled={this.props.newPart}>
@@ -116,7 +117,7 @@ class PartToolbar extends Component {
 
                 <Tooltip title="Show in Infor EAM">
                     <IconButton onClick={this.showInExtendedHandler.bind(this)} disabled={this.props.newPart}>
-                        <OpenInNew style={this.iconStyle} />
+                        <OpenInNewIcon style={this.iconStyle} />
                     </IconButton>
                 </Tooltip>
 

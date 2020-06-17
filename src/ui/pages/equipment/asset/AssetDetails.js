@@ -5,6 +5,7 @@ import EAMDatePicker from 'eam-components/dist/ui/components/muiinputs/EAMDatePi
 import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
 import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
+import OpenInAppIcon from 'mdi-material-ui/OpenInApp'
 
 class AssetDetails extends Component {
     render() {
@@ -89,7 +90,7 @@ class AssetDetails extends Component {
                                     descKey="partDesc"
                                     autocompleteHandler={WSEquipment.autocompleteEquipmentPart}
                                     link={() => equipment.partCode ? "/part/" + equipment.partCode: null}
-                                    />
+                                    icon={<OpenInAppIcon/>}/>
 
                 <EAMAutocomplete children={children}
                                     elementInfo={assetLayout.fields['store']}
