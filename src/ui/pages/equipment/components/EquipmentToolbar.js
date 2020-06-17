@@ -5,7 +5,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {Link} from 'react-router-dom'
 import {WorkorderIcon} from 'eam-components/dist/ui/components/icons'
 import Divider from '@material-ui/core/Divider';
-import {ContentCopy, EmailOutline, Map, OpenInNew} from 'mdi-material-ui'
+import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
+import {ContentCopy, EmailOutline, Map} from 'mdi-material-ui';
 
 class EquipmentToolbar extends Component {
 
@@ -74,7 +75,7 @@ class EquipmentToolbar extends Component {
                     </Link>
                 </MenuItem>
                 <MenuItem onClick={this.showInExtendedHandler.bind(this)} disabled={this.props.newEquipment}>
-                    <OpenInNew style={this.iconMenuStyle} />
+                    <OpenInNewIcon style={this.iconMenuStyle} />
                     <div style={this.menuLabelStyle}>Show in Infor EAM</div>
                 </MenuItem>
             </div>
@@ -114,7 +115,7 @@ class EquipmentToolbar extends Component {
 
                 <Tooltip title="Show in Infor EAM">
                     <IconButton onClick={this.showInExtendedHandler.bind(this)} disabled={this.props.newEquipment}>
-                        <OpenInNew style={this.iconStyle} />
+                        <OpenInNewIcon style={this.iconStyle} />
                     </IconButton>
                 </Tooltip>
             </div>
