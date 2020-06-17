@@ -337,7 +337,8 @@ export default class Asset extends Entity {
                         newEquipment: layout.newEntity,
                         applicationData: applicationData,
                         extendedLink: applicationData.EL_ASSLI,
-                        screencode: userData.assetScreen
+                        screencode: userData.assetScreen,
+                        copyHandler: this.copyEntity.bind(this)
                     }}
                     width={730}
                     entityIcon={<AssetIcon style={{ height: 18 }} />}
