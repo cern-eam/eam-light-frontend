@@ -153,8 +153,7 @@ class ReplaceEqpGeneral extends Component {
 
                     {this.renderImageMode()}
 
-                    <Button onClick={this.openDialog} color="primary" style={buttonStyle}
-                            variant="contained">
+                    <Button onClick={this.openDialog} color="primary" style={buttonStyle}>
                         <Refresh/>
                         Replace Equipment
                     </Button>
