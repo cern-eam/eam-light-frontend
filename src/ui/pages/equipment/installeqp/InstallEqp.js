@@ -22,6 +22,11 @@ export default function NameForm(props) {
     }
 
     const installEqpHandler = (code) => {
+        if (!parentEq || !childEq) {
+            props.showError("Please provide the Child and Parent Equipment.");
+            return;
+        }
+
         setBlocking(true);
         if (code) {
             WSEquipment.installEquipment(code).then(response => {
@@ -42,10 +47,10 @@ export default function NameForm(props) {
                 <div id="entityContent" style={{height: "100%"}}>
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
-                            <EISPanel heading="Install Equipment">
+                            <EISPanel heading="INSTALL EQUIPMENT">
                                 <div style={{width: "100%", marginTop: 0}}>
                                     <EAMBarcodeInput updateProperty={setParentEq} right={0} top={16}>
-                                        <EAMAutocomplete elementInfo={{attribute: "O", text: "Parent"}}
+                                        <EAMAutocomplete elementInfo={{attribute: "R", text: "Parent"}}
                                                          value={parentEq}
                                                          valueKey="parent"
                                                          updateProperty={(key, value) => (key === 'parent') && setParentEq(value)}
@@ -53,7 +58,7 @@ export default function NameForm(props) {
                                     </EAMBarcodeInput>
 
                                     <EAMBarcodeInput updateProperty={setChildEq} right={0} top={16}>
-                                        <EAMAutocomplete elementInfo={{attribute: "O", text: "Child"}}
+                                        <EAMAutocomplete elementInfo={{attribute: "R", text: "Child"}}
                                                          value={childEq}
                                                          valueKey="child"
                                                          updateProperty={(key, value) => (key === 'child') && setChildEq(value)}
