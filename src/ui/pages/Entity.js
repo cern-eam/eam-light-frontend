@@ -16,7 +16,8 @@ export default class readEntityEquipment extends Component {
             layout: {
                 blocking: false,
                 newEntity: true,
-                isModified: false
+                isModified: false,
+                reading: false
             }
         }
         // map of all children components (the children are responsible for registration)
@@ -50,17 +51,52 @@ export default class readEntityEquipment extends Component {
      * Triggered by React. Used to read existing entity or init new one depending on the URL
      *
      * @param prevProps
+     * @param prevState
+     * @param snapshot
      */
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         const nextCode = this.props.match.params.code;
         const previousCode = prevProps.match.params.code;
+
         // Execute only when the URL was 'pushed'
-        if (nextCode === previousCode) return;
-        if (nextCode) {
-            this.readEntity(decodeURIComponent(nextCode))
-        } else {
-            this.initNewEntity()
+        if (nextCode !== previousCode) {
+            if (nextCode) {
+                this.readEntity(decodeURIComponent(nextCode))
+            } else {
+                this.initNewEntity()
+            }
+            return;
         }
+        
+        if(this.state.layout.reading) {
+            return;
+        }
+
+        const newEntity = this.state[this.settings.entity];
+        const oldEntity = prevState[this.settings.entity];
+
+        if(typeof newEntity !== 'object' || typeof oldEntity !== 'object') {
+            return;
+        }
+
+        Object.entries(newEntity)
+            .filter(([key, value]) => oldEntity[key] !== value)
+            .forEach(([key, value]) => this.handleUpdate(key, value));
+    }
+
+    handleUpdate(key, value) {
+        if(!this.settings.handlerFunctions || !this.settings.handlerFunctions[key]) {
+            return;
+        }
+
+        const promise = this.settings.handlerFunctions[key](value);
+
+        if(!promise) {
+            return;
+        }
+
+        this.setLayout({blocking: true})
+        promise.finally(() => this.setLayout({blocking: false}));
     }
 
     /**
@@ -73,7 +109,10 @@ export default class readEntityEquipment extends Component {
             return
         }
         this.resetValidation(this.children)
-        this.setLayout({blocking: true});
+        this.setLayout({
+            blocking: true,
+            reading: true
+        });
         this.settings.initNewEntity()
             .then(response => {
                 this.setLayout({
@@ -93,10 +132,11 @@ export default class readEntityEquipment extends Component {
 
                 // Invoke entity specific logic on the subclass
                 this.postInit()
+                this.setLayout({reading: false});
             })
             .catch(error => {
                 this.props.handleError(error);
-                this.setLayout({blocking: false});
+                this.setLayout({blocking: false, reading: false});
             })
     }
 
@@ -113,7 +153,10 @@ export default class readEntityEquipment extends Component {
         // Reset all validators when reading new entity
         this.resetValidation(this.children)
         //
-        this.setLayout({blocking: true})
+        this.setLayout({
+            blocking: true,
+            reading: true
+        })
         //
         if (this.cancelSource) {
             this.cancelSource.cancel();
@@ -137,6 +180,7 @@ export default class readEntityEquipment extends Component {
                 if (!this.settings.entityScreen.updateAllowed) {
                     this.disableChildren()
                 }
+                this.setLayout({reading: false});
             })
             .catch(error => {
                 if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
@@ -238,7 +282,7 @@ export default class readEntityEquipment extends Component {
     copyEntity() {
         //TODO clean the URL
         let code = this.state[this.settings.entity][this.settings.entityCodeProperty];
-        this.setLayout({ newEntity: true });
+        this.setLayout({newEntity: true, reading: true});
         this.setState({[this.settings.entity]: {
             ...assignDefaultValues(this.state[this.settings.entity],
                                         this.settings.layout,
@@ -248,6 +292,7 @@ export default class readEntityEquipment extends Component {
         if (this.postCopy) {
             this.postCopy();
         }
+        this.setLayout({reading: false});
     }
 
     /**

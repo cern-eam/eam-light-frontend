@@ -7,28 +7,6 @@ import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
 
 class AssetDetails extends Component {
-
-    onChangeCategoryCode = (code) => {
-        const {updateEquipmentProperty} = this.props;
-        //Fetch the category data
-        if (code) {
-            WSEquipment.getCategoryData(code).then(response => {
-                const categoryData = response.body.data[0];
-                if (categoryData) {
-                    if (categoryData.categoryclass) {
-                        updateEquipmentProperty('classCode', categoryData.categoryclass);
-                        updateEquipmentProperty('classDesc', categoryData.categoryclassdesc);
-                    }
-                    if (categoryData.manufacturer) {
-                        updateEquipmentProperty('manufacturerCode', categoryData.manufacturer);
-                    }
-                }
-            }).catch(error => {
-                console.log(error);
-            })
-        }
-    };
-
     render() {
         let {equipment, children, assetLayout, updateEquipmentProperty, layout} = this.props;
 
@@ -53,8 +31,7 @@ class AssetDetails extends Component {
                     updateProperty={updateEquipmentProperty}
                     valueKey="categoryCode"
                     descKey="categoryDesc"
-                    autocompleteHandler={WSEquipment.autocompleteEquipmentCategory}
-                    onChangeValue={this.onChangeCategoryCode}/>
+                    autocompleteHandler={WSEquipment.autocompleteEquipmentCategory}/>
 
                 <EAMDatePicker
                     children={children}
