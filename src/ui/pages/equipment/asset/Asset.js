@@ -31,6 +31,38 @@ export default class Asset extends Entity {
         }
     }
 
+    onChangeCategoryCode = code => {
+        if(!code) {
+            return;
+        }
+
+        //Fetch the category data
+        return WSEquipment.getCategoryData(code).then(response => {
+            const categoryData = response.body.data[0];
+
+            if(!categoryData) {
+                return;
+            }
+
+            this.setState(prevState => {
+                const equipment = {...prevState.equipment};
+
+                if(categoryData.categoryclass) {
+                    equipment.classCode = categoryData.categoryclass;
+                    equipment.classDesc = categoryData.categoryclassdesc;
+                }
+
+                if(categoryData.manufacturer) {
+                    equipment.manufacturerCode = categoryData.manufacturer;
+                }
+
+                return {equipment};
+            });
+        }).catch(error => {
+            console.log(error);
+        });
+    };
+
     settings = {
         entity: 'equipment',
         entityDesc: 'Asset',
@@ -44,7 +76,10 @@ export default class Asset extends Entity {
         deleteEntity: WSEquipment.deleteEquipment.bind(WSEquipment),
         initNewEntity: () => WSEquipment.initEquipment("OBJ", "A", this.props.location.search),
         layout: this.props.assetLayout,
-        layoutPropertiesMap: EquipmentTools.assetLayoutPropertiesMap
+        layoutPropertiesMap: EquipmentTools.assetLayoutPropertiesMap,
+        handlerFunctions: {
+            'categoryCode': this.onChangeCategoryCode
+        }
     }
 
     postInit() {
