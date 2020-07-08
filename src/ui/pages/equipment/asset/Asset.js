@@ -78,7 +78,7 @@ export default class Asset extends Entity {
         layout: this.props.assetLayout,
         layoutPropertiesMap: EquipmentTools.assetLayoutPropertiesMap,
         handlerFunctions: {
-            'categoryCode': this.onChangeCategoryCode
+            categoryCode: this.onChangeCategoryCode
         }
     }
 
