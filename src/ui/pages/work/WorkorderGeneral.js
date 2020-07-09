@@ -10,34 +10,9 @@ import WSWorkorders from "../../../tools/WSWorkorders"
 
 function WorkorderDetails(props) {
 
-    const { children, workOrderLayout, workorder, updateWorkorderProperty, layout, applicationData, setWOEquipment, userData, newEntity } = props;
+    const { children, workOrderLayout, workorder, updateWorkorderProperty, layout, applicationData, userData } = props;
     const rpawClassesList = (applicationData && applicationData.EL_TRPAC && applicationData.EL_TRPAC.split(',')) || [];
     const rpawLink = applicationData && applicationData.EL_TRPAW;
-
-    let onChangeEquipment = (value, firstTime) => {
-        if(firstTime && !newEntity) {
-            return;
-        }
-
-        //If there is a value, fetch location, department, cost code
-        //and custom fields
-        if (value) {
-            WS.autocompleteEquipmentSelected(value).then(response => {
-                const data = response.body.data[0];
-                //Assign values
-                updateWorkorderProperty('departmentCode', data.department);
-                updateWorkorderProperty('departmentDesc', data.departmentdisc); // 'disc' is not a typo (well, it is in Infor's response ;-) )
-                updateWorkorderProperty('locationCode', data.parentlocation);
-                updateWorkorderProperty('locationDesc', data.locationdesc);
-                updateWorkorderProperty('costCode', data.equipcostcode);
-                updateWorkorderProperty('costCodeDesc', '');
-                //Set the equipment work order
-                setWOEquipment(value);
-            }).catch(error => {
-                //Simply don't assign values
-            });
-        }
-    };
 
     return (
         <div style={{width: "100%", marginTop: 0}}>
@@ -58,7 +33,6 @@ function WorkorderDetails(props) {
                     descKey="equipmentDesc"
                     updateProperty={updateWorkorderProperty}
                     autocompleteHandler={WS.autocompleteEquipment}
-                    onChangeValue={onChangeEquipment}
                     link={() => workorder.equipmentCode ? "/equipment/" + workorder.equipmentCode : null}/>
             </EAMBarcodeInput>
 
@@ -127,7 +101,6 @@ function WorkorderDetails(props) {
                     valueDesc={workorder.standardWODesc}
                     descKey="standardWODesc"
                     updateProperty={updateWorkorderProperty}
-                    onChangeValue={props.readStandardWorkOrder}
                     autocompleteHandler={WSWorkorders.autocompleteStandardWorkOrder.bind(null, userData.eamAccount.userGroup)}/>
 
             <EAMInput

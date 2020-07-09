@@ -6,6 +6,7 @@ import React from 'react';
 import BlockUi from 'react-block-ui';
 import WSEquipment from "../../../tools/WSEquipment";
 import WSWorkorder from "../../../tools/WSWorkorders";
+import WS from '../../../tools/WS'
 import {TOOLBARS} from "../../components/AbstractToolbar";
 import CustomFields from '../../components/customfields/CustomFields';
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
@@ -57,6 +58,48 @@ class Workorder extends Entity {
         this.props.setLayoutProperty('showEqpTreeButton', false);
     }
 
+    onChangeStandardWorkOrder = standardWorkOrderCode => {
+        if (!standardWorkOrderCode) {
+            return;
+        }
+
+        return WSWorkorder.getStandardWorkOrder(standardWorkOrderCode).then(response => {
+            const standardWorkOrder = response.body.data;
+        
+            this.setState(state => ({
+                workorder: assignStandardWorkOrderValues({...state.workorder}, standardWorkOrder)
+            }));
+        })
+    }
+
+    onChangeEquipment = value => {
+        if(!value) {
+            return;
+        }
+
+        //If there is a value, fetch location, department, cost code
+        //and custom fields
+        return Promise.all([
+            WS.autocompleteEquipmentSelected(value).then(response => {
+                const data = response.body.data[0];
+                //Assign values
+                this.setState(prevState => ({
+                    workorder: {
+                        ...prevState.workorder,
+                        departmentCode: data.department,
+                        departmentDesc: data.departmentdisc, // 'disc' is not a typo (well, it is in Infor's response ;-) )
+                        locationCode: data.parentlocation,
+                        locationDesc: data.locationdesc,
+                        costCode: data.equipcostcode,
+                        costCodeDesc: ''
+                    }
+                }));
+            }),
+            this.setWOEquipment(value) //Set the equipment work order
+        ]).catch(error => {
+            //Simply don't assign values
+        });
+    };
 
     //
     // SETTINGS OBJECT USED BY ENTITY CLASS
@@ -75,7 +118,11 @@ class Workorder extends Entity {
         deleteEntity: WSWorkorder.deleteWorkOrder.bind(WSWorkorder),
         initNewEntity: WSWorkorder.initWorkOrder.bind(WSWorkorder, "EVNT"),
         layout: this.props.workOrderLayout,
-        layoutPropertiesMap: WorkorderTools.layoutPropertiesMap
+        layoutPropertiesMap: WorkorderTools.layoutPropertiesMap,
+        handlerFunctions: {
+            equipmentCode: this.onChangeEquipment,
+            standardWO: this.onChangeStandardWorkOrder
+        }
     }
 
 
@@ -90,7 +137,6 @@ class Workorder extends Entity {
             workOrderLayout
         } = this.props;
         const { layout, workorder } = this.state;
-        const { newEntity } = layout;
 
         const commonProps = {
             workorder,
@@ -110,10 +156,8 @@ class Workorder extends Entity {
                 render: () => 
                     <WorkorderDetails
                         {...commonProps}
-                        readStandardWorkOrder={this.readStandardWorkOrder}
                         applicationData={applicationData}
-                        userData={userData} 
-                        newEntity={newEntity} />
+                        userData={userData} />
                 ,
                 column: 1,
                 order: 1
@@ -445,35 +489,23 @@ class Workorder extends Entity {
             });
     }
 
-    setWOEquipment = (code) => {
+    setWOEquipment = code => {
         //Only call if the region is available
-        if (WorkorderTools.isRegionAvailable('CUSTOM_FIELDS_EQP', this.props.workOrderLayout)) {
-            WSEquipment.getEquipment(code).then(response => {
-                this.setLayout({woEquipment: response.body.data})
-            }).catch(error => {
-                this.setLayout({woEquipment: undefined})
-            });
+        if (!WorkorderTools.isRegionAvailable('CUSTOM_FIELDS_EQP', this.props.workOrderLayout)) {
+            return;
         }
+
+        return WSEquipment.getEquipment(code).then(response => {
+            this.setLayout({woEquipment: response.body.data})
+        }).catch(error => {
+            this.setLayout({woEquipment: undefined})
+        });
     };
 
     postAddActivityHandler = () => {
         //Refresh the activities in the checklist
         this.checklists.readActivities(this.state.workorder.number);
     };
-
-    readStandardWorkOrder = (standardWorkOrderCode, firstTime) => {
-        if (!standardWorkOrderCode || ((firstTime && !this.state.layout.newEntity))) {
-            return;
-        }
-
-        WSWorkorder.getStandardWorkOrder(standardWorkOrderCode).then(response => {
-            const standardWorkOrder = response.body.data;
-        
-            this.setState(state => ({
-                workorder: assignStandardWorkOrderValues({...state.workorder}, standardWorkOrder)
-            }));
-        })
-    }
 
     renderWorkOrder() {
         const { layout, workorder } = this.state;

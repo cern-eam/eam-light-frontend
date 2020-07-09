@@ -25,6 +25,38 @@ export default class Position extends Entity {
         super(props)
         this.setCriticalities()
     }
+    
+    onChangeCategoryCode = code => {
+        if(!code) {
+            return;
+        }
+
+        //Fetch the category data
+        return WSEquipment.getCategoryData(code).then(response => {
+            const categoryData = response.body.data[0];
+
+            if(!categoryData) {
+                return;
+            }
+
+            this.setState(prevState => {
+                const equipment = {...prevState.equipment};
+
+                if(categoryData.categoryclass) {
+                    equipment.classCode = categoryData.categoryclass;
+                    equipment.classDesc = categoryData.categoryclassdesc;
+                }
+
+                if(categoryData.manufacturer) {
+                    equipment.manufacturerCode = categoryData.manufacturer;
+                }
+
+                return {equipment};
+            });
+        }).catch(error => {
+            console.log(error);
+        });
+    };
 
     settings = {
         entity: 'equipment',
@@ -37,7 +69,10 @@ export default class Position extends Entity {
         updateEntity: WSEquipment.updateEquipment.bind(WSEquipment),
         createEntity: WSEquipment.createEquipment.bind(WSEquipment),
         deleteEntity: WSEquipment.deleteEquipment.bind(WSEquipment),
-        initNewEntity: () => WSEquipment.initEquipment("OBJ", "P", this.props.location.search)
+        initNewEntity: () => WSEquipment.initEquipment("OBJ", "P", this.props.location.search),
+        handlerFunctions: {
+            categoryCode: this.onChangeCategoryCode
+        }
     }
 
     postInit() {
