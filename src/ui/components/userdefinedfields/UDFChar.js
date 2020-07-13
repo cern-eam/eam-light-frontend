@@ -59,6 +59,7 @@ class UDFChar extends Component {
                         updateProperty={this.props.updateUDFProperty}
                         children={this.props.children}
                         link={this.props.link}
+                        icon={this.props.icon}
                     />
                 );
             case RENT:
@@ -72,6 +73,7 @@ class UDFChar extends Component {
                                      autocompleteHandler={(value, config) => WSUDF.autocompleteUserDefinedField(this.props.fieldInfo.udfLookupEntity, value, config)}
                                      children={this.props.children}
                                      link={this.props.link}
+                                     icon={this.props.icon}
                     />
                 );
             case NONE:
@@ -83,6 +85,7 @@ class UDFChar extends Component {
                               valueKey={this.props.fieldKey}
                               children={this.props.children}
                               link={this.props.link}
+                              icon={this.props.icon}
                     />
                 );
         }

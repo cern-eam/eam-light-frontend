@@ -7,6 +7,8 @@ import WS from '../../../tools/WS'
 import UDFChar from "../../components/userdefinedfields/UDFChar";
 import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
 import WSWorkorders from "../../../tools/WSWorkorders"
+import OpenInAppIcon from 'mdi-material-ui/OpenInApp'
+import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
 
 function WorkorderDetails(props) {
 
@@ -33,7 +35,8 @@ function WorkorderDetails(props) {
                     descKey="equipmentDesc"
                     updateProperty={updateWorkorderProperty}
                     autocompleteHandler={WS.autocompleteEquipment}
-                    link={() => workorder.equipmentCode ? "/equipment/" + workorder.equipmentCode : null}/>
+                    link={() => workorder.equipmentCode ? "/equipment/" + workorder.equipmentCode : null}
+                    icon={<OpenInAppIcon/>}/>
             </EAMBarcodeInput>
 
             <EAMAutocomplete
@@ -108,7 +111,9 @@ function WorkorderDetails(props) {
                     value={workorder.parentWO}
                     valueKey="parentWO"
                     updateProperty={updateWorkorderProperty}
-                    link={() => workorder.parentWO && rpawClassesList.includes(workorder.classCode) ? rpawLink + workorder.parentWO : null}/>
+                    link={() => workorder.parentWO && rpawClassesList.includes(workorder.classCode) ? rpawLink + workorder.parentWO : null}
+                    icon={<OpenInAppIcon/>}/>
+                    
 
             <UDFChar fieldInfo={workOrderLayout.fields['udfchar01']}
                         fieldValue={workorder.userDefinedFields.udfchar01}
@@ -117,7 +122,8 @@ function WorkorderDetails(props) {
                         descKey={`userDefinedFields.udfchar01Desc`}
                         updateUDFProperty={updateWorkorderProperty}
                         children={children}
-                        link={() => workorder.userDefinedFields.udfchar01 ? "https://cern.service-now.com/task.do?sysparm_query=number=" + workorder.userDefinedFields.udfchar01 : null}/>
+                        link={() => workorder.userDefinedFields.udfchar01 ? "https://cern.service-now.com/task.do?sysparm_query=number=" + workorder.userDefinedFields.udfchar01 : null}
+                        icon={<OpenInNewIcon/>}/>
 
             <UDFChar fieldInfo={workOrderLayout.fields['udfchar20']}
                         fieldValue={workorder.userDefinedFields.udfchar20}
@@ -134,7 +140,8 @@ function WorkorderDetails(props) {
                         descKey={`userDefinedFields.udfchar01Desc`}
                         updateUDFProperty={updateWorkorderProperty}
                         children={children}
-                        link={() => workorder.userDefinedFields.udfchar24 ? "https://its.cern.ch/jira/browse/" + workorder.userDefinedFields.udfchar24 : null}/>
+                        link={() => workorder.userDefinedFields.udfchar24 ? "https://its.cern.ch/jira/browse/" + workorder.userDefinedFields.udfchar24 : null}
+                        icon={<OpenInNewIcon/>}/>
 
             <EAMCheckbox elementInfo={workOrderLayout.fields['udfchkbox02']}
                             value={workorder.userDefinedFields.udfchkbox02}
