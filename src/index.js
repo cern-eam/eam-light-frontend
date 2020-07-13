@@ -14,6 +14,10 @@ import {create} from "jss";
 import {StylesProvider, jssPreset} from '@material-ui/core/styles';
 import SnackbarContainer from "./ui/components/snackbar/SnackbarContainer";
 import Ajax from 'eam-components/dist/tools/ajax'
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+// EAM-480, en-GB locale used in order to have monday as first day of the week
+import { enGB } from "date-fns/locale"; 
 
 const jss = create(jssPreset());
 
@@ -39,10 +43,12 @@ const store = createStore(rootReducer, applyMiddleware(createAxiosAuthMiddleware
 ReactDOM.render(
     <StylesProvider jss={jss}>
         <Provider store={store}>
-            <div style={{width: "100%", height: "100%"}}>
-                <EamlightContainer />
-                <SnackbarContainer />
-            </div>
+            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={enGB}>
+                <div style={{width: "100%", height: "100%"}}>
+                    <EamlightContainer />
+                    <SnackbarContainer />
+                </div>
+            </MuiPickersUtilsProvider>
         </Provider>
     </StylesProvider>
     ,document.getElementById('root'));
