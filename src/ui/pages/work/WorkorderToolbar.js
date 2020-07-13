@@ -4,12 +4,12 @@ import Tooltip from "@material-ui/core/Tooltip";
 import MenuItem from "@material-ui/core/MenuItem";
 import "../../../ui/components/EamlightToolbar.css";
 import Divider from "@material-ui/core/Divider";
+import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
 import {
     ContentCopy,
     EmailOutline,
     Printer,
     Map,
-    OpenInNew,
     Domain,
     Camera
 } from "mdi-material-ui";
@@ -169,7 +169,7 @@ class WorkorderToolbar extends Component {
                         onClick={this.showInExtendedHandler.bind(this)}
                         disabled={this.props.newWorkorder}
                     >
-                        <OpenInNew style={this.iconMenuStyle} />
+                        <OpenInNewIcon style={this.iconMenuStyle} />
                         <div>Show in Infor EAM</div>
                     </MenuItem>
                 )}
@@ -256,7 +256,7 @@ class WorkorderToolbar extends Component {
                             onClick={this.showInExtendedHandler.bind(this)}
                             disabled={this.props.newWorkorder}
                         >
-                            <OpenInNew style={this.iconStyle} />
+                            <OpenInNewIcon style={this.iconStyle} />
                         </IconButton>
                     </Tooltip>
                 )}
