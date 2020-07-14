@@ -73,9 +73,9 @@ export default class readEntityEquipment extends Component {
         }
 
         const newEntity = this.state[this.settings.entity];
-        const oldEntity = prevState[this.settings.entity];
+        const oldEntity = {...prevState[this.settings.entity]}; // {...undefined} = {}
 
-        if(typeof newEntity !== 'object' || typeof oldEntity !== 'object') {
+        if(typeof newEntity !== 'object') {
             return;
         }
 
@@ -109,10 +109,7 @@ export default class readEntityEquipment extends Component {
             return
         }
         this.resetValidation(this.children)
-        this.setLayout({
-            blocking: true,
-            reading: true
-        });
+        this.setLayout({blocking: true});
         this.settings.initNewEntity()
             .then(response => {
                 this.setLayout({
@@ -132,11 +129,10 @@ export default class readEntityEquipment extends Component {
 
                 // Invoke entity specific logic on the subclass
                 this.postInit()
-                this.setLayout({reading: false});
             })
             .catch(error => {
                 this.props.handleError(error);
-                this.setLayout({blocking: false, reading: false});
+                this.setLayout({blocking: false});
             })
     }
 
