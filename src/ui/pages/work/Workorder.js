@@ -82,6 +82,11 @@ class Workorder extends Entity {
         return Promise.all([
             WS.autocompleteEquipmentSelected(value).then(response => {
                 const data = response.body.data[0];
+
+                if(!data) {
+                    return;
+                }
+
                 //Assign values
                 this.setState(prevState => ({
                     workorder: {
