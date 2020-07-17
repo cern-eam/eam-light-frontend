@@ -55,17 +55,21 @@ export default class readEntityEquipment extends Component {
      * @param snapshot
      */
     componentDidUpdate(prevProps, prevState, snapshot) {
-        const nextCode = this.props.match.params.code;
-        const previousCode = prevProps.match.params.code;
+        if (prevProps.location.key !== this.props.location.key) {
+            // Note: code below is trickier than it looks. From testing we have never seen
+            // that nextCode !== previousCode, which feels quite strange and unexpected,
+            // taking into account that these values change over time
+            let nextCode = this.props.match.params.code;
+            let previousCode = prevProps.match.params.code;
 
-        // Execute only when the URL was 'pushed'
-        if (nextCode !== previousCode) {
-            if (nextCode) {
-                this.readEntity(decodeURIComponent(nextCode))
-            } else {
+            if (nextCode && (nextCode !== previousCode)) {
+                nextCode = decodeURIComponent(nextCode);
+                this.readEntity(nextCode)
+            }
+
+            if (!nextCode) {
                 this.initNewEntity()
             }
-            return;
         }
         
         if(this.state.layout.reading) {
