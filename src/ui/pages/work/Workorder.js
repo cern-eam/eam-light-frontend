@@ -344,14 +344,14 @@ class Workorder extends Entity {
                 id: 'CUSTOMFIELDSEQP',
                 label: 'Custom Fields Equipment',
                 isVisibleWhenNewEntity: true,
-                customVisibility: () => WorkorderTools.isRegionAvailable('CUSTOM_FIELDS_EQP', commonProps.workOrderLayout) && layout.woEquipment,
+                customVisibility: () => WorkorderTools.isRegionAvailable('CUSTOM_FIELDS_EQP', commonProps.workOrderLayout),
                 maximizable: false,
                 render: () => 
                     <CustomFields children={this.children}
                         entityCode='OBJ'
-                        entityKeyCode={layout.woEquipment.code}
-                        classCode={layout.woEquipment.classCode}
-                        customFields={layout.woEquipment.customField}
+                        entityKeyCode={layout.woEquipment && layout.woEquipment.code}
+                        classCode={layout.woEquipment && layout.woEquipment.classCode}
+                        customFields={layout.woEquipment && layout.woEquipment.customField}
                         updateEntityProperty={this.updateEntityProperty.bind(this)}
                         readonly={true} />
                 ,
