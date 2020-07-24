@@ -6,46 +6,48 @@ import EISTableFilter from 'eam-components/dist/ui/components/table/EISTableFilt
 import EquipmentMTFWorkOrders from "./EquipmentMTFWorkOrders"
 import BlockUi from 'react-block-ui';
 
-function EquipmentWorkOrders(props) {    
-    let workOrderFilterTypes = {
-        ALL: 'All',
-        OPEN: 'Open',
-        MTF: 'MTF'
-    }
+const WO_FILTER_TYPES = {
+    ALL: 'All',
+    OPEN: 'Open',
+    MTF: 'MTF',
+}
 
-    let workOrderFilters = {
-        [workOrderFilterTypes.ALL]: {
-            text: workOrderFilterTypes.ALL,
-            process: (data) => {
-                return [...data];
-            }
-        },
-        [workOrderFilterTypes.OPEN]: {
-            text: workOrderFilterTypes.OPEN,
-            process: (data) => {
-                return data.filter((workOrder) => workOrder.status && !workOrder.status.startsWith("T"));
-            }
-        },
-        [workOrderFilterTypes.MTF]: {
-            text: workOrderFilterTypes.MTF,
-            process: (data) => {
-                return data.filter((workOrder) => {
-                    return workOrder.mrc && (workOrder.mrc.startsWith("ICF") || workOrder.mrc.startsWith("MTF"));
-                })
-            }
+const WO_FILTERS = {
+    [WO_FILTER_TYPES.ALL]: {
+        text: WO_FILTER_TYPES.ALL,
+        process: (data) => {
+            return [...data];
+        }
+    },
+    [WO_FILTER_TYPES.OPEN]: {
+        text: WO_FILTER_TYPES.OPEN,
+        process: (data) => {
+            return data.filter((workOrder) => workOrder.status && !workOrder.status.startsWith("T"));
+        }
+    },
+    [WO_FILTER_TYPES.MTF]: {
+        text: WO_FILTER_TYPES.MTF,
+        process: (data) => {
+            return data.filter((workOrder) => {
+                return workOrder.mrc && (workOrder.mrc.startsWith("ICF") || workOrder.mrc.startsWith("MTF"));
+            })
         }
     }
+}
+
+function EquipmentWorkOrders(props) {
+    const { defaultFilter } = props;
 
     let headers = ['Work Order', 'Description', 'Status', 'Creation Date'];
     let propCodes = ['number', 'desc', 'status', 'createdDate'];
     let linksMap = new Map([['number', {linkType: 'fixed', linkValue: 'workorder/', linkPrefix: '/'}]]);
 
     let [data, setData] = useState([]);
-    let [workOrderFilter, setWorkOrderFilter] = useState(workOrderFilterTypes.ALL)
+    let [workOrderFilter, setWorkOrderFilter] = useState(Object.values(WO_FILTER_TYPES).includes(defaultFilter) ? defaultFilter : WO_FILTER_TYPES.ALL)
     const [loadingData, setLoadingData] = useState(true);
 
     let getFilteredWorkOrderList = (workOrders) => {
-        return workOrderFilters[workOrderFilter].process(workOrders)
+        return WO_FILTERS[workOrderFilter].process(workOrders)
     }
 
     useEffect(() => {
@@ -70,14 +72,14 @@ function EquipmentWorkOrders(props) {
     return (
         <div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
             <EISTableFilter
-                filters={workOrderFilters}
+                filters={WO_FILTERS}
                 handleFilterChange={newFilter =>
                     setWorkOrderFilter(newFilter)
                 }
                 activeFilter={workOrderFilter}
                 />
                 
-            {workOrderFilter === workOrderFilterTypes.MTF ?
+            {workOrderFilter === WO_FILTER_TYPES.MTF ?
                 <EquipmentMTFWorkOrders equipmentcode={props.equipmentcode} />
                 :
                 <BlockUi blocking={loadingData}>

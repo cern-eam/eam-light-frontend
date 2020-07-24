@@ -2,6 +2,11 @@ import React from 'react'
 import RegionPanel from './regionpanel/RegionPanel';
 import Grid from '@material-ui/core/Grid';
 import { useHistory, useLocation } from 'react-router-dom';
+import queryString from "query-string"
+
+const ENTITY_REGION_PARAMS = {
+    MAXIMIZE: 'maximize'
+}
 
 const EntityRegions = (props) => {
     const { isHiddenRegion, regions = [], showEqpTree, isNewEntity } = props;
@@ -10,7 +15,7 @@ const EntityRegions = (props) => {
 
     const history = useHistory();
     const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
+    const searchParams = queryString.parse(location.search);
 
     React.useEffect(() => {
         const defaultVisibility = (region) => regionMaximized === region.id ||
@@ -25,8 +30,8 @@ const EntityRegions = (props) => {
     }, [regions, isHiddenRegion, isNewEntity, regionMaximized])
 
     React.useEffect(() => {
-        setRegionMaximized(searchParams.get('maximize'));
-    }, [searchParams])
+        setRegionMaximized(searchParams.maximize);
+    }, [searchParams[ENTITY_REGION_PARAMS.MAXIMIZE]])
 
     const columns = regions.reduce((acc, region) => ({
         ...acc,
@@ -44,12 +49,30 @@ const EntityRegions = (props) => {
     }
 
     const updateMaximize = (regionID) => () => {
-        regionID
-        ? searchParams.set('maximize', regionID)
-        : searchParams.delete('maximize');
-        history.push({ pathname: location.pathname, search: searchParams.toString()});
+        const newSearchParams = regionID ? (
+            { ...searchParams, maximize: regionID }
+        ) : (
+            Object.keys(searchParams)
+                .filter(paramKey => paramKey !== ENTITY_REGION_PARAMS.maximize)
+                .reduce((acc, paramKey) => ({
+                    ...acc,
+                    [paramKey]: searchParams[paramKey]
+                }), {})
+        )
+        history.push({
+            pathname: location.pathname,
+            search: queryString.stringify(newSearchParams)
+        });
         setRegionMaximized(regionID);
     }
+
+    const getRegionPanelQueryParams = React.useCallback((regionID) => Object.keys(searchParams)
+        .filter(paramKey => paramKey.startsWith(regionID))
+        .reduce((acc, paramKey) => ({
+            ...acc,
+            [paramKey.replace(`${regionID}_`, '')]: searchParams[paramKey],
+        }), {})
+    , [searchParams]);
 
     return (
         <div id="entityContent">
@@ -68,7 +91,7 @@ const EntityRegions = (props) => {
                                     unMaximize={updateMaximize(undefined)}
                                     showMaximizeControls={region.maximizable}
                                     {...region.RegionPanelProps}>
-                                    {region.render()}
+                                    {region.render({ panelQueryParams: getRegionPanelQueryParams(region.id) })}
                                 </RegionPanel>
                             ))
                         }
