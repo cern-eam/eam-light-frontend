@@ -190,9 +190,10 @@ export default class System extends Entity {
                 label: 'Work Orders',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
+                render: ({ panelQueryParams }) => 
                     <EquipmentWorkOrders
-                        equipmentcode={equipment.code} />
+                        equipmentcode={equipment.code}
+                        defaultFilter={panelQueryParams.defaultFilter}/>
                 ,
                 column: 1,
                 order: 4

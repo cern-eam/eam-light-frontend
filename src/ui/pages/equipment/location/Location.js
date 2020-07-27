@@ -103,9 +103,10 @@ export default class Location extends Entity {
                 label: 'Work Orders',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
+                render: ({ panelQueryParams }) => 
                     <EquipmentWorkOrders
-                        equipmentcode={location.code} />
+                        equipmentcode={location.code}
+                        defaultFilter={panelQueryParams.defaultFilter}/>
                 ,
                 column: 1,
                 order: 4
