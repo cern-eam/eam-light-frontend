@@ -80,10 +80,10 @@ class WorkorderToolbar extends Component {
     }
 
     OSVCHandler() {
-        const osvcLink =
-            this.props.applicationData.EL_INTEG +
-            "/osvc.xhtml?workordernum=" +
-            this.props.workorder.number;
+        const osvcLink = this.props.applicationData.EL_OSVCU.replace(
+            "{{workOrderId}}",
+            this.props.workorder.number
+        );
         window.open(osvcLink, "_blank");
     }
 
@@ -174,7 +174,7 @@ class WorkorderToolbar extends Component {
                     </MenuItem>
                 )}
 
-                {this.props.applicationData.EL_INTEG && (
+                {this.props.applicationData.EL_OSVCU && (
                     <MenuItem
                         onClick={this.OSVCHandler.bind(this)}
                         disabled={this.props.newWorkorder}
@@ -261,7 +261,7 @@ class WorkorderToolbar extends Component {
                     </Tooltip>
                 )}
 
-                {this.props.applicationData.EL_INTEG && (
+                {this.props.applicationData.EL_OSVCU && (
                     <Tooltip title="OSVC">
                         <IconButton
                             onClick={this.OSVCHandler.bind(this)}
