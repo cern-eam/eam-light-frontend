@@ -9,7 +9,6 @@
 #topbar {
     display: flex;
     flex: 0 0 48px;
-    background-color: #00aaff;
     transition: top 0.3s;
 }
 

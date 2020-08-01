@@ -51,7 +51,7 @@ class Eamlight extends Component {
         }
 
         // User data still not there, display loading page
-        if (!this.props.userData) {
+        if (!this.props.userData || !this.props.applicationData) {
             this.props.initializeApplication();
             return (
                 <BlockUi tag="div" blocking={true} style={this.blockUiStyle}>
@@ -67,6 +67,9 @@ class Eamlight extends Component {
         }
 
         const eqpRegex = ["/asset", "/position", "/system", "/location"].map(e => `${e}/:code(.+)?`)
+
+        const inPROD = this.props.applicationData.EL_INTEG !== 'https://cmmsx-test.cern.ch/SSO/integration/ais';
+        theme.topBarColor = inPROD ? '#00aaff' : '#6ac860';
 
         // Render real application once user data is there and user has an EAM account
         return (
