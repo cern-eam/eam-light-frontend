@@ -19,8 +19,11 @@ export default class SearchResult extends React.Component {
             case EntityCode.WORKORDER: {
                 return "Work Order:";
             }
-            case EntityCode.PART : {
+            case EntityCode.PART: {
                 return "Part:"
+            }
+            case EntityCode.LOCATION: {
+                return "Location: "
             }
             default: {
                 return "Equipment:"
