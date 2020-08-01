@@ -8,10 +8,12 @@ import './ApplicationLayout.css'
 import UserInfoContainer from './UserInfoContainer'
 import {FileTree, FormatHorizontalAlignLeft, FormatHorizontalAlignRight} from 'mdi-material-ui';
 import { useLocation } from 'react-router-dom';
+import { useTheme } from '@material-ui/core/styles';
 
 export default function ApplicationLayout(props) {
     const [menuCompacted, setMenuCompacted] = useState(false)
     const [mobileMenuActive, setMobileMenuActive] = useState(false)
+    const theme = useTheme();
     const dispatch = useDispatch();
     const showEqpTree = useSelector(state => state.ui.layout.showEqpTree)
     const showEqpTreeButton = useSelector(state => state.ui.layout.showEqpTreeButton)
@@ -36,7 +38,7 @@ export default function ApplicationLayout(props) {
 
     return (
         <div id="maindiv" className={(menuCompacted) ? 'SlimMenu' : ''} onClick={() => !menuCompacted && mobileMenuActive && setMobileMenuActive(false)}>
-            <div id="topbar">
+            <div id="topbar" style={{backgroundColor: theme.topBarColor}}>
                 <div id="topbar-left">
                     <Link style={headerLinkStyle} to="/">EAM Light</Link>
                 </div>
