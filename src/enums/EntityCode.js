@@ -3,5 +3,6 @@ export default {
     POSITION: "P",
     SYSTEM : "S",
     WORKORDER : "JOB",
-    PART: "PART"
+    PART: "PART",
+    LOCATION: "L",
 }

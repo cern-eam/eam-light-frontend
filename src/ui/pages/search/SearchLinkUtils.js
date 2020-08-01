@@ -22,5 +22,9 @@ export function getLink(type, code) {
             case EntityCode.PART: {
                 return '/part/' + code;
             }
+
+            case EntityCode.LOCATION: {
+                return '/location/' + code;
+            }
         }
 }
