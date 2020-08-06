@@ -22,11 +22,11 @@ import {ThemeProvider} from '@material-ui/core/styles';
 import EquipmentRedirect from "./ui/pages/equipment/EquipmentRedirect";
 import MeterReadingContainer from './ui/pages/meter/MeterReadingContainer';
 import EquipmentContainer from "./ui/pages/equipment/EquipmentContainer";
-import {theme} from 'eam-components/dist/ui/components/theme';
 import LoginContainer from "./ui/pages/login/LoginContainer";
 import Grid from "./ui/pages/grid/Grid";
 import JMTIntegrationContainer from "./ui/components/jmt/JMTIntegrationContainer";
 import InstallEqpContainer from "./ui/pages/equipment/installeqp/InstallEqpContainer";
+import * as theme from 'eam-components/dist/ui/components/theme';
 
 class Eamlight extends Component {
 
@@ -68,13 +68,16 @@ class Eamlight extends Component {
 
         const eqpRegex = ["/asset", "/position", "/system", "/location"].map(e => `${e}/:code(.+)?`)
 
-        const inPROD = this.props.applicationData.EL_INTEG !== 'https://cmmsx-test.cern.ch/SSO/integration/ais';
-        theme.topBarColor = inPROD ? '#00aaff' : '#6ac860';
+        const selectedTheme = ({
+              PROD: theme.BLUE,
+              TEST: theme.GREEN,
+              DEV: theme.RED,
+        }[this.props.applicationData.EL_ENVIR]) || theme.DANGER;
 
         // Render real application once user data is there and user has an EAM account
         return (
             <Router basename={process.env.PUBLIC_URL}>
-                <ThemeProvider theme={theme}>
+                <ThemeProvider theme={selectedTheme}>
                     <Switch>
                     <Route path="/impact"
                            component={ImpactContainer}/>
