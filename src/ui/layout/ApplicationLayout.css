@@ -104,3 +104,10 @@
     flex: 1 0;
     align-items: center;
 }
+
+#topbar-left > span {
+    position: absolute;
+    font-size: 12px;
+    margin-top: 16px;
+    margin-left: -83px;
+}

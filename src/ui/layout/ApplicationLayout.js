@@ -19,6 +19,8 @@ export default function ApplicationLayout(props) {
     const showEqpTreeButton = useSelector(state => state.ui.layout.showEqpTreeButton)
     const location = useLocation()
 
+    const environment = props.applicationData.EL_ENVIR;
+
     const headerLinkStyle = {
         color: "white",
         textDecoration: "none",
@@ -41,6 +43,7 @@ export default function ApplicationLayout(props) {
             <div id="topbar" style={{backgroundColor: theme.palette.primary.main}}>
                 <div id="topbar-left">
                     <Link style={headerLinkStyle} to="/">EAM Light</Link>
+                    {environment !== 'PROD' && <span>{environment}</span>}
                 </div>
 
                 <div id="topbar-right">
