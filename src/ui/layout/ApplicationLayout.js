@@ -38,7 +38,7 @@ export default function ApplicationLayout(props) {
 
     return (
         <div id="maindiv" className={(menuCompacted) ? 'SlimMenu' : ''} onClick={() => !menuCompacted && mobileMenuActive && setMobileMenuActive(false)}>
-            <div id="topbar" style={{backgroundColor: theme.custom.topBarColor}}>
+            <div id="topbar" style={{backgroundColor: theme.palette.primary.main}}>
                 <div id="topbar-left">
                     <Link style={headerLinkStyle} to="/">EAM Light</Link>
                 </div>
