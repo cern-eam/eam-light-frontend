@@ -13,7 +13,7 @@ import Entity from '../../Entity';
 import EquipmentHistory from '../components/EquipmentHistory.js';
 import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
-import EamlightToolbar from './../../../components/EamlightToolbar';
+import EamlightToolbarContainer from './../../../components/EamlightToolbarContainer';
 import AssetDetails from './AssetDetails';
 import AssetGeneral from './AssetGeneral';
 import AssetHierarchy from './AssetHierarchy';
@@ -355,7 +355,7 @@ export default class Asset extends Entity {
 
         return (
             <BlockUi tag="div" blocking={layout.blocking} style={{ height: "100%", width: "100%" }}>
-                <EamlightToolbar
+                <EamlightToolbarContainer
                     isModified={layout.isModified}
                     newEntity={layout.newEntity}
                     entityScreen={userData.screens[userData.assetScreen]}

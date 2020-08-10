@@ -193,6 +193,16 @@ class EamlightToolbar extends Component {
             justifyContent: "center",
             flexWrap: "wrap"
         };
+        
+        const userData = this.props.userData;
+
+        const camelCaseEntityName = this.props.entityName
+            .split(' ')
+            .map(word => word.toLowerCase())
+            .map((word, index) => index === 0 ? word : word.replace(word[0], word[0].toUpperCase()))
+            .join('');
+
+        const screenName = userData[camelCaseEntityName + 'Screen'];
 
         return (
             <div className={"entityToolbar"} ref={entityToolbarDiv => this.entityToolbarDiv = entityToolbarDiv}>
