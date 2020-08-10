@@ -210,7 +210,10 @@ class EamlightToolbar extends Component {
                 <div className={"entityToolbarContent"}>
                     <div style={this.state.compactMenu ? {...entityCodeStyle, flexBasis: "8em"} : entityCodeStyle}>
                         <div style={{display: "flex", alignItems: "center", marginRight: 5}}>
-                            {this.props.entityIcon}
+                            <div style={{display: "flex", flexDirection: "column", justifyContent: "flex-end", alignItems: "center"}}>
+                                {this.props.entityIcon}
+                                <span>{screenName}</span>
+                            </div>
                             <span style={{marginLeft: 5}}>{this.props.entityName}</span>
                         </div>
                         <div>
