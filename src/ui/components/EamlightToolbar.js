@@ -14,6 +14,12 @@ import IconButton from '@material-ui/core/IconButton';
 import AbstractToolbar from './AbstractToolbar';
 
 
+const verticalLineStyle = {
+    height: 25,
+    borderRight: "1px solid gray",
+    margin: 5
+};
+
 class EamlightToolbar extends Component {
     state = {
         open: false,
@@ -158,6 +164,16 @@ class EamlightToolbar extends Component {
         <AbstractToolbar {...this.props.toolbarProps} renderOption={renderOption}/>
 
     renderDesktopMenu() {
+        const userData = this.props.userData;
+
+        const camelCaseEntityName = this.props.entityName
+            .split(' ')
+            .map(word => word.toLowerCase())
+            .map((word, index) => index === 0 ? word : word.replace(word[0], word[0].toUpperCase()))
+            .join('');
+
+        const screenName = userData[camelCaseEntityName + 'Screen'];
+
         return (
             <div style={{display: "flex", height: 36}}>
                 <Button onClick={this.newHandler}
@@ -173,17 +189,15 @@ class EamlightToolbar extends Component {
                     Delete
                 </Button>
                 {this.getToolbar('TOOLBARICONS')}
+                <div style={verticalLineStyle}/>
+                <div style={{display: "flex", alignItems: "center", marginRight: 5}}>
+                    <span style={{marginLeft: 5}}>{screenName}</span>
+                </div>
             </div>
         )
     }
 
     render() {
-
-        const verticalLineStyle = {
-            height: 25,
-            borderRight: "1px solid gray",
-            margin: 5
-        };
 
         const entityCodeStyle = {
             marginLeft: 12,
@@ -193,16 +207,6 @@ class EamlightToolbar extends Component {
             justifyContent: "center",
             flexWrap: "wrap"
         };
-        
-        const userData = this.props.userData;
-
-        const camelCaseEntityName = this.props.entityName
-            .split(' ')
-            .map(word => word.toLowerCase())
-            .map((word, index) => index === 0 ? word : word.replace(word[0], word[0].toUpperCase()))
-            .join('');
-
-        const screenName = userData[camelCaseEntityName + 'Screen'];
 
         return (
             <div className={"entityToolbar"} ref={entityToolbarDiv => this.entityToolbarDiv = entityToolbarDiv}>
@@ -229,7 +233,6 @@ class EamlightToolbar extends Component {
                     </Button>
 
                     {this.state.compactMenu ? this.renderCompactMenu() : this.renderDesktopMenu()}
-
                 </div>
 
                 {this.props.regions &&
