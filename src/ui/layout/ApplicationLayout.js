@@ -8,6 +8,7 @@ import './ApplicationLayout.css'
 import UserInfoContainer from './UserInfoContainer'
 import {FileTree, FormatHorizontalAlignLeft, FormatHorizontalAlignRight} from 'mdi-material-ui';
 import { useLocation } from 'react-router-dom';
+import EamlightFooterContainer from './EamlightFooterContainer'
 
 export default function ApplicationLayout(props) {
     const [menuCompacted, setMenuCompacted] = useState(false)
@@ -77,6 +78,8 @@ export default function ApplicationLayout(props) {
                     {props.children[1]}
                 </div>
             </div>
+
+            <EamlightFooterContainer />
         </div>
 
     )
