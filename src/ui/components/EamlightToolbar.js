@@ -204,9 +204,8 @@ class EamlightToolbar extends Component {
 
         const screenName = userData[camelCaseEntityName + 'Screen'];
 
-        return (
-            <div className={"entityToolbar"} ref={entityToolbarDiv => this.entityToolbarDiv = entityToolbarDiv}>
-
+        return <div ref={entityToolbarDiv => this.entityToolbarDiv = entityToolbarDiv}>
+            <div className={"entityToolbar"} >
                 <div className={"entityToolbarContent"}>
                     <div style={this.state.compactMenu ? {...entityCodeStyle, flexBasis: "8em"} : entityCodeStyle}>
                         <div style={{display: "flex", alignItems: "center", marginRight: 5}}>
@@ -217,10 +216,15 @@ class EamlightToolbar extends Component {
                             {!this.props.newEntity && (<span
                                 style={{fontWeight: 500, whiteSpace: "nowrap"}}> {this.props.entityKeyCode}</span>)}
                         </div>
+                        <div style={verticalLineStyle}></div>
+                        <div style={{display: "flex", alignItems: "center", marginRight: 5}}>
+                            <span style={{marginLeft: 5}}>{screenName}</span>
+                        </div>
                     </div>
-
-                    <div style={verticalLineStyle}/>
-
+                </div>
+            </div>
+            <div className={"entityToolbar"}>
+                <div className={"entityToolbarContent"} style={{marginLeft: '10px'}}>
                     <Button onClick={this.props.saveHandler}
                             disabled={this.isSaveButtonDisabled()}
                             startIcon={<SaveIcon className="iconButton"/>}
@@ -229,7 +233,6 @@ class EamlightToolbar extends Component {
                     </Button>
 
                     {this.state.compactMenu ? this.renderCompactMenu() : this.renderDesktopMenu()}
-
                 </div>
 
                 {this.props.regions &&
@@ -271,7 +274,7 @@ class EamlightToolbar extends Component {
                 />
 
             </div>
-        )
+        </div>
     }
 }
 
