@@ -11,7 +11,7 @@ import {TOOLBARS} from "../../components/AbstractToolbar";
 import CustomFields from '../../components/customfields/CustomFields';
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import Entity from '../Entity';
-import EamlightToolbar from './../../components/EamlightToolbar';
+import EamlightToolbarContainer from './../../components/EamlightToolbarContainer';
 import Activities from './activities/Activities';
 import WorkorderChildren from "./childrenwo/WorkorderChildren";
 import MeterReadingContainerWO from './meter/MeterReadingContainerWO';
@@ -527,7 +527,7 @@ class Workorder extends Entity {
             <div className="entityContainer">
                 <BlockUi tag="div" blocking={layout.blocking} style={{height: "100%", width: "100%"}}>
 
-                    <EamlightToolbar isModified={layout.isModified}
+                    <EamlightToolbarContainer isModified={layout.isModified}
                                      newEntity={layout.newEntity}
                                      entityScreen={userData.screens[userData.workOrderScreen]}
                                      entityName="Work Order"
@@ -552,7 +552,7 @@ class Workorder extends Entity {
                                      regions={regions}
                                      getUniqueRegionID={getUniqueRegionID}
                                      isHiddenRegion={isHiddenRegion}>
-                    </EamlightToolbar>
+                    </EamlightToolbarContainer>
                     <EntityRegions
                         regions={regions}
                         isNewEntity={layout.newEntity} 
