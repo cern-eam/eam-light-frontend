@@ -178,6 +178,7 @@ class EamlightToolbar extends Component {
     }
 
     render() {
+        const { userData } = this.props;
 
         const verticalLineStyle = {
             height: 25,
@@ -193,8 +194,6 @@ class EamlightToolbar extends Component {
             justifyContent: "center",
             flexWrap: "wrap"
         };
-        
-        const userData = this.props.userData;
 
         const camelCaseEntityName = this.props.entityName
             .split(' ')
@@ -203,11 +202,15 @@ class EamlightToolbar extends Component {
             .join('');
 
         const screenName = userData[camelCaseEntityName + 'Screen'];
+        const isLocalAdministrator = userData &&
+            userData.eamAccount &&
+            userData.eamAccount.userDefinedFields &&
+            userData.eamAccount.userDefinedFields.udfchkbox01;
 
         return (
             <div className={"entityToolbar"} ref={entityToolbarDiv => this.entityToolbarDiv = entityToolbarDiv}>
 
-                <div className={"entityToolbarContent"}>
+                <div className={"entityToolbarContent"} style={{flexShrink: 0}}>
                     <div style={this.state.compactMenu ? {...entityCodeStyle, flexBasis: "8em"} : entityCodeStyle}>
                         <div style={{display: "flex", alignItems: "center", marginRight: 5}}>
                             {this.props.entityIcon}
@@ -232,8 +235,18 @@ class EamlightToolbar extends Component {
 
                 </div>
 
-                {this.props.regions &&
-                    <div>
+                <div className={"entityToolbarContent"} style={{minWidth: 0}}>
+                    {isLocalAdministrator && <>
+                        <span style={{
+                            marginRight: 5,
+                            color: '#ccc',
+                            fontWeight: 'lighter',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            minWidth: '0px'}}>{screenName}</span>
+                        <div style={{...verticalLineStyle, borderRightColor: '#ccc'}}/>
+                    </>}
+                    {this.props.regions && <div style={{flexGrow: '1'}}>
                         <IconButton
                             aria-label="More"
                             aria-owns={this.state.visibilityMenu ? 'simple-menu' : null}
@@ -251,8 +264,8 @@ class EamlightToolbar extends Component {
                             {this.getRegions()}
 
                         </Menu>
-                    </div>
-                }
+                    </div>}
+                </div>
 
                 <ConfirmationDialog
                     ref={deleteConfirmation => this.deleteConfirmation = deleteConfirmation}
