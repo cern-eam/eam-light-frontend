@@ -178,7 +178,7 @@ class EamlightToolbar extends Component {
     }
 
     render() {
-        const { userData, entityScreen } = this.props;
+        const { entityScreen, isLocalAdministrator } = this.props;
 
         const verticalLineStyle = {
             height: 25,
@@ -194,11 +194,6 @@ class EamlightToolbar extends Component {
             justifyContent: "center",
             flexWrap: "wrap"
         };
-
-        const isLocalAdministrator = userData &&
-            userData.eamAccount &&
-            userData.eamAccount.userDefinedFields &&
-            userData.eamAccount.userDefinedFields.udfchkbox01;
 
         return (
             <div className={"entityToolbar"} ref={entityToolbarDiv => this.entityToolbarDiv = entityToolbarDiv}>
