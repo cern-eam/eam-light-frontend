@@ -1,9 +1,10 @@
 import {connect} from 'react-redux'
 import EamlightToolbar from './EamlightToolbar'
+import { applicationGetters } from '../../reducers/applicationReducers';
 
 const mapStateToProps = (state) => {
     return {
-        userData: state.application.userData
+        isLocalAdministrator: applicationGetters(state.application).isLocalAdministrator()
     }
 };
 
