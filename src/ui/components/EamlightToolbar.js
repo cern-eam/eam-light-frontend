@@ -178,7 +178,7 @@ class EamlightToolbar extends Component {
     }
 
     render() {
-        const { userData } = this.props;
+        const { userData, entityScreen } = this.props;
 
         const verticalLineStyle = {
             height: 25,
@@ -195,13 +195,6 @@ class EamlightToolbar extends Component {
             flexWrap: "wrap"
         };
 
-        const camelCaseEntityName = this.props.entityName
-            .split(' ')
-            .map(word => word.toLowerCase())
-            .map((word, index) => index === 0 ? word : word.replace(word[0], word[0].toUpperCase()))
-            .join('');
-
-        const screenName = userData[camelCaseEntityName + 'Screen'];
         const isLocalAdministrator = userData &&
             userData.eamAccount &&
             userData.eamAccount.userDefinedFields &&
@@ -243,7 +236,7 @@ class EamlightToolbar extends Component {
                             fontWeight: 'lighter',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
-                            minWidth: '0px'}}>{screenName}</span>
+                            minWidth: '0px'}}>{entityScreen.screenCode}</span>
                         <div style={{...verticalLineStyle, borderRightColor: '#ccc'}}/>
                     </>}
                     {this.props.regions && <div style={{flexGrow: '1'}}>
