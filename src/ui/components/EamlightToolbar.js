@@ -178,6 +178,7 @@ class EamlightToolbar extends Component {
     }
 
     render() {
+        const { entityScreen, isLocalAdministrator } = this.props;
 
         const verticalLineStyle = {
             height: 25,
@@ -197,7 +198,7 @@ class EamlightToolbar extends Component {
         return (
             <div className={"entityToolbar"} ref={entityToolbarDiv => this.entityToolbarDiv = entityToolbarDiv}>
 
-                <div className={"entityToolbarContent"}>
+                <div className={"entityToolbarContent"} style={{flexShrink: 0}}>
                     <div style={this.state.compactMenu ? {...entityCodeStyle, flexBasis: "8em"} : entityCodeStyle}>
                         <div style={{display: "flex", alignItems: "center", marginRight: 5}}>
                             {this.props.entityIcon}
@@ -222,8 +223,18 @@ class EamlightToolbar extends Component {
 
                 </div>
 
-                {this.props.regions &&
-                    <div>
+                <div className={"entityToolbarContent"} style={{minWidth: 0}}>
+                    {isLocalAdministrator && <>
+                        <span style={{
+                            marginRight: 5,
+                            color: '#ccc',
+                            fontWeight: 'lighter',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            minWidth: '0px'}}>{entityScreen.screenCode}</span>
+                        <div style={{...verticalLineStyle, borderRightColor: '#ccc'}}/>
+                    </>}
+                    {this.props.regions && <div style={{flexGrow: '1'}}>
                         <IconButton
                             aria-label="More"
                             aria-owns={this.state.visibilityMenu ? 'simple-menu' : null}
@@ -241,8 +252,8 @@ class EamlightToolbar extends Component {
                             {this.getRegions()}
 
                         </Menu>
-                    </div>
-                }
+                    </div>}
+                </div>
 
                 <ConfirmationDialog
                     ref={deleteConfirmation => this.deleteConfirmation = deleteConfirmation}

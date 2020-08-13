@@ -1,5 +1,5 @@
 import React from 'react';
-import EamlightToolbar from './../../components/EamlightToolbar';
+import EamlightToolbarContainer from './../../components/EamlightToolbarContainer';
 import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';
 import WSParts from '../../../tools/WSParts';
@@ -230,7 +230,7 @@ class Part extends Entity {
         return (
             <div className="entityContainer">
                 <BlockUi tag="div" blocking={layout.blocking} style={{height: "100%", width: '100%'}}>
-                    <EamlightToolbar
+                    <EamlightToolbarContainer
                         isModified={layout.isModified}
                         newEntity={layout.newEntity}
                         entityScreen={userData.screens[userData.partScreen]}
