@@ -11,7 +11,7 @@ import UserDefinedFields from "../../../components/userdefinedfields/UserDefined
 import Entity from "../../Entity";
 import EquipmentHistory from "../components/EquipmentHistory.js";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
-import EamlightToolbar from "./../../../components/EamlightToolbar";
+import EamlightToolbarContainer from "./../../../components/EamlightToolbarContainer";
 import LocationDetails from "./LocationDetails";
 import LocationGeneral from "./LocationGeneral";
 import LocationHierarchy from "./LocationHierarchy";
@@ -226,7 +226,7 @@ export default class Location extends Entity {
 
         return (
             <BlockUi tag="div" blocking={layout.blocking} style={{height: "100%", width: "100%"}}>
-                <EamlightToolbar isModified={layout.isModified}
+                <EamlightToolbarContainer isModified={layout.isModified}
                                  newEntity={layout.newEntity}
                                  entityScreen={userData.screens[userData.locationScreen]}
                                  entityName="Location"
@@ -251,7 +251,7 @@ export default class Location extends Entity {
                                  getUniqueRegionID={getUniqueRegionID}
                                  regions={regions}
                                  isHiddenRegion={isHiddenRegion}>
-                </EamlightToolbar>
+                </EamlightToolbarContainer>
                 <EntityRegions
                     showEqpTree={showEqpTree}
                     regions={regions}

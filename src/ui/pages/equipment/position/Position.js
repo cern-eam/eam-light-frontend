@@ -1,7 +1,7 @@
 import React from 'react';
 import Entity from '../../Entity'
 import EquipmentHistory from '../components/EquipmentHistory.js'
-import EamlightToolbar from './../../../components/EamlightToolbar'
+import EamlightToolbarContainer from './../../../components/EamlightToolbarContainer'
 import CustomFields from '../../../components/customfields/CustomFields'
 import WSEquipment from "../../../../tools/WSEquipment"
 import BlockUi from 'react-block-ui'
@@ -300,7 +300,7 @@ export default class Position extends Entity {
 
         return (
             <BlockUi tag="div" blocking={layout.blocking} style={{width: '100%', height: "100%"}}>
-                <EamlightToolbar
+                <EamlightToolbarContainer
                     isModified={layout.isModified}
                     newEntity={layout.newEntity}
                     entityScreen={userData.screens[userData.positionScreen]}
