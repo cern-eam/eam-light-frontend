@@ -43,14 +43,6 @@
     margin-left: 58px;
 }
 
-#topbar-left {
-    color: white;
-    flex: 0 0 280px;
-    font-weight: 500;
-    line-height: 48px;
-    font-size: 18px;
-}
-
 #eqp-tree-btn {
     display: flex;
     align-items: center;
@@ -103,11 +95,4 @@
     display: flex;
     flex: 1 0;
     align-items: center;
-}
-
-#topbar-left > span {
-    position: absolute;
-    font-size: 12px;
-    margin-top: 16px;
-    margin-left: -83px;
 }

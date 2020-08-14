@@ -9,8 +9,35 @@ import UserInfoContainer from './UserInfoContainer'
 import {FileTree, FormatHorizontalAlignLeft, FormatHorizontalAlignRight} from 'mdi-material-ui';
 import { useLocation } from 'react-router-dom';
 import { useTheme } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 
-export default function ApplicationLayout(props) {
+const styles = {
+    topBarLeft: {
+        color: 'white',
+        flex: '0 0 265px',
+        fontWeight: '500',
+        display: 'flex',
+        flexDirection: 'column',
+        paddingLeft: '15px',
+        justifyContent: 'center'
+    },
+    topBarLink: {
+        color: 'white',
+        textDecoration: 'none',
+        fontWeight: '900',
+        fontSize:'18px'
+    },
+    topBarSpan: {
+        fontSize: '12px',
+    }
+};
+
+export default withStyles(styles)(function ApplicationLayout(props) {
+    const { classes, applicationData } = props;
+
+    const environment = applicationData.EL_ENVIR;
+
     const [menuCompacted, setMenuCompacted] = useState(false)
     const [mobileMenuActive, setMobileMenuActive] = useState(false)
     const theme = useTheme();
@@ -18,15 +45,6 @@ export default function ApplicationLayout(props) {
     const showEqpTree = useSelector(state => state.ui.layout.showEqpTree)
     const showEqpTreeButton = useSelector(state => state.ui.layout.showEqpTreeButton)
     const location = useLocation()
-
-    const environment = props.applicationData.EL_ENVIR;
-
-    const headerLinkStyle = {
-        color: "white",
-        textDecoration: "none",
-        fontWeight: 900,
-        marginLeft: 15
-    }
 
     const menuIconStyle = {
         color: "white",
@@ -41,9 +59,9 @@ export default function ApplicationLayout(props) {
     return (
         <div id="maindiv" className={(menuCompacted) ? 'SlimMenu' : ''} onClick={() => !menuCompacted && mobileMenuActive && setMobileMenuActive(false)}>
             <div id="topbar" style={{backgroundColor: theme.palette.primary.main}}>
-                <div id="topbar-left">
-                    <Link style={headerLinkStyle} to="/">EAM Light</Link>
-                    {environment !== 'PROD' && <span>{environment}</span>}
+                <div className={clsx(classes.topBarLeft)}>
+                    <Link to="/" className={clsx(classes.topBarLink)}>EAM Light</Link>
+                    {environment !== 'PROD' && <span className={clsx(classes.topBarSpan)}>{environment}</span>}
                 </div>
 
                 <div id="topbar-right">
@@ -85,4 +103,4 @@ export default function ApplicationLayout(props) {
         </div>
 
     )
-}
+})
