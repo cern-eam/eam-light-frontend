@@ -134,7 +134,6 @@ class Workorder extends Entity {
     getRegions = () => {
         const {
             applicationData,
-            edmsDocListLink,
             handleError,
             showError,
             showNotification,
@@ -243,7 +242,7 @@ class Workorder extends Entity {
                         objectID={workorder.number}
                         objectType="J"
                         creationMode="NCR"
-                        edmsDocListLink={edmsDocListLink}
+                        edmsDocListLink={applicationData.EL_EDMSL}
                         showError={showError}
                         showSuccess={showNotification} />
                 ,
