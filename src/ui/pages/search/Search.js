@@ -11,22 +11,24 @@ import KeyCode from '../../../enums/KeyCode'
 import ErrorTypes from "../../../enums/ErrorTypes";
 import Ajax from 'eam-components/dist/tools/ajax'
 
+const INITIAL_STATE = {
+    results: [],
+    searchBoxUp: false,
+    keyword: '',
+    isFetching: false,
+    redirectRoute: '',
+}
+
 class Search extends Component {
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            "results": [],
-            "searchBoxUp": false,
-            "keyword": "",
-            "isFetching": false,
-            "redirectRoute": "",
+    state = INITIAL_STATE;
 
-        }
-    }
-
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         this.scrollWindowIfNecessary();
+        if (prevProps.location !== this.props.location) {
+            this.setState(INITIAL_STATE);
+            this.cancelSource && this.cancelSource.cancel();
+        }
     }
 
     render() {
