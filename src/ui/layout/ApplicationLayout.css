@@ -9,7 +9,6 @@
 #topbar {
     display: flex;
     flex: 0 0 48px;
-    background-color: #00aaff;
     transition: top 0.3s;
 }
 
@@ -42,14 +41,6 @@
 
 .SlimMenu #layout-portlets-cover {
     margin-left: 58px;
-}
-
-#topbar-left {
-    color: white;
-    flex: 0 0 280px;
-    font-weight: 500;
-    line-height: 48px;
-    font-size: 18px;
 }
 
 #eqp-tree-btn {
