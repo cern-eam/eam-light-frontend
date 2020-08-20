@@ -149,7 +149,7 @@ export default class Location extends Entity {
             //             objectID={location.code}
             //             objectType="L"
             //             creationMode="NCR"
-            //             edmsDocListLink={applicationData.edmsDocListLink}
+            //             edmsDocListLink={applicationData.EL_EDMSL}
             //             showError={showError}
             //             showSuccess={showSuccess} />
             //     ,

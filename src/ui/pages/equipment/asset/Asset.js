@@ -279,7 +279,7 @@ export default class Asset extends Entity {
                         objectID={equipment.code}
                         objectType="A"
                         creationMode="NCR"
-                        edmsDocListLink={applicationData.edmsDocListLink}
+                        edmsDocListLink={applicationData.EL_EDMSL}
                         showError={showError}
                         showSuccess={showNotification} />
                 ,

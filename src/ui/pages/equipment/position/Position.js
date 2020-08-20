@@ -224,7 +224,7 @@ export default class Position extends Entity {
                         objectID={equipment.code}
                         objectType="S"
                         creationMode="NCR"
-                        edmsDocListLink={applicationData.edmsDocListLink}
+                        edmsDocListLink={applicationData.EL_EDMSL}
                         showError={showError}
                         showSuccess={showNotification} />
                 ,
