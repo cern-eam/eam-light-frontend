@@ -218,7 +218,7 @@ export default class System extends Entity {
                 render: () => 
                     <EquipmentPartsAssociated
                         equipmentcode={equipment.code}
-                        parentScreen={userData.systemScreen.parentScreen} />
+                        parentScreen={userData.screens[userData.systemScreen].parentScreen} />
                 ,
                 column: 1,
                 order: 6

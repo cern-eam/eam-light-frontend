@@ -193,7 +193,7 @@ export default class Position extends Entity {
                 render: () => 
                     <EquipmentPartsAssociated
                         equipmentcode={equipment.code}
-                        parentScreen={userData.positionScreen.parentScreen} />
+                        parentScreen={userData.screens[userData.positionScreen].parentScreen} />
                 ,
                 column: 1,
                 order: 6
