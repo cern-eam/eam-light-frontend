@@ -19,6 +19,7 @@ import AssetGeneral from './AssetGeneral';
 import AssetHierarchy from './AssetHierarchy';
 import EquipmentTools from "../EquipmentTools";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
+import EquipmentPartsMadeOf from "../components/EquipmentPartsMadeOf";
 
 export default class Asset extends Entity {
 
@@ -244,12 +245,8 @@ export default class Asset extends Entity {
                 id: 'PARTS',
                 label: 'Parts',
                 isVisibleWhenNewEntity: false,
-                maximizable: false,
-                render: () => 
-                    <EquipmentPartsAssociated
-                        equipmentcode={equipment.code}
-                        parentScreen={userData.screens[userData.assetScreen].parentScreen} />
-                ,
+                maximizable: true,
+                render: () => <EquipmentPartsMadeOf equipmentcode={equipment.code} />,
                 column: 1,
                 order: 6
             },
