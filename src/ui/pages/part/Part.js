@@ -42,7 +42,10 @@ class Part extends Entity {
         deleteEntity: WSParts.deletePart.bind(WSParts),
         initNewEntity: () => WSParts.initPart(PART, this.props.location.search),
         layout: this.props.partLayout,
-        layoutPropertiesMap: PartTools.layoutPropertiesMap
+        layoutPropertiesMap: PartTools.layoutPropertiesMap,
+        handlerFunctions: {
+            classCode: this.onChangeClass,
+        }
     };
 
     //
