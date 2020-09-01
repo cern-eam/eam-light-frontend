@@ -6,7 +6,8 @@ import Ajax from 'eam-components/dist/tools/ajax'
 import ErrorTypes from "../../enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
-import {assignDefaultValues, assignQueryParamValues} from './EntityTools';
+import {assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, AssignmentType} from './EntityTools';
+import WSCustomFields from "../../tools/WSCustomFields";
 
 export default class readEntityEquipment extends Component {
 
@@ -403,6 +404,24 @@ export default class readEntityEquipment extends Component {
         if (event.keyCode === 13 || event.keyCode === 121) {
             this.saveHandler()
         }
+    }
+
+    onChangeClass = newClass => {
+        const entity = this.state[this.settings.entity];
+
+        // TODO: refactor how entityCode is retrieved
+        const entityCode = this.settings.entityCodeProperty === 'number' ? 'EVNT'
+            : this.settings.entity === 'part' ? 'PART'
+            : this.settings.entity === 'location' ? 'LOC'
+            : 'OBJ';
+
+        return WSCustomFields.getCustomFields(entityCode, entity.classCode).then(response => {
+            const newCustomFields = response.body.data;
+            const newEntity = assignCustomFieldFromCustomField(entity, newCustomFields, AssignmentType.SOURCE_NOT_EMPTY);
+            this.setState({
+                [this.settings.entity]: newEntity
+            });
+        })
     }
 
     //

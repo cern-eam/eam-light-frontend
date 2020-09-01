@@ -29,7 +29,10 @@ export default class Location extends Entity {
         updateEntity: WSLocation.update,
         createEntity: WSLocation.create,
         deleteEntity: WSLocation.remove,
-        initNewEntity: () => WSLocation.init()
+        initNewEntity: () => WSLocation.init(),
+        handlerFunctions: {
+            classCode: this.onChangeClass,
+        }
     }
 
     postInit() {
