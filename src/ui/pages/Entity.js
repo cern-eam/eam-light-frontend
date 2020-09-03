@@ -6,7 +6,7 @@ import Ajax from 'eam-components/dist/tools/ajax'
 import ErrorTypes from "../../enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
-import {assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, AssignmentType} from './EntityTools';
+import {assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType} from './EntityTools';
 import WSCustomFields from "../../tools/WSCustomFields";
 
 export default class readEntityEquipment extends Component {
@@ -421,7 +421,14 @@ export default class readEntityEquipment extends Component {
 
         return WSCustomFields.getCustomFields(entityCode, entity.classCode).then(response => {
             const newCustomFields = response.body.data;
-            const newEntity = assignCustomFieldFromCustomField(entity, newCustomFields, AssignmentType.SOURCE_NOT_EMPTY);
+            let newEntity = assignCustomFieldFromCustomField(entity, newCustomFields, AssignmentType.SOURCE_NOT_EMPTY);
+
+            // replace custom fields with ones in query parameters if we just created the entity
+            if(!this.state.layout.isModified && this.state.layout.newEntity) {
+                const queryParams = queryString.parse(window.location.search);
+                newEntity = assignCustomFieldFromObject(newEntity, queryParams, AssignmentType.SOURCE_NOT_EMPTY);
+            }
+
             this.setState({
                 [this.settings.entity]: newEntity
             });
