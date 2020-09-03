@@ -410,10 +410,14 @@ export default class readEntityEquipment extends Component {
         const entity = this.state[this.settings.entity];
 
         // TODO: refactor how entityCode is retrieved
-        const entityCode = this.settings.entityCodeProperty === 'number' ? 'EVNT'
-            : this.settings.entity === 'part' ? 'PART'
-            : this.settings.entity === 'location' ? 'LOC'
-            : 'OBJ';
+        const entityCodeMap = {
+            workorder: 'EVNT',
+            part: 'PART',
+            location: 'LOC',
+            default: 'OBJ',
+        };
+
+        const entityCode = entityCodeMap[this.settings.entity] || entityCodeMap.default;
 
         return WSCustomFields.getCustomFields(entityCode, entity.classCode).then(response => {
             const newCustomFields = response.body.data;
