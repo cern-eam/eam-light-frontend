@@ -6,7 +6,8 @@ import Ajax from 'eam-components/dist/tools/ajax'
 import ErrorTypes from "../../enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
-import {assignDefaultValues, assignQueryParamValues} from './EntityTools';
+import {assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType} from './EntityTools';
+import WSCustomFields from "../../tools/WSCustomFields";
 
 export default class readEntityEquipment extends Component {
 
@@ -403,6 +404,35 @@ export default class readEntityEquipment extends Component {
         if (event.keyCode === 13 || event.keyCode === 121) {
             this.saveHandler()
         }
+    }
+
+    onChangeClass = newClass => {
+        const entity = this.state[this.settings.entity];
+
+        // TODO: refactor how entityCode is retrieved
+        const entityCodeMap = {
+            workorder: 'EVNT',
+            part: 'PART',
+            location: 'LOC',
+            default: 'OBJ',
+        };
+
+        const entityCode = entityCodeMap[this.settings.entity] || entityCodeMap.default;
+
+        return WSCustomFields.getCustomFields(entityCode, entity.classCode).then(response => {
+            const newCustomFields = response.body.data;
+            let newEntity = assignCustomFieldFromCustomField(entity, newCustomFields, AssignmentType.SOURCE_NOT_EMPTY);
+
+            // replace custom fields with ones in query parameters if we just created the entity
+            if(!this.state.layout.isModified && this.state.layout.newEntity) {
+                const queryParams = queryString.parse(window.location.search);
+                newEntity = assignCustomFieldFromObject(newEntity, queryParams, AssignmentType.SOURCE_NOT_EMPTY);
+            }
+
+            this.setState({
+                [this.settings.entity]: newEntity
+            });
+        })
     }
 
     //
