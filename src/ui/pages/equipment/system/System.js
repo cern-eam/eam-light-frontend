@@ -71,7 +71,8 @@ export default class System extends Entity {
         deleteEntity: WSEquipment.deleteEquipment.bind(WSEquipment),
         initNewEntity: () => WSEquipment.initEquipment("OBJ", "S", this.props.location.search),
         handlerFunctions: {
-            categoryCode: this.onChangeCategoryCode
+            categoryCode: this.onChangeCategoryCode,
+            classCode: this.onChangeClass,
         }
     };
 

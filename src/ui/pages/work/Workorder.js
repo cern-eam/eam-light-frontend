@@ -126,7 +126,8 @@ class Workorder extends Entity {
         layoutPropertiesMap: WorkorderTools.layoutPropertiesMap,
         handlerFunctions: {
             equipmentCode: this.onChangeEquipment,
-            standardWO: this.onChangeStandardWorkOrder
+            standardWO: this.onChangeStandardWorkOrder,
+            classCode: this.onChangeClass,
         }
     }
 
