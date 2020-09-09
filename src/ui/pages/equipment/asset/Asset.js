@@ -341,7 +341,7 @@ export default class Asset extends Entity {
             {
                 id : 'PARTCUSTOMFIELDS',
                 label : 'Part Custom Fields',
-                isVisibleWhenNewEntity: false,
+                isVisibleWhenNewEntity: true,
                 maximizable: false,
                 customVisibility: () => this.state.part,
                 render: () => 
@@ -349,8 +349,8 @@ export default class Asset extends Entity {
                         children={this.children}
                         entityCode='PART'
                         entityKeyCode={this.state.part && this.state.part.code}
-                        classCode={this.state.part && this.state.part.customField}
-                        customFields={layout.partCustomField && layout.partCustomField}
+                        classCode={this.state.part && this.state.part.classCode}
+                        customFields={layout.partCustomField}
                         updateEntityProperty={this.updateEntityProperty.bind(this)}
                         readonly={true}/>
                 ,
@@ -362,11 +362,11 @@ export default class Asset extends Entity {
 
     setAssetPart = partCode=> {
         return WSParts.getPart(partCode).then(response => {
-            this.setState({part : response.body.data})
-            this.setLayout({partCustomField : response.body.data.customField})
+            this.setState({part:response.body.data})
+            this.setLayout({partCustomField:response.body.data.customField})
         }).catch(error => {
-            this.setState({part : undefined})
-            this.setLayout({partCustomField : undefined})
+            this.setState({part:undefined})
+            this.setLayout({partCustomField:undefined})
         });
     };
 
