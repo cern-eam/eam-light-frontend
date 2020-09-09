@@ -20,6 +20,7 @@ import AssetHierarchy from './AssetHierarchy';
 import EquipmentTools from "../EquipmentTools";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentPartsMadeOf from "../components/EquipmentPartsMadeOf";
+import WSParts from '../../../../tools/WSParts';
 
 export default class Asset extends Entity {
 
@@ -97,12 +98,14 @@ export default class Asset extends Entity {
 
     postUpdate() {
         this.comments.createCommentForNewEntity();
+        this.setAssetPart(this.state.equipment.partCode)
     }
 
     postRead() {
         this.setStatuses(false)
         this.props.setLayoutProperty('showEqpTreeButton', true)
         this.props.setLayoutProperty('equipment', this.state.equipment)
+        this.setAssetPart(this.state.equipment.partCode)
     }
 
     setStatuses(neweqp) {
@@ -335,8 +338,37 @@ export default class Asset extends Entity {
                 column: 2,
                 order: 11
             },
+            {
+                id : 'PARTCUSTOMFIELDS',
+                label : 'Part Custom Fields',
+                isVisibleWhenNewEntity: false,
+                maximizable: false,
+                customVisibility: () => this.state.part,
+                render: () => 
+                    <CustomFields 
+                        children={this.children}
+                        entityCode='PART'
+                        entityKeyCode={this.state.part && this.state.part.code}
+                        classCode={this.state.part && this.state.part.customField}
+                        customFields={layout.partCustomField && layout.partCustomField}
+                        updateEntityProperty={this.updateEntityProperty.bind(this)}
+                        readonly={true}/>
+                ,
+                column: 2,
+                order: 12
+            }
         ]
     }
+
+    setAssetPart = partCode=> {
+        return WSParts.getPart(partCode).then(response => {
+            this.setState({part : response.body.data})
+            this.setLayout({partCustomField : response.body.data.customField})
+        }).catch(error => {
+            this.setState({part : undefined})
+            this.setLayout({partCustomField : undefined})
+        });
+    };
 
     renderAsset() {
         const {
