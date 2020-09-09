@@ -13,15 +13,6 @@ import { withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
 const styles = {
-    topBarLeft: {
-        color: 'white',
-        flex: '0 0 265px',
-        fontWeight: '500',
-        display: 'flex',
-        flexDirection: 'column',
-        paddingLeft: '15px',
-        justifyContent: 'center'
-    },
     topBarLink: {
         color: 'white',
         textDecoration: 'none',
@@ -59,7 +50,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
     return (
         <div id="maindiv" className={(menuCompacted) ? 'SlimMenu' : ''} onClick={() => !menuCompacted && mobileMenuActive && setMobileMenuActive(false)}>
             <div id="topbar" style={{backgroundColor: theme.palette.primary.main}}>
-                <div className={clsx(classes.topBarLeft)}>
+                <div id="topbar-left">
                     <Link to="/" className={clsx(classes.topBarLink)}>EAM Light</Link>
                     {environment !== 'PROD' && <span className={clsx(classes.topBarSpan)}>{environment}</span>}
                 </div>

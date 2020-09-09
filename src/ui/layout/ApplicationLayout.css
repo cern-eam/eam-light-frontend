@@ -12,6 +12,16 @@
     transition: top 0.3s;
 }
 
+#topbar-left {
+    color: white;
+    flex: 0 0 265px;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    padding-left: 15px;
+    justify-content: center;
+}
+
 #layout-container {
     min-height: 0;
     flex: 1 0;
