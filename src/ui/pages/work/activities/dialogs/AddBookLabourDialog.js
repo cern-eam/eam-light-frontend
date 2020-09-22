@@ -62,8 +62,19 @@ function AddActivityDialog(props) {
 
         setLoading(true);
         WSWorkorders.createBookingLabour(bookingLabour)
+            .then(WSWorkorders.getWorkOrder.bind(null, props.workorderNumber))
             .then(result => {
                 setLoading(false);
+
+                const workorder = result.body.data;
+                if (props.updateCount + 1 === workorder.updateCount && props.startDate === null) {
+                        props.updateEntityProperty('startDate', workorder.startDate);
+                        props.updateEntityProperty('updateCount', props.updateCount + 1);
+                } else if (props.updateCount !== workorder.updateCount) {
+                    // an unexpected situation has happened, reload the page
+                    window.location.reload();
+                }
+
                 props.showNotification("Booking labour successfully created")
                 handleClose();
                 props.onChange();
