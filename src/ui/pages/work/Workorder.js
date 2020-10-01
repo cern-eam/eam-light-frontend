@@ -303,6 +303,7 @@ class Workorder extends Entity {
                         showSuccess={showNotification}
                         showError={showError}
                         handleError={handleError}
+                        userCode={userData.eamAccount.userCode}
                         topSlot={
                             applicationData.EL_PRTCL &&
                                 <div style={{
