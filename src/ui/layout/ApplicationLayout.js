@@ -47,42 +47,49 @@ export default withStyles(styles)(function ApplicationLayout(props) {
         searchParams.get('maximize') && setMenuCompacted(true);
     }, [])
 
-    return (
-        <div id="maindiv" className={(menuCompacted) ? 'SlimMenu' : ''} onClick={() => !menuCompacted && mobileMenuActive && setMobileMenuActive(false)}>
-            <div id="topbar" style={{backgroundColor: theme.palette.primary.main}}>
-                <div id="topbar-left">
-                    <Link to="/" className={clsx(classes.topBarLink)}>EAM Light</Link>
-                    {environment !== 'PROD' && <span className={clsx(classes.topBarSpan)}>{environment}</span>}
-                </div>
-
-                <div id="topbar-right">
-                    <div id="menu-resize-btn">
-                        <IconButton onClick={() => setMenuCompacted(!menuCompacted)}>
-                            {(menuCompacted) ? (
-                                <FormatHorizontalAlignRight style={menuIconStyle}/>
-                            ) : (
-                                <FormatHorizontalAlignLeft style={menuIconStyle}/>
-                            )}
-                        </IconButton>
-                    </div>
-                    <div id="mobile-menu-btn">
-                        <IconButton onClick={() => setMobileMenuActive(!mobileMenuActive)}>
-                            <Menu style={menuIconStyle}/>
-                        </IconButton>
-                    </div>
-
-                    {showEqpTreeButton &&
-                    <div id="eqp-tree-btn">
-                        <div style={{borderLeft: "1px solid rgba(255, 255, 255, 0.8)", height: 22}}/>
-                        <IconButton onClick={() => dispatch(setLayoutProperty('showEqpTree', !showEqpTree))}>
-                            <FileTree style={menuIconStyle}/>
-                        </IconButton>
-                    </div>}
-
-                    <UserInfoContainer/>
-                </div>
+    const topbar = (
+        <div id="topbar" style={{backgroundColor: theme.palette.primary.main}}>
+            <div id="topbar-left">
+                <Link to="/" className={clsx(classes.topBarLink)}>EAM Light</Link>
+                {environment !== 'PROD' && <span className={clsx(classes.topBarSpan)}>{environment}</span>}
             </div>
 
+            <div id="topbar-right">
+                <div id="menu-resize-btn">
+                    <IconButton onClick={() => setMenuCompacted(!menuCompacted)}>
+                        {(menuCompacted) ? (
+                            <FormatHorizontalAlignRight style={menuIconStyle}/>
+                        ) : (
+                            <FormatHorizontalAlignLeft style={menuIconStyle}/>
+                        )}
+                    </IconButton>
+                </div>
+                <div id="mobile-menu-btn">
+                    <IconButton onClick={() => setMobileMenuActive(!mobileMenuActive)}>
+                        <Menu style={menuIconStyle}/>
+                    </IconButton>
+                </div>
+
+                {showEqpTreeButton &&
+                <div id="eqp-tree-btn">
+                    <div style={{borderLeft: "1px solid rgba(255, 255, 255, 0.8)", height: 22}}/>
+                    <IconButton onClick={() => dispatch(setLayoutProperty('showEqpTree', !showEqpTree))}>
+                        <FileTree style={menuIconStyle}/>
+                    </IconButton>
+                </div>}
+
+                <UserInfoContainer/>
+            </div>
+        </div>
+    );
+
+    const startsWithString = 'https://inforos-test.cern.ch';
+    const isInsideIframe = window.self !== window.top;
+    const showTopBar = !(document.referrer.startsWith(startsWithString) && isInsideIframe);
+
+    return (
+        <div id="maindiv" className={(menuCompacted) ? 'SlimMenu' : ''} onClick={() => !menuCompacted && mobileMenuActive && setMobileMenuActive(false)}>
+            {showTopBar && topbar}
             <div id="layout-container">
                 <div id="layout-menu-cover" className={(mobileMenuActive) ? 'active' : ''} onClick={(event) => event.stopPropagation()}>
                     {props.children[0]}
