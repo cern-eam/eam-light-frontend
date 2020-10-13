@@ -283,7 +283,11 @@ class Workorder extends Entity {
                         layout={workOrderLayout.tabs}
                         defaultEmployee={userData.eamAccount.employeeCode}
                         defaultEmployeeDesc={userData.eamAccount.employeeDesc}
-                        postAddActivityHandler={this.postAddActivityHandler} />
+                        postAddActivityHandler={this.postAddActivityHandler}
+                        updateEntityProperty={this.updateEntityProperty.bind(this)}
+                        updateCount={workorder.updateCount}
+                        startDate={workorder.startDate}
+                        />
                 ,
                 column: 2,
                 order: 8
