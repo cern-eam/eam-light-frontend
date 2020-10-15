@@ -362,11 +362,11 @@ export default class Asset extends Entity {
 
     setAssetPart = partCode=> {
         return WSParts.getPart(partCode).then(response => {
-            this.setState({part:response.body.data})
-            this.setLayout({partCustomField:response.body.data.customField})
+            this.setState({part: response.body.data})
+            this.setLayout({partCustomField: response.body.data.customField})
         }).catch(error => {
-            this.setState({part:undefined})
-            this.setLayout({partCustomField:undefined})
+            this.setState({part: undefined})
+            this.setLayout({partCustomField: undefined})
         });
     };
 
