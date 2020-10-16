@@ -44,8 +44,8 @@ const EntityRegions = (props) => {
     const gridDimensions = {
         xs: 12,
         sm: 12,
-        md: showEqpTree ? 12 : 12 / Object.keys(columns).length,
-        lg: 12 / Object.keys(columns).length,
+        md: showEqpTree || regionMaximized ? 12 : 12 / Object.keys(columns).length,
+        lg: regionMaximized ? 12 : 12 / Object.keys(columns).length,
     }
 
     const updateMaximize = (regionID) => () => {
@@ -53,7 +53,7 @@ const EntityRegions = (props) => {
             { ...searchParams, maximize: regionID }
         ) : (
             Object.keys(searchParams)
-                .filter(paramKey => paramKey !== ENTITY_REGION_PARAMS.maximize)
+                .filter(paramKey => paramKey !== ENTITY_REGION_PARAMS.MAXIMIZE)
                 .reduce((acc, paramKey) => ({
                     ...acc,
                     [paramKey]: searchParams[paramKey]
@@ -80,10 +80,11 @@ const EntityRegions = (props) => {
                 {Object.keys(columns).sort().map(column => (
                     <Grid key={column} item xs={gridDimensions.xs} sm={gridDimensions.sm} md={gridDimensions.md} lg={gridDimensions.lg}>
                         {columns[column]
-                            .sort((a,b) => a.order - b.order)
+                            .sort((a,b) => a.id === regionMaximized ? -1 : a.order - b.order)
                             .filter(region => visibleRegions[region.id])
                             .map(region => (
                                 <RegionPanel
+                                    style={{ display: regionMaximized && region.id !== regionMaximized ? 'none' : '' }}
                                     key={region.id}
                                     heading={region.label.toUpperCase()}
                                     isMaximized={region.id === regionMaximized}
