@@ -25,6 +25,7 @@ import EquipmentContainer from "./ui/pages/equipment/EquipmentContainer";
 import LoginContainer from "./ui/pages/login/LoginContainer";
 import Grid from "./ui/pages/grid/Grid";
 import JMTIntegrationContainer from "./ui/components/jmt/JMTIntegrationContainer";
+import EqpTree from "./ui/components/eqtree/EqpTree";
 import InstallEqpContainer from "./ui/pages/equipment/installeqp/InstallEqpContainer";
 import Themes from 'eam-components/dist/ui/components/theme';
 import config from './config';
@@ -80,6 +81,8 @@ class Eamlight extends Component {
                            component={ImpactContainer}/>
                     <Route path="/jmt"
                            component={JMTIntegrationContainer}/>
+                     <Route path="/eqptree"
+                           component={EqpTree}/>
                     <ApplicationLayoutContainer>
                         <EamlightMenuContainer/>
                         <div style={{height: "100%"}}>
