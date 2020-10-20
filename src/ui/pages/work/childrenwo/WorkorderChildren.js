@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import EISPanel from 'eam-components/dist/ui/components/panel';
 import WSWorkorders from '../../../../tools/WSWorkorders';
 import EISTable from 'eam-components/dist/ui/components/table';
 import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/SimpleEmptyState'
@@ -43,15 +42,14 @@ export default class WorkorderChildren extends Component {
         return (
             isEmptyState
             ? <SimpleEmptyState message="No Child Work Orders to show."/>
-            :
-                <EISPanel heading="CHILD WORK ORDERS">
-                    <EISTable
-                        data={this.state.data}
-                        headers={this.headers}
-                        propCodes={this.propCodes}
-                        linksMap={this.linksMap}
-                    />
-                </EISPanel>
+            : (
+                <EISTable
+                    data={this.state.data}
+                    headers={this.headers}
+                    propCodes={this.propCodes}
+                    linksMap={this.linksMap}
+                />
+            )
         )
     }
 }
