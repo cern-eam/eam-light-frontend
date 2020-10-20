@@ -41,7 +41,8 @@ const headers = {
     mtf_step_result: "Result",
     last_repeated_status_color: "NC",
     evt_desc: "Description",
-    evt_completed: "Completed On"
+    evt_completed: "Completed On",
+    evt_updatedby: "Updated By"
 };
 
 const sortTypesMap = {
