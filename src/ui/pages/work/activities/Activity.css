@@ -1,16 +1,5 @@
-.activity {
-    width: 100%;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
 .activity .label {
     font-weight: bold;
-}
-
-.activity .content {
-    margin-left: 15px;
-    margin-right: 15px;
 }
 
 .activity .activityDetails {

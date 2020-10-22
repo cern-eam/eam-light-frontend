@@ -1,23 +1,23 @@
-import React from 'react';
-import BookLabours from "./BookLabours";
-import Grid from '@material-ui/core/Grid';
-import Divider from '@material-ui/core/Divider';
 import './Activity.css'
+
+import { Box } from '@material-ui/core';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import React from 'react';
+
+import BookLabours from "./BookLabours";
 
 /**
  * Display detail of an activity
  */
-function Activity(props){
-
-    let {activity, bookLabours, layout} = props;
-
+function Activity({activity, bookLabours, layout}) {
     return (
-      <div className="activity" >
+      <Box className="activity" my={1.25}>
         <div className="content">
 
           <h3>Activity {activity.activityCode}</h3>
 
-            <Grid container spacing={1} className="activityDetails">
+          <Grid container spacing={1} className="activityDetails">
 
             <Grid item xs={6} md={6} lg={2}>{layout.ACT.activitynote.text}</Grid>
             <Grid item xs={6} md={6} lg={4}>{activity.activityNote}</Grid>
@@ -49,9 +49,8 @@ function Activity(props){
 
         <Divider className="divider"/>
 
-      </div>
+      </Box>
     )
-
 }
 
 export default React.memo(Activity);
