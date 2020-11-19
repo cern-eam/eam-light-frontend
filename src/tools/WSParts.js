@@ -74,14 +74,6 @@ class WSParts {
         return WS._get('/parts/partstock/' + partCode);
     }
 
-    //
-    // PRINT BARCODE
-    //
-
-    printBarcode(barcodeInput, config = {}) {
-        return WS._put('/barcode/printBarcode/', barcodeInput, config);
-    }
-
 
     //
     // ASSETS LIST
