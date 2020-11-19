@@ -5,7 +5,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Divider from '@material-ui/core/Divider';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
 import {Barcode, ContentCopy, EmailOutline} from 'mdi-material-ui';
-import WSParts from '../../../tools/WSParts';
 
 class PartToolbar extends Component {
 
@@ -49,30 +48,13 @@ class PartToolbar extends Component {
         window.open(extendedLink, '_blank');
     }
 
-    printBarcode() {
-        let {userDefinedFields, customField, code, fields, ...partFields} = this.props.part;
-        // expand custom fields
-        customField.forEach( f => partFields[f.code] = f.value );
-        // expand user defined fields
-        partFields = { ...partFields, ...userDefinedFields };
-        let barcodeInput = {
-          type: 'P', // Set print for PARTS
-          variables: [{
-              code: this.props.part.code, // Send info for main code to print
-              // Send all fields of part so labels may be created out of any available field
-              fields: partFields
-          }]
-        };
-        WSParts.printBarcode.bind(WSParts)(barcodeInput)
-            .then(response => {
-                this.props.showNotification(response.body.data);
-            })
-            .catch(error => {
-                if (error && error.response && error.response.body) {
-                    this.props.showError(error.response.body.data);
-                }
-                this.props.handleError(error);
-            });
+    printBarcodeHandler = () => {
+        const barcodingLink = this.props.applicationData.EL_BCUR
+            .replace("&1", this.props.screencode)
+            .replace("&2", 'partcode')
+            .replace("&3", this.props.part.code);
+
+        window.open(barcodingLink, '_blank');
     }
 
     renderMenuItems() {
@@ -91,7 +73,7 @@ class PartToolbar extends Component {
                     <OpenInNewIcon style={this.iconMenuStyle} />
                     <div style={this.menuLabelStyle}>Show in Infor EAM</div>
                 </MenuItem>
-                <MenuItem onClick={this.printBarcode.bind(this)} disabled={this.props.newPart}>
+                <MenuItem onClick={this.printBarcodeHandler} disabled={this.props.newPart}>
                     <Barcode style={this.iconMenuStyle} />
                     <div style={this.menuLabelStyle}>Print Barcode</div>
                 </MenuItem>
@@ -122,7 +104,7 @@ class PartToolbar extends Component {
                 </Tooltip>
 
                 <Tooltip title="Print Barcode">
-                    <IconButton onClick={this.printBarcode.bind(this)} disabled={this.props.newPart}>
+                    <IconButton onClick={this.printBarcodeHandler} disabled={this.props.newPart}>
                         <Barcode style={this.iconStyle} />
                     </IconButton>
                 </Tooltip>
