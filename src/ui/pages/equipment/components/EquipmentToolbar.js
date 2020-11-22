@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 import {WorkorderIcon} from 'eam-components/dist/ui/components/icons'
 import Divider from '@material-ui/core/Divider';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
-import {ContentCopy, EmailOutline, Map} from 'mdi-material-ui';
+import {Barcode, ContentCopy, EmailOutline, Map} from 'mdi-material-ui';
 
 class EquipmentToolbar extends Component {
 
@@ -51,6 +51,15 @@ class EquipmentToolbar extends Component {
         window.open(extendedLink, '_blank');
     }
 
+    printBarcodeHandler = () => {
+        const barcodingLink = this.props.applicationData.EL_BCUR
+            .replace("&1", this.props.screencode)
+            .replace("&2", 'equipmentno')
+            .replace("&3", this.props.equipment.code);
+
+        window.open(barcodingLink, '_blank');
+    }
+
     renderMenuItems() {
         return (
             <div >
@@ -77,6 +86,10 @@ class EquipmentToolbar extends Component {
                 <MenuItem onClick={this.showInExtendedHandler.bind(this)} disabled={this.props.newEquipment}>
                     <OpenInNewIcon style={this.iconMenuStyle} />
                     <div style={this.menuLabelStyle}>Show in Infor EAM</div>
+                </MenuItem>
+                <MenuItem onClick={this.printBarcodeHandler} disabled={this.props.newEquipment}>
+                    <Barcode style={this.iconMenuStyle} />
+                    <div style={this.menuLabelStyle}>Print Barcode</div>
                 </MenuItem>
             </div>
         );
@@ -116,6 +129,12 @@ class EquipmentToolbar extends Component {
                 <Tooltip title="Show in Infor EAM">
                     <IconButton onClick={this.showInExtendedHandler.bind(this)} disabled={this.props.newEquipment}>
                         <OpenInNewIcon style={this.iconStyle} />
+                    </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Print Barcode">
+                    <IconButton onClick={this.printBarcodeHandler} disabled={this.props.newEquipment}>
+                        <Barcode style={this.iconStyle} />
                     </IconButton>
                 </Tooltip>
             </div>
