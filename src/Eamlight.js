@@ -45,8 +45,6 @@ class Eamlight extends Component {
     };
 
     render() {
-       const { updateScannedUser, scannedUser } = this.props;
-
         // Display login screen
         if (!this.props.inforContext && process.env.REACT_APP_LOGIN_METHOD === 'STD') {
             return (

@@ -26,7 +26,7 @@ const styles = {
 };
 
 export default withStyles(styles)(function ApplicationLayout(props) {
-    const { classes, applicationData, userData, scannedUser, updateScannedUser, handleError } = props;
+    const { classes, applicationData, userData, scannedUser, updateScannedUser, handleError, showNotification } = props;
 
     const environment = applicationData.EL_ENVIR;
 
@@ -88,8 +88,12 @@ export default withStyles(styles)(function ApplicationLayout(props) {
     const isInsideIframe = window.self !== window.top;
     const showTopBar = !(document.referrer.startsWith(startsWithString) && isInsideIframe);
 
-    const showScan = userData.eamAccount.userCode === applicationData.EAMLIGHT_SERVICE_ACCOUNT && (!scannedUser || !scannedUser.userCode)
-        && <ScanUser updateScannedUser={updateScannedUser} handleError={handleError}/>;
+    const showScan = applicationData.serviceAccounts.includes( userData.eamAccount.userCode) && (!scannedUser || !scannedUser.userCode)
+        && <ScanUser
+                updateScannedUser={updateScannedUser}
+                showNotification={showNotification}
+                handleError={handleError}
+            />;
 
     return (
         <div id="maindiv" className={(menuCompacted) ? 'SlimMenu' : ''} onClick={() => !menuCompacted && mobileMenuActive && setMobileMenuActive(false)}>
