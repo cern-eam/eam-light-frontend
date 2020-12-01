@@ -20,9 +20,18 @@ export function getUserInfo() {
             .then(response => {
                 let userdata = response.body.data;
                 Promise.all(createPromiseArray(userdata)).then(values => {
+                    let serviceAccounts;
+                    try {
+                        serviceAccounts = values[0].body.data.EL_SERVI && Object.keys(JSON.parse(values[0].body.data.EL_SERVI));
+                    } catch (err) {
+                        serviceAccounts = [];
+                    }
                     dispatch(updateApplication({
                         userData: response.body.data,
-                        applicationData: values[0].body.data,
+                        applicationData: {
+                            ...values[0].body.data,
+                            serviceAccounts
+                        },
                         assetLayout: values[1] ? values[1].body.data : null,
                         positionLayout: values[2] ? values[2].body.data : null,
                         systemLayout: values[3] ? values[3].body.data : null,

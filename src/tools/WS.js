@@ -12,10 +12,10 @@ class WS {
         return this._get(`/users?currentScreen=${currentScreen ? currentScreen : ""}&screenCode=${screenCode ? screenCode : ""}`, config);
     }
 
-    getUserDataFromEmployeeCode(employeeCode, config = {}) {
-        return this._get(`/users/employee/${employeeCode}`, config);
-    }
+    getUserDataToImpersonate(userId, config = {}) {
+        return this._get(`/users/impersonate?userId=${userId}`, config);
 
+    }
     getApplicationData(config = {}) {
         return this._get('/application/applicationdata', config);
     }

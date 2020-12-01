@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { handleError } from "../../actions/uiActions";
+import { handleError, showNotification } from "../../actions/uiActions";
 import { updateScannedUser } from '../../actions/scannedUserActions';
 import ApplicationLayout from './ApplicationLayout';
 
@@ -11,6 +11,6 @@ const mapStateToProps = (state) => {
     }
 };
 
-const ApplicationLayoutContainer = connect(mapStateToProps, {updateScannedUser, handleError})(ApplicationLayout);
+const ApplicationLayoutContainer = connect(mapStateToProps, {updateScannedUser, showNotification, handleError})(ApplicationLayout);
 
 export default ApplicationLayoutContainer;

@@ -5,9 +5,9 @@ import KeyCode from '../../../enums/KeyCode';
 import WS from '../../../tools/WS';
 import BlockUi from 'react-block-ui';
 
-const setUser = (employeeCode, onSuccess, onError) => {
-    if (employeeCode) {
-        WS.getUserDataFromEmployeeCode(employeeCode)
+const setUser = (userId, onSuccess, onError) => {
+    if (userId) {
+        WS.getUserDataToImpersonate(userId)
             .then(resp => onSuccess(resp.body.data))
             .catch(onError)
             ;
@@ -19,15 +19,17 @@ const setUser = (employeeCode, onSuccess, onError) => {
 /**
  * Allows user to scan card
  */
-const ScanUser = ({ updateScannedUser, handleError }) => {
+const ScanUser = ({ updateScannedUser, showNotification, handleError }) => {
         const [cernId, updateCernId] = useState("");
         //const [ref, updateRef] = useState(null);
         const [loading, setLoading] = useState(null);
 
         const updateUser = (evt) => {
+            if (loading) return;
             evt.persist();
             setLoading(true);
             const onSuccess = (user) => {
+                showNotification(`Welcome, ${user.userDesc}!`)
                 setLoading(false);
                 updateScannedUser(user);
             }
@@ -41,16 +43,16 @@ const ScanUser = ({ updateScannedUser, handleError }) => {
             setUser(cernId, onSuccess, onError);
         }
 
-        return <div style={{zIndex: '9999', backgroundColor: 'rgba(0, 0, 0, 0.8)', position: 'absolute', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', display: "flex", flexDirection: 'column'}}>
-            <BlockUi blocking={loading} style={{zIndex: '10000', backgroundColor: 'rgba(255, 255, 255, 1)', position: 'absolute', width: '50%', height: '50%', alignItems: 'center', justifyContent: 'center', display: "flex", flexDirection: 'column'}}>
-                <span className="FontLatoBlack Fleft Fs30 DispBlock" style={{fontSize: '20px', color: "#02a2f2"}}>Scan your card: </span>
+        return <div style={{zIndex: '1399', backgroundColor: 'rgba(0, 0, 0, 0.8)', position: 'absolute', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', display: "flex", flexDirection: 'column'}}>
+            <BlockUi blocking={loading} style={{zIndex: '1399', backgroundColor: 'rgba(255, 255, 255, 1)', position: 'absolute', width: '50%', height: '50%', alignItems: 'center', justifyContent: 'center', display: "flex", flexDirection: 'column'}}>
+                <span className="FontLatoBlack Fleft Fs30 DispBlock" style={{fontSize: '18px', color: "#02a2f2"}}>Insert your ID: </span>
                 <Input
                     //ref={that => that.focus()}
                     autoFocus
                     value={cernId}
                     onChange={(event) => updateCernId(event.target.value)}
-                    placeholder={"CERN ID"}
-                    style={{maxWidth: '200px'}}
+                    placeholder={"CERN ID, Person ID or Login"}
+                    style={{width: '200px'}}
                     onBlur={updateUser}
                     onKeyDown={(event) => event.keyCode === KeyCode.ENTER && updateUser(event)}
                 />
