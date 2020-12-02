@@ -16,10 +16,11 @@ const EntityRegions = (props) => {
     const history = useHistory();
     const location = useLocation();
     const searchParams = queryString.parse(location.search);
-
+    const visibleRegionParams = searchParams.visible ? searchParams.visible : "";
     React.useEffect(() => {
         const defaultVisibility = (region) => regionMaximized === region.id ||
-            (!isHiddenRegion(region.id) && (region.customVisibility ? region.customVisibility() : true));
+            visibleRegionParams.includes(region.id) ||
+            !visibleRegionParams.length && !isHiddenRegion(region.id) && (region.customVisibility ? region.customVisibility() : true);
 
         setVisibleRegions(regions.reduce((acc, region) => ({
             ...acc,

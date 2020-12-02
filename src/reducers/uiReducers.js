@@ -1,5 +1,4 @@
 import {SET_LAYOUT, SET_SNACKBAR_MESSAGE, TOGGLE_HIDDEN_REGION} from "../actions/uiActions";
-import queryString from "query-string";
 
 export default function ui(state = buildDefaultUiObject(), action) {
     switch(action.type) {
@@ -33,16 +32,10 @@ export default function ui(state = buildDefaultUiObject(), action) {
 }
 
 function buildDefaultUiObject() {
-    const location = window.location;
-    const searchParams = queryString.parse(location.search);
-    let forcedVisableRegions = searchParams.visable ? 
-         searchParams.visable.split(",") 
-        : [];
 
     return {
         snackbar: {message: "", type: "", open: false},
         layout: {showEqpTreeButton: false, showEqpTree: false},
         hiddenRegions: JSON.parse(localStorage.getItem("hiddenRegions")) || {},
-        forcedVisableRegions: forcedVisableRegions
     }
 }
