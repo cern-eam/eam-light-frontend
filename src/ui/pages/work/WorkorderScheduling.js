@@ -4,6 +4,7 @@ import EAMDatePicker from 'eam-components/dist/ui/components/muiinputs/EAMDatePi
 import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
 import WS from "../../../tools/WS";
 import UDFChar from "../../components/userdefinedfields/UDFChar";
+import { Grid } from '@material-ui/core';
 
 const WorkorderScheduling = (props) => {
 
@@ -23,6 +24,25 @@ const WorkorderScheduling = (props) => {
 
     return (
         <div style={{width: "100%", marginTop: 0}}>
+ 
+                <div style= {{width: "45%", float: "left"}}>
+                    <EAMAutocomplete children={children}
+                                        elementInfo={workOrderLayout.fields['createdby']}
+                                        value={workorder.createdBy}
+                                        updateProperty={updateWorkorderProperty}
+                                        valueKey="createdBy"
+                                        valueDesc={workorder.createdByDesc}
+                                        descKey="createdByDesc"
+                                        autocompleteHandler={WS.autocompleteEmployee}/>
+                </div>
+
+                <div style= {{width: "45%", float: "right"}}>
+                    <EAMDatePicker children={children}
+                                    elementInfo={workOrderLayout.fields['datecreated']}
+                                    valueKey="createdDate"
+                                    value={workorder.createdDate || ''}
+                                    updateProperty={updateWorkorderProperty}/>
+                </div>
 
             <EAMAutocomplete children={children}
                                 elementInfo={workOrderLayout.fields['reportedby']}
