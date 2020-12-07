@@ -5,7 +5,8 @@ import { useHistory, useLocation } from 'react-router-dom';
 import queryString from "query-string"
 
 const ENTITY_REGION_PARAMS = {
-    MAXIMIZE: 'maximize'
+    MAXIMIZE: 'maximize',
+    VISIBLE: 'visible'
 }
 
 const EntityRegions = (props) => {
@@ -15,11 +16,15 @@ const EntityRegions = (props) => {
 
     const history = useHistory();
     const location = useLocation();
-    const searchParams = queryString.parse(location.search);
 
+    const searchParams = queryString.parse(location.search, {arrayFormat: 'comma'});
+    const visibleRegionsParam =  searchParams[ENTITY_REGION_PARAMS.VISIBLE] ? 
+        [].concat(searchParams[ENTITY_REGION_PARAMS.VISIBLE]) : [];
+    
     React.useEffect(() => {
         const defaultVisibility = (region) => regionMaximized === region.id ||
-            (!isHiddenRegion(region.id) && (region.customVisibility ? region.customVisibility() : true));
+            visibleRegionsParam.includes(region.id) ||
+            !visibleRegionsParam.length && !isHiddenRegion(region.id) && (region.customVisibility ? region.customVisibility() : true);
 
         setVisibleRegions(regions.reduce((acc, region) => ({
             ...acc,
@@ -61,7 +66,7 @@ const EntityRegions = (props) => {
         )
         history.push({
             pathname: location.pathname,
-            search: queryString.stringify(newSearchParams)
+            search: queryString.stringify(newSearchParams, {arrayFormat: 'comma'})
         });
         setRegionMaximized(regionID);
     }
