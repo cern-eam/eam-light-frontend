@@ -24,8 +24,8 @@ const WorkorderScheduling = (props) => {
 
     return (
         <div style={{width: "100%", marginTop: 0}}>
- 
-                <div style= {{width: "45%", float: "left"}}>
+            <Grid container justify="space-between" spacing={12} style={{margin: "0px"}}>
+                <Grid xs={5}>
                     <EAMAutocomplete children={children}
                                         elementInfo={workOrderLayout.fields['createdby']}
                                         value={workorder.createdBy}
@@ -34,16 +34,17 @@ const WorkorderScheduling = (props) => {
                                         valueDesc={workorder.createdByDesc}
                                         descKey="createdByDesc"
                                         autocompleteHandler={WS.autocompleteEmployee}/>
-                </div>
+                </Grid>
 
-                <div style= {{width: "45%", float: "right"}}>
+                <Grid xs={5}>
                     <EAMDatePicker children={children}
                                     elementInfo={workOrderLayout.fields['datecreated']}
                                     valueKey="createdDate"
                                     value={workorder.createdDate || ''}
                                     updateProperty={updateWorkorderProperty}/>
-                </div>
-
+                </Grid>
+            </Grid>
+            
             <EAMAutocomplete children={children}
                                 elementInfo={workOrderLayout.fields['reportedby']}
                                 value={workorder.reportedBy}
