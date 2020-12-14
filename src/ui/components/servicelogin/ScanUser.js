@@ -50,7 +50,7 @@ const ScanUser = ({ updateScannedUser, showNotification, handleError }) => {
                     //ref={that => that.focus()}
                     autoFocus
                     value={cernId}
-                    onChange={(event) => updateCernId(event.target.value)}
+                    onChange={(event) => updateCernId(event.target.value && event.target.value.toUpperCase())}
                     placeholder={"CERN ID, Person ID or Login"}
                     style={{width: '200px'}}
                     onBlur={updateUser}
