@@ -21,6 +21,7 @@ import EquipmentTools from "../EquipmentTools";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentPartsMadeOf from "../components/EquipmentPartsMadeOf";
 import WSParts from '../../../../tools/WSParts';
+import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 
 export default class Asset extends Entity {
 
@@ -356,7 +357,24 @@ export default class Asset extends Entity {
                 ,
                 column: 2,
                 order: 12
-            }
+            },
+            {
+                id: 'EQUIPMENTGRAPH',
+                label: 'Equipment Graph',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () => 
+                    <EquipmentGraphIframe
+                        equipmentCode={equipment.code} 
+                        equipmentGraphURL={applicationData.EL_EQGRH}
+                    />
+                ,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0 }
+                },
+                column: 2,
+                order: 13
+            },
         ]
     }
 
