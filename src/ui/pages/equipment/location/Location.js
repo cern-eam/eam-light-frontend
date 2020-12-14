@@ -16,6 +16,7 @@ import LocationDetails from "./LocationDetails";
 import LocationGeneral from "./LocationGeneral";
 import LocationHierarchy from "./LocationHierarchy";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
+import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 
 export default class Location extends Entity {
     settings = {
@@ -54,7 +55,7 @@ export default class Location extends Entity {
     }
 
     getRegions = () => {
-        const { locationLayout, userData } = this.props;
+        const { locationLayout, userData, applicationData } = this.props;
         const { location, layout } = this.state;
         const commonProps = {
             location,
@@ -208,6 +209,23 @@ export default class Location extends Entity {
                 ,
                 column: 2,
                 order: 10
+            },
+            {
+                id: 'EQUIPMENTGRAPH',
+                label: 'Equipment Graph',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () => 
+                    <EquipmentGraphIframe
+                        equipmentCode={location.code} 
+                        equipmentGraphURL={applicationData.EL_EQGRH}
+                    />
+                ,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0 }
+                },
+                column: 2,
+                order: 11
             },
         ]
 
