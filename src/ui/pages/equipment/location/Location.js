@@ -211,7 +211,7 @@ export default class Location extends Entity {
                 order: 10
             },
             {
-                id: 'EQIPMENTGRAPH',
+                id: 'EQUIPMENTGRAPH',
                 label: 'Equipment Graph',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
