@@ -285,7 +285,7 @@ export default class Position extends Entity {
                 order: 11
             },
             {
-                id: 'EQIPMENTGRAPH',
+                id: 'EQUIPMENTGRAPH',
                 label: 'Equipment Graph',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,

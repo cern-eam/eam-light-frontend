@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import ResizableIframe from "./ResizableIframe";
 
-
 const functionToEAMLightPageMapping = {
-    'OSOBJA': 'asset',
-    'OSOBJS': 'system',
-    'OSOBJP': 'position',
-    'OSOBJL': 'location'
+    'OSOBJA': '/asset',
+    'OSOBJS': '/system',
+    'OSOBJP': '/position',
+    'OSOBJL': '/location'
 }
 
 const eqGraphStyle = {
@@ -17,41 +16,50 @@ const eqGraphStyle = {
     boxShadow: "0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12)"
 }
 
-
+const MESSAGE_EVENT_KEY = "message";
 
 const EquipmentGraphIframe = (props) => {
-    const {equipmentGraphURL, equipmentCode} = props;
+    const { equipmentGraphURL, equipmentCode } = props;
     const src = `${equipmentGraphURL}?equipmentno=${equipmentCode}`;
     const history = useHistory();
-    const [displayIframe, setDisplayIFrame] = useState(false)
+    const [displayIframe, setDisplayIFrame] = useState(false);
 
-    const eventListeners = {
-        'message': [
-            (event) => {
-                const data = JSON.parse(event.data);
-                if(data.messageName === "directSelect") {
-                    const link = `../../${functionToEAMLightPageMapping[data.systemFunction]}/${data.drillbackParams.equipmentno}`
-                    history.push(link);
-                }
-            }
-        ]
-    }
+    const messageHandler = useCallback((event) => {
+        if (!event || !event.data) return;
+        let data = {};
 
-    setTimeout(() => setDisplayIFrame(true), 1500);
+        try {
+            data = JSON.parse(event.data);
+        } catch (e) {
+            return;
+        }
+        
+        if (data.messageName === "directSelect") {
+            const link = `${functionToEAMLightPageMapping[data.systemFunction]}/${data.drillbackParams.equipmentno}`
+            history.push(link);
+        }
+    }, []);
+
+    useEffect(() => {
+        window.addEventListener(MESSAGE_EVENT_KEY, messageHandler);
+        return () => window.removeEventListener(MESSAGE_EVENT_KEY, messageHandler);
+    }, []);
+
+    // Needed in order to render graph centered
+    setTimeout(() => setDisplayIFrame(true), 0);
 
     return (
         displayIframe &&
             <ResizableIframe
                 iframeResizerOptions={{
                     scrolling: false,
-                    checkOrigin: false, // CHECK: disable this option or list allowed origins
+                    checkOrigin: false,
                     heightCalculationMethod: 'bodyOffset',
                     id: 'equipmentGraph',
                     sizeHeight: false
                 }}
                 src={src}
-                style={eqGraphStyle}
-                eventListeners={eventListeners}/>
+                style={eqGraphStyle} />
     )
 }
 

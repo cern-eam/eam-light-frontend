@@ -359,7 +359,7 @@ export default class Asset extends Entity {
                 order: 12
             },
             {
-                id: 'EQIPMENTGRAPH',
+                id: 'EQUIPMENTGRAPH',
                 label: 'Equipment Graph',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
