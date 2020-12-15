@@ -9,7 +9,12 @@ export default function MenuMyWorkorders(props) {
     const generateMyOpenWorkOrders = () => {
         return props.myOpenWorkOrders
             .filter(MenuTools.daysFilterFunctions[days])
-            .sort((wo1, wo2) => (wo1.schedulingStartDate === null) - (wo2.schedulingStartDate === null))
+            .sort((wo1, wo2) => {
+                if (wo1.schedulingStartDate === null && wo2.schedulingStartDate === null) return 0;
+                if (wo1.schedulingStartDate === null) return 1;
+                if (wo2.schedulingStartDate === null) return -1;
+                return wo1.schedulingStartDate - wo2.schedulingStartDate;
+            })
             .map(wo => (
                 <MenuWorkorder key={wo.number} wo={wo} />
             ))
