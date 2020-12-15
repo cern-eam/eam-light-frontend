@@ -18,6 +18,7 @@ import {TOOLBARS} from "../../../components/AbstractToolbar";
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import EDMSWidget from 'eam-components/dist/ui/components/edms/EDMSWidget';
 import EntityRegions from "../../../components/entityregions/EntityRegions";
+import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 
 export default class Position extends Entity {
 
@@ -282,6 +283,23 @@ export default class Position extends Entity {
                 ,
                 column: 2,
                 order: 11
+            },
+            {
+                id: 'EQUIPMENTGRAPH',
+                label: 'Equipment Graph',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () => 
+                    <EquipmentGraphIframe
+                        equipmentCode={equipment.code} 
+                        equipmentGraphURL={applicationData.EL_EQGRH}
+                    />
+                ,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0 }
+                },
+                column: 2,
+                order: 12
             },
         ]
     }
