@@ -17,7 +17,8 @@ import Ajax from 'eam-components/dist/tools/ajax'
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 // EAM-480, en-GB locale used in order to have monday as first day of the week
-import { enGB } from "date-fns/locale"; 
+import { enGB } from "date-fns/locale";
+import { UPDATE_SCANNED_USER } from './actions/scannedUserActions';
 
 const jss = create(jssPreset());
 
@@ -27,7 +28,9 @@ polyfill();
 function createAxiosAuthMiddleware() {
     return ({ getState }) => next => (action) => {
         const inforContext = getState().inforContext;
-        if (inforContext) {
+        if (action.type === UPDATE_SCANNED_USER) {
+            Ajax.getAxiosInstance().defaults.headers.common.INFOR_USER = action.value && action.value.userCode || '';
+        } else if (inforContext) {
             Ajax.getAxiosInstance().defaults.headers.common.INFOR_USER = inforContext.INFOR_USER;
             Ajax.getAxiosInstance().defaults.headers.common.INFOR_PASSWORD = inforContext.INFOR_PASSWORD;
             Ajax.getAxiosInstance().defaults.headers.common.INFOR_ORGANIZATION = inforContext.INFOR_ORGANIZATION;

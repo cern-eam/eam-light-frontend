@@ -11,6 +11,7 @@ import { useLocation } from 'react-router-dom';
 import { useTheme } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import ScanUser from '../../ui/components/servicelogin/ScanUser';
 
 const styles = {
     topBarLink: {
@@ -25,7 +26,7 @@ const styles = {
 };
 
 export default withStyles(styles)(function ApplicationLayout(props) {
-    const { classes, applicationData } = props;
+    const { classes, applicationData, userData, scannedUser, updateScannedUser, handleError, showNotification } = props;
 
     const environment = applicationData.EL_ENVIR;
 
@@ -87,17 +88,25 @@ export default withStyles(styles)(function ApplicationLayout(props) {
     const isInsideIframe = window.self !== window.top;
     const showTopBar = !(document.referrer.startsWith(startsWithString) && isInsideIframe);
 
+    const showScan = applicationData.serviceAccounts.includes( userData.eamAccount.userCode) && (!scannedUser || !scannedUser.userCode)
+        && <ScanUser
+                updateScannedUser={updateScannedUser}
+                showNotification={showNotification}
+                handleError={handleError}
+            />;
+
     return (
         <div id="maindiv" className={(menuCompacted) ? 'SlimMenu' : ''} onClick={() => !menuCompacted && mobileMenuActive && setMobileMenuActive(false)}>
             {showTopBar && topbar}
-            <div id="layout-container">
-                <div id="layout-menu-cover" className={(mobileMenuActive) ? 'active' : ''} onClick={(event) => event.stopPropagation()}>
+            <div id="layout-container" >
+                {props.children[0] && <div id="layout-menu-cover" className={(mobileMenuActive) ? 'active' : ''} onClick={(event) => event.stopPropagation()}>
                     {props.children[0]}
-                </div>
+                </div>}
                 <div id="layout-portlets-cover">
                     {props.children[1]}
                 </div>
             </div>
+            {showScan}
         </div>
 
     )

@@ -17,6 +17,7 @@ import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import {TOOLBARS} from "../../../components/AbstractToolbar";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
+import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 
 
 export default class System extends Entity {
@@ -138,7 +139,7 @@ export default class System extends Entity {
     //
     //
     getRegions = () => {
-        const { userData, systemLayout, handleError } = this.props;
+        const { userData, systemLayout, handleError, applicationData } = this.props;
         const { equipment, layout } = this.state;
 
         let commonProps = {
@@ -291,6 +292,23 @@ export default class System extends Entity {
                 ,
                 column: 2,
                 order: 10
+            },
+            {
+                id: 'EQUIPMENTGRAPH',
+                label: 'Equipment Graph',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () => 
+                    <EquipmentGraphIframe
+                        equipmentCode={equipment.code} 
+                        equipmentGraphURL={applicationData.EL_EQGRH}
+                    />
+                ,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0 }
+                },
+                column: 2,
+                order: 11
             },
         ]
     }
