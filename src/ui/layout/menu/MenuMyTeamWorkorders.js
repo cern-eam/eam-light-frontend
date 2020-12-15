@@ -33,6 +33,7 @@ const MenuMyTeamWorkorders = props =>  {
         return props.myTeamWorkOrders
             .filter(MenuTools.daysFilterFunctions[days])
             .filter(wo => department === 'ALL' || wo.mrc === department)
+            .sort((wo1, wo2) => (wo1.schedulingStartDate === null) - (wo2.schedulingStartDate === null))
             .map(wo => (
                 <MenuWorkorder key={wo.number} wo={wo} />
             ))
