@@ -29,6 +29,7 @@ function CustomFieldInput(props) {
             lookupValues: lookupValues,
             elementInfo: generateFieldInfo(),
             readonly: readonly,
+            UoM: customField.uom
         };
 
         switch (customField.type) {
