@@ -5,9 +5,8 @@ import tools from '../CustomFieldTools'
 
 function CustomFieldNUM(props) {
 
-    let {customField, updateCustomFieldValue, elementInfo, children, lookupValues} = props;
+    let {customField, updateCustomFieldValue, elementInfo, children, lookupValues, UoM} = props;
     elementInfo = {...elementInfo, readonly: props.readonly};
-
     if (tools.isLookupCustomField(customField)) {
         return <EAMSelect
             children={children}
@@ -23,7 +22,8 @@ function CustomFieldNUM(props) {
                 elementInfo={elementInfo}
                 value={customField.value}
                 updateProperty={updateCustomFieldValue}
-                valueKey="value"/>
+                valueKey="value"
+                endAdornment={UoM}/>
         )
     }
 
