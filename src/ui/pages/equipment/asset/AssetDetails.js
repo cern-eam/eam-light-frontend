@@ -34,6 +34,17 @@ class AssetDetails extends Component {
                     descKey="categoryDesc"
                     autocompleteHandler={WSEquipment.autocompleteEquipmentCategory}/>
 
+
+                <EAMAutocomplete
+                    children={children}
+                    elementInfo={assetLayout.fields['costcode']}
+                    value={equipment.costCode}
+                    valueDesc={equipment.costCodeDesc || ""}
+                    updateProperty={updateEquipmentProperty}
+                    valueKey="costCode"
+                    descKey="costCodeDesc"
+                    autocompleteHandler={WSEquipment.autocompleteCostCode}/>
+
                 <EAMDatePicker
                     children={children}
                     elementInfo={assetLayout.fields['commissiondate']}
