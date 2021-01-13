@@ -77,6 +77,10 @@ class WSEquipment {
         filter = encodeURIComponent(filter);
         return WS._get(`/autocomplete/department/${filter}`, config);
     }
+    autocompleteCostCode = (filter, config = {}) => {
+        filter = encodeURIComponent(filter);
+        return WS._get('/autocomplete/equipment/costcode/' + filter, config);
+    };
 
     //
     // HIERARCHY
