@@ -92,37 +92,31 @@ function PartUsageDialog(props) {
     };
 
     let handleAssetChange = (value) => {
-        //Only if value really change
-        if (value && value !== partUsageLine.assetIDCode) {
-            //Clear part and bin selection
-            updatePartUsageLineProperty('partCode', '');
-            updatePartUsageLineProperty('partDesc', '');
-            updatePartUsageLineProperty('bin', '');
-            //Complete data for change Asset
-            WSWorkorders.getPartUsageSelectedAsset(props.workorder.number, partUsage.transactionType,
-                partUsage.storeCode, value).then(response => {
-                const completeData = response.body.data[0];
-                if (completeData) {
-                    updatePartUsageLineProperty('bin', completeData.bin);
-                    updatePartUsageLineProperty('partCode', completeData.part);
-                    loadBinList(completeData.bin, completeData.part);
-                }
-            }).catch(error => {
-                props.handleError(error);
-            });
-        }
+        //Clear part and bin selection
+        updatePartUsageLineProperty('partCode', '');
+        updatePartUsageLineProperty('partDesc', '');
+        updatePartUsageLineProperty('bin', '');
+        //Complete data for change Asset
+        WSWorkorders.getPartUsageSelectedAsset(props.workorder.number, partUsage.transactionType,
+            partUsage.storeCode, value).then(response => {
+            const completeData = response.body.data[0];
+            if (completeData) {
+                updatePartUsageLineProperty('bin', completeData.bin);
+                updatePartUsageLineProperty('partCode', completeData.part);
+                loadBinList(completeData.bin, completeData.part);
+            }
+        }).catch(error => {
+            props.handleError(error);
+        });
     };
 
     let handlePartChange = (value) => {
-        //Only if value really change
-        if (value && value !== partUsageLine.partCode) {
-            //Clear asset and bin selection
-            updatePartUsageLineProperty('assetIDCode', '');
-            updatePartUsageLineProperty('assetIDDesc', '');
-            updatePartUsageLineProperty('bin', '');
-            //Load the bin list
-            loadBinList('', value);
-        }
+        //Clear asset and bin selection
+        updatePartUsageLineProperty('assetIDCode', '');
+        updatePartUsageLineProperty('assetIDDesc', '');
+        updatePartUsageLineProperty('bin', '');
+        //Load the bin list
+        loadBinList('', value);
     };
 
     let loadBinList = (binCode, partCode) => {
