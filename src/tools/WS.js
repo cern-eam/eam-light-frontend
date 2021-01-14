@@ -12,8 +12,8 @@ class WS {
         return this._get(`/users?currentScreen=${currentScreen ? currentScreen : ""}&screenCode=${screenCode ? screenCode : ""}`, config);
     }
 
-    getUserDataToImpersonate(userId, config = {}) {
-        return this._get(`/users/impersonate?userId=${userId}`, config);
+    getUserDataToImpersonate(userId, mode, config = {}) {
+        return this._get(`/users/impersonate?userId=${userId}&mode=${mode}`, config);
 
     }
     getApplicationData(config = {}) {
