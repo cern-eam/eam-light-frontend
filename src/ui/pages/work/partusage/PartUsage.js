@@ -15,8 +15,8 @@ const buttonStyle = {
 
 function PartUsage(props) {
 
-    let headers = ['Transaction', 'Part', 'Activity', 'Store', 'Quantity'];
-    let propCodes = ['transType', 'partCode', 'activityDesc', 'storeCode', 'quantity'];
+    let headers = ['Transaction', 'Part', 'Activity', 'Store', 'Quantity', 'UoM'];
+    let propCodes = ['transType', 'partCode', 'activityDesc', 'storeCode', 'quantity', 'partUoM'];
     let linksMap = new Map([['partCode', {linkType: 'fixed', linkValue: 'part/', linkPrefix: '/'}]]);
 
     let [data, setData] = useState([]);
