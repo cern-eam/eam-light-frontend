@@ -7,7 +7,7 @@ import BlockUi from 'react-block-ui';
 
 const setUser = (userId, onSuccess, onError) => {
     if (userId) {
-        WS.getUserDataToImpersonate(userId)
+        WS.getUserDataToImpersonate(userId, MODE)
             .then(resp => onSuccess(resp.body.data))
             .catch(onError)
             ;
@@ -16,6 +16,15 @@ const setUser = (userId, onSuccess, onError) => {
     }
 }
 
+// For future
+const MODES = {
+    ALL: "ALL",
+    PERSON: "PERSON",
+}
+
+const MODE = MODES.PERSON;
+const SCANNER_ONLY = true;
+
 /**
  * Allows user to scan card
  */
@@ -23,6 +32,7 @@ const ScanUser = ({ updateScannedUser, showNotification, handleError }) => {
         const [cernId, updateCernId] = useState("");
         //const [ref, updateRef] = useState(null);
         const [loading, setLoading] = useState(null);
+        const [scannerTimeout, setScannerTimeout] = useState(null);
 
         const updateUser = (evt) => {
             if (loading) return;
@@ -49,12 +59,26 @@ const ScanUser = ({ updateScannedUser, showNotification, handleError }) => {
                 <Input
                     //ref={that => that.focus()}
                     autoFocus
+                    type="password"
                     value={cernId}
-                    onChange={(event) => updateCernId(event.target.value && event.target.value.toUpperCase())}
-                    placeholder={"CERN ID, Person ID or Login"}
+                    onChange={(event) => {
+                        const value = event.target.value;
+                        if (SCANNER_ONLY && value && (value.length - (cernId || "").length) > 1) {
+                            updateCernId("");
+                        } else {
+                            updateCernId(value && (MODE === MODES.PERSON ? value.replace(/\D/g,''): value.toUpperCase()))
+                        }
+                    }}
+                    placeholder={MODE === MODES.PERSON ? "Person ID" : "CERN ID, Person ID or Login"}
                     style={{width: '200px'}}
-                    onBlur={updateUser}
-                    onKeyDown={(event) => event.keyCode === KeyCode.ENTER && updateUser(event)}
+                    onBlur={(evt) => !SCANNER_ONLY && updateUser(evt)}
+                    onKeyDown={(event) => {
+                        if (SCANNER_ONLY) {
+                            clearTimeout(scannerTimeout);
+                            setScannerTimeout(setTimeout(() => updateCernId(""), 100));
+                        }
+                        event.keyCode === KeyCode.ENTER && updateUser(event)
+                    }}
                 />
             </BlockUi>
         </div>
