@@ -55,7 +55,7 @@ const ScanUser = ({ updateScannedUser, showNotification, handleError }) => {
 
         return <div style={{zIndex: '1399', backgroundColor: 'rgba(0, 0, 0, 0.8)', position: 'absolute', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', display: "flex", flexDirection: 'column'}}>
             <BlockUi blocking={loading} style={{zIndex: '1399', backgroundColor: 'rgba(255, 255, 255, 1)', position: 'absolute', width: '50%', height: '50%', alignItems: 'center', justifyContent: 'center', display: "flex", flexDirection: 'column'}}>
-                <span className="FontLatoBlack Fleft Fs30 DispBlock" style={{fontSize: '18px', color: "#02a2f2"}}>Insert your ID: </span>
+                <span className="FontLatoBlack Fleft Fs30 DispBlock" style={{fontSize: '18px', color: "#02a2f2"}}>{MODE === MODES.PERSON ? "Scan your CERN badge: " : "Insert your ID: "}</span>
                 <Input
                     //ref={that => that.focus()}
                     autoFocus
