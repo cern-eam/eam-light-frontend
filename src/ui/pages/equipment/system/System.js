@@ -135,6 +135,13 @@ export default class System extends Entity {
         return equipment;
     };
 
+    getEDMSObjectType = (equipment) => {
+        if (equipment.systemTypeCode === 'S' && ['B', 'M'].includes(equipment.typeCode)) {
+            return 'A';
+        }
+        return 'X';
+    }
+
     //
     //
     //
@@ -232,7 +239,7 @@ export default class System extends Entity {
                 maximizable: true,
                 render: () => 
                     <EDMSDoclightIframeContainer
-                        objectType="X"
+                        objectType={this.getEDMSObjectType(equipment)}
                         objectID={equipment.code} />
                 ,
                 RegionPanelProps: {
