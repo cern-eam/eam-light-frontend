@@ -42,7 +42,11 @@ export function getUserInfo() {
                 })
             })
             .catch(response => {
-                dispatch(updateApplication({userData: {invalidAccount: true}}))
+                if (response && response.response.status === 403) {
+                    dispatch(updateApplication({userData: {invalidAccount: true},
+                                                applicationData: {invalidAccount: true}}));
+                
+                } else dispatch(updateApplication({userData: {invalidAccount: true}}));
             })
     }
 }
