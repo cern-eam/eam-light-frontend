@@ -11,6 +11,7 @@ import EAMSelect from "eam-components/dist/ui/components/muiinputs/EAMSelect";
 import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
 import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
 import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
+import WSParts from '../../../../tools/WSParts';
 
 
 const transactionTypes = [{code: 'ISSUE', desc: 'Issue'}, {code: 'RETURN', desc: 'Return'}];
@@ -23,6 +24,7 @@ function PartUsageDialog(props) {
     let [storeList, setStoreList] = useState([]);
     let [activityList, setActivityList] = useState([]);
     let [loading, setLoading] = useState(false);
+    let [uom, setUoM] = useState("");
 
     useEffect(() => {
         if (props.isDialogOpen) {
@@ -117,6 +119,7 @@ function PartUsageDialog(props) {
         updatePartUsageLineProperty('bin', '');
         //Load the bin list
         loadBinList('', value);
+        loadUoM(value);
     };
 
     let loadBinList = (binCode, partCode) => {
@@ -133,6 +136,14 @@ function PartUsageDialog(props) {
             props.handleError(error);
         });
     };
+
+    let loadUoM = (partCode) => {
+        if (!partCode) return;
+
+        WSParts.getPart(partCode).then(response => {
+            setUoM(response.body.data.uom);
+        })
+    }
 
     let handleSave = () => {
         //Call the handle save from the parent
@@ -226,6 +237,7 @@ function PartUsageDialog(props) {
 
                             <EAMInput elementInfo={props.tabLayout['transactionquantity']}
                                       valueKey="transactionQty"
+                                      endAdornment={uom}
                                       value={partUsageLine.transactionQty}
                                       updateProperty={updatePartUsageLineProperty}
                                       children={props.children}/>
