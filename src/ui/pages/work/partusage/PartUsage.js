@@ -15,8 +15,8 @@ const buttonStyle = {
 
 function PartUsage(props) {
 
-    let headers = ['Transaction', 'Part', 'Activity', 'Store', 'Quantity', 'UoM'];
-    let propCodes = ['transType', 'partCode', 'activityDesc', 'storeCode', 'quantity', 'partUoM'];
+    let headers = ['Transaction', 'Part', 'Activity', 'Store', 'Quantity'];
+    let propCodes = ['transType', 'partCode', 'activityDesc', 'storeCode', 'quantity'];
     let linksMap = new Map([['partCode', {linkType: 'fixed', linkValue: 'part/', linkPrefix: '/'}]]);
 
     let [data, setData] = useState([]);
@@ -27,10 +27,17 @@ function PartUsage(props) {
         fetchData(props.workorder.number)
     }, [props.workorder.number])
 
+    let formatQuantity = (data) => {
+        data.forEach(part => 
+            part.quantity = part.quantity ? part.quantity + (part.partUoM ? " " + part.partUoM : "") : ""
+        )
+    }
+
     let fetchData = (workorder) => {
         setIsLoading(true)
         if (workorder) {
             WSWorkorders.getPartUsageList(workorder).then(response => {
+                formatQuantity(response.body.data);
                 setData(response.body.data);
                 setIsLoading(false);
             }).catch(error => {
