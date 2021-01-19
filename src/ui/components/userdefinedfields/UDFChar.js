@@ -60,6 +60,7 @@ class UDFChar extends Component {
                         children={this.props.children}
                         link={this.props.link}
                         icon={this.props.icon}
+                        disableUpperCasing={this.props.disableUpperCasing}
                     />
                 );
             case RENT:

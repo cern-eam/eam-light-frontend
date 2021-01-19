@@ -105,7 +105,8 @@ const WorkorderScheduling = (props) => {
                         fieldKey={`userDefinedFields.udfchar17`}
                         descKey={`userDefinedFields.udfchar17Desc`}
                         updateUDFProperty={updateWorkorderProperty}
-                        children={children}/>
+                        children={children}
+                        disableUpperCasing={true}/>
 
         </div>
     )
