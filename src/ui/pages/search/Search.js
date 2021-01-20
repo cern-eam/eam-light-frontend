@@ -178,7 +178,7 @@ class Search extends Component {
         }
     }
 
-    fetchNewData(keyword) {
+    fetchNewData(keyword, entityTypes) {
         if (!!this.cancelSource) {
             this.cancelSource.cancel();
         }
@@ -203,7 +203,7 @@ class Search extends Component {
 
         clearTimeout(this.timeout);
         this.timeout = setTimeout(() =>
-            (WS.getSearchData(this.prepareKeyword(keyword), {
+            (WS.getSearchData(this.prepareKeyword(keyword), entityTypes, {
                 cancelToken: this.cancelSource.token
             }).then(response => {
                 this.cancelSource = null;

@@ -1,16 +1,50 @@
 import React from 'react';
 import FontIcon from '@material-ui/core/Icon';
 import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
+import EAMCheckbox from "eam-components/dist/ui/components/muiinputs/EAMCheckbox";
 
-
+const SEARCH_TYPES = {
+    PART: {
+        text: "Part",
+        value: "PART",
+        code: "PART",
+    },
+    EQUIPMENT_TYPES: {
+        text: "Equipment",
+        value: "A,P,S,L",
+        code: "EQUIPMEN",
+    },
+    JOB: {
+        text: "WorkOrder",
+        value: "JOB",
+        code: "JOB",
+    }
+}
 export default class SearchHeader extends React.Component {
 
-    componentDidMount(){
+    state = {
+        searchOn: Object.values(SEARCH_TYPES).map(v => v.value),
+    }
+
+    componentDidMount() {
         this.searchInput.focus();
     }
 
-    render() {
+    renderTypeCheckbox(searchType) {
+        const { searchOn, setState } = this.state;
+        return <EAMCheckbox
+                key={searchType.code}
+                elementInfo={{text: searchType.text}}
+                value={searchOn.includes(searchType.value).toString()}
+                updateProperty={() =>
+                    this.setState({searchOn: searchOn.includes(searchType.value) ?
+                        searchOn.filter(val => val !== searchType.value)
+                        : [...searchOn, searchType.value]})
+                }
+            />
+    }
 
+    render() {
         const searchIconStyle = {
             color: "#02a2f2",
             fontSize: 25,
@@ -39,6 +73,9 @@ export default class SearchHeader extends React.Component {
                             ref={(input) => { this.searchInput = input; }} />
                     </EAMBarcodeInput>
                     <FontIcon style={searchIconStyle} className="fa fa-search"/>
+                    <div style={{height: '30px', display: 'flex', direction: 'row'}}>
+                       {Object.values(SEARCH_TYPES).map(this.renderTypeCheckbox.bind(this))}
+                    </div>
                     <label id="searchPlaceHolder">{!this.props.keyword && "Search for Equipment, Work Orders, Parts, ..."}</label>
                 </div>
             </div>
@@ -46,6 +83,6 @@ export default class SearchHeader extends React.Component {
     }
 
     handleSearchInput = (event) => {
-        this.props.fetchDataHandler(event.target.value);
+        this.props.fetchDataHandler(event.target.value, this.state.searchOn.join(','));
     }
 }
