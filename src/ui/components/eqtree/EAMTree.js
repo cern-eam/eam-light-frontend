@@ -140,6 +140,10 @@ class EAMTree extends Component {
                       if (this.props.history) {
                           this.props.history.push("/" + this._getURLForType(rowInfo.node.type) + `/${rowInfo.node.id}`);
                       }
+                      window.parent.postMessage(JSON.stringify({
+                        type: 'EQUIPMENT_TREE_NODE_CLICK',
+                        node: rowInfo.node,
+                      }), "*");
                     }
                   },
                   icons: rowInfo.node.isDirectory
