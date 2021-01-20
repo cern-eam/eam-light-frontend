@@ -56,9 +56,9 @@ class WS {
         return this._get('/myworkorders/myteam', config)
     }
 
-    getSearchData(keyword, config = {}) {
+    getSearchData(keyword, entityTypes, config = {}) {
         keyword = encodeURIComponent(keyword);
-        return ajax.get(process.env.REACT_APP_BACKEND + '/index?s=' + keyword, config);
+        return ajax.get(process.env.REACT_APP_BACKEND + `/index?s=${keyword}&entityTypes=${entityTypes}`, config);
     }
 
     getSearchSingleResult(keyword, config = {}) {
