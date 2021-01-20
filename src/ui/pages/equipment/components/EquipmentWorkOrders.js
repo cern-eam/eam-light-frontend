@@ -10,6 +10,7 @@ const WO_FILTER_TYPES = {
     ALL: 'All',
     OPEN: 'Open',
     MTF: 'MTF',
+    THIS: 'This Eqp'
 }
 
 const WO_FILTERS = {
@@ -32,19 +33,50 @@ const WO_FILTERS = {
                 return workOrder.mrc && (workOrder.mrc.startsWith("ICF") || workOrder.mrc.startsWith("MTF"));
             })
         }
+    },
+    [WO_FILTER_TYPES.THIS]: {
+        text: WO_FILTER_TYPES.THIS,
+        process: data => [...data]
     }
 }
 
 function EquipmentWorkOrders(props) {
     const { defaultFilter } = props;
 
-    let headers = ['Work Order', 'Description', 'Status', 'Creation Date'];
-    let propCodes = ['number', 'desc', 'status', 'createdDate'];
-    let linksMap = new Map([['number', {linkType: 'fixed', linkValue: 'workorder/', linkPrefix: '/'}]]);
-
-    let [data, setData] = useState([]);
+    let [events, setEvents] = useState([]);
+    let [workorders, setWorkorders] = useState([]);
     let [workOrderFilter, setWorkOrderFilter] = useState(Object.values(WO_FILTER_TYPES).includes(defaultFilter) ? defaultFilter : WO_FILTER_TYPES.ALL)
     const [loadingData, setLoadingData] = useState(true);
+
+    let headers = ['Work Order', 'Equipment', 'Description', 'Status'];
+    let propCodes = ['number', 'object','desc', 'status'];
+
+    if (workOrderFilter === WO_FILTER_TYPES.THIS) {
+        headers = ['Work Order', 'Description', 'Status', 'Creation Date'];
+        propCodes = ['number', 'desc', 'status', 'createdDate'];
+    }
+
+    // make spaces in header strings non-breaking so headers do not wrap to multiple lines
+    headers = headers.map(string => string.replaceAll(' ', '\u00a0'));
+
+    const linksMap = new Map([
+        ['number', {
+            linkType: 'fixed',
+            linkValue: 'workorder/',
+            linkPrefix: '/'
+        }],
+        ['object', {
+            linkType: 'dynamic',
+            linkValue: 'objectUrl',
+            linkPrefix: '/'
+        }]
+    ]);
+
+    const stylesMap = {
+        number: {
+            overflowWrap: 'anywhere'
+        }
+    };
 
     let getFilteredWorkOrderList = (workOrders) => {
         return WO_FILTERS[workOrderFilter].process(workOrders)
@@ -54,17 +86,34 @@ function EquipmentWorkOrders(props) {
         if (props.equipmentcode) {
             fetchData(props.equipmentcode)
         } else {
-            setData([]);
+            setWorkorders([]);
+            setEvents([])
         }
     },[props.equipmentcode])
 
-    let fetchData = (equipmentcode) => {
-        WSEquipment.getEquipmentWorkOrders(equipmentcode)
-            .then(response => {
-                response.body.data.forEach(element => {
-                    element.createdDate = element.createdDate && format(new Date(element.createdDate),'dd-MMM-yyyy');
-                });
-                setData(response.body.data)
+    const getUrl = (equipmentType, objectCode) => {
+        const linkPrefix = {
+            A: 'asset',
+            P: 'position',
+            S: 'system',
+            L: 'location',
+        }[equipmentType];
+
+        return linkPrefix ? `${linkPrefix}/${objectCode}` : '';
+    }
+
+    const fetchData = equipmentCode => {
+        Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode)])
+            .then(responses => {
+                const formatResponse = response => response.body.data.map(element => ({
+                    ...element,
+                    createdDate: element.createdDate && format(new Date(element.createdDate),'dd-MMM-yyyy'),
+                    objectUrl: getUrl(element.equipmentType, element.object)
+                }));
+
+                const [workorders, events] = responses.map(formatResponse);
+                setWorkorders(workorders);
+                setEvents(events);
             })
             .finally(() => setLoadingData(false));
     }
@@ -82,12 +131,13 @@ function EquipmentWorkOrders(props) {
             {workOrderFilter === WO_FILTER_TYPES.MTF ?
                 <EquipmentMTFWorkOrders equipmentcode={props.equipmentcode} />
                 :
-                <BlockUi blocking={loadingData}>
+                <BlockUi blocking={loadingData} style={{overflowX: 'auto'}}>
                     <EISTable
-                    data={getFilteredWorkOrderList(data)}
+                    data={getFilteredWorkOrderList(workOrderFilter === WO_FILTER_TYPES.THIS ? workorders : events)}
                     headers={headers}
                     propCodes={propCodes}
                     linksMap={linksMap}
+                    stylesMap={stylesMap}
                     />
                 </BlockUi>
             }

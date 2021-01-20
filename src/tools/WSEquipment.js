@@ -16,6 +16,10 @@ class WSEquipment {
         return WS._get('/equipment/workorders?c=' + equipmentCode, config);
     }
 
+    getEquipmentEvents(equipmentCode, config = {}) {
+        return WS._get('/equipment/events?c=' + equipmentCode, config);
+    }
+
     getEquipment(equipmentCode, config = {}) {
         equipmentCode = encodeURIComponent(equipmentCode);
         return WS._get('/equipment?c=' + equipmentCode, config);
