@@ -26,7 +26,7 @@ export default class PositionSearch extends Component {
                     screenCode={this.props.positionScreen.screenCode}
                     handleError={this.props.handleError}
                     cellRenderer={this._cellRenderer}
-                    startupAction={this.props.positionScreen.startupAction}
+                    searchOnMount={this.props.positionScreen.startupAction !== "N"}                
                 />
             </div>
         )
