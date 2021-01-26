@@ -43,10 +43,11 @@ export function getUserInfo() {
             })
             .catch(response => {
                 if (response && response.response.status === 403) {
-                    dispatch(updateApplication({userData: {invalidAccount: true},
-                                                applicationData: {invalidAccount: true}}));
-                
-                } else dispatch(updateApplication({userData: {invalidAccount: true}}));
+                    dispatch(updateApplication({userData: {invalidAccount: true}}));
+                }
+                else {
+                    dispatch(updateApplication({userData: {}}));
+                }
             })
     }
 }

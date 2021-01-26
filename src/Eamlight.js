@@ -52,6 +52,11 @@ class Eamlight extends Component {
             )
         }
 
+        if (this.props.userData && this.props.userData.invalidAccount) {
+              return <InfoPage title="Access Denied"
+                               message="You don't have valid EAM account. "/>
+       }
+
         // User data still not there, display loading page
         if (!this.props.userData || !this.props.applicationData) {
             this.props.initializeApplication();
@@ -60,12 +65,6 @@ class Eamlight extends Component {
                     <div style={this.blockUiStyleDiv}>Loading EAM Light ...</div>
                 </BlockUi>
             )
-        }
-
-        // User has no valid EAM account
-        if (this.props.userData.invalidAccount) {
-            return <InfoPage title="Access Denied"
-                             message="You don't have valid EAM account. "/>
         }
 
         const eqpRegex = ["/asset", "/position", "/system", "/location"].map(e => `${e}/:code(.+)?`)
