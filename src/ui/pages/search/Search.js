@@ -45,7 +45,9 @@ class Search extends Component {
                     <SearchHeader keyword={this.state.keyword} searchBoxUp={this.state.searchBoxUp}
                                   fetchDataHandler={this.fetchNewData.bind(this)}
                                   onKeyDown={this.onKeyDown.bind(this)}
-                                  tryToGoToResult={this.tryToGoToResult.bind(this)}  />
+                                  tryToGoToResult={this.tryToGoToResult.bind(this)}
+                                  showTypes={this.state.searchBoxUp}
+                    />
                     <div id="searchResults"
                          className={this.state.searchBoxUp ? "searchResultsSearch" : "searchResultsHome"}>
                         <div className="linearProgressBox">
