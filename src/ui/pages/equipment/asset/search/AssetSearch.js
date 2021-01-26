@@ -26,7 +26,7 @@ export default class AssetSearch extends Component {
                     screenCode={this.props.assetScreen.screenCode}
                     handleError={this.props.handleError}
                     cellRenderer={this._cellRenderer}
-                    startupAction={this.props.assetScreen.startupAction}
+                    searchOnMount={this.props.assetScreen.startupAction !== "N"}
                 />
             </div>
         )

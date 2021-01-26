@@ -26,7 +26,7 @@ export default class PartSearch extends Component {
                     screenCode={this.props.partScreen.screenCode}
                     handleError={this.props.handleError}
                     cellRenderer={this._cellRenderer}
-                    startupAction={this.props.partScreen.startupAction}
+                    searchOnMount={this.props.partScreen.startupAction !== "N"}
                 />
             </div>
         )
