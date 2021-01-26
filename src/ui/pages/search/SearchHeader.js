@@ -36,11 +36,16 @@ export default class SearchHeader extends React.Component {
                 key={searchType.code}
                 elementInfo={{text: searchType.text}}
                 value={searchOn.includes(searchType.value).toString()}
-                updateProperty={() =>
-                    this.setState({searchOn: searchOn.includes(searchType.value) ?
-                        searchOn.filter(val => val !== searchType.value)
-                        : [...searchOn, searchType.value]})
-                }
+                updateProperty={() => {
+                    this.setState(
+                        {
+                            searchOn: searchOn.includes(searchType.value) ?
+                            searchOn.filter(val => val !== searchType.value)
+                            : [...searchOn, searchType.value]
+                        }
+                        , () => this.handleSearchInput({target: {value: this.props.keyword}})
+                    )
+                }}
             />
     }
 
@@ -52,6 +57,8 @@ export default class SearchHeader extends React.Component {
             right: -4,
             top: 5
         };
+
+        const { showTypes } = this.props;
 
         return (
             <div id="searchBox" className={this.props.searchBoxUp ? "searchBox searchBoxSearch" : "searchBox searchBoxHome"}>
@@ -73,9 +80,9 @@ export default class SearchHeader extends React.Component {
                             ref={(input) => { this.searchInput = input; }} />
                     </EAMBarcodeInput>
                     <FontIcon style={searchIconStyle} className="fa fa-search"/>
-                    <div style={{height: '30px', display: 'flex', direction: 'row'}}>
+                    {showTypes && <div style={{height: '30px', display: 'flex', direction: 'row'}}>
                        {Object.values(SEARCH_TYPES).map(this.renderTypeCheckbox.bind(this))}
-                    </div>
+                    </div>}
                     <label id="searchPlaceHolder">{!this.props.keyword && "Search for Equipment, Work Orders, Parts, ..."}</label>
                 </div>
             </div>
