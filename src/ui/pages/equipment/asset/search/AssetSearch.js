@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import EAMGrid from 'eam-components/dist/ui/components/eamgrid';
 import {Link} from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
+import GridTools from '../../../../../tools/GridTools';
 
 export default class AssetSearch extends Component {
 
@@ -18,7 +19,14 @@ export default class AssetSearch extends Component {
         return false;
     }
 
+    setSearchFilters(gridFilters) {
+        const params = GridTools.replaceUrlParam('gridFilters', GridTools.stringifyGridFilters(gridFilters));
+        this.props.history.push(params);
+    }
+
     render() {
+        const filters = GridTools.parseGridFilters(GridTools.getURLParameterByName('gridFilters'));
+
         return (
             <div className="entityContainer">
                 <EAMGrid
@@ -27,6 +35,8 @@ export default class AssetSearch extends Component {
                     handleError={this.props.handleError}
                     cellRenderer={this._cellRenderer}
                     searchOnMount={this.props.assetScreen.startupAction !== "N"}
+                    initialGridFilters={filters}
+                    setSearchFilters={this.setSearchFilters.bind(this)}
                 />
             </div>
         )
