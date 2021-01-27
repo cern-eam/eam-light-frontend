@@ -40,27 +40,13 @@ function PartUsage(props) {
         }
     };
 
-    let handleAddPartUsage = (partUsage, partUsageLine) => {
-        setIsLoading(true);
-        //Set the part usage Line
-        partUsage.transactionlines = [partUsageLine];
-        //Remove transaction info prop
-        delete partUsage.transactionInfo;
-        //Save the record
-        WSWorkorders.createPartUsage(partUsage).then(response => {
-            //Notification
-            props.showNotification('Part usage created successfully');
-            //Close dialog
-            setIsDialogOpen(false);
-            //Init the list of part usage again
-            fetchData(props.workorder.number);
-            setIsLoading(false);
-        }).catch(error => {
-            props.handleError(error);
-            setIsLoading(false);
-        });
-    };
-
+    let successHandler = () => {
+        props.showNotification('Part usage created successfully');
+        //Close dialog
+        setIsDialogOpen(false);
+        //Init the list of part usage again
+        fetchData(props.workorder.number);
+    }
 
     return (
         isLoading
@@ -79,14 +65,14 @@ function PartUsage(props) {
                 </Button>
             </div>
             <PartUsageDialog
-                handleSave={handleAddPartUsage}
                 showNotification={props.showNotification}
                 handleError={props.handleError}
                 handleCancel={() => setIsDialogOpen(false)}
                 tabLayout={props.tabLayout}
                 isDialogOpen={isDialogOpen}
                 workorder={props.workorder}
-                isLoading={isLoading}/>
+                isLoading={isLoading}
+                successHandler={successHandler}/>
         </>
     )
 }
