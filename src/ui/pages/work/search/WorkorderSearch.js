@@ -26,6 +26,7 @@ export default class WorkorderSearch extends Component {
                     screenCode={this.props.workOrderScreen.screenCode}
                     handleError={this.props.handleError}
                     cellRenderer={this._cellRenderer}
+                    searchOnMount={this.props.workOrderScreen.startupAction !== "N"}
                 />
             </div>
         )

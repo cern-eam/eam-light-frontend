@@ -19,6 +19,7 @@ const LocationSearch = props => {
                 screenCode={locationScreen.screenCode}
                 handleError={handleError}
                 cellRenderer={cellRenderer}
+                searchOnMount={locationScreen.startupAction !== "N"}
             />
         </div>
     );
