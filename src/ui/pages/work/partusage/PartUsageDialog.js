@@ -136,7 +136,17 @@ function PartUsageDialog(props) {
 
     let handleSave = () => {
         //Call the handle save from the parent
-        props.handleSave(partUsage, partUsageLine);
+        setLoading(true);
+        let partUsageCopy = {...partUsage};
+        //Set the part usage Line
+        partUsageCopy.transactionlines = [partUsageLine];
+        //Remove transaction info prop
+        delete partUsageCopy.transactionInfo;
+        //Save the record
+        WSWorkorders.createPartUsage(partUsageCopy)
+        .then(props.successHandler)
+        .catch(props.handleError)
+        .finally(() => setLoading(false));
     };
 
     let transformActivities = (activities) => {
