@@ -19,13 +19,12 @@ export default class AssetSearch extends Component {
         return false;
     }
 
-    setSearchFilters(gridFilters) {
-        const params = GridTools.replaceUrlParam('gridFilters', GridTools.stringifyGridFilters(gridFilters));
-        this.props.history.push(params);
-    }
-
     render() {
         const filters = GridTools.parseGridFilters(GridTools.getURLParameterByName('gridFilters'));
+        const setSearchFilters = (gridFilters) => {
+            const params = GridTools.replaceUrlParam('gridFilters', GridTools.stringifyGridFilters(gridFilters));
+            this.props.history.push(params);
+        }
 
         return (
             <div className="entityContainer">
