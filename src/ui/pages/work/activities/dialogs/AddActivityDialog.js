@@ -61,11 +61,31 @@ function AddActivityDialog(props) {
     };
 
     let updateFormValues = (key, value) => {
+        if (key === "taskCode") {
+            onTaskCodeChanged(value);
+        }
         setFormValues(prevFormValues => ({
             ...prevFormValues,
             [key]: value
         }))
     };
+
+    let onTaskCodeChanged = (taskcode) => {
+        setLoading(true);
+        WSWorkorders.getTaskPlan(taskcode).then(response => {
+            const taskPlan = response.body.data;
+            if (taskPlan.peopleRequired !== null) {
+                updateFormValues("peopleRequired", taskPlan.peopleRequired);
+            }
+            if (taskPlan.estimatedHours !== null) {
+                updateFormValues("estimatedHours", taskPlan.estimatedHours);
+            }
+            if (taskPlan.tradeCode) {
+                updateFormValues("tradeCode", taskPlan.tradeCode);
+            }
+        }).finally(() => setLoading(false))
+    }
+
 
     let onKeyDown = (e) => {
         if (e.keyCode === KeyCode.ENTER) {
