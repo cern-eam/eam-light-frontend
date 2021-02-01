@@ -74,18 +74,11 @@ function AddActivityDialog(props) {
         setLoading(true);
         WSWorkorders.getTaskPlan(taskcode).then(response => {
             const taskPlan = response.body.data;
-            if (taskPlan.peopleRequired !== null) {
-                updateFormValues("peopleRequired", taskPlan.peopleRequired);
-            }
-            if (taskPlan.estimatedHours !== null) {
-                updateFormValues("estimatedHours", taskPlan.estimatedHours);
-            }
-            if (taskPlan.tradeCode) {
-                updateFormValues("tradeCode", taskPlan.tradeCode);
-            }
+            updateFormValues("peopleRequired", taskPlan.peopleRequired === null ? "" : taskPlan.peopleRequired);
+            updateFormValues("estimatedHours", taskPlan.estimatedHours === null ? "" : taskPlan.estimatedHours);
+            updateFormValues("tradeCode", taskPlan.tradeCode === null ? "" : taskPlan.tradeCode);
         }).finally(() => setLoading(false))
     }
-
 
     let onKeyDown = (e) => {
         if (e.keyCode === KeyCode.ENTER) {
@@ -122,6 +115,15 @@ function AddActivityDialog(props) {
                                 value={formValues['activityNote']}
                                 updateProperty={updateFormValues}
                             />
+
+                            <EAMAutocomplete
+                                autocompleteHandler={WSWorkorders.autocompleteACTTask}
+                                elementInfo={props.layout.task}
+                                valueKey="taskCode"
+                                value={formValues['taskCode']}
+                                valueDesc={formValues['taskDesc']}
+                                descKey="taskDesc"
+                                updateProperty={updateFormValues}/>
 
                             <EAMAutocomplete
                                 autocompleteHandler={WSWorkorders.autocompleteACTTrade}
@@ -161,15 +163,6 @@ function AddActivityDialog(props) {
                                 value={formValues['endDate']}
                                 updateProperty={updateFormValues}
                             />
-
-                            <EAMAutocomplete
-                                autocompleteHandler={WSWorkorders.autocompleteACTTask}
-                                elementInfo={props.layout.task}
-                                valueKey="taskCode"
-                                value={formValues['taskCode']}
-                                valueDesc={formValues['taskDesc']}
-                                descKey="taskDesc"
-                                updateProperty={updateFormValues}/>
 
                             <EAMAutocomplete
                                 autocompleteHandler={WSWorkorders.autocompleteACTMatList}
