@@ -35,7 +35,7 @@ export default class AssetSearch extends Component {
                     cellRenderer={this._cellRenderer}
                     searchOnMount={this.props.assetScreen.startupAction !== "N"}
                     initialGridFilters={filters}
-                    setSearchFilters={this.setSearchFilters.bind(this)}
+                    setSearchFilters={setSearchFilters}
                 />
             </div>
         )
