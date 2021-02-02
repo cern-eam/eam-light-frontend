@@ -17,6 +17,7 @@ import LocationGeneral from "./LocationGeneral";
 import LocationHierarchy from "./LocationHierarchy";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
+import { isCernMode } from '../../../components/CERNMode';
 
 export default class Location extends Entity {
     settings = {
@@ -141,7 +142,8 @@ export default class Location extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 6
+                order: 6,
+                ignore: !isCernMode
             },
             // {
             //     id: 'NCRS',
@@ -225,7 +227,8 @@ export default class Location extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 11
+                order: 11,
+                ignore: !isCernMode
             },
         ]
 

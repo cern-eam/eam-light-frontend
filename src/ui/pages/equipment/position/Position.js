@@ -20,6 +20,7 @@ import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import EDMSWidget from 'eam-components/dist/ui/components/edms/EDMSWidget';
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
+import { isCernMode } from '../../../components/CERNMode';
 
 export default class Position extends Entity {
 
@@ -216,7 +217,8 @@ export default class Position extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 7
+                order: 7,
+                ignore: !isCernMode
             },
             {
                 id: 'NCRS',
@@ -233,7 +235,8 @@ export default class Position extends Entity {
                         showSuccess={showNotification} />
                 ,
                 column: 2,
-                order: 8
+                order: 8,
+                ignore: !isCernMode
             },
             {
                 id: 'COMMENTS',
@@ -301,7 +304,8 @@ export default class Position extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 12
+                order: 12,
+                ignore: !isCernMode
             },
         ]
     }

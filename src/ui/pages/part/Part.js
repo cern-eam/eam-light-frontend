@@ -16,6 +16,7 @@ import {PartIcon} from 'eam-components/dist/ui/components/icons'
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import {ENTITY_TYPE} from '../../components/Toolbar';
 import EntityRegions from "../../components/entityregions/EntityRegions";
+import { isCernMode } from '../../components/CERNMode';
 
 const PART = 'PART';
 
@@ -170,7 +171,8 @@ class Part extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 5
+                order: 5,
+                ignore: !isCernMode,
             },
             {
                 id: 'COMMENTS',
