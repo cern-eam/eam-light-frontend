@@ -5,6 +5,7 @@ import EISTable from 'eam-components/dist/ui/components/table';
 import EISTableFilter from 'eam-components/dist/ui/components/table/EISTableFilter';
 import EquipmentMTFWorkOrders from "./EquipmentMTFWorkOrders"
 import BlockUi from 'react-block-ui';
+import { isCernMode } from '../../../components/CERNMode';
 
 const WO_FILTER_TYPES = {
     ALL: 'All',
@@ -26,18 +27,14 @@ const WO_FILTERS = {
             return data.filter((workOrder) => workOrder.status && ['T', 'C'].every(statusCode => !workOrder.status.startsWith(statusCode)));
         }
     },
-    [WO_FILTER_TYPES.MTF]: {
+    ...isCernMode ? {[WO_FILTER_TYPES.MTF]: {
         text: WO_FILTER_TYPES.MTF,
         process: (data) => {
             return data.filter((workOrder) => {
                 return workOrder.mrc && (workOrder.mrc.startsWith("ICF") || workOrder.mrc.startsWith("MTF"));
             })
         }
-    },
-    [WO_FILTER_TYPES.THIS]: {
-        text: WO_FILTER_TYPES.THIS,
-        process: data => [...data]
-    }
+    }} : {},
 }
 
 function EquipmentWorkOrders(props) {

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import ResizableIframe from "./ResizableIframe";
+import { withCernMode } from '../CERNMode'
 
 const functionToEAMLightPageMapping = {
     'OSOBJA': '/asset',
@@ -63,4 +64,4 @@ const EquipmentGraphIframe = (props) => {
     )
 }
 
-export default EquipmentGraphIframe;
+export default withCernMode(EquipmentGraphIframe);
