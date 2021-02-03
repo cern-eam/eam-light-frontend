@@ -16,7 +16,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import {withStyles} from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
-import {format} from 'date-fns'
+import {format, parseISO} from 'date-fns'
 
 const styles = () => ({
     paperWidthSm: {
@@ -112,12 +112,31 @@ class Impact extends Component {
                 const impactActivity = response[1].body.data;
                 const impactActivityProperties = impactActivity.propertiesMap;
 
+                let schedulingStart, schedulingEnd;
+                try {
+                    schedulingStart = impactActivityProperties.scheduledStartDate
+                        ? format(parseISO(impactActivityProperties.scheduledStartDate), 'dd-MMM-yyyy')
+                        : '';
+
+                    schedulingEnd = impactActivityProperties.scheduledEndDate
+                        ? format(parseISO(impactActivityProperties.scheduledEndDate), 'dd-MMM-yyyy')
+                        : '';
+                } catch {
+                    this.setState(() => ({
+                        error: true,
+                        errorMessage: 'Failed retrieving scheduling start and end dates',
+                        loading: false,
+                        loaded: true
+                    }));
+                    return;
+                }
+
                 this.setState({
                     currentActivity: {
                         id: impactActivity.activityId,
                         title: impactActivityProperties.title,
-                        schedulingStart: impactActivityProperties.scheduledStartDate ? format(impactActivityProperties.scheduledStartDate, "dd-MMM-yyyy") : '',
-                        schedulingEnd: impactActivityProperties.scheduledEndDate ? format(impactActivityProperties.scheduledEndDate, "dd-MMM-yyyy") : '',
+                        schedulingStart,
+                        schedulingEnd,
                         facility: impactActivityProperties.facility.label,
                         responsible: impactActivityProperties.creator.fullName,
                         status: impactActivityProperties.status.label
