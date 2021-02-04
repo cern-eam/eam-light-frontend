@@ -7,7 +7,7 @@ import BlockUi from 'react-block-ui';
 import WSEquipment from "../../../tools/WSEquipment";
 import WSWorkorder from "../../../tools/WSWorkorders";
 import WS from '../../../tools/WS'
-import {TOOLBARS} from "../../components/AbstractToolbar";
+import {ENTITY_TYPE} from "../../components/AbstractToolbar";
 import CustomFields from '../../components/customfields/CustomFields';
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import Entity from '../Entity';
@@ -542,16 +542,17 @@ class Workorder extends Entity {
                                      deleteHandler={this.deleteEntity.bind(this, workorder.number)}
                                      width={790}
                                      toolbarProps={{
-                                            _toolbarType: TOOLBARS.WORKORDER,
-                                            workorder: workorder,
-                                            postInit: this.postInit.bind(this),
-                                            setLayout: this.setLayout.bind(this),
-                                            newWorkorder: layout.newEntity,
-                                            applicationData: applicationData,
-                                            userGroup: userData.eamAccount.userGroup,
-                                            screencode: userData.screens[userData.workOrderScreen].screenCode,
-                                            copyHandler: this.copyEntity.bind(this)}
-                                     }
+                                        entity: workorder,
+                                        postInit: this.postInit.bind(this),
+                                        setLayout: this.setLayout.bind(this),
+                                        newEntity: layout.newEntity,
+                                        applicationData: applicationData,
+                                        userGroup: userData.eamAccount.userGroup,
+                                        screencode: userData.screens[userData.workOrderScreen].screenCode,
+                                        copyHandler: this.copyEntity.bind(this),
+                                        entityDesc: this.settings.entityDesc,
+                                        entityType: ENTITY_TYPE.WORKORDER
+                                     }}
                                      entityIcon={<WorkorderIcon style={{height: 18}}/>}
                                      toggleHiddenRegion={toggleHiddenRegion}
                                      regions={regions}

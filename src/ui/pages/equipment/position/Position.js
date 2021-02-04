@@ -14,7 +14,7 @@ import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
 import {PositionIcon} from 'eam-components/dist/ui/components/icons'
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
-import {TOOLBARS} from "../../../components/AbstractToolbar";
+import {ENTITY_TYPE} from "../../../components/AbstractToolbar";
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import EDMSWidget from 'eam-components/dist/ui/components/edms/EDMSWidget';
 import EntityRegions from "../../../components/entityregions/EntityRegions";
@@ -329,16 +329,16 @@ export default class Position extends Entity {
                     newHandler={() => history.push('/position')}
                     deleteHandler={this.deleteEntity.bind(this, equipment.code)}
                     toolbarProps={{
-                        _toolbarType: TOOLBARS.EQUIPMENT,
                         entityDesc: this.settings.entityDesc,
-                        equipment: equipment,
+                        entity: equipment,
                         postInit: this.postInit.bind(this),
                         setLayout: this.setLayout.bind(this),
-                        newEquipment: layout.newEntity,
+                        newEntity: layout.newEntity,
                         applicationData: applicationData,
                         extendedLink: applicationData.EL_POSLI,
                         screencode: userData.positionScreen,
-                        copyHandler: this.copyEntity.bind(this)
+                        copyHandler: this.copyEntity.bind(this),
+                        entityType: ENTITY_TYPE.EQUIPMENT,
                     }}
                     width={730}
                     entityIcon={<PositionIcon style={{height: 18}}/>}
