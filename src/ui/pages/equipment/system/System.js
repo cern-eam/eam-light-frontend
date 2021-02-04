@@ -15,7 +15,7 @@ import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
 import {SystemIcon} from 'eam-components/dist/ui/components/icons'
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
-import {TOOLBARS} from "../../../components/AbstractToolbar";
+import {ENTITY_TYPE} from "../../../components/AbstractToolbar";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 
@@ -345,16 +345,16 @@ export default class System extends Entity {
                     newHandler={() => history.push('/system')}
                     deleteHandler={this.deleteEntity.bind(this, equipment.code)}
                     toolbarProps={{
-                        _toolbarType: TOOLBARS.EQUIPMENT,
                         entityDesc: this.settings.entityDesc,
-                        equipment: equipment,
+                        entity: equipment,
                         postInit: this.postInit.bind(this),
                         setLayout: this.setLayout.bind(this),
-                        newEquipment: layout.newEntity,
+                        newEntity: layout.newEntity,
                         applicationData: applicationData,
                         extendedLink: applicationData.EL_SYSLI,
                         screencode: userData.systemScreen,
-                        copyHandler: this.copyEntity.bind(this)
+                        copyHandler: this.copyEntity.bind(this),
+                        entityType: ENTITY_TYPE.EQUIPMENT, 
                     }}
                     width={730}
                     entityIcon={<SystemIcon style={{height: 18}}/>}
