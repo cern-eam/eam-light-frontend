@@ -36,12 +36,6 @@ export const BUTTON_KEYS = {
     CREATE_WORKORDER: "CREATE_WORKORDER",
 }
 
-const EMAIL_HOSTNAME_MAPPING = {
-    WORKORDER: 'workorder',
-    EQUIPMENT: 'equipment',
-    PART: 'part',
-    LOCATION: 'location',
-}
 class AbstractToolbar extends React.Component {
 
     iconStyle = {
@@ -73,8 +67,203 @@ class AbstractToolbar extends React.Component {
         textDecoration: "none"
     }
 
+    getButtonDefinitions = () => {
+        return {
+            [BUTTON_KEYS.COPY] : {
+                isVisible: () => true,
+                onClick: this.props.copyHandler,
+                isDisabled: () => this.props.newEntity,
+                values: {
+                    icon: <ContentCopy/>,
+                    text: "Copy"
+                }
+            },
+            [BUTTON_KEYS.EMAIL] : {
+                isVisible: () => true,
+                getOnClick: (entityType, entity) => {
+                   const url = window.location.href.split("?")[0];
+                   const id = entityType === ENTITY_TYPE.WORKORDER ? entity.number : entity.code;
+                   return () => window.open(
+                       `mailto:?Subject=${this.props.entityDesc} ${id}`
+                       + `&body=${url}`
+                   )
+                },
+                isDisabled: () => this.props.newEntity,
+                values: {
+                    icon: <EmailOutline/>,
+                    text: "Email"
+                }
+            },
+            [BUTTON_KEYS.PRINT] : {
+                isVisible: () => true,
+                isDisabled: () => this.props.newEntity,
+                getOnClick: (entityType, entity) => {
+                    const url = this.props.EL_PRTWO + entity.number;
+                    return () => {
+                        const w = window.open(url, "winLov", "Scrollbars=1,resizable=1");
+                        if (w.opener == null) {
+                            w.opener = window.self;
+                        }
+                        w.focus();
+                    }
+                },
+                values: {
+                    icon: <Printer/>,
+                    text: "Print"
+                }
+            },
+            [BUTTON_KEYS.SHOW_ON_MAP] : {
+                isVisible: () => true,
+                getOnClick: (entityType, entity) => {
+                    const LOCATION_URLS = {
+                        WORKORDER: this.props.applicationData.EL_GISWO,
+                        EQUIPMENT: this.props.applicationData.EL_GISEQ,
+                        LOCATION: this.props.applicationData.EL_GISEQ,
+                    }
+
+                    const ID = entityType === ENTITY_TYPE.WORKORDER
+                        ? entity.number : entity.code;
+
+                    const URL = `${LOCATION_URLS[entityType]}${ID}`;
+                    return () => window.open(URL, '_blank');
+                },
+                isDisabled: () => this.props.newEntity,
+                values: {
+                    icon: <Map/>,
+                    text: "Show on Map" 
+                }
+            },
+            [BUTTON_KEYS.SHOW_IN_INFOR] : {
+                isVisible: () => true,
+                getOnClick: (entityType, entity) => {
+                    let extendedLink; 
+                    switch (entityType){
+                        case ENTITY_TYPE.WORKORDER:
+                            extendedLink = this.props.applicationData.EL_WOLIN
+                                            .replace("&1",this.props.screencode)
+                                            .replace("&2", entity.number);
+                            break;
+                        case ENTITY_TYPE.EQUIPMENT:
+                        case ENTITY_TYPE.LOCATION:
+                            extendedLink = this.props.applicationData.EL_LOCLI
+                                            .replace("&1", this.props.screencode)
+                                            .replace("&2", entity.code);
+                            break;
+                        case ENTITY_TYPE.PART:
+                            extendedLink = this.props.applicationData.EL_PARTL
+                                            .replace("&1", this.props.screencode)
+                                            .replace("&2", entity.code);
+                            break;
+                    }
+                    return () => window.open(extendedLink, "_blank");
+                },
+                isDisabled: () => this.props.newEntity,
+                values: {
+                    icon: <OpenInNewIcon/>,
+                    text: "Show in Infor EAM"
+                }
+            },
+            [BUTTON_KEYS.BARCODING] : {
+                isVisible: () => true,
+                getOnClick: (entityType, entity) => {
+                    let barcodingLink;
+                    switch (entityType) {
+                        case ENTITY_TYPE.PART:
+                            barcodingLink = this.props.applicationData.EL_BCUR
+                                            .replace("&1", this.props.screencode)
+                                            .replace("&2", 'partcode')
+                                            .replace("&3", entity.code);
+                            break;
+                        case ENTITY_TYPE.WORKORDER:
+                            barcodingLink = this.props.applicationData.EL_PRTWO + entity.number;
+                            break;
+                        case ENTITY_TYPE.EQUIPMENT:
+                            barcodingLink = this.props.applicationData.EL_BCUR
+                                            .replace("&1", this.props.screencode)
+                                            .replace("&2", 'equipmentno')
+                                            .replace("&3", entity.code);
+                            break;
+                    }
+                    return () => window.open(barcodingLink, '_blank')
+                },
+                isDisabled: () => this.props.newEntity,
+                values: {
+                    icon: <Barcode/>,
+                    text: "Print Barcode"
+                }
+            },
+            [BUTTON_KEYS.OSVC] : {   
+                isVisible: () => true,
+                getOnClick: (entityType, entity) => {
+                    const osvcLink = this.props.applicationData.EL_OSVCU
+                                    .replace("{{workOrderId}}", entity.number);
+                    return () => window.open(osvcLink, "_blank");
+                },
+                isDisabled: () => this.props.newEntity,
+                values: {
+                    icon: <Domain/>,
+                    text: "OSVC"
+                }
+            },
+            [BUTTON_KEYS.DISMAC] : {
+                isVisible: () =>  this.props.applicationData.EL_DMUSG &&
+                                  this.props.applicationData.EL_DMUSG.includes(this.props.userGroup),
+                getOnClick: (entityType, entity) => {
+                    const dismacLink = this.props.applicationData.EL_DMURL
+                                                        .replace("{{workOrderId}}", entity.number);
+                    return () => window.open(dismacLink, "_blank");
+                },
+                isDisabled: () => this.props.newEntity,
+                values: {
+                    icon: <Camera/>,
+                    text: "DISMAC"
+                } 
+            },
+            [BUTTON_KEYS.TREC] : { 
+                isVisible: () => {
+                    const entity = this.props.entity;
+                    const { EL_TRWOC } = this.props.applicationData;
+                    return (
+                        EL_TRWOC &&
+                        EL_TRWOC.split(",")
+                            .filter(Boolean)
+                            .includes(entity.classCode)
+                    );
+                },
+                getOnClick: (entityType, entity) => {
+                    const { applicationData } = this.props;
+                    const { EL_TRWRU } = applicationData;
+                    const trecLink = EL_TRWRU.replace(
+                        "{{workOrderId}}",
+                        entity.number
+                    );
+                    return () => window.open(trecLink, "_blank");
+                },
+                isDisabled: () => this.props.newEntity,
+                values: {
+                    icon: <RadiationIcon/>,
+                    text: "TREC"
+                }
+            },
+            [BUTTON_KEYS.CREATE_WORKORDER] : {
+                isVisible: () => true,
+                getOnClick: () => {
+
+                },
+                isDisabled: () => this.props.newEntity,
+                values: {
+                    icon: <WorkorderIcon/>,
+                    text: "Create New Work Order"
+                },
+                getLinkTo: (entity, entityCode) => {
+                    return `/workorder?equipmentCode=${entity.code}`;
+                }
+            }
+        };
+    }
+
     getButtons() {
-        const {entityType} = this.props; 
+        const {entityType, renderOption, entity} = this.props; 
         let buttonKeys = [];
         switch (entityType) {
             case ENTITY_TYPE.WORKORDER:
@@ -117,223 +306,25 @@ class AbstractToolbar extends React.Component {
                 ]
                 break;    
         }
-        return this.getButtonDefinitions()
-            .filter(button => buttonKeys.includes(button.key))
-            .map(button => this.generateContent(this.props.renderOption, button, this.props.entityType, this.props.entity))
+        const buttonDefinitions = this.getButtonDefinitions();
+        const buttonsRender = buttonKeys.map(buttonKey => buttonDefinitions[buttonKey])
+            .map(buttonDefinition => this.generateContent({
+                renderOption: renderOption, 
+                buttonDefinition: buttonDefinition, 
+                entityType: entityType,
+                entity: entity
+            }));
+        return buttonsRender;   
     }
 
-    getButtonDefinitions = () => {
-        return [
-            {
-                key: BUTTON_KEYS.COPY,
-                isVisible: () => true,
-                onClick: this.props.copyHandler,
-                isDisabled: () => this.props.newEntity,
-                values: {
-                    icon: <ContentCopy/>,
-                    text: "Copy"
-                }
-            },
-            {
-                key: BUTTON_KEYS.EMAIL,
-                isVisible: () => true,
-                getOnClick: (entityType, entity) => {
-                   const url = window.location.href.split("?")[0];
-                   const id = entityType === ENTITY_TYPE.WORKORDER ? entity.number : entity.code;
-                   return () => window.open(
-                       `mailto:?Subject=${this.props.entityDesc} ${id}`
-                       + `&body=${url}`
-                   )
-                },
-                isDisabled: () => this.props.newEntity,
-                values: {
-                    icon: <EmailOutline/>,
-                    text: "Email"
-                }
-            },
-            {
-                key: BUTTON_KEYS.PRINT,
-                isVisible: () => true,
-                isDisabled: () => this.props.newEntity,
-                getOnClick: (entityType, entity) => {
-                    const url = this.props.EL_PRTWO + entity.number;
-                    return () => {
-                        const w = window.open(url, "winLov", "Scrollbars=1,resizable=1");
-                        if (w.opener == null) {
-                            w.opener = window.self;
-                        }
-                        w.focus();
-                    }
-                },
-                values: {
-                    icon: <Printer/>,
-                    text: "Print"
-                }
-            },
-            {
-                key: BUTTON_KEYS.SHOW_ON_MAP,
-                isVisible: () => true,
-                getOnClick: (entityType, entity) => {
-                    const LOCATION_URLS = {
-                        WORKORDER: this.props.applicationData.EL_GISWO,
-                        EQUIPMENT: this.props.applicationData.EL_GISEQ,
-                        LOCATION: this.props.applicationData.EL_GISEQ,
-                    }
-
-                    const ID = entityType === ENTITY_TYPE.WORKORDER
-                        ? entity.number : entity.code;
-
-                    const URL = `${LOCATION_URLS[entityType]}${ID}`;
-                    return () => window.open(URL, '_blank');
-                },
-                isDisabled: () => this.props.newEntity,
-                values: {
-                    icon: <Map/>,
-                    text: "Show on Map" 
-                }
-            },
-            {
-                key: BUTTON_KEYS.SHOW_IN_INFOR,
-                isVisible: () => true,
-                getOnClick: (entityType, entity) => {
-                    let extendedLink; 
-                    switch (entityType){
-                        case ENTITY_TYPE.WORKORDER:
-                            extendedLink = this.props.applicationData.EL_WOLIN
-                                            .replace("&1",this.props.screencode)
-                                            .replace("&2", entity.number);
-                            break;
-                        case ENTITY_TYPE.EQUIPMENT:
-                        case ENTITY_TYPE.LOCATION:
-                            extendedLink = this.props.applicationData.EL_LOCLI
-                                            .replace("&1", this.props.screencode)
-                                            .replace("&2", entity.code);
-                            break;
-                        case ENTITY_TYPE.PART:
-                            extendedLink = this.props.applicationData.EL_PARTL
-                                            .replace("&1", this.props.screencode)
-                                            .replace("&2", entity.code);
-                            break;
-                    }
-                    return () => window.open(extendedLink, "_blank");
-                },
-                isDisabled: () => this.props.newEntity,
-                values: {
-                    icon: <OpenInNewIcon/>,
-                    text: "Show in Infor EAM"
-                }
-            },
-            {
-                key: BUTTON_KEYS.BARCODING,
-                isVisible: () => true,
-                getOnClick: (entityType, entity) => {
-                    let barcodingLink;
-                    switch (entityType) {
-                        case ENTITY_TYPE.PART:
-                            barcodingLink = this.props.applicationData.EL_BCUR
-                                            .replace("&1", this.props.screencode)
-                                            .replace("&2", 'partcode')
-                                            .replace("&3", entity.code);
-                            break;
-                        case ENTITY_TYPE.WORKORDER:
-                            barcodingLink = this.props.applicationData.EL_PRTWO + entity.number;
-                            break;
-                        case ENTITY_TYPE.EQUIPMENT:
-                            barcodingLink = this.props.applicationData.EL_BCUR
-                                            .replace("&1", this.props.screencode)
-                                            .replace("&2", 'equipmentno')
-                                            .replace("&3", entity.code);
-                            break;
-                    }
-                    return () => window.open(barcodingLink, '_blank')
-                },
-                isDisabled: () => this.props.newEntity,
-                values: {
-                    icon: <Barcode/>,
-                    text: "Print Barcode"
-                }
-            },
-            {   
-                key: BUTTON_KEYS.OSVC,
-                isVisible: () => true,
-                getOnClick: (entityType, entity) => {
-                    const osvcLink = this.props.applicationData.EL_OSVCU
-                                    .replace("{{workOrderId}}", entity.number);
-                    return () => window.open(osvcLink, "_blank");
-                },
-                isDisabled: () => this.props.newEntity,
-                values: {
-                    icon: <Domain/>,
-                    text: "OSVC"
-                }
-            },
-            {
-                key: BUTTON_KEYS.DISMAC,
-                isVisible: () =>  this.props.applicationData.EL_DMUSG &&
-                                  this.props.applicationData.EL_DMUSG.includes(this.props.userGroup),
-                getOnClick: (entityType, entity) => {
-                    const dismacLink = this.props.applicationData.EL_DMURL
-                                                        .replace("{{workOrderId}}", entity.number);
-                    return () => window.open(dismacLink, "_blank");
-                },
-                isDisabled: () => this.props.newEntity,
-                values: {
-                    icon: <Camera/>,
-                    text: "DISMAC"
-                } 
-            },
-            { 
-                key: BUTTON_KEYS.TREC,
-                isVisible: () => {
-                    const entity = this.props.entity;
-                    const { EL_TRWOC } = this.props.applicationData;
-                    return (
-                        EL_TRWOC &&
-                        EL_TRWOC.split(",")
-                            .filter(Boolean)
-                            .includes(entity.classCode)
-                    );
-                },
-                getOnClick: (entityType, entity) => {
-                    const { applicationData } = this.props;
-                    const { EL_TRWRU } = applicationData;
-                    const trecLink = EL_TRWRU.replace(
-                        "{{workOrderId}}",
-                        entity.number
-                    );
-                    return () => window.open(trecLink, "_blank");
-                },
-                isDisabled: () => this.props.newEntity,
-                values: {
-                    icon: <RadiationIcon/>,
-                    text: "TREC"
-                }
-            },
-            {
-                key: BUTTON_KEYS.CREATE_WORKORDER,
-                isVisible: () => true,
-                getOnClick: () => {
-
-                },
-                isDisabled: () => this.props.newEntity,
-                values: {
-                    icon: <WorkorderIcon/>,
-                    text: "Create New Work Order"
-                },
-                getLinkTo: (entity, entityCode) => {
-                    return `/workorder?equipmentCode=${entity.code}`;
-                }
-            }
-        ]
-    }
-
-    generateContent = (viewMode, {key, isVisible, onClick, isDisabled, values, getOnClick, getLinkTo}, entityType, entity) => {
+    generateContent = ({renderOption, buttonDefinition, entityType, entity}) => {
+        let {isVisible, onClick, isDisabled, values, getOnClick, getLinkTo} = buttonDefinition;
         let content = null;
         if (!onClick && getOnClick) {
             onClick = getOnClick(entityType, entity);
         }
         if (isVisible()) {
-            switch (viewMode) {
+            switch (renderOption) {
                 case VIEW_MODES.MENU_ITEMS: 
                     content = 
                         <MenuItem
