@@ -15,7 +15,7 @@ import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
 import {SystemIcon} from 'eam-components/dist/ui/components/icons'
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
-import {ENTITY_TYPE} from "../../../components/AbstractToolbar";
+import {ENTITY_TYPE} from "../../../components/Toolbar";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 

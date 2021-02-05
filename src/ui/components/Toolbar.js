@@ -36,7 +36,7 @@ export const BUTTON_KEYS = {
     CREATE_WORKORDER: "CREATE_WORKORDER",
 }
 
-class AbstractToolbar extends React.Component {
+class Toolbar extends React.Component {
 
     iconStyle = {
         width: 20,
@@ -68,11 +68,12 @@ class AbstractToolbar extends React.Component {
     }
 
     getButtonDefinitions = () => {
+        const {copyHandler, newEntity, entityDesc, applicationData, screencode, userGroup, EL_PRTWO, entity} = this.props;
         return {
             [BUTTON_KEYS.COPY] : {
                 isVisible: () => true,
-                onClick: this.props.copyHandler,
-                isDisabled: () => this.props.newEntity,
+                onClick: copyHandler,
+                isDisabled: () => newEntity,
                 values: {
                     icon: <ContentCopy/>,
                     text: "Copy"
@@ -84,11 +85,11 @@ class AbstractToolbar extends React.Component {
                    const url = window.location.href.split("?")[0];
                    const id = entityType === ENTITY_TYPE.WORKORDER ? entity.number : entity.code;
                    return () => window.open(
-                       `mailto:?Subject=${this.props.entityDesc} ${id}`
+                       `mailto:?Subject=${entityDesc} ${id}`
                        + `&body=${url}`
                    )
                 },
-                isDisabled: () => this.props.newEntity,
+                isDisabled: () => newEntity,
                 values: {
                     icon: <EmailOutline/>,
                     text: "Email"
@@ -96,9 +97,9 @@ class AbstractToolbar extends React.Component {
             },
             [BUTTON_KEYS.PRINT] : {
                 isVisible: () => true,
-                isDisabled: () => this.props.newEntity,
+                isDisabled: () => newEntity,
                 getOnClick: (entityType, entity) => {
-                    const url = this.props.EL_PRTWO + entity.number;
+                    const url = EL_PRTWO + entity.number;
                     return () => {
                         const w = window.open(url, "winLov", "Scrollbars=1,resizable=1");
                         if (w.opener == null) {
@@ -116,9 +117,9 @@ class AbstractToolbar extends React.Component {
                 isVisible: () => true,
                 getOnClick: (entityType, entity) => {
                     const LOCATION_URLS = {
-                        WORKORDER: this.props.applicationData.EL_GISWO,
-                        EQUIPMENT: this.props.applicationData.EL_GISEQ,
-                        LOCATION: this.props.applicationData.EL_GISEQ,
+                        WORKORDER: applicationData.EL_GISWO,
+                        EQUIPMENT: applicationData.EL_GISEQ,
+                        LOCATION: applicationData.EL_GISEQ,
                     }
 
                     const ID = entityType === ENTITY_TYPE.WORKORDER
@@ -127,7 +128,7 @@ class AbstractToolbar extends React.Component {
                     const URL = `${LOCATION_URLS[entityType]}${ID}`;
                     return () => window.open(URL, '_blank');
                 },
-                isDisabled: () => this.props.newEntity,
+                isDisabled: () => newEntity,
                 values: {
                     icon: <Map/>,
                     text: "Show on Map" 
@@ -139,25 +140,25 @@ class AbstractToolbar extends React.Component {
                     let extendedLink; 
                     switch (entityType){
                         case ENTITY_TYPE.WORKORDER:
-                            extendedLink = this.props.applicationData.EL_WOLIN
-                                            .replace("&1",this.props.screencode)
+                            extendedLink = applicationData.EL_WOLIN
+                                            .replace("&1",screencode)
                                             .replace("&2", entity.number);
                             break;
                         case ENTITY_TYPE.EQUIPMENT:
                         case ENTITY_TYPE.LOCATION:
-                            extendedLink = this.props.applicationData.EL_LOCLI
-                                            .replace("&1", this.props.screencode)
+                            extendedLink = applicationData.EL_LOCLI
+                                            .replace("&1", screencode)
                                             .replace("&2", entity.code);
                             break;
                         case ENTITY_TYPE.PART:
-                            extendedLink = this.props.applicationData.EL_PARTL
-                                            .replace("&1", this.props.screencode)
+                            extendedLink = applicationData.EL_PARTL
+                                            .replace("&1", screencode)
                                             .replace("&2", entity.code);
                             break;
                     }
                     return () => window.open(extendedLink, "_blank");
                 },
-                isDisabled: () => this.props.newEntity,
+                isDisabled: () => newEntity,
                 values: {
                     icon: <OpenInNewIcon/>,
                     text: "Show in Infor EAM"
@@ -169,24 +170,24 @@ class AbstractToolbar extends React.Component {
                     let barcodingLink;
                     switch (entityType) {
                         case ENTITY_TYPE.PART:
-                            barcodingLink = this.props.applicationData.EL_BCUR
-                                            .replace("&1", this.props.screencode)
+                            barcodingLink = applicationData.EL_BCUR
+                                            .replace("&1", screencode)
                                             .replace("&2", 'partcode')
                                             .replace("&3", entity.code);
                             break;
                         case ENTITY_TYPE.WORKORDER:
-                            barcodingLink = this.props.applicationData.EL_PRTWO + entity.number;
+                            barcodingLink = applicationData.EL_PRTWO + entity.number;
                             break;
                         case ENTITY_TYPE.EQUIPMENT:
-                            barcodingLink = this.props.applicationData.EL_BCUR
-                                            .replace("&1", this.props.screencode)
+                            barcodingLink = applicationData.EL_BCUR
+                                            .replace("&1", screencode)
                                             .replace("&2", 'equipmentno')
                                             .replace("&3", entity.code);
                             break;
                     }
                     return () => window.open(barcodingLink, '_blank')
                 },
-                isDisabled: () => this.props.newEntity,
+                isDisabled: () => newEntity,
                 values: {
                     icon: <Barcode/>,
                     text: "Print Barcode"
@@ -195,25 +196,25 @@ class AbstractToolbar extends React.Component {
             [BUTTON_KEYS.OSVC] : {   
                 isVisible: () => true,
                 getOnClick: (entityType, entity) => {
-                    const osvcLink = this.props.applicationData.EL_OSVCU
+                    const osvcLink = applicationData.EL_OSVCU
                                     .replace("{{workOrderId}}", entity.number);
                     return () => window.open(osvcLink, "_blank");
                 },
-                isDisabled: () => this.props.newEntity,
+                isDisabled: () => newEntity,
                 values: {
                     icon: <Domain/>,
                     text: "OSVC"
                 }
             },
             [BUTTON_KEYS.DISMAC] : {
-                isVisible: () =>  this.props.applicationData.EL_DMUSG &&
-                                  this.props.applicationData.EL_DMUSG.includes(this.props.userGroup),
+                isVisible: () =>  applicationData.EL_DMUSG &&
+                                  applicationData.EL_DMUSG.includes(userGroup),
                 getOnClick: (entityType, entity) => {
-                    const dismacLink = this.props.applicationData.EL_DMURL
+                    const dismacLink = applicationData.EL_DMURL
                                                         .replace("{{workOrderId}}", entity.number);
                     return () => window.open(dismacLink, "_blank");
                 },
-                isDisabled: () => this.props.newEntity,
+                isDisabled: () => newEntity,
                 values: {
                     icon: <Camera/>,
                     text: "DISMAC"
@@ -221,8 +222,7 @@ class AbstractToolbar extends React.Component {
             },
             [BUTTON_KEYS.TREC] : { 
                 isVisible: () => {
-                    const entity = this.props.entity;
-                    const { EL_TRWOC } = this.props.applicationData;
+                    const { EL_TRWOC } = applicationData;
                     return (
                         EL_TRWOC &&
                         EL_TRWOC.split(",")
@@ -231,7 +231,6 @@ class AbstractToolbar extends React.Component {
                     );
                 },
                 getOnClick: (entityType, entity) => {
-                    const { applicationData } = this.props;
                     const { EL_TRWRU } = applicationData;
                     const trecLink = EL_TRWRU.replace(
                         "{{workOrderId}}",
@@ -239,7 +238,7 @@ class AbstractToolbar extends React.Component {
                     );
                     return () => window.open(trecLink, "_blank");
                 },
-                isDisabled: () => this.props.newEntity,
+                isDisabled: () => newEntity,
                 values: {
                     icon: <RadiationIcon/>,
                     text: "TREC"
@@ -250,7 +249,7 @@ class AbstractToolbar extends React.Component {
                 getOnClick: () => {
 
                 },
-                isDisabled: () => this.props.newEntity,
+                isDisabled: () => newEntity,
                 values: {
                     icon: <WorkorderIcon/>,
                     text: "Create New Work Order"
@@ -380,4 +379,4 @@ class AbstractToolbar extends React.Component {
 
 }
 
-export default AbstractToolbar;
+export default Toolbar;

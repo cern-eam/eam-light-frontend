@@ -4,7 +4,7 @@ import LocationIcon from "@material-ui/icons/Room";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import WSLocation from "../../../../tools/WSLocation";
-import {ENTITY_TYPE} from "../../../components/AbstractToolbar";
+import {ENTITY_TYPE} from "../../../components/Toolbar";
 import CustomFields from "../../../components/customfields/CustomFields";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";

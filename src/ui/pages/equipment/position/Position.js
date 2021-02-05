@@ -14,7 +14,7 @@ import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
 import {PositionIcon} from 'eam-components/dist/ui/components/icons'
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
-import {ENTITY_TYPE} from "../../../components/AbstractToolbar";
+import {ENTITY_TYPE} from "../../../components/Toolbar";
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import EDMSWidget from 'eam-components/dist/ui/components/edms/EDMSWidget';
 import EntityRegions from "../../../components/entityregions/EntityRegions";
