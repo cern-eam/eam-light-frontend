@@ -3,6 +3,7 @@ import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect'
 import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
 import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
 import WSEquipment from "../../../../tools/WSEquipment";
+import StatusRow from "../../../components/statusrow/StatusRow"
 
 class AssetGeneral extends Component {
 
@@ -11,7 +12,6 @@ class AssetGeneral extends Component {
 
         return (
             <div style={{width: "100%", marginTop: 0}}>
-
                 {layout.newEntity &&
                 <EAMInput
                     children = {children}
@@ -69,6 +69,11 @@ class AssetGeneral extends Component {
                     updateProperty={updateEquipmentProperty}
                     valueKey="stateCode"/>
 
+                <StatusRow
+                    entity={equipment}
+                    entityType={"equipment"}
+                    style={{marginTop: "10px", marginBottom: "-10px"}}
+                />
             </div>
         )
     }

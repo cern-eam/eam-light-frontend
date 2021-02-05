@@ -3,6 +3,7 @@ import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect'
 import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
 import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
 import WSEquipment from "../../../../tools/WSEquipment";
+import StatusRow from "../../../components/statusrow/StatusRow"
 
 class PositionGeneral extends Component {
 
@@ -60,6 +61,11 @@ class PositionGeneral extends Component {
                     updateProperty={updateEquipmentProperty}
                     valueKey="statusCode"/>
 
+                <StatusRow
+                    entity={equipment}
+                    entityType={"equipment"}
+                    style={{marginTop: "10px", marginBottom: "-10px"}}
+                />
             </div>
         )
     }

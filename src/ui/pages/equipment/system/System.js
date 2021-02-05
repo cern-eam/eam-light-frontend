@@ -18,6 +18,7 @@ import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDocligh
 import {TOOLBARS} from "../../../components/AbstractToolbar";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
+import StatusRow from '../../../components/statusrow/StatusRow'
 
 
 export default class System extends Entity {
