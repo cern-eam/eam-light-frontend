@@ -514,7 +514,7 @@ class Workorder extends Entity {
 
     postAddActivityHandler = () => {
         //Refresh the activities in the checklist
-        this.checklists.readActivities(this.state.workorder.number);
+        this.checklists && this.checklists.readActivities(this.state.workorder.number);
     };
 
     renderWorkOrder() {
