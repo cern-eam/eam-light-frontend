@@ -8,6 +8,7 @@ import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
 import {Barcode, ContentCopy, EmailOutline, Map, Printer, Domain, Camera} from 'mdi-material-ui';
 import { RadiationIcon } from "eam-components/dist/ui/components/icons";
 import { Link } from "react-router-dom";
+import CERNMode, { isCernMode } from "./CERNMode"
 
 export const ENTITY_TYPE = {
     WORKORDER: 'WORKORDER',
@@ -96,7 +97,7 @@ class Toolbar extends React.Component {
                 }
             },
             [BUTTON_KEYS.PRINT] : {
-                isVisible: () => true,
+                isVisible: () => EL_PRTWO && isCernMode,
                 isDisabled: () => newEntity,
                 getOnClick: (entityType, entity) => {
                     const url = EL_PRTWO + entity.number;
@@ -114,7 +115,7 @@ class Toolbar extends React.Component {
                 }
             },
             [BUTTON_KEYS.SHOW_ON_MAP] : {
-                isVisible: () => true,
+                isVisible: () => isCernMode && applicationData.EL_GISEQ && applicationData.EL_GISWO,
                 getOnClick: (entityType, entity) => {
                     const LOCATION_URLS = {
                         WORKORDER: applicationData.EL_GISWO,
@@ -135,7 +136,7 @@ class Toolbar extends React.Component {
                 }
             },
             [BUTTON_KEYS.SHOW_IN_INFOR] : {
-                isVisible: () => true,
+                isVisible: () => applicationData.EL_WOLIN && applicationData.EL_LOCLI && applicationData.EL_PARTL,
                 getOnClick: (entityType, entity) => {
                     let extendedLink; 
                     switch (entityType){
@@ -169,7 +170,7 @@ class Toolbar extends React.Component {
                 }
             },
             [BUTTON_KEYS.BARCODING] : {
-                isVisible: () => true,
+                isVisible: () => isCernMode && applicationData.EL_BCUR,
                 getOnClick: (entityType, entity) => {
                     let barcodingLink;
                     switch (entityType) {
@@ -198,7 +199,7 @@ class Toolbar extends React.Component {
                 }
             },
             [BUTTON_KEYS.OSVC] : {   
-                isVisible: () => true,
+                isVisible: () => applicationData.EL_OSVCU && isCernMode,
                 getOnClick: (entityType, entity) => {
                     const osvcLink = applicationData.EL_OSVCU
                                     .replace("{{workOrderId}}", entity.number);
@@ -228,6 +229,7 @@ class Toolbar extends React.Component {
                 isVisible: () => {
                     const { EL_TRWOC } = applicationData;
                     return (
+                        isCernMode &&
                         EL_TRWOC &&
                         EL_TRWOC.split(",")
                             .filter(Boolean)
@@ -323,10 +325,10 @@ class Toolbar extends React.Component {
     generateContent = ({renderOption, buttonDefinition, entityType, entity}) => {
         let {isVisible, onClick, isDisabled, values, getOnClick, getLinkTo} = buttonDefinition;
         let content = null;
-        if (!onClick && getOnClick) {
-            onClick = getOnClick(entityType, entity);
-        }
         if (isVisible()) {
+            if (!onClick && getOnClick) {
+                onClick = getOnClick(entityType, entity);
+            }
             switch (renderOption) {
                 case VIEW_MODES.MENU_ITEMS: 
                     content = 
