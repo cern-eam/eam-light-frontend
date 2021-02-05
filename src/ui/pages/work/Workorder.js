@@ -445,6 +445,7 @@ class Workorder extends Entity {
         let fields = this.props.workOrderLayout.fields;
         this.updateEntityProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
         this.updateEntityProperty("typeCode", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD")
+        this.updateEntityProperty("completedDate", "");
     }
 
     //
