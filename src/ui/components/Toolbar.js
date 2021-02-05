@@ -330,7 +330,7 @@ class Toolbar extends React.Component {
                             onClick={onClick}
                             disabled={isDisabled()}
                         >
-                            {React.cloneElement(values.icon, this.iconMenuStyle)}
+                            {React.cloneElement(values.icon, {style: {...this.iconMenuStyle}})}
                             {values.text && <div>{values.text}</div>}
                         </MenuItem>
                     break;
