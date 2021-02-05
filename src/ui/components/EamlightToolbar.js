@@ -11,7 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
-import AbstractToolbar from './AbstractToolbar';
+import Toolbar from './Toolbar';
 
 
 class EamlightToolbar extends Component {
@@ -155,7 +155,7 @@ class EamlightToolbar extends Component {
     }
 
     getToolbar = renderOption => 
-        <AbstractToolbar {...this.props.toolbarProps} renderOption={renderOption}/>
+        <Toolbar {...this.props.toolbarProps} renderOption={renderOption}/>
 
     renderDesktopMenu() {
         return (
