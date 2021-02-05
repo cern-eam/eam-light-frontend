@@ -188,6 +188,12 @@ class WSWorkorders {
         return WS._put('/checklists/', checklistItem, config);
     }
 
+    //
+    //TaskPlans
+    //
+    getTaskPlan(taskCode, config={}) {
+        return WS._get('/taskplan/' + taskCode, config);
+    }
 }
 
 export default new WSWorkorders();
