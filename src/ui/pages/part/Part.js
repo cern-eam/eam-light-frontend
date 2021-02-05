@@ -14,7 +14,7 @@ import Entity from '../Entity';
 import PartTools from "./PartTools";
 import {PartIcon} from 'eam-components/dist/ui/components/icons'
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
-import {TOOLBARS} from '../../components/AbstractToolbar';
+import {ENTITY_TYPE} from '../../components/Toolbar';
 import EntityRegions from "../../components/entityregions/EntityRegions";
 
 const PART = 'PART';
@@ -243,17 +243,18 @@ class Part extends Entity {
                         newHandler={() => history.push('/part')}
                         deleteHandler={this.deleteEntity.bind(this, part.code)}
                         toolbarProps={{ 
-                            _toolbarType: TOOLBARS.PART, 
-                            part: part,
+                            entity: part,
                             postInit: this.postInit.bind(this),
                             setLayout: this.setLayout.bind(this),
-                            newPart: layout.newEntity,
+                            newEntity: layout.newEntity,
                             applicationData: applicationData,
                             screencode: userData.partScreen,
                             handleError: handleError,
                             showNotification: showNotification,
                             showError: showError,
-                            copyHandler: this.copyEntity.bind(this)
+                            copyHandler: this.copyEntity.bind(this),
+                            entityType: ENTITY_TYPE.PART,
+                            entityDesc: this.settings.entityDesc,
                         }}
                         width={730}
                         entityIcon={<PartIcon style={{height: 18}}/>}

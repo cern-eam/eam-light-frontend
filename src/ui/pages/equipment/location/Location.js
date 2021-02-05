@@ -4,7 +4,7 @@ import LocationIcon from "@material-ui/icons/Room";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import WSLocation from "../../../../tools/WSLocation";
-import {TOOLBARS} from "../../../components/AbstractToolbar";
+import {ENTITY_TYPE} from "../../../components/Toolbar";
 import CustomFields from "../../../components/customfields/CustomFields";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
@@ -256,15 +256,16 @@ export default class Location extends Entity {
                                  newHandler={() => history.push("/location")}
                                  deleteHandler={this.deleteEntity.bind(this, location.code)}
                                  toolbarProps={{
-                                    _toolbarType: TOOLBARS.LOCATION,
                                     entityDesc: this.settings.entityDesc,
-                                    equipment: location,
+                                    entity: location,
                                     postInit: this.postInit.bind(this),
                                     setLayout: this.setLayout.bind(this),
-                                    newEquipment: layout.newEntity,
+                                    newEntity: layout.newEntity,
                                     applicationData: applicationData,
                                     extendedLink: applicationData.EL_LOCLI,
-                                    screencode: userData.screens[userData.locationScreen].screenCode
+                                    screencode: userData.screens[userData.locationScreen].screenCode,
+                                    copyHandler: this.postInit.bind(this),
+                                    entityType: ENTITY_TYPE.LOCATION
                                  }}
                                  width={730}
                                  entityIcon={<LocationIcon style={{height: 18}}/>}

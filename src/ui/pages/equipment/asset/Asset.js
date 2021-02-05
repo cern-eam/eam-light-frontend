@@ -5,7 +5,7 @@ import React from 'react';
 import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';
 import WSEquipment from "../../../../tools/WSEquipment";
-import { TOOLBARS } from "../../../components/AbstractToolbar";
+import { ENTITY_TYPE } from "../../../components/Toolbar";
 import CustomFields from '../../../components/customfields/CustomFields';
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
@@ -413,16 +413,16 @@ export default class Asset extends Entity {
                     newHandler={() => history.push('/asset')}
                     deleteHandler={this.deleteEntity.bind(this, equipment.code)}
                     toolbarProps={{
-                        _toolbarType: TOOLBARS.EQUIPMENT,
                         entityDesc: this.settings.entityDesc,
-                        equipment: equipment,
+                        entity: equipment,
                         postInit: this.postInit.bind(this),
                         setLayout: this.setLayout.bind(this),
-                        newEquipment: layout.newEntity,
+                        newEntity: layout.newEntity,
                         applicationData: applicationData,
                         extendedLink: applicationData.EL_ASSLI,
                         screencode: userData.assetScreen,
-                        copyHandler: this.copyEntity.bind(this)
+                        copyHandler: this.copyEntity.bind(this),
+                        entityType: ENTITY_TYPE.EQUIPMENT,
                     }}
                     width={730}
                     entityIcon={<AssetIcon style={{ height: 18 }} />}
