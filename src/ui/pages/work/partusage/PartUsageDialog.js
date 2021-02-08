@@ -156,7 +156,8 @@ function PartUsageDialog(props) {
     let handleSave = () => {
         //Call the handle save from the parent
         setLoading(true);
-        let partUsageCopy = {...partUsage};
+        const relatedWorkOrder = props.equipmentMEC && props.equipmentMEC.length > 0 ? props.workorder.number : null;
+        let partUsageCopy = {...partUsage, relatedWorkOrder};
         //Set the part usage Line
         partUsageCopy.transactionlines = [partUsageLine];
         //Remove transaction info prop
