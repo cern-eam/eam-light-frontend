@@ -65,7 +65,7 @@ class Workorder extends Entity {
 
         return WSWorkorder.getStandardWorkOrder(standardWorkOrderCode).then(response => {
             const standardWorkOrder = response.body.data;
-        
+
             this.setState(state => ({
                 workorder: assignStandardWorkOrderValues({...state.workorder}, standardWorkOrder)
             }));
@@ -141,7 +141,7 @@ class Workorder extends Entity {
             userData,
             workOrderLayout
         } = this.props;
-        const { layout, workorder } = this.state;
+        const { layout, workorder, equipmentMEC } = this.state;
 
         const commonProps = {
             workorder,
@@ -158,7 +158,7 @@ class Workorder extends Entity {
                 label: 'Details',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <WorkorderDetails
                         {...commonProps}
                         applicationData={applicationData}
@@ -173,7 +173,7 @@ class Workorder extends Entity {
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
                 customVisibility: () => WorkorderTools.isRegionAvailable('SCHEDULING', commonProps.workOrderLayout),
-                render: () => 
+                render: () =>
                     <WorkorderScheduling {...commonProps} />
                 ,
                 column: 1,
@@ -185,7 +185,7 @@ class Workorder extends Entity {
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
                 customVisibility: () => WorkorderTools.isRegionAvailable('CLOSING_CODES', commonProps.workOrderLayout),
-                render: () => 
+                render: () =>
                     <WorkorderClosingCodes {...commonProps} />
                 ,
                 column: 1,
@@ -197,10 +197,11 @@ class Workorder extends Entity {
                 isVisibleWhenNewEntity: false,
                 maximizable: false,
                 customVisibility: () => WorkorderTools.isRegionAvailable('PAR', commonProps.workOrderLayout),
-                render: () => 
+                render: () =>
                     <PartUsageContainer
                         workorder={workorder}
-                        tabLayout={commonProps.workOrderLayout.tabs.PAR} />
+                        tabLayout={commonProps.workOrderLayout.tabs.PAR}
+                        equipmentMEC={equipmentMEC}/>
                 ,
                 column: 1,
                 order: 4
@@ -211,7 +212,7 @@ class Workorder extends Entity {
                 isVisibleWhenNewEntity: false,
                 maximizable: false,
                 customVisibility: () => WorkorderTools.isRegionAvailable('CWO', commonProps.workOrderLayout),
-                render: () => 
+                render: () =>
                     <WorkorderChildren workorder={workorder.number} />
                 ,
                 column: 1,
@@ -222,7 +223,7 @@ class Workorder extends Entity {
                 label: 'EDMS Documents',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
+                render: () =>
                     <EDMSDoclightIframeContainer
                         objectType="J"
                         objectID={workorder.number} />
@@ -238,7 +239,7 @@ class Workorder extends Entity {
                 label: 'NCRs',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
+                render: () =>
                     <EDMSWidget
                         objectID={workorder.number}
                         objectType="J"
@@ -255,7 +256,7 @@ class Workorder extends Entity {
                 label: 'Comments',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <Comments
                         ref={comments => this.comments = comments}
                         entityCode='EVNT'
@@ -275,7 +276,7 @@ class Workorder extends Entity {
                 label: 'Activities and Booked Labor',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
+                render: () =>
                     <Activities
                         workorder={workorder.number}
                         department={workorder.departmentCode}
@@ -297,7 +298,7 @@ class Workorder extends Entity {
                 label: 'Checklists',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () =>  (                     
+                render: () =>  (
                     <Checklists
                         workorder={workorder.number}
                         printingChecklistLinkToAIS={applicationData.EL_PRTCL}
@@ -333,7 +334,7 @@ class Workorder extends Entity {
                 isVisibleWhenNewEntity: true,
                 customVisibility: () => workOrderLayout.fields.block_5.attribute !== 'H',
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <CustomFields
                         children={this.children}
                         entityCode='EVNT'
@@ -351,7 +352,7 @@ class Workorder extends Entity {
                 isVisibleWhenNewEntity: true,
                 customVisibility: () => WorkorderTools.isRegionAvailable('CUSTOM_FIELDS_EQP', commonProps.workOrderLayout),
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <CustomFields children={this.children}
                         entityCode='OBJ'
                         entityKeyCode={layout.woEquipment && layout.woEquipment.code}
@@ -368,7 +369,7 @@ class Workorder extends Entity {
                 label: 'Meter Readings',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
+                render: () =>
                     <MeterReadingContainerWO equipment={workorder.equipmentCode}/>
                 ,
                 column: 2,
@@ -380,8 +381,8 @@ class Workorder extends Entity {
                 isVisibleWhenNewEntity: false,
                 customVisibility: () => WorkorderTools.isRegionAvailable('MEC', commonProps.workOrderLayout),
                 maximizable: false,
-                render: () => 
-                    <WorkorderMultiequipment workorder={workorder.number} />
+                render: () =>
+                    <WorkorderMultiequipment workorder={workorder.number} setEquipmentMEC={this.setEquipmentMEC.bind(this)}/>
                 ,
                 column: 2,
                 order: 13
@@ -389,6 +390,10 @@ class Workorder extends Entity {
         ]
 
 
+    }
+
+    setEquipmentMEC(data) {
+        this.setState({equipmentMEC: data})
     }
 
     //
@@ -562,7 +567,7 @@ class Workorder extends Entity {
                     </EamlightToolbarContainer>
                     <EntityRegions
                         regions={regions}
-                        isNewEntity={layout.newEntity} 
+                        isNewEntity={layout.newEntity}
                         isHiddenRegion={this.props.isHiddenRegion} />
                 </BlockUi>
             </div>

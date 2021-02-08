@@ -28,7 +28,7 @@ function PartUsage(props) {
     }, [props.workorder.number])
 
     let formatQuantity = (data) => {
-        data.forEach(part => 
+        data.forEach(part =>
             part.quantity = part.quantity ? part.quantity + (part.partUoM ? " " + part.partUoM : "") : ""
         )
     }
@@ -57,7 +57,7 @@ function PartUsage(props) {
 
     return (
         isLoading
-        ?   
+        ?
             <BlockUi tag="div" blocking={isLoading} style={{ width: '100%' }} />
         :
         <>
@@ -79,7 +79,8 @@ function PartUsage(props) {
                 isDialogOpen={isDialogOpen}
                 workorder={props.workorder}
                 isLoading={isLoading}
-                successHandler={successHandler}/>
+                successHandler={successHandler}
+                equipmentMEC={props.equipmentMEC}/>
         </>
     )
 }
