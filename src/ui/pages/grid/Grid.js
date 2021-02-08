@@ -11,25 +11,27 @@ const treatParamAsList = (param) => (param === undefined || param === null) ? []
     : [param]
 
 
-const cellRenderer = ({assetColumns, workorderColumns, locationColumns, partColumns}) => (cell, row) => {
-    return treatParamAsList(assetColumns).includes(cell.t)  ?
-            getLink("/equipment/", cell.value)
-        : treatParamAsList(locationColumns).includes(cell.t)  ?
-            getLink("/location/", cell.value)
-        : treatParamAsList(workorderColumns).includes(cell.t)  ?
-            getLink("/workorder/", cell.value)
-        : treatParamAsList(partColumns).includes(cell.t)  ?
-            getLink("/part/", cell.value)
-        : ["equipmentno", "obj_code", "evt_object", , "equipment"].includes(cell.t) ?
-            getLink("/equipment/", cell.value)
-        : ["location"].includes(cell.t) ?
-            getLink("/location/", cell.value)
-        : ["workordernum", "evt_code", "parentwo"].includes(cell.t) ?
-            getLink("/workorder/", cell.value)
-        : ["part"].includes(cell.t) ?
-            getLink("/part/", cell.value)
-        : null
-        ;
+const cellRenderer = userColumns => (cell, row) => {
+    const userColumnToType = {
+        assetColumns: 'equipment',
+        locationColumns: 'location',
+        workorderColumns: 'workorder',
+        partColumns: 'part',
+    };
+
+    const typeToDefaultColumns = {
+        equipment: ['equipmentno', 'obj_code', 'evt_object', 'equipment'],
+        location: ['location'],
+        workorder: ['workordernum', 'evt_code', 'parentwo'],
+        part: ['part'],
+    }
+
+    const link = userColumnToType[Object.keys(userColumnToType)
+                .find(userColumn => treatParamAsList(userColumns[userColumn]).includes(cell.t))]
+            || Object.keys(typeToDefaultColumns)
+                .find(type => typeToDefaultColumns[type].includes(cell.t));
+
+    return link === undefined ? null : getLink(`/${link}/`, cell.value);
 }
 
 const getLink = (path, val) => <Typography>
