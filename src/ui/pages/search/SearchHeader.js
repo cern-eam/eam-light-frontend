@@ -5,7 +5,7 @@ import EAMCheckbox from "eam-components/dist/ui/components/muiinputs/EAMCheckbox
 
 const SEARCH_TYPES = {
     PART: {
-        text: "Part",
+        text: "Parts",
         value: "PART",
         code: "PART",
     },
@@ -15,7 +15,7 @@ const SEARCH_TYPES = {
         code: "EQUIPMEN",
     },
     JOB: {
-        text: "WorkOrder",
+        text: "Work Orders",
         value: "JOB",
         code: "JOB",
     }
@@ -80,7 +80,7 @@ export default class SearchHeader extends React.Component {
                             ref={(input) => { this.searchInput = input; }} />
                     </EAMBarcodeInput>
                     <FontIcon style={searchIconStyle} className="fa fa-search"/>
-                    {showTypes && <div style={{height: '30px', display: 'flex', direction: 'row'}}>
+                    {showTypes && <div style={{height: '30px', display: 'flex', direction: 'row', whiteSpace: 'nowrap'}}>
                        {Object.values(SEARCH_TYPES).map(this.renderTypeCheckbox.bind(this))}
                     </div>}
                     <label id="searchPlaceHolder">{!this.props.keyword && "Search for Equipment, Work Orders, Parts, ..."}</label>
