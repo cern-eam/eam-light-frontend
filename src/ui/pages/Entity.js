@@ -407,8 +407,6 @@ export default class readEntityEquipment extends Component {
     }
 
     onChangeClass = newClass => {
-        const entity = this.state[this.settings.entity];
-
         // TODO: refactor how entityCode is retrieved
         const entityCodeMap = {
             workorder: 'EVNT',
@@ -419,18 +417,21 @@ export default class readEntityEquipment extends Component {
 
         const entityCode = entityCodeMap[this.settings.entity] || entityCodeMap.default;
 
-        return WSCustomFields.getCustomFields(entityCode, entity.classCode).then(response => {
-            const newCustomFields = response.body.data;
-            let newEntity = assignCustomFieldFromCustomField(entity, newCustomFields, AssignmentType.SOURCE_NOT_EMPTY);
+        return WSCustomFields.getCustomFields(entityCode, newClass).then(response => {
+            this.setState(prevState => {
+                const entity = prevState[this.settings.entity];
+                const newCustomFields = response.body.data;
+                let newEntity = assignCustomFieldFromCustomField(entity, newCustomFields, AssignmentType.SOURCE_NOT_EMPTY);
+    
+                // replace custom fields with ones in query parameters if we just created the entity
+                if(!this.state.layout.isModified && this.state.layout.newEntity) {
+                    const queryParams = queryString.parse(window.location.search);
+                    newEntity = assignCustomFieldFromObject(newEntity, queryParams, AssignmentType.SOURCE_NOT_EMPTY);
+                }
 
-            // replace custom fields with ones in query parameters if we just created the entity
-            if(!this.state.layout.isModified && this.state.layout.newEntity) {
-                const queryParams = queryString.parse(window.location.search);
-                newEntity = assignCustomFieldFromObject(newEntity, queryParams, AssignmentType.SOURCE_NOT_EMPTY);
-            }
-
-            this.setState({
-                [this.settings.entity]: newEntity
+                return {
+                    [this.settings.entity]: newEntity
+                };
             });
         })
     }
