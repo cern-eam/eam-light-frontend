@@ -143,17 +143,35 @@ function WorkorderDetails(props) {
                         link={() => workorder.userDefinedFields.udfchar24 ? "https://its.cern.ch/jira/browse/" + workorder.userDefinedFields.udfchar24 : null}
                         icon={<OpenInNewIcon/>}/>
 
+            <EAMCheckbox elementInfo={workOrderLayout.fields['udfchkbox01']}
+                        value={workorder.userDefinedFields.udfchkbox01}
+                        updateProperty={updateWorkorderProperty}
+                        valueKey={`userDefinedFields.udfchkbox01`}
+                        children={children}/>
+
             <EAMCheckbox elementInfo={workOrderLayout.fields['udfchkbox02']}
-                            value={workorder.userDefinedFields.udfchkbox02}
-                            updateProperty={updateWorkorderProperty}
-                            valueKey={`userDefinedFields.udfchkbox02`}
-                            children={children}/>
+                        value={workorder.userDefinedFields.udfchkbox02}
+                        updateProperty={updateWorkorderProperty}
+                        valueKey={`userDefinedFields.udfchkbox02`}
+                        children={children}/>
+
+            <EAMCheckbox elementInfo={workOrderLayout.fields['udfchkbox03']}
+                        value={workorder.userDefinedFields.udfchkbox03}
+                        updateProperty={updateWorkorderProperty}
+                        valueKey={`userDefinedFields.udfchkbox03`}
+                        children={children}/>
 
             <EAMCheckbox elementInfo={workOrderLayout.fields['udfchkbox04']}
-                            value={workorder.userDefinedFields.udfchkbox04}
-                            updateProperty={updateWorkorderProperty}
-                            valueKey={`userDefinedFields.udfchkbox04`}
-                            children={children}/>
+                        value={workorder.userDefinedFields.udfchkbox04}
+                        updateProperty={updateWorkorderProperty}
+                        valueKey={`userDefinedFields.udfchkbox04`}
+                        children={children}/>
+            
+            <EAMCheckbox elementInfo={workOrderLayout.fields['udfchkbox05']}
+                        value={workorder.userDefinedFields.udfchkbox05}
+                        updateProperty={updateWorkorderProperty}
+                        valueKey={`userDefinedFields.udfchkbox05`}
+                        children={children}/>
 
             <EAMInput
                 children={children}
