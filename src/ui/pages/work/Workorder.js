@@ -447,9 +447,9 @@ class Workorder extends Entity {
 
     postCopy = () => {
         let fields = this.props.workOrderLayout.fields;
-        this.updateEntityProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
-        this.updateEntityProperty("typeCode", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD")
-        this.updateEntityProperty("completedDate", "");
+        isCernMode && this.updateEntityProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
+        isCernMode && this.updateEntityProperty("typeCode", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD")
+        isCernMode && this.updateEntityProperty("completedDate", "");
     }
 
     //
