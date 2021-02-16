@@ -1,4 +1,5 @@
 import React from 'react';
+import Tooltip from '@material-ui/core/Tooltip';
 import BlockIcon from '@material-ui/icons/Block';
 import {EISIcon, RadiationIcon} from 'eam-components/dist/ui/components/icons/index'
 
@@ -40,10 +41,12 @@ const StatusRow = (props) => {
         return STATUSES.map(status => {
             if (status.shouldRender(entity, entityType)) {
                 return (
-                    <div style={{textAlign: "center", width: "80px"}}>
-                        {status.icon}
-                        <div style={{fontSize: "0.75rem"}}>{status.description}</div>
-                    </div>
+                    <Tooltip title={status.description}>
+                        <div style={{textAlign: "center", width: "80px"}}>
+                            {status.icon}
+                            <div style={{fontSize: "0.75rem"}}>{status.description}</div>
+                        </div>
+                    </Tooltip>
                 )
             }
         })
