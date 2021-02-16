@@ -12,6 +12,7 @@ class AssetGeneral extends Component {
 
         return (
             <div style={{width: "100%", marginTop: 0}}>
+
                 {layout.newEntity &&
                 <EAMInput
                     children = {children}

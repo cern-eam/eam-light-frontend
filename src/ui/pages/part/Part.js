@@ -16,7 +16,6 @@ import {PartIcon} from 'eam-components/dist/ui/components/icons'
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import {TOOLBARS} from '../../components/AbstractToolbar';
 import EntityRegions from "../../components/entityregions/EntityRegions";
-import StatusRow from '../../components/statusrow/StatusRow'
 
 const PART = 'PART';
 
@@ -104,7 +103,7 @@ class Part extends Entity {
                         {...commonProps} />
                 ,
                 column: 1,
-                order: 2
+                order: 1
             },
             {
                 id: 'USERDEFINEDFIELDS',
@@ -119,7 +118,7 @@ class Part extends Entity {
                         children={this.children} />
                 ,
                 column: 1,
-                order: 3
+                order: 2
             },
             {
                 id: 'STOCK',
@@ -131,7 +130,7 @@ class Part extends Entity {
                         {...commonProps} />
                 ,
                 column: 1,
-                order: 4
+                order: 3
             },
             {
                 id: 'WHEREUSED',
@@ -143,7 +142,7 @@ class Part extends Entity {
                         {...commonProps} />
                 ,
                 column: 1,
-                order: 5
+                order: 4
             },
             {
                 id: 'ASSETS',
@@ -171,7 +170,7 @@ class Part extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 6
+                order: 5
             },
             {
                 id: 'COMMENTS',
@@ -191,7 +190,7 @@ class Part extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 7
+                order: 6
             },
             {
                 id: 'CUSTOMFIELDS',
@@ -209,7 +208,7 @@ class Part extends Entity {
                         updateEntityProperty={this.updateEntityProperty}/>
                 ,
                 column: 2,
-                order: 8
+                order: 7
             },
         ]
     }
