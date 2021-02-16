@@ -267,7 +267,7 @@ export default class Location extends Entity {
                                     applicationData: applicationData,
                                     extendedLink: applicationData.EL_LOCLI,
                                     screencode: userData.screens[userData.locationScreen].screenCode,
-                                    copyHandler: this.postInit.bind(this),
+                                    copyHandler: this.copyEntity.bind(this),
                                     entityType: ENTITY_TYPE.LOCATION
                                  }}
                                  width={730}
