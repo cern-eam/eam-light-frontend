@@ -141,10 +141,14 @@ class Toolbar extends React.Component {
                     switch (entityType){
                         case ENTITY_TYPE.WORKORDER:
                             extendedLink = applicationData.EL_WOLIN
-                                            .replace("&1",screencode)
+                                            .replace("&1", screencode)
                                             .replace("&2", entity.number);
                             break;
                         case ENTITY_TYPE.EQUIPMENT:
+                            extendedLink = this.props.extendedLink
+                                            .replace("&1", screencode)
+                                            .replace("&2", entity.code);
+                            break;
                         case ENTITY_TYPE.LOCATION:
                             extendedLink = applicationData.EL_LOCLI
                                             .replace("&1", screencode)
