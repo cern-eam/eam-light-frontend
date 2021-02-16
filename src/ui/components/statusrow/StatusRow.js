@@ -1,7 +1,7 @@
 import React from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import BlockIcon from '@material-ui/icons/Block';
-import {EISIcon, RadiationIcon} from 'eam-components/dist/ui/components/icons/index'
+import {EISIcon, RadioactiveWarningIcon} from 'eam-components/dist/ui/components/icons/index'
 
 const STATUS_KEYS = {
     OUT_OF_SERVICE: "OUT_OF_SERVICE",
@@ -30,7 +30,7 @@ const STATUSES = [
     {
         key: STATUS_KEYS.RADIOACTIVE,
         shouldRender: (entity, entityType) => entityType === "equipment" && entity.userDefinedFields.udfchar04 === "Radioactive",
-        icon: <RadiationIcon style={iconStyle}/>,
+        icon: <RadioactiveWarningIcon style={iconStyle}/>,
         description: "Radioactive"
     }
 
