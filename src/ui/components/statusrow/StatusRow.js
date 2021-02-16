@@ -19,19 +19,22 @@ const STATUSES = [
         key: STATUS_KEYS.OUT_OF_SERVICE,
         shouldRender: (entity, entityType) => entity.outOfService === "true" || entity.outOfService === true,
         icon: <BlockIcon style={{color: 'red', ...iconStyle}}/>,
-        description: "Out of Service" 
+        description: "Out of Service",
+        tooltip: "Out of Service",
     },
     {
         key: STATUS_KEYS.EIS,
         shouldRender: (entity, entityType) => entityType === "equipment" && entity.userDefinedFields.udfchkbox01 === "true",
         icon: <EISIcon style={{color: 'blue', ...iconStyle}}/>,
-        description: "EIS"
+        description: "EIS",
+        tooltip: "Élément Important pour la Sécurité",
     },
     {
         key: STATUS_KEYS.RADIOACTIVE,
         shouldRender: (entity, entityType) => entityType === "equipment" && entity.userDefinedFields.udfchar04 === "Radioactive",
         icon: <RadioactiveWarningIcon style={iconStyle}/>,
-        description: "Radioactive"
+        description: "Radioactive",
+        tooltip: "Radioactive",
     }
 
 ]
@@ -41,7 +44,7 @@ const StatusRow = (props) => {
         return STATUSES.map(status => {
             if (status.shouldRender(entity, entityType)) {
                 return (
-                    <Tooltip title={status.description}>
+                    <Tooltip key={status.key} title={status.tooltip}>
                         <div style={{textAlign: "center", width: "80px"}}>
                             {status.icon}
                             <div style={{fontSize: "0.75rem"}}>{status.description}</div>
