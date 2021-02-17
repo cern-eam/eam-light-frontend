@@ -343,13 +343,11 @@ class EamlightMenu extends Component {
                     </EamlightSubmenu>
                     }
 
-                    {eamAccount.userGroup === 'R5' &&
+                    {applicationData.EL_ADMUG && applicationData.EL_ADMUG.split(',').includes(eamAccount.userGroup) &&
                     <EamlightSubmenu id="settings" header={<span>ADMIN SETTINGS</span>}>
-                        {currentPartScreen.creationAllowed &&
                         <MenuItem label="Refresh EAM Light Cache"
                                   icon={<DatabaseRefresh style={menuIconStyle}/>}
                                   onClick={MenuTools.refreshCache.bind(null, showNotification, showError)}/>
-                        }
                     </EamlightSubmenu>
                     }
                 </div>
