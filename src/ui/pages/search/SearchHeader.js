@@ -60,6 +60,8 @@ export default class SearchHeader extends React.Component {
 
         const { showTypes } = this.props;
 
+        const entityTypes = this.state.searchOn.join(',');
+
         return (
             <div id="searchBox" className={this.props.searchBoxUp ? "searchBox searchBoxSearch" : "searchBox searchBoxHome"}>
                 <div id="searchBoxLabel" className="searchBoxLabelHome">
@@ -70,7 +72,7 @@ export default class SearchHeader extends React.Component {
                     </div>
                 </div>
                 <div id="searchBoxInput" className={this.props.searchBoxUp ? "searchBoxInputSearch" : "searchBoxInputHome" }>
-                    <EAMBarcodeInput updateProperty={this.props.fetchDataHandler} top={3} right={-7}>
+                    <EAMBarcodeInput updateProperty={val => this.props.fetchDataHandler(val, entityTypes)} top={3} right={-7}>
                         <input
                             onInput={this.handleSearchInput.bind(this)}
                             id="searchInputText"
