@@ -33,13 +33,13 @@ function EquipmentRedirect(props) {
             code = decodeURIComponent(code);
             setIsLoading(true);
             //Fetch the equipment
-            WSEquipment.getEquipment(code).then(response => {
-                const equipment = response.body.data;
+            WSEquipment.getEquipmentType(code).then(response => {
+                const equipmentType = response.body.data;
                 //Valid code
                 setIsLoading(false)
                 setIsValidCode(true)
                 //Redirect according to the typeCode
-                switch (equipment.systemTypeCode) {
+                switch (equipmentType) {
                     case 'A':
                         props.history.replace(`/asset/${code}`);
                         break;
