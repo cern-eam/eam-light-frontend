@@ -73,7 +73,7 @@ class EamlightMenu extends Component {
         }
 
   
-        const { myOpenWorkOrders, myTeamWorkOrders, userData, showNotification, showError, updateWorkOrderScreenLayout, 
+        const { myOpenWorkOrders, myTeamWorkOrders, userData, applicationData, showNotification, showError, updateWorkOrderScreenLayout, 
             updateAssetScreenLayout, updatePositionScreenLayout, updateSystemScreenLayout, updatePartScreenLayout, updateLocationScreenLayout } = this.props;
         const { workOrderScreen, assetScreen, positionScreen, systemScreen, partScreen, locationScreen, eamAccount, screens } = userData;
         
@@ -172,7 +172,7 @@ class EamlightMenu extends Component {
                         </li>
                         }
 
-                        {eamAccount.userGroup === 'R5' &&
+                        {applicationData.EL_ADMUG && applicationData.EL_ADMUG.split(',').includes(eamAccount.userGroup) &&
                         <li>
                             <div rel="settings" onClick={this.mainMenuClickHandler}>
                                 <Tooltip title="ADMIN SETTINGS" placement="right">

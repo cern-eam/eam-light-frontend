@@ -17,7 +17,8 @@ const mapStateToProps = (state) => {
     return {
         myOpenWorkOrders: state.workorder.myOpenWorkOrders,
         myTeamWorkOrders: state.workorder.myTeamWorkOrders,
-        userData: state.application.userData
+        userData: state.application.userData,
+        applicationData: state.application.applicationData
     }
 };
 
