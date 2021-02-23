@@ -35,10 +35,14 @@ const WO_FILTERS = {
             })
         }
     }} : {},
+    [WO_FILTER_TYPES.THIS]: {
+        text: WO_FILTER_TYPES.THIS,
+        process: data => [...data]
+    }
 }
 
 function EquipmentWorkOrders(props) {
-    const { defaultFilter } = props;
+    const { defaultFilter, equipmentcode, equipmenttype } = props;
 
     let [events, setEvents] = useState([]);
     let [workorders, setWorkorders] = useState([]);
@@ -80,13 +84,13 @@ function EquipmentWorkOrders(props) {
     }
 
     useEffect(() => {
-        if (props.equipmentcode) {
-            fetchData(props.equipmentcode)
+        if (equipmentcode) {
+            fetchData(equipmentcode, equipmenttype);
         } else {
             setWorkorders([]);
-            setEvents([])
+            setEvents([]);
         }
-    },[props.equipmentcode])
+    }, [equipmentcode, equipmenttype])
 
     const getUrl = (equipmentType, objectCode) => {
         const linkPrefix = {
@@ -99,8 +103,8 @@ function EquipmentWorkOrders(props) {
         return linkPrefix ? `${linkPrefix}/${objectCode}` : '';
     }
 
-    const fetchData = equipmentCode => {
-        Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode)])
+    const fetchData = (equipmentCode, equipmentType) => {
+        Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode, equipmentType)])
             .then(responses => {
                 const formatResponse = response => response.body.data.map(element => ({
                     ...element,
@@ -126,7 +130,7 @@ function EquipmentWorkOrders(props) {
                 />
                 
             {workOrderFilter === WO_FILTER_TYPES.MTF ?
-                <EquipmentMTFWorkOrders equipmentcode={props.equipmentcode} />
+                <EquipmentMTFWorkOrders equipmentcode={equipmentcode} />
                 :
                 <BlockUi blocking={loadingData} style={{overflowX: 'auto'}}>
                     <EISTable

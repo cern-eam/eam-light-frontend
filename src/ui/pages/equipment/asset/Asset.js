@@ -231,7 +231,8 @@ export default class Asset extends Entity {
                 render: ({ panelQueryParams }) => 
                     <EquipmentWorkOrders
                         equipmentcode={equipment.code}
-                        defaultFilter={panelQueryParams.defaultFilter}/>
+                        defaultFilter={panelQueryParams.defaultFilter}
+                        equipmenttype='A' />
                 ,
                 column: 1,
                 order: 4
@@ -246,7 +247,8 @@ export default class Asset extends Entity {
                         equipmentcode={equipment.code} />
                 ,
                 column: 1,
-                order: 5
+                order: 5,
+                ignore: !isCernMode
             },
             {
                 id: 'PARTS',
@@ -272,7 +274,7 @@ export default class Asset extends Entity {
                 },
                 column: 2,
                 order: 7,
-                ignore: !isCernMode,
+                ignore: !isCernMode
             },
             {
                 id: 'NCRS',

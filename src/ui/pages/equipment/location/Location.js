@@ -111,7 +111,8 @@ export default class Location extends Entity {
                 render: ({ panelQueryParams }) => 
                     <EquipmentWorkOrders
                         equipmentcode={location.code}
-                        defaultFilter={panelQueryParams.defaultFilter}/>
+                        defaultFilter={panelQueryParams.defaultFilter}
+                        equipmenttype='L' />
                 ,
                 column: 1,
                 order: 4
@@ -126,7 +127,8 @@ export default class Location extends Entity {
                         equipmentcode={location.code} />
                 ,
                 column: 1,
-                order: 5
+                order: 5,
+                ignore: !isCernMode
             },
             {
                 id: 'EDMSDOCUMENTS',

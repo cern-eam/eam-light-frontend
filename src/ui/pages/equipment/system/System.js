@@ -204,7 +204,8 @@ export default class System extends Entity {
                 render: ({ panelQueryParams }) => 
                     <EquipmentWorkOrders
                         equipmentcode={equipment.code}
-                        defaultFilter={panelQueryParams.defaultFilter}/>
+                        defaultFilter={panelQueryParams.defaultFilter}
+                        equipmenttype='S' />
                 ,
                 column: 1,
                 order: 4
@@ -219,7 +220,8 @@ export default class System extends Entity {
                         equipmentcode={equipment.code} />
                 ,
                 column: 1,
-                order: 5
+                order: 5,
+                ignore: !isCernMode
             },
             {
                 id: 'PARTS',
