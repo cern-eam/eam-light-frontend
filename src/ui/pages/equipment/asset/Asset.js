@@ -192,6 +192,7 @@ export default class Asset extends Entity {
                 maximizable: false,
                 render: () => 
                     <AssetGeneral
+                        showNotification={showNotification}
                         {...commonProps}/>
                 ,
                 column: 1,
