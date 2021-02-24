@@ -13,6 +13,7 @@ const initEqpReplacement = {
     oldEquipment: '',
     oldEquipmentDesc:'',
     oldEquipmentStatus: '',
+    oldEquipmentState: '',
     newEquipment: '',
     newEquipmentDesc: '',
     newEquipmentStatus: 'I',
@@ -41,6 +42,9 @@ class ReplaceEqp extends Component {
         if (newEquipment) {
             this.updateEqpReplacementProp('newEquipment', newEquipment);
         }
+        WSEquipment.getEquipmentStateValues()
+            .then(resp => this.setState({stateList: resp.body.data}))
+            .catch(this.props.handleError)
     }
 
     loadStatuses = () => {
@@ -49,14 +53,20 @@ class ReplaceEqp extends Component {
                 statusList: [],
                 replaceEquipment: {
                     ...prevState.replaceEquipment,
-                    oldEquipmentStatus: ''
+                    oldEquipmentStatus: '',
                 }
             }));
             return;
         }
 
-        const oldEquipmentStatus = this.state.replaceEquipment.oldEquipmentStatus;
+        let oldEquipmentStatus = this.state.replaceEquipment.oldEquipmentStatus;
         const userGroup = this.props.userData.eamAccount.userGroup;
+
+        if (oldEquipmentStatus === 'C') {
+            this.props.showWarning('The equipment selected is in store. If you have access, and the new equipment is not in a different store, an issue/return transaction will be performed before/after the structure update.', 'Equipmen in store!');
+            oldEquipmentStatus = 'I'; //Interceptor will issue the part.
+            this.updateEqpReplacementProp('oldEquipmentStatus', 'I');
+        }
 
         //Load list of statuses
         WSEquipment.getEquipmentStatusValues(userGroup, false, oldEquipmentStatus)
@@ -113,7 +123,8 @@ class ReplaceEqp extends Component {
                 if(destination === 'oldEquipment') {
                     newState.replaceEquipment = {
                         ...prevState.replaceEquipment,
-                        oldEquipmentStatus: response.body.data.statusCode
+                        oldEquipmentStatus: response.body.data.statusCode,
+                        oldEquipmentState: response.body.data.stateCode,
                     }
                 }
 
@@ -152,6 +163,7 @@ class ReplaceEqp extends Component {
                                                    onChangeNewEquipment={this.onChangeNewEquipment}
                                                    equipmentLayout={this.props.equipmentLayout}
                                                    statusList={this.state.statusList}
+                                                   stateList={this.state.stateList}
                                                    replaceEquipmentHandler={this.replaceEquipmentHandler}
                                                    showError={this.props.showError}/>
                             </Grid>
