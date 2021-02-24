@@ -12,9 +12,17 @@ import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAuto
 import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
 import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
 import WSParts from '../../../../tools/WSParts';
-
+import { makeStyles } from '@material-ui/core/styles';
 
 const transactionTypes = [{code: 'ISSUE', desc: 'Issue'}, {code: 'RETURN', desc: 'Return'}];
+
+const overflowStyle = {
+    overflowY: 'visible'
+}
+
+const useStyles = makeStyles({
+    paper: overflowStyle
+});
 
 function PartUsageDialog(props) {
 
@@ -167,6 +175,7 @@ function PartUsageDialog(props) {
         }));
     }
 
+    const classes = useStyles();
 
     return (
         <div>
@@ -176,11 +185,14 @@ function PartUsageDialog(props) {
                 open={props.isDialogOpen}
                 onClose={props.handleCancel}
                 aria-labelledby="form-dialog-title"
-                disableBackdropClick={true}>
+                disableBackdropClick={true}
+                classes={{
+                    paper: classes.paper
+                }}>
 
                 <DialogTitle id="form-dialog-title">Add Part Usage</DialogTitle>
 
-                <DialogContent id="content">
+                <DialogContent id="content" style={overflowStyle}>
                     <div>
                         <BlockUi tag="div" blocking={loading || props.isLoading}>
                             <EAMRadio elementInfo={props.tabLayout['transactiontype']}
@@ -243,6 +255,7 @@ function PartUsageDialog(props) {
                                        value={partUsageLine.bin}
                                        updateProperty={updatePartUsageLineProperty}
                                        children={props.children}
+                                       suggestionsPixelHeight={200} 
                             />
 
                             <EAMInput elementInfo={props.tabLayout['transactionquantity']}
