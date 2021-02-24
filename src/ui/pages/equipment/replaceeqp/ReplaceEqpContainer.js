@@ -1,5 +1,5 @@
 import {connect} from 'react-redux'
-import {handleError, showError, showNotification} from '../../../../actions/uiActions'
+import {handleError, showError, showWarning, showNotification} from '../../../../actions/uiActions'
 import ReplaceEqp from "./ReplaceEqp";
 
 function mapStateToProps(state) {
@@ -12,6 +12,7 @@ function mapStateToProps(state) {
 const ReplaceEqpContainer = connect(mapStateToProps, {
         showNotification,
         showError,
+        showWarning,
         handleError
     }
 )(ReplaceEqp);
