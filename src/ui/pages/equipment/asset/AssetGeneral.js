@@ -4,8 +4,11 @@ import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
 import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
 import WSEquipment from "../../../../tools/WSEquipment";
 import StatusRow from "../../../components/statusrow/StatusRow"
+import EquipmentTools from "../EquipmentTools"
 
 class AssetGeneral extends Component {
+
+    updateEquipmentStatus = EquipmentTools.getUpdateStatus(this.props.updateEquipmentProperty, this.props.showNotification);
 
     render() {
         let { equipment, children, assetLayout, updateEquipmentProperty, layout } = this.props
@@ -59,7 +62,7 @@ class AssetGeneral extends Component {
                     elementInfo={assetLayout.fields['assetstatus']}
                     value={equipment.statusCode}
                     values={layout.statusValues}
-                    updateProperty={updateEquipmentProperty}
+                    updateProperty={this.updateEquipmentStatus}
                     valueKey="statusCode"/>
                 
                 <EAMSelect
