@@ -23,7 +23,7 @@ const WO_FILTERS = {
     [WO_FILTER_TYPES.OPEN]: {
         text: WO_FILTER_TYPES.OPEN,
         process: (data) => {
-            return data.filter((workOrder) => workOrder.status && !workOrder.status.startsWith("T"));
+            return data.filter((workOrder) => workOrder.status && ['T', 'C'].every(statusCode => !workOrder.status.startsWith(statusCode)));
         }
     },
     [WO_FILTER_TYPES.MTF]: {
@@ -48,8 +48,8 @@ function EquipmentWorkOrders(props) {
     let [workOrderFilter, setWorkOrderFilter] = useState(Object.values(WO_FILTER_TYPES).includes(defaultFilter) ? defaultFilter : WO_FILTER_TYPES.ALL)
     const [loadingData, setLoadingData] = useState(true);
 
-    let headers = ['Work Order', 'Equipment', 'Description', 'Status'];
-    let propCodes = ['number', 'object','desc', 'status'];
+    let headers = ['Work Order', 'Equipment', 'Description', 'Status', 'Creation Date'];
+    let propCodes = ['number', 'object','desc', 'status', 'createdDate'];
 
     if (workOrderFilter === WO_FILTER_TYPES.THIS) {
         headers = ['Work Order', 'Description', 'Status', 'Creation Date'];
