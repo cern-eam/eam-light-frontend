@@ -20,6 +20,15 @@ class EquipmentTools {
     assetLayoutPropertiesMap = {
         state: "stateCode"
     }
+
+    getUpdateStatus(updateProperty, showNotification) {
+        return (key, value) => {
+            if (key === 'statusCode' && value === 'D') {
+                showNotification("Updating the equipment status to Hors service definitif (D) will lead to the its hierarchy being nullified.");
+            }
+            updateProperty(key, value);
+        }
+    }
 }
 
 export default new EquipmentTools();
