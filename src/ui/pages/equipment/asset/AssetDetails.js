@@ -1,141 +1,127 @@
 import React, {Component} from 'react';
-import EISPanel from 'eam-components/dist/ui/components/panel';
 import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect'
 import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
 import EAMDatePicker from 'eam-components/dist/ui/components/muiinputs/EAMDatePicker'
 import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
 import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
+import OpenInAppIcon from 'mdi-material-ui/OpenInApp'
 
 class AssetDetails extends Component {
-
-    onChangeCategoryCode = (code) => {
-        const {updateEquipmentProperty} = this.props;
-        //Fetch the category data
-        if (code) {
-            WSEquipment.getCategoryData(code).then(response => {
-                const categoryData = response.body.data[0];
-                if (categoryData) {
-                    if (categoryData.categoryclass) {
-                        updateEquipmentProperty('classCode', categoryData.categoryclass);
-                        updateEquipmentProperty('classDesc', categoryData.categoryclassdesc);
-                    }
-                    if (categoryData.manufacturer) {
-                        updateEquipmentProperty('manufacturerCode', categoryData.manufacturer);
-                    }
-                }
-            }).catch(error => {
-                console.log(error);
-            })
-        }
-    };
-
     render() {
         let {equipment, children, assetLayout, updateEquipmentProperty, layout} = this.props;
 
         return (
-            <EISPanel heading="DETAILS">
-                <div style={{width: "100%", marginTop: 0}}>
+            <div style={{width: "100%", marginTop: 0}}>
 
-                    <EAMAutocomplete
-                        children={children}
-                        elementInfo={assetLayout.fields['class']}
-                        value={equipment.classCode}
-                        valueDesc={equipment.classDesc}
-                        updateProperty={updateEquipmentProperty}
-                        valueKey="classCode"
-                        descKey="classDesc"
-                        autocompleteHandler={(filter) => WS.autocompleteClass('OBJ', filter)}/>
+                <EAMAutocomplete
+                    children={children}
+                    elementInfo={assetLayout.fields['class']}
+                    value={equipment.classCode}
+                    valueDesc={equipment.classDesc}
+                    updateProperty={updateEquipmentProperty}
+                    valueKey="classCode"
+                    descKey="classDesc"
+                    autocompleteHandler={(filter) => WS.autocompleteClass('OBJ', filter)}/>
 
-                    <EAMAutocomplete
-                        children={children}
-                        elementInfo={assetLayout.fields['category']}
-                        value={equipment.categoryCode}
-                        valueDesc={equipment.categoryDesc}
-                        updateProperty={updateEquipmentProperty}
-                        valueKey="categoryCode"
-                        descKey="categoryDesc"
-                        autocompleteHandler={WSEquipment.autocompleteEquipmentCategory}
-                        onChangeValue={this.onChangeCategoryCode}/>
+                <EAMAutocomplete
+                    children={children}
+                    elementInfo={assetLayout.fields['category']}
+                    value={equipment.categoryCode}
+                    valueDesc={equipment.categoryDesc}
+                    updateProperty={updateEquipmentProperty}
+                    valueKey="categoryCode"
+                    descKey="categoryDesc"
+                    autocompleteHandler={WSEquipment.autocompleteEquipmentCategory}/>
 
-                    <EAMDatePicker
-                        children={children}
-                        elementInfo={assetLayout.fields['commissiondate']}
-                        value={equipment.comissionDate}
-                        updateProperty={updateEquipmentProperty}
-                        valueKey="comissionDate"/>
 
-                    <EAMAutocomplete children={children}
-                                     elementInfo={assetLayout.fields['assignedto']}
-                                     value={equipment.assignedTo}
-                                     updateProperty={updateEquipmentProperty}
-                                     valueKey="assignedTo"
-                                     valueDesc={equipment.assignedToDesc}
-                                     descKey="assignedToDesc"
-                                     autocompleteHandler={WS.autocompleteEmployee}/>
+                <EAMAutocomplete
+                    children={children}
+                    elementInfo={assetLayout.fields['costcode']}
+                    value={equipment.costCode}
+                    valueDesc={equipment.costCodeDesc || ""}
+                    updateProperty={updateEquipmentProperty}
+                    valueKey="costCode"
+                    descKey="costCodeDesc"
+                    autocompleteHandler={WSEquipment.autocompleteCostCode}/>
 
-                    <EAMSelect
-                        children={children}
-                        elementInfo={assetLayout.fields['criticality']}
-                        value={equipment.criticality}
-                        values={layout.criticalityValues}
-                        updateProperty={updateEquipmentProperty}
-                        valueKey="criticality"/>
+                <EAMDatePicker
+                    children={children}
+                    elementInfo={assetLayout.fields['commissiondate']}
+                    value={equipment.comissionDate}
+                    updateProperty={updateEquipmentProperty}
+                    valueKey="comissionDate"/>
 
-                    <EAMAutocomplete children={children}
-                                     elementInfo={assetLayout.fields['manufacturer']}
-                                     value={equipment.manufacturerCode}
-                                     valueDesc={equipment.manufacturerDesc}
-                                     updateProperty={updateEquipmentProperty}
-                                     valueKey="manufacturerCode"
-                                     descKey="manufacturerDesc"
-                                     autocompleteHandler={WSEquipment.autocompleteManufacturer}/>
+                <EAMAutocomplete children={children}
+                                    elementInfo={assetLayout.fields['assignedto']}
+                                    value={equipment.assignedTo}
+                                    updateProperty={updateEquipmentProperty}
+                                    valueKey="assignedTo"
+                                    valueDesc={equipment.assignedToDesc}
+                                    descKey="assignedToDesc"
+                                    autocompleteHandler={WS.autocompleteEmployee}/>
 
-                    <EAMInput
-                        children={children}
-                        elementInfo={assetLayout.fields['serialnumber']}
-                        value={equipment.serialNumber}
-                        updateProperty={updateEquipmentProperty}
-                        valueKey="serialNumber"/>
+                <EAMSelect
+                    children={children}
+                    elementInfo={assetLayout.fields['criticality']}
+                    value={equipment.criticality}
+                    values={layout.criticalityValues}
+                    updateProperty={updateEquipmentProperty}
+                    valueKey="criticality"/>
 
-                    <EAMInput
-                        children={children}
-                        elementInfo={assetLayout.fields['model']}
-                        value={equipment.model}
-                        updateProperty={updateEquipmentProperty}
-                        valueKey="model"/>
+                <EAMAutocomplete children={children}
+                                    elementInfo={assetLayout.fields['manufacturer']}
+                                    value={equipment.manufacturerCode}
+                                    valueDesc={equipment.manufacturerDesc}
+                                    updateProperty={updateEquipmentProperty}
+                                    valueKey="manufacturerCode"
+                                    descKey="manufacturerDesc"
+                                    autocompleteHandler={WSEquipment.autocompleteManufacturer}/>
 
-                    <EAMAutocomplete children={children}
-                                     elementInfo={assetLayout.fields['part']}
-                                     value={equipment.partCode}
-                                     valueDesc={equipment.partDesc}
-                                     updateProperty={updateEquipmentProperty}
-                                     valueKey="partCode"
-                                     descKey="partDesc"
-                                     autocompleteHandler={WSEquipment.autocompleteEquipmentPart}
-                                     link={() => equipment.partCode ? "/part/" + equipment.partCode: null}
-                                     />
+                <EAMInput
+                    children={children}
+                    elementInfo={assetLayout.fields['serialnumber']}
+                    value={equipment.serialNumber}
+                    updateProperty={updateEquipmentProperty}
+                    valueKey="serialNumber"/>
 
-                    <EAMAutocomplete children={children}
-                                     elementInfo={assetLayout.fields['store']}
-                                     value={equipment.storeCode}
-                                     valueDesc={equipment.storeDesc}
-                                     updateProperty={updateEquipmentProperty}
-                                     valueKey="storeCode"
-                                     descKey="storeDesc"
-                                     autocompleteHandler={WSEquipment.autocompleteEquipmentStore}/>
+                <EAMInput
+                    children={children}
+                    elementInfo={assetLayout.fields['model']}
+                    value={equipment.model}
+                    updateProperty={updateEquipmentProperty}
+                    valueKey="model"/>
 
-                    <EAMAutocomplete children={children}
-                                     elementInfo={assetLayout.fields['bin']}
-                                     value={equipment.bin}
-                                     valueDesc={equipment.binDesc}
-                                     updateProperty={updateEquipmentProperty}
-                                     valueKey="bin"
-                                     descKey="binDesc"
-                                     autocompleteHandler={(filter, config) => WSEquipment.autocompleteEquipmentBin(this.props.equipment.storeCode, filter, config)}/>
+                <EAMAutocomplete children={children}
+                                    elementInfo={assetLayout.fields['part']}
+                                    value={equipment.partCode}
+                                    valueDesc={equipment.partDesc}
+                                    updateProperty={updateEquipmentProperty}
+                                    valueKey="partCode"
+                                    descKey="partDesc"
+                                    autocompleteHandler={WSEquipment.autocompleteEquipmentPart}
+                                    link={() => equipment.partCode ? "/part/" + equipment.partCode: null}
+                                    icon={<OpenInAppIcon/>}/>
 
-                </div>
-            </EISPanel>
+                <EAMAutocomplete children={children}
+                                    elementInfo={assetLayout.fields['store']}
+                                    value={equipment.storeCode}
+                                    valueDesc={equipment.storeDesc}
+                                    updateProperty={updateEquipmentProperty}
+                                    valueKey="storeCode"
+                                    descKey="storeDesc"
+                                    autocompleteHandler={WSEquipment.autocompleteEquipmentStore}/>
+
+                <EAMAutocomplete children={children}
+                                    elementInfo={assetLayout.fields['bin']}
+                                    value={equipment.bin}
+                                    valueDesc={equipment.binDesc}
+                                    updateProperty={updateEquipmentProperty}
+                                    valueKey="bin"
+                                    descKey="binDesc"
+                                    autocompleteHandler={(filter, config) => WSEquipment.autocompleteEquipmentBin(this.props.equipment.storeCode, filter, config)}/>
+
+            </div>
         )
     }
 }

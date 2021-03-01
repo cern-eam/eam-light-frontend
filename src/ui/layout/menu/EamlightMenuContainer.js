@@ -5,7 +5,8 @@ import {
     updatePartScreenLayout,
     updatePositionScreenLayout,
     updateSystemScreenLayout,
-    updateWorkOrderScreenLayout
+    updateWorkOrderScreenLayout,
+    updateLocationScreenLayout
 } from '../../../actions/applicationActions'
 import {
     showError,
@@ -16,7 +17,8 @@ const mapStateToProps = (state) => {
     return {
         myOpenWorkOrders: state.workorder.myOpenWorkOrders,
         myTeamWorkOrders: state.workorder.myTeamWorkOrders,
-        userData: state.application.userData
+        userData: state.application.userData,
+        applicationData: state.application.applicationData
     }
 };
 
@@ -26,6 +28,7 @@ const EamlightMenuContainer = connect(mapStateToProps, {
     updatePositionScreenLayout,
     updateSystemScreenLayout,
     updatePartScreenLayout,
+    updateLocationScreenLayout,
     showError,
     showNotification
 })(EamlightMenu);

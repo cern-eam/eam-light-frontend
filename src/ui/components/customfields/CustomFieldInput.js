@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import CustomFieldRENT from './inputs/CustomFieldRENT'
 import CustomFieldCHAR from './inputs/CustomFieldCHAR'
 import CustomFieldDATE from './inputs/CustomFieldDATE'
@@ -29,6 +29,7 @@ function CustomFieldInput(props) {
             lookupValues: lookupValues,
             elementInfo: generateFieldInfo(),
             readonly: readonly,
+            UoM: customField.uom
         };
 
         switch (customField.type) {

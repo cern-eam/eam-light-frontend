@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import EISPanel from 'eam-components/dist/ui/components/panel';
 import WSWorkorders from '../../../../tools/WSWorkorders';
 import EISTable from 'eam-components/dist/ui/components/table';
-
+import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/SimpleEmptyState'
+import BlockUi from 'react-block-ui';
 
 export default class WorkorderMultiequipment extends Component {
 
@@ -11,7 +11,8 @@ export default class WorkorderMultiequipment extends Component {
     linksMap = new Map([['equipmentCode', {linkType: 'fixed', linkValue: 'equipment/', linkPrefix: '/'}]]);
 
     state = {
-        data: []
+        data: [],
+        blocking: true,
     };
 
     componentWillMount() {
@@ -29,6 +30,7 @@ export default class WorkorderMultiequipment extends Component {
     }
 
     fetchData = (props) => {
+        this.setState({ blocking: true });
         WSWorkorders.getWorkOrderEquipmentMEC(props.workorder)
             .then(response => {
                 //Set type in just one field
@@ -38,23 +40,30 @@ export default class WorkorderMultiequipment extends Component {
                 }));
                 //Assign data
                 this.setState(() => ({data}));
+            })
+            .finally(() => {
+                this.setState({ blocking: false })
             });
     };
 
     render() {
-        if (this.state.data.length === 0) {
-            return null;
-        }
+        const { blocking, data } = this.state;
+        const isEmptyState = !blocking && data.length === 0;
 
         return (
-            <EISPanel heading="EQUIPMENT">
-                <EISTable
-                    data={this.state.data}
-                    headers={this.headers}
-                    propCodes={this.propCodes}
-                    linksMap={this.linksMap}
-                />
-            </EISPanel>
+            isEmptyState
+            ? (
+                <SimpleEmptyState message="No Equipment to show." />
+            )
+            : (
+                <BlockUi blocking={blocking} style={{ width: "100%" }}>
+                    <EISTable
+                        data={this.state.data}
+                        headers={this.headers}
+                        propCodes={this.propCodes}
+                        linksMap={this.linksMap} />
+                </BlockUi>
+            )
         )
     }
 }

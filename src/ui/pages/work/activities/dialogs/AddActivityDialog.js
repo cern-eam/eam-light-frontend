@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -15,178 +15,182 @@ import KeyCode from "../../../../../enums/KeyCode";
 /**
  * Display detail of an activity
  */
-export default class AddActivityDialog extends Component {
+function AddActivityDialog(props) {
 
-    state = {
-        loading: true,
-        formValues: {}
-    };
+    let [loading, setLoading] = useState(false);
+    let [formValues, setFormValues] = useState({});
 
-    componentDidMount() {
-        this.init(this.props);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.workorderNumber && nextProps.workorderNumber !== this.props.workorderNumber) {
-            this.init(nextProps);
+    useEffect(() => {
+        if (props.open) {
+            init()
         }
-    }
+    }, [props.open])
 
-    init = (props) => {
+    let init = () => {
+        setLoading(true)
         WSWorkorders.initWorkOrderActivity(props.workorderNumber).then(response => {
-            this.setState(() => ({
-                formValues: response.body.data,
-                loading: false
-            }));
+            setFormValues(response.body.data);
+            setLoading(false);
         });
     };
 
-    handleClose = () => {
-        this.props.onClose();
+    let handleClose = () => {
+        props.onClose();
     };
 
-    handleSave = () => {
-        let activity = {...this.state.formValues}
+    let handleSave = () => {
+        let activity = {...formValues}
         delete activity.taskDesc;
         delete activity.tradeDesc;
         delete activity.materialListDesc;
 
-        this.setState({loading: true});
+        setLoading(true);
         WSWorkorders.createWorkOrderActivity(activity)
             .then(result => {
                 //Post add handler
-                this.props.postAddActivityHandler();
-                this.setState({loading: false});
-                this.props.showNotification("Activity successfully created");
-                this.handleClose();
-                this.props.onChange();
-                this.init(this.props);
-
+                props.postAddActivityHandler();
+                setLoading(false);
+                props.showNotification("Activity successfully created");
+                handleClose();
+                props.onChange();
             })
             .catch(error => {
-                this.setState({loading: false});
-                this.props.handleError(error)
+                setLoading(false);
+                props.handleError(error)
             });
     };
 
-
-    updateFormValues = (key, value) => {
-        this.setState((prevState) => ({
-            formValues: {
-                ...prevState.formValues,
-                [key]: value
-            }
-        }));
+    let updateFormValues = (key, value) => {
+        if (key === "taskCode") {
+            onTaskCodeChanged(value);
+        }
+        setFormValues(prevFormValues => ({
+            ...prevFormValues,
+            [key]: value
+        }))
     };
 
-    onKeyDown(e) {
+    let onTaskCodeChanged = (taskcode) => {
+        setLoading(true);
+        WSWorkorders.getTaskPlan(taskcode).then(response => {
+            const taskPlan = response.body.data;
+            updateFormValues("peopleRequired", taskPlan.peopleRequired === null ? "" : taskPlan.peopleRequired);
+            updateFormValues("estimatedHours", taskPlan.estimatedHours === null ? "" : taskPlan.estimatedHours);
+            updateFormValues("tradeCode", taskPlan.tradeCode === null ? "" : taskPlan.tradeCode);
+        }).finally(() => setLoading(false))
+    }
+
+    let onKeyDown = (e) => {
         if (e.keyCode === KeyCode.ENTER) {
-            this.handleSave();
+            e.stopPropagation();
+            handleSave();
         }
     }
 
-    render() {
-        return (
-            <div onKeyDown={this.onKeyDown.bind(this)}>
-                <BlockUi blocking={this.state.loading}>
-                    <Dialog
-                        fullWidth
-                        id="addActivityDialog"
-                        open={this.props.open}
-                        onClose={this.handleClose}
-                        aria-labelledby="form-dialog-title"
-                        disableBackdropClick={true}>
+    return (
+        <div onKeyDown={onKeyDown}>
+            <Dialog
+                fullWidth
+                id="addActivityDialog"
+                open={props.open}
+                onClose={handleClose}
+                aria-labelledby="form-dialog-title"
+                disableBackdropClick={true}>
 
-                        <DialogTitle id="form-dialog-title">Add Activity</DialogTitle>
+                <DialogTitle id="form-dialog-title">Add Activity</DialogTitle>
 
-                        <DialogContent id="content">
-                            <div>
-                                <BlockUi tag="div" blocking={this.state.loading}>
-                                    <EAMInput
-                                        elementInfo={this.props.layout.activity}
-                                        valueKey="activityCode"
-                                        value={this.state.formValues['activityCode']}
-                                        updateProperty={this.updateFormValues}
-                                    />
+                <DialogContent id="content">
+                    <div>
+                        <BlockUi tag="div" blocking={loading}>
+                            <EAMInput
+                                elementInfo={props.layout.activity}
+                                valueKey="activityCode"
+                                value={formValues['activityCode']}
+                                updateProperty={updateFormValues}
+                            />
 
-                                    <EAMAutocomplete
-                                        autocompleteHandler={WSWorkorders.autocompleteACTTrade}
-                                        elementInfo={this.props.layout.trade}
-                                        valueKey="tradeCode"
-                                        value={this.state.formValues['tradeCode']}
-                                        valueDesc={this.state.formValues['tradeDesc']}
-                                        descKey="tradeDesc"
-                                        updateProperty={this.updateFormValues}/>
+                            <EAMInput
+                                elementInfo={props.layout.activitynote}
+                                valueKey="activityNote"
+                                value={formValues['activityNote']}
+                                updateProperty={updateFormValues}
+                            />
 
-                                    <EAMInput
-                                        required={true}
-                                        elementInfo={this.props.layout.personsreq}
-                                        valueKey="peopleRequired"
-                                        value={this.state.formValues['peopleRequired']}
-                                        updateProperty={this.updateFormValues}
-                                    />
+                            <EAMAutocomplete
+                                autocompleteHandler={WSWorkorders.autocompleteACTTask}
+                                elementInfo={props.layout.task}
+                                valueKey="taskCode"
+                                value={formValues['taskCode']}
+                                valueDesc={formValues['taskDesc']}
+                                descKey="taskDesc"
+                                updateProperty={updateFormValues}/>
 
-                                    <EAMInput
-                                        required={true}
-                                        elementInfo={this.props.layout.esthrs}
-                                        valueKey="estimatedHours"
-                                        value={this.state.formValues['estimatedHours']}
-                                        updateProperty={this.updateFormValues}
-                                    />
+                            <EAMAutocomplete
+                                autocompleteHandler={WSWorkorders.autocompleteACTTrade}
+                                elementInfo={props.layout.trade}
+                                valueKey="tradeCode"
+                                value={formValues['tradeCode']}
+                                valueDesc={formValues['tradeDesc']}
+                                descKey="tradeDesc"
+                                updateProperty={updateFormValues}/>
 
-                                    <EAMDatePicker
-                                        elementInfo={this.props.layout.actstartdate}
-                                        valueKey="startDate"
-                                        value={this.state.formValues['startDate']}
-                                        updateProperty={this.updateFormValues}
-                                    />
+                            <EAMInput
+                                required={true}
+                                elementInfo={props.layout.personsreq}
+                                valueKey="peopleRequired"
+                                value={formValues['peopleRequired']}
+                                updateProperty={updateFormValues}
+                            />
 
-                                    <EAMDatePicker
-                                        elementInfo={this.props.layout.actenddate}
-                                        valueKey="endDate"
-                                        value={this.state.formValues['endDate']}
-                                        updateProperty={this.updateFormValues}
-                                    />
+                            <EAMInput
+                                required={true}
+                                elementInfo={props.layout.esthrs}
+                                valueKey="estimatedHours"
+                                value={formValues['estimatedHours']}
+                                updateProperty={updateFormValues}
+                            />
 
-                                    <EAMAutocomplete
-                                        autocompleteHandler={WSWorkorders.autocompleteACTTask}
-                                        elementInfo={this.props.layout.task}
-                                        valueKey="taskCode"
-                                        value={this.state.formValues['taskCode']}
-                                        valueDesc={this.state.formValues['taskDesc']}
-                                        descKey="taskDesc"
-                                        updateProperty={this.updateFormValues}/>
+                            <EAMDatePicker
+                                elementInfo={props.layout.actstartdate}
+                                valueKey="startDate"
+                                value={formValues['startDate']}
+                                updateProperty={updateFormValues}
+                            />
 
-                                    <EAMAutocomplete
-                                        autocompleteHandler={WSWorkorders.autocompleteACTMatList}
-                                        elementInfo={this.props.layout.matlcode}
-                                        valueKey="materialList"
-                                        value={this.state.formValues['materialList']}
-                                        valueDesc={this.state.formValues['materialListDesc']}
-                                        descKey="materialListDesc"
-                                        updateProperty={this.updateFormValues}/>
+                            <EAMDatePicker
+                                elementInfo={props.layout.actenddate}
+                                valueKey="endDate"
+                                value={formValues['endDate']}
+                                updateProperty={updateFormValues}
+                            />
 
-                                </BlockUi>
-                            </div>
-                        </DialogContent>
+                            <EAMAutocomplete
+                                autocompleteHandler={WSWorkorders.autocompleteACTMatList}
+                                elementInfo={props.layout.matlcode}
+                                valueKey="materialList"
+                                value={formValues['materialList']}
+                                valueDesc={formValues['materialListDesc']}
+                                descKey="materialListDesc"
+                                updateProperty={updateFormValues}/>
 
-                        <DialogActions>
-                            <div>
-                                <BlockUi tag="div" blocking={this.state.loading}>
-                                    <Button onClick={this.handleClose} color="primary">
-                                        Cancel
-                                    </Button>
-                                    <Button onClick={this.handleSave} color="primary" autoFocus>
-                                        Save
-                                    </Button>
-                                </BlockUi>
-                            </div>
-                        </DialogActions>
+                        </BlockUi>
+                    </div>
+                </DialogContent>
 
-                    </Dialog>
-                </BlockUi>
-            </div>
-        )
-    }
+                <DialogActions>
+                    <div>
+                        <Button onClick={handleClose} color="primary" disabled={loading}>
+                            Cancel
+                        </Button>
+                        <Button onClick={handleSave} color="primary" disabled={loading} autoFocus>
+                            Save
+                        </Button>
+                    </div>
+                </DialogActions>
 
+            </Dialog>
+        </div>
+    )
 }
+
+export default AddActivityDialog;

@@ -28,19 +28,18 @@ class WSWorkorders {
         return WS._delete('/workorders/' + number, config);
     }
 
-    autocompleteWorkorderEquipment(filter, config = {}) {
-        filter = encodeURIComponent(filter);
-        return WS._get('/autocomplete/wo/eqp?s=' + filter, config);
-    }
-
-    autocompleteWorkorderEquipmentSelected(filter, config = {}) {
-        filter = encodeURIComponent(filter);
-        return WS._get('/autocomplete/wo/eqp/selected?code=' + filter, config);
+    getStandardWorkOrder(code, config = {}) {
+        return WS._get('/stdworkorders/' + code, config);
     }
 
     autocompleteCostCode = (filter, config = {}) => {
         filter = encodeURIComponent(filter);
         return WS._get('/autocomplete/wo/costcode/' + filter, config);
+    };
+
+    autocompleteStandardWorkOrder = (userGroup, filter, config = {}) => {
+        filter = encodeURIComponent(filter);
+        return WS._get(`/autocomplete/standardworkorder?userGroup=${encodeURIComponent(userGroup)}&s=${filter}`, config);
     };
 
     //
@@ -189,6 +188,12 @@ class WSWorkorders {
         return WS._put('/checklists/', checklistItem, config);
     }
 
+    //
+    //TaskPlans
+    //
+    getTaskPlan(taskCode, config={}) {
+        return WS._get('/taskplan/' + taskCode, config);
+    }
 }
 
 export default new WSWorkorders();

@@ -136,9 +136,9 @@ class MeterReading extends React.Component {
         };
 
         return (
-            <div className="entityContainer">
+            <div id="entityContainer" style={{height: "100%"}}>
                 <BlockUi tag="div" blocking={this.state.blocking} style={{height: "100%", width: "100%"}}>
-                    <div className="entityMain" style={{height: "100%", overflowY: "hidden"}}>
+                    <div id="entityContent" style={{height: "100%", overflowY: "hidden"}}>
                         <Grid container spacing={1}>
                             <Grid item xs={12}>
                                 <MeterReadingSearch parentProps={parentProps}/>

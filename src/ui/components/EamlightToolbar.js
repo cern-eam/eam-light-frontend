@@ -11,7 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
-import AbstractToolbar from './AbstractToolbar';
+import Toolbar from './Toolbar';
 
 
 class EamlightToolbar extends Component {
@@ -110,12 +110,13 @@ class EamlightToolbar extends Component {
     //
     //
     getRegions = () => {
-        return Object.values(this.props.regions).map(
-            region => <MenuItem key={region.code} onClick={() => this.props.toggleHiddenRegion(region.code)}>
-                         <Checkbox disabled checked={!this.props.hiddenRegions[region.code]}/>
-                         {region.label}
-                      </MenuItem>
-        )
+        const { regions, toggleHiddenRegion, getUniqueRegionID, isHiddenRegion } = this.props;
+        return regions.map(region => (
+            <MenuItem key={region.id} onClick={() => toggleHiddenRegion(getUniqueRegionID(region.id))}>
+                <Checkbox disabled checked={!isHiddenRegion(region.id)}/>
+                {region.label}
+            </MenuItem>
+        ))
     }
 
     //
@@ -154,7 +155,7 @@ class EamlightToolbar extends Component {
     }
 
     getToolbar = renderOption => 
-        <AbstractToolbar {...this.props.toolbarProps} renderOption={renderOption}/>
+        <Toolbar {...this.props.toolbarProps} renderOption={renderOption}/>
 
     renderDesktopMenu() {
         return (
@@ -177,6 +178,7 @@ class EamlightToolbar extends Component {
     }
 
     render() {
+        const { entityScreen, isLocalAdministrator } = this.props;
 
         const verticalLineStyle = {
             height: 25,
@@ -196,7 +198,7 @@ class EamlightToolbar extends Component {
         return (
             <div className={"entityToolbar"} ref={entityToolbarDiv => this.entityToolbarDiv = entityToolbarDiv}>
 
-                <div className={"entityToolbarContent"}>
+                <div className={"entityToolbarContent"} style={{flexShrink: 0}}>
                     <div style={this.state.compactMenu ? {...entityCodeStyle, flexBasis: "8em"} : entityCodeStyle}>
                         <div style={{display: "flex", alignItems: "center", marginRight: 5}}>
                             {this.props.entityIcon}
@@ -221,8 +223,18 @@ class EamlightToolbar extends Component {
 
                 </div>
 
-                {this.props.regions &&
-                    <div>
+                <div className={"entityToolbarContent"} style={{minWidth: 0}}>
+                    {isLocalAdministrator && <>
+                        <span style={{
+                            marginRight: 5,
+                            color: '#ccc',
+                            fontWeight: 'lighter',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            minWidth: '0px'}}>{entityScreen.screenCode}</span>
+                        <div style={{...verticalLineStyle, borderRightColor: '#ccc'}}/>
+                    </>}
+                    {this.props.regions && <div style={{flexGrow: '1'}}>
                         <IconButton
                             aria-label="More"
                             aria-owns={this.state.visibilityMenu ? 'simple-menu' : null}
@@ -240,8 +252,8 @@ class EamlightToolbar extends Component {
                             {this.getRegions()}
 
                         </Menu>
-                    </div>
-                }
+                    </div>}
+                </div>
 
                 <ConfirmationDialog
                     ref={deleteConfirmation => this.deleteConfirmation = deleteConfirmation}

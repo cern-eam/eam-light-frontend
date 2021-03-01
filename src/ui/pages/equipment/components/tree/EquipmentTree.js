@@ -5,7 +5,7 @@ class EquipmentTree extends Component {
 
 
     treeDivStyle= {
-        height: "calc(100% - 100px)",
+        height: "calc(100% - 56px)",
         backgroundColor: 'white',
         width: "100%"
     }
@@ -22,15 +22,17 @@ class EquipmentTree extends Component {
     }
 
     render() {
-
         return (
 
             <div style={{height: "100%"}}>
-                <div style={this.headerStyle}>
-                    <div>Equipment Tree</div>
-                </div>
+                {
+                this.props.hideHeader ? null
+                    : <div style={this.headerStyle}>
+                        <div>Equipment Tree</div>
+                    </div>
+                }
                 <div style={this.treeDivStyle}>
-                    <EAMTree code={this.props.equipment.code}
+                    <EAMTree code={this.props.equipmentCode}
                              history={this.props.history}/>
                 </div>
             </div>
