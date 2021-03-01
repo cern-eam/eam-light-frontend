@@ -12,6 +12,10 @@ class WS {
         return this._get(`/users?currentScreen=${currentScreen ? currentScreen : ""}&screenCode=${screenCode ? screenCode : ""}`, config);
     }
 
+    getUserDataToImpersonate(userId, mode, config = {}) {
+        return this._get(`/users/impersonate?userId=${userId}&mode=${mode}`, config);
+
+    }
     getApplicationData(config = {}) {
         return this._get('/application/applicationdata', config);
     }
@@ -20,7 +24,7 @@ class WS {
         return this._get('/application/refreshCache', config);
     }
 
-    getScreenLayout(userGroup, entity, systemFunction, userFunction, tabs, config = {}) {
+    getScreenLayout(userGroup, entity, systemFunction, userFunction, tabs, config = {timeout: 20000}) {
         if (tabs)
             tabs = 'tabname=' + tabs.join('&tabname=');
         return this._get(`/users/screenlayout/${userGroup}/${entity}/${systemFunction}/${userFunction}?${tabs}`, config)
@@ -52,9 +56,9 @@ class WS {
         return this._get('/myworkorders/myteam', config)
     }
 
-    getSearchData(keyword, config = {}) {
+    getSearchData(keyword, entityTypes, config = {}) {
         keyword = encodeURIComponent(keyword);
-        return ajax.get(process.env.REACT_APP_BACKEND + '/index?s=' + keyword, config);
+        return ajax.get(process.env.REACT_APP_BACKEND + `/index?s=${keyword}&entityTypes=${entityTypes}`, config);
     }
 
     getSearchSingleResult(keyword, config = {}) {
@@ -83,6 +87,15 @@ class WS {
         return this._get(`/autocomplete/location?s=${filter}`, config);
     };
 
+    autocompleteEquipment = (filter, config = {}) => {
+        filter = encodeURIComponent(filter);
+        return this._get('/autocomplete/eqp?s=' + filter, config);
+    };
+
+    autocompleteEquipmentSelected = (filter, config) => {
+        filter = encodeURIComponent(filter);
+        return this._get('/autocomplete/eqp/selected?code=' + filter, config);
+    };
 
     //
     //

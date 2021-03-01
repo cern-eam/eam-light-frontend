@@ -1,32 +1,30 @@
 #maindiv {
-    margin: 0px;
+    display: flex;
+    flex-direction: column;
     height: 100%;
     width: 100%;
     font-size: 14px;
 }
 
-#layout-topbar-cover {
-    width: 100%;
-    display: table;
-    box-sizing: border-box;
-    position: fixed;
-    table-layout: fixed;
-    top: 0px;
-    z-index: 999;
-    height: 40px;
-    background-color: #00aaff
+#topbar {
+    display: flex;
+    flex: 0 0 48px;
+    transition: top 0.3s;
+}
+
+#topbar-left {
+    color: white;
+    flex: 0 0 265px;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    padding-left: 15px;
+    justify-content: center;
 }
 
 #layout-container {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    padding-top: 48px;
-}
-
-#layout-container-row {
-    height: 100%;
-    width: 100%;
+    min-height: 0;
+    flex: 1 0;
 }
 
 #layout-menu-cover {
@@ -40,7 +38,6 @@
     vertical-align: top;
     transition: all 0.3s ease;
 }
-
 
 #layout-portlets-cover {
     display: block;
@@ -56,20 +53,7 @@
     margin-left: 58px;
 }
 
-#layout-topbar-row {
-    display: flex;
-}
-
-#layout-topbar-left {
-    color: white;
-    flex: 0 0 280px;
-    font-weight: 500;
-    line-height: 48px;
-    font-size: 18px;
-}
-
 #eqp-tree-btn {
-    display: inline;
     display: flex;
     align-items: center;
 }
@@ -92,7 +76,7 @@
 }
 
 @media (max-width: 959px) {
-    #layout-topbar-left {
+    #topbar-left {
         flex: 0 0 120px;
     }
     #menu-resize-btn {
@@ -116,8 +100,9 @@
     }
 }
 
-#layout-topbar-right {
+#topbar-right {
     background-color: rgba(40, 40, 40, 0.06);
     display: flex;
+    flex: 1 0;
     align-items: center;
 }

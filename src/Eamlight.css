@@ -13,22 +13,20 @@
 }
 
 .entityContainer {
-    position: relative;
     display: flex;
     flex-direction: row;
     height: 100%;
     background-color: #eeeeee;
 }
 
-.entityMain {
-    height: calc(100% - 109px);
+#entityContent {
+    height: calc(100% - 60px);
     overflow-y: scroll;
     overflow-x: hidden;
     padding-top: 8px;
     padding-left: 8px;
     padding-right: 8px;
     background-color: #eeeeee;
-    display: flex;
     -webkit-overflow-scrolling: touch;
 }
 

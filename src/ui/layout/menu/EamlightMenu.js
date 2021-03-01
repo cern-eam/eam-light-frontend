@@ -15,6 +15,15 @@ import {AssetIcon, PartIcon, PositionIcon, SystemIcon, WorkorderIcon} from 'eam-
 import {Account, AccountMultiple, Settings, Tune, DatabaseRefresh} from "mdi-material-ui"
 import ScreenChange from "./ScreenChange";
 import MenuTools from './MenuTools'
+import RoomIcon from '@material-ui/icons/Room';
+import BuildIcon from '@material-ui/icons/Build';
+
+const getScreenHeaderFunction = (screens = {}) => ({ screenName, screen, updateScreenLayout }) =>
+    <ScreenChange
+        updateScreenLayout={updateScreenLayout}
+        screen={screen}
+        screens = {Object.values(screens).filter(screen => screen.parentScreen === screenName)}
+    />
 
 class EamlightMenu extends Component {
     constructor(props) {
@@ -41,61 +50,9 @@ class EamlightMenu extends Component {
     }
 
 
-    creationAllowed(screen) {
-        return screen && this.props.userData.screens[screen].creationAllowed
-    }
+    creationAllowed = (screens, screen) => screen && screens[screen] && screens[screen].creationAllowed
 
-    readAllowed(screen) {
-        return screen && this.props.userData.screens[screen].readAllowed
-    }
-
-    //
-    // HEADERS
-    //
-    getWorkOrdersHeader() {
-        return (
-            <ScreenChange
-                updateScreenLayout={this.props.updateWorkOrderScreenLayout}
-                screen={this.props.userData.workOrderScreen}
-                screens = {Object.values(this.props.userData.screens).filter(screen => screen.parentScreen === "WSJOBS")}/>
-        )
-    }
-
-    getAssetsHeader() {
-        return (
-            <ScreenChange
-                updateScreenLayout={this.props.updateAssetScreenLayout}
-                screen={this.props.userData.assetScreen}
-                screens = {Object.values(this.props.userData.screens).filter(screen => screen.parentScreen === "OSOBJA")}/>
-        )
-    }
-
-    getPositionsHeader() {
-        return (
-            <ScreenChange
-                updateScreenLayout={this.props.updatePositionScreenLayout}
-                screen={this.props.userData.positionScreen}
-                screens = {Object.values(this.props.userData.screens).filter(screen => screen.parentScreen === "OSOBJP")}/>
-        )
-    }
-
-    getSystemsHeader() {
-        return (
-            <ScreenChange
-                updateScreenLayout={this.props.updateSystemScreenLayout}
-                screen={this.props.userData.systemScreen}
-                screens = {Object.values(this.props.userData.screens).filter(screen => screen.parentScreen === "OSOBJS")}/>
-        )
-    }
-
-    getPartsHeader() {
-        return (
-            <ScreenChange
-                updateScreenLayout={this.props.updatePartScreenLayout}
-                screen={this.props.userData.partScreen}
-                screens = {Object.values(this.props.userData.screens).filter(screen => screen.parentScreen === "SSPART")}/>
-        )
-    }
+    readAllowed = (screens, screen) => screen && screens[screen] && screens[screen].readAllowed
 
     //
     // RENDER
@@ -115,6 +72,48 @@ class EamlightMenu extends Component {
             height: 36
         }
 
+  
+        const { myOpenWorkOrders, myTeamWorkOrders, userData, applicationData, showNotification, showError, updateWorkOrderScreenLayout, 
+            updateAssetScreenLayout, updatePositionScreenLayout, updateSystemScreenLayout, updatePartScreenLayout, updateLocationScreenLayout } = this.props;
+        const { workOrderScreen, assetScreen, positionScreen, systemScreen, partScreen, locationScreen, eamAccount, screens } = userData;
+        
+        const currentPartScreen = screens[partScreen] || {};
+        const currentWorkOrderScreen = screens[workOrderScreen] || {};
+
+        const screenProps = {
+            workOrder: {
+                screenName: 'WSJOBS',
+                updateScreenLayout: updateWorkOrderScreenLayout,
+                screen: workOrderScreen
+            },
+            asset: {
+                screenName: 'OSOBJA',
+                updateScreenLayout: updateAssetScreenLayout,
+                screen: assetScreen
+            },
+            position: {
+                screenName: 'OSOBJP',
+                updateScreenLayout: updatePositionScreenLayout,
+                screen: positionScreen
+            },
+            system: {
+                screenName: 'OSOBJS',
+                updateScreenLayout: updateSystemScreenLayout,
+                screen: systemScreen
+            },
+            location: {
+                screenName: 'OSOBJL',
+                updateScreenLayout: updateLocationScreenLayout,
+                screen: locationScreen
+            },
+            part: {
+                screenName: 'SSPART',
+                updateScreenLayout: updatePartScreenLayout,
+                screen: partScreen
+            },
+        }
+
+        const getScreenHeader = getScreenHeaderFunction(screens);
 
         return (
             <div id="menu" ref={(menudiv) => {
@@ -128,8 +127,8 @@ class EamlightMenu extends Component {
                                 <Tooltip title="MY OPEN WOs" placement="right">
                                     <Account style={iconStyles} />
                                 </Tooltip>
-                                {!!this.props.myOpenWorkOrders.length && <div className="numberOfWorkOrders">
-                                    {this.props.myOpenWorkOrders.length < 100 ? this.props.myOpenWorkOrders.length : '99+'}</div>}
+                                {!!myOpenWorkOrders.length && <div className="numberOfWorkOrders">
+                                    {myOpenWorkOrders.length < 100 ? myOpenWorkOrders.length : '99+'}</div>}
                             </div>
                         </li>
 
@@ -138,12 +137,12 @@ class EamlightMenu extends Component {
                                 <Tooltip title="MY TEAM's WOs" placement="right">
                                     <AccountMultiple style={iconStyles} />
                                 </Tooltip>
-                                {!!this.props.myTeamWorkOrders.length && <div className="numberOfWorkOrders">
-                                    {this.props.myTeamWorkOrders.length < 100 ? this.props.myTeamWorkOrders.length : '99+'}</div>}
+                                {!!myTeamWorkOrders.length && <div className="numberOfWorkOrders">
+                                    {myTeamWorkOrders.length < 100 ? myTeamWorkOrders.length : '99+'}</div>}
                             </div>
                         </li>
 
-                        {this.props.userData.workOrderScreen &&
+                        {workOrderScreen &&
                         <li>
                             <div rel="workorders" onClick={this.mainMenuClickHandler}>
                                 <Tooltip title="WORK ORDERS" placement="right">
@@ -153,7 +152,7 @@ class EamlightMenu extends Component {
                         </li>
                         }
 
-                        {(this.props.userData.assetScreen || this.props.userData.positionScreen || this.props.userData.systemScreen) &&
+                        {(assetScreen || positionScreen || systemScreen || locationScreen) &&
                         <li>
                             <div rel="equipment" onClick={this.mainMenuClickHandler}>
                                 <Tooltip title="EQUIPMENT" placement="right">
@@ -163,7 +162,7 @@ class EamlightMenu extends Component {
                         </li>
                         }
 
-                        {this.props.userData.partScreen &&
+                        {partScreen &&
                         <li>
                             <div rel="materials" onClick={this.mainMenuClickHandler}>
                                 <Tooltip title="MATERIALS" placement="right">
@@ -173,7 +172,7 @@ class EamlightMenu extends Component {
                         </li>
                         }
 
-                        {this.props.userData.eamAccount.userGroup === 'R5' &&
+                        {applicationData.EL_ADMUG && applicationData.EL_ADMUG.split(',').includes(eamAccount.userGroup) &&
                         <li>
                             <div rel="settings" onClick={this.mainMenuClickHandler}>
                                 <Tooltip title="ADMIN SETTINGS" placement="right">
@@ -184,70 +183,80 @@ class EamlightMenu extends Component {
                         }
                     </ul>
 
-                    <MenuMyWorkorders myOpenWorkOrders={this.props.myOpenWorkOrders}/>
+                    <MenuMyWorkorders myOpenWorkOrders={myOpenWorkOrders}/>
 
-                    <MenuMyTeamWorkorders myTeamWorkOrders={this.props.myTeamWorkOrders} eamAccount={this.props.userData.eamAccount}/>
+                    <MenuMyTeamWorkorders myTeamWorkOrders={myTeamWorkOrders} eamAccount={eamAccount}/>
 
-                    {this.props.userData.workOrderScreen &&
-                    <EamlightSubmenu id="workorders" header={this.getWorkOrdersHeader()}>
+                    {workOrderScreen &&
+                    <EamlightSubmenu id="workorders" header={getScreenHeader(screenProps.workOrder)}>
 
-                        {this.props.userData.screens[this.props.userData.workOrderScreen].creationAllowed &&
+                        {currentWorkOrderScreen.creationAllowed &&
                         <MenuItem label="New Work Order"
                                   icon={<AddIcon style={menuIconStyle}/>}
                                   link="workorder"/>
                         }
 
-                        {this.props.userData.screens[this.props.userData.workOrderScreen].readAllowed &&
-                        <MenuItem label={"Search " + this.props.userData.screens[this.props.userData.workOrderScreen].screenDesc}
+                        {currentWorkOrderScreen.readAllowed &&
+                        <MenuItem label={"Search " + currentWorkOrderScreen.screenDesc}
                                   icon={<SearchIcon style={menuIconStyle}/>}
                                   link="wosearch"/>
                         }
-
-                        <MenuItem label="Meter Reading"
-                                  icon={<SpeedometerIcon style={menuIconStyle}/>}
-                                  link="meterreading"/>
                     </EamlightSubmenu>}
 
 
-                    {(this.props.userData.assetScreen || this.props.userData.positionScreen || this.props.userData.systemScreen) &&
+                    {(assetScreen || positionScreen || systemScreen) &&
                     <EamlightSubmenu id="equipment" header={<span>EQUIPMENT</span>}>
 
-                        {this.props.userData.assetScreen &&
+                        {assetScreen &&
                         <MenuItem label="Assets"
                                   icon={<AssetIcon style={menuIconStyle}/>}
                                   onClick={this.openSubMenu.bind(this, 'assets')}/>
                         }
 
-                        { this.props.userData.positionScreen &&
+                        { positionScreen &&
                         <MenuItem label="Positions"
                                   icon={<PositionIcon style={menuIconStyle}/>}
                                   onClick={this.openSubMenu.bind(this, 'positions')}/>
                         }
 
-                        { this.props.userData.systemScreen &&
+                        { systemScreen &&
                         <MenuItem label="Systems"
                                   icon={<SystemIcon style={menuIconStyle}/>}
                                   onClick={this.openSubMenu.bind(this, 'systems')}/>
                         }
 
-                        {this.props.userData.assetScreen && this.props.userData.screens[this.props.userData.assetScreen].updateAllowed &&
+                        { locationScreen &&
+                        <MenuItem label="Locations"
+                                  icon={<RoomIcon style={menuIconStyle}/>}
+                                  onClick={this.openSubMenu.bind(this, 'locations')}/>
+                        }
+
+                        {assetScreen && screens[assetScreen].updateAllowed &&
                         <MenuItem label="Replace Equipment"
                                   icon={<AutorenewIcon style={menuIconStyle}/>}
                                   link="replaceeqp"/>}
+                                                      
+                        <MenuItem label="Meter Reading"
+                                  icon={<SpeedometerIcon style={menuIconStyle}/>}
+                                  link="meterreading"/>  
+                        
+                        <MenuItem label="Install Equipment"
+                                  icon={<BuildIcon style={menuIconStyle}/>}
+                                  link="installeqp"/>         
                     </EamlightSubmenu>
                     }
 
-                    {this.props.userData.assetScreen &&
-                    <EamlightSubmenu id="assets" header={this.getAssetsHeader()}>
+                    {assetScreen &&
+                    <EamlightSubmenu id="assets" header={getScreenHeader(screenProps.asset)}>
 
-                        {this.creationAllowed(this.props.userData.assetScreen) &&
+                        {this.creationAllowed(screens, assetScreen) &&
                         <MenuItem label="New Asset"
                                   icon={<AddIcon style={menuIconStyle}/>}
                                   link="asset"/>
                         }
 
-                        {this.readAllowed(this.props.userData.assetScreen) &&
-                        <MenuItem label={"Search " + this.props.userData.screens[this.props.userData.assetScreen].screenDesc}
+                        {this.readAllowed(screens, assetScreen) &&
+                        <MenuItem label={"Search " + screens[assetScreen].screenDesc}
                                   icon={<SearchIcon style={menuIconStyle}/>}
                                   link="assetsearch"/>
                         }
@@ -259,18 +268,18 @@ class EamlightMenu extends Component {
                     </EamlightSubmenu>
                     }
 
-                    {this.props.userData.positionScreen &&
-                    <EamlightSubmenu id="positions" header={this.getPositionsHeader()}>
+                    {positionScreen &&
+                    <EamlightSubmenu id="positions" header={getScreenHeader(screenProps.position)}>
 
-                        {this.creationAllowed(this.props.userData.positionScreen)  &&
+                        {this.creationAllowed(screens, positionScreen)  &&
                         <MenuItem label="New Position"
                                   icon={<AddIcon style={menuIconStyle}/>}
                                   link="position"/>
                         }
 
-                        {this.readAllowed(this.props.userData.positionScreen) &&
+                        {this.readAllowed(screens, positionScreen) &&
                         <MenuItem
-                            label={"Search " + this.props.userData.screens[this.props.userData.positionScreen].screenDesc}
+                            label={"Search " + screens[positionScreen].screenDesc}
                             icon={<SearchIcon style={menuIconStyle}/>}
                             link="positionsearch"/>
                         }
@@ -281,17 +290,17 @@ class EamlightMenu extends Component {
                     </EamlightSubmenu>
                     }
 
-                    {this.props.userData.systemScreen &&
-                    <EamlightSubmenu id="systems" header={this.getSystemsHeader()}>
+                    {systemScreen &&
+                    <EamlightSubmenu id="systems" header={getScreenHeader(screenProps.system)}>
 
-                        {this.creationAllowed(this.props.userData.systemScreen)  &&
+                        {this.creationAllowed(screens, systemScreen)  &&
                         <MenuItem label="New System"
                                   icon={<AddIcon style={menuIconStyle}/>}
                                   link="system"/>
                         }
 
-                        {this.readAllowed(this.props.userData.systemScreen) &&
-                        <MenuItem label={"Search " + this.props.userData.screens[this.props.userData.systemScreen].screenDesc}
+                        {this.readAllowed(screens, systemScreen) &&
+                        <MenuItem label={"Search " + screens[systemScreen].screenDesc}
                                   icon={<SearchIcon style={menuIconStyle}/>}
                                   link="systemsearch"/>
                         }
@@ -302,30 +311,43 @@ class EamlightMenu extends Component {
                     </EamlightSubmenu>
                     }
 
+                    {locationScreen &&
+                    <EamlightSubmenu id="locations" header={getScreenHeader(screenProps.location)}>
 
-                    {this.props.userData.partScreen &&
-                    <EamlightSubmenu id="materials" header={this.getPartsHeader()}>
-                        {this.props.userData.screens[this.props.userData.partScreen].creationAllowed &&
+                        {this.readAllowed(screens, locationScreen) &&
+                        <MenuItem label={"Search " + screens[locationScreen].screenDesc}
+                                  icon={<SearchIcon style={menuIconStyle}/>}
+                                  link="locationsearch"/>
+                        }
+
+                        <MenuItem label="Back to Equipment"
+                                  icon={<ArrowBackIcon style={menuIconStyle}/>}
+                                  onClick={this.openSubMenu.bind(this, 'equipment')}/>
+                    </EamlightSubmenu>
+                    }
+
+
+                    {partScreen &&
+                    <EamlightSubmenu id="materials" header={getScreenHeader(screenProps.part)}>
+                        {currentPartScreen.creationAllowed &&
                         <MenuItem label="New Part"
                                   icon={<AddIcon style={menuIconStyle}/>}
                                   link="part"/>
                         }
 
-                        {this.props.userData.screens[this.props.userData.partScreen].readAllowed &&
-                        <MenuItem label={"Search " + this.props.userData.screens[this.props.userData.partScreen].screenDesc}
+                        {currentPartScreen.readAllowed &&
+                        <MenuItem label={"Search " + currentPartScreen.screenDesc}
                                   icon={<SearchIcon style={menuIconStyle}/>}
                                   link="partsearch"/>
                         }
                     </EamlightSubmenu>
                     }
 
-                    {this.props.userData.eamAccount.userGroup === 'R5' &&
+                    {applicationData.EL_ADMUG && applicationData.EL_ADMUG.split(',').includes(eamAccount.userGroup) &&
                     <EamlightSubmenu id="settings" header={<span>ADMIN SETTINGS</span>}>
-                        {this.props.userData.screens[this.props.userData.partScreen].creationAllowed &&
                         <MenuItem label="Refresh EAM Light Cache"
                                   icon={<DatabaseRefresh style={menuIconStyle}/>}
-                                  onClick={MenuTools.refreshCache.bind(null, this.props.showNotification, this.props.showError)}/>
-                        }
+                                  onClick={MenuTools.refreshCache.bind(null, showNotification, showError)}/>
                     </EamlightSubmenu>
                     }
                 </div>

@@ -1,95 +1,147 @@
 import React, {useState, useEffect} from 'react';
-import EISPanel from 'eam-components/dist/ui/components/panel';
+import {format} from 'date-fns'
 import WSEquipment from '../../../../tools/WSEquipment';
 import EISTable from 'eam-components/dist/ui/components/table';
+import EISTableFilter from 'eam-components/dist/ui/components/table/EISTableFilter';
+import EquipmentMTFWorkOrders from "./EquipmentMTFWorkOrders"
+import BlockUi from 'react-block-ui';
+
+const WO_FILTER_TYPES = {
+    ALL: 'All',
+    OPEN: 'Open',
+    MTF: 'MTF',
+    THIS: 'This Eqp'
+}
+
+const WO_FILTERS = {
+    [WO_FILTER_TYPES.ALL]: {
+        text: WO_FILTER_TYPES.ALL,
+        process: (data) => {
+            return [...data];
+        }
+    },
+    [WO_FILTER_TYPES.OPEN]: {
+        text: WO_FILTER_TYPES.OPEN,
+        process: (data) => {
+            return data.filter((workOrder) => workOrder.status && ['T', 'C'].every(statusCode => !workOrder.status.startsWith(statusCode)));
+        }
+    },
+    [WO_FILTER_TYPES.MTF]: {
+        text: WO_FILTER_TYPES.MTF,
+        process: (data) => {
+            return data.filter((workOrder) => {
+                return workOrder.mrc && (workOrder.mrc.startsWith("ICF") || workOrder.mrc.startsWith("MTF"));
+            })
+        }
+    },
+    [WO_FILTER_TYPES.THIS]: {
+        text: WO_FILTER_TYPES.THIS,
+        process: data => [...data]
+    }
+}
 
 function EquipmentWorkOrders(props) {
-    
-    let workOrderFilterTypes = {
-        ALL: 'ALL',
-        OPEN: 'OPEN',
-        MTF: 'MTF'
+    const { defaultFilter } = props;
+
+    let [events, setEvents] = useState([]);
+    let [workorders, setWorkorders] = useState([]);
+    let [workOrderFilter, setWorkOrderFilter] = useState(Object.values(WO_FILTER_TYPES).includes(defaultFilter) ? defaultFilter : WO_FILTER_TYPES.ALL)
+    const [loadingData, setLoadingData] = useState(true);
+
+    let headers = ['Work Order', 'Equipment', 'Description', 'Status', 'Creation Date'];
+    let propCodes = ['number', 'object','desc', 'status', 'createdDate'];
+
+    if (workOrderFilter === WO_FILTER_TYPES.THIS) {
+        headers = ['Work Order', 'Description', 'Status', 'Creation Date'];
+        propCodes = ['number', 'desc', 'status', 'createdDate'];
     }
 
-    let workOrderFilters = {
-        [workOrderFilterTypes.ALL]: {
-            text: 'All',
-            process: (data) => {
-                return [...data];
-            }
-        },
-        [workOrderFilterTypes.OPEN]: {
-            text: 'Open',
-            process: (data) => {
-                return data.filter((workOrder) => workOrder.status && !workOrder.status.startsWith("T"));
-            }
-        },
-        [workOrderFilterTypes.MTF]: {
-            text: 'MTF',
-            process: (data) => {
-                return data.filter((workOrder) => {
-                    return workOrder.mrc && (workOrder.mrc.startsWith("ICF") || workOrder.mrc.startsWith("MTF"));
-                })
-            }
+    // make spaces in header strings non-breaking so headers do not wrap to multiple lines
+    headers = headers.map(string => string.replaceAll(' ', '\u00a0'));
+
+    const linksMap = new Map([
+        ['number', {
+            linkType: 'fixed',
+            linkValue: 'workorder/',
+            linkPrefix: '/'
+        }],
+        ['object', {
+            linkType: 'dynamic',
+            linkValue: 'objectUrl',
+            linkPrefix: '/'
+        }]
+    ]);
+
+    const stylesMap = {
+        number: {
+            overflowWrap: 'anywhere'
         }
-    }
-
-    let headers = ['Work Order', 'Description', 'Status', 'Creation Date'];
-    let propCodes = ['number', 'desc', 'status', 'createdDate'];
-    let linksMap = new Map([['number', {linkType: 'fixed', linkValue: 'workorder/', linkPrefix: '/'}]]);
-
-    let [data, setData] = useState([]);
-    let [workOrderFilter, setWorkOrderFilter] = useState(workOrderFilterTypes.ALL)
+    };
 
     let getFilteredWorkOrderList = (workOrders) => {
-        return workOrderFilters[workOrderFilter].process(workOrders)
+        return WO_FILTERS[workOrderFilter].process(workOrders)
     }
 
     useEffect(() => {
         if (props.equipmentcode) {
             fetchData(props.equipmentcode)
         } else {
-            setData([]);
+            setWorkorders([]);
+            setEvents([])
         }
     },[props.equipmentcode])
 
-    let fetchData = (equipmentcode) => {
-        WSEquipment.getEquipmentWorkOrders(equipmentcode)
-            .then(response => {
-                response.body.data.forEach(element => {
-                    // convert the dates from UNIX time to readable format
-                    let date = new Date(element.createdDate);
-                    let year = date.getFullYear().toString();
-                    let month = (date.getMonth() + 1).toString();
-                    let day = (date.getDate()).toString();
+    const getUrl = (equipmentType, objectCode) => {
+        const linkPrefix = {
+            A: 'asset',
+            P: 'position',
+            S: 'system',
+            L: 'location',
+        }[equipmentType];
 
-                    if (month.length < 2) month = '0' + month;
-                    if (day.length < 2) day = '0' + day;
-
-                    element.createdDate = [year, month, day].join('-');
-                });
-
-                setData(response.body.data)
-            });
+        return linkPrefix ? `${linkPrefix}/${objectCode}` : '';
     }
 
-    if (data.length === 0) {
-        return null;
+    const fetchData = equipmentCode => {
+        Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode)])
+            .then(responses => {
+                const formatResponse = response => response.body.data.map(element => ({
+                    ...element,
+                    createdDate: element.createdDate && format(new Date(element.createdDate),'dd-MMM-yyyy'),
+                    objectUrl: getUrl(element.equipmentType, element.object)
+                }));
+
+                const [workorders, events] = responses.map(formatResponse);
+                setWorkorders(workorders);
+                setEvents(events);
+            })
+            .finally(() => setLoadingData(false));
     }
 
     return (
-        <EISPanel
-            detailsStyle={{display: 'flex', flexDirection: 'column'}}
-            heading="WORK ORDERS">
-            <EISTable
-               data={getFilteredWorkOrderList(data)}
-               headers={headers}
-               propCodes={propCodes}
-               filters={workOrderFilters}
-               activeFilter={workOrderFilter}
-               handleFilterChange={newFilter => setWorkOrderFilter(newFilter)}
-               linksMap={linksMap} />
-        </EISPanel>
+        <div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
+            <EISTableFilter
+                filters={WO_FILTERS}
+                handleFilterChange={newFilter =>
+                    setWorkOrderFilter(newFilter)
+                }
+                activeFilter={workOrderFilter}
+                />
+                
+            {workOrderFilter === WO_FILTER_TYPES.MTF ?
+                <EquipmentMTFWorkOrders equipmentcode={props.equipmentcode} />
+                :
+                <BlockUi blocking={loadingData} style={{overflowX: 'auto'}}>
+                    <EISTable
+                    data={getFilteredWorkOrderList(workOrderFilter === WO_FILTER_TYPES.THIS ? workorders : events)}
+                    headers={headers}
+                    propCodes={propCodes}
+                    linksMap={linksMap}
+                    stylesMap={stylesMap}
+                    />
+                </BlockUi>
+            }
+        </div>
     )
 
 }

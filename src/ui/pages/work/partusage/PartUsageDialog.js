@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -11,284 +11,281 @@ import EAMSelect from "eam-components/dist/ui/components/muiinputs/EAMSelect";
 import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
 import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
 import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
-
+import WSParts from '../../../../tools/WSParts';
+import { makeStyles } from '@material-ui/core/styles';
 
 const transactionTypes = [{code: 'ISSUE', desc: 'Issue'}, {code: 'RETURN', desc: 'Return'}];
 
-class PartUsageDialog extends Component {
+const overflowStyle = {
+    overflowY: 'visible'
+}
 
-    state = {
-        partUsage: {},
-        partUsageLine: {},
-        binList: [],
-        storeList: [],
-        activityList: [],
-        loadingDialog: true,
-    };
+const useStyles = makeStyles({
+    paper: overflowStyle
+});
 
-    componentWillMount() {
-        this.initNewPartUsage(this.props.workorder);
-    }
+function PartUsageDialog(props) {
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.workorder.number && nextProps.workorder.number !== this.props.workorder.number)
-            this.initNewPartUsage(nextProps.workorder);
-        else if (this.props.isDialogOpen && this.props.isDialogOpen !== nextProps.isDialogOpen)
-            this.initNewPartUsage(nextProps.workorder);
-        else if (!this.props.isDialogOpen && nextProps.isDialogOpen) {
-            //If no store and no activity, we init complete
-            if (!this.state.partUsage.storeCode && !this.state.partUsage.activityCode) {
-                this.initNewPartUsage(nextProps.workorder);
-            } else {/*Just the lists*/
-                this.loadLists(nextProps.workorder);
-            }
+    let [partUsage, setPartUsage] = useState({});
+    let [partUsageLine, setPartUsageLine] = useState({});
+    let [binList, setBinList] = useState([]);
+    let [storeList, setStoreList] = useState([]);
+    let [activityList, setActivityList] = useState([]);
+    let [loading, setLoading] = useState(false);
+    let [uom, setUoM] = useState("");
+
+    useEffect(() => {
+        if (props.isDialogOpen) {
+            initNewPartUsage(props.workorder);
         }
-    }
+    }, [props.isDialogOpen])
 
-    initNewPartUsage = (workorder) => {
+    let initNewPartUsage = (workorder) => {
+        setLoading(true);
         //Fetch the new part usage object
         WSWorkorders.getInitNewPartUsage(workorder).then(response => {
-            this.setState(() => ({
-                partUsage: response.body.data,
-                partUsageLine: response.body.data.transactionlines[0],
-            }));
+            setLoading(false);
+            setPartUsage(response.body.data);
+            setPartUsageLine(response.body.data.transactionlines[0]);
         }).catch(error => {
-            this.props.handleError(error);
+            props.handleError(error);
         });
         //Load lists
-        this.loadLists(workorder);
+        loadLists(workorder);
     };
 
-    loadLists = (workorder) => {
-        //Set loading
-        this.setLoading(true);
+    let loadLists = (workorder) => {
         Promise.all([WSWorkorders.getPartUsageStores(),
-            WSWorkorders.getWorkOrderActivities(workorder.number)]).then(responses => {
-            this.setState(() => ({storeList: this.transformStores(responses[0].body.data)}));
-            this.setState(() => ({activityList: this.transformActivities(responses[1].body.data)}));
-            this.setLoading(false);
+                            WSWorkorders.getWorkOrderActivities(workorder.number)]).then(responses => {
+            setStoreList(responses[0].body.data);
+            setActivityList(transformActivities(responses[1].body.data));
         }).catch(error => {
-            this.props.handleError(error);
-            this.setLoading(false);
+            props.handleError(error);
         });
         //Bin list
-        this.setState((prevState) => ({...prevState, binList: []}));
+        setBinList([]);
     };
 
-    updatePartUsageProperty = (key, value) => {
-        this.setState((prevState) => ({
-            partUsage: {
-                ...prevState.partUsage,
-                [key]: value
-            }
+    let updatePartUsageProperty = (key, value) => {
+        setPartUsage(prevPartUsage => ({
+            ...prevPartUsage,
+            [key]: value
         }));
     };
 
-    updatePartUsageLineProperty = (key, value) => {
-        this.setState((prevState) => ({
-            partUsageLine: {
-                ...prevState.partUsageLine,
-                [key]: value
-            }
+    let updatePartUsageLineProperty = (key, value) => {
+        setPartUsageLine(prevPartUsageLine => ({
+            ...prevPartUsageLine,
+            [key]: value
         }));
     };
 
-    handleTransactionChange = (value) => {
+    let handleTransactionChange = (value) => {
         //Init all properties
-        this.updatePartUsageLineProperty('partCode', '');
-        this.updatePartUsageLineProperty('partDesc', '');
-        this.updatePartUsageLineProperty('assetIDCode', '');
-        this.updatePartUsageLineProperty('assetIDDesc', '');
+        updatePartUsageLineProperty('partCode', '');
+        updatePartUsageLineProperty('partDesc', '');
+        updatePartUsageLineProperty('assetIDCode', '');
+        updatePartUsageLineProperty('assetIDDesc', '');
         //Bin list
-        this.setState((prevState) => ({...prevState, binList: []}));
-        this.updatePartUsageLineProperty('bin', '');
+        setBinList([])
+        updatePartUsageLineProperty('bin', '');
     };
 
-    handleStoreChange = (value) => {
-        this.updatePartUsageLineProperty('partCode', '');
-        this.updatePartUsageLineProperty('partDesc', '');
-        this.updatePartUsageLineProperty('assetIDCode', '');
-        this.updatePartUsageLineProperty('assetIDDesc', '');
+    let handleStoreChange = (value) => {
+        updatePartUsageLineProperty('partCode', '');
+        updatePartUsageLineProperty('partDesc', '');
+        updatePartUsageLineProperty('assetIDCode', '');
+        updatePartUsageLineProperty('assetIDDesc', '');
         //Bin list
-        this.setState((prevState) => ({...prevState, binList: []}));
-        this.updatePartUsageLineProperty('bin', '');
+        setBinList([])
+        updatePartUsageLineProperty('bin', '');
     };
 
-    handleAssetChange = (value) => {
-        //Only if value really change
-        if (value && value !== this.state.partUsageLine.assetIDCode) {
-            //Clear part and bin selection
-            this.updatePartUsageLineProperty('partCode', '');
-            this.updatePartUsageLineProperty('partDesc', '');
-            this.updatePartUsageLineProperty('bin', '');
-            //Complete data for change Asset
-            WSWorkorders.getPartUsageSelectedAsset(this.props.workorder.number, this.state.partUsage.transactionType,
-                this.state.partUsage.storeCode, value).then(response => {
-                const completeData = response.body.data[0];
-                if (completeData) {
-                    this.updatePartUsageLineProperty('bin', completeData.bin);
-                    this.updatePartUsageLineProperty('partCode', completeData.part);
-                    this.loadBinList(completeData.bin, completeData.part);
-                }
-            }).catch(error => {
-                this.props.handleError(error);
-            });
-        }
+    let handleAssetChange = (value) => {
+        //Clear part and bin selection
+        updatePartUsageLineProperty('partCode', '');
+        updatePartUsageLineProperty('partDesc', '');
+        updatePartUsageLineProperty('bin', '');
+        //Complete data for change Asset
+        WSWorkorders.getPartUsageSelectedAsset(props.workorder.number, partUsage.transactionType,
+            partUsage.storeCode, value).then(response => {
+            const completeData = response.body.data[0];
+            if (completeData) {
+                updatePartUsageLineProperty('bin', completeData.bin);
+                updatePartUsageLineProperty('partCode', completeData.part);
+                loadBinList(completeData.bin, completeData.part);
+            }
+        }).catch(error => {
+            props.handleError(error);
+        });
     };
 
-    handlePartChange = (value) => {
-        //Only if value really change
-        if (value && value !== this.state.partUsageLine.partCode) {
-            //Clear asset and bin selection
-            this.updatePartUsageLineProperty('assetIDCode', '');
-            this.updatePartUsageLineProperty('assetIDDesc', '');
-            this.updatePartUsageLineProperty('bin', '');
-            //Load the bin list
-            this.loadBinList('', value);
-        }
+    let handlePartChange = (value) => {
+        //Clear asset and bin selection
+        updatePartUsageLineProperty('assetIDCode', '');
+        updatePartUsageLineProperty('assetIDDesc', '');
+        updatePartUsageLineProperty('bin', '');
+        //Load the bin list
+        loadBinList('', value);
+        loadUoM(value);
     };
 
-    loadBinList = (binCode, partCode) => {
+    let loadBinList = (binCode, partCode) => {
         if (!partCode)
             return;
-        WSWorkorders.getPartUsageBin(this.state.partUsage.transactionType,
-            binCode, partCode, this.state.partUsage.storeCode).then(response => {
-            this.setState(() => ({binList: this.transformBinList(response.body.data)}))
+        WSWorkorders.getPartUsageBin(partUsage.transactionType,
+            binCode, partCode, partUsage.storeCode).then(response => {
+            let binList = response.body.data;
+            setBinList(binList)
+            if (binList.length === 1) {
+                updatePartUsageLineProperty('bin', binList[0].code);
+            }
         }).catch(error => {
-            this.props.handleError(error);
+            props.handleError(error);
         });
     };
 
-    handleSave = () => {
+    let loadUoM = (partCode) => {
+        if (!partCode) return;
+
+        WSParts.getPart(partCode).then(response => {
+            setUoM(response.body.data.uom);
+        })
+    }
+
+    let handleSave = () => {
         //Call the handle save from the parent
-        this.props.handleSave(this.state.partUsage, this.state.partUsageLine);
+        setLoading(true);
+        let partUsageCopy = {...partUsage};
+        //Set the part usage Line
+        partUsageCopy.transactionlines = [partUsageLine];
+        //Remove transaction info prop
+        delete partUsageCopy.transactionInfo;
+        //Save the record
+        WSWorkorders.createPartUsage(partUsageCopy)
+        .then(props.successHandler)
+        .catch(props.handleError)
+        .finally(() => setLoading(false));
     };
 
-    transformActivities = (activities) => {
-        return activities.map(activity => ({code: activity.activityCode,
-                                            desc: `${activity.activityCode} - ${activity.tradeCode}`}));
+    let transformActivities = (activities) => {
+        return activities.map(activity => ({
+            code: activity.activityCode,
+            desc: activity.tradeCode
+        }));
     }
 
-    transformStores = (stores) => {
-        return stores.map(store => ({code: store.code,
-                                     desc: `${store.code} - ${store.desc}`}));
-    };
+    const classes = useStyles();
 
-    transformBinList = (bins) => {
-        return bins.map(bin => ({code: bin.code, desc: `${bin.code} - ${bin.desc}`}));
+    return (
+        <div>
+            <Dialog
+                fullWidth
+                id="addPartUsageDialog"
+                open={props.isDialogOpen}
+                onClose={props.handleCancel}
+                aria-labelledby="form-dialog-title"
+                disableBackdropClick={true}
+                classes={{
+                    paper: classes.paper
+                }}>
 
-    };
+                <DialogTitle id="form-dialog-title">Add Part Usage</DialogTitle>
 
-    setLoading = (loadingDialog) => {
-        this.setState(() => ({loadingDialog}));
-    };
+                <DialogContent id="content" style={overflowStyle}>
+                    <div>
+                        <BlockUi tag="div" blocking={loading || props.isLoading}>
+                            <EAMRadio elementInfo={props.tabLayout['transactiontype']}
+                                      valueKey="transactionType"
+                                      values={transactionTypes}
+                                      value={partUsage.transactionType}
+                                      updateProperty={updatePartUsageProperty}
+                                      onChangeValue={handleTransactionChange}
+                                      children={props.children}
+                            />
 
-    render() {
+                            <EAMSelect elementInfo={{...props.tabLayout['storecode'], attribute: 'R'}}
+                                       valueKey="storeCode"
+                                       values={storeList}
+                                       value={partUsage.storeCode}
+                                       updateProperty={updatePartUsageProperty}
+                                       onChangeValue={handleStoreChange}
+                                       children={props.children}/>
 
-        return (
-            <div>
-                <Dialog
-                    fullWidth
-                    id="addPartUsageDialog"
-                    open={this.props.isDialogOpen}
-                    onClose={this.handleCancel}
-                    aria-labelledby="form-dialog-title"
-                    disableBackdropClick={true}>
+                            <EAMSelect elementInfo={{...props.tabLayout['activity'], attribute: 'R'}}
+                                       valueKey="activityCode"
+                                       values={activityList}
+                                       value={partUsage.activityCode}
+                                       updateProperty={updatePartUsageProperty}
+                                       children={props.children}/>
 
-                    <DialogTitle id="form-dialog-title">Add Part Usage</DialogTitle>
+                            <EAMBarcodeInput updateProperty={value => {
+                                handlePartChange(value);
+                                updatePartUsageLineProperty('partCode', value);
+                            }} right={0} top={20}>
+                                <EAMAutocomplete elementInfo={props.tabLayout['partcode']}
+                                                 value={partUsageLine.partCode}
+                                                 updateProperty={updatePartUsageLineProperty}
+                                                 valueKey="partCode"
+                                                 valueDesc={partUsageLine.partDesc}
+                                                 descKey="partDesc"
+                                                 autocompleteHandler={(value, config) => WSWorkorders.getPartUsagePart(props.workorder.number, partUsage.storeCode, value, config)}
+                                                 onChangeValue={handlePartChange}
+                                                 children={props.children}/>
 
-                    <DialogContent id="content">
-                        <div>
-                            <BlockUi tag="div" blocking={this.props.isLoading || this.state.loadingDialog}>
-                                <EAMRadio elementInfo={this.props.tabLayout['transactiontype']}
-                                          valueKey="transactionType"
-                                          values={transactionTypes}
-                                          value={this.state.partUsage.transactionType}
-                                          updateProperty={this.updatePartUsageProperty}
-                                          onChangeValue={this.handleTransactionChange}
-                                          children={this.props.children}
-                                />
-
-                                <EAMSelect elementInfo={{...this.props.tabLayout['storecode'], attribute: 'R'}}
-                                           valueKey="storeCode"
-                                           values={this.state.storeList}
-                                           value={this.state.partUsage.storeCode}
-                                           updateProperty={this.updatePartUsageProperty}
-                                           onChangeValue={this.handleStoreChange}
-                                           children={this.props.children}/>
-
-                                <EAMSelect elementInfo={{...this.props.tabLayout['activity'], attribute: 'R'}}
-                                           valueKey="activityCode"
-                                           values={this.state.activityList}
-                                           value={this.state.partUsage.activityCode}
-                                           updateProperty={this.updatePartUsageProperty}
-                                           children={this.props.children}/>
-
-                                <EAMBarcodeInput updateProperty={value => {
-                                    this.handlePartChange(value);
-                                    this.updatePartUsageLineProperty('partCode', value);
-                                }} right={0} top={20}>
-                                    <EAMAutocomplete elementInfo={this.props.tabLayout['partcode']}
-                                                     value={this.state.partUsageLine.partCode}
-                                                     updateProperty={this.updatePartUsageLineProperty}
-                                                     valueKey="partCode"
-                                                     valueDesc={this.state.partUsageLine.partDesc}
-                                                     descKey="partDesc"
-                                                     autocompleteHandler={(value, config) => WSWorkorders.getPartUsagePart(this.props.workorder.number, this.state.partUsage.storeCode, value, config)}
-                                                     onChangeValue={this.handlePartChange}
-                                                     children={this.props.children}/>
-
-                                </EAMBarcodeInput>
-                                <EAMBarcodeInput updateProperty={value => {
-                                    this.handleAssetChange(value);
-                                    this.updatePartUsageLineProperty('assetIDCode', value);
-                                }} right={0} top={20}>
-                                <EAMAutocomplete elementInfo={this.props.tabLayout['assetid']}
-                                                 value={this.state.partUsageLine.assetIDCode}
-                                                 updateProperty={this.updatePartUsageLineProperty}
+                            </EAMBarcodeInput>
+                            <EAMBarcodeInput updateProperty={value => {
+                                handleAssetChange(value);
+                                updatePartUsageLineProperty('assetIDCode', value);
+                            }} right={0} top={20}>
+                                <EAMAutocomplete elementInfo={props.tabLayout['assetid']}
+                                                 value={partUsageLine.assetIDCode}
+                                                 updateProperty={updatePartUsageLineProperty}
                                                  valueKey="assetIDCode"
-                                                 valueDesc={this.state.partUsageLine.assetIDDesc}
+                                                 valueDesc={partUsageLine.assetIDDesc}
                                                  descKey="assetIDDesc"
-                                                 autocompleteHandler={(value, config) => WSWorkorders.getPartUsageAsset(this.state.partUsage.transactionType, this.state.partUsage.storeCode, value, config)}
-                                                 onChangeValue={this.handleAssetChange}
-                                                 children={this.props.children}/>
-                                </EAMBarcodeInput>
+                                                 autocompleteHandler={(value, config) => WSWorkorders.getPartUsageAsset(partUsage.transactionType, partUsage.storeCode, value, config)}
+                                                 onChangeValue={handleAssetChange}
+                                                 children={props.children}/>
+                            </EAMBarcodeInput>
 
-                                <EAMSelect elementInfo={this.props.tabLayout['bincode']}
-                                           valueKey="bin"
-                                           values={this.state.binList}
-                                           value={this.state.partUsageLine.bin}
-                                           updateProperty={this.updatePartUsageLineProperty}
-                                           children={this.props.children}
-                                />
+                            <EAMSelect elementInfo={props.tabLayout['bincode']}
+                                       valueKey="bin"
+                                       values={binList}
+                                       value={partUsageLine.bin}
+                                       updateProperty={updatePartUsageLineProperty}
+                                       children={props.children}
+                                       suggestionsPixelHeight={200} 
+                            />
 
-                                <EAMInput elementInfo={this.props.tabLayout['transactionquantity']}
-                                          valueKey="transactionQty"
-                                          value={this.state.partUsageLine.transactionQty}
-                                          updateProperty={this.updatePartUsageLineProperty}
-                                          children={this.props.children}/>
+                            <EAMInput elementInfo={props.tabLayout['transactionquantity']}
+                                      valueKey="transactionQty"
+                                      endAdornment={uom}
+                                      value={partUsageLine.transactionQty}
+                                      updateProperty={updatePartUsageLineProperty}
+                                      children={props.children}/>
 
-                            </BlockUi>
-                        </div>
-                    </DialogContent>
+                        </BlockUi>
+                    </div>
+                </DialogContent>
 
 
-                    <DialogActions>
-                        <div>
-                            <Button onClick={this.props.handleCancel} color="primary"
-                                    disabled={this.props.isLoading || this.state.loadingDialog}>
-                                Cancel
-                            </Button>
-                            <Button onClick={this.handleSave} color="primary"
-                                    disabled={this.props.isLoading || this.state.loadingDialog}>
-                                Save
-                            </Button>
-                        </div>
-                    </DialogActions>
-                </Dialog>
-            </div>
-        )
-    }
+                <DialogActions>
+                    <div>
+                        <Button onClick={props.handleCancel} color="primary"
+                                disabled={loading || props.isLoading}>
+                            Cancel
+                        </Button>
+                        <Button onClick={handleSave} color="primary"
+                                disabled={loading || props.isLoading}>
+                            Save
+                        </Button>
+                    </div>
+                </DialogActions>
+            </Dialog>
+        </div>
+    )
+
 }
 
 export default PartUsageDialog;

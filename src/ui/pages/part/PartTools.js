@@ -15,6 +15,10 @@ class PartTools {
                 return tabs[regionCode] && tabs[regionCode].alwaysAvailable;
         }
     }
+
+    layoutPropertiesMap = {
+        commoditycode: "commodityCode"
+    }
 }
 
 export default new PartTools();

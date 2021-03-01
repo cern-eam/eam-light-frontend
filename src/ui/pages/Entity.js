@@ -6,6 +6,8 @@ import Ajax from 'eam-components/dist/tools/ajax'
 import ErrorTypes from "../../enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
+import {assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType} from './EntityTools';
+import WSCustomFields from "../../tools/WSCustomFields";
 
 export default class readEntityEquipment extends Component {
 
@@ -15,7 +17,8 @@ export default class readEntityEquipment extends Component {
             layout: {
                 blocking: false,
                 newEntity: true,
-                isModified: false
+                isModified: false,
+                reading: false
             }
         }
         // map of all children components (the children are responsible for registration)
@@ -27,7 +30,7 @@ export default class readEntityEquipment extends Component {
      *
      * @param nextProps
      */
-    componentDidMount() {
+    componentDidMount() { 
         const values = queryString.parse(window.location.search)
         // If code param is present, open it
         if (values.code) {
@@ -42,16 +45,21 @@ export default class readEntityEquipment extends Component {
         } else {
             this.initNewEntity()
         }
+
     }
 
     /**
      * Triggered by React. Used to read existing entity or init new one depending on the URL
      *
      * @param prevProps
+     * @param prevState
+     * @param snapshot
      */
-    componentDidUpdate(prevProps) {
-        // Execute only when the URL was 'pushed'
+    componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.location.key !== this.props.location.key) {
+            // Note: code below is trickier than it looks. From testing we have never seen
+            // that nextCode !== previousCode, which feels quite strange and unexpected,
+            // taking into account that these values change over time
             let nextCode = this.props.match.params.code;
             let previousCode = prevProps.match.params.code;
 
@@ -64,6 +72,36 @@ export default class readEntityEquipment extends Component {
                 this.initNewEntity()
             }
         }
+        
+        if(this.state.layout.reading) {
+            return;
+        }
+
+        const newEntity = this.state[this.settings.entity];
+        const oldEntity = {...prevState[this.settings.entity]}; // {...undefined} = {}
+
+        if(typeof newEntity !== 'object') {
+            return;
+        }
+
+        Object.entries(newEntity)
+            .filter(([key, value]) => oldEntity[key] !== value)
+            .forEach(([key, value]) => this.handleUpdate(key, value));
+    }
+
+    handleUpdate(key, value) {
+        if(!this.settings.handlerFunctions || !this.settings.handlerFunctions[key]) {
+            return;
+        }
+
+        const promise = this.settings.handlerFunctions[key](value);
+
+        if(!promise) {
+            return;
+        }
+
+        this.setLayout({blocking: true})
+        promise.finally(() => this.setLayout({blocking: false}));
     }
 
     /**
@@ -86,7 +124,7 @@ export default class readEntityEquipment extends Component {
                 })
 
                 // Assign default values
-                let entity = this.assignDefaultValues(response.body.data);
+                let entity = this.assignValues(response.body.data);
 
                 // Save to the state
                 this.setState({
@@ -116,7 +154,10 @@ export default class readEntityEquipment extends Component {
         // Reset all validators when reading new entity
         this.resetValidation(this.children)
         //
-        this.setLayout({blocking: true})
+        this.setLayout({
+            blocking: true,
+            reading: true
+        })
         //
         if (this.cancelSource) {
             this.cancelSource.cancel();
@@ -125,21 +166,22 @@ export default class readEntityEquipment extends Component {
         //
         this.settings.readEntity(code, {cancelToken: this.cancelSource.token})
             .then(response => {
-                this.setState(() => ({
-                    [this.settings.entity]: response.body.data,
-                     readError: null
-                }))
                 this.setLayout({
                     newEntity: false,
                     blocking: false,
                     isModified: false
                 })
+                this.setState(() => ({
+                    [this.settings.entity]: response.body.data,
+                     readError: null
+                }))
                 // Invoke entity specific logic on the subclass
                 this.postRead(response.body.data)
                 // Disable all children when updates not allowed
                 if (!this.settings.entityScreen.updateAllowed) {
                     this.disableChildren()
                 }
+                this.setLayout({reading: false});
             })
             .catch(error => {
                 if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
@@ -206,7 +248,7 @@ export default class readEntityEquipment extends Component {
 
                 // Set new URL (pushState does not trigger componentDidUpdate)
                 window.history.pushState({}, this.settings.entityDesc + ' ' + response.body.data,
-                    this.settings.entityURL + encodeURIComponent(createdEntity[this.settings.entityCodeProperty]));
+                   process.env.PUBLIC_URL + this.settings.entityURL + encodeURIComponent(createdEntity[this.settings.entityCodeProperty]));
 
                 this.props.showNotification(this.settings.entityDesc + ' ' + createdEntity[this.settings.entityCodeProperty] + ' has been successfully created.');
                 // Invoke entity specific logic on the subclass
@@ -236,6 +278,22 @@ export default class readEntityEquipment extends Component {
                 this.props.handleError(error);
                 this.setLayout({blocking: false})
             })
+    }
+
+    copyEntity() {
+        //TODO clean the URL
+        let code = this.state[this.settings.entity][this.settings.entityCodeProperty];
+        this.setLayout({newEntity: true, reading: true});
+        this.setState({[this.settings.entity]: {
+            ...assignDefaultValues(this.state[this.settings.entity],
+                                        this.settings.layout,
+                                        this.settings.layoutPropertiesMap),
+            copyFrom: code}});
+        this.postInit();
+        if (this.postCopy) {
+            this.postCopy();
+        }
+        this.setLayout({reading: false});
     }
 
     /**
@@ -315,48 +373,16 @@ export default class readEntityEquipment extends Component {
     }
 
     //
-    // ASSIGN DEFAULT VALUES
+    // ASSIGN VALUES
     //
-    assignDefaultValues(entity) {
+    assignValues(entity) {
         let layout = this.settings.layout;
         let layoutPropertiesMap = this.settings.layoutPropertiesMap;
         let queryParams = queryString.parse(window.location.search);
 
-        // Populate the entity object with query params keys matching the custom field code
-        if (entity.customField) {
-            entity.customField.filter(cf => queryParams[cf.code]).forEach(cf => cf.value = queryParams[cf.code])
-        }
-
-        // Create an entity-like object with the default values from the screen's layout
-        let defaultValues = {};
-        if (layout && layoutPropertiesMap) {
-             defaultValues = Object.values(layout.fields)
-                 .filter(field => field.defaultValue && layoutPropertiesMap[field.elementId])
-                 .reduce((result, field) => set(result, layoutPropertiesMap[field.elementId], field.defaultValue === 'NULL' ? '' : field.defaultValue), {})
-        }
-
-        // Create an entity-like object with the values from the query parameters
-        let queryValues = Object.keys(queryParams).reduce( (result, qkey) => {
-            if (qkey.startsWith("udf")) {
-                set(result, `userDefinedFields.${qkey}`, queryParams[qkey])
-            } else {
-                // Transform the query key (qkey) to match exactly the key name in the entity (ekey)
-                result[Object.keys(entity).find(ekey => ekey.toUpperCase() === qkey.toUpperCase())] = queryParams[qkey];
-            }
-            return result;
-        }, {})
-        delete queryValues.undefined;
-
-        return {
-            ...entity,
-            ...defaultValues,
-            ...queryValues,
-            userDefinedFields: {
-                ...entity.userDefinedFields,
-                ...defaultValues.userDefinedFields,
-                ...queryValues.userDefinedFields
-            }
-        }
+        entity = assignDefaultValues(entity, layout, layoutPropertiesMap);
+        entity = assignQueryParamValues(entity, queryParams);
+        return entity;
     }
 
     //
@@ -380,6 +406,36 @@ export default class readEntityEquipment extends Component {
         }
     }
 
+    onChangeClass = newClass => {
+        // TODO: refactor how entityCode is retrieved
+        const entityCodeMap = {
+            workorder: 'EVNT',
+            part: 'PART',
+            location: 'LOC',
+            default: 'OBJ',
+        };
+
+        const entityCode = entityCodeMap[this.settings.entity] || entityCodeMap.default;
+
+        return WSCustomFields.getCustomFields(entityCode, newClass).then(response => {
+            this.setState(prevState => {
+                const entity = prevState[this.settings.entity];
+                const newCustomFields = response.body.data;
+                let newEntity = assignCustomFieldFromCustomField(entity, newCustomFields, AssignmentType.SOURCE_NOT_EMPTY);
+    
+                // replace custom fields with ones in query parameters if we just created the entity
+                if(!this.state.layout.isModified && this.state.layout.newEntity) {
+                    const queryParams = queryString.parse(window.location.search);
+                    newEntity = assignCustomFieldFromObject(newEntity, queryParams, AssignmentType.SOURCE_NOT_EMPTY);
+                }
+
+                return {
+                    [this.settings.entity]: newEntity
+                };
+            });
+        })
+    }
+
     //
     // RENDER
     //
@@ -401,7 +457,7 @@ export default class readEntityEquipment extends Component {
         this.children = {}
 
         return (
-            <div onKeyDown={this.onKeyDownHandler.bind(this)} tabIndex={0} style={{width: '100%', height: '100%'}}>
+            <div onKeyDown={this.onKeyDownHandler.bind(this)} tabIndex={0} style={{width: '100%', height: '100%', outline: "none"}}>
                 {this.settings.renderEntity()}
             </div>
         )

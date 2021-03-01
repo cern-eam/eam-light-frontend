@@ -11,22 +11,24 @@ import KeyCode from '../../../enums/KeyCode'
 import ErrorTypes from "../../../enums/ErrorTypes";
 import Ajax from 'eam-components/dist/tools/ajax'
 
+const INITIAL_STATE = {
+    results: [],
+    searchBoxUp: false,
+    keyword: '',
+    isFetching: false,
+    redirectRoute: '',
+}
+
 class Search extends Component {
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            "results": [],
-            "searchBoxUp": false,
-            "keyword": "",
-            "isFetching": false,
-            "redirectRoute": "",
+    state = INITIAL_STATE;
 
-        }
-    }
-
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         this.scrollWindowIfNecessary();
+        if (prevProps.location !== this.props.location) {
+            this.setState(INITIAL_STATE);
+            this.cancelSource && this.cancelSource.cancel();
+        }
     }
 
     render() {
@@ -43,7 +45,9 @@ class Search extends Component {
                     <SearchHeader keyword={this.state.keyword} searchBoxUp={this.state.searchBoxUp}
                                   fetchDataHandler={this.fetchNewData.bind(this)}
                                   onKeyDown={this.onKeyDown.bind(this)}
-                                  tryToGoToResult={this.tryToGoToResult.bind(this)}  />
+                                  tryToGoToResult={this.tryToGoToResult.bind(this)}
+                                  showTypes={this.state.searchBoxUp}
+                    />
                     <div id="searchResults"
                          className={this.state.searchBoxUp ? "searchResultsSearch" : "searchResultsHome"}>
                         <div className="linearProgressBox">
@@ -176,7 +180,7 @@ class Search extends Component {
         }
     }
 
-    fetchNewData(keyword) {
+    fetchNewData(keyword, entityTypes) {
         if (!!this.cancelSource) {
             this.cancelSource.cancel();
         }
@@ -201,7 +205,7 @@ class Search extends Component {
 
         clearTimeout(this.timeout);
         this.timeout = setTimeout(() =>
-            (WS.getSearchData(this.prepareKeyword(keyword), {
+            (WS.getSearchData(this.prepareKeyword(keyword), entityTypes, {
                 cancelToken: this.cancelSource.token
             }).then(response => {
                 this.cancelSource = null;

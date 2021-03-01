@@ -16,6 +16,10 @@ class WSEquipment {
         return WS._get('/equipment/workorders?c=' + equipmentCode, config);
     }
 
+    getEquipmentEvents(equipmentCode, config = {}) {
+        return WS._get('/equipment/events?c=' + equipmentCode, config);
+    }
+
     getEquipment(equipmentCode, config = {}) {
         equipmentCode = encodeURIComponent(equipmentCode);
         return WS._get('/equipment?c=' + equipmentCode, config);
@@ -43,6 +47,10 @@ class WSEquipment {
 
     getEquipmentCriticalityValues(config = {}) {
         return WS._get('/eqplists/criticalitycodes', config);
+    }
+
+    getEquipmentStateValues(config = {}) {
+        return WS._get('/eqplists/statecodes', config);
     }
 
     autocompleteManufacturer(filter, config = {}) {
@@ -73,6 +81,10 @@ class WSEquipment {
         filter = encodeURIComponent(filter);
         return WS._get(`/autocomplete/department/${filter}`, config);
     }
+    autocompleteCostCode = (filter, config = {}) => {
+        filter = encodeURIComponent(filter);
+        return WS._get('/autocomplete/equipment/costcode/' + filter, config);
+    };
 
     //
     // HIERARCHY
@@ -125,6 +137,13 @@ class WSEquipment {
     getEquipmentChildren(equipment, config = {}) {
         equipment = encodeURIComponent(equipment);
         return WS._get(`/equipment/children/${equipment}`, config);
+    }
+
+    //
+    //INSTALL EQUIPMENT
+    //
+    installEquipment(equipmentStructure, config = {}) {
+        return WS._post('/eqstructure/attach', equipmentStructure, config);
     }
 }
 

@@ -6,12 +6,11 @@ export default class UserInfo extends Component {
 
     userInfoStyle = {
        color: "rgba(255, 255, 255, 0.8)",
-       width: "100%",
+       flexGrow: 1,
        height: 48,
        display: "flex",
        alignItems: "center",
-       justifyContent: 'flex-end',
-       backgroundColor: "rgba(40, 40, 40, 0.06)"
+       justifyContent: 'flex-end'
    }
 
    accountIcon = {
@@ -34,6 +33,10 @@ export default class UserInfo extends Component {
    }
 
     logoutHandler() {
+        if (this.props.scannedUser) {
+            this.props.updateScannedUser(null);
+            return;
+        }
         if (process.env.REACT_APP_LOGIN_METHOD === 'STD') {
             this.props.updateInforContext(null);
             this.props.updateApplication({userData: null})
@@ -45,10 +48,14 @@ export default class UserInfo extends Component {
     }
 
     render() {
+        const { scannedUser } = this.props;
+
+        const usernameDisplay = this.props.userData.eamAccount.userCode + (scannedUser ? ` (${scannedUser.userCode})` : '');
+
         return (
             <div style={this.userInfoStyle}>
                 <Account style={this.accountIcon}/>
-                {this.props.userData.eamAccount.userCode}
+                {usernameDisplay}
                 <span style={this.separatorStyle}/>
                 <IconButton onClick={this.logoutHandler.bind(this)} style={this.logoutIcon}>
                     <Logout style={{fontSize: 20}}/>

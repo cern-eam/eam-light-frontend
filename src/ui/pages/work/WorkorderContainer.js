@@ -5,17 +5,22 @@ import {
     setLayoutProperty,
     showError,
     showNotification,
-    toggleHiddenRegion
+    toggleHiddenRegion,
 } from '../../../actions/uiActions'
 import {updateMyWorkOrders} from '../../../actions/workorderActions'
 import {updateApplication} from '../../../actions/applicationActions'
+import { isHiddenRegion, getUniqueRegionID } from '../../../selectors/uiSelectors'
+
 
 function mapStateToProps(state) {
+    const entityScreenCode = state.application.userData.workOrderScreen;
     return {
         workOrderLayout: state.application.workOrderLayout,
         userData: state.application.userData,
         hiddenRegions: state.ui.hiddenRegions,
-        applicationData: state.application.applicationData
+        applicationData: state.application.applicationData,
+        isHiddenRegion: isHiddenRegion(state)(entityScreenCode),
+        getUniqueRegionID: getUniqueRegionID(state)(entityScreenCode),
     }
 }
 
@@ -26,7 +31,7 @@ const WorkorderContainer = connect(mapStateToProps, {
         updateMyWorkOrders,
         setLayoutProperty,
         updateApplication,
-        toggleHiddenRegion,
+        toggleHiddenRegion
     }
 )(Workorder)
 

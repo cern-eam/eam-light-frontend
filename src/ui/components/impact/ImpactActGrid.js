@@ -50,7 +50,6 @@ class ImpactActGrid extends Component {
             </div>
         )
     }
-
 }
 
 export default ImpactActGrid;

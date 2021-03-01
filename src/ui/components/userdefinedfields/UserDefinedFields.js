@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-import EISPanel from 'eam-components/dist/ui/components/panel';
 import UDFChar from "./UDFChar";
-
 import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
 import EAMDatePicker from "eam-components/dist/ui/components/muiinputs/EAMDatePicker";
 import EAMDateTimePicker from "eam-components/dist/ui/components/muiinputs/EAMDateTimePicker";
@@ -105,14 +103,12 @@ class UserDefinedFields extends Component {
 
     render() {
         return (
-            <EISPanel heading="USER DEFINED FIELDS">
-                <div style={{width: "100%", marginTop: 0}}>
-                    {this.renderUdfChars()}
-                    {this.renderUdfNums()}
-                    {this.renderUdfDates()}
-                    {this.renderUdfCheckboxs()}
-                </div>
-            </EISPanel>
+            <div style={{width: "100%", marginTop: 0}}>
+                {this.renderUdfChars()}
+                {this.renderUdfNums()}
+                {this.renderUdfDates()}
+                {this.renderUdfCheckboxs()}
+            </div>
         );
     }
 }

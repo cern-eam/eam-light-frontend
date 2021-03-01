@@ -26,6 +26,7 @@ export default class SystemSearch extends Component {
                     screenCode={this.props.systemScreen.screenCode}
                     handleError={this.props.handleError}
                     cellRenderer={this._cellRenderer}
+                    searchOnMount={this.props.systemScreen.startupAction !== "N"}
                 />
             </div>
         )
