@@ -13,7 +13,7 @@ const treatParamAsList = (param) => (param === undefined || param === null) ? []
 
 const cellRenderer = userColumns => (cell, row) => {
     const userColumnToType = {
-        assetColumns: 'equipment',
+        equipmentColumns: 'equipment',
         locationColumns: 'location',
         workorderColumns: 'workorder',
         partColumns: 'part',
