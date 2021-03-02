@@ -10,9 +10,11 @@ const ENTITY_REGION_PARAMS = {
 }
 
 const EntityRegions = (props) => {
-    const { isHiddenRegion, regions = [], showEqpTree, isNewEntity } = props;
+    const { isHiddenRegion, regions : inputRegions = [], showEqpTree, isNewEntity } = props;
     const [visibleRegions, setVisibleRegions] = React.useState([]);
     const [regionMaximized, setRegionMaximized] = React.useState(undefined);
+
+    const regions = inputRegions.filter(region => !region.ignore);
 
     const history = useHistory();
     const location = useLocation();
@@ -32,7 +34,7 @@ const EntityRegions = (props) => {
                 ? region.isVisibleWhenNewEntity && defaultVisibility(region)
                 : defaultVisibility(region)
         }), {}))
-    }, [regions, isHiddenRegion, isNewEntity, regionMaximized])
+    }, [inputRegions, isHiddenRegion, isNewEntity, regionMaximized])
 
     React.useEffect(() => {
         setRegionMaximized(searchParams.maximize);

@@ -1,6 +1,7 @@
 import {connect} from 'react-redux'
 import {handleError, showError, showNotification} from '../../../../actions/uiActions'
 import ReplaceEqp from "./ReplaceEqp";
+import { withCernMode } from '../../../components/CERNMode';
 
 function mapStateToProps(state) {
     return {
@@ -16,4 +17,4 @@ const ReplaceEqpContainer = connect(mapStateToProps, {
     }
 )(ReplaceEqp);
 
-export default ReplaceEqpContainer;
+export default withCernMode(ReplaceEqpContainer);

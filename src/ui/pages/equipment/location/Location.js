@@ -17,6 +17,7 @@ import LocationGeneral from "./LocationGeneral";
 import LocationHierarchy from "./LocationHierarchy";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
+import { isCernMode } from '../../../components/CERNMode';
 
 export default class Location extends Entity {
     settings = {
@@ -110,7 +111,8 @@ export default class Location extends Entity {
                 render: ({ panelQueryParams }) => 
                     <EquipmentWorkOrders
                         equipmentcode={location.code}
-                        defaultFilter={panelQueryParams.defaultFilter}/>
+                        defaultFilter={panelQueryParams.defaultFilter}
+                        equipmenttype='L' />
                 ,
                 column: 1,
                 order: 4
@@ -125,7 +127,8 @@ export default class Location extends Entity {
                         equipmentcode={location.code} />
                 ,
                 column: 1,
-                order: 5
+                order: 5,
+                ignore: !isCernMode
             },
             {
                 id: 'EDMSDOCUMENTS',
@@ -141,7 +144,8 @@ export default class Location extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 6
+                order: 6,
+                ignore: !isCernMode
             },
             // {
             //     id: 'NCRS',
@@ -225,7 +229,8 @@ export default class Location extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 11
+                order: 11,
+                ignore: !isCernMode
             },
         ]
 
@@ -264,7 +269,7 @@ export default class Location extends Entity {
                                     applicationData: applicationData,
                                     extendedLink: applicationData.EL_LOCLI,
                                     screencode: userData.screens[userData.locationScreen].screenCode,
-                                    copyHandler: this.postInit.bind(this),
+                                    copyHandler: this.copyEntity.bind(this),
                                     entityType: ENTITY_TYPE.LOCATION
                                  }}
                                  width={730}

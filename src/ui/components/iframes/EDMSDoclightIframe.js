@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import queryString from "query-string"
 import ResizableIframe from "./ResizableIframe";
+import { withCernMode } from "../CERNMode";
 
 class EDMSDoclightIframe extends Component {
     docLightStyle = {
@@ -42,4 +43,4 @@ EDMSDoclightIframe.defaultProps = {
     title: '',
 }
 
-export default EDMSDoclightIframe;
+export default withCernMode(EDMSDoclightIframe);

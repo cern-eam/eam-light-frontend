@@ -3,6 +3,7 @@ import WSEquipment from '../../../../tools/WSEquipment';
 import EISTable from 'eam-components/dist/ui/components/table';
 import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/SimpleEmptyState'
 import BlockUi from 'react-block-ui';
+import { withCernMode } from '../../../components/CERNMode';
 
 function EquipmentHistory(props)  {
     const headers = ['Date', 'Type', 'Related Value', 'Done By'];
@@ -55,4 +56,4 @@ function EquipmentHistory(props)  {
     );
 }
 
-export default React.memo(EquipmentHistory);
+export default withCernMode(React.memo(EquipmentHistory));

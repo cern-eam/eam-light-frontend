@@ -4,6 +4,7 @@ import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
 import KeyCode from '../../../enums/KeyCode';
 import WS from '../../../tools/WS';
 import BlockUi from 'react-block-ui';
+import { withCernMode } from '../CERNMode';
 
 const setUser = (userId, onSuccess, onError) => {
     if (userId) {
@@ -84,4 +85,4 @@ const ScanUser = ({ updateScannedUser, showNotification, handleError }) => {
         </div>
 }
 
-export default ScanUser;
+export default withCernMode(ScanUser);
