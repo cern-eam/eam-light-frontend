@@ -6,6 +6,13 @@ import CustomFieldDATI from './inputs/CustomFieldDATI'
 import CustomFieldNUM from './inputs/CustomFieldNUM'
 import CustomFieldCODE from './inputs/CustomFieldCODE'
 
+const groupLabelStyle = {
+    "margin": "15px 0 0 0",
+    "fontWeight": "900",
+    "color": "rgb(52 111 151)",
+    "fontSize": "0.90rem",
+    "textAlign": "center"
+}
 function CustomFieldInput(props) {
 
     let {customField, children, updateCustomFieldValue, updateCustomFieldDesc, index, lookupValues, readonly} = props
@@ -32,23 +39,34 @@ function CustomFieldInput(props) {
             UoM: customField.uom
         };
 
+        let customFieldRender;
         switch (customField.type) {
             case "RENT":
-                return <CustomFieldRENT {...props}/>;
+                customFieldRender = <CustomFieldRENT {...props}/>;
+                break;
             case "CHAR":
-                return <CustomFieldCHAR {...props}/>;
+                customFieldRender = <CustomFieldCHAR {...props}/>;
+                break;
             case "DATE":
-                return <CustomFieldDATE {...props}/>;
+                customFieldRender = <CustomFieldDATE {...props}/>;
+                break;
             case "DATI":
-                return <CustomFieldDATI {...props}/>;
+                customFieldRender = <CustomFieldDATI {...props}/>;
+                break;
             case "NUM":
-                return <CustomFieldNUM {...props}/>;
+                customFieldRender = <CustomFieldNUM {...props}/>;
+                break;
             case "CODE":
-                return <CustomFieldCODE {...props}/>;
+                customFieldRender = <CustomFieldCODE {...props}/>;
+                break;
             default:
-                return <div/>
+                customFieldRender = <div/>;
+                break;
         }
-
+        return <>
+            {customField.groupLabel && <div style={groupLabelStyle}>{customField.groupLabel}</div>}
+            {customFieldRender}
+        </>
     }
 
     return renderCustomFieldSpecificInput()
