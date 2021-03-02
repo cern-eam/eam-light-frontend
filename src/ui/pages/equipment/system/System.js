@@ -18,6 +18,7 @@ import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDocligh
 import {ENTITY_TYPE} from "../../../components/Toolbar";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
+import StatusRow from '../../../components/statusrow/StatusRow'
 
 
 export default class System extends Entity {
@@ -146,7 +147,7 @@ export default class System extends Entity {
     //
     //
     getRegions = () => {
-        const { userData, systemLayout, handleError, applicationData } = this.props;
+        const { userData, systemLayout, handleError, applicationData, showNotification } = this.props;
         const { equipment, layout } = this.state;
 
         let commonProps = {
@@ -165,6 +166,7 @@ export default class System extends Entity {
                 maximizable: false,
                 render: () => 
                     <SystemGeneral
+                        showNotification={showNotification}
                         {...commonProps}/>
                 ,
                 column: 1,

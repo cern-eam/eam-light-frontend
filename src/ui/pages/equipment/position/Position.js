@@ -133,6 +133,7 @@ export default class Position extends Entity {
                 maximizable: false,
                 render: () => 
                     <PositionGeneral
+                        showNotification={showNotification}
                         {...commonProps}/>
                 ,
                 column: 1,

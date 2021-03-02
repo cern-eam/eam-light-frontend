@@ -2,6 +2,7 @@ import React from "react";
 import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
 import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
 import WS from "../../../../tools/WS";
+import StatusRow from "../../../components/statusrow/StatusRow";
 
 const AssetGeneral = props => {
     const {
@@ -49,6 +50,12 @@ const AssetGeneral = props => {
                 valueKey="departmentCode"
                 descKey="departmentDesc"
                 autocompleteHandler={WS.autocompleteDepartment}
+            />
+
+            <StatusRow
+                entity={location}
+                entityType={"equipment"}
+                style={{marginTop: "10px", marginBottom: "-10px"}}
             />
         </div>
     );
