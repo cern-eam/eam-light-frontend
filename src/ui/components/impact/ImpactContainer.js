@@ -2,6 +2,7 @@ import {connect} from 'react-redux';
 import {withRouter} from "react-router-dom";
 import Impact from "./Impact";
 import {handleError, showError} from "../../../actions/uiActions";
+import { withCernMode } from "../CERNMode";
 
 /**
  * To get the value of a parameter from the URL
@@ -26,4 +27,4 @@ const mapStateToProps = (state, ownProps) => {
 
 const ImpactContainer = connect(mapStateToProps, {handleError, showError})(Impact);
 
-export default withRouter(ImpactContainer)
+export default withCernMode(withRouter(ImpactContainer))

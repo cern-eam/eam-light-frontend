@@ -18,7 +18,7 @@ import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDocligh
 import {ENTITY_TYPE} from "../../../components/Toolbar";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
-import StatusRow from '../../../components/statusrow/StatusRow'
+import { isCernMode } from '../../../components/CERNMode';
 
 
 export default class System extends Entity {
@@ -204,7 +204,8 @@ export default class System extends Entity {
                 render: ({ panelQueryParams }) => 
                     <EquipmentWorkOrders
                         equipmentcode={equipment.code}
-                        defaultFilter={panelQueryParams.defaultFilter}/>
+                        defaultFilter={panelQueryParams.defaultFilter}
+                        equipmenttype='S' />
                 ,
                 column: 1,
                 order: 4
@@ -219,7 +220,8 @@ export default class System extends Entity {
                         equipmentcode={equipment.code} />
                 ,
                 column: 1,
-                order: 5
+                order: 5,
+                ignore: !isCernMode
             },
             {
                 id: 'PARTS',
@@ -248,7 +250,8 @@ export default class System extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 7
+                order: 7,
+                ignore: !isCernMode
             },
             {
                 id: 'COMMENTS',
@@ -317,7 +320,8 @@ export default class System extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 11
+                order: 11,
+                ignore: !isCernMode
             },
         ]
     }

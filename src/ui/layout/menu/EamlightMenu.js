@@ -17,6 +17,7 @@ import ScreenChange from "./ScreenChange";
 import MenuTools from './MenuTools'
 import RoomIcon from '@material-ui/icons/Room';
 import BuildIcon from '@material-ui/icons/Build';
+import CERNMode from '../../components/CERNMode';
 
 const getScreenHeaderFunction = (screens = {}) => ({ screenName, screen, updateScreenLayout }) =>
     <ScreenChange
@@ -231,11 +232,13 @@ class EamlightMenu extends Component {
                                   onClick={this.openSubMenu.bind(this, 'locations')}/>
                         }
 
-                        {assetScreen && screens[assetScreen].updateAllowed &&
-                        <MenuItem label="Replace Equipment"
-                                  icon={<AutorenewIcon style={menuIconStyle}/>}
-                                  link="replaceeqp"/>}
-                                                      
+                        <CERNMode>
+                            {assetScreen && screens[assetScreen].updateAllowed &&
+                            <MenuItem label="Replace Equipment"
+                                        icon={<AutorenewIcon style={menuIconStyle}/>}
+                                        link="replaceeqp"/>}
+                        </CERNMode>
+
                         <MenuItem label="Meter Reading"
                                   icon={<SpeedometerIcon style={menuIconStyle}/>}
                                   link="meterreading"/>  

@@ -4,6 +4,7 @@ import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
 import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
 import WSEquipment from "../../../../tools/WSEquipment";
 import StatusRow from "../../../components/statusrow/StatusRow";
+import CERNMode from "../../../components/CERNMode"
 import EquipmentTools from "../EquipmentTools"
 
 class SystemGeneral extends Component {
@@ -64,11 +65,13 @@ class SystemGeneral extends Component {
                     updateProperty={this.updateEquipmentStatus}
                     valueKey="statusCode"/>
 
-                <StatusRow
-                    entity={equipment}
-                    entityType={"equipment"}
-                    style={{marginTop: "10px", marginBottom: "-10px"}}
-                />
+                <CERNMode>
+                    <StatusRow
+                        entity={equipment}
+                        entityType={"equipment"}
+                        style={{marginTop: "10px", marginBottom: "-10px"}}
+                    />
+                </CERNMode>
             </div>
         )
     }

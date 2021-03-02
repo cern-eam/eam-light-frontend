@@ -22,6 +22,7 @@ import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentPartsMadeOf from "../components/EquipmentPartsMadeOf";
 import WSParts from '../../../../tools/WSParts';
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
+import { isCernMode } from '../../../components/CERNMode';
 
 export default class Asset extends Entity {
 
@@ -230,7 +231,8 @@ export default class Asset extends Entity {
                 render: ({ panelQueryParams }) => 
                     <EquipmentWorkOrders
                         equipmentcode={equipment.code}
-                        defaultFilter={panelQueryParams.defaultFilter}/>
+                        defaultFilter={panelQueryParams.defaultFilter}
+                        equipmenttype='A' />
                 ,
                 column: 1,
                 order: 4
@@ -245,7 +247,8 @@ export default class Asset extends Entity {
                         equipmentcode={equipment.code} />
                 ,
                 column: 1,
-                order: 5
+                order: 5,
+                ignore: !isCernMode
             },
             {
                 id: 'PARTS',
@@ -270,7 +273,8 @@ export default class Asset extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 7
+                order: 7,
+                ignore: !isCernMode
             },
             {
                 id: 'NCRS',
@@ -287,7 +291,8 @@ export default class Asset extends Entity {
                         showSuccess={showNotification} />
                 ,
                 column: 2,
-                order: 8
+                order: 8,
+                ignore: !isCernMode
             },
             {
                 id: 'COMMENTS',
@@ -374,7 +379,8 @@ export default class Asset extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 13
+                order: 13,
+                ignore: !isCernMode
             },
         ]
     }

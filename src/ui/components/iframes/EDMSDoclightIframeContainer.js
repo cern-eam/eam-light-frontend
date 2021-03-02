@@ -1,5 +1,6 @@
 import {connect} from 'react-redux'
 import EDMSDoclightIframe from './EDMSDoclightIframe'
+import { withCernMode } from '../CERNMode'
 
 function mapStateToProps(state) {
     return {
@@ -9,4 +10,4 @@ function mapStateToProps(state) {
 
 const EDMSDoclightIframeContainer = connect(mapStateToProps)(EDMSDoclightIframe)
 
-export default EDMSDoclightIframeContainer
+export default withCernMode(EDMSDoclightIframeContainer)

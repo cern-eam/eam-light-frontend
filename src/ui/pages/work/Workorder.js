@@ -25,6 +25,8 @@ import EntityRegions from '../../components/entityregions/EntityRegions';
 import IconButton from '@material-ui/core/IconButton';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
 import {assignValues, assignUserDefinedFields, assignCustomFieldFromCustomField, AssignmentType} from '../EntityTools';
+import { isCernMode } from '../../components/CERNMode';
+
 
 const assignStandardWorkOrderValues = (workOrder, standardWorkOrder) => {
     const swoToWoMap = ([k, v]) => [k, standardWorkOrder[v]];
@@ -231,7 +233,8 @@ class Workorder extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 5
+                order: 5,
+                ignore: !isCernMode
             },
             {
                 id: 'NCRS',
@@ -248,7 +251,8 @@ class Workorder extends Entity {
                         showSuccess={showNotification} />
                 ,
                 column: 2,
-                order: 6
+                order: 6,
+                ignore: !isCernMode
             },
             {
                 id: 'COMMENTS',
@@ -443,9 +447,9 @@ class Workorder extends Entity {
 
     postCopy = () => {
         let fields = this.props.workOrderLayout.fields;
-        this.updateEntityProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
-        this.updateEntityProperty("typeCode", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD")
-        this.updateEntityProperty("completedDate", "");
+        isCernMode && this.updateEntityProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
+        isCernMode && this.updateEntityProperty("typeCode", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD")
+        isCernMode && this.updateEntityProperty("completedDate", "");
     }
 
     //

@@ -3,6 +3,7 @@ import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
 import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
 import WS from "../../../../tools/WS";
 import StatusRow from "../../../components/statusrow/StatusRow";
+import CERNMode from "../../../components/CERNMode"
 
 const AssetGeneral = props => {
     const {
@@ -52,11 +53,13 @@ const AssetGeneral = props => {
                 autocompleteHandler={WS.autocompleteDepartment}
             />
 
-            <StatusRow
-                entity={location}
-                entityType={"equipment"}
-                style={{marginTop: "10px", marginBottom: "-10px"}}
-            />
+            <CERNMode>
+                <StatusRow
+                    entity={location}
+                    entityType={"equipment"}
+                    style={{marginTop: "10px", marginBottom: "-10px"}}
+                />
+            </CERNMode>
         </div>
     );
 };

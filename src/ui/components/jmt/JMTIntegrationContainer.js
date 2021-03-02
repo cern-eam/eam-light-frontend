@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
 import JMTIntegration from "./JMTIntegration";
 import { showNotification, handleError, showError } from "../../../actions/uiActions";
+import { withCernMode } from "../CERNMode";
 
 /**
  * To get the value of a parameter from the URL
@@ -26,4 +27,4 @@ const mapStateToProps = (state, ownProps) => {
 
 const JMTInteg = connect(mapStateToProps, {showNotification, handleError, showError})(JMTIntegration);
 
-export default withRouter(JMTInteg)
+export default withCernMode(withRouter(JMTInteg))

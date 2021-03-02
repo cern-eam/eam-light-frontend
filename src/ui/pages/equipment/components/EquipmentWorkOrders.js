@@ -5,6 +5,7 @@ import EISTable from 'eam-components/dist/ui/components/table';
 import EISTableFilter from 'eam-components/dist/ui/components/table/EISTableFilter';
 import EquipmentMTFWorkOrders from "./EquipmentMTFWorkOrders"
 import BlockUi from 'react-block-ui';
+import { isCernMode } from '../../../components/CERNMode';
 
 const WO_FILTER_TYPES = {
     ALL: 'All',
@@ -26,14 +27,14 @@ const WO_FILTERS = {
             return data.filter((workOrder) => workOrder.status && ['T', 'C'].every(statusCode => !workOrder.status.startsWith(statusCode)));
         }
     },
-    [WO_FILTER_TYPES.MTF]: {
+    ...isCernMode ? {[WO_FILTER_TYPES.MTF]: {
         text: WO_FILTER_TYPES.MTF,
         process: (data) => {
             return data.filter((workOrder) => {
                 return workOrder.mrc && (workOrder.mrc.startsWith("ICF") || workOrder.mrc.startsWith("MTF"));
             })
         }
-    },
+    }} : {},
     [WO_FILTER_TYPES.THIS]: {
         text: WO_FILTER_TYPES.THIS,
         process: data => [...data]
@@ -41,7 +42,7 @@ const WO_FILTERS = {
 }
 
 function EquipmentWorkOrders(props) {
-    const { defaultFilter } = props;
+    const { defaultFilter, equipmentcode, equipmenttype } = props;
 
     let [events, setEvents] = useState([]);
     let [workorders, setWorkorders] = useState([]);
@@ -83,13 +84,13 @@ function EquipmentWorkOrders(props) {
     }
 
     useEffect(() => {
-        if (props.equipmentcode) {
-            fetchData(props.equipmentcode)
+        if (equipmentcode) {
+            fetchData(equipmentcode, equipmenttype);
         } else {
             setWorkorders([]);
-            setEvents([])
+            setEvents([]);
         }
-    },[props.equipmentcode])
+    }, [equipmentcode, equipmenttype])
 
     const getUrl = (equipmentType, objectCode) => {
         const linkPrefix = {
@@ -102,8 +103,8 @@ function EquipmentWorkOrders(props) {
         return linkPrefix ? `${linkPrefix}/${objectCode}` : '';
     }
 
-    const fetchData = equipmentCode => {
-        Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode)])
+    const fetchData = (equipmentCode, equipmentType) => {
+        Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode, equipmentType)])
             .then(responses => {
                 const formatResponse = response => response.body.data.map(element => ({
                     ...element,
@@ -129,7 +130,7 @@ function EquipmentWorkOrders(props) {
                 />
                 
             {workOrderFilter === WO_FILTER_TYPES.MTF ?
-                <EquipmentMTFWorkOrders equipmentcode={props.equipmentcode} />
+                <EquipmentMTFWorkOrders equipmentcode={equipmentcode} />
                 :
                 <BlockUi blocking={loadingData} style={{overflowX: 'auto'}}>
                     <EISTable

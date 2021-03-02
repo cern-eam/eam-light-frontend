@@ -16,8 +16,8 @@ class WSEquipment {
         return WS._get('/equipment/workorders?c=' + equipmentCode, config);
     }
 
-    getEquipmentEvents(equipmentCode, config = {}) {
-        return WS._get('/equipment/events?c=' + equipmentCode, config);
+    getEquipmentEvents(equipmentCode, equipmentType, config = {}) {
+        return WS._get(`/equipment/events?c=${equipmentCode}&t=${equipmentType}`, config);
     }
 
     getEquipment(equipmentCode, config = {}) {

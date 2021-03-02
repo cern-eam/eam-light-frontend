@@ -88,7 +88,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
     const isInsideIframe = window.self !== window.top;
     const showTopBar = !(document.referrer.startsWith(startsWithString) && isInsideIframe);
 
-    const showScan = applicationData.serviceAccounts.includes( userData.eamAccount.userCode) && (!scannedUser || !scannedUser.userCode)
+    const showScan = applicationData.serviceAccounts && applicationData.serviceAccounts.includes( userData.eamAccount.userCode) && (!scannedUser || !scannedUser.userCode)
         && <ScanUser
                 updateScannedUser={updateScannedUser}
                 showNotification={showNotification}
