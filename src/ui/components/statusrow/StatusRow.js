@@ -2,6 +2,7 @@ import React from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import BlockIcon from '@material-ui/icons/Block';
 import {EISIcon, RadioactiveWarningIcon} from 'eam-components/dist/ui/components/icons/index'
+import {withCernMode} from '../CERNMode';
 
 const STATUS_KEYS = {
     OUT_OF_SERVICE: "OUT_OF_SERVICE",
@@ -59,4 +60,4 @@ const StatusRow = (props) => {
     return icons.length && <div style={{width: "100%", display: "flex", ...props.style}}>{icons}</div>;
 }
 
-export default StatusRow;
+export default withCernMode(StatusRow);
