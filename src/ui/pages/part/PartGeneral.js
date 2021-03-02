@@ -5,6 +5,7 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAuto
 import WSParts from "../../../tools/WSParts";
 import EAMCheckbox from "eam-components/dist/ui/components/muiinputs/EAMCheckbox";
 import WS from "../../../tools/WS";
+import StatusRow from "../../components/statusrow/StatusRow"
 
 class PartGeneral extends Component {
     render() {
@@ -80,6 +81,11 @@ class PartGeneral extends Component {
                     updateProperty={updatePartProperty}
                     valueKey="trackCores" children={children}/>
 
+                <StatusRow
+                    entity={part}
+                    entityType={"part"}
+                    style={{marginTop: "10px", marginBottom: "-10px"}}
+                />
             </div>
         );
     }

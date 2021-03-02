@@ -154,7 +154,7 @@ class Part extends Entity {
                         partCode={part.code} />
                 ,
                 column: 1,
-                order: 4
+                order: 5
             },
             {
                 id: 'EDMSDOCUMENTS',
