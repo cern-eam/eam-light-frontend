@@ -97,7 +97,7 @@ class Toolbar extends React.Component {
                 }
             },
             [BUTTON_KEYS.PRINT] : {
-                isVisible: () => EL_PRTWO && isCernMode,
+                isVisible: () => isCernMode && applicationData.EL_PRTWO,
                 isDisabled: () => newEntity,
                 getOnClick: (entityType, entity) => {
                     const url = applicationData.EL_PRTWO + entity.number;
