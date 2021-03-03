@@ -74,13 +74,11 @@ class AssetGeneral extends Component {
                     updateProperty={updateEquipmentProperty}
                     valueKey="stateCode"/>
 
-                <CERNMode>
-                    <StatusRow
-                        entity={equipment}
-                        entityType={"equipment"}
-                        style={{marginTop: "10px", marginBottom: "-10px"}}
-                    />
-                </CERNMode>
+                <StatusRow
+                    entity={equipment}
+                    entityType={"equipment"}
+                    style={{marginTop: "10px", marginBottom: "-10px"}}
+                />
             </div>
         )
     }

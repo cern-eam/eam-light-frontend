@@ -6,7 +6,6 @@ import WSParts from "../../../tools/WSParts";
 import EAMCheckbox from "eam-components/dist/ui/components/muiinputs/EAMCheckbox";
 import WS from "../../../tools/WS";
 import StatusRow from "../../components/statusrow/StatusRow"
-import CERNMode from "../../components/CERNMode"
 
 class PartGeneral extends Component {
     render() {
@@ -82,13 +81,12 @@ class PartGeneral extends Component {
                     updateProperty={updatePartProperty}
                     valueKey="trackCores" children={children}/>
 
-                <CERNMode>
-                    <StatusRow
-                        entity={part}
-                        entityType={"part"}
-                        style={{marginTop: "10px", marginBottom: "-10px"}}
-                    />
-                </CERNMode>
+                <StatusRow
+                    entity={part}
+                    entityType={"part"}
+                    style={{marginTop: "10px", marginBottom: "-10px"}}
+                />
+                
             </div>
         );
     }

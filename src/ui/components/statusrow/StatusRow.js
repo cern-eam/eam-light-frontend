@@ -2,7 +2,7 @@ import React from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import BlockIcon from '@material-ui/icons/Block';
 import {EISIcon, RadioactiveWarningIcon} from 'eam-components/dist/ui/components/icons/index'
-import {withCernMode} from '../CERNMode';
+import {isCernMode} from '../CERNMode';
 
 const STATUS_KEYS = {
     OUT_OF_SERVICE: "OUT_OF_SERVICE",
@@ -25,14 +25,14 @@ const STATUSES = [
     },
     {
         key: STATUS_KEYS.EIS,
-        shouldRender: (entity, entityType) => entityType === "equipment" && entity.userDefinedFields.udfchkbox01 === "true",
+        shouldRender: (entity, entityType) => isCernMode && entityType === "equipment" && entity.userDefinedFields.udfchkbox01 === "true",
         icon: <EISIcon style={{color: 'blue', ...iconStyle}}/>,
         description: "EIS",
         tooltip: "Élément Important pour la Sécurité",
     },
     {
         key: STATUS_KEYS.RADIOACTIVE,
-        shouldRender: (entity, entityType) => entityType === "equipment" && entity.userDefinedFields.udfchar04 === "Radioactive",
+        shouldRender: (entity, entityType) => isCernMode && entityType === "equipment" && entity.userDefinedFields.udfchar04 === "Radioactive",
         icon: <RadioactiveWarningIcon style={iconStyle}/>,
         description: "Radioactive",
         tooltip: "Radioactive",
@@ -60,4 +60,4 @@ const StatusRow = (props) => {
     return icons.length && <div style={{width: "100%", display: "flex", ...props.style}}>{icons}</div>;
 }
 
-export default withCernMode(StatusRow);
+export default StatusRow;
