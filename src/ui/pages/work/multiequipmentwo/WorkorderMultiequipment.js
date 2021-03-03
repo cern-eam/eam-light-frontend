@@ -40,6 +40,9 @@ export default class WorkorderMultiequipment extends Component {
                 }));
                 //Assign data
                 this.setState(() => ({data}));
+                if (props.setEquipmentMEC) {
+                    props.setEquipmentMEC(data);
+                }
             })
             .finally(() => {
                 this.setState({ blocking: false })

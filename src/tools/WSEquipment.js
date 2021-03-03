@@ -37,6 +37,10 @@ class WSEquipment {
         return WS._delete('/equipment/' + equipment, config);
     }
 
+    getEquipmentType(equipmentCode, config = {}) {
+        return WS._get('/equipment/type', { ...config, params: { c: equipmentCode }});
+    }
+
     initEquipment(entity, eqpType, params, config = {}) {
         return WS._get(`/equipment/init/${entity}/${eqpType}${params}`, config);
     }

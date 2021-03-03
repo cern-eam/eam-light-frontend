@@ -69,7 +69,7 @@ class Toolbar extends React.Component {
     }
 
     getButtonDefinitions = () => {
-        const {copyHandler, newEntity, entityDesc, applicationData, screencode, userGroup, EL_PRTWO, entity} = this.props;
+        const {copyHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity} = this.props;
         return {
             [BUTTON_KEYS.COPY] : {
                 isVisible: () => true,
@@ -100,7 +100,7 @@ class Toolbar extends React.Component {
                 isVisible: () => EL_PRTWO && isCernMode,
                 isDisabled: () => newEntity,
                 getOnClick: (entityType, entity) => {
-                    const url = EL_PRTWO + entity.number;
+                    const url = applicationData.EL_PRTWO + entity.number;
                     return () => {
                         const w = window.open(url, "winLov", "Scrollbars=1,resizable=1");
                         if (w.opener == null) {
