@@ -16,6 +16,19 @@ export function showNotification(message, title = '') {
   }
 }
 
+export function showWarning(message, title = '') {
+  return {
+    type: SET_SNACKBAR_MESSAGE,
+    snackbar: {
+      title,
+      message,
+      type: 'warning',
+      open: true
+    }
+  }
+}
+
+
 export function showError(message, title = '') {
   return {
     type: SET_SNACKBAR_MESSAGE,
