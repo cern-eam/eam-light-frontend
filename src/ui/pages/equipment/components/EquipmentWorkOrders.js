@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {format} from 'date-fns'
 import WSEquipment from '../../../../tools/WSEquipment';
-import EISTable from 'eam-components/dist/ui/components/table';
+import EISTable, {TRANSFORM_KEYS} from 'eam-components/dist/ui/components/table';
 import EISTableFilter from 'eam-components/dist/ui/components/table/EISTableFilter';
 import EquipmentMTFWorkOrders from "./EquipmentMTFWorkOrders"
 import BlockUi from 'react-block-ui';
@@ -79,6 +79,10 @@ function EquipmentWorkOrders(props) {
         }
     };
 
+    const keyMap = {
+        createdDate: TRANSFORM_KEYS.DATE_DD_MMM_YYYY
+    }
+
     let getFilteredWorkOrderList = (workOrders) => {
         return WO_FILTERS[workOrderFilter].process(workOrders)
     }
@@ -139,6 +143,7 @@ function EquipmentWorkOrders(props) {
                     propCodes={propCodes}
                     linksMap={linksMap}
                     stylesMap={stylesMap}
+                    keyMap={keyMap}
                     />
                 </BlockUi>
             }
