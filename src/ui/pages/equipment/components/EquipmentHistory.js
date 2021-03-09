@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import WSEquipment from '../../../../tools/WSEquipment';
-import EISTable from 'eam-components/dist/ui/components/table';
+import EISTable, {TRANSFORM_KEYS} from 'eam-components/dist/ui/components/table';
 import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/SimpleEmptyState'
 import BlockUi from 'react-block-ui';
 import { withCernMode } from '../../../components/CERNMode';
@@ -41,6 +41,10 @@ function EquipmentHistory(props)  {
 
     const isEmptyState = !blocking && historyData.length === 0;
 
+    const keyMap = {
+        completedDate: TRANSFORM_KEYS.DATE_DD_MMM_YYYY_HH_MM
+    }
+
     return (
         isEmptyState
         ? (
@@ -50,7 +54,8 @@ function EquipmentHistory(props)  {
             <BlockUi blocking={blocking} style={{ width: "100%" }}>
                 <EISTable data={historyData}
                 headers={headers}
-                propCodes={propCodes} />
+                propCodes={propCodes}
+                keyMap={keyMap} />
             </BlockUi>
         )
     );
