@@ -17,6 +17,7 @@ import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIf
 import {ENTITY_TYPE} from '../../components/Toolbar';
 import EntityRegions from "../../components/entityregions/EntityRegions";
 import { isCernMode } from '../../components/CERNMode';
+import { TAB_CODES } from '../../components/entityregions/TabCodeMapping'
 
 const PART = 'PART';
 
@@ -83,6 +84,7 @@ class Part extends Entity {
     getRegions = () => {
         const { partLayout, userData, handleError } = this.props;
         const { part, layout } = this.state;
+        const tabs = partLayout.tabs;
 
         const commonProps = {
             part,
@@ -104,7 +106,9 @@ class Part extends Entity {
                         {...commonProps} />
                 ,
                 column: 1,
-                order: 1
+                order: 1,
+                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
             },
             {
                 id: 'USERDEFINEDFIELDS',
@@ -119,7 +123,9 @@ class Part extends Entity {
                         children={this.children} />
                 ,
                 column: 1,
-                order: 2
+                order: 2,
+                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
             },
             {
                 id: 'STOCK',
@@ -131,7 +137,9 @@ class Part extends Entity {
                         {...commonProps} />
                 ,
                 column: 1,
-                order: 3
+                order: 3,
+                ignore: !tabs[TAB_CODES.STOCK].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.STOCK].alwaysDisplayed
             },
             {
                 id: 'WHEREUSED',
@@ -143,7 +151,9 @@ class Part extends Entity {
                         {...commonProps} />
                 ,
                 column: 1,
-                order: 4
+                order: 4,
+                ignore: !tabs[TAB_CODES.WHERE_USED].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.WHERE_USED].alwaysDisplayed
             },
             {
                 id: 'ASSETS',
@@ -155,7 +165,9 @@ class Part extends Entity {
                         partCode={part.code} />
                 ,
                 column: 1,
-                order: 5
+                order: 5,
+                ignore: !tabs[TAB_CODES.WHERE_USED].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.WHERE_USED].alwaysDisplayed
             },
             {
                 id: 'EDMSDOCUMENTS',
@@ -172,7 +184,8 @@ class Part extends Entity {
                 },
                 column: 2,
                 order: 5,
-                ignore: !isCernMode,
+                ignore: !isCernMode || !tabs[TAB_CODES.EDMS_DOCUMENTS_PARTS].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.EDMS_DOCUMENTS_PARTS].alwaysDisplayed
             },
             {
                 id: 'COMMENTS',
@@ -192,7 +205,9 @@ class Part extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 6
+                order: 6,
+                ignore: !tabs[TAB_CODES.COMMENTS].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.COMMENTS].alwaysDisplayed
             },
             {
                 id: 'CUSTOMFIELDS',
@@ -210,7 +225,9 @@ class Part extends Entity {
                         updateEntityProperty={this.updateEntityProperty}/>
                 ,
                 column: 2,
-                order: 7
+                order: 7,
+                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
             },
         ]
     }
@@ -221,8 +238,10 @@ class Part extends Entity {
             history,
             showEqpTree,
             toggleHiddenRegion,
+            setRegionInvisibility,
             userData,
             isHiddenRegion,
+            getHiddenRegionState,
             getUniqueRegionID,
             showNotification,
             handleError,
@@ -268,6 +287,9 @@ class Part extends Entity {
                         showEqpTree={showEqpTree}
                         regions={regions}
                         isNewEntity={layout.newEntity} 
+                        getHiddenRegionState={getHiddenRegionState}
+                        getUniqueRegionID={getUniqueRegionID}
+                        setRegionInvisibility={setRegionInvisibility}
                         isHiddenRegion={isHiddenRegion}/>
                 </BlockUi>
             </div>

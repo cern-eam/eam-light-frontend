@@ -75,7 +75,7 @@ function PartUsage(props) {
                 showNotification={props.showNotification}
                 handleError={props.handleError}
                 handleCancel={() => setIsDialogOpen(false)}
-                tabLayout={props.tabLayout}
+                tabLayout={props.tabLayout.fields}
                 isDialogOpen={isDialogOpen}
                 workorder={props.workorder}
                 isLoading={isLoading}

@@ -1,6 +1,6 @@
 import WS from "../tools/WS";
 import queryString from "query-string"
-
+import { TAB_CODES } from "../ui/components/entityregions/TabCodeMapping"
 export const UPDATE_APPLICATION = 'UPDATE_APPLICATION';
 
 export function updateApplication(value) {
@@ -107,32 +107,71 @@ function createPromiseArray(userdata) {
     let assetScreenPromise = Promise.resolve(false);
     if (userdata.assetScreen) {
         assetScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup, 'OBJ', 'OSOBJA',
-            userdata.assetScreen, ['PAS'])
+            userdata.assetScreen, [
+                TAB_CODES.RECORD_VIEW,
+                TAB_CODES.WORKORDERS,
+                TAB_CODES.COMMENTS,
+                TAB_CODES.PARTS_ASSOCIATED,
+                TAB_CODES.EDMS_DOCUMENTS_ASSETS,
+                TAB_CODES.EQUIPMENT_GRAPH_ASSETS
+            ]);
     }
     //
     let positionScreenPromise = Promise.resolve(false);
     if (userdata.positionScreen) {
         positionScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup,'OBJ', 'OSOBJP',
-            userdata.positionScreen, ['PAS'])
+            userdata.positionScreen, [
+                TAB_CODES.RECORD_VIEW,
+                TAB_CODES.WORKORDERS,
+                TAB_CODES.COMMENTS,
+                TAB_CODES.PARTS_ASSOCIATED,
+                TAB_CODES.EDMS_DOCUMENTS_POSITIONS,
+                TAB_CODES.EQUIPMENT_GRAPH_POSITIONS
+            ])
     }
     //
     let systemScreenPromise = Promise.resolve(false);
     if (userdata.systemScreen) {
         systemScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup,'OBJ', 'OSOBJS',
-            userdata.systemScreen, ['PAS'])
+            userdata.systemScreen, [
+                TAB_CODES.RECORD_VIEW,
+                TAB_CODES.WORKORDERS,
+                TAB_CODES.COMMENTS,
+                TAB_CODES.PARTS_ASSOCIATED,
+                TAB_CODES.EDMS_DOCUMENTS_SYSTEMS,
+                TAB_CODES.EQUIPMENT_GRAPH_SYSTEMS
+            ])
     }
     //
     let partScreenPromise = Promise.resolve(false);
     if (userdata.partScreen) {
         partScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup,'PART', "SSPART",
-            userdata.partScreen, ['EPA'])
+            userdata.partScreen, [
+                TAB_CODES.RECORD_VIEW,
+                TAB_CODES.WHERE_USED,
+                TAB_CODES.COMMENTS,
+                TAB_CODES.STOCK,
+                TAB_CODES.EDMS_DOCUMENTS_PARTS
+            ])
     }
     //
     let woScreenPromise = Promise.resolve(false);
     if (userdata.workOrderScreen) {
         woScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup,'EVNT', "WSJOBS",
             userdata.workOrderScreen,
-            ['ACT', 'BOO', 'PAR', 'ACK', 'MEC', 'CWO'])
+            [
+                TAB_CODES.RECORD_VIEW,
+                TAB_CODES.PART_USAGE,
+                TAB_CODES.CHILD_WO,
+                TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS,
+                TAB_CODES.COMMENTS,
+                TAB_CODES.ACTIVITIES,
+                TAB_CODES.CHECKLIST,
+                TAB_CODES.METER_READINGS,
+                TAB_CODES.EQUIPMENT_TAB_WO_SCREEN,
+                TAB_CODES.BOOK_LABOR,
+                TAB_CODES.CLOSING_CODES
+            ])
     }
 
      //
@@ -140,7 +179,12 @@ function createPromiseArray(userdata) {
      if (userdata.locationScreen) {
         locationScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup,'LOC', "OSOBJL",
              userdata.locationScreen,
-             ['PAS'])
+             [
+                TAB_CODES.RECORD_VIEW,
+                TAB_CODES.WORKORDERS,
+                TAB_CODES.EDMS_DOCUMENTS_LOCATIONS,
+                TAB_CODES.COMMENTS
+            ])
      }
 
     return [applicationDataPromise,

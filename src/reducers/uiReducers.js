@@ -1,4 +1,4 @@
-import {SET_LAYOUT, SET_SNACKBAR_MESSAGE, TOGGLE_HIDDEN_REGION} from "../actions/uiActions";
+import {SET_LAYOUT, SET_SNACKBAR_MESSAGE, TOGGLE_HIDDEN_REGION, SET_REGION_VISIBILITY} from "../actions/uiActions";
 
 export default function ui(state = buildDefaultUiObject(), action) {
     switch(action.type) {
@@ -22,9 +22,23 @@ export default function ui(state = buildDefaultUiObject(), action) {
             }
             // Save to local storage
             localStorage.setItem("hiddenRegions", JSON.stringify(hiddenRegions))
+            // console.log(state);
             return {
                 ...state,
                 hiddenRegions: hiddenRegions
+            }
+        case SET_REGION_VISIBILITY:
+
+            let hiddenRegions_ = {
+                ...state.hiddenRegions,
+                [action.region]: !action.isVisible
+            }
+
+            localStorage.setItem("hiddenRegions", JSON.stringify(hiddenRegions_));
+
+            return {
+                ...state,
+                hiddenRegions: hiddenRegions_
             }
         default:
             return state
