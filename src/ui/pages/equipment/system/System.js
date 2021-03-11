@@ -19,6 +19,7 @@ import {ENTITY_TYPE} from "../../../components/Toolbar";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
+import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 
 
 export default class System extends Entity {
@@ -149,6 +150,7 @@ export default class System extends Entity {
     getRegions = () => {
         const { userData, systemLayout, handleError, applicationData, showNotification } = this.props;
         const { equipment, layout } = this.state;
+        const tabs = systemLayout.tabs;
 
         let commonProps = {
             equipment,
@@ -170,7 +172,9 @@ export default class System extends Entity {
                         {...commonProps}/>
                 ,
                 column: 1,
-                order: 1
+                order: 1,
+                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
             },
             {
                 id: 'DETAILS',
@@ -182,7 +186,9 @@ export default class System extends Entity {
                         {...commonProps} />
                 ,
                 column: 1,
-                order: 2
+                order: 2,
+                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
             },
             {
                 id: 'HIERARCHY',
@@ -194,7 +200,9 @@ export default class System extends Entity {
                         {...commonProps} />
                 ,
                 column: 1,
-                order: 3
+                order: 3,
+                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
             },
             {
                 id: 'WORKORDERS',
@@ -208,7 +216,9 @@ export default class System extends Entity {
                         equipmenttype='S' />
                 ,
                 column: 1,
-                order: 4
+                order: 4,
+                ignore: !tabs[TAB_CODES.WORKORDERS].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.WORKORDERS].alwaysDisplayed
             },
             {
                 id: 'HISTORY',
@@ -221,7 +231,8 @@ export default class System extends Entity {
                 ,
                 column: 1,
                 order: 5,
-                ignore: !isCernMode
+                ignore: !isCernMode || !tabs[TAB_CODES.WORKORDERS].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.WORKORDERS].alwaysDisplayed
             },
             {
                 id: 'PARTS',
@@ -234,7 +245,9 @@ export default class System extends Entity {
                         parentScreen={userData.screens[userData.systemScreen].parentScreen} />
                 ,
                 column: 1,
-                order: 6
+                order: 6,
+                ignore: !tabs[TAB_CODES.PARTS_ASSOCIATED].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.PARTS_ASSOCIATED].alwaysDisplayed
             },
             {
                 id: 'EDMSDOCUMENTS',
@@ -251,7 +264,8 @@ export default class System extends Entity {
                 },
                 column: 2,
                 order: 7,
-                ignore: !isCernMode
+                ignore: !isCernMode || !tabs[TAB_CODES.EDMS_DOCUMENTS_SYSTEMS].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.EDMS_DOCUMENTS_SYSTEMS].alwaysDisplayed
             },
             {
                 id: 'COMMENTS',
@@ -271,7 +285,9 @@ export default class System extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 8
+                order: 8,
+                ignore: !tabs[TAB_CODES.COMMENTS].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.COMMENTS].alwaysDisplayed
             },
             {
                 id: 'USERDEFINEDFIELDS',
@@ -286,7 +302,9 @@ export default class System extends Entity {
                         children={this.children} />
                 ,
                 column: 2,
-                order: 9
+                order: 9,
+                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
             },
             {
                 id: 'CUSTOMFIELDS',
@@ -303,7 +321,9 @@ export default class System extends Entity {
                         updateEntityProperty={this.updateEntityProperty.bind(this)} />
                 ,
                 column: 2,
-                order: 10
+                order: 10,
+                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
             },
             {
                 id: 'EQUIPMENTGRAPH',
@@ -321,7 +341,8 @@ export default class System extends Entity {
                 },
                 column: 2,
                 order: 11,
-                ignore: !isCernMode
+                ignore: !isCernMode || !tabs[TAB_CODES.EQUIPMENT_GRAPH_SYSTEMS].tabAvailable,
+                initialVisibility: tabs[TAB_CODES.EQUIPMENT_GRAPH_SYSTEMS].alwaysDisplayed
             },
         ]
     }
@@ -332,8 +353,10 @@ export default class System extends Entity {
             history,
             showEqpTree,
             toggleHiddenRegion,
+            setRegionVisibility,
             userData,
             isHiddenRegion,
+            getHiddenRegionState,
             getUniqueRegionID
         } = this.props;
         const { equipment, layout } = this.state;
@@ -367,11 +390,16 @@ export default class System extends Entity {
                     toggleHiddenRegion={toggleHiddenRegion}
                     getUniqueRegionID={getUniqueRegionID}
                     regions={regions}
+                    getHiddenRegionState={getHiddenRegionState}
+                    setRegionVisibility={setRegionVisibility}
                     isHiddenRegion={isHiddenRegion} />
                 <EntityRegions
                     showEqpTree={showEqpTree}
                     regions={regions}
                     isNewEntity={layout.newEntity} 
+                    getUniqueRegionID={getUniqueRegionID}
+                    getHiddenRegionState={getHiddenRegionState}
+                    setRegionVisibility={setRegionVisibility}
                     isHiddenRegion={isHiddenRegion}/>
             </BlockUi>
         )
