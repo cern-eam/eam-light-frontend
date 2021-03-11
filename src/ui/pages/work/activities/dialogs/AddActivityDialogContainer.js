@@ -6,7 +6,7 @@ import {handleError, showError, showNotification} from "../../../../../actions/u
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    layout: state.application.workOrderLayout.tabs.ACT
+    layout: state.application.workOrderLayout.tabs.ACT.fields
   }
 };
 
