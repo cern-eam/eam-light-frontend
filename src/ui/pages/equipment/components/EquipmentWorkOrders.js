@@ -6,6 +6,7 @@ import EISTableFilter from 'eam-components/dist/ui/components/table/EISTableFilt
 import EquipmentMTFWorkOrders from "./EquipmentMTFWorkOrders"
 import BlockUi from 'react-block-ui';
 import { isCernMode } from '../../../components/CERNMode';
+import Constants from 'eam-components/dist/enums/Constants';
 
 const WO_FILTER_TYPES = {
     ALL: 'All',
@@ -144,6 +145,8 @@ function EquipmentWorkOrders(props) {
                     linksMap={linksMap}
                     stylesMap={stylesMap}
                     keyMap={keyMap}
+                    defaultOrderBy='createdDate'
+                    defaultOrder={Constants.SORT_DESC}
                     />
                 </BlockUi>
             }
