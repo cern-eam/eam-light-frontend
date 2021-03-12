@@ -233,8 +233,7 @@ export default class Location extends Entity {
                 order: 10,
                 ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
                 initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
-            }
-            ,
+            },
             {
                 id: 'EQUIPMENTGRAPH',
                 label: 'Equipment Graph',
