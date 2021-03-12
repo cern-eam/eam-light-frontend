@@ -148,7 +148,6 @@ class Workorder extends Entity {
         const { layout, workorder, equipmentMEC } = this.state;
         const {tabs} = workOrderLayout;
 
-        // console.log(workOrderLayout);
         const commonProps = {
             workorder,
             layout,
@@ -158,7 +157,7 @@ class Workorder extends Entity {
             children: this.children,
             setWOEquipment: this.setWOEquipment
         };
-        // console.log(commonProps.workOrderLayout);
+
         return [
             {
                 id: 'DETAILS',
