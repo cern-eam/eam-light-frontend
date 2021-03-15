@@ -40,6 +40,7 @@ const EntityRegions = (props) => {
                 : defaultVisibility(region)
         }), {}))
     }, [inputRegions, isHiddenRegion, isNewEntity, regionMaximized])
+
     React.useEffect(() => {
         setRegionMaximized(searchParams.maximize);
     }, [searchParams[ENTITY_REGION_PARAMS.MAXIMIZE]])

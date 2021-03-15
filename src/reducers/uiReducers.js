@@ -22,7 +22,6 @@ export default function ui(state = buildDefaultUiObject(), action) {
             }
             // Save to local storage
             localStorage.setItem("hiddenRegions", JSON.stringify(hiddenRegions))
-            // console.log(state);
             return {
                 ...state,
                 hiddenRegions: hiddenRegions
