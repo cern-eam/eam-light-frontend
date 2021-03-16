@@ -44,7 +44,7 @@ const WorkorderScheduling = (props) => {
                                     updateProperty={updateWorkorderProperty}/>
                 </Grid>
             </Grid>
-            
+
             <EAMAutocomplete children={children}
                                 elementInfo={workOrderLayout.fields['reportedby']}
                                 value={workorder.reportedBy}
@@ -107,6 +107,13 @@ const WorkorderScheduling = (props) => {
                         updateUDFProperty={updateWorkorderProperty}
                         children={children}/>
 
+            <UDFChar fieldInfo={workOrderLayout.fields['udfchar19']}
+                        fieldValue={workorder.userDefinedFields.udfchar19}
+                        fieldValueDesc={workorder.userDefinedFields.udfchar19Desc}
+                        fieldKey={`userDefinedFields.udfchar19`}
+                        descKey={`userDefinedFields.udfchar19Desc`}
+                        updateUDFProperty={updateWorkorderProperty}
+                        children={children}/>
         </div>
     )
 }
