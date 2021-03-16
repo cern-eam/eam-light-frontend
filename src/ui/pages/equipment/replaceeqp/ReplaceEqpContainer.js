@@ -6,7 +6,8 @@ import { withCernMode } from '../../../components/CERNMode';
 function mapStateToProps(state) {
     return {
         userData: state.application.userData,
-        equipmentLayout: state.application.assetLayout
+        equipmentLayout: state.application.assetLayout,
+        cryoClasses: state.application.applicationData.EL_CRYOC,
     }
 }
 

@@ -121,13 +121,20 @@ class ReplaceEqp extends Component {
 
                 //Set status for old equipment
                 if(destination === 'oldEquipment') {
-                    newState.replaceEquipment = {
-                        ...prevState.replaceEquipment,
-                        oldEquipmentStatus: response.body.data.statusCode,
-                        oldEquipmentState: response.body.data.stateCode,
+                    if ((this.props.cryoClasses || []).includes(response.body.data.classCode)) {
+                        newState.replaceEquipment = {
+                            ...prevState.replaceEquipment,
+                            oldEquipmentStatus: 'IRP',
+                            oldEquipmentState: 'DEF',
+                        }
+                    } else {
+                        newState.replaceEquipment = {
+                            ...prevState.replaceEquipment,
+                            oldEquipmentStatus: response.body.data.statusCode,
+                            oldEquipmentState: response.body.data.stateCode,
+                        }
                     }
                 }
-
                 return newState;
             }, setStateCallback);
         }).catch(error => this.setState({blocking: false}));
