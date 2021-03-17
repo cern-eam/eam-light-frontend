@@ -14,7 +14,6 @@
   #layout-tab-menu>li {
     width: 58px;
     height: 50px;
-    
   }
 
   #layout-tab-menu>li:first-child {
@@ -56,7 +55,7 @@
     min-height: 100%;
     margin-left: 58px;
     background-color: #282828;
-    padding-bottom: 100px;
+    padding-bottom: 0;
     display: none;
   }
 
@@ -65,10 +64,11 @@
   }
 
   .layout-tab-submenu>li {
-    display: block;
+    display: flex;
+    flex-flow: column;
     margin: 0px;
     padding: 0px;
-    margin-bottom: 10px;
+    max-height: 85vh;
   }
 
   .layout-tab-submenu>li:first-child {
@@ -87,7 +87,8 @@
   .layout-tab-submenu>li ul {
     margin: 0px;
     padding: 0px;
-    display: block;
+    overflow-y: scroll;
+    flex: 1;
   }
 
   .layout-tab-submenu>li ul li {
