@@ -4,6 +4,7 @@ import EISTable, {TRANSFORM_KEYS} from 'eam-components/dist/ui/components/table'
 import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/SimpleEmptyState'
 import BlockUi from 'react-block-ui';
 import { withCernMode } from '../../../components/CERNMode';
+import Constants from 'eam-components/dist/enums/Constants';
 
 function EquipmentHistory(props)  {
     const headers = ['Date', 'Type', 'Related Value', 'Done By'];
@@ -55,7 +56,9 @@ function EquipmentHistory(props)  {
                 <EISTable data={historyData}
                 headers={headers}
                 propCodes={propCodes}
-                keyMap={keyMap} />
+                keyMap={keyMap}
+                defaultOrderBy='completedDate'
+                defaultOrder={Constants.SORT_DESC} />
             </BlockUi>
         )
     );
