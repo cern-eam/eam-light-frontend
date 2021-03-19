@@ -64,11 +64,12 @@
   }
 
   .layout-tab-submenu>li {
-    display: flex;
-    flex-flow: column;
+    display: block;
     margin: 0px;
     padding: 0px;
-    max-height: 85vh;
+    position: absolute;
+    width: inherit;
+    height: 100%;
   }
 
   .layout-tab-submenu>li:first-child {
@@ -88,7 +89,25 @@
     margin: 0px;
     padding: 0px;
     overflow-y: scroll;
-    flex: 1;
+    height: 80%;
+    scrollbar-color: transparent transparent;
+  }
+
+  @media only screen and (max-height: 450px) {
+    .layout-tab-submenu>li ul {
+      height: 60%;
+    }
+  }
+
+  @media only screen and (min-height: 451px) and (max-height: 660px) {
+    .layout-tab-submenu>li ul {
+      height: 70%;
+    }
+  }
+
+  .layout-tab-submenu>li ul::-webkit-scrollbar {
+    width: 0 !important;
+    display: none;
   }
 
   .layout-tab-submenu>li ul li {
@@ -137,7 +156,6 @@
     right: 0;
     bottom: 0;
     left: 0;
-    position: relative;
     background-color: #242021;
   }
 
