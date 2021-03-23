@@ -106,7 +106,7 @@ class ReplaceEqpGeneral extends Component {
             <EISPanel heading="REPLACE EQUIPMENT" alwaysExpanded={true}>
                 <div style={{width: "100%", marginTop: 0}}>
 
-                    <EAMBarcodeInput updateProperty={value => this.props.updateProperty('oldEquipment', value)} right={0} top={20}>
+                    <EAMBarcodeInput updateProperty={value => {this.props.onChangeOldEquipment(value); return this.props.updateProperty('oldEquipment', value)}} right={0} top={20}>
                         <EAMAutocomplete elementInfo={{
                             ...this.props.equipmentLayout.fields['equipmentno'],
                             attribute: "R",
@@ -148,7 +148,7 @@ class ReplaceEqpGeneral extends Component {
                         updateProperty={this.props.updateProperty}
                         children={this.children} />
 
-                    <EAMBarcodeInput updateProperty={value => this.props.updateProperty('newEquipment', value)} right={0} top={20}>
+                    <EAMBarcodeInput updateProperty={value => {this.props.onChangeNewEquipment(value); return this.props.updateProperty('newEquipment', value)}} right={0} top={20}>
                         <EAMAutocomplete elementInfo={{
                             ...this.props.equipmentLayout.fields['equipmentno'],
                             attribute: "R",
