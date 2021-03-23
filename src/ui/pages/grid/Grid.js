@@ -1,9 +1,11 @@
-import EAMGrid from "eam-components/dist/ui/components/eamgrid";
-import queryString from "query-string";
 import React from 'react';
+import queryString from "query-string";
 import { Link } from 'react-router-dom';
-import GridTools from '../../../tools/GridTools';
 import Typography from '@material-ui/core/Typography';
+import SyncedQueryParamsEAMGridContext from "../../../tools/SyncedQueryParamsEAMGridContext";
+import EAMGrid from 'eam-components/dist/ui/components/grids/eam/EAMGrid';
+import { EAMCellField } from 'eam-components/dist/ui/components/grids/eam/utils';
+
 
 const treatParamAsList = (param) => (param === undefined || param === null) ? []
     : Array.isArray(param) ? param
@@ -11,7 +13,7 @@ const treatParamAsList = (param) => (param === undefined || param === null) ? []
     : [param]
 
 
-const cellRenderer = userColumns => (cell, row) => {
+const cellRenderer = userColumns => ({ column, value }) => {
     const userColumnToType = {
         equipmentColumns: 'equipment',
         locationColumns: 'location',
@@ -27,11 +29,11 @@ const cellRenderer = userColumns => (cell, row) => {
     }
 
     const link = userColumnToType[Object.keys(userColumnToType)
-                .find(userColumn => treatParamAsList(userColumns[userColumn]).includes(cell.t))]
+                .find(userColumn => treatParamAsList(userColumns[userColumn]).includes(column.id))]
             || Object.keys(typeToDefaultColumns)
-                .find(type => typeToDefaultColumns[type].includes(cell.t));
+                .find(type => typeToDefaultColumns[type].includes(column.id));
 
-    return link === undefined ? null : getLink(`/${link}/`, cell.value);
+    return link === undefined ? EAMCellField({ column, value }) : getLink(`/${link}/`, value);
 }
 
 const getLink = (path, val) => <Typography>
@@ -41,19 +43,18 @@ const getLink = (path, val) => <Typography>
     </Typography>
 
 
-function Grid(props) {
-    const filters = GridTools.parseGridFilters(GridTools.getURLParameterByName('gridFilters'));
-
+const Grid = () => {
     const values = queryString.parse(window.location.search);
     return (
-        <div className="entityContainer">
-            <EAMGrid
-                screenCode={values.gridName}
-                cellRenderer={cellRenderer(values)}
-                initialGridFilters={filters}
-            />
-        </div>
+        <SyncedQueryParamsEAMGridContext
+            gridName={values.gridName}
+            cellRenderer={cellRenderer(values)}
+            searchOnMount
+        >
+            <EAMGrid />
+        </SyncedQueryParamsEAMGridContext>
     )
+
 }
 
 export default Grid;
