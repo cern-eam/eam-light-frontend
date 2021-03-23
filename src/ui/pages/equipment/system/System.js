@@ -20,6 +20,7 @@ import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
+import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 
 
 export default class System extends Entity {
@@ -173,8 +174,8 @@ export default class System extends Entity {
                 ,
                 column: 1,
                 order: 1,
-                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'DETAILS',
@@ -187,8 +188,8 @@ export default class System extends Entity {
                 ,
                 column: 1,
                 order: 2,
-                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'HIERARCHY',
@@ -201,8 +202,8 @@ export default class System extends Entity {
                 ,
                 column: 1,
                 order: 3,
-                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'WORKORDERS',
@@ -217,8 +218,8 @@ export default class System extends Entity {
                 ,
                 column: 1,
                 order: 4,
-                ignore: !tabs[TAB_CODES.WORKORDERS].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.WORKORDERS].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
             {
                 id: 'HISTORY',
@@ -231,8 +232,8 @@ export default class System extends Entity {
                 ,
                 column: 1,
                 order: 5,
-                ignore: !isCernMode || !tabs[TAB_CODES.WORKORDERS].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.WORKORDERS].alwaysDisplayed
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
             {
                 id: 'PARTS',
@@ -246,8 +247,8 @@ export default class System extends Entity {
                 ,
                 column: 1,
                 order: 6,
-                ignore: !tabs[TAB_CODES.PARTS_ASSOCIATED].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.PARTS_ASSOCIATED].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
             },
             {
                 id: 'EDMSDOCUMENTS',
@@ -264,8 +265,8 @@ export default class System extends Entity {
                 },
                 column: 2,
                 order: 7,
-                ignore: !isCernMode || !tabs[TAB_CODES.EDMS_DOCUMENTS_SYSTEMS].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.EDMS_DOCUMENTS_SYSTEMS].alwaysDisplayed
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_SYSTEMS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_SYSTEMS)
             },
             {
                 id: 'COMMENTS',
@@ -286,8 +287,8 @@ export default class System extends Entity {
                 },
                 column: 2,
                 order: 8,
-                ignore: !tabs[TAB_CODES.COMMENTS].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.COMMENTS].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
             {
                 id: 'USERDEFINEDFIELDS',
@@ -303,8 +304,8 @@ export default class System extends Entity {
                 ,
                 column: 2,
                 order: 9,
-                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'CUSTOMFIELDS',
@@ -322,8 +323,8 @@ export default class System extends Entity {
                 ,
                 column: 2,
                 order: 10,
-                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'EQUIPMENTGRAPH',
@@ -341,8 +342,8 @@ export default class System extends Entity {
                 },
                 column: 2,
                 order: 11,
-                ignore: !isCernMode || !tabs[TAB_CODES.EQUIPMENT_GRAPH_SYSTEMS].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.EQUIPMENT_GRAPH_SYSTEMS].alwaysDisplayed
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_SYSTEMS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_SYSTEMS)
             },
         ]
     }

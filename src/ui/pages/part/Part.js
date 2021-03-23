@@ -17,7 +17,8 @@ import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIf
 import {ENTITY_TYPE} from '../../components/Toolbar';
 import EntityRegions from "../../components/entityregions/EntityRegions";
 import { isCernMode } from '../../components/CERNMode';
-import { TAB_CODES } from '../../components/entityregions/TabCodeMapping'
+import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
+import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
 
 const PART = 'PART';
 
@@ -107,8 +108,8 @@ class Part extends Entity {
                 ,
                 column: 1,
                 order: 1,
-                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'USERDEFINEDFIELDS',
@@ -124,8 +125,8 @@ class Part extends Entity {
                 ,
                 column: 1,
                 order: 2,
-                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'STOCK',
@@ -138,8 +139,8 @@ class Part extends Entity {
                 ,
                 column: 1,
                 order: 3,
-                ignore: !tabs[TAB_CODES.STOCK].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.STOCK].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.STOCK),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.STOCK)
             },
             {
                 id: 'WHEREUSED',
@@ -152,8 +153,8 @@ class Part extends Entity {
                 ,
                 column: 1,
                 order: 4,
-                ignore: !tabs[TAB_CODES.WHERE_USED].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.WHERE_USED].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.WHERE_USED),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WHERE_USED)
             },
             {
                 id: 'ASSETS',
@@ -166,8 +167,8 @@ class Part extends Entity {
                 ,
                 column: 1,
                 order: 5,
-                ignore: !tabs[TAB_CODES.WHERE_USED].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.WHERE_USED].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.WHERE_USED),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WHERE_USED)
             },
             {
                 id: 'EDMSDOCUMENTS',
@@ -184,8 +185,8 @@ class Part extends Entity {
                 },
                 column: 2,
                 order: 5,
-                ignore: !isCernMode || !tabs[TAB_CODES.EDMS_DOCUMENTS_PARTS].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.EDMS_DOCUMENTS_PARTS].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_PARTS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_PARTS)
             },
             {
                 id: 'COMMENTS',
@@ -206,8 +207,8 @@ class Part extends Entity {
                 },
                 column: 2,
                 order: 6,
-                ignore: !tabs[TAB_CODES.COMMENTS].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.COMMENTS].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
             {
                 id: 'CUSTOMFIELDS',
@@ -226,8 +227,8 @@ class Part extends Entity {
                 ,
                 column: 2,
                 order: 7,
-                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
         ]
     }
@@ -238,7 +239,7 @@ class Part extends Entity {
             history,
             showEqpTree,
             toggleHiddenRegion,
-            setRegionInvisibility,
+            setRegionVisibility,
             userData,
             isHiddenRegion,
             getHiddenRegionState,
@@ -282,6 +283,7 @@ class Part extends Entity {
                         toggleHiddenRegion={toggleHiddenRegion}
                         getUniqueRegionID={getUniqueRegionID}
                         regions={regions}
+                        setRegionVisibility={setRegionVisibility}
                         isHiddenRegion={isHiddenRegion} />
                     <EntityRegions
                         showEqpTree={showEqpTree}
@@ -289,7 +291,7 @@ class Part extends Entity {
                         isNewEntity={layout.newEntity} 
                         getHiddenRegionState={getHiddenRegionState}
                         getUniqueRegionID={getUniqueRegionID}
-                        setRegionInvisibility={setRegionInvisibility}
+                        setRegionVisibility={setRegionVisibility}
                         isHiddenRegion={isHiddenRegion}/>
                 </BlockUi>
             </div>
