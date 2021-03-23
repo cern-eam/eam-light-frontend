@@ -27,6 +27,7 @@ import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
 import {assignValues, assignUserDefinedFields, assignCustomFieldFromCustomField, AssignmentType} from '../EntityTools';
 import { isCernMode } from '../../components/CERNMode';
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
+import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
 
 
 
@@ -172,8 +173,9 @@ class Workorder extends Entity {
                 ,
                 column: 1,
                 order: 1,
-                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed            },
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
+            },
             {
                 id: 'SCHEDULING',
                 label: 'Scheduling',
@@ -185,8 +187,8 @@ class Workorder extends Entity {
                 ,
                 column: 1,
                 order: 2,
-                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'CLOSINGCODES',
@@ -199,8 +201,8 @@ class Workorder extends Entity {
                 ,
                 column: 1,
                 order: 3,
-                ignore: !tabs[TAB_CODES.CLOSING_CODES].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.CLOSING_CODES].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.CLOSING_CODES),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CLOSING_CODES)
             },
             {
                 id: 'PARTUSAGE',
@@ -216,8 +218,8 @@ class Workorder extends Entity {
                 ,
                 column: 1,
                 order: 4,
-                ignore: !tabs[TAB_CODES.PART_USAGE].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.PART_USAGE].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.PART_USAGE),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PART_USAGE)
             },
             {
                 id: 'CHILDRENWOS',
@@ -230,8 +232,8 @@ class Workorder extends Entity {
                 ,
                 column: 1,
                 order: 4,
-                ignore: !tabs[TAB_CODES.CHILD_WO].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.CHILD_WO].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.CHILD_WO),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CHILD_WO)
             },
             {
                 id: 'EDMSDOCUMENTS',
@@ -248,8 +250,8 @@ class Workorder extends Entity {
                 },
                 column: 2,
                 order: 5,
-                ignore: !isCernMode && !tabs[TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS].alwaysDisplayed
+                ignore: !isCernMode && !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS)
             },
             {
                 id: 'NCRS',
@@ -267,8 +269,8 @@ class Workorder extends Entity {
                 ,
                 column: 2,
                 order: 6,
-                ignore: !isCernMode && !tabs[TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS].alwaysDisplayed
+                ignore: !isCernMode && !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS)
             },
             {
                 id: 'COMMENTS',
@@ -289,8 +291,8 @@ class Workorder extends Entity {
                 },
                 column: 2,
                 order: 7,
-                ignore: !tabs[TAB_CODES.COMMENTS].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.COMMENTS].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
             {
                 id: 'ACTIVITIES',
@@ -313,8 +315,8 @@ class Workorder extends Entity {
                 ,
                 column: 2,
                 order: 8,
-                ignore: !tabs[TAB_CODES.ACTIVITIES].tabAvailable && !tabs[TAB_CODES.BOOK_LABOR].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.ACTIVITIES].alwaysDisplayed && !tabs[TAB_CODES.BOOK_LABOR].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.ACTIVITIES) && !getTabAvailability(tabs, TAB_CODES.BOOK_LABOR),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.ACTIVITIES) && !tabs[TAB_CODES.BOOK_LABOR]
             },
             {
                 id: 'CHECKLISTS',
@@ -350,8 +352,8 @@ class Workorder extends Entity {
                 ,
                 column: 2,
                 order: 9,
-                ignore: !tabs[TAB_CODES.CHECKLIST].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.CHECKLIST].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.CHECKLIST),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CHECKLIST)
             },
             {
                 id: 'CUSTOMFIELDS',
@@ -370,8 +372,8 @@ class Workorder extends Entity {
                 ,
                 column: 2,
                 order: 10,
-                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'CUSTOMFIELDSEQP',
@@ -390,8 +392,8 @@ class Workorder extends Entity {
                 ,
                 column: 2,
                 order: 11,
-                ignore: !tabs[TAB_CODES.RECORD_VIEW].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.RECORD_VIEW].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'METERREADINGS',
@@ -403,8 +405,8 @@ class Workorder extends Entity {
                 ,
                 column: 2,
                 order: 12,
-                ignore: !tabs[TAB_CODES.METER_READINGS].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.METER_READINGS].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.METER_READINGS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.METER_READINGS)
             },
             {
                 id: 'MULTIPLEEQUIPMENT',
@@ -417,8 +419,8 @@ class Workorder extends Entity {
                 ,
                 column: 2,
                 order: 13,
-                ignore: !tabs[TAB_CODES.EQUIPMENT_TAB_WO_SCREEN].tabAvailable,
-                initialVisibility: tabs[TAB_CODES.EQUIPMENT_TAB_WO_SCREEN].alwaysDisplayed
+                ignore: !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_TAB_WO_SCREEN),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_TAB_WO_SCREEN)
             },
         ]
 
@@ -563,7 +565,7 @@ class Workorder extends Entity {
             getUniqueRegionID,
             history,
             isHiddenRegion,
-            setRegionInvisibility,
+            setRegionVisibility,
             getHiddenRegionState,
             toggleHiddenRegion,
             userData
@@ -606,7 +608,7 @@ class Workorder extends Entity {
                         isNewEntity={layout.newEntity}
                         getUniqueRegionID={getUniqueRegionID}
                         getHiddenRegionState={getHiddenRegionState}
-                        setRegionInvisibility={setRegionInvisibility}
+                        setRegionVisibility={setRegionVisibility}
                         isHiddenRegion={this.props.isHiddenRegion} />
                 </BlockUi>
             </div>

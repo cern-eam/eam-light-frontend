@@ -25,7 +25,7 @@ const EntityRegions = (props) => {
     
     React.useEffect(() => {
         regions.filter(region => getHiddenRegionState(region.id) === undefined)
-            .forEach(region => setRegionVisibility(getUniqueRegionID(region.id), !region.initialVisibility))
+            .forEach(region => setRegionVisibility(getUniqueRegionID(region.id), region.initialVisibility))
     });
 
     React.useEffect(() => {
