@@ -1,28 +1,35 @@
-import React from "react";
-import EAMGrid from "eam-components/dist/ui/components/eamgrid";
-import { Link } from "react-router-dom";
-import Typography from "@material-ui/core/Typography";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
+import EAMGrid from 'eam-components/dist/ui/components/grids/eam/EAMGrid';
+import { EAMCellField } from 'eam-components/dist/ui/components/grids/eam/utils';
+import SyncedQueryParamsEAMGridContext from "../../../../../tools/SyncedQueryParamsEAMGridContext";
 
-const cellRenderer = cell =>
-    cell.t === "equipmentno" ? (
-        <Typography>
-            <Link to={"/location/" + cell.value}>{cell.value}</Link>
-        </Typography>
-    ) : null;
+const cellRenderer = ({ column, value }) => {
+    if (column.id === 'equipmentno') {
+        return (
+            <Typography>
+                <Link to={"/location/" + value}>
+                    {value}
+                </Link>
+            </Typography>
+        )   
+    }
+    return EAMCellField({ column, value });
+}
 
-const LocationSearch = props => {
+const LocationSearch = (props) => {
     const { locationScreen, handleError } = props;
     return (
-        <div className="entityContainer">
-            <EAMGrid
-                gridId={locationScreen.gridId}
-                screenCode={locationScreen.screenCode}
-                handleError={handleError}
-                cellRenderer={cellRenderer}
-                searchOnMount={locationScreen.startupAction !== "N"}
-            />
-        </div>
+        <SyncedQueryParamsEAMGridContext
+            gridName={locationScreen.screenCode}
+            handleError={handleError}
+            searchOnMount={locationScreen.startupAction !== "N"}
+            cellRenderer={cellRenderer}
+        >
+            <EAMGrid />
+        </SyncedQueryParamsEAMGridContext>
     );
-};
+}
 
 export default LocationSearch;

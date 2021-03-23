@@ -27,7 +27,7 @@ const parseGridFilters = (gridFiltersString) => {
 }
 
 const stringifyGridFilter = gridFilter => {
-    return gridFilter.fieldName + VALUE_SEPARATOR + gridFilter.fieldValue + OPERATOR_SEPARATOR + gridFilter.operator
+    return gridFilter.fieldName + VALUE_SEPARATOR + (gridFilter.fieldValue || '') + OPERATOR_SEPARATOR + gridFilter.operator
 }
 
 const stringifyGridFilters = (gridFilters = []) => {
