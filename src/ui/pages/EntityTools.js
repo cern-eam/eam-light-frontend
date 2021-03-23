@@ -181,3 +181,13 @@ export const assignDefaultValues = (entity, layout, layoutPropertiesMap, assignm
     entity = assignValues(entity, defaultValues, assignmentType);
     return assignUserDefinedFields(entity, defaultValues.userDefinedFields, assignmentType);
 }
+
+export const getTabAvailability = (tabs, tabCode) => {
+    if(!tabs[tabCode]) return true;
+    return tabs[tabCode].tabAvailable;
+}
+
+export const getTabInitialVisibility = (tabs, tabCode) => {
+    if (!tabs[tabCode]) return true;
+    return tabs[tabCode].alwaysDisplayed;
+}
