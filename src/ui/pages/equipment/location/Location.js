@@ -234,25 +234,25 @@ export default class Location extends Entity {
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
-            {
-                id: 'EQUIPMENTGRAPH',
-                label: 'Equipment Graph',
-                isVisibleWhenNewEntity: false,
-                maximizable: true,
-                render: () => 
-                    <EquipmentGraphIframe
-                        equipmentCode={location.code} 
-                        equipmentGraphURL={applicationData.EL_EQGRH}
-                    />
-                ,
-                RegionPanelProps: {
-                    detailsStyle: { padding: 0 }
-                },
-                column: 2,
-                order: 11,
-                ignore: !isCernMode,
-                initialVisibility: false
-            },
+            // {
+            //     id: 'EQUIPMENTGRAPH',
+            //     label: 'Equipment Graph',
+            //     isVisibleWhenNewEntity: false,
+            //     maximizable: true,
+            //     render: () => 
+            //         <EquipmentGraphIframe
+            //             equipmentCode={location.code} 
+            //             equipmentGraphURL={applicationData.EL_EQGRH}
+            //         />
+            //     ,
+            //     RegionPanelProps: {
+            //         detailsStyle: { padding: 0 }
+            //     },
+            //     column: 2,
+            //     order: 11,
+            //     ignore: !isCernMode,
+            //     initialVisibility: false
+            // },
         ]
 
     }
