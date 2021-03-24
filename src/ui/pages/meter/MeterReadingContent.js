@@ -84,13 +84,14 @@ function MeterReadingContent(props) {
                 <ExpansionPanelActions>
 
                     <FormControl style={{width: '100%', marginLeft: '15px', marginRight: '15px'}}>
-                        <InputLabel htmlFor="readingValue">New Value</InputLabel>
+                        <InputLabel htmlFor="readingValue">{props.disabled ? 'Recording meter readings is disabled' : 'New Value'}</InputLabel>
                         <Input
                             id="readingValue"
                             type="number"
                             value={readingValue}
                             onChange={event => setReadingValue(event.target.value)}
                             onKeyDown={handleKeyDown}
+                            disabled={props.disabled}
                             endAdornment={<InputAdornment position="end"
                                                           className="readingValueUOM">[{reading.uomDesc}]</InputAdornment>}
                         />

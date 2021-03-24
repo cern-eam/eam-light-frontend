@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import UDFChar from "./UDFChar";
 import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
 import EAMDatePicker from "eam-components/dist/ui/components/muiinputs/EAMDatePicker";
 import EAMDateTimePicker from "eam-components/dist/ui/components/muiinputs/EAMDateTimePicker";
 import EAMCheckbox from "eam-components/dist/ui/components/muiinputs/EAMCheckbox";
-
 
 /**
  * Receive props:
@@ -15,80 +15,84 @@ import EAMCheckbox from "eam-components/dist/ui/components/muiinputs/EAMCheckbox
 class UserDefinedFields extends Component {
 
     renderUdfChars = () => {
-        if (!this.props.entityLayout)
-            return null;
-        let udfChars = [];
-        this.sortProperties().forEach(prop => {
-            if (prop.indexOf('udfchar') !== -1 && prop.indexOf('Desc') === -1) {
-                udfChars.push(<UDFChar key={prop} fieldInfo={this.props.entityLayout[prop]}
-                                       fieldValue={this.props.fields[prop]}
-                                       fieldValueDesc={this.props.fields[`${prop}Desc`]}
-                                       fieldKey={`userDefinedFields.${prop}`}
-                                       updateUDFProperty={this.props.updateUDFProperty}
-                                       children={this.props.children}/>);
-            }
-        });
-        return udfChars;
+        const { entityLayout, exclusions, fields, updateUDFProperty, children } = this.props;
 
+        if (!entityLayout) {
+            return null;
+        }
+
+        return this.sortProperties()
+            .filter(prop => prop.startsWith('udfchar')
+                && !prop.includes('Desc')
+                && !exclusions.includes(prop))
+            .map(prop => <UDFChar
+                key={prop}
+                fieldInfo={entityLayout[prop]}
+                fieldValue={fields[prop]}
+                fieldValueDesc={fields[`${prop}Desc`]}
+                fieldKey={`userDefinedFields.${prop}`}
+                updateUDFProperty={updateUDFProperty}
+                children={children}/>);
     };
 
     renderUdfNums = () => {
-        if (!this.props.entityLayout)
-            return null;
-        let udfNums = [];
-        this.sortProperties().forEach(prop => {
-            if (prop.indexOf('udfnum') !== -1) {
-                udfNums.push(<EAMInput key={prop} elementInfo={this.props.entityLayout[prop]}
-                                       value={this.props.fields[prop]}
-                                       updateProperty={this.props.updateUDFProperty}
-                                       valueKey={`userDefinedFields.${prop}`}
-                                       children={this.props.children}/>);
-            }
-        });
-        return udfNums;
+        const { entityLayout, exclusions, fields, updateUDFProperty, children } = this.props;
 
+        if (!entityLayout) {
+            return null;
+        }
+
+        return this.sortProperties()
+            .filter(prop => prop.startsWith('udfnum') && !exclusions.includes(prop))
+            .map(prop => <EAMInput
+                key={prop}
+                elementInfo={entityLayout[prop]}
+                value={fields[prop]}
+                updateProperty={updateUDFProperty}
+                valueKey={`userDefinedFields.${prop}`}
+                children={children}/>);
     };
 
     renderUdfDates = () => {
-        if (!this.props.entityLayout)
-            return null;
-        let udfDates = [];
-        this.sortProperties().forEach(prop => {
-            if (prop.indexOf('udfdate') !== -1) {
-                if (this.props.entityLayout[prop].fieldType === 'datetime') {
-                    udfDates.push(<EAMDateTimePicker key={prop} elementInfo={this.props.entityLayout[prop]}
-                                                     value={this.props.fields[prop]}
-                                                     updateProperty={this.props.updateUDFProperty}
-                                                     valueKey={`userDefinedFields.${prop}`}
-                                                     children={this.props.children}/>);
-                } else {
-                    udfDates.push(<EAMDatePicker key={prop} elementInfo={this.props.entityLayout[prop]}
-                                                 value={this.props.fields[prop]}
-                                                 updateProperty={this.props.updateUDFProperty}
-                                                 valueKey={`userDefinedFields.${prop}`}
-                                                 children={this.props.children}/>);
-                }
-            }
-        });
-        return udfDates;
+        const { entityLayout, exclusions, fields, updateUDFProperty, children } = this.props;
 
+        if (!entityLayout) {
+            return null;
+        }
+
+        return this.sortProperties()
+            .filter(prop => prop.startsWith('udfdate') && !exclusions.includes(prop))
+            .map(prop => {
+                const PickerComponent = entityLayout[prop].fieldType === 'datetime'
+                    ? EAMDateTimePicker
+                    : EAMDatePicker;
+
+                return <PickerComponent
+                    key={prop}
+                    elementInfo={entityLayout[prop]}
+                    value={fields[prop]}
+                    updateProperty={updateUDFProperty}
+                    valueKey={`userDefinedFields.${prop}`}
+                    children={children}/>
+            });
     };
 
     renderUdfCheckboxs = () => {
-        if (!this.props.entityLayout)
-            return null;
-        let udfChecks = [];
-        this.sortProperties().forEach(prop => {
-            if (prop.indexOf('udfchk') !== -1) {
-                udfChecks.push(<EAMCheckbox key={prop} elementInfo={this.props.entityLayout[prop]}
-                                            value={this.props.fields[prop]}
-                                            updateProperty={this.props.updateUDFProperty}
-                                            valueKey={`userDefinedFields.${prop}`}
-                                            children={this.props.children}/>);
+        const { entityLayout, exclusions, fields, updateUDFProperty, children } = this.props;
 
-            }
-        });
-        return udfChecks;
+        if (!entityLayout) {
+            return null;
+        }
+
+        return this.sortProperties()
+            .filter(prop => prop.startsWith('udfchk') && !exclusions.includes(prop))
+            .map(prop => <EAMCheckbox
+                key={prop}
+                elementInfo={entityLayout[prop]}
+                value={fields[prop]}
+                updateProperty={updateUDFProperty}
+                valueKey={`userDefinedFields.${prop}`}
+                children={children}/>);
     };
 
     sortProperties = () => {
@@ -112,5 +116,16 @@ class UserDefinedFields extends Component {
         );
     }
 }
+
+UserDefinedFields.propTypes = {
+    entityLayout: PropTypes.object.isRequired,
+    fields: PropTypes.object.isRequired,
+    updateUDFProperty: PropTypes.func,
+    exclusions: PropTypes.array,
+};
+
+UserDefinedFields.defaultProps = {
+    exclusions: [],
+};
 
 export default UserDefinedFields;
