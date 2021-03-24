@@ -32,7 +32,7 @@ class SystemGeneral extends Component {
                     valueKey="alias"/>
 
                 <EAMInput
-                    children = {children}
+                    children={children}
                     elementInfo={systemLayout.fields['udfchar45']}
                     value={equipment.userDefinedFields.udfchar45}
                     updateProperty={updateEquipmentProperty}

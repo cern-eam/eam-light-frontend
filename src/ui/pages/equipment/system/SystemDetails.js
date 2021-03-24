@@ -58,7 +58,8 @@ class SystemDetails extends Component {
                     updateProperty={updateEquipmentProperty}
                     valueKey="criticality"/>
 
-                <EAMAutocomplete elementInfo={systemLayout.fields['manufacturer']}
+                <EAMAutocomplete children={children}
+                                    elementInfo={systemLayout.fields['manufacturer']}
                                     updateProperty={updateEquipmentProperty}
                                     value={equipment.manufacturerCode}
                                     valueKey="manufacturerCode"

@@ -204,7 +204,8 @@ export default class readEntityEquipment extends Component {
         }
         this.settings.updateEntity(entity)
             .then(response => {
-                this.setState(() => ({[this.settings.entity]: response.body.data}));
+                const entity = response.body.data;
+                this.setState(() => ({[this.settings.entity]: entity}));
                 this.setLayout({
                     newEntity: false,
                     blocking: false,
@@ -215,7 +216,7 @@ export default class readEntityEquipment extends Component {
                     + this.state[this.settings.entity][this.settings.entityCodeProperty]
                     + ' has been successfully updated.')
                 // Invoke entity specific logic on the subclass
-                this.postUpdate()
+                this.postUpdate(entity)
             })
             .catch(error => {
                 this.processError(this.children, error)
@@ -434,6 +435,12 @@ export default class readEntityEquipment extends Component {
                 };
             });
         })
+    }
+
+    get departmentalSecurity() {
+        const { userData } = this.props;
+        const { [this.settings.entity]: entity } = this.state;
+        return userData.eamAccount.departmentalSecurity[entity.departmentCode] || {};
     }
 
     //

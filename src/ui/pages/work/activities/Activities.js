@@ -10,7 +10,6 @@ import AddBookLabourDialogContainer from "./dialogs/AddBookLabourDialogContainer
  * Panel Activities and Book labor
  */
 function Activities(props) {
-
     let [activities, setActivities] = useState([]);
     let [bookLaboursByActivity, setBookLaboursByActivity] = useState({});
     let [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
@@ -73,11 +72,11 @@ function Activities(props) {
             })}
 
             <div id="actions">
-                <Button onClick={() => setIsActivityModalOpen(true)} color="primary">
+                <Button onClick={() => setIsActivityModalOpen(true)} color="primary" disabled={props.disabled}>
                     Add activity
                 </Button>
 
-                <Button onClick={() => setIsBookLaborModalOpen(true)} color="primary">
+                <Button onClick={() => setIsBookLaborModalOpen(true)} color="primary" disabled={props.disabled}>
                     Book Labor
                 </Button>
             </div>
