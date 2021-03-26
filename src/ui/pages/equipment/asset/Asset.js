@@ -23,6 +23,8 @@ import EquipmentPartsMadeOf from "../components/EquipmentPartsMadeOf";
 import WSParts from '../../../../tools/WSParts';
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
+import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
+import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 
 export default class Asset extends Entity {
 
@@ -176,6 +178,7 @@ export default class Asset extends Entity {
     getRegions = () => {
         const { assetLayout, userData, applicationData, showError, showNotification } = this.props;
         const { equipment, layout } = this.state;
+        const tabs = assetLayout.tabs;
 
         const commonProps = {
             equipment,
@@ -197,7 +200,9 @@ export default class Asset extends Entity {
                         {...commonProps}/>
                 ,
                 column: 1,
-                order: 1
+                order: 1,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'DETAILS',
@@ -209,7 +214,9 @@ export default class Asset extends Entity {
                         {...commonProps} />
                 ,
                 column: 1,
-                order: 2
+                order: 2,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'HIERARCHY',
@@ -221,7 +228,9 @@ export default class Asset extends Entity {
                         {...commonProps} />
                 ,
                 column: 1,
-                order: 3
+                order: 3,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'WORKORDERS',
@@ -235,7 +244,9 @@ export default class Asset extends Entity {
                         equipmenttype='A' />
                 ,
                 column: 1,
-                order: 4
+                order: 4,
+                ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
             {
                 id: 'HISTORY',
@@ -248,7 +259,8 @@ export default class Asset extends Entity {
                 ,
                 column: 1,
                 order: 5,
-                ignore: !isCernMode
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'PARTS',
@@ -257,7 +269,9 @@ export default class Asset extends Entity {
                 maximizable: true,
                 render: () => <EquipmentPartsMadeOf equipmentcode={equipment.code} />,
                 column: 1,
-                order: 6
+                order: 6,
+                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
             },
             {
                 id: 'EDMSDOCUMENTS',
@@ -274,7 +288,8 @@ export default class Asset extends Entity {
                 },
                 column: 2,
                 order: 7,
-                ignore: !isCernMode
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS)
             },
             {
                 id: 'NCRS',
@@ -292,7 +307,8 @@ export default class Asset extends Entity {
                 ,
                 column: 2,
                 order: 8,
-                ignore: !isCernMode
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS)
             },
             {
                 id: 'COMMENTS',
@@ -311,7 +327,9 @@ export default class Asset extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 9
+                order: 9,
+                ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
             {
                 id: 'USERDEFINEDFIELDS',
@@ -326,7 +344,9 @@ export default class Asset extends Entity {
                         children={this.children} />
                 ,
                 column: 2,
-                order: 10
+                order: 10,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'CUSTOMFIELDS',
@@ -343,7 +363,9 @@ export default class Asset extends Entity {
                         updateEntityProperty={this.updateEntityProperty.bind(this)} />
                 ,
                 column: 2,
-                order: 11
+                order: 11,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id : 'PARTCUSTOMFIELDS',
@@ -362,7 +384,9 @@ export default class Asset extends Entity {
                         readonly={true}/>
                 ,
                 column: 2,
-                order: 12
+                order: 12,
+                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
             },
             {
                 id: 'EQUIPMENTGRAPH',
@@ -380,7 +404,8 @@ export default class Asset extends Entity {
                 },
                 column: 2,
                 order: 13,
-                ignore: !isCernMode
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS)
             },
         ]
     }
@@ -401,8 +426,10 @@ export default class Asset extends Entity {
             history,
             showEqpTree,
             toggleHiddenRegion,
+            setRegionVisibility,
             userData,
             isHiddenRegion,
+            getHiddenRegionState,
             getUniqueRegionID
         } = this.props;
         const { equipment, layout } = this.state;
@@ -436,12 +463,16 @@ export default class Asset extends Entity {
                     toggleHiddenRegion={toggleHiddenRegion}
                     getUniqueRegionID={getUniqueRegionID}
                     regions={regions}
-                    isHiddenRegion={isHiddenRegion} />
+                    isHiddenRegion={isHiddenRegion}
+                    getHiddenRegionState={getHiddenRegionState}/>
                 <EntityRegions
                     showEqpTree={showEqpTree}
                     regions={regions}
                     isNewEntity={layout.newEntity} 
-                    isHiddenRegion={isHiddenRegion}/>
+                    isHiddenRegion={isHiddenRegion}
+                    getUniqueRegionID={getUniqueRegionID}
+                    setRegionVisibility={setRegionVisibility}
+                    getHiddenRegionState={getHiddenRegionState}/>
             </BlockUi>
         )
     }

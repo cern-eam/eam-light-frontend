@@ -12,7 +12,7 @@ class PartTools {
             default:/*All other regions*/
                 //Regions in here:
                 // Where used
-                return tabs[regionCode] && tabs[regionCode].alwaysAvailable;
+                return tabs.fields[regionCode] && tabs.fields[regionCode].alwaysAvailable;
         }
     }
 
