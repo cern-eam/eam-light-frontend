@@ -95,13 +95,19 @@
 
   @media only screen and (max-height: 450px) {
     .layout-tab-submenu>li ul {
-      height: 60%;
+      height: 80%;
+    }
+    .layout-tab-submenu>li> span + div + ul {
+      height: 67%;
     }
   }
 
   @media only screen and (min-height: 451px) and (max-height: 660px) {
     .layout-tab-submenu>li ul {
-      height: 70%;
+      height: 82%;
+    }
+    .layout-tab-submenu>li> span + div + ul {
+      height: 75%;
     }
   }
 
