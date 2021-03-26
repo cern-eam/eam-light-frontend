@@ -18,6 +18,8 @@ import LocationHierarchy from "./LocationHierarchy";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
+import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
+import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 
 export default class Location extends Entity {
     settings = {
@@ -58,6 +60,8 @@ export default class Location extends Entity {
     getRegions = () => {
         const { locationLayout, userData, applicationData } = this.props;
         const { location, layout } = this.state;
+        const tabs = locationLayout.tabs; 
+
         const commonProps = {
             location,
             layout,
@@ -77,7 +81,9 @@ export default class Location extends Entity {
                         {...commonProps}/>
                 ,
                 column: 1,
-                order: 1
+                order: 1,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'DETAILS',
@@ -89,7 +95,9 @@ export default class Location extends Entity {
                         {...commonProps} />
                 ,
                 column: 1,
-                order: 2
+                order: 2,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'HIERARCHY',
@@ -101,7 +109,9 @@ export default class Location extends Entity {
                         {...commonProps} />
                 ,
                 column: 1,
-                order: 3
+                order: 3,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'WORKORDERS',
@@ -115,7 +125,9 @@ export default class Location extends Entity {
                         equipmenttype='L' />
                 ,
                 column: 1,
-                order: 4
+                order: 4,
+                ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
             {
                 id: 'HISTORY',
@@ -128,7 +140,8 @@ export default class Location extends Entity {
                 ,
                 column: 1,
                 order: 5,
-                ignore: !isCernMode
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
             {
                 id: 'EDMSDOCUMENTS',
@@ -145,7 +158,8 @@ export default class Location extends Entity {
                 },
                 column: 2,
                 order: 6,
-                ignore: !isCernMode
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_LOCATIONS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_LOCATIONS)
             },
             // {
             //     id: 'NCRS',
@@ -180,7 +194,9 @@ export default class Location extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 8
+                order: 8,
+                ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
             {
                 id: 'USERDEFINEDFIELDS',
@@ -195,7 +211,9 @@ export default class Location extends Entity {
                         children={this.children} />
                 ,
                 column: 2,
-                order: 9
+                order: 9,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'CUSTOMFIELDS',
@@ -212,26 +230,29 @@ export default class Location extends Entity {
                         updateEntityProperty={this.updateEntityProperty.bind(this)} />
                 ,
                 column: 2,
-                order: 10
+                order: 10,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
-            {
-                id: 'EQUIPMENTGRAPH',
-                label: 'Equipment Graph',
-                isVisibleWhenNewEntity: false,
-                maximizable: true,
-                render: () => 
-                    <EquipmentGraphIframe
-                        equipmentCode={location.code} 
-                        equipmentGraphURL={applicationData.EL_EQGRH}
-                    />
-                ,
-                RegionPanelProps: {
-                    detailsStyle: { padding: 0 }
-                },
-                column: 2,
-                order: 11,
-                ignore: !isCernMode
-            },
+            // {
+            //     id: 'EQUIPMENTGRAPH',
+            //     label: 'Equipment Graph',
+            //     isVisibleWhenNewEntity: false,
+            //     maximizable: true,
+            //     render: () => 
+            //         <EquipmentGraphIframe
+            //             equipmentCode={location.code} 
+            //             equipmentGraphURL={applicationData.EL_EQGRH}
+            //         />
+            //     ,
+            //     RegionPanelProps: {
+            //         detailsStyle: { padding: 0 }
+            //     },
+            //     column: 2,
+            //     order: 11,
+            //     ignore: !isCernMode,
+            //     initialVisibility: false
+            // },
         ]
 
     }
@@ -242,8 +263,10 @@ export default class Location extends Entity {
             history,
             showEqpTree,
             toggleHiddenRegion,
+            setRegionVisibility,
             userData,
             isHiddenRegion,
+            getHiddenRegionState,
             getUniqueRegionID
         } = this.props;
         const { location, layout } = this.state
@@ -277,13 +300,17 @@ export default class Location extends Entity {
                                  toggleHiddenRegion={toggleHiddenRegion}
                                  getUniqueRegionID={getUniqueRegionID}
                                  regions={regions}
-                                 isHiddenRegion={isHiddenRegion}>
+                                 isHiddenRegion={isHiddenRegion}
+                                 getHiddenRegionState={getHiddenRegionState}>
                 </EamlightToolbarContainer>
                 <EntityRegions
                     showEqpTree={showEqpTree}
                     regions={regions}
                     isNewEntity={layout.newEntity} 
-                    isHiddenRegion={isHiddenRegion}/>
+                    isHiddenRegion={isHiddenRegion}
+                    setRegionVisibility={setRegionVisibility}
+                    getUniqueRegionID={getUniqueRegionID}
+                    getHiddenRegionState={getHiddenRegionState}/>
             </BlockUi>
         )
     }

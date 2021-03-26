@@ -26,6 +26,9 @@ import IconButton from '@material-ui/core/IconButton';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
 import {assignValues, assignUserDefinedFields, assignCustomFieldFromCustomField, AssignmentType} from '../EntityTools';
 import { isCernMode } from '../../components/CERNMode';
+import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
+import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
+
 
 
 const assignStandardWorkOrderValues = (workOrder, standardWorkOrder) => {
@@ -144,6 +147,7 @@ class Workorder extends Entity {
             workOrderLayout
         } = this.props;
         const { layout, workorder, equipmentMEC } = this.state;
+        const {tabs} = workOrderLayout;
 
         const commonProps = {
             workorder,
@@ -154,6 +158,7 @@ class Workorder extends Entity {
             children: this.children,
             setWOEquipment: this.setWOEquipment
         };
+
         return [
             {
                 id: 'DETAILS',
@@ -167,7 +172,9 @@ class Workorder extends Entity {
                         userData={userData} />
                 ,
                 column: 1,
-                order: 1
+                order: 1,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'SCHEDULING',
@@ -179,7 +186,9 @@ class Workorder extends Entity {
                     <WorkorderScheduling {...commonProps} />
                 ,
                 column: 1,
-                order: 2
+                order: 2,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'CLOSINGCODES',
@@ -191,7 +200,9 @@ class Workorder extends Entity {
                     <WorkorderClosingCodes {...commonProps} />
                 ,
                 column: 1,
-                order: 3
+                order: 3,
+                ignore: !getTabAvailability(tabs, TAB_CODES.CLOSING_CODES),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CLOSING_CODES)
             },
             {
                 id: 'PARTUSAGE',
@@ -206,7 +217,9 @@ class Workorder extends Entity {
                         equipmentMEC={equipmentMEC}/>
                 ,
                 column: 1,
-                order: 4
+                order: 4,
+                ignore: !getTabAvailability(tabs, TAB_CODES.PART_USAGE),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PART_USAGE)
             },
             {
                 id: 'CHILDRENWOS',
@@ -218,7 +231,9 @@ class Workorder extends Entity {
                     <WorkorderChildren workorder={workorder.number} />
                 ,
                 column: 1,
-                order: 4
+                order: 4,
+                ignore: !getTabAvailability(tabs, TAB_CODES.CHILD_WO),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CHILD_WO)
             },
             {
                 id: 'EDMSDOCUMENTS',
@@ -235,7 +250,8 @@ class Workorder extends Entity {
                 },
                 column: 2,
                 order: 5,
-                ignore: !isCernMode
+                ignore: !isCernMode && !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS)
             },
             {
                 id: 'NCRS',
@@ -253,7 +269,8 @@ class Workorder extends Entity {
                 ,
                 column: 2,
                 order: 6,
-                ignore: !isCernMode
+                ignore: !isCernMode && !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS)
             },
             {
                 id: 'COMMENTS',
@@ -273,7 +290,9 @@ class Workorder extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 7
+                order: 7,
+                ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
             {
                 id: 'ACTIVITIES',
@@ -295,7 +314,9 @@ class Workorder extends Entity {
                         />
                 ,
                 column: 2,
-                order: 8
+                order: 8,
+                ignore: !getTabAvailability(tabs, TAB_CODES.ACTIVITIES) && !getTabAvailability(tabs, TAB_CODES.BOOK_LABOR),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.ACTIVITIES) && !tabs[TAB_CODES.BOOK_LABOR]
             },
             {
                 id: 'CHECKLISTS',
@@ -330,7 +351,9 @@ class Workorder extends Entity {
                 )
                 ,
                 column: 2,
-                order: 9
+                order: 9,
+                ignore: !getTabAvailability(tabs, TAB_CODES.CHECKLIST),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CHECKLIST)
             },
             {
                 id: 'CUSTOMFIELDS',
@@ -348,7 +371,9 @@ class Workorder extends Entity {
                         updateEntityProperty={this.updateEntityProperty.bind(this)} />
                 ,
                 column: 2,
-                order: 10
+                order: 10,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'CUSTOMFIELDSEQP',
@@ -366,7 +391,9 @@ class Workorder extends Entity {
                         readonly={true} />
                 ,
                 column: 2,
-                order: 11
+                order: 11,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'METERREADINGS',
@@ -377,7 +404,9 @@ class Workorder extends Entity {
                     <MeterReadingContainerWO equipment={workorder.equipmentCode}/>
                 ,
                 column: 2,
-                order: 12
+                order: 12,
+                ignore: !getTabAvailability(tabs, TAB_CODES.METER_READINGS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.METER_READINGS)
             },
             {
                 id: 'MULTIPLEEQUIPMENT',
@@ -389,7 +418,9 @@ class Workorder extends Entity {
                     <WorkorderMultiequipment workorder={workorder.number} setEquipmentMEC={this.setEquipmentMEC.bind(this)}/>
                 ,
                 column: 2,
-                order: 13
+                order: 13,
+                ignore: !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_TAB_WO_SCREEN),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_TAB_WO_SCREEN)
             },
         ]
 
@@ -534,6 +565,8 @@ class Workorder extends Entity {
             getUniqueRegionID,
             history,
             isHiddenRegion,
+            setRegionVisibility,
+            getHiddenRegionState,
             toggleHiddenRegion,
             userData
         } = this.props;
@@ -567,11 +600,15 @@ class Workorder extends Entity {
                                      toggleHiddenRegion={toggleHiddenRegion}
                                      regions={regions}
                                      getUniqueRegionID={getUniqueRegionID}
+                                     getHiddenRegionState={getHiddenRegionState}
                                      isHiddenRegion={isHiddenRegion}>
                     </EamlightToolbarContainer>
                     <EntityRegions
                         regions={regions}
                         isNewEntity={layout.newEntity}
+                        getUniqueRegionID={getUniqueRegionID}
+                        getHiddenRegionState={getHiddenRegionState}
+                        setRegionVisibility={setRegionVisibility}
                         isHiddenRegion={this.props.isHiddenRegion} />
                 </BlockUi>
             </div>

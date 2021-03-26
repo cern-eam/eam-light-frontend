@@ -21,6 +21,8 @@ import EDMSWidget from 'eam-components/dist/ui/components/edms/EDMSWidget';
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
+import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
+import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 
 export default class Position extends Entity {
 
@@ -118,6 +120,8 @@ export default class Position extends Entity {
     getRegions = () => {
         const { positionLayout, userData, applicationData, showError, showNotification } = this.props;
         const { equipment, layout } = this.state;
+        const tabs = positionLayout.tabs;
+
 
         const commonProps = {
             equipment,
@@ -139,7 +143,9 @@ export default class Position extends Entity {
                         {...commonProps}/>
                 ,
                 column: 1,
-                order: 1
+                order: 1,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'DETAILS',
@@ -151,7 +157,9 @@ export default class Position extends Entity {
                         {...commonProps} />
                 ,
                 column: 1,
-                order: 2
+                order: 2,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'HIERARCHY',
@@ -163,7 +171,9 @@ export default class Position extends Entity {
                         {...commonProps} />
                 ,
                 column: 1,
-                order: 3
+                order: 3,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'WORKORDERS',
@@ -177,7 +187,9 @@ export default class Position extends Entity {
                         equipmenttype='P' />
                 ,
                 column: 1,
-                order: 4
+                order: 4,
+                ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
             {
                 id: 'HISTORY',
@@ -190,7 +202,8 @@ export default class Position extends Entity {
                 ,
                 column: 1,
                 order: 5,
-                ignore: !isCernMode
+                ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
             {
                 id: 'PARTS',
@@ -203,7 +216,9 @@ export default class Position extends Entity {
                         parentScreen={userData.screens[userData.positionScreen].parentScreen} />
                 ,
                 column: 1,
-                order: 6
+                order: 6,
+                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
             },
             {
                 id: 'EDMSDOCUMENTS',
@@ -220,7 +235,8 @@ export default class Position extends Entity {
                 },
                 column: 2,
                 order: 7,
-                ignore: !isCernMode
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS)
             },
             {
                 id: 'NCRS',
@@ -238,7 +254,8 @@ export default class Position extends Entity {
                 ,
                 column: 2,
                 order: 8,
-                ignore: !isCernMode
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS)
             },
             {
                 id: 'COMMENTS',
@@ -257,7 +274,9 @@ export default class Position extends Entity {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 9
+                order: 9,
+                ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
             {
                 id: 'USERDEFINEDFIELDS',
@@ -272,7 +291,9 @@ export default class Position extends Entity {
                         children={this.children} />
                 ,
                 column: 2,
-                order: 10
+                order: 10,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'CUSTOMFIELDS',
@@ -289,7 +310,9 @@ export default class Position extends Entity {
                         updateEntityProperty={this.updateEntityProperty.bind(this)} />
                 ,
                 column: 2,
-                order: 11
+                order: 11,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'EQUIPMENTGRAPH',
@@ -307,7 +330,8 @@ export default class Position extends Entity {
                 },
                 column: 2,
                 order: 12,
-                ignore: !isCernMode
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_POSITIONS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_POSITIONS)
             },
         ]
     }
@@ -318,8 +342,10 @@ export default class Position extends Entity {
             history,
             showEqpTree,
             toggleHiddenRegion,
+            setRegionVisibility,
             userData,
             isHiddenRegion,
+            getHiddenRegionState,
             getUniqueRegionID
         } = this.props;
         const { equipment, layout } = this.state;
@@ -353,11 +379,15 @@ export default class Position extends Entity {
                     toggleHiddenRegion={toggleHiddenRegion}
                     getUniqueRegionID={getUniqueRegionID}
                     regions={regions}
+                    getHiddenRegionState={getHiddenRegionState}
                     isHiddenRegion={isHiddenRegion} />
                 <EntityRegions
                     showEqpTree={showEqpTree}
                     regions={regions}
                     isNewEntity={layout.newEntity} 
+                    getUniqueRegionID={getUniqueRegionID}
+                    getHiddenRegionState={getHiddenRegionState}
+                    setRegionVisibility={setRegionVisibility}
                     isHiddenRegion={isHiddenRegion}/>
             </BlockUi>
         )

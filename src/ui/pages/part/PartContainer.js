@@ -5,9 +5,10 @@ import {
     setLayoutProperty,
     showError,
     showNotification,
-    toggleHiddenRegion
+    toggleHiddenRegion,
+    setRegionVisibility
 } from '../../../actions/uiActions';
-import { isHiddenRegion, getUniqueRegionID } from '../../../selectors/uiSelectors'
+import { isHiddenRegion, getHiddenRegionState, getUniqueRegionID } from '../../../selectors/uiSelectors'
 
 function mapStateToProps(state) {
     const entityScreenCode = state.application.userData.partScreen;
@@ -15,6 +16,7 @@ function mapStateToProps(state) {
         partLayout: state.application.partLayout,
         hiddenRegions: state.ui.hiddenRegions,
         isHiddenRegion: isHiddenRegion(state)(entityScreenCode),
+        getHiddenRegionState: getHiddenRegionState(state)(entityScreenCode),
         getUniqueRegionID: getUniqueRegionID(state)(entityScreenCode),
         userData: state.application.userData,
         applicationData: state.application.applicationData
@@ -27,6 +29,7 @@ const PartContainer = connect(mapStateToProps, {
         handleError,
         setLayoutProperty,
         toggleHiddenRegion,
+        setRegionVisibility,
     }
 )(Part);
 

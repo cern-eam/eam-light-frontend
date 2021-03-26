@@ -13,7 +13,7 @@ class EquipmentTools {
             default:/*All other regions*/
                 //Regions in here:
                 // Parts associated
-                return tabs[regionCode] && tabs[regionCode].alwaysAvailable;
+                return tabs.fields[regionCode] && tabs.fields[regionCode].alwaysAvailable;
         }
     }
 
