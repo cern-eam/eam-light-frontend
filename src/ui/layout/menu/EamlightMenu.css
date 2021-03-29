@@ -89,26 +89,12 @@
     margin: 0px;
     padding: 0px;
     overflow-y: scroll;
-    height: 80%;
+    height: calc(100% - 95px);
     scrollbar-color: transparent transparent;
   }
 
-  @media only screen and (max-height: 450px) {
-    .layout-tab-submenu>li ul {
-      height: 80%;
-    }
-    .layout-tab-submenu>li> span + div + ul {
-      height: 67%;
-    }
-  }
-
-  @media only screen and (min-height: 451px) and (max-height: 660px) {
-    .layout-tab-submenu>li ul {
-      height: 82%;
-    }
-    .layout-tab-submenu>li> span + div + ul {
-      height: 75%;
-    }
+  .layout-tab-submenu>li> span + div + ul {
+    height: calc(100% - 150px);
   }
 
   .layout-tab-submenu>li ul::-webkit-scrollbar {
