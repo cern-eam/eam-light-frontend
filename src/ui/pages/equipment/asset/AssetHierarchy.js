@@ -5,31 +5,34 @@ import WSEquipment from "../../../../tools/WSEquipment";
 import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
 import EAMCheckbox from 'eam-components/dist/ui/components/muiinputs/EAMCheckbox';
 
+const fieldIsHidden = (info) =>
+    info && info.attribute === 'H'
+
 class AssetHierarchy extends Component {
 
     styles = {
         checkboxStyle: {
-            display:"flex", 
+            display:"flex",
             paddingLeft: "10px",
             marginRight:"-23px",
             marginBottom: "-20px",
             marginTop: "-10px"
         },
         labelStyle: {
-            display:"flex", 
+            display:"flex",
             alignItems:"center",
             padding:'0',
             marginBottom: "-20px",
             marginTop: "-10px"
         },
         dependencyRowStyle: {
-            display: "flex", 
-            flexDirection:"row-reverse", 
-            fontSize:"10px", 
+            display: "flex",
+            flexDirection:"row-reverse",
+            fontSize:"10px",
             width: '100%'
         },
         dependencyCheckboxWrapperStyle: {
-            display: "flex", 
+            display: "flex",
             flexDirection:"row",
         }
     }
@@ -51,7 +54,7 @@ class AssetHierarchy extends Component {
                     .findIndex(value => value && value !== false.toString())
                 //index of edited hierarchy field
                 let indexAfter = Object.keys(hierarchyMap).findIndex(prop => prop === key)
-                
+
                 if (indexAfter > indexExistant) {
                     if(indexExistant !== -1){
                         Object.values(hierarchyMap).forEach(hierarchyProp => {
@@ -64,13 +67,13 @@ class AssetHierarchy extends Component {
                 updateEquipmentProperty(hierarchyMap[key], false.toString());
             }
         }
-        
+
         updateEquipmentProperty(key, value)
     }
 
     render() {
         let { equipment, children, assetLayout, updateEquipmentProperty } = this.props
-        
+
         return (
             <div style={{width: "100%", marginTop: 0}}>
 
@@ -88,6 +91,7 @@ class AssetHierarchy extends Component {
                     updateProperty={updateEquipmentProperty}
                     valueKey="userDefinedFields.udfchar11"/>
 
+                {!fieldIsHidden(assetLayout.fields['parentasset']) && <>
                     <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyAssetCode', value)} right={0} top={20}>
                         <EAMAutocomplete
                             children = {children}
@@ -104,67 +108,72 @@ class AssetHierarchy extends Component {
                         <div style={this.styles.dependencyCheckboxWrapperStyle}>
                             <span style={this.styles.labelStyle}>Dependent</span>
                             <div style={this.styles.checkboxStyle}>
-                                <EAMCheckbox 
+                                <EAMCheckbox
                                     elementInfo={{readonly: !equipment.hierarchyAssetCode}}
                                     children = {children}
                                     updateProperty={updateEquipmentProperty}
                                     value={equipment.hierarchyAssetDependent}
-                                    valueKey="hierarchyAssetDependent"/> 
+                                    valueKey="hierarchyAssetDependent"/>
                             </div>
                         </div>
                     </div>
+                </>}
 
-                <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyPositionCode', value)} right={0} top={20}>
-                    <EAMAutocomplete
-                        children = {children}
-                        elementInfo={assetLayout.fields['position']}
-                        value={equipment.hierarchyPositionCode}
-                        updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
-                        valueKey="hierarchyPositionCode"
-                        valueDesc={equipment.hierarchyPositionDesc}
-                        descKey="hierarchyPositionDesc"
-                        autocompleteHandler={WSEquipment.autocompletePositionParent}/>
-                </EAMBarcodeInput>
+                {!fieldIsHidden(assetLayout.fields['position']) && <>
+                    <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyPositionCode', value)} right={0} top={20}>
+                        <EAMAutocomplete
+                            children = {children}
+                            elementInfo={assetLayout.fields['position']}
+                            value={equipment.hierarchyPositionCode}
+                            updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
+                            valueKey="hierarchyPositionCode"
+                            valueDesc={equipment.hierarchyPositionDesc}
+                            descKey="hierarchyPositionDesc"
+                            autocompleteHandler={WSEquipment.autocompletePositionParent}/>
+                    </EAMBarcodeInput>
 
-                <div style={this.styles.dependencyRowStyle}>
-                    <div style={this.styles.dependencyCheckboxWrapperStyle}>
-                        <span style={this.styles.labelStyle}>Dependent</span>
-                        <div style={this.styles.checkboxStyle}>
-                            <EAMCheckbox 
-                                elementInfo={{readonly: !equipment.hierarchyPositionCode}}
-                                children = {children}
-                                updateProperty={updateEquipmentProperty}
-                                value={equipment.hierarchyPositionDependent}
-                                valueKey="hierarchyPositionDependent"/> 
+                    <div style={this.styles.dependencyRowStyle}>
+                        <div style={this.styles.dependencyCheckboxWrapperStyle}>
+                            <span style={this.styles.labelStyle}>Dependent</span>
+                            <div style={this.styles.checkboxStyle}>
+                                <EAMCheckbox
+                                    elementInfo={{readonly: !equipment.hierarchyPositionCode}}
+                                    children = {children}
+                                    updateProperty={updateEquipmentProperty}
+                                    value={equipment.hierarchyPositionDependent}
+                                    valueKey="hierarchyPositionDependent"/>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </>}
 
-                <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyPrimarySystemCode', value)} right={0} top={20}>
-                    <EAMAutocomplete
-                        children = {children}
-                        elementInfo={assetLayout.fields['primarysystem']}
-                        value={equipment.hierarchyPrimarySystemCode}
-                        updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
-                        valueKey="hierarchyPrimarySystemCode"
-                        valueDesc={equipment.hierarchyPrimarySystemDesc}
-                        descKey="hierarchyPrimarySystemDesc"
-                        autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}/>
-                </EAMBarcodeInput>
+                {!fieldIsHidden(assetLayout.fields['primarysystem']) && <>
+                    <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyPrimarySystemCode', value)} right={0} top={20}>
+                        <EAMAutocomplete
+                            children = {children}
+                            elementInfo={assetLayout.fields['primarysystem']}
+                            value={equipment.hierarchyPrimarySystemCode}
+                            updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
+                            valueKey="hierarchyPrimarySystemCode"
+                            valueDesc={equipment.hierarchyPrimarySystemDesc}
+                            descKey="hierarchyPrimarySystemDesc"
+                            autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}/>
+                    </EAMBarcodeInput>
 
-                <div style={this.styles.dependencyRowStyle}>
-                    <div style={this.styles.dependencyCheckboxWrapperStyle}>
-                        <span style={this.styles.labelStyle}>Dependent</span>
-                        <div style={this.styles.checkboxStyle}>
-                            <EAMCheckbox 
-                                        elementInfo={{readonly: !equipment.hierarchyPrimarySystemCode}}
-                                        children = {children}
-                                        updateProperty={updateEquipmentProperty}
-                                        value={equipment.hierarchyPrimarySystemDependent}
-                                        valueKey="hierarchyPrimarySystemDependent"/> 
+                    <div style={this.styles.dependencyRowStyle}>
+                        <div style={this.styles.dependencyCheckboxWrapperStyle}>
+                            <span style={this.styles.labelStyle}>Dependent</span>
+                            <div style={this.styles.checkboxStyle}>
+                                <EAMCheckbox
+                                    elementInfo={{readonly: !equipment.hierarchyPrimarySystemCode}}
+                                    children = {children}
+                                    updateProperty={updateEquipmentProperty}
+                                    value={equipment.hierarchyPrimarySystemDependent}
+                                    valueKey="hierarchyPrimarySystemDependent"/>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </>}
 
                 <EAMAutocomplete
                     children = {children}
