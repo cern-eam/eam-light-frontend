@@ -126,6 +126,17 @@ function AddActivityDialog(props) {
                                 updateProperty={updateFormValues}/>
 
                             <EAMAutocomplete
+                                autocompleteHandler={WSWorkorders.autocompleteACTMatList}
+                                elementInfo={props.layout.matlcode}
+                                valueKey="materialList"
+                                value={formValues['materialList']}
+                                valueDesc={formValues['materialListDesc']}
+                                descKey="materialListDesc"
+                                updateProperty={updateFormValues}
+                                maxHeight={200}
+                            />
+
+                            <EAMAutocomplete
                                 autocompleteHandler={WSWorkorders.autocompleteACTTrade}
                                 elementInfo={props.layout.trade}
                                 valueKey="tradeCode"
@@ -163,15 +174,6 @@ function AddActivityDialog(props) {
                                 value={formValues['endDate']}
                                 updateProperty={updateFormValues}
                             />
-
-                            <EAMAutocomplete
-                                autocompleteHandler={WSWorkorders.autocompleteACTMatList}
-                                elementInfo={props.layout.matlcode}
-                                valueKey="materialList"
-                                value={formValues['materialList']}
-                                valueDesc={formValues['materialListDesc']}
-                                descKey="materialListDesc"
-                                updateProperty={updateFormValues}/>
 
                         </BlockUi>
                     </div>
