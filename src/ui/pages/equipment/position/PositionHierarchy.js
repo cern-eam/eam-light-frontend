@@ -86,6 +86,30 @@ class PositionHierarchy extends Component {
                 <EAMAutocomplete
                     children={children}
                     elementInfo={positionLayout.fields['asset']}
+                    value={equipment.hierarchyAssetCode}
+                    updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
+                    valueKey="hierarchyAssetCode"
+                    valueDesc={equipment.hierarchyAssetDesc}
+                    descKey="hierarchyAssetDesc"
+                    autocompleteHandler={WSEquipment.autocompleteAssetParent}/>
+
+                <div style={this.styles.dependencyRowStyle}>
+                    <div style={this.styles.dependencyCheckboxWrapperStyle}>
+                        <span style={this.styles.labelStyle}>Dependent</span>
+                        <div style={this.styles.checkboxStyle}>
+                            <EAMCheckbox
+                                elementInfo={{readonly: !equipment.hierarchyAssetCode}}
+                                children = {children}
+                                updateProperty={updateEquipmentProperty}
+                                value={equipment.hierarchyAssetDependent}
+                                valueKey="hierarchyAssetDependent"/>
+                        </div>
+                    </div>
+                </div>
+
+                <EAMAutocomplete
+                    children={children}
+                    elementInfo={positionLayout.fields['parentasset']}
                     value={equipment.hierarchyPositionCode}
                     updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
                     valueKey="hierarchyPositionCode"
