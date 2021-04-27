@@ -17,11 +17,13 @@ function Activity(props){
         .map(Number)
         .reduce(add, 0) ?? 0
 
+    const tradeString = activity.tradeCode === '*' ? '' : ` - Trade ${activity.tradeCode}`
+
     return (
       <div className="activity" >
         <div className="content">
 
-          <h3>Activity {activity.activityCode}</h3>
+          <h3>Activity {activity.activityCode}{tradeString}</h3>
 
             <Grid container spacing={1} className="activityDetails">
 
