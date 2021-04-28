@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {addDays, differenceInDays, parse, format} from 'date-fns'
 import set from "set-value";
 import queryString from "query-string";
 import BlockUi from 'react-block-ui'
@@ -376,28 +375,6 @@ export default class readEntityEquipment extends Component {
         this.setState((prevState) => ({layout: {...prevState.layout, ...layout}}))
     }
 
-    updateScheduleProperty = (key, value, prevState) => {
-        const {scheduledEndDate, scheduledStartDate} = prevState[this.settings.entity]
-        const initialStartDate = scheduledStartDate.replace('00:00', '').trim()
-        const initialEndDate = scheduledEndDate.replace('00:00', '').trim()
-
-        const dateFormat = 'dd-MMM-yyyy'
-        const incomingStartDate = parse(value, dateFormat, new Date())
-        const startDate = parse(initialStartDate, dateFormat, new Date())
-        const endDate = parse(initialEndDate, dateFormat, new Date())
-
-        const diff = differenceInDays(incomingStartDate, startDate)
-        const newEnd = format(addDays(endDate, diff), dateFormat)
-
-        return {
-            [this.settings.entity]: {
-                ...prevState[this.settings.entity],
-                scheduledStartDate: value,
-                scheduledEndDate: newEnd
-            }
-        }
-    }
-
     updateEntityProperty = (key, value) => {
         // Form was modified
         this.setLayout({
@@ -406,10 +383,6 @@ export default class readEntityEquipment extends Component {
 
         // Set state with the clone of the entity that got the key set
         this.setState((prevState) => {
-            if(key === 'scheduledStartDate') {
-                return this.updateScheduleProperty(key, value, prevState)
-            }
-
             return {
                 [this.settings.entity]: set({...prevState[this.settings.entity]}, key, value)
             }
