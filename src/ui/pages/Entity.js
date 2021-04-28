@@ -382,11 +382,9 @@ export default class readEntityEquipment extends Component {
         })
 
         // Set state with the clone of the entity that got the key set
-        this.setState((prevState) => {
-            return {
-                [this.settings.entity]: set({...prevState[this.settings.entity]}, key, value)
-            }
-        });
+        this.setState((prevState) => ({
+            [this.settings.entity]: set({...prevState[this.settings.entity]}, key, value)
+        }));
     };
 
     //
