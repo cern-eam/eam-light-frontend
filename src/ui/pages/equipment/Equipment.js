@@ -6,6 +6,7 @@ import AssetContainer from "./asset/AssetContainer";
 import SystemContainer from "./system/SystemContainer";
 import LocationContainer from "./location/LocationContainer";
 import Split from 'react-split'
+import InstallEqpContainer from "./installeqp/InstallEqpContainer";
 
 class Equipment extends Component {
 
@@ -16,6 +17,7 @@ class Equipment extends Component {
 
     render() {
         const equipmentCode = (this.props.eqp && this.props.eqp.code) || this.props.match.params.code;
+
         return (
             <div className="entityContainer">
 
@@ -45,6 +47,8 @@ class Equipment extends Component {
                                    component={SystemContainer}/>
                             <Route path={"/location/:code(.+)?"}
                                    component={LocationContainer}/>
+                            <Route path="/installeqp/:code(.+)?"
+                                   component={InstallEqpContainer}/>
                         </Switch>
                     </div>
 

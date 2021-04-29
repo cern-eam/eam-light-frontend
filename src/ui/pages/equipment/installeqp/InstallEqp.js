@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import EISPanel from 'eam-components/dist/ui/components/panel';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid'
@@ -13,6 +13,12 @@ export default function NameForm(props) {
     const [parentEq, setParentEq] = useState("");
     const [childEq, setChildEq] = useState("");
     const [blocking, setBlocking] = useState(false);
+
+    useEffect( () => {
+        if (props.match.params.code) {
+            setParentEq(props.match.params.code);
+        }
+    },[props.match.params.code])
 
     const createEquipmentStructure = (newParent, child) => {
         return {
@@ -41,6 +47,12 @@ export default function NameForm(props) {
         }
     }
 
+    const changeParentHandler = (code) => {
+        console.log('parent changed')
+        props.setLayoutProperty('equipment',{code: code});
+        props.setLayoutProperty('showEqpTreeButton', true);
+    }
+
     return (
         <div id="entityContainer" style={{height: "100%"}}>
             <BlockUi tag="div" blocking={blocking} style={{height: "100%", width: "100%"}}>
@@ -53,6 +65,7 @@ export default function NameForm(props) {
                                         <EAMAutocomplete elementInfo={{attribute: "R", text: "Parent"}}
                                                          value={parentEq}
                                                          valueKey="parent"
+                                                         onChangeValue={changeParentHandler}
                                                          updateProperty={(key, value) => (key === 'parent') && setParentEq(value)}
                                                          autocompleteHandler={WS.autocompleteEquipment}/>
                                     </EAMBarcodeInput>

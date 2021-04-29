@@ -52,6 +52,10 @@ export default class readEntityEquipment extends Component {
 
     }
 
+    componentWillUnmount() {
+        document.title = "EAM Light";
+    }
+
     /**
      * Triggered by React. Used to read existing entity or init new one depending on the URL
      *
@@ -176,6 +180,9 @@ export default class readEntityEquipment extends Component {
                     readError: null
                 })
 
+                // Change the window title
+                document.title = "New " + this.settings.entityDesc;
+
                 // Invoke entity specific logic on the subclass
                 this.postInit()
             })
@@ -217,6 +224,8 @@ export default class readEntityEquipment extends Component {
                     [this.settings.entity]: response.body.data,
                      readError: null
                 }))
+                // Change the window title
+                document.title = this.settings.entityDesc + " " + response.body.data[this.settings.entityCodeProperty];
                 // Invoke entity specific logic on the subclass
                 this.postRead(response.body.data)
                 // Disable all children when updates not allowed
@@ -296,6 +305,9 @@ export default class readEntityEquipment extends Component {
                    process.env.PUBLIC_URL + this.settings.entityURL + encodeURIComponent(createdEntity[this.settings.entityCodeProperty]));
 
                 this.props.showNotification(this.settings.entityDesc + ' ' + createdEntity[this.settings.entityCodeProperty] + ' has been successfully created.');
+                // Change the window title
+                document.title = this.settings.entityDesc + " " + createdEntity[this.settings.entityCodeProperty];
+
                 // Invoke entity specific logic on the subclass
                 this.postCreate()
             })
@@ -318,6 +330,8 @@ export default class readEntityEquipment extends Component {
             .then(response => {
                 this.props.showNotification(this.settings.entityDesc + ' ' + code + ' has been successfully deleted.')
                 this.props.history.push(this.settings.entityURL)
+                // Change the window title
+                document.title = "New " + this.settings.entityDesc;
             })
             .catch(error => {
                 this.props.handleError(error);

@@ -1,205 +1,170 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import TreeWS from './lib/TreeWS';
 import ErrorTypes from 'eam-components/dist/ui/components/eamgrid/lib/GridErrorTypes';
-import {connect} from "react-redux";
-import {handleError} from "../../../actions/uiActions";
 import SortableTree from 'react-sortable-tree';
 import TreeTheme from './theme/TreeTheme';
 import TreeIcon from './components/TreeIcon';
 import TreeSelectParent from "./components/TreeSelectParent";
 import BlockUi from 'react-block-ui';
 
-class EAMTree extends Component {
-  constructor(props) {
-    super(props);
+export default function EAMTree(props) {
 
-    this.state = {
-      loading: false,
-      lastSearchedNodeIndex: -1,
-      treeData: []
+    const [loading, setLoading] = useState(false);
+    const [treeData, setTreeData] = useState([]);
+
+    useEffect(() => {
+        _loadTreeData(props.code);
+    }, [])
+
+    /**
+     * Add expanded = true for those nodes that belong to the
+     * selected system/code path in the tree
+     */
+    const _expandTreeToCode = (treeData, code) => {
+        if (code && treeData && treeData.length > 0) {
+            let nodes = treeData.filter(f => (code == f.id));
+
+            if (nodes.length > 0) {
+                nodes[0].expanded = true;
+                return true;
+            } else {
+                return treeData.some(item => {
+                    const res = _expandTreeToCode(item.children, code);
+                    if (res) {
+                        item.expanded = true;
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+            }
+        }
+        return false;
     }
-  }
 
-  componentDidMount() {
-    this._loadTreeData(this.props.code);
-  }
+    const _loadTreeData = (code) => {
+        setLoading(true);
 
-  componentWillUnmount() {
+        TreeWS.getEquipmentStructure(code)
+            .then(data => {
 
-  }
+                // get tree data
+                let treeData = data.body.data;
+                _expandTreeToCode(treeData, props.code);
 
-  /**
-   * Add expanded = true for those nodes that belong to the
-   * selected system/code path in the tree
-   */
-  _expandTreeToCode(treeData, code) {
-    if (code && treeData && treeData.length > 0) {
-      let nodes = treeData.filter(f => (code == f.id));
-
-      if (nodes.length > 0) {
-        nodes[0].expanded = true;
-        return true;
-      } else {
-        return treeData.some(item => {
-          const res = this._expandTreeToCode(item.children, code);
-          if (res) {
-            item.expanded = true;
-            return true;
-          } else {
-              return false;
-          }
+                setTreeData(treeData);
+                setLoading(false);
+            }).catch(error => {
+            if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
+                props.handleError(error);
+            }
         });
-      }
+
     }
-    return false;
-  }
 
-  _loadTreeData(code) {
+    const _isNodeSelected = (node) => {
+        return node.id === props.code;
+    };
 
-    this.setState(() => ({
-       loading: true
-    }));
-
-    TreeWS.getEquipmentStructure(code)
-      .then(data => {
-
-        // get tree data
-        let treeData = data.body.data;
-
-        //treeData[0].expanded = true;
-        this._expandTreeToCode(treeData, this.props.code);
-
-        this.setState(() => ({
-          treeData: treeData,
-          loading: false
-        }))
-      }).catch(error => {
-      if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
-        this.props.handleError(error);
-      }
-    });
-
-  }
-
-  _sortableTreeOnChange = (treeData) => {
-    this.setState({tree: treeData});
-  };
-
-  _isNodeSelected = (node) => {
-    return node.id === this.props.code;
-  };
-
-  _getURLForType(type) {
-    switch(type) {
-        case 'A':
-            return 'asset';
-        case 'P':
-            return 'position';
-        case 'S':
-            return 'system';
-        case 'L':
-            return 'location';
+    const urlTypeMap = {
+        'A': 'asset',
+        'P': 'position',
+        'S': 'system',
+        'L': 'location'
     }
-  }
 
-  _getColorForType(type) {
-    switch(type) {
-        case 'A':
-            return '#B71C1C';
-        case 'P':
-            return '#0D47A1';
-        default:
-            return '#757575';
+    const _getColorForType = (type) => {
+        switch (type) {
+            case 'A':
+                return '#B71C1C';
+            case 'P':
+                return '#0D47A1';
+            default:
+                return '#757575';
+        }
     }
-  }
 
-  render() {
-    const {classes} = this.props;
+    const nodeClickHandler = rowInfo => event => {
+        if (event.target.className === `rowTitle` && ["A", "P", "S", "L"].includes(rowInfo.node.type)) {
+            if (window.location.pathname.includes("installeqp")) {
+                props.history.push("/installeqp/" + rowInfo.node.id)
+                return;
+            }
+
+            if (props.history) {
+                props.history.push("/" + urlTypeMap[rowInfo.node.type] + `/${rowInfo.node.id}`);
+            }
+            window.parent.postMessage(JSON.stringify({
+                type: 'EQUIPMENT_TREE_NODE_CLICK',
+                node: rowInfo.node,
+            }), "*");
+        }
+    }
+
+    console.log("loading", loading)
 
     return (
         <React.Fragment>
-      <BlockUi tag="div" blocking={this.state.loading}/>
-      <div style={{height: '100%', margin: 5}}>
-            <SortableTree
-              canDrag={false}
-              treeData={this.state.treeData}
-              onChange={treeData => this.setState({treeData})}
+            <BlockUi tag="div" blocking={loading}/>
+            <div style={{height: '100%', margin: 5}}>
+                <SortableTree
+                    canDrag={false}
+                    treeData={treeData}
+                    onChange={setTreeData}
 
-              // this is to make the tree div height to fit the screen
-              //style={{height: '100%'}}
-              className='sortableTree'
-              // set up our theme
-              theme={TreeTheme}
+                    // this is to make the tree div height to fit the screen
+                    //style={{height: '100%'}}
+                    className='sortableTree'
+                    // set up our theme
+                    theme={TreeTheme}
 
-              generateNodeProps={rowInfo => {
+                    generateNodeProps={rowInfo => {
 
-                return {
-                  isNodeSelected: this._isNodeSelected,
-                  onClick: (event) => {
-                    if (event.target.className === `rowTitle` && ["A", "P", "S", "L"].includes(rowInfo.node.type)) {
-                      if (this.props.history) {
-                          this.props.history.push("/" + this._getURLForType(rowInfo.node.type) + `/${rowInfo.node.id}`);
-                      }
-                      window.parent.postMessage(JSON.stringify({
-                        type: 'EQUIPMENT_TREE_NODE_CLICK',
-                        node: rowInfo.node,
-                      }), "*");
-                    }
-                  },
-                  icons: rowInfo.node.isDirectory
-                    ? [
-                      <div
-                        style={{
-                          borderLeft: 'solid 8px red',
-                          borderBottom: 'solid 10px red',
-                          marginRight: 10,
-                          width: 16,
-                          height: 12,
-                          filter: rowInfo.node.expanded
-                            ? 'drop-shadow(1px 0 0 red) drop-shadow(0 1px 0 red) drop-shadow(0 -1px 0 red) drop-shadow(-1px 0 0 red)'
-                            : 'none',
-                          borderColor: rowInfo.node.expanded ? 'white' : 'red',
-                        }}
-                      />,
-                    ]
-                    : [
-                      <div className='selectParentButton' style={{marginLeft: '-10px'}}>
-                        {
-                          !rowInfo.parentNode && rowInfo.node.parents && rowInfo.node.parents.length > 0 &&
-                          <TreeSelectParent
-                            parents={rowInfo.node.parents}
-                            reloadData={this._loadTreeData.bind(this)}
-                          />
+                        return {
+                            isNodeSelected: _isNodeSelected,
+                            onClick: nodeClickHandler(rowInfo),
+                            icons: rowInfo.node.isDirectory
+                                ? [
+                                    <div
+                                        style={{
+                                            borderLeft: 'solid 8px red',
+                                            borderBottom: 'solid 10px red',
+                                            marginRight: 10,
+                                            width: 16,
+                                            height: 12,
+                                            filter: rowInfo.node.expanded
+                                                ? 'drop-shadow(1px 0 0 red) drop-shadow(0 1px 0 red) drop-shadow(0 -1px 0 red) drop-shadow(-1px 0 0 red)'
+                                                : 'none',
+                                            borderColor: rowInfo.node.expanded ? 'white' : 'red',
+                                        }}
+                                    />,
+                                ]
+                                : [
+                                    <div className='selectParentButton' style={{marginLeft: '-10px'}}>
+                                        {
+                                            !rowInfo.parentNode && rowInfo.node.parents && rowInfo.node.parents.length > 0 &&
+                                            <TreeSelectParent
+                                                parents={rowInfo.node.parents}
+                                                reloadData={_loadTreeData}
+                                            />
+                                        }
+                                    </div>,
+                                    <TreeIcon
+                                        eqtype={rowInfo.node.type}
+                                        style={{
+                                            width: 15,
+                                            height: 15,
+                                            marginRight: 5,
+                                            marginTop: 3,
+                                            color: _getColorForType(rowInfo.node.type)
+                                        }}
+                                    />,
+                                ],
                         }
-                      </div>,
-                      <TreeIcon
-                        eqtype={rowInfo.node.type}
-                        style={{
-                          width: 15,
-                          height: 15,
-                          marginRight: 5,
-                          marginTop: 3,
-                          color: this._getColorForType(rowInfo.node.type)
-                        }}
-                      />,
-                    ],
-                }
-              }
-              }
-            />
-      </div></React.Fragment>
+                    }
+                    }
+                />
+            </div>
+        </React.Fragment>
     )
-  }
 }
-
-//EAMTree = withStyles(styles)(EAMTree);
-
-function mapStateToProps(state) {
-  return {}
-}
-
-EAMTree = connect(mapStateToProps, {
-  handleError
-})(EAMTree);
-
-export default EAMTree;
