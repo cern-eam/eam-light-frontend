@@ -26,6 +26,7 @@ const WorkorderSearch = (props) => {
             handleError={handleError}
             searchOnMount={workOrderScreen.startupAction !== "N"}
             cellRenderer={cellRenderer}
+            key={workOrderScreen.screenCode}
         >
             <EAMGrid />
         </SyncedQueryParamsEAMGridContext>

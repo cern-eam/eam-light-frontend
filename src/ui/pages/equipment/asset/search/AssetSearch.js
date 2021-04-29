@@ -26,6 +26,7 @@ const AssetSearch = (props) => {
             handleError={handleError}
             searchOnMount={assetScreen.startupAction !== "N"}
             cellRenderer={cellRenderer}
+            key={assetScreen.screenCode}
         >
             <EAMGrid />
         </SyncedQueryParamsEAMGridContext>

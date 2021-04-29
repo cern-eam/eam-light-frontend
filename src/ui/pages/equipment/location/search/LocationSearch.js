@@ -26,6 +26,7 @@ const LocationSearch = (props) => {
             handleError={handleError}
             searchOnMount={locationScreen.startupAction !== "N"}
             cellRenderer={cellRenderer}
+            key={locationScreen.screenCode}
         >
             <EAMGrid />
         </SyncedQueryParamsEAMGridContext>
