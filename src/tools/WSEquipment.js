@@ -76,9 +76,16 @@ class WSEquipment {
         return WS._get(`/autocomplete/eqp/bin?code=${filter}&store=${store}`, config);
     }
 
-    autocompleteEquipmentCategory(filter, config = {}) {
+    autocompleteEquipmentCategory(filter, eqpClass, config = {}) {
         filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/eqp/category/${filter}`, config);
+        eqpClass = eqpClass === null ? '' : eqpClass;
+        return WS._get(`/autocomplete/eqp/category/${filter}`, {
+            ...config,
+            params: {
+                class: eqpClass,
+                ...config.params
+            }
+        });
     }
 
     autocompleteEquipmentDepartment(filter, config = {}) {
