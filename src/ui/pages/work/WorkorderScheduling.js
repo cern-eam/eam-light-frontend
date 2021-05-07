@@ -8,7 +8,7 @@ import { Grid } from '@material-ui/core';
 
 const WorkorderScheduling = (props) => {
 
-    const { children, workOrderLayout, workorder, updateWorkorderProperty } = props;
+    const { children, workOrderLayout, workorder, updateWorkorderProperty, updateScheduleProperty } = props;
 
     if ("H" === workOrderLayout.fields.reqstartdate.attribute &&
         "H" === workOrderLayout.fields.reqenddate.attribute &&
@@ -79,7 +79,7 @@ const WorkorderScheduling = (props) => {
                             elementInfo={workOrderLayout.fields['schedstartdate']}
                             valueKey="scheduledStartDate"
                             value={workorder.scheduledStartDate || ''}
-                            updateProperty={updateWorkorderProperty}/>
+                            updateProperty={updateScheduleProperty}/>
 
             <EAMDatePicker children={children}
                             elementInfo={workOrderLayout.fields['schedenddate']}

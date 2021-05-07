@@ -1,13 +1,13 @@
 import React, {Component} from 'react'
-import InfoPage from '../components/infopage/InfoPage'
-import BlockUi from 'react-block-ui'
-import 'react-block-ui/style.css'
-import Ajax from 'eam-components/dist/tools/ajax'
-import ErrorTypes from "../../enums/ErrorTypes";
-import queryString from "query-string";
 import set from "set-value";
+import queryString from "query-string";
+import BlockUi from 'react-block-ui'
+import Ajax from 'eam-components/dist/tools/ajax'
+import InfoPage from '../components/infopage/InfoPage'
+import ErrorTypes from "../../enums/ErrorTypes";
 import {assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType} from './EntityTools';
 import WSCustomFields from "../../tools/WSCustomFields";
+import 'react-block-ui/style.css'
 
 export default class readEntityEquipment extends Component {
 
@@ -30,7 +30,7 @@ export default class readEntityEquipment extends Component {
      *
      * @param nextProps
      */
-    componentDidMount() { 
+    componentDidMount() {
         const values = queryString.parse(window.location.search)
         // If code param is present, open it
         if (values.code) {
@@ -72,7 +72,7 @@ export default class readEntityEquipment extends Component {
                 this.initNewEntity()
             }
         }
-        
+
         if(this.state.layout.reading) {
             return;
         }
@@ -328,8 +328,8 @@ export default class readEntityEquipment extends Component {
 
         // Set state with the clone of the entity that got the key set
         this.setState((prevState) => ({
-                     [this.settings.entity]: set({...prevState[this.settings.entity]}, key, value)
-                 }));
+            [this.settings.entity]: set({...prevState[this.settings.entity]}, key, value)
+        }));
     };
 
     //
@@ -422,7 +422,7 @@ export default class readEntityEquipment extends Component {
                 const entity = prevState[this.settings.entity];
                 const newCustomFields = response.body.data;
                 let newEntity = assignCustomFieldFromCustomField(entity, newCustomFields, AssignmentType.SOURCE_NOT_EMPTY);
-    
+
                 // replace custom fields with ones in query parameters if we just created the entity
                 if(!this.state.layout.isModified && this.state.layout.newEntity) {
                     const queryParams = queryString.parse(window.location.search);

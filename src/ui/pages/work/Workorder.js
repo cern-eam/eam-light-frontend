@@ -4,6 +4,7 @@ import EDMSWidget from 'eam-components/dist/ui/components/edms/EDMSWidget';
 import {WorkorderIcon} from 'eam-components/dist/ui/components/icons';
 import React from 'react';
 import BlockUi from 'react-block-ui';
+import set from "set-value";
 import WSEquipment from "../../../tools/WSEquipment";
 import WSWorkorder from "../../../tools/WSWorkorders";
 import WS from '../../../tools/WS'
@@ -28,6 +29,7 @@ import {assignValues, assignUserDefinedFields, assignCustomFieldFromCustomField,
 import { isCernMode } from '../../components/CERNMode';
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
+import { createScheduleValue } from './WorkorderUtils';
 
 
 
@@ -136,6 +138,34 @@ class Workorder extends Entity {
         }
     }
 
+    updateScheduleProperty = (key, value) => {
+        this.setLayout({
+            isModified: true
+        })
+
+        this.setState((prevState) => {
+            const {scheduledEndDate, scheduledStartDate} = prevState[this.settings.entity];
+
+            if(!scheduledEndDate) {
+                return {
+                    [this.settings.entity]: set({...prevState[this.settings.entity]}, key, value)
+                };
+            }
+
+            return {
+                [this.settings.entity]: {
+                    ...prevState[this.settings.entity],
+                    ...createScheduleValue({
+                        value,
+                        startValue: scheduledStartDate,
+                        endValue: scheduledEndDate,
+                        startKey: 'scheduledStartDate',
+                        endKey: 'scheduledEndDate',
+                    })
+                }
+            };
+        });
+    }
 
     getRegions = () => {
         const {
@@ -155,6 +185,7 @@ class Workorder extends Entity {
             workOrderLayout,
             userData,
             updateWorkorderProperty: this.updateEntityProperty.bind(this),
+            updateScheduleProperty: this.updateScheduleProperty.bind(this),
             children: this.children,
             setWOEquipment: this.setWOEquipment
         };

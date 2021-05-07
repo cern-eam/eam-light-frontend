@@ -11,6 +11,7 @@ import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAuto
 import WSWorkorders from "../../../../../tools/WSWorkorders";
 import EAMDatePicker from "eam-components/dist/ui/components/muiinputs/EAMDatePicker";
 import KeyCode from "../../../../../enums/KeyCode";
+import { createScheduleValue } from "../../WorkorderUtils"
 
 /**
  * Display detail of an activity
@@ -64,10 +65,25 @@ function AddActivityDialog(props) {
         if (key === "taskCode") {
             onTaskCodeChanged(value);
         }
-        setFormValues(prevFormValues => ({
-            ...prevFormValues,
-            [key]: value
-        }))
+
+        // when start date changes, end date is shifted by the difference
+        if(key === "startDate") {
+            setFormValues(prevFormValues => ({
+                ...prevFormValues,
+                ...createScheduleValue({
+                    value,
+                    startValue: prevFormValues.startDate,
+                    endValue: prevFormValues.endDate,
+                    startKey: 'startDate',
+                    endKey: 'endDate',
+                })
+            }))
+        } else {
+            setFormValues(prevFormValues => ({
+                ...prevFormValues,
+                [key]: value
+            }))
+        }
     };
 
     let onTaskCodeChanged = (taskcode) => {
