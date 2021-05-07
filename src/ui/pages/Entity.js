@@ -18,7 +18,11 @@ export default class readEntityEquipment extends Component {
                 blocking: false,
                 newEntity: true,
                 isModified: false,
-                reading: false
+                reading: false,
+                // the following 2 properties are used for setting the url parameters again after all the
+                // requests from the parameterized urls are finished
+                requests: 0, // number of requests that we are waiting to complete, also used for unblocking the ui
+                assignUrlParams: false // controls whether at the end of all the requests we assign the query params to the entity
             }
         }
         // map of all children components (the children are responsible for registration)
@@ -73,7 +77,28 @@ export default class readEntityEquipment extends Component {
             }
         }
         
-        if(this.state.layout.reading) {
+        if (this.state.layout.reading) {
+            return;
+        }
+
+        // if we changed state from waiting for requests to not waiting from requests
+        if (this.state.layout.requests === 0 && prevState.layout.requests > 0) {
+            // unblock the user interface when all the requests are completed
+            this.setLayout({blocking: false});
+
+            // handle the requests that were generated for the parameterized urls feature
+            if (!this.state.assignUrlParams) {
+                // if there are no more requests to do, reassign the values in the url to the entity
+                this.setState(prevState => {
+                    const queryParams = queryString.parse(window.location.search);
+                    const entity = assignQueryParamValues(prevState[this.settings.entity], queryParams);
+                    return {
+                        [this.settings.entity]: entity,
+                        assignUrlParams: false
+                    };
+                });
+            }
+
             return;
         }
 
@@ -84,24 +109,41 @@ export default class readEntityEquipment extends Component {
             return;
         }
 
-        Object.entries(newEntity)
-            .filter(([key, value]) => oldEntity[key] !== value)
-            .forEach(([key, value]) => this.handleUpdate(key, value));
+        // create an array of the [key, value] pairs we have to pass to handle the value changing
+        const toUpdate = Object.entries(newEntity)
+            .filter(([key, value]) => oldEntity[key] !== value && this.settings.handlerFunctions && this.settings.handlerFunctions[key]);
+
+        if (toUpdate.length > 0) {
+            // update the count of the requests that we are waiting on
+            // note the use of prevLayout to prevent usage of an old incorrect layout state
+            this.setLayout(prevLayout => ({requests: prevLayout.requests + toUpdate.length}));
+
+            toUpdate.forEach(([key, value]) => this.handleUpdate(key, value));
+        }
     }
 
     handleUpdate(key, value) {
-        if(!this.settings.handlerFunctions || !this.settings.handlerFunctions[key]) {
-            return;
-        }
+        // finish the update handling, by decreasing the requests that are waiting to be completed by 1
+        // note the use of prevLayout to prevent usage of an old incorrect layout state
+        const finish = () => this.setLayout(prevLayout => ({
+            requests: prevLayout.requests - 1,
+        }));
 
         const promise = this.settings.handlerFunctions[key](value);
 
+        // all handler functions should return a promise
+        // in the case it does not, consider the request finished and do an early exit
         if(!promise) {
+            finish();
             return;
         }
 
+        // if we are indeed performing a request, block the user interface
         this.setLayout({blocking: true})
-        promise.finally(() => this.setLayout({blocking: false}));
+
+        promise.finally(() => {
+            finish();
+        });
     }
 
     /**
@@ -120,7 +162,9 @@ export default class readEntityEquipment extends Component {
                 this.setLayout({
                     newEntity: true,
                     blocking: false,
-                    isModified: false
+                    isModified: false,
+                    // set up the initial values for the parameterized urls request tracking
+                    requests: 0, assignUrlParams: true
                 })
 
                 // Assign default values
@@ -154,10 +198,7 @@ export default class readEntityEquipment extends Component {
         // Reset all validators when reading new entity
         this.resetValidation(this.children)
         //
-        this.setLayout({
-            blocking: true,
-            reading: true
-        })
+        this.setLayout({blocking: true, reading: true});
         //
         if (this.cancelSource) {
             this.cancelSource.cancel();
@@ -169,7 +210,8 @@ export default class readEntityEquipment extends Component {
                 this.setLayout({
                     newEntity: false,
                     blocking: false,
-                    isModified: false
+                    isModified: false,
+                    assignUrlParams: false
                 })
                 this.setState(() => ({
                     [this.settings.entity]: response.body.data,
@@ -208,7 +250,8 @@ export default class readEntityEquipment extends Component {
                 this.setLayout({
                     newEntity: false,
                     blocking: false,
-                    isModified: false
+                    isModified: false,
+                    assignUrlParams: false
                 })
                 this.props.showNotification(
                     this.settings.entityDesc + ' '
@@ -243,7 +286,8 @@ export default class readEntityEquipment extends Component {
                 this.setLayout({
                     newEntity: false,
                     blocking: false,
-                    isModified: false
+                    isModified: false,
+                    assignUrlParams: false
                 });
 
                 // Set new URL (pushState does not trigger componentDidUpdate)
@@ -283,7 +327,7 @@ export default class readEntityEquipment extends Component {
     copyEntity() {
         //TODO clean the URL
         let code = this.state[this.settings.entity][this.settings.entityCodeProperty];
-        this.setLayout({newEntity: true, reading: true});
+        this.setLayout({newEntity: true, reading: true, assignUrlParams: false});
         this.setState({[this.settings.entity]: {
             ...assignDefaultValues(this.state[this.settings.entity],
                                         this.settings.layout,
@@ -317,6 +361,16 @@ export default class readEntityEquipment extends Component {
     // STATE MANIPULATORS
     //
     setLayout(layout) {
+        if (typeof layout === 'function') {
+            this.setState(prevState => ({
+                layout: {
+                    ...prevState.layout,
+                    ...layout(prevState.layout)
+                }
+            }));
+            return;
+        }
+
         this.setState((prevState) => ({layout: {...prevState.layout, ...layout}}))
     }
 
