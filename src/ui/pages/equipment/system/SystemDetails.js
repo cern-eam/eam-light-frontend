@@ -32,7 +32,7 @@ class SystemDetails extends Component {
                     updateProperty={updateEquipmentProperty}
                     valueKey="categoryCode"
                     descKey="categoryDesc"
-                    autocompleteHandler={WSEquipment.autocompleteEquipmentCategory}/>
+                    autocompleteHandler={filter => WSEquipment.autocompleteEquipmentCategory(filter, equipment.classCode)}/>
 
                 <EAMDatePicker
                     children={children}
