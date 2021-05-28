@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect';
 import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete';
 import WSWorkorders from "../../../tools/WSWorkorders";
+import BlockUi from 'react-block-ui';
 
 class WorkorderClosingCodes extends Component {
 
@@ -18,8 +19,7 @@ class WorkorderClosingCodes extends Component {
         }
 
         return (
-            <div style={{width: "100%", marginTop: 0}}>
-
+            <BlockUi blocking={layout.closingCodesLoading} style={{width: "100%", marginTop: 0}}>
                 <EAMSelect children={children}
                             elementInfo={workOrderLayout.fields['problemcode']}
                             valueKey="problemCode"
@@ -57,7 +57,7 @@ class WorkorderClosingCodes extends Component {
                                     descKey="costCodeDesc"
                                     autocompleteHandler={WSWorkorders.autocompleteCostCode}/>
 
-            </div>
+            </BlockUi>
         )
     }
 }
