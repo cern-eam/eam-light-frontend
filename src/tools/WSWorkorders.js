@@ -53,20 +53,55 @@ class WSWorkorders {
         return WS._get(`/wolists/typecodes?userGroup=${encodeURIComponent(userGroup)}`, config)
     }
 
-    getWorkOrderProblemCodeValues(woclass, objclass, config = {}) {
-        return WS._get('/wolists/problemcodes?woclass=' + woclass + '&objclass=' + objclass, config)
+    getWorkOrderProblemCodeValues(woclass, objclass, equipment, config = {}) {
+        return WS._get('/wolists/problemcodes', {
+            ...config,
+            params: {
+                ...config.params,
+                woclass,
+                objclass,
+                equipment
+            }
+        });
     }
 
-    getWorkOrderActionCodeValues(objclass, failurecode, problemcode, causecode, config = {}) {
-        return WS._get('/wolists/actioncodes?objclass=' + objclass + '&failurecode=' + failurecode + '&problemcode=' + problemcode + '&causecode=' + causecode, config)
+    getWorkOrderActionCodeValues(objclass, failurecode, problemcode, causecode, equipment, config = {}) {
+        return WS._get('/wolists/actioncodes', {
+            ...config,
+            params: {
+                ...config.params,
+                objclass,
+                failurecode,
+                problemcode,
+                causecode,
+                equipment
+            }
+        });
     }
 
-    getWorkOrderCauseCodeValues(objclass, failurecode, problemcode, config = {}) {
-        return WS._get('/wolists/causecodes?objclass=' + objclass + '&failurecode=' + failurecode + '&problemcode=' + problemcode, config)
+    getWorkOrderCauseCodeValues(objclass, failurecode, problemcode, equipment, config = {}) {
+        return WS._get('/wolists/causecodes', {
+            ...config,
+            params: {
+                ...config.params,
+                objclass,
+                failurecode,
+                problemcode,
+                equipment
+            }
+        });
     }
 
-    getWorkOrderFailureCodeValues(objclass, problemcode, config = {}) {
-        return WS._get('/wolists/failurecodes?objclass=' + objclass + '&problemcode=' + problemcode, config)
+    getWorkOrderFailureCodeValues(objclass, problemcode, equipment, config = {}) {
+        return WS._get('/wolists/failurecodes', {
+            ...config,
+            params: {
+                ...config.params,
+                objclass,
+                problemcode,
+                equipment
+            }
+        });
     }
 
     getWorkOrderPriorities(config = {}) {
