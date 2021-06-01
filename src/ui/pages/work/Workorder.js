@@ -55,12 +55,18 @@ class Workorder extends Entity {
 
     constructor(props) {
         super(props);
-        this.setProblemCodes(null, null);
-        this.setFailureCodes(null, null);
-        this.setActionCodes(null, null);
-        this.setCauseCodes(null, null);
         this.setPriorityValues();
         this.props.setLayoutProperty('showEqpTreeButton', false);
+    }
+    
+    componentDidMount() {
+        super.componentDidMount();
+        this.setLayout({closingCodesLoading: true});
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        super.componentDidUpdate(prevProps, prevState, snapshot);
+        this.setClosingCodes(prevState);
     }
 
     onChangeStandardWorkOrder = standardWorkOrderCode => {
@@ -505,34 +511,6 @@ class Workorder extends Entity {
             })
     }
 
-    setProblemCodes(woclass, objclass) {
-        WSWorkorder.getWorkOrderProblemCodeValues(woclass, objclass)
-            .then(response => {
-                this.setLayout({problemCodeValues: response.body.data})
-            })
-    }
-
-    setActionCodes(objclass, failurecode, problemcode, causecode) {
-        WSWorkorder.getWorkOrderActionCodeValues(objclass, failurecode, problemcode, causecode)
-            .then(response => {
-                this.setLayout({actionCodeValues: response.body.data})
-            })
-    }
-
-    setCauseCodes(objclass, failurecode, problemcode) {
-        WSWorkorder.getWorkOrderCauseCodeValues(objclass, failurecode, problemcode)
-            .then(response => {
-                this.setLayout({causeCodeValues: response.body.data})
-            })
-    }
-
-    setFailureCodes(objclass, problemcode) {
-        WSWorkorder.getWorkOrderFailureCodeValues(objclass, problemcode)
-            .then(response => {
-                this.setLayout({failureCodeValues: response.body.data})
-            })
-    }
-
     setPriorityValues() {
         WSWorkorder.getWorkOrderPriorities()
             .then(response => {
@@ -552,6 +530,49 @@ class Workorder extends Entity {
             this.setLayout({woEquipment: undefined})
         });
     };
+
+    setClosingCodes = prevState => {
+        const { workorder = {}, layout } = this.state;
+        const { classCode, problemCode, failureCode, causeCode, actionCode, equipmentCode } = workorder || {};
+        const objClass = layout.woEquipment && layout.woEquipment.classCode;
+
+        const { workorder: prevWorkorder = {}, layout: prevLayout } = prevState || {};
+        const prevObjClass = prevLayout && prevLayout.woEquipment && prevLayout.woEquipment.classCode;
+
+        if (layout.reading) {
+            return;
+        }
+
+        const equalObjectProps = (a, b, propNames) => propNames.every(field => a[field] === b[field]);
+        if (!equalObjectProps(prevWorkorder, workorder,
+                ['problemCode', 'failureCode', 'causeCode', 'classCode', 'equipmentCode'])
+                || prevObjClass !== objClass) {
+            this.setLayout({closingCodesLoading: true});
+    
+            Promise.all([
+                WSWorkorder.getWorkOrderProblemCodeValues(classCode, objClass, equipmentCode),
+                WSWorkorder.getWorkOrderActionCodeValues(objClass, failureCode, problemCode, causeCode, equipmentCode),
+                WSWorkorder.getWorkOrderCauseCodeValues(objClass, failureCode, problemCode, equipmentCode),
+                WSWorkorder.getWorkOrderFailureCodeValues(objClass, problemCode, equipmentCode)
+            ]).then(responses => {
+                const [
+                    problemCodeValues,
+                    actionCodeValues,
+                    causeCodeValues,
+                    failureCodeValues
+                ] = responses.map(response => response.body.data);
+    
+                this.setLayout({
+                    problemCodeValues,
+                    actionCodeValues,
+                    causeCodeValues,
+                    failureCodeValues,
+                    closingCodesLoading: false
+                });
+            });
+        }
+
+    }
 
     postAddActivityHandler = () => {
         //Refresh the activities in the checklist
