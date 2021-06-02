@@ -61,7 +61,6 @@ class Workorder extends Entity {
     
     componentDidMount() {
         super.componentDidMount();
-        this.setLayout({closingCodesLoading: true});
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -519,11 +518,6 @@ class Workorder extends Entity {
     }
 
     setWOEquipment = code => {
-        //Only call if the region is available
-        if (!WorkorderTools.isRegionAvailable('CUSTOM_FIELDS_EQP', this.props.workOrderLayout)) {
-            return;
-        }
-
         return WSEquipment.getEquipment(code).then(response => {
             this.setLayout({woEquipment: response.body.data})
         }).catch(error => {
@@ -547,7 +541,6 @@ class Workorder extends Entity {
         if (!equalObjectProps(prevWorkorder, workorder,
                 ['problemCode', 'failureCode', 'causeCode', 'classCode', 'equipmentCode'])
                 || prevObjClass !== objClass) {
-            this.setLayout({closingCodesLoading: true});
     
             Promise.all([
                 WSWorkorder.getWorkOrderProblemCodeValues(classCode, objClass, equipmentCode),
@@ -566,8 +559,7 @@ class Workorder extends Entity {
                     problemCodeValues,
                     actionCodeValues,
                     causeCodeValues,
-                    failureCodeValues,
-                    closingCodesLoading: false
+                    failureCodeValues
                 });
             });
         }

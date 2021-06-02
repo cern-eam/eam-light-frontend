@@ -19,7 +19,7 @@ class WorkorderClosingCodes extends Component {
         }
 
         return (
-            <BlockUi blocking={layout.closingCodesLoading} style={{width: "100%", marginTop: 0}}>
+            <div style={{width: "100%", marginTop: 0}}>
                 <EAMSelect children={children}
                             elementInfo={workOrderLayout.fields['problemcode']}
                             valueKey="problemCode"
@@ -57,7 +57,7 @@ class WorkorderClosingCodes extends Component {
                                     descKey="costCodeDesc"
                                     autocompleteHandler={WSWorkorders.autocompleteCostCode}/>
 
-            </BlockUi>
+            </div>
         )
     }
 }
