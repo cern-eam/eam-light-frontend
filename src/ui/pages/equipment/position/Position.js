@@ -84,6 +84,7 @@ export default class Position extends Entity {
     postInit() {
         this.setStatuses(true)
         this.props.setLayoutProperty('showEqpTreeButton', false)
+        this.enableChildren();
     }
 
     postCreate() {
@@ -92,14 +93,26 @@ export default class Position extends Entity {
         this.props.setLayoutProperty('showEqpTreeButton', true)
     }
 
-    postUpdate() {
+    postUpdate(equipment) {
         this.comments.createCommentForNewEntity();
+
+        if (this.departmentalSecurity.readOnly) {
+            this.disableChildren();
+        } else {
+            this.enableChildren();
+        }
     }
 
-    postRead() {
+    postRead(equipment) {
         this.setStatuses(false)
         this.props.setLayoutProperty('showEqpTreeButton', true)
-        this.props.setLayoutProperty('equipment', this.state.equipment)
+        this.props.setLayoutProperty('equipment', equipment)
+
+        if (this.departmentalSecurity.readOnly) {
+            this.disableChildren();
+        } else {
+            this.enableChildren();
+        }
     }
 
     setStatuses(neweqp) {
@@ -130,7 +143,7 @@ export default class Position extends Entity {
             updateEquipmentProperty: this.updateEntityProperty.bind(this),
             children: this.children,
         }
-
+        
         return [
             {
                 id: 'GENERAL',
@@ -268,7 +281,8 @@ export default class Position extends Entity {
                         entityCode='OBJ'
                         entityKeyCode={!layout.newEntity ? equipment.code : undefined}
                         userCode={userData.eamAccount.userCode}
-                        allowHtml={true} />
+                        allowHtml={true}
+                        disabled={this.departmentalSecurity.readOnly} />
                 ,
                 RegionPanelProps: {
                     detailsStyle: { padding: 0 }
@@ -373,6 +387,9 @@ export default class Position extends Entity {
                         screencode: userData.positionScreen,
                         copyHandler: this.copyEntity.bind(this),
                         entityType: ENTITY_TYPE.EQUIPMENT,
+                        departmentalSecurity: this.departmentalSecurity,
+                        screens: userData.screens,
+                        workorderScreencode: userData.workorderScreen
                     }}
                     width={730}
                     entityIcon={<PositionIcon style={{height: 18}}/>}
@@ -380,7 +397,8 @@ export default class Position extends Entity {
                     getUniqueRegionID={getUniqueRegionID}
                     regions={regions}
                     getHiddenRegionState={getHiddenRegionState}
-                    isHiddenRegion={isHiddenRegion} />
+                    isHiddenRegion={isHiddenRegion}
+                    departmentalSecurity={this.departmentalSecurity} />
                 <EntityRegions
                     showEqpTree={showEqpTree}
                     regions={regions}

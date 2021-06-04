@@ -56,6 +56,7 @@ class Part extends Entity {
     //
     postInit() {
         this.setTrackingMethods();
+        this.enableChildren();
     }
 
     postCreate() {
@@ -277,6 +278,8 @@ class Part extends Entity {
                             copyHandler: this.copyEntity.bind(this),
                             entityType: ENTITY_TYPE.PART,
                             entityDesc: this.settings.entityDesc,
+                            screens: userData.screens,
+                            workorderScreencode: userData.workorderScreen
                         }}
                         width={730}
                         entityIcon={<PartIcon style={{height: 18}}/>}

@@ -83,6 +83,7 @@ export default class System extends Entity {
     postInit() {
         this.setStatuses(true);
         this.props.setLayoutProperty('showEqpTreeButton', false)
+        this.enableChildren();
     }
 
     postCreate() {
@@ -91,14 +92,26 @@ export default class System extends Entity {
         this.props.setLayoutProperty('showEqpTreeButton', true)
     }
 
-    postUpdate() {
+    postUpdate(equipment) {
         this.comments.createCommentForNewEntity();
+
+        if (this.departmentalSecurity.readOnly) {
+            this.disableChildren();
+        } else {
+            this.enableChildren();
+        }
     }
 
-    postRead() {
+    postRead(equipment) {
         this.setStatuses(false);
         this.props.setLayoutProperty('showEqpTreeButton', true)
-        this.props.setLayoutProperty('equipment', this.state.equipment)
+        this.props.setLayoutProperty('equipment', equipment)
+
+        if (this.departmentalSecurity.readOnly) {
+            this.disableChildren();
+        } else {
+            this.enableChildren();
+        }
     }
 
     setStatuses(neweqp) {
@@ -280,7 +293,8 @@ export default class System extends Entity {
                         entityKeyCode={!layout.newEntity ? equipment.code : undefined}
                         userCode={userData.eamAccount.userCode}
                         handleError={handleError}
-                        allowHtml={true} />
+                        allowHtml={true}
+                        disabled={this.departmentalSecurity.readOnly} />
                 ,
                 RegionPanelProps: {
                     detailsStyle: { padding: 0 }
@@ -300,7 +314,10 @@ export default class System extends Entity {
                         fields={equipment.userDefinedFields}
                         entityLayout={systemLayout.fields}
                         updateUDFProperty={this.updateEntityProperty}
-                        children={this.children} />
+                        children={this.children}
+                        exclusions={[
+                            'udfchar45'
+                        ]} />
                 ,
                 column: 2,
                 order: 9,
@@ -384,7 +401,10 @@ export default class System extends Entity {
                         extendedLink: applicationData.EL_SYSLI,
                         screencode: userData.systemScreen,
                         copyHandler: this.copyEntity.bind(this),
-                        entityType: ENTITY_TYPE.EQUIPMENT, 
+                        entityType: ENTITY_TYPE.EQUIPMENT,
+                        departmentalSecurity: this.departmentalSecurity,
+                        screens: userData.screens,
+                        workorderScreencode: userData.workorderScreen
                     }}
                     width={730}
                     entityIcon={<SystemIcon style={{height: 18}}/>}
@@ -393,7 +413,8 @@ export default class System extends Entity {
                     regions={regions}
                     getHiddenRegionState={getHiddenRegionState}
                     setRegionVisibility={setRegionVisibility}
-                    isHiddenRegion={isHiddenRegion} />
+                    isHiddenRegion={isHiddenRegion}
+                    departmentalSecurity={this.departmentalSecurity} />
                 <EntityRegions
                     showEqpTree={showEqpTree}
                     regions={regions}

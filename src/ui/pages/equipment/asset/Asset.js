@@ -92,6 +92,7 @@ export default class Asset extends Entity {
     postInit() {
         this.setStatuses(true)
         this.props.setLayoutProperty('showEqpTreeButton', false)
+        this.enableChildren();
     }
 
     postCreate() {
@@ -100,16 +101,28 @@ export default class Asset extends Entity {
         this.props.setLayoutProperty('showEqpTreeButton', true)
     }
 
-    postUpdate() {
+    postUpdate(equipment) {
         this.comments.createCommentForNewEntity();
         this.setAssetPart(this.state.equipment.partCode)
+
+        if (this.departmentalSecurity.readOnly) {
+            this.disableChildren();
+        } else {
+            this.enableChildren();
+        }
     }
 
-    postRead() {
+    postRead(equipment) {
         this.setStatuses(false)
         this.props.setLayoutProperty('showEqpTreeButton', true)
-        this.props.setLayoutProperty('equipment', this.state.equipment)
-        this.setAssetPart(this.state.equipment.partCode)
+        this.props.setLayoutProperty('equipment', equipment);
+        this.setAssetPart(equipment.partCode);
+
+        if (this.departmentalSecurity.readOnly) {
+            this.disableChildren();
+        } else {
+            this.enableChildren();
+        }
     }
 
     setStatuses(neweqp) {
@@ -321,7 +334,8 @@ export default class Asset extends Entity {
                         entityCode='OBJ'
                         entityKeyCode={!layout.newEntity ? equipment.code : undefined}
                         userCode={userData.eamAccount.userCode}
-                        allowHtml={true} />
+                        allowHtml={true}
+                        disabled={this.departmentalSecurity.readOnly} />
                 ,
                 RegionPanelProps: {
                     detailsStyle: { padding: 0 }
@@ -433,7 +447,7 @@ export default class Asset extends Entity {
             getUniqueRegionID
         } = this.props;
         const { equipment, layout } = this.state;
-        const regions = this.getRegions();        
+        const regions = this.getRegions();
 
         return (
             <BlockUi tag="div" blocking={layout.blocking} style={{ height: "100%", width: "100%" }}>
@@ -457,6 +471,9 @@ export default class Asset extends Entity {
                         screencode: userData.assetScreen,
                         copyHandler: this.copyEntity.bind(this),
                         entityType: ENTITY_TYPE.EQUIPMENT,
+                        departmentalSecurity: this.departmentalSecurity,
+                        screens: userData.screens[userData.assetScreen],
+                        workorderScreencode: userData.workorderScreen
                     }}
                     width={730}
                     entityIcon={<AssetIcon style={{ height: 18 }} />}
@@ -464,7 +481,8 @@ export default class Asset extends Entity {
                     getUniqueRegionID={getUniqueRegionID}
                     regions={regions}
                     isHiddenRegion={isHiddenRegion}
-                    getHiddenRegionState={getHiddenRegionState}/>
+                    getHiddenRegionState={getHiddenRegionState}
+                    departmentalSecurity={this.departmentalSecurity} />
                 <EntityRegions
                     showEqpTree={showEqpTree}
                     regions={regions}

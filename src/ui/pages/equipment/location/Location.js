@@ -41,20 +41,33 @@ export default class Location extends Entity {
 
     postInit() {
         this.props.setLayoutProperty('showEqpTreeButton', false)
+        this.enableChildren();
     }
 
-    postCreate() {
+    postCreate(equipment) {
         this.comments.createCommentForNewEntity();
         this.props.setLayoutProperty("showEqpTreeButton", true)
     }
 
-    postUpdate() {
+    postUpdate(equipment) {
         this.comments.createCommentForNewEntity();
+
+        if (this.departmentalSecurity.readOnly) {
+            this.disableChildren();
+        } else {
+            this.enableChildren();
+        }
     }
 
     postRead() {
         this.props.setLayoutProperty("showEqpTreeButton", true)
         this.props.setLayoutProperty("location", this.state.location)
+
+        if (this.departmentalSecurity.readOnly) {
+            this.disableChildren();
+        } else {
+            this.enableChildren();
+        }
     }
 
     getRegions = () => {
@@ -188,7 +201,8 @@ export default class Location extends Entity {
                         entityCode="LOC"
                         entityKeyCode={!layout.newEntity ? location.code : undefined}
                         userCode={userData.eamAccount.userCode}
-                        allowHtml={true}/>
+                        allowHtml={true}
+                        disabled={this.departmentalSecurity.readOnly}/>
                 ,
                 RegionPanelProps: {
                     detailsStyle: { padding: 0 }
@@ -293,7 +307,10 @@ export default class Location extends Entity {
                                     extendedLink: applicationData.EL_LOCLI,
                                     screencode: userData.screens[userData.locationScreen].screenCode,
                                     copyHandler: this.copyEntity.bind(this),
-                                    entityType: ENTITY_TYPE.LOCATION
+                                    entityType: ENTITY_TYPE.LOCATION,
+                                    departmentalSecurity: this.departmentalSecurity,
+                                    screens: userData.screens,
+                                    workorderScreencode: userData.workorderScreen
                                  }}
                                  width={730}
                                  entityIcon={<LocationIcon style={{height: 18}}/>}
@@ -301,8 +318,8 @@ export default class Location extends Entity {
                                  getUniqueRegionID={getUniqueRegionID}
                                  regions={regions}
                                  isHiddenRegion={isHiddenRegion}
-                                 getHiddenRegionState={getHiddenRegionState}>
-                </EamlightToolbarContainer>
+                                 getHiddenRegionState={getHiddenRegionState}
+                                 departmentalSecurity={this.departmentalSecurity} />
                 <EntityRegions
                     showEqpTree={showEqpTree}
                     regions={regions}
