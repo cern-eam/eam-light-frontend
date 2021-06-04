@@ -98,6 +98,8 @@ class MeterReadingWO extends React.Component {
     };
 
     renderMetersList = () => {
+        const { disabled } = this.props;
+
         //Properties to pass to the children
         const parentProps = {
             saveHandler: this.saveHandler
@@ -111,7 +113,8 @@ class MeterReadingWO extends React.Component {
                     <div key={`meter_${index}`}>
                         <MeterReadingContent
                             reading={reading}
-                            parentProps={parentProps}/>
+                            parentProps={parentProps}
+                            disabled={disabled} />
                     </div>);
             }));
     };

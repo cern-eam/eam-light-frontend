@@ -219,7 +219,8 @@ class Workorder extends Entity {
                     <PartUsageContainer
                         workorder={workorder}
                         tabLayout={commonProps.workOrderLayout.tabs.PAR}
-                        equipmentMEC={equipmentMEC}/>
+                        equipmentMEC={equipmentMEC}
+                        disabled={this.departmentalSecurity.readOnly} />
                 ,
                 column: 1,
                 order: 4,
@@ -289,7 +290,8 @@ class Workorder extends Entity {
                         entityKeyCode={!layout.newEntity ? workorder.number : undefined}
                         userCode={userData.eamAccount.userCode}
                         handleError={handleError}
-                        allowHtml={true} />
+                        allowHtml={true}
+                        disabled={this.departmentalSecurity.readOnly} />
                 ,
                 RegionPanelProps: {
                     detailsStyle: { padding: 0 }
@@ -316,7 +318,7 @@ class Workorder extends Entity {
                         updateEntityProperty={this.updateEntityProperty.bind(this)}
                         updateCount={workorder.updateCount}
                         startDate={workorder.startDate}
-                        />
+                        disabled={this.departmentalSecurity.readOnly} />
                 ,
                 column: 2,
                 order: 8,
@@ -339,6 +341,7 @@ class Workorder extends Entity {
                         showError={showError}
                         handleError={handleError}
                         userCode={userData.eamAccount.userCode}
+                        disabled={this.departmentalSecurity.readOnly}
                         topSlot={
                             applicationData.EL_PRTCL &&
                                 <div style={{
@@ -406,7 +409,7 @@ class Workorder extends Entity {
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
                 render: () =>
-                    <MeterReadingContainerWO equipment={workorder.equipmentCode}/>
+                    <MeterReadingContainerWO equipment={workorder.equipmentCode} disabled={this.departmentalSecurity.readOnly} />
                 ,
                 column: 2,
                 order: 12,
@@ -454,12 +457,15 @@ class Workorder extends Entity {
         }
     }
 
-    postUpdate() {
-        this.props.updateMyWorkOrders(this.state.workorder)
-        this.setStatuses(this.state.workorder.statusCode, this.state.workorder.typeCode, false)
-        this.setTypes(this.state.workorder.statusCode, this.state.workorder.typeCode, false)
-        // Check if opening a terminated work order
-        if (WorkorderTools.isClosedWorkOrder(this.state.workorder.statusCode)) {
+    postUpdate(workorder) {
+        this.props.updateMyWorkOrders(workorder)
+        this.setStatuses(workorder.statusCode, workorder.typeCode, false)
+        this.setTypes(workorder.statusCode, workorder.typeCode, false)
+
+        if (this.departmentalSecurity.readOnly) {
+            this.disableChildren();
+        } else if (WorkorderTools.isClosedWorkOrder(workorder.statusCode)) {
+            // If opening a terminated work order
             this.disableChildren()
             this.children['EAMID_WorkOrder_STATUS_STATUSCODE'].enable()
         } else {
@@ -475,8 +481,11 @@ class Workorder extends Entity {
         this.props.updateMyWorkOrders(workorder)
         this.setStatuses(workorder.statusCode, workorder.typeCode, false)
         this.setTypes(workorder.statusCode, workorder.typeCode, false)
-        // Check if opening a terminated work order
-        if (WorkorderTools.isClosedWorkOrder(workorder.statusCode)) {
+
+        if (this.departmentalSecurity.readOnly) {
+            this.disableChildren();
+        } else if (WorkorderTools.isClosedWorkOrder(workorder.statusCode)) {
+            // If opening a terminated work order
             this.disableChildren()
             this.children['EAMID_WorkOrder_STATUS_STATUSCODE'].enable()
         } else {
@@ -607,15 +616,18 @@ class Workorder extends Entity {
                                         screencode: userData.screens[userData.workOrderScreen].screenCode,
                                         copyHandler: this.copyEntity.bind(this),
                                         entityDesc: this.settings.entityDesc,
-                                        entityType: ENTITY_TYPE.WORKORDER
+                                        entityType: ENTITY_TYPE.WORKORDER,
+                                        departmentalSecurity: this.departmentalSecurity,
+                                        screens: userData.screens,
+                                        workorderScreencode: userData.workorderScreen
                                      }}
                                      entityIcon={<WorkorderIcon style={{height: 18}}/>}
                                      toggleHiddenRegion={toggleHiddenRegion}
                                      regions={regions}
                                      getUniqueRegionID={getUniqueRegionID}
                                      getHiddenRegionState={getHiddenRegionState}
-                                     isHiddenRegion={isHiddenRegion}>
-                    </EamlightToolbarContainer>
+                                     isHiddenRegion={isHiddenRegion}
+                                     departmentalSecurity={this.departmentalSecurity} />
                     <EntityRegions
                         regions={regions}
                         isNewEntity={layout.newEntity}

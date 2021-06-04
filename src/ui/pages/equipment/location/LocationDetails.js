@@ -37,6 +37,7 @@ const LocationDetails = props => {
             />
 
             <EAMCheckbox
+                children={children}
                 elementInfo={locationLayout.fields["safety"]}
                 value={`${location.safety}`}
                 updateProperty={updateEquipmentProperty}
@@ -44,6 +45,7 @@ const LocationDetails = props => {
             />
 
             <EAMCheckbox
+                children={children}
                 elementInfo={locationLayout.fields["outofservice"]}
                 value={`${location.outOfService}`}
                 updateProperty={updateEquipmentProperty}

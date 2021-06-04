@@ -69,7 +69,8 @@ class Toolbar extends React.Component {
     }
 
     getButtonDefinitions = () => {
-        const {copyHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity} = this.props;
+        const {copyHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity, departmentalSecurity, screens, workorderScreencode} = this.props;
+
         return {
             [BUTTON_KEYS.COPY] : {
                 isVisible: () => true,
@@ -255,7 +256,9 @@ class Toolbar extends React.Component {
                 getOnClick: () => {
 
                 },
-                isDisabled: () => newEntity,
+                isDisabled: () => newEntity
+                    || departmentalSecurity.readOnly
+                    || (screens[workorderScreencode] && !screens[workorderScreencode].creationAllowed),
                 values: {
                     icon: <WorkorderIcon/>,
                     text: "Create New Work Order"
@@ -325,16 +328,24 @@ class Toolbar extends React.Component {
     generateContent = ({renderOption, buttonDefinition, entityType, entity}) => {
         let {isVisible, onClick, isDisabled, values, getOnClick, getLinkTo} = buttonDefinition;
         let content = null;
+
+        const disabled = isDisabled();
+
+        if (disabled) {
+            onClick = undefined;
+        }
+
         if (isVisible()) {
             if (!onClick && getOnClick) {
                 onClick = getOnClick(entityType, entity);
             }
+
             switch (renderOption) {
                 case VIEW_MODES.MENU_ITEMS: 
                     content = 
                         <MenuItem
                             onClick={onClick}
-                            disabled={isDisabled()}
+                            disabled={disabled}
                         >
                             {React.cloneElement(values.icon, {style: this.iconMenuStyle})}
                             {values.text && <div>{values.text}</div>}
@@ -345,7 +356,7 @@ class Toolbar extends React.Component {
                         <Tooltip title={values.text}>
                             <IconButton
                                 onClick={onClick}
-                                disabled={isDisabled()}
+                                disabled={disabled}
                             >
                                 {React.cloneElement(values.icon, {style: this.iconStyle})}
                             </IconButton>
@@ -353,7 +364,8 @@ class Toolbar extends React.Component {
                     break;
 
             }
-            if (getLinkTo) {
+
+            if (getLinkTo && !disabled) {
                 content = <Link to={getLinkTo(entity, entityType)} 
                                 style={this.linkStyle}>
                             {content}
@@ -384,5 +396,10 @@ class Toolbar extends React.Component {
     }
 
 }
+
+Toolbar.defaultProps = {
+    departmentalSecurity: {},
+    screens: {},
+};
 
 export default Toolbar;

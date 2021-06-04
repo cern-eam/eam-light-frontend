@@ -67,7 +67,7 @@ function PartUsage(props) {
                     headers={headers}
                     propCodes={propCodes}
                     linksMap={linksMap} />
-                <Button onClick={() => setIsDialogOpen(true)} color="primary" style={buttonStyle}>
+                <Button onClick={() => setIsDialogOpen(true)} color="primary" style={buttonStyle} disabled={props.disabled}>
                     Add Part Usage
                 </Button>
             </div>
