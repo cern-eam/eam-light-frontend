@@ -102,17 +102,17 @@ class WSEquipment {
     //
     autocompleteAssetParent(filter, config = {}) {
         filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/eqp/parent/A/${filter}`, config);
+        return WS._get(`/autocomplete/eqp/parent/A?code=${filter}`, config);
     }
 
     autocompletePositionParent(filter, config = {}) {
         filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/eqp/parent/P/${filter}`, config);
+        return WS._get(`/autocomplete/eqp/parent/P?code=${filter}`, config);
     }
 
     autocompletePrimarySystemParent(filter, config = {}) {
         filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/eqp/parent/S/${filter}`, config);
+        return WS._get(`/autocomplete/eqp/parent/S?code=${filter}`, config);
     }
 
     autocompleteLocation = (filter, config = {}) => {
