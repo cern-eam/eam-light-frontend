@@ -323,7 +323,7 @@ class Workorder extends Entity {
                 column: 2,
                 order: 8,
                 ignore: !getTabAvailability(tabs, TAB_CODES.ACTIVITIES) && !getTabAvailability(tabs, TAB_CODES.BOOK_LABOR),
-                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.ACTIVITIES) && !tabs[TAB_CODES.BOOK_LABOR]
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.ACTIVITIES) || getTabInitialVisibility(tabs, TAB_CODES.BOOK_LABOR)
             },
             {
                 id: 'CHECKLISTS',
