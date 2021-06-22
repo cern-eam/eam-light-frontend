@@ -13,6 +13,7 @@ const ITEM_HEIGHT = 48;
 const styles = theme => ({
     root: {
       width: 30,
+      height: 30,
       marginLeft: '-20px',
       marginTop: '-45px'
     },

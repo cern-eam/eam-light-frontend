@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import EAMTree from '../../../../../ui/components/eqtree/EAMTree';
+import EAMTreeContainer from '../../../../components/eqtree/EAMTreeContainer';
 
 class EquipmentTree extends Component {
 
@@ -32,7 +33,7 @@ class EquipmentTree extends Component {
                     </div>
                 }
                 <div style={this.treeDivStyle}>
-                    <EAMTree code={this.props.equipmentCode}
+                    <EAMTreeContainer code={this.props.equipmentCode}
                              history={this.props.history}/>
                 </div>
             </div>

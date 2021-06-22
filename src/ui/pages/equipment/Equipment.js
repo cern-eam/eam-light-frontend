@@ -5,13 +5,17 @@ import PositionContainer from "./position/PositionContainer";
 import AssetContainer from "./asset/AssetContainer";
 import SystemContainer from "./system/SystemContainer";
 import LocationContainer from "./location/LocationContainer";
+import InstallEqpContainer from "./installeqp/InstallEqpContainer"
 import Split from 'react-split'
 
 class Equipment extends Component {
 
     componentWillUnmount() {
-        // Removing this property from the store will force the eqp. tree to reinitialize when valid eqp. will be set
-        this.props.setLayoutProperty('equipment', null)
+        this.props.setLayoutProperty('equipment', null);
+        this.props.setLayoutProperty('showEqpTreeButton', false);
+        this.props.setLayoutProperty('showEqpTree', false);
+        this.props.setLayoutProperty('eqpTreeNewChild', null);
+        this.props.setLayoutProperty('eqpTreeCurrentNode', null);
     }
 
     render() {
@@ -45,6 +49,8 @@ class Equipment extends Component {
                                    component={SystemContainer}/>
                             <Route path={"/location/:code(.+)?"}
                                    component={LocationContainer}/>
+                            <Route path="/installeqp"
+                                   component={InstallEqpContainer}/>
                         </Switch>
                     </div>
 
