@@ -192,7 +192,7 @@ class EamlightMenu extends Component {
                         </li>
                         }
 
-                        {reports &&
+                        {reports && reports.length > 0 &&
                         <li>
                             <div rel="customgrids" onClick={this.mainMenuClickHandler}>
                                 <Tooltip title="CUSTOM GRIDS" placement="right">
@@ -373,7 +373,7 @@ class EamlightMenu extends Component {
                     </EamlightSubmenu>
                     }
 
-                    {reports &&
+                    {reports && reports.length > 0 &&
                     <EamlightSubmenu id="customgrids" header={<span>CUSTOM GRIDS</span>}>
                         {reports.map( report => (
                             <MenuGridLink grid={report}/>

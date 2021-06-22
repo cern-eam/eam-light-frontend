@@ -1,9 +1,19 @@
 import {connect} from 'react-redux'
 import EAMTree from './EAMTree'
-import {handleError} from '../../../actions/uiActions'
+import {handleError, setLayoutProperty} from '../../../actions/uiActions'
 
-const EAMTreeContainer = connect(null, {
-        handleError
+function mapStateToProps(state) {
+    return {
+        layout: state.ui.layout
+    }
+}
+
+const EAMTreeContainer = connect(mapStateToProps,
+
+
+    {
+        handleError,
+        setLayoutProperty
     }
 )(EAMTree);
 

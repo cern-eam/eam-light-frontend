@@ -11,14 +11,16 @@ import BlockUi from 'react-block-ui';
 export default function NameForm(props) {
 
     const [parentEq, setParentEq] = useState("");
+    const [parentEqDesc, setParentEqDesc] = useState("")
     const [childEq, setChildEq] = useState("");
     const [blocking, setBlocking] = useState(false);
 
     useEffect( () => {
-        if (props.match.params.code) {
-            setParentEq(props.match.params.code);
+        if (props.layout.eqpTreeCurrentNode) {
+            setParentEq(props.layout.eqpTreeCurrentNode.id);
+            setParentEqDesc(props.layout.eqpTreeCurrentNode.name)
         }
-    },[props.match.params.code])
+    },[props.layout.eqpTreeCurrentNode])
 
     const createEquipmentStructure = (newParent, child) => {
         return {
@@ -37,6 +39,9 @@ export default function NameForm(props) {
         if (code) {
             WSEquipment.installEquipment(code).then(response => {
                 props.showNotification(`${childEq} was successfully attached to ${parentEq}`);
+                props.setLayoutProperty('eqpTreeNewChild', {id: childEq,
+                    name: response.body.data.childDesc,
+                    type: response.body.data.childType});
                 setChildEq("");
                 setParentEq("");
                 setBlocking(false);
@@ -48,8 +53,7 @@ export default function NameForm(props) {
     }
 
     const changeParentHandler = (code) => {
-        console.log('parent changed')
-        props.setLayoutProperty('equipment',{code: code});
+        props.setLayoutProperty('equipment', {code: code});
         props.setLayoutProperty('showEqpTreeButton', true);
     }
 

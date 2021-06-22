@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import TreeWS from './lib/TreeWS';
 import ErrorTypes from 'eam-components/dist/ui/components/eamgrid/lib/GridErrorTypes';
 import SortableTree from 'react-sortable-tree';
+import {addNodeUnderParent} from 'react-sortable-tree'
 import TreeTheme from './theme/TreeTheme';
 import TreeIcon from './components/TreeIcon';
 import TreeSelectParent from "./components/TreeSelectParent";
@@ -15,6 +16,21 @@ export default function EAMTree(props) {
     useEffect(() => {
         _loadTreeData(props.code);
     }, [])
+
+    useEffect( () => {
+        if (props.layout.eqpTreeNewChild && treeData.length > 0) {
+            const currentNode = props.layout.eqpTreeCurrentNode ? props.layout.eqpTreeCurrentNode.id : treeData[0].id
+            setTreeData(
+                addNodeUnderParent({
+                    treeData,
+                    parentKey: currentNode,
+                    expandParent: true,
+                    newNode: props.layout.eqpTreeNewChild,
+                    getNodeKey: ({node}) => node.id
+                }).treeData
+            )
+        }
+    }, [props.layout.eqpTreeNewChild])
 
     /**
      * Add expanded = true for those nodes that belong to the
@@ -51,7 +67,6 @@ export default function EAMTree(props) {
                 // get tree data
                 let treeData = data.body.data;
                 _expandTreeToCode(treeData, props.code);
-
                 setTreeData(treeData);
                 setLoading(false);
             }).catch(error => {
@@ -63,6 +78,9 @@ export default function EAMTree(props) {
     }
 
     const _isNodeSelected = (node) => {
+        if (props.layout.eqpTreeCurrentNode) {
+            return node.id === props.layout.eqpTreeCurrentNode.id;
+        }
         return node.id === props.code;
     };
 
@@ -87,7 +105,7 @@ export default function EAMTree(props) {
     const nodeClickHandler = rowInfo => event => {
         if (event.target.className === `rowTitle` && ["A", "P", "S", "L"].includes(rowInfo.node.type)) {
             if (window.location.pathname.includes("installeqp")) {
-                props.history.push("/installeqp/" + rowInfo.node.id)
+                props.setLayoutProperty('eqpTreeCurrentNode', rowInfo.node)
                 return;
             }
 
@@ -100,8 +118,6 @@ export default function EAMTree(props) {
             }), "*");
         }
     }
-
-    console.log("loading", loading)
 
     return (
         <React.Fragment>

@@ -4,7 +4,8 @@ import {handleError, showError, showNotification, setLayoutProperty} from '../..
 
 function mapStateToProps(state) {
     return {
-        userData: state.application.userData
+        userData: state.application.userData,
+        layout: state.ui.layout
     }
 }
 

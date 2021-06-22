@@ -67,7 +67,8 @@ class Eamlight extends Component {
             )
         }
 
-        const eqpRegex = ["/asset", "/position", "/system", "/location", "/installeqp"].map(e => `${e}/:code(.+)?`)
+        const eqpRegex = ["/asset", "/position", "/system", "/location"].map(e => `${e}/:code(.+)?`)
+        eqpRegex.push("/installeqp");
 
         const selectedTheme = Themes[config.theme[this.props.applicationData.EL_ENVIR] || config.theme.DEFAULT] || Themes.DANGER;
 

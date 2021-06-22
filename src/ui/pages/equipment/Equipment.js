@@ -11,8 +11,11 @@ import InstallEqpContainer from "./installeqp/InstallEqpContainer";
 class Equipment extends Component {
 
     componentWillUnmount() {
-        // Removing this property from the store will force the eqp. tree to reinitialize when valid eqp. will be set
-        this.props.setLayoutProperty('equipment', null)
+        this.props.setLayoutProperty('equipment', null);
+        this.props.setLayoutProperty('showEqpTreeButton', false);
+        this.props.setLayoutProperty('showEqpTree', false);
+        this.props.setLayoutProperty('eqpTreeNewChild', null);
+        this.props.setLayoutProperty('eqpTreeCurrentNode', null);
     }
 
     render() {
@@ -47,7 +50,7 @@ class Equipment extends Component {
                                    component={SystemContainer}/>
                             <Route path={"/location/:code(.+)?"}
                                    component={LocationContainer}/>
-                            <Route path="/installeqp/:code(.+)?"
+                            <Route path="/installeqp"
                                    component={InstallEqpContainer}/>
                         </Switch>
                     </div>

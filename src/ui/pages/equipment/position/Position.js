@@ -83,7 +83,9 @@ export default class Position extends Entity {
 
     postInit() {
         this.setStatuses(true)
-        this.props.setLayoutProperty('showEqpTreeButton', false)
+        this.props.setLayoutProperty('equipment', null);
+        this.props.setLayoutProperty('showEqpTreeButton', false);
+        this.props.setLayoutProperty('showEqpTree', false);
         this.enableChildren();
     }
 
