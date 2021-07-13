@@ -5,7 +5,7 @@ import tools from '../CustomFieldTools'
 
 function CustomFieldDATE(props) {
 
-    let {customField, updateCustomFieldValue, elementInfo, children, lookupValues} =props;
+    let {customField, updateCustomFieldValue, elementInfo, children, lookupValues, UoM} =props;
     elementInfo = {...elementInfo, readonly: props.readonly};
 
     if (tools.isLookupCustomField(customField)) {
@@ -23,7 +23,8 @@ function CustomFieldDATE(props) {
                 elementInfo={elementInfo}
                 value={customField.value}
                 updateProperty={updateCustomFieldValue}
-                valueKey="value"/>
+                valueKey="value"
+                endAdornment={UoM}/>
         )
     }
 
