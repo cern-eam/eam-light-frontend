@@ -6,7 +6,7 @@ import tools from '../CustomFieldTools'
 function CustomFieldDATI(props) {
 
 
-    let {customField, updateCustomFieldValue, elementInfo, children, lookupValues} = props
+    let {customField, updateCustomFieldValue, elementInfo, children, lookupValues, UoM} = props
     elementInfo = {...elementInfo, readonly: props.readonly};
 
     if (tools.isLookupCustomField(customField)) {
@@ -24,7 +24,8 @@ function CustomFieldDATI(props) {
                 elementInfo={elementInfo}
                 value={customField.value}
                 updateProperty={updateCustomFieldValue}
-                valueKey="value"/>
+                valueKey="value"
+                endAdornment={UoM}/>
         )
     }
 
