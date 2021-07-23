@@ -5,7 +5,7 @@ import tools from '../CustomFieldTools'
 
 function CustomFieldCHAR(props) {
 
-    let {customField, updateCustomFieldValue, elementInfo, children, lookupValues} = props;
+    let {customField, updateCustomFieldValue, elementInfo, children, lookupValues, UoM} = props;
     elementInfo = {...elementInfo, readonly: props.readonly};
 
     if (tools.isLookupCustomField(customField)) {
@@ -25,7 +25,8 @@ function CustomFieldCHAR(props) {
                 value={customField.value}
                 updateProperty={updateCustomFieldValue}
                 valueKey="value"
-                readonly={props.readonly}/>
+                readonly={props.readonly}
+                endAdornment={UoM}/>
         )
     }
 
