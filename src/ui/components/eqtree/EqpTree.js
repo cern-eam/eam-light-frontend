@@ -1,6 +1,5 @@
-import { withStyles } from '@material-ui/core/styles';
 import React from 'react';
-import EquipmentTree from "../../pages/equipment/components/tree/EquipmentTree";
+import EquipmentTree from '../../pages/equipment/components/tree/EquipmentTree';
 /**
  * To get the value of a parameter from the URL
  * @param name (Key) of the parameter
@@ -8,16 +7,16 @@ import EquipmentTree from "../../pages/equipment/components/tree/EquipmentTree";
  */
 const getURLParameterByName = (name) => {
     const url = window.location.href;
-    name = name.replace(/[[]]/g, "\\$&");
-    const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+    name = name.replace(/[[]]/g, '\\$&');
+    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
         results = regex.exec(url);
     if (!results || !results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
 };
 
 const EqpTree = (props) => {
     const eqpCode = getURLParameterByName('eqpCode');
     return <EquipmentTree equipmentCode={eqpCode} hideHeader={true} />;
-}
+};
 
 export default EqpTree;

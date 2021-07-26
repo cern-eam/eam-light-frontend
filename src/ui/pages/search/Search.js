@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
-import SearchResults from './SearchResults'
-import './Search.css'
+import React, { Component } from 'react';
+import SearchResults from './SearchResults';
+import './Search.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import WS from '../../../tools/WS'
-import SearchHeader from "./SearchHeader";
-import {Redirect} from "react-router-dom";
-import {getLink} from "./SearchLinkUtils";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import KeyCode from '../../../enums/KeyCode'
-import ErrorTypes from "../../../enums/ErrorTypes";
-import Ajax from 'eam-components/dist/tools/ajax'
+import WS from '../../../tools/WS';
+import SearchHeader from './SearchHeader';
+import { Redirect } from 'react-router-dom';
+import { getLink } from './SearchLinkUtils';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import KeyCode from '../../../enums/KeyCode';
+import ErrorTypes from '../../../enums/ErrorTypes';
+import Ajax from 'eam-components/dist/tools/ajax';
 
 const INITIAL_STATE = {
     results: [],
@@ -17,10 +17,9 @@ const INITIAL_STATE = {
     keyword: '',
     isFetching: false,
     redirectRoute: '',
-}
+};
 
 class Search extends Component {
-
     state = INITIAL_STATE;
 
     componentDidUpdate(prevProps) {
@@ -33,40 +32,55 @@ class Search extends Component {
 
     render() {
         if (!!this.state.redirectRoute) {
-            return (
-                <Redirect to={this.state.redirectRoute}/>
-            );
+            return <Redirect to={this.state.redirectRoute} />;
         }
 
         return (
             <div>
-                <div id="searchContainer"
-                     className={this.state.searchBoxUp ? "searchContainer searchContainerSearch" : "searchContainer searchContainerHome"}>
-                    <SearchHeader keyword={this.state.keyword} searchBoxUp={this.state.searchBoxUp}
-                                  fetchDataHandler={this.fetchNewData.bind(this)}
-                                  onKeyDown={this.onKeyDown.bind(this)}
-                                  tryToGoToResult={this.tryToGoToResult.bind(this)}
-                                  showTypes={this.state.searchBoxUp}
+                <div
+                    id="searchContainer"
+                    className={
+                        this.state.searchBoxUp
+                            ? 'searchContainer searchContainerSearch'
+                            : 'searchContainer searchContainerHome'
+                    }
+                >
+                    <SearchHeader
+                        keyword={this.state.keyword}
+                        searchBoxUp={this.state.searchBoxUp}
+                        fetchDataHandler={this.fetchNewData.bind(this)}
+                        onKeyDown={this.onKeyDown.bind(this)}
+                        tryToGoToResult={this.tryToGoToResult.bind(this)}
+                        showTypes={this.state.searchBoxUp}
                     />
-                    <div id="searchResults"
-                         className={this.state.searchBoxUp ? "searchResultsSearch" : "searchResultsHome"}>
+                    <div
+                        id="searchResults"
+                        className={this.state.searchBoxUp ? 'searchResultsSearch' : 'searchResultsHome'}
+                    >
                         <div className="linearProgressBox">
-                            {this.state.isFetching && <LinearProgress className="linearProgress"/>}
+                            {this.state.isFetching && <LinearProgress className="linearProgress" />}
                         </div>
                         <div className="searchScrollBox">
-                            {(!this.state.isFetching && this.state.results.length === 0 && this.state.keyword) ?
-                                <div className="searchNoResults">No results found.</div> :
+                            {!this.state.isFetching && this.state.results.length === 0 && this.state.keyword ? (
+                                <div className="searchNoResults">No results found.</div>
+                            ) : (
                                 <InfiniteScroll height="calc(100vh - 150px)">
-                                    <SearchResults data={this.state.results} keyword={this.state.keyword}
-                                                   selectedItemCode={!!this.state.results[this.state.selectedItemIndex] ? this.state.results[this.state.selectedItemIndex].code : null}/>
+                                    <SearchResults
+                                        data={this.state.results}
+                                        keyword={this.state.keyword}
+                                        selectedItemCode={
+                                            !!this.state.results[this.state.selectedItemIndex]
+                                                ? this.state.results[this.state.selectedItemIndex].code
+                                                : null
+                                        }
+                                    />
                                 </InfiniteScroll>
-                            }
-
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 
     /**
@@ -89,6 +103,9 @@ class Search extends Component {
                 this.tryToGoToResult();
                 break;
             }
+
+            default:
+                break;
         }
     }
 
@@ -96,7 +113,7 @@ class Search extends Component {
         // if only one result, enter sends you to the result
         if (this.state.results.length === 1) {
             this.setState({
-                redirectRoute: getLink(this.state.results[0].type, this.state.results[0].code)
+                redirectRoute: getLink(this.state.results[0].type, this.state.results[0].code),
             });
 
             return;
@@ -105,7 +122,10 @@ class Search extends Component {
         // redirects to the record selected with arrows
         if (this.state.selectedItemIndex >= 0 && this.state.selectedItemIndex < this.state.results.length) {
             this.setState({
-                redirectRoute: getLink(this.state.results[this.state.selectedItemIndex].type, this.state.results[this.state.selectedItemIndex].code)
+                redirectRoute: getLink(
+                    this.state.results[this.state.selectedItemIndex].type,
+                    this.state.results[this.state.selectedItemIndex].code
+                ),
             });
 
             return;
@@ -115,38 +135,37 @@ class Search extends Component {
         // with the code exactly matching the keyword
         // redirect to this record
         if (this.state.results.length > 0) {
-            this.state.results.forEach(result => {
+            this.state.results.forEach((result) => {
                 if (result.code === this.state.keyword) {
                     this.setState({
-                        redirectRoute: getLink(result.type, result.code)
+                        redirectRoute: getLink(result.type, result.code),
                     });
 
                     return;
                 }
-            })
+            });
         }
 
         if (this.state.keyword) {
             // try to get single result
-            WS.getSearchSingleResult(this.state.keyword)
-                .then(response => {
-                    if (response.body && response.body.data) {
-                        this.setState({
-                            redirectRoute: getLink(response.body.data.type, response.body.data.code)
-                        });
-                    }
-                })
+            WS.getSearchSingleResult(this.state.keyword).then((response) => {
+                if (response.body && response.body.data) {
+                    this.setState({
+                        redirectRoute: getLink(response.body.data.type, response.body.data.code),
+                    });
+                }
+            });
         }
     }
 
     handleSearchArrowDown() {
         if (this.state.selectedItemIndex !== this.state.results.length - 1) {
             this.setState({
-                selectedItemIndex: ++this.state.selectedItemIndex
+                selectedItemIndex: this.state.selectedItemIndex + 1,
             });
         } else {
             this.setState({
-                selectedItemIndex: 0
+                selectedItemIndex: 0,
             });
         }
     }
@@ -154,17 +173,17 @@ class Search extends Component {
     handleSearchArrowUp() {
         if (this.state.selectedItemIndex > 0) {
             this.setState(() => ({
-                selectedItemIndex: --this.state.selectedItemIndex
+                selectedItemIndex: this.state.selectedItemIndex - 1,
             }));
         } else {
             this.setState(() => ({
-                selectedItemIndex: this.state.results.length - 1
+                selectedItemIndex: this.state.results.length - 1,
             }));
         }
     }
 
     scrollWindowIfNecessary() {
-        let selectedRow = document.getElementsByClassName("selectedRow")[0];
+        let selectedRow = document.getElementsByClassName('selectedRow')[0];
 
         if (!selectedRow) {
             return;
@@ -172,8 +191,8 @@ class Search extends Component {
 
         let rect = selectedRow.getBoundingClientRect();
         const margin = 230;
-        const isInViewport = rect.top >= margin &&
-            rect.bottom <= ((window.innerHeight || document.documentElement.clientHeight) - margin);
+        const isInViewport =
+            rect.top >= margin && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) - margin;
 
         if (!isInViewport) {
             selectedRow.scrollIntoView();
@@ -189,8 +208,8 @@ class Search extends Component {
             this.setState({
                 results: [],
                 keyword,
-                isFetching: false
-            })
+                isFetching: false,
+            });
             return;
         }
 
@@ -199,39 +218,40 @@ class Search extends Component {
         this.setState({
             searchBoxUp: true,
             keyword,
-            isFetching: true
+            isFetching: true,
         });
 
-
         clearTimeout(this.timeout);
-        this.timeout = setTimeout(() =>
-            (WS.getSearchData(this.prepareKeyword(keyword), entityTypes, {
-                cancelToken: this.cancelSource.token
-            }).then(response => {
-                this.cancelSource = null;
+        this.timeout = setTimeout(
+            () =>
+                WS.getSearchData(this.prepareKeyword(keyword), entityTypes, {
+                    cancelToken: this.cancelSource.token,
+                })
+                    .then((response) => {
+                        this.cancelSource = null;
 
-                this.setState({
-                    results: response.body.data,
-                    selectedItemIndex: -1,
-                    isFetching: false
-                });
+                        this.setState({
+                            results: response.body.data,
+                            selectedItemIndex: -1,
+                            isFetching: false,
+                        });
+                    })
+                    .catch((error) => {
+                        if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
+                            this.setState({
+                                isFetching: false,
+                            });
 
-
-            }).catch(error => {
-                if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
-                    this.setState({
-                        isFetching: false
-                    });
-
-                    this.props.handleError(error);
-                }
-            })), 200);
+                            this.props.handleError(error);
+                        }
+                    }),
+            200
+        );
     }
 
     prepareKeyword(keyword) {
-        return keyword.replace("_", "\\_").replace("%", "\\%").toUpperCase();
+        return keyword.replace('_', '\\_').replace('%', '\\%').toUpperCase();
     }
-
 }
 
-export default Search
+export default Search;

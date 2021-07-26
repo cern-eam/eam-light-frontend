@@ -1,91 +1,92 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import BlockUi from 'react-block-ui'
-import './AddActivityDialog.css'
-import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
-import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
-import WSWorkorders from "../../../../../tools/WSWorkorders";
-import EAMDatePicker from "eam-components/dist/ui/components/muiinputs/EAMDatePicker";
-import KeyCode from "../../../../../enums/KeyCode";
+import BlockUi from 'react-block-ui';
+import './AddActivityDialog.css';
+import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput';
+import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete';
+import WSWorkorders from '../../../../../tools/WSWorkorders';
+import EAMDatePicker from 'eam-components/dist/ui/components/muiinputs/EAMDatePicker';
+import KeyCode from '../../../../../enums/KeyCode';
 
 /**
  * Display detail of an activity
  */
 function AddActivityDialog(props) {
-
     let [loading, setLoading] = useState(false);
     let [formValues, setFormValues] = useState({});
 
     useEffect(() => {
-        if (props.open) {
-            init()
-        }
-    }, [props.open])
+        let init = () => {
+            setLoading(true);
+            WSWorkorders.initWorkOrderActivity(props.workorderNumber).then((response) => {
+                setFormValues(response.body.data);
+                setLoading(false);
+            });
+        };
 
-    let init = () => {
-        setLoading(true)
-        WSWorkorders.initWorkOrderActivity(props.workorderNumber).then(response => {
-            setFormValues(response.body.data);
-            setLoading(false);
-        });
-    };
+        if (props.open) {
+            init();
+        }
+    }, [props.open, props.workorderNumber]);
 
     let handleClose = () => {
         props.onClose();
     };
 
     let handleSave = () => {
-        let activity = {...formValues}
+        let activity = { ...formValues };
         delete activity.taskDesc;
         delete activity.tradeDesc;
         delete activity.materialListDesc;
 
         setLoading(true);
         WSWorkorders.createWorkOrderActivity(activity)
-            .then(result => {
+            .then((result) => {
                 //Post add handler
                 props.postAddActivityHandler();
                 setLoading(false);
-                props.showNotification("Activity successfully created");
+                props.showNotification('Activity successfully created');
                 handleClose();
                 props.onChange();
             })
-            .catch(error => {
+            .catch((error) => {
                 setLoading(false);
-                props.handleError(error)
+                props.handleError(error);
             });
     };
 
     let updateFormValues = (key, value) => {
-        if (key === "taskCode") {
+        if (key === 'taskCode' && value) {
             onTaskCodeChanged(value);
         }
-        setFormValues(prevFormValues => ({
+        setFormValues((prevFormValues) => ({
             ...prevFormValues,
-            [key]: value
-        }))
+            [key]: value,
+        }));
     };
 
     let onTaskCodeChanged = (taskcode) => {
         setLoading(true);
-        WSWorkorders.getTaskPlan(taskcode).then(response => {
-            const taskPlan = response.body.data;
-            updateFormValues("peopleRequired", taskPlan.peopleRequired === null ? "" : taskPlan.peopleRequired);
-            updateFormValues("estimatedHours", taskPlan.estimatedHours === null ? "" : taskPlan.estimatedHours);
-            updateFormValues("tradeCode", taskPlan.tradeCode === null ? "" : taskPlan.tradeCode);
-        }).finally(() => setLoading(false))
-    }
+        WSWorkorders.getTaskPlan(taskcode)
+            .then((response) => {
+                const taskPlan = response.body.data;
+                updateFormValues('peopleRequired', taskPlan.peopleRequired === null ? '' : taskPlan.peopleRequired);
+                updateFormValues('estimatedHours', taskPlan.estimatedHours === null ? '' : taskPlan.estimatedHours);
+                updateFormValues('tradeCode', taskPlan.tradeCode === null ? '' : taskPlan.tradeCode);
+            })
+            .finally(() => setLoading(false));
+    };
 
     let onKeyDown = (e) => {
         if (e.keyCode === KeyCode.ENTER) {
             e.stopPropagation();
             handleSave();
         }
-    }
+    };
 
     return (
         <div onKeyDown={onKeyDown}>
@@ -95,8 +96,8 @@ function AddActivityDialog(props) {
                 open={props.open}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
-                disableBackdropClick={true}>
-
+                disableBackdropClick={true}
+            >
                 <DialogTitle id="form-dialog-title">Add Activity</DialogTitle>
 
                 <DialogContent id="content">
@@ -123,7 +124,8 @@ function AddActivityDialog(props) {
                                 value={formValues['taskCode']}
                                 valueDesc={formValues['taskDesc']}
                                 descKey="taskDesc"
-                                updateProperty={updateFormValues}/>
+                                updateProperty={updateFormValues}
+                            />
 
                             <EAMAutocomplete
                                 autocompleteHandler={WSWorkorders.autocompleteACTMatList}
@@ -143,7 +145,8 @@ function AddActivityDialog(props) {
                                 value={formValues['tradeCode']}
                                 valueDesc={formValues['tradeDesc']}
                                 descKey="tradeDesc"
-                                updateProperty={updateFormValues}/>
+                                updateProperty={updateFormValues}
+                            />
 
                             <EAMInput
                                 required={true}
@@ -174,7 +177,6 @@ function AddActivityDialog(props) {
                                 value={formValues['endDate']}
                                 updateProperty={updateFormValues}
                             />
-
                         </BlockUi>
                     </div>
                 </DialogContent>
@@ -189,10 +191,9 @@ function AddActivityDialog(props) {
                         </Button>
                     </div>
                 </DialogActions>
-
             </Dialog>
         </div>
-    )
+    );
 }
 
 export default AddActivityDialog;

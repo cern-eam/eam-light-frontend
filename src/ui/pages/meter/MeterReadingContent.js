@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import React, { useEffect, useState } from 'react';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionActions from '@material-ui/core/AccordionActions';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -11,19 +11,18 @@ import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import Save from '@material-ui/icons/Save';
 import './MeterReading.css';
-import KeyCode from "../../../enums/KeyCode";;
+import KeyCode from '../../../enums/KeyCode';
 
 function MeterReadingContent(props) {
-
-    const {reading} = props;
+    const { reading } = props;
     let [readingValue, setReadingValue] = useState('');
 
     // Clean the input field
     useEffect(() => {
-        if (reading.lastValue == readingValue) {
-           setReadingValue('');
+        if (reading.lastValue === readingValue) {
+            setReadingValue('');
         }
-    },[reading.lastValue])
+    }, [reading.lastValue, readingValue]);
 
     let createNewReading = () => {
         const isRollover = reading.rolloverValue && reading.rolloverValue < readingValue;
@@ -31,7 +30,7 @@ function MeterReadingContent(props) {
         const newReading = {
             uom: reading.uom,
             equipmentCode: reading.equipmentCode,
-            actualValue: readingValue
+            actualValue: readingValue,
         };
         //Execute parent save handler
         props.parentProps.saveHandler(newReading, isRollover);
@@ -48,26 +47,24 @@ function MeterReadingContent(props) {
         return null;
     }
 
-
     return (
-        <div style={{width: '100%', height: '100%'}}>
-            <ExpansionPanel defaultExpanded>
-                <ExpansionPanelSummary>
+        <div style={{ width: '100%', height: '100%' }}>
+            <Accordion defaultExpanded>
+                <AccordionSummary>
                     <div className={`meterContentDetails`}>
                         <div className={`meterContentDetail`}>
                             <div className={`meterContentTitleContentH`}>Equipment:</div>
                             <div className={`meterContentTitleContentC`}>{reading.equipmentCode}</div>
                         </div>
-                        {reading.meterName &&
-                        <div className={`meterContentDetail`}>
-                            <div className={`meterContentTitleContentH`}>Meter Name:</div>
-                            <div className={`meterContentTitleContentC`}>{reading.meterName}</div>
-                        </div>
-                        }
-                        
+                        {reading.meterName && (
+                            <div className={`meterContentDetail`}>
+                                <div className={`meterContentTitleContentH`}>Meter Name:</div>
+                                <div className={`meterContentTitleContentC`}>{reading.meterName}</div>
+                            </div>
+                        )}
                     </div>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                </AccordionSummary>
+                <AccordionDetails>
                     <div className={`meterContentDetails`}>
                         <div className={`meterContentDetail`}>
                             <div className={`meterContentTitleContentH`}>Last Reading Date:</div>
@@ -75,37 +72,41 @@ function MeterReadingContent(props) {
                         </div>
                         <div className={`meterContentDetail`}>
                             <div className={`meterContentTitleContentH`}>Last Value:</div>
-                            <div className={`meterContentTitleContentC`}>{reading.lastValue} [{reading.uomDesc}]
+                            <div className={`meterContentTitleContentC`}>
+                                {reading.lastValue} [{reading.uomDesc}]
                             </div>
                         </div>
                     </div>
-                </ExpansionPanelDetails>
-                <Divider/>
-                <ExpansionPanelActions>
-
-                    <FormControl style={{width: '100%', marginLeft: '15px', marginRight: '15px'}}>
-                        <InputLabel htmlFor="readingValue">{props.disabled ? 'Recording meter readings is disabled' : 'New Value'}</InputLabel>
+                </AccordionDetails>
+                <Divider />
+                <AccordionActions>
+                    <FormControl style={{ width: '100%', marginLeft: '15px', marginRight: '15px' }}>
+                        <InputLabel htmlFor="readingValue">
+                            {props.disabled ? 'Recording meter readings is disabled' : 'New Value'}
+                        </InputLabel>
                         <Input
                             id="readingValue"
                             type="number"
                             value={readingValue}
-                            onChange={event => setReadingValue(event.target.value)}
+                            onChange={(event) => setReadingValue(event.target.value)}
                             onKeyDown={handleKeyDown}
                             disabled={props.disabled}
-                            endAdornment={<InputAdornment position="end"
-                                                          className="readingValueUOM">[{reading.uomDesc}]</InputAdornment>}
+                            endAdornment={
+                                <InputAdornment position="end" className="readingValueUOM">
+                                    [{reading.uomDesc}]
+                                </InputAdornment>
+                            }
                         />
                     </FormControl>
 
-                    {readingValue &&
-                    <Button style={{top: '8px'}} size="small" color="primary"
-                            onClick={createNewReading}>
-                        <Save/>
-                        Save
-                    </Button>
-                    }
-                </ExpansionPanelActions>
-            </ExpansionPanel>
+                    {readingValue && (
+                        <Button style={{ top: '8px' }} size="small" color="primary" onClick={createNewReading}>
+                            <Save />
+                            Save
+                        </Button>
+                    )}
+                </AccordionActions>
+            </Accordion>
         </div>
     );
 }

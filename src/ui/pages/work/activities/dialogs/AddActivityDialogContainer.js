@@ -1,19 +1,15 @@
-import {connect} from 'react-redux'
-import AddActivityDialog from './AddActivityDialog'
-import {createWorkOrderActivity} from '../../../../../actions/workorderActions';
-import {handleError, showError, showNotification} from "../../../../../actions/uiActions";
-
+import { connect } from 'react-redux';
+import AddActivityDialog from './AddActivityDialog';
+import { handleError, showError, showNotification } from '../../../../../actions/uiActions';
 
 const mapStateToProps = (state, ownProps) => {
-  return {
-    layout: state.application.workOrderLayout.tabs.ACT.fields
-  }
+    return {
+        layout: state.application.workOrderLayout.tabs.ACT.fields,
+    };
 };
 
-export default connect(
-  mapStateToProps, {
-      showNotification,
-      showError,
-      handleError}
-)(AddActivityDialog);
-
+export default connect(mapStateToProps, {
+    showNotification,
+    showError,
+    handleError,
+})(AddActivityDialog);

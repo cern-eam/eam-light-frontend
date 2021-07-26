@@ -1,46 +1,48 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import BlockUi from 'react-block-ui'
-import './AddActivityDialog.css'
-import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
-import WSWorkorders from "../../../../../tools/WSWorkorders";
-import EAMSelect from "eam-components/dist/ui/components/muiinputs/EAMSelect";
-import EAMDatePicker from "eam-components/dist/ui/components/muiinputs/EAMDatePicker";
-import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
-import KeyCode from "../../../../../enums/KeyCode";
+import BlockUi from 'react-block-ui';
+import './AddActivityDialog.css';
+import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput';
+import WSWorkorders from '../../../../../tools/WSWorkorders';
+import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect';
+import EAMDatePicker from 'eam-components/dist/ui/components/muiinputs/EAMDatePicker';
+import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete';
+import KeyCode from '../../../../../enums/KeyCode';
 
 /**
  * Display detail of an activity
  */
 function AddActivityDialog(props) {
-
     let [loading, setLoading] = useState(false);
     let [formValues, setFormValues] = useState({});
     let [typesOfHours, setTypesOfHours] = useState([]);
 
-    useEffect(() => {
-        if (props.open) {
-            init()
-        }
-    }, [props.open])
+    const { open, workorderNumber, department, departmentDesc, defaultEmployee, defaultEmployeeDesc, activities } =
+        props;
 
-    let init = () => {
-        setFormValues({
-            workOrderNumber: props.workorderNumber,
-            departmentCode: props.department,
-            departmentDesc: props.departmentDesc,
-            employeeCode: props.defaultEmployee,
-            employeeDesc: props.defaultEmployeeDesc,
-            activityCode: props.activities.length === 1 ? '5' : null,
-            typeOfHours: 'N',
-            dateWorked: new Date()
-        });
-        WSWorkorders.getTypesOfHours().then(response => setTypesOfHours(response.body.data));
-    };
+    useEffect(() => {
+        let init = () => {
+            setFormValues({
+                workOrderNumber: workorderNumber,
+                departmentCode: department,
+                departmentDesc,
+                employeeCode: defaultEmployee,
+                employeeDesc: defaultEmployeeDesc,
+                activityCode: activities.length === 1 ? '5' : null,
+                typeOfHours: 'N',
+                dateWorked: new Date(),
+            });
+            WSWorkorders.getTypesOfHours().then((response) => setTypesOfHours(response.body.data));
+        };
+
+        if (open) {
+            init();
+        }
+    }, [open, workorderNumber, department, departmentDesc, defaultEmployee, defaultEmployeeDesc, activities]);
 
     let handleClose = () => {
         props.onClose();
@@ -48,50 +50,50 @@ function AddActivityDialog(props) {
 
     let handleSave = () => {
         // Populate trade code
-        let tradeCode = "";
-        let filteredActivities = props.activities.filter(activity => activity.activityCode === formValues.activityCode);
+        let tradeCode = '';
+        let filteredActivities = props.activities.filter(
+            (activity) => activity.activityCode === formValues.activityCode
+        );
         if (filteredActivities.length === 1) {
             tradeCode = filteredActivities[0].tradeCode;
         }
 
         let bookingLabour = {
             ...formValues,
-            tradeCode
-        }
+            tradeCode,
+        };
         delete bookingLabour.departmentDesc;
 
         setLoading(true);
         WSWorkorders.createBookingLabour(bookingLabour)
             .then(WSWorkorders.getWorkOrder.bind(null, props.workorderNumber))
-            .then(result => {
+            .then((result) => {
                 setLoading(false);
 
                 const workorder = result.body.data;
-                if (props.updateCount + 1 === workorder.updateCount
-                        && props.startDate === null) {
+                if (props.updateCount + 1 === workorder.updateCount && props.startDate === null) {
                     props.updateEntityProperty('startDate', workorder.startDate);
                     props.updateEntityProperty('updateCount', props.updateCount + 1);
-                } else if (props.updateCount !== workorder.updateCount
-                        || props.startDate !== workorder.startDate) {
+                } else if (props.updateCount !== workorder.updateCount || props.startDate !== workorder.startDate) {
                     // an unexpected situation has happened, reload the page
                     window.location.reload();
                 }
 
-                props.showNotification("Booking labour successfully created")
+                props.showNotification('Booking labour successfully created');
                 handleClose();
                 props.onChange();
             })
-            .catch(error => {
-                setLoading(false)
-                props.handleError(error)
+            .catch((error) => {
+                setLoading(false);
+                props.handleError(error);
             });
     };
 
     let updateFormValues = (key, value) => {
-        setFormValues(prevFormValues => ({
+        setFormValues((prevFormValues) => ({
             ...prevFormValues,
-            [key]: value
-        }))
+            [key]: value,
+        }));
     };
 
     let onKeyDown = (e) => {
@@ -99,7 +101,7 @@ function AddActivityDialog(props) {
             e.stopPropagation();
             handleSave();
         }
-    }
+    };
 
     return (
         <div onKeyDown={onKeyDown}>
@@ -120,11 +122,11 @@ function AddActivityDialog(props) {
                                 elementInfo={props.layout.booactivity}
                                 valueKey="activityCode"
                                 value={formValues['activityCode'] || ''}
-                                values={props.activities.map(activity => {
+                                values={props.activities.map((activity) => {
                                     return {
                                         code: activity.activityCode,
-                                        desc: activity.tradeCode
-                                    }
+                                        desc: activity.tradeCode,
+                                    };
                                 })}
                                 updateProperty={updateFormValues}
                             />
@@ -184,10 +186,9 @@ function AddActivityDialog(props) {
                         </Button>
                     </div>
                 </DialogActions>
-
             </Dialog>
         </div>
-    )
+    );
 }
 
 export default AddActivityDialog;

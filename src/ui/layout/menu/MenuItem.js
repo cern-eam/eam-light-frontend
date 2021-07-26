@@ -1,26 +1,24 @@
 import React from 'react';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 export default function MenuItem(props) {
-
     if (props.onClick) {
         return (
-            <li style={{marginTop: 15}}>
-                <a onClick={props.onClick}>
+            <li style={{ marginTop: 15 }}>
+                <button onClick={props.onClick}>
                     {props.icon}
                     <span>{props.label}</span>
-                </a>
+                </button>
             </li>
-        )
+        );
     }
 
     return (
-        <li style={{marginTop: 15}}>
-            <Link to={"/" + props.link} >
+        <li style={{ marginTop: 15 }}>
+            <Link to={'/' + props.link}>
                 {props.icon}
                 <span>{props.label}</span>
             </Link>
         </li>
-    )
-
+    );
 }

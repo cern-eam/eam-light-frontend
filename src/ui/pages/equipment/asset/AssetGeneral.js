@@ -1,32 +1,34 @@
-import React, {Component} from 'react';
-import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect'
-import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
-import WSEquipment from "../../../../tools/WSEquipment";
-import StatusRow from "../../../components/statusrow/StatusRow"
-import CERNMode from "../../../components/CERNMode"
-import EquipmentTools from "../EquipmentTools"
+import React, { Component } from 'react';
+import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect';
+import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput';
+import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete';
+import WSEquipment from '../../../../tools/WSEquipment';
+import StatusRow from '../../../components/statusrow/StatusRow';
+import EquipmentTools from '../EquipmentTools';
 
 class AssetGeneral extends Component {
-
-    updateEquipmentStatus = EquipmentTools.getUpdateStatus(this.props.updateEquipmentProperty, this.props.showNotification);
+    updateEquipmentStatus = EquipmentTools.getUpdateStatus(
+        this.props.updateEquipmentProperty,
+        this.props.showNotification
+    );
 
     render() {
-        let { equipment, children, assetLayout, updateEquipmentProperty, layout } = this.props
+        let { equipment, children, assetLayout, updateEquipmentProperty, layout } = this.props;
 
         return (
-            <div style={{width: "100%", marginTop: 0}}>
+            <div style={{ width: '100%', marginTop: 0 }}>
+                {layout.newEntity && (
+                    <EAMInput
+                        children={children}
+                        elementInfo={assetLayout.fields['equipmentno']}
+                        value={equipment.code}
+                        updateProperty={updateEquipmentProperty}
+                        valueKey="code"
+                    />
+                )}
 
-                {layout.newEntity &&
                 <EAMInput
-                    children = {children}
-                    elementInfo={assetLayout.fields['equipmentno']}
-                    value={equipment.code}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="code"/>}
-
-                <EAMInput
-                    children = {children}
+                    children={children}
                     elementInfo={assetLayout.fields['alias']}
                     value={equipment.alias}
                     updateProperty={updateEquipmentProperty}
@@ -34,7 +36,7 @@ class AssetGeneral extends Component {
                 />
 
                 <EAMInput
-                    children = {children}
+                    children={children}
                     elementInfo={assetLayout.fields['udfchar45']}
                     value={equipment.userDefinedFields.udfchar45}
                     updateProperty={updateEquipmentProperty}
@@ -42,46 +44,50 @@ class AssetGeneral extends Component {
                 />
 
                 <EAMInput
-                    children = {children}
+                    children={children}
                     elementInfo={assetLayout.fields['equipmentdesc']}
                     value={equipment.description}
                     updateProperty={updateEquipmentProperty}
-                    valueKey="description"/>
+                    valueKey="description"
+                />
 
                 <EAMAutocomplete
-                    children = {children}
+                    children={children}
                     elementInfo={assetLayout.fields['department']}
                     value={equipment.departmentCode}
                     valueDesc={equipment.departmentDesc}
                     updateProperty={updateEquipmentProperty}
                     valueKey="departmentCode"
                     descKey="departmentDesc"
-                    autocompleteHandler={WSEquipment.autocompleteEquipmentDepartment}/>
+                    autocompleteHandler={WSEquipment.autocompleteEquipmentDepartment}
+                />
 
                 <EAMSelect
-                    children = {children}
+                    children={children}
                     elementInfo={assetLayout.fields['assetstatus']}
                     value={equipment.statusCode}
                     values={layout.statusValues}
                     updateProperty={this.updateEquipmentStatus}
-                    valueKey="statusCode"/>
-                
+                    valueKey="statusCode"
+                />
+
                 <EAMSelect
                     children={children}
                     elementInfo={assetLayout.fields['state']}
                     value={equipment.stateCode}
                     values={layout.stateValues}
                     updateProperty={updateEquipmentProperty}
-                    valueKey="stateCode"/>
+                    valueKey="stateCode"
+                />
 
                 <StatusRow
                     entity={equipment}
-                    entityType={"equipment"}
-                    style={{marginTop: "10px", marginBottom: "-10px"}}
+                    entityType={'equipment'}
+                    style={{ marginTop: '10px', marginBottom: '-10px' }}
                 />
             </div>
-        )
+        );
     }
 }
 
-export default AssetGeneral
+export default AssetGeneral;
