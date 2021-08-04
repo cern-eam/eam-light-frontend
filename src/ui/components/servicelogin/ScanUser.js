@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Input } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
 import KeyCode from '../../../enums/KeyCode';
 import WS from '../../../tools/WS';
@@ -34,7 +35,7 @@ const ScanUser = ({ updateScannedUser, showNotification, handleError }) => {
         const [scannerTimeout, setScannerTimeout] = useState(null);
         const scannerOnly = GridTools.getURLParameterByName("scannerOnly") !== "false";
         const mode = GridTools.getURLParameterByName("mode") || MODES.PERSON;
-
+        const [focus, setFocus] = useState(false)
 
         const updateUser = (evt) => {
             if (loading) return;
@@ -58,30 +59,38 @@ const ScanUser = ({ updateScannedUser, showNotification, handleError }) => {
         return <div style={{zIndex: '1399', backgroundColor: 'rgba(0, 0, 0, 0.8)', position: 'absolute', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', display: "flex", flexDirection: 'column'}}>
             <BlockUi blocking={loading} style={{zIndex: '1399', backgroundColor: 'rgba(255, 255, 255, 1)', position: 'absolute', width: '50%', height: '50%', alignItems: 'center', justifyContent: 'center', display: "flex", flexDirection: 'column'}}>
                 <span className="FontLatoBlack Fleft Fs30 DispBlock" style={{fontSize: '18px', color: "#02a2f2"}}>{mode === MODES.PERSON ? "Scan your CERN badge: " : "Insert your ID: "}</span>
-                <Input
-                    //ref={that => that.focus()}
-                    autoFocus
-                    type={mode === MODES.PERSON && "password"}
-                    value={cernId}
-                    onChange={(event) => {
-                        const value = event.target.value;
-                        if (scannerOnly && value && (value.length - (cernId || "").length) > 1) {
-                            updateCernId("");
-                        } else {
-                            updateCernId(value && (mode === MODES.PERSON ? value.replace(/\D/g,''): value.toUpperCase()))
-                        }
-                    }}
-                    placeholder={mode === MODES.PERSON ? "Person ID" : "CERN ID, Person ID or Login"}
-                    style={{width: '200px'}}
-                    onBlur={(evt) => !scannerOnly && updateUser(evt)}
-                    onKeyDown={(event) => {
-                        if (scannerOnly) {
-                            clearTimeout(scannerTimeout);
-                            setScannerTimeout(setTimeout(() => updateCernId(""), 100));
-                        }
-                        event.keyCode === KeyCode.ENTER && updateUser(event)
-                    }}
-                />
+                    <Input
+                        autoFocus
+                        type={mode === MODES.PERSON && "password"}
+                        value={cernId}
+                        onChange={(event) => {
+                            const value = event.target.value;
+                            if (scannerOnly && value && (value.length - (cernId || "").length) > 1) {
+                                updateCernId("");
+                            } else {
+                                updateCernId(value && (mode === MODES.PERSON ? value.replace(/\D/g,''): value.toUpperCase()))
+                            }
+                        }}
+                        placeholder={mode === MODES.PERSON ? "Person ID" : "CERN ID, Person ID or Login"}
+                        style={{width: '200px'}}
+                        onFocus={() => setFocus(true)}
+                        onBlur={(evt) => {setFocus(false); !scannerOnly && updateUser(evt)}}
+                        onKeyDown={(event) => {
+                            if (scannerOnly) {
+                                clearTimeout(scannerTimeout);
+                                setScannerTimeout(setTimeout(() => updateCernId(""), 100));
+                            }
+                            event.keyCode === KeyCode.ENTER && updateUser(event)
+                        }}
+                    />
+                    {!focus ?
+                        <div style={{position: 'relative', width: '90%', maxWidth: '450px', display: 'flex', justifyContent: 'center'}}>
+                            <Alert style={{position: 'absolute', marginTop: '8px'}} variant="outlined" severity="warning">
+                                Problems scanning? Make sure the input field above is selected before using the scanner on your CERN badge
+                            </Alert>
+                        </div>
+                        : null
+                    }
             </BlockUi>
         </div>
 }
