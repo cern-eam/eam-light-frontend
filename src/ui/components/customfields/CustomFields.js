@@ -29,18 +29,22 @@ function CustomFields(props) {
         ? <SimpleEmptyState message="No Custom Fields to show." />
         : (
             <div style={{width: "100%", marginTop: 0}}>
-                {/* The custom fields starting with MTFX were temporarily used to have a similar functionality to
-                    the Line Title in the Associate Custom Fields screen of Infor EAM. They may now be hidden. */}
-                {customFields.filter(customField => !customField.code.startsWith('MTFX') || !isCernMode)
-                    .map((customField, index) => (
-                        <CustomFieldInput children={children}
-                                            key={index}
-                                            updateCustomFieldValue={updateCustomFieldValue.bind(null, index)}
-                                            customField={customField}
-                                            index={index}
-                                            lookupValues={lookupValues}
-                                            readonly={readonly}/>
-                ))}
+                {customFields.map((customField, index) => {
+                    {/* The custom fields starting with MTFX were temporarily used to have a similar functionality to
+                        the Line Title in the Associate Custom Fields screen of Infor EAM. They may now be hidden. */}
+                    if (isCernMode && customField.code.startsWith('MTFX')) return null;
+                    return (
+                        <CustomFieldInput
+                            children={children}
+                            key={index}
+                            updateCustomFieldValue={updateCustomFieldValue.bind(null, index)}
+                            customField={customField}
+                            index={index}
+                            lookupValues={lookupValues}
+                            readonly={readonly}
+                        />
+                    )
+                })}
             </div>
         )
     )
