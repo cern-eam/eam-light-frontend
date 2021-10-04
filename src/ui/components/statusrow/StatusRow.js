@@ -1,6 +1,10 @@
 import React from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import BlockIcon from '@material-ui/icons/Block';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorOutlinedIcon from '@material-ui/icons/ErrorOutlined';
+import ReportIcon from '@material-ui/icons/Report';
+import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 import {EISIcon, RadioactiveWarningIcon} from 'eam-components/dist/ui/components/icons/index'
 import {isCernMode} from '../CERNMode';
 
@@ -8,6 +12,7 @@ const STATUS_KEYS = {
     OUT_OF_SERVICE: "OUT_OF_SERVICE",
     EIS: "EIS",
     RADIOACTIVE: 'RADIOACTIVE',
+    SAFETY_CONFORMITY: 'SAFETY_CONFORMITY',
 }
 
 const iconStyle = {
@@ -15,29 +20,47 @@ const iconStyle = {
     width: "25px"
 }
 
+const safetyConformity = ({
+    'CONFORME': { icon: <CheckCircleIcon style={{color: 'green', ...iconStyle}} />, description: 'Conform', tooltip: 'Conform' },
+    'CONFORME-RESERVES': { icon: <ReportProblemIcon style={{color: 'orange', ...iconStyle}}/>, description: 'Observations', tooltip: 'Observations' },
+    'OBSERVATIONS': { icon: <ReportProblemIcon style={{color: 'orange', ...iconStyle}}/>, description: 'Observations', tooltip: 'Observations' },
+    'NON CONFORME': { icon: <ReportIcon style={{color: 'red', ...iconStyle}}/>, description: 'NON conform', tooltip: 'NON conform' },
+    'NON INSPECTE': { icon: <ErrorOutlinedIcon style={{color: 'orange', ...iconStyle}}/>, description: 'Not inspected', tooltip: 'Not inspected' },
+});
+
+const getSafetyConformity = (entity) => {
+    return safetyConformity[entity.userDefinedFields.udfchar30];
+};
+
 const STATUSES = [
     {
         key: STATUS_KEYS.OUT_OF_SERVICE,
         shouldRender: (entity, entityType) => entity.outOfService === "true" || entity.outOfService === true,
-        icon: <BlockIcon style={{color: 'red', ...iconStyle}}/>,
-        description: "Out of Service",
-        tooltip: "Out of Service",
+        getIcon: () => <BlockIcon style={{color: 'red', ...iconStyle}}/>,
+        getDescription: () => "Out of Service",
+        getTooltip: () => "Out of Service",
     },
     {
         key: STATUS_KEYS.EIS,
         shouldRender: (entity, entityType) => isCernMode && entityType === "equipment" && entity.userDefinedFields.udfchkbox01 === "true",
-        icon: <EISIcon style={{color: 'blue', ...iconStyle}}/>,
-        description: "EIS",
-        tooltip: "Élément Important pour la Sécurité",
+        getIcon: () => <EISIcon style={{color: 'blue', ...iconStyle}}/>,
+        getDescription: () => "EIS",
+        getTooltip: () => "Élément Important pour la Sécurité",
     },
     {
         key: STATUS_KEYS.RADIOACTIVE,
         shouldRender: (entity, entityType) => isCernMode && entityType === "equipment" && entity.userDefinedFields.udfchar04 === "Radioactive",
-        icon: <RadioactiveWarningIcon style={iconStyle}/>,
-        description: "Radioactive",
-        tooltip: "Radioactive",
-    }
-
+        getIcon: () => <RadioactiveWarningIcon style={iconStyle}/>,
+        getDescription: () => "Radioactive",
+        getTooltip: () => "Radioactive",
+    },
+    {
+        key: STATUS_KEYS.SAFETY_CONFORMITY,
+        shouldRender: (entity, entityType) => isCernMode && entityType === "equipment" && getSafetyConformity(entity) !== undefined,
+        getIcon: (entity) => getSafetyConformity(entity).icon,
+        getDescription: (entity) => getSafetyConformity(entity).description,
+        getTooltip: (entity) => getSafetyConformity(entity).tooltip,
+    },
 ]
 
 const StatusRow = (props) => {
@@ -45,10 +68,10 @@ const StatusRow = (props) => {
         return STATUSES.map(status => {
             if (status.shouldRender(entity, entityType)) {
                 return (
-                    <Tooltip key={status.key} title={status.tooltip}>
+                    <Tooltip key={status.key} title={status.getTooltip(entity)}>
                         <div style={{textAlign: "center", width: "80px"}}>
-                            {status.icon}
-                            <div style={{fontSize: "0.75rem"}}>{status.description}</div>
+                            {status.getIcon(entity)}
+                            <div style={{fontSize: "0.75rem"}}>{status.getDescription(entity)}</div>
                         </div>
                     </Tooltip>
                 )
