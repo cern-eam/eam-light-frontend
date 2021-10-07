@@ -196,8 +196,8 @@ export default class Position extends Entity {
                 render: ({ panelQueryParams }) => 
                     <EquipmentWorkOrders
                         equipmentcode={equipment.code}
-                        defaultFilter={panelQueryParams.defaultFilter}
-                        equipmenttype='P' />
+                        equipmenttype='P'
+                        urlFilters={panelQueryParams.defaultFilter}/>
                 ,
                 column: 1,
                 order: 4,
@@ -355,11 +355,9 @@ export default class Position extends Entity {
             applicationData,
             history,
             showEqpTree,
-            toggleHiddenRegion,
-            setRegionVisibility,
+            setHiddenRegions,
+            hiddenRegions,
             userData,
-            isHiddenRegion,
-            getHiddenRegionState,
             getUniqueRegionID
         } = this.props;
         const { equipment, layout } = this.state;
@@ -393,20 +391,18 @@ export default class Position extends Entity {
                     }}
                     width={730}
                     entityIcon={<PositionIcon style={{height: 18}}/>}
-                    toggleHiddenRegion={toggleHiddenRegion}
+                    hiddenRegions={hiddenRegions}
+                    setHiddenRegions={setHiddenRegions}
                     getUniqueRegionID={getUniqueRegionID}
                     regions={regions}
-                    getHiddenRegionState={getHiddenRegionState}
-                    isHiddenRegion={isHiddenRegion}
                     departmentalSecurity={this.departmentalSecurity} />
                 <EntityRegions
                     showEqpTree={showEqpTree}
                     regions={regions}
+                    hiddenRegions={hiddenRegions}
+                    setHiddenRegions={setHiddenRegions}
                     isNewEntity={layout.newEntity} 
-                    getUniqueRegionID={getUniqueRegionID}
-                    getHiddenRegionState={getHiddenRegionState}
-                    setRegionVisibility={setRegionVisibility}
-                    isHiddenRegion={isHiddenRegion}/>
+                    getUniqueRegionID={getUniqueRegionID}/>
             </BlockUi>
         )
     }

@@ -5,10 +5,9 @@ import {
     setLayoutProperty,
     showError,
     showNotification,
-    toggleHiddenRegion,
-    setRegionVisibility,
+    setHiddenRegions,
 } from "../../../../actions/uiActions";
-import { isHiddenRegion, getHiddenRegionState, getUniqueRegionID } from '../../../../selectors/uiSelectors'
+import { getUniqueRegionID } from '../../../../selectors/uiSelectors'
 
 function mapStateToProps(state) {
     const entityScreenCode = state.application.userData.locationScreen;
@@ -19,8 +18,6 @@ function mapStateToProps(state) {
         hiddenRegions: state.ui.hiddenRegions,
         eqp: state.ui.layout.equipment,
         applicationData: state.application.applicationData,
-        isHiddenRegion: isHiddenRegion(state)(entityScreenCode),
-        getHiddenRegionState: getHiddenRegionState(state)(entityScreenCode),
         getUniqueRegionID: getUniqueRegionID(state)(entityScreenCode),
     };
 }
@@ -30,8 +27,7 @@ const LocationContainer = connect(mapStateToProps, {
     showError,
     handleError,
     setLayoutProperty,
-    toggleHiddenRegion,
-    setRegionVisibility,
+    setHiddenRegions,
 })(Location);
 
 export default LocationContainer;

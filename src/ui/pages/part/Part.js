@@ -239,11 +239,9 @@ class Part extends Entity {
             applicationData,
             history,
             showEqpTree,
-            toggleHiddenRegion,
-            setRegionVisibility,
+            setHiddenRegions,
+            hiddenRegions,
             userData,
-            isHiddenRegion,
-            getHiddenRegionState,
             getUniqueRegionID,
             showNotification,
             handleError,
@@ -263,6 +261,7 @@ class Part extends Entity {
                         entityName={this.settings.entityDesc}
                         entityKeyCode={part.code}
                         saveHandler={this.saveHandler.bind(this)}
+                        hiddenRegions={hiddenRegions}
                         newHandler={() => history.push('/part')}
                         deleteHandler={this.deleteEntity.bind(this, part.code)}
                         toolbarProps={{ 
@@ -283,19 +282,16 @@ class Part extends Entity {
                         }}
                         width={730}
                         entityIcon={<PartIcon style={{height: 18}}/>}
-                        toggleHiddenRegion={toggleHiddenRegion}
+                        setHiddenRegions={setHiddenRegions}
                         getUniqueRegionID={getUniqueRegionID}
-                        regions={regions}
-                        setRegionVisibility={setRegionVisibility}
-                        isHiddenRegion={isHiddenRegion} />
+                        regions={regions}/>
                     <EntityRegions
                         showEqpTree={showEqpTree}
                         regions={regions}
+                        hiddenRegions={hiddenRegions}
                         isNewEntity={layout.newEntity} 
-                        getHiddenRegionState={getHiddenRegionState}
-                        getUniqueRegionID={getUniqueRegionID}
-                        setRegionVisibility={setRegionVisibility}
-                        isHiddenRegion={isHiddenRegion}/>
+                        setHiddenRegions={setHiddenRegions}
+                        getUniqueRegionID={getUniqueRegionID}/>
                 </BlockUi>
             </div>
         );

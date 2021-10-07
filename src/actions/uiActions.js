@@ -3,7 +3,10 @@ import ErrorTypes from "../enums/ErrorTypes";
 export const SET_SNACKBAR_MESSAGE = 'SET_SNACKBAR_MESSAGE';
 export const SET_LAYOUT = 'SET_LAYOUT';
 export const TOGGLE_HIDDEN_REGION = 'TOGGLE_HIDDEN_REGION';
-export const SET_REGION_VISIBILITY = 'SET_REGION_VISIBILITY'
+<<<<<<< HEAD
+=======
+export const SET_REGION_VISIBILITY = 'SET_REGION_VISIBILITY';
+>>>>>>> 441659b... [EAM-1510] Store filters for Work Orders tab locally
 
 export function showNotification(message, title = '') {
   return {
@@ -28,7 +31,6 @@ export function showWarning(message, title = '') {
     }
   }
 }
-
 
 export function showError(message, title = '') {
   return {
@@ -55,26 +57,18 @@ export function hideNotification() {
 }
 
 export function setLayoutProperty(property, value) {
-    return {
-        type: SET_LAYOUT,
-            layout: {
-            [property]: value
-          }
-    }
-}
-
-export function toggleHiddenRegion(region) {
-    return {
-        type: TOGGLE_HIDDEN_REGION,
-        region: region
-    }
-}
-
-export function setRegionVisibility(region, isVisible) {
   return {
-    type: SET_REGION_VISIBILITY,
-    region: region,
-    isVisible: isVisible
+    type: SET_LAYOUT,
+    layout: {
+      [property]: value
+    }
+  }
+}
+
+export function setHiddenRegions(hiddenRegions) {
+  return {
+    type: TOGGLE_HIDDEN_REGION,
+    hiddenRegions: hiddenRegions
   }
 }
 

@@ -7,6 +7,7 @@ import EquipmentMTFWorkOrders from "./EquipmentMTFWorkOrders"
 import BlockUi from 'react-block-ui';
 import { isCernMode } from '../../../components/CERNMode';
 import Constants from 'eam-components/dist/enums/Constants';
+import useLocalStorage from '../../../../hooks/useLocalStorage';
 
 const WO_FILTER_TYPES = {
     ALL: 'All',
@@ -42,16 +43,24 @@ const WO_FILTERS = {
     }
 }
 
+const LOCAL_STORAGE_FILTER_KEY = 'filters:workorders';
+
 function EquipmentWorkOrders(props) {
-    const { defaultFilter, equipmentcode, equipmenttype } = props;
+    const { equipmentcode, equipmenttype } = props;
 
     let [events, setEvents] = useState([]);
     let [workorders, setWorkorders] = useState([]);
-    let [workOrderFilter, setWorkOrderFilter] = useState(Object.values(WO_FILTER_TYPES).includes(defaultFilter) ? defaultFilter : WO_FILTER_TYPES.ALL)
     const [loadingData, setLoadingData] = useState(true);
 
+    const [workOrderFilter, setWorkOrderFilter] = useLocalStorage(LOCAL_STORAGE_FILTER_KEY, WO_FILTER_TYPES.ALL);
     let headers = ['Work Order', 'Equipment', 'Description', 'Status', 'Creation Date'];
     let propCodes = ['number', 'object','desc', 'status', 'createdDate'];
+
+    useEffect(() => {
+        if (Object.values(WO_FILTER_TYPES).includes(defaultFilter)) {
+            setWorkOrderFilter(defaultFilter);
+        }
+    }, [])
 
     if (workOrderFilter === WO_FILTER_TYPES.THIS) {
         headers = ['Work Order', 'Description', 'Status', 'Creation Date'];
@@ -128,7 +137,7 @@ function EquipmentWorkOrders(props) {
         <div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
             <EISTableFilter
                 filters={WO_FILTERS}
-                handleFilterChange={newFilter =>
+                handleFilterChange={(newFilter) =>
                     setWorkOrderFilter(newFilter)
                 }
                 activeFilter={workOrderFilter}

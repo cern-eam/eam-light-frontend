@@ -150,7 +150,7 @@ class Workorder extends Entity {
             showError,
             showNotification,
             userData,
-            workOrderLayout
+            workOrderLayout,
         } = this.props;
         const { layout, workorder, equipmentMEC } = this.state;
         const {tabs} = workOrderLayout;
@@ -622,10 +622,8 @@ class Workorder extends Entity {
             applicationData,
             getUniqueRegionID,
             history,
-            isHiddenRegion,
-            setRegionVisibility,
-            getHiddenRegionState,
-            toggleHiddenRegion,
+            setHiddenRegions,
+            hiddenRegions,
             userData
         } = this.props;
         const regions = this.getRegions();
@@ -641,6 +639,7 @@ class Workorder extends Entity {
                                      saveHandler={this.saveHandler.bind(this)}
                                      newHandler={() => history.push('/workorder')}
                                      deleteHandler={this.deleteEntity.bind(this, workorder.number)}
+                                     hiddenRegions={hiddenRegions}
                                      width={790}
                                      toolbarProps={{
                                         entity: workorder,
@@ -658,19 +657,16 @@ class Workorder extends Entity {
                                         workorderScreencode: userData.workorderScreen
                                      }}
                                      entityIcon={<WorkorderIcon style={{height: 18}}/>}
-                                     toggleHiddenRegion={toggleHiddenRegion}
+                                     setHiddenRegions={setHiddenRegions}
                                      regions={regions}
                                      getUniqueRegionID={getUniqueRegionID}
-                                     getHiddenRegionState={getHiddenRegionState}
-                                     isHiddenRegion={isHiddenRegion}
                                      departmentalSecurity={this.departmentalSecurity} />
                     <EntityRegions
                         regions={regions}
                         isNewEntity={layout.newEntity}
-                        getUniqueRegionID={getUniqueRegionID}
-                        getHiddenRegionState={getHiddenRegionState}
-                        setRegionVisibility={setRegionVisibility}
-                        isHiddenRegion={this.props.isHiddenRegion} />
+                        hiddenRegions={hiddenRegions}
+                        setHiddenRegions={setHiddenRegions}
+                        getUniqueRegionID={getUniqueRegionID} />
                 </BlockUi>
             </div>
         )

@@ -226,8 +226,8 @@ export default class System extends Entity {
                 render: ({ panelQueryParams }) => 
                     <EquipmentWorkOrders
                         equipmentcode={equipment.code}
-                        defaultFilter={panelQueryParams.defaultFilter}
-                        equipmenttype='S' />
+                        equipmenttype='S'
+                        urlFilters={panelQueryParams.defaultFilter}/>
                 ,
                 column: 1,
                 order: 4,
@@ -371,11 +371,10 @@ export default class System extends Entity {
             history,
             showEqpTree,
             toggleHiddenRegion,
-            setRegionVisibility,
             userData,
-            isHiddenRegion,
-            getHiddenRegionState,
-            getUniqueRegionID
+            getUniqueRegionID,
+            setHiddenRegions,
+            hiddenRegions
         } = this.props;
         const { equipment, layout } = this.state;
         const regions = this.getRegions();        
@@ -391,6 +390,8 @@ export default class System extends Entity {
                     saveHandler={this.saveHandler.bind(this)}
                     newHandler={() => history.push('/system')}
                     deleteHandler={this.deleteEntity.bind(this, equipment.code)}
+                    hiddenRegions={hiddenRegions}
+                    setHiddenRegions={setHiddenRegions}
                     toolbarProps={{
                         entityDesc: this.settings.entityDesc,
                         entity: equipment,
@@ -411,18 +412,14 @@ export default class System extends Entity {
                     toggleHiddenRegion={toggleHiddenRegion}
                     getUniqueRegionID={getUniqueRegionID}
                     regions={regions}
-                    getHiddenRegionState={getHiddenRegionState}
-                    setRegionVisibility={setRegionVisibility}
-                    isHiddenRegion={isHiddenRegion}
                     departmentalSecurity={this.departmentalSecurity} />
                 <EntityRegions
                     showEqpTree={showEqpTree}
                     regions={regions}
+                    hiddenRegions={hiddenRegions}
+                    setHiddenRegions={setHiddenRegions}
                     isNewEntity={layout.newEntity} 
-                    getUniqueRegionID={getUniqueRegionID}
-                    getHiddenRegionState={getHiddenRegionState}
-                    setRegionVisibility={setRegionVisibility}
-                    isHiddenRegion={isHiddenRegion}/>
+                    getUniqueRegionID={getUniqueRegionID}/>
             </BlockUi>
         )
     }

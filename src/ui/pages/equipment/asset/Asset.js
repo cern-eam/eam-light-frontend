@@ -253,8 +253,8 @@ export default class Asset extends Entity {
                 render: ({ panelQueryParams }) => 
                     <EquipmentWorkOrders
                         equipmentcode={equipment.code}
-                        defaultFilter={panelQueryParams.defaultFilter}
-                        equipmenttype='A' />
+                        equipmenttype='A'
+                        urlFilters={panelQueryParams.defaultFilter}/>
                 ,
                 column: 1,
                 order: 4,
@@ -439,11 +439,9 @@ export default class Asset extends Entity {
             applicationData,
             history,
             showEqpTree,
-            toggleHiddenRegion,
-            setRegionVisibility,
+            setHiddenRegions,
+            hiddenRegions,
             userData,
-            isHiddenRegion,
-            getHiddenRegionState,
             getUniqueRegionID
         } = this.props;
         const { equipment, layout } = this.state;
@@ -476,21 +474,19 @@ export default class Asset extends Entity {
                         workorderScreencode: userData.workorderScreen
                     }}
                     width={730}
+                    hiddenRegions={hiddenRegions}
+                    setHiddenRegions={setHiddenRegions}
                     entityIcon={<AssetIcon style={{ height: 18 }} />}
-                    toggleHiddenRegion={toggleHiddenRegion}
                     getUniqueRegionID={getUniqueRegionID}
                     regions={regions}
-                    isHiddenRegion={isHiddenRegion}
-                    getHiddenRegionState={getHiddenRegionState}
                     departmentalSecurity={this.departmentalSecurity} />
                 <EntityRegions
                     showEqpTree={showEqpTree}
+                    hiddenRegions={hiddenRegions}
+                    setHiddenRegions={setHiddenRegions}
                     regions={regions}
                     isNewEntity={layout.newEntity} 
-                    isHiddenRegion={isHiddenRegion}
-                    getUniqueRegionID={getUniqueRegionID}
-                    setRegionVisibility={setRegionVisibility}
-                    getHiddenRegionState={getHiddenRegionState}/>
+                    getUniqueRegionID={getUniqueRegionID}/>
             </BlockUi>
         )
     }

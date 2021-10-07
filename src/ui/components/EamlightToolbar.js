@@ -1,5 +1,5 @@
 import './EamlightToolbar.css'
-import React, {Component} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Button from '@material-ui/core/Button';
 import SaveIcon from 'mdi-material-ui/ContentSaveOutline'
 import AddIcon from '@material-ui/icons/Add';
@@ -12,58 +12,71 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Toolbar from './Toolbar';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
+const iconMenuStyle = {
+    marginRight: 5,
+    width: 20
+};
 
-class EamlightToolbar extends Component {
-    state = {
-        open: false,
-        compactMenu: false,
-    };
+const verticalLineStyle = {
+    height: 25,
+    borderRight: "1px solid gray",
+    margin: 5
+};
 
-    iconMenuStyle = {
-        marginRight: 5,
-        width: 20
-    };
+const entityCodeStyle = {
+    marginLeft: 12,
+    marginRight: 5,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexWrap: "wrap"
+};
 
+const EamlightToolbar = (props) => {
+    const [open, setOpen] = useState(false);
+    const [compactMenu, setCompactMenu] = useState(false);
+    const [moreMenu, setMoreMenu] = useState(null);
+    const [visibilityMenu, setVisibilityMenu] = useState(null);
+    const entityToolbarDiv = useRef();
+    const deleteConfirmation = useRef();
+    const newConfirmation = useRef();
+    const [hiddenRegions, toggleHiddenRegion] = useLocalStorage('hiddenRegions', {});
 
-    componentDidMount() {
-        window.addEventListener("resize", this.updateDimensions.bind(this));
-        this.updateDimensions()
-    }
+    useEffect(() => {
+        window.addEventListener("resize", updateDimensions.bind(this));
+        updateDimensions();
+        return window.removeEventListener("resize", updateDimensions); 
+    }, []);
 
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.updateDimensions);
-    }
-
-    updateDimensions(event) {
-        if (this.entityToolbarDiv) {
-            this.setState({
-                compactMenu: (this.entityToolbarDiv.clientWidth < this.props.width)
-            })
+    const updateDimensions = (event) => {
+        if (entityToolbarDiv) {
+            setCompactMenu(entityToolbarDiv.current.clientWidth < props.width);
         }
     }
 
-    deleteHandler = () => {
-        this.setState({open: true});
+    const deleteHandler = () => {
+        setOpen(true);
     };
 
-    newHandler = () => {
-        if (this.props.isModified) {
-            this.newConfirmation.show()
+    const newHandler = () => {
+        if (props.isModified) {
+            newConfirmation.show()
         } else {
-            this.props.newHandler()
+            props.newHandler()
         }
     };
 
-    handleClose = (deleteEntity) => {
+    const handleClose = (deleteEntity) => {
         if (deleteEntity === true) {
-            this.props.deleteHandler()
+            props.deleteHandler()
         }
-        this.setState({open: false});
+        this.setOpen(false);
     };
 
-    isSaveButtonDisabled() {
-        const { newEntity, entityScreen, departmentalSecurity } = this.props;
+    const isSaveButtonDisabled = () => {
+        const { newEntity, entityScreen, departmentalSecurity } = props;
 
         if (!entityScreen) {
             return true;
@@ -74,8 +87,8 @@ class EamlightToolbar extends Component {
             || departmentalSecurity.readOnly;
     }
 
-    isNewButtonDisabled() {
-        const { entityScreen } = this.props;
+    const isNewButtonDisabled = () => {
+        const { entityScreen } = props;
 
         if (!entityScreen) {
             return true;
@@ -84,8 +97,8 @@ class EamlightToolbar extends Component {
         return !entityScreen.creationAllowed;
     }
 
-    isDeleteButtonDisabled() {
-        const { newEntity, entityScreen, departmentalSecurity } = this.props;
+    const isDeleteButtonDisabled = () => {
+        const { newEntity, entityScreen, departmentalSecurity } = props;
 
         if (!entityScreen) {
             return true;
@@ -99,39 +112,48 @@ class EamlightToolbar extends Component {
     //
     // MORE MENU HANDLERS
     //
-    handleMoreMenuClose() {
-        if (this.state.moreMenu) {
-            this.setState({moreMenu: null});
+    const handleMoreMenuClose = () => {
+        if (moreMenu) {
+            setMoreMenu(null);
         }
     }
 
-    handleMoreMenuClick(e) {
-        this.setState({moreMenu: e.currentTarget});
+    const handleMoreMenuClick = (e) => {
+        setMoreMenu(e.currentTarget);
     }
 
     //
     // VISIBILITY MENU HANDLERS
     //
-    handleVisibilityMenuClose() {
-        if (this.state.visibilityMenu) {
-            this.setState({visibilityMenu: null});
+    const handleVisibilityMenuClose = () => {
+        if (visibilityMenu) {
+            setVisibilityMenu(null);
         }
     }
 
-    handleVisibilityMenuClick(e) {
-        this.setState({visibilityMenu: e.currentTarget});
+    const handleVisibilityMenuClick = (e) => {
+        setVisibilityMenu(e.currentTarget);
     }
 
     //
     //
     //
-    getRegions = () => {
-        const { regions, toggleHiddenRegion, getUniqueRegionID, isHiddenRegion } = this.props;
+    const getRegions = () => {
+        const { regions, getUniqueRegionID } = props;
+        const toggleRegion = (region) => {
+            const hidRegions = {
+                ...hiddenRegions,
+                [getUniqueRegionID(region.id)]: !hiddenRegions[getUniqueRegionID(region.id)]
+            }
+            toggleHiddenRegion(hidRegions);
+            props.setHiddenRegions(hidRegions);
+        }
+        
         return regions
             .filter(region => !region.ignore)
             .map(region => (
-                <MenuItem key={region.id} onClick={() => toggleHiddenRegion(getUniqueRegionID(region.id))}>
-                    <Checkbox disabled checked={!isHiddenRegion(region.id)}/>
+                <MenuItem key={region.id} onClick={() => toggleRegion(region)}>
+                    <Checkbox disabled checked={!hiddenRegions[getUniqueRegionID(region.id)]}/>
                     {region.label}
                 </MenuItem>
         ))
@@ -140,158 +162,138 @@ class EamlightToolbar extends Component {
     //
     //
     //
-    renderCompactMenu() {
-        //this.props.entityToolbar.props.renderOption = 'MENUITEMS'
+    const renderCompactMenu = () => {
+        //props.entityToolbar.props.renderOption = 'MENUITEMS'
         return (
             <div>
                 <Button
                     style={{padding: 8, minWidth: "unset"}}
                     aria-label="More"
-                    aria-owns={this.state.moreMenu ? 'long-menu' : null}
-                    onClick={this.handleMoreMenuClick.bind(this)}>
+                    aria-owns={moreMenu ? 'long-menu' : null}
+                    onClick={handleMoreMenuClick.bind(this)}>
                     MORE
                     <SvgIcon style={{color: "rgba(0, 0, 0, 0.54)"}}>
                         <path d="M7 10l5 5 5-5z"/>
                     </SvgIcon>
                 </Button>
                 <Menu id="long-menu"
-                      anchorEl={this.state.moreMenu}
-                      open={Boolean(this.state.moreMenu)}
-                      onClose={this.handleMoreMenuClose.bind(this)}>
-                    <MenuItem onClick={this.newHandler} disabled={this.isNewButtonDisabled()}>
-                        <AddIcon className="iconButton" style={this.iconMenuStyle}/>
-                        <div style={this.menuLabelStyle}> New</div>
+                      anchorEl={moreMenu}
+                      open={Boolean(moreMenu)}
+                      onClose={handleMoreMenuClose.bind(this)}>
+                    <MenuItem onClick={newHandler} disabled={isNewButtonDisabled()}>
+                        <AddIcon className="iconButton" style={iconMenuStyle}/>
+                        <div> New</div>
                     </MenuItem>
-                    <MenuItem onClick={() => this.deleteConfirmation.show()} disabled={this.isDeleteButtonDisabled()}>
-                        <DeleteIcon className="iconButton" style={this.iconMenuStyle}/>
-                        <div style={this.menuLabelStyle}> Delete</div>
+                    <MenuItem onClick={() => deleteConfirmation.current.show()} disabled={isDeleteButtonDisabled()}>
+                        <DeleteIcon className="iconButton" style={iconMenuStyle}/>
+                        <div> Delete</div>
                     </MenuItem>
-                    {this.getToolbar('MENUITEMS')}
+                    {getToolbar('MENUITEMS')}
                 </Menu>
             </div>
         )
     }
 
-    getToolbar = renderOption => 
-        <Toolbar {...this.props.toolbarProps} renderOption={renderOption}/>
+    const getToolbar = (renderOption) => <Toolbar {...props.toolbarProps} renderOption={renderOption}/>
 
-    renderDesktopMenu() {
+    const renderDesktopMenu = () => {
         return (
             <div style={{display: "flex", height: 36}}>
-                <Button onClick={this.newHandler}
-                        disabled={this.isNewButtonDisabled()}
+                <Button onClick={newHandler}
+                        disabled={isNewButtonDisabled()}
                         startIcon={<AddIcon/>}
                 >
                     New
                 </Button>
-                <Button onClick={() => this.deleteConfirmation.show()}
-                        disabled={this.isDeleteButtonDisabled()}
+                <Button onClick={() => deleteConfirmation.current.show()}
+                        disabled={isDeleteButtonDisabled()}
                         startIcon={<DeleteIcon/>}
                 >
                     Delete
                 </Button>
-                {this.getToolbar('TOOLBARICONS')}
+                {getToolbar('TOOLBARICONS')}
             </div>
         )
     }
 
-    render() {
-        const { entityScreen, isLocalAdministrator } = this.props;
+    const { entityScreen, entityIcon, entityKeyCode, entityName, newEntity, regions, isLocalAdministrator, saveHandler } = props;
+    return (
+        <div className={"entityToolbar"} ref={entityToolbarDiv}>
 
-        const verticalLineStyle = {
-            height: 25,
-            borderRight: "1px solid gray",
-            margin: 5
-        };
-
-        const entityCodeStyle = {
-            marginLeft: 12,
-            marginRight: 5,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexWrap: "wrap"
-        };
-
-        return (
-            <div className={"entityToolbar"} ref={entityToolbarDiv => this.entityToolbarDiv = entityToolbarDiv}>
-
-                <div className={"entityToolbarContent"} style={{flexShrink: 0}}>
-                    <div style={this.state.compactMenu ? {...entityCodeStyle, flexBasis: "8em"} : entityCodeStyle}>
-                        <div style={{display: "flex", alignItems: "center", marginRight: 5}}>
-                            {this.props.entityIcon}
-                            <span style={{marginLeft: 5}}>{this.props.entityName}</span>
-                        </div>
-                        <div>
-                            {!this.props.newEntity && (<span
-                                style={{fontWeight: 500, whiteSpace: "nowrap"}}> {this.props.entityKeyCode}</span>)}
-                        </div>
+            <div className={"entityToolbarContent"} style={{flexShrink: 0}}>
+                <div style={compactMenu ? {...entityCodeStyle, flexBasis: "8em"} : entityCodeStyle}>
+                    <div style={{display: "flex", alignItems: "center", marginRight: 5}}>
+                        {entityIcon}
+                        <span style={{marginLeft: 5}}>{entityName}</span>
                     </div>
-
-                    <div style={verticalLineStyle}/>
-
-                    <Button onClick={this.props.saveHandler}
-                            disabled={this.isSaveButtonDisabled()}
-                            startIcon={<SaveIcon className="iconButton"/>}
-                    >
-                        Save
-                    </Button>
-
-                    {this.state.compactMenu ? this.renderCompactMenu() : this.renderDesktopMenu()}
-
+                    <div>
+                        {!newEntity && (<span style={{fontWeight: 500, whiteSpace: "nowrap"}}>{entityKeyCode}</span>)}
+                    </div>
                 </div>
 
-                <div className={"entityToolbarContent"} style={{minWidth: 0}}>
-                    {isLocalAdministrator && <>
-                        <span style={{
-                            marginRight: 5,
-                            color: '#ccc',
-                            fontWeight: 'lighter',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            minWidth: '0px'}}>{entityScreen.screenCode}</span>
-                        <div style={{...verticalLineStyle, borderRightColor: '#ccc'}}/>
-                    </>}
-                    {this.props.regions && <div style={{flexGrow: '1'}}>
-                        <IconButton
-                            aria-label="More"
-                            aria-owns={this.state.visibilityMenu ? 'simple-menu' : null}
-                            onClick={this.handleVisibilityMenuClick.bind(this)}
-                        >
-                            <TelevisionGuide/>
-                        </IconButton>
-                        <Menu
-                            id="simple-menu"
-                            anchorEl={this.state.visibilityMenu}
-                            open={Boolean(this.state.visibilityMenu)}
-                            onClose={this.handleVisibilityMenuClose.bind(this)}
-                        >
+                <div style={verticalLineStyle}/>
 
-                            {this.getRegions()}
+                <Button onClick={saveHandler}
+                        disabled={isSaveButtonDisabled()}
+                        startIcon={<SaveIcon className="iconButton"/>}
+                >
+                    Save
+                </Button>
 
-                        </Menu>
-                    </div>}
-                </div>
-
-                <ConfirmationDialog
-                    ref={deleteConfirmation => this.deleteConfirmation = deleteConfirmation}
-                    onConfirm={this.props.deleteHandler}
-                    title={"Delete " + this.props.entityName + "?"}
-                    content={"Are you sure you would like to delete this " + this.props.entityName + "?"}
-                    confirmButtonText="Delete"
-                />
-
-                <ConfirmationDialog
-                    ref={newConfirmation => this.newConfirmation = newConfirmation}
-                    onConfirm={this.props.newHandler}
-                    title={"New " + this.props.entityName + "?"}
-                    content={"Are you sure you would like to proceed without saving the changes?"}
-                    confirmButtonText="Proceed"
-                />
+                {compactMenu ? renderCompactMenu() : renderDesktopMenu()}
 
             </div>
-        )
-    }
+
+            <div className={"entityToolbarContent"} style={{minWidth: 0}}>
+                {isLocalAdministrator && <>
+                    <span style={{
+                        marginRight: 5,
+                        color: '#ccc',
+                        fontWeight: 'lighter',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        minWidth: '0px'}}>{entityScreen.screenCode}</span>
+                    <div style={{...verticalLineStyle, borderRightColor: '#ccc'}}/>
+                </>}
+                {regions && <div style={{flexGrow: '1'}}>
+                    <IconButton
+                        aria-label="More"
+                        aria-owns={visibilityMenu ? 'simple-menu' : null}
+                        onClick={handleVisibilityMenuClick.bind(this)}
+                    >
+                        <TelevisionGuide/>
+                    </IconButton>
+                    <Menu
+                        id="simple-menu"
+                        anchorEl={visibilityMenu}
+                        open={Boolean(visibilityMenu)}
+                        onClose={handleVisibilityMenuClose.bind(this)}
+                    >
+
+                        {getRegions()}
+
+                    </Menu>
+                </div>}
+            </div>
+
+            <ConfirmationDialog
+                ref={deleteConfirmation}
+                onConfirm={props.deleteHandler}
+                title={"Delete " + entityName + "?"}
+                content={"Are you sure you would like to delete this " + entityName + "?"}
+                confirmButtonText="Delete"
+            />
+
+            <ConfirmationDialog
+                ref={newConfirmation}
+                onConfirm={props.newHandler}
+                title={"New " + entityName + "?"}
+                content={"Are you sure you would like to proceed without saving the changes?"}
+                confirmButtonText="Proceed"
+            />
+
+        </div>
+    );
 }
 
 EamlightToolbar.defaultProps = {
