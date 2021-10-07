@@ -3,7 +3,7 @@ import ErrorTypes from "../enums/ErrorTypes";
 export const SET_SNACKBAR_MESSAGE = 'SET_SNACKBAR_MESSAGE';
 export const SET_LAYOUT = 'SET_LAYOUT';
 export const TOGGLE_HIDDEN_REGION = 'TOGGLE_HIDDEN_REGION';
-export const SET_REGION_VISIBILITY = 'SET_REGION_VISIBILITY'
+export const SET_REGION_VISIBILITY = 'SET_REGION_VISIBILITY';
 
 export function showNotification(message, title = '') {
   return {
@@ -28,7 +28,6 @@ export function showWarning(message, title = '') {
     }
   }
 }
-
 
 export function showError(message, title = '') {
   return {
@@ -55,19 +54,19 @@ export function hideNotification() {
 }
 
 export function setLayoutProperty(property, value) {
-    return {
-        type: SET_LAYOUT,
-            layout: {
-            [property]: value
-          }
+  return {
+    type: SET_LAYOUT,
+    layout: {
+      [property]: value
     }
+  }
 }
 
 export function toggleHiddenRegion(region) {
-    return {
-        type: TOGGLE_HIDDEN_REGION,
-        region: region
-    }
+  return {
+    type: TOGGLE_HIDDEN_REGION,
+    region: region
+  }
 }
 
 export function setRegionVisibility(region, isVisible) {
