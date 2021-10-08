@@ -55,7 +55,7 @@ export default class UserInfo extends Component {
         return (
             <div style={this.userInfoStyle}>
                 <Account style={this.accountIcon}/>
-                {usernameDisplay}
+                <span className='user-name'>{usernameDisplay}</span>
                 <span style={this.separatorStyle}/>
                 <IconButton onClick={this.logoutHandler.bind(this)} style={this.logoutIcon}>
                     <Logout style={{fontSize: 20}}/>
