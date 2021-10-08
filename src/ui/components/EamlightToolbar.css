@@ -17,3 +17,14 @@
     height: 50px;
 }
 
+@media (max-width: 450px) {
+    .screen-code {
+        display: none;
+    }
+}
+
+@media (max-width: 300px) {
+    .save-label {
+        display: none;
+    }
+}
