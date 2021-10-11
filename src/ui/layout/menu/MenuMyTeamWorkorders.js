@@ -6,6 +6,7 @@ import Select from '@material-ui/core/Select';
 import {withStyles} from "@material-ui/core/styles/index";
 import MyWorkOrdersTimeFilter from "./MyWorkOrdersTimeFilter";
 import MenuTools from "./MenuTools";
+import useLocalStorage from '../../../hooks/useLocalStorage';
 
 const styles = {
     root: {
@@ -17,8 +18,8 @@ const styles = {
 };
 
 const MenuMyTeamWorkorders = props =>  {
-    const [days, setDays] = useState('ALL');
-    const [department, setDepartment] = useState('ALL')
+    const [days, setDays] = useLocalStorage('myteamworkorders:days', 'ALL');
+    const [department, setDepartment] = useLocalStorage('myteamworkorders:department', 'ALL');
 
     const headingStyle = {
         display: "flex",
@@ -29,10 +30,11 @@ const MenuMyTeamWorkorders = props =>  {
         justifyContent: "center"
     }
 
+    const teamWorkOrders = props.myTeamWorkOrders.filter(wo => department === 'ALL' || wo.mrc === department);
+
     const generateMyTeamWorkOrders = () => {
-        return props.myTeamWorkOrders
+        return teamWorkOrders
             .filter(MenuTools.daysFilterFunctions[days])
-            .filter(wo => department === 'ALL' || wo.mrc === department)
             .sort((wo1, wo2) => {
                 if (wo1.schedulingStartDate === null && wo2.schedulingStartDate === null) return 0;
                 if (wo1.schedulingStartDate === null) return 1;
@@ -78,9 +80,9 @@ const MenuMyTeamWorkorders = props =>  {
     }
 
     return (
-        <ul className="layout-tab-submenu" id="myteamwos">
+        <ul className="layout-tab-submenu active" id="myteamwos">
             <li>{renderHeading()}
-                <MyWorkOrdersTimeFilter days={days} onChange={(event, value) => setDays(value)}/>
+                <MyWorkOrdersTimeFilter workOrders={teamWorkOrders} days={days} onChange={(event, value) => setDays(value)}/>
                 <ul>
                     {generateMyTeamWorkOrders()}
                 </ul>
