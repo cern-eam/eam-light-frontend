@@ -2,9 +2,10 @@ import React, {useState} from 'react';
 import MenuWorkorder from './MenuWorkorder'
 import MyWorkOrdersTimeFilter from './MyWorkOrdersTimeFilter'
 import MenuTools from './MenuTools'
+import useLocalStorage from '../../../hooks/useLocalStorage';
 
 export default function MenuMyWorkorders(props) {
-    const [days, setDays] = useState('ALL')
+    const [days, setDays] = useLocalStorage('myworkorders:days', 'ALL')
 
     const generateMyOpenWorkOrders = () => {
         return props.myOpenWorkOrders
@@ -23,7 +24,7 @@ export default function MenuMyWorkorders(props) {
     return (
         <ul className="layout-tab-submenu active" id="mywos">
             <li><span>MY OPEN WORK ORDERS</span>
-                <MyWorkOrdersTimeFilter days={days} onChange={(event, value) => setDays(value)}/>
+                <MyWorkOrdersTimeFilter workOrders={props.myOpenWorkOrders} days={days} onChange={(event, value) => setDays(value)}/>
                 <ul>
                     {generateMyOpenWorkOrders()}
                 </ul>

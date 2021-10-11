@@ -42,7 +42,7 @@ const MenuWorkorder = (props) => {
                 <span style={{...spanStyle, color: "#ffffff"}}>{props.wo.desc}</span>
                 <span style={spanStyle}>Eqp.: {props.wo.object}</span>
                 <span style={spanStyle}>Department: {props.wo.mrc}</span>
-                {props.wo.schedulingStartDate && <span style={spanStyle}>Scheduled Start: {format(new Date(props.wo.schedulingStartDate), 'dd-MMM-yyyy')}</span>}
+                {props.wo.schedulingEndDate && <span style={spanStyle}>Scheduled End: {format(new Date(props.wo.schedulingEndDate), 'dd-MMM-yyyy')}</span>}
             </Link>
         </li>
     )
