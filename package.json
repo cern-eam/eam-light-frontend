@@ -15,7 +15,7 @@
     "core-js": "3.1.4",
     "date-fns": "2.7.0",
     "diacritics": "1.3.0",
-    "eam-components": "git+https://github.com/cern-eam/eam-components.git#bad3139be4539a2c94081393603034c543a40f29",
+    "eam-components": "git+https://github.com/cern-eam/eam-components.git#1.9.2",
     "es6-promise": "4.2.8",
     "iframe-resizer": "3.6.4",
     "jss": "10.0.0",
