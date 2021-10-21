@@ -19,6 +19,7 @@
     "es6-promise": "4.2.8",
     "iframe-resizer": "3.6.4",
     "jss": "10.0.0",
+    "jss-plugin-nested": "10.8.0",
     "lodash": "4.17.11",
     "mdi-material-ui": "6.8.0",
     "node-sass-chokidar": "0.0.3",
