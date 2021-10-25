@@ -22,9 +22,9 @@ const iconStyle = {
 
 const safetyConformity = ({
     'CONFORME': { icon: <CheckCircleIcon style={{color: 'green', ...iconStyle}} />, description: 'Conform', tooltip: 'Conform' },
-    'CONFORME-RESERVES': { icon: <ReportProblemIcon style={{color: 'orange', ...iconStyle}}/>, description: 'Observations', tooltip: 'Observations' },
-    'OBSERVATIONS': { icon: <ReportProblemIcon style={{color: 'orange', ...iconStyle}}/>, description: 'Observations', tooltip: 'Observations' },
-    'NON CONFORME': { icon: <ReportIcon style={{color: 'red', ...iconStyle}}/>, description: 'NON conform', tooltip: 'NON conform' },
+    'CONFORME-RESERVES': { icon: <ReportProblemIcon style={{color: 'orange', ...iconStyle}}/>, description: 'Conform – Observations', tooltip: 'Conform – Observations' },
+    'OBSERVATIONS': { icon: <ReportProblemIcon style={{color: 'orange', ...iconStyle}}/>, description: 'Conform – Observations', tooltip: 'Conform – Observations' },
+    'NON CONFORME': { icon: <ReportIcon style={{color: 'red', ...iconStyle}}/>, description: 'Non-conform', tooltip: 'Non-conform' },
     'NON INSPECTE': { icon: <ErrorOutlinedIcon style={{color: 'orange', ...iconStyle}}/>, description: 'Not inspected', tooltip: 'Not inspected' },
 });
 
