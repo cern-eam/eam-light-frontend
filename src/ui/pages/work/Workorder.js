@@ -424,8 +424,8 @@ class Workorder extends Entity {
                 ),
                 column: 2,
                 order: 12,
-                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
-                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
             },
             {
                 id: 'METERREADINGS',
