@@ -1,5 +1,5 @@
 import WS from '../../../tools/WS'
-import {isToday, isPast, isThisWeek} from "date-fns";
+import {isToday, isBefore, isThisWeek, startOfToday} from "date-fns";
 class MenuTools {
     refreshCache(showNotificatoin, showError) {
         WS.refreshCache().then(response => {
@@ -14,7 +14,7 @@ class MenuTools {
         'TODAY': workOrder => workOrder.schedulingEndDate &&
                               isToday(workOrder.schedulingEndDate),
         'LATE': workOrder => workOrder.schedulingEndDate &&
-                             isPast(workOrder.schedulingEndDate),
+                             isBefore(workOrder.schedulingEndDate, startOfToday()),
         'WEEK': workOrder =>  workOrder.schedulingEndDate &&
                               isThisWeek(workOrder.schedulingEndDate, { weekStartsOn: 1 }),
     }
