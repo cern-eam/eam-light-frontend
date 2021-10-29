@@ -553,26 +553,26 @@ class Workorder extends Entity {
     setWOEquipment = (code) =>
         WSEquipment.getEquipment(code)
             .then((response) => {
-                WSParts.getPart(response.body.data.partCode).then((part) => {
-                    if (!part.body.data) {
-                        this.setLayout({ woEquipment: response.body.data });
-                    } else {
-                        this.setLayout({
-                            woEquipment: {
-                                ...response.body.data,
-                                partCustomFields: part.body.data.customField,
-                            },
-                        });
-                    }
-                });
+                this.setLayout({ woEquipment: response.body.data });
+                return WSParts.getPart(response.body.data.partCode)
             })
-            .catch((error) => {
+            .then((part) => {
+                if (part.body.data) {
+                    this.setLayout({
+                        woEquipment: {
+                            ...this.state.layout.woEquipment,
+                            partCustomFields: part.body.data.customField,
+                        },
+                    });
+                }
+            })
+            .catch(() => {
                 this.setLayout({ woEquipment: undefined });
             });
 
     setClosingCodes = prevState => {
         const { workorder = {}, layout } = this.state;
-        const { classCode, problemCode, failureCode, causeCode, actionCode, equipmentCode } = workorder || {};
+        const { classCode, problemCode, failureCode, causeCode, equipmentCode } = workorder || {};
         const objClass = layout.woEquipment && layout.woEquipment.classCode;
 
         const { workorder: prevWorkorder = {}, layout: prevLayout } = prevState || {};
