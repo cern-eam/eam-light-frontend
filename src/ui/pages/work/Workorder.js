@@ -557,7 +557,7 @@ class Workorder extends Entity {
                 return response.body.data.partCode ? WSParts.getPart(response.body.data.partCode) : null;
             })
             .then((part) => {
-                if (part ?? part.body.data) {
+                if (part && part.body.data) {
                     this.setLayout({
                         woEquipment: {
                             ...this.state.layout.woEquipment,
