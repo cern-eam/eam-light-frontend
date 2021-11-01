@@ -28,6 +28,7 @@ import {assignValues, assignUserDefinedFields, assignCustomFieldFromCustomField,
 import { isCernMode } from '../../components/CERNMode';
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
+import WSParts from '../../../tools/WSParts';
 
 
 
@@ -404,6 +405,29 @@ class Workorder extends Entity {
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
+                id: 'CUSTOMFIELDSPART',
+                label: 'Custom Fields Part',
+                isVisibleWhenNewEntity: true,
+                customVisibility: () =>
+                    WorkorderTools.isRegionAvailable('CUSTOM_FIELDS_PART', commonProps.workOrderLayout),
+                maximizable: false,
+                render: () => (
+                    <CustomFields
+                        children={this.children}
+                        entityCode="OBJ"
+                        entityKeyCode={layout.woEquipment && layout.woEquipment.partCode}
+                        classCode={layout.woEquipment && layout.woEquipment.classCode}
+                        customFields={layout.woEquipment && layout.woEquipment.partCustomFields}
+                        updateEntityProperty={this.updateEntityProperty.bind(this)}
+                        readonly={true}
+                    />
+                ),
+                column: 2,
+                order: 12,
+                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
+            },
+            {
                 id: 'METERREADINGS',
                 label: 'Meter Readings',
                 isVisibleWhenNewEntity: false,
@@ -526,17 +550,29 @@ class Workorder extends Entity {
             });
     }
 
-    setWOEquipment = code => {
-        return WSEquipment.getEquipment(code).then(response => {
-            this.setLayout({woEquipment: response.body.data})
-        }).catch(error => {
-            this.setLayout({woEquipment: undefined})
-        });
-    };
+    setWOEquipment = (code) =>
+        WSEquipment.getEquipment(code)
+            .then((response) => {
+                this.setLayout({ woEquipment: response.body.data });
+                return response.body.data.partCode ? WSParts.getPart(response.body.data.partCode) : null;
+            })
+            .then((part) => {
+                if (part && part.body.data) {
+                    this.setLayout({
+                        woEquipment: {
+                            ...this.state.layout.woEquipment,
+                            partCustomFields: part.body.data.customField,
+                        },
+                    });
+                }
+            })
+            .catch(() => {
+                this.setLayout({ woEquipment: undefined });
+            });
 
     setClosingCodes = prevState => {
         const { workorder = {}, layout } = this.state;
-        const { classCode, problemCode, failureCode, causeCode, actionCode, equipmentCode } = workorder || {};
+        const { classCode, problemCode, failureCode, causeCode, equipmentCode } = workorder || {};
         const objClass = layout.woEquipment && layout.woEquipment.classCode;
 
         const { workorder: prevWorkorder = {}, layout: prevLayout } = prevState || {};
