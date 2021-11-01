@@ -80,7 +80,7 @@ const MenuMyTeamWorkorders = props =>  {
     }
 
     return (
-        <ul className="layout-tab-submenu active" id="myteamwos">
+        <ul className="layout-tab-submenu" id="myteamwos">
             <li>{renderHeading()}
                 <MyWorkOrdersTimeFilter workOrders={teamWorkOrders} days={days} onChange={(event, value) => setDays(value)}/>
                 <ul>
