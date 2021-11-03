@@ -11,10 +11,10 @@ export default function MenuMyWorkorders(props) {
         return props.myOpenWorkOrders
             .filter(MenuTools.daysFilterFunctions[days])
             .sort((wo1, wo2) => {
-                if (wo1.schedulingStartDate === null && wo2.schedulingStartDate === null) return 0;
-                if (wo1.schedulingStartDate === null) return 1;
-                if (wo2.schedulingStartDate === null) return -1;
-                return wo1.schedulingStartDate - wo2.schedulingStartDate;
+                if (wo1.schedulingEndDate === null && wo2.schedulingEndDate === null) return 0;
+                if (wo1.schedulingEndDate === null) return 1;
+                if (wo2.schedulingEndDate === null) return -1;
+                return wo1.schedulingEndDate - wo2.schedulingEndDate;
             })
             .map(wo => (
                 <MenuWorkorder key={wo.number} wo={wo} />
