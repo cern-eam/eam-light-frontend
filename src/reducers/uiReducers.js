@@ -1,4 +1,4 @@
-import {SET_LAYOUT, SET_SNACKBAR_MESSAGE, TOGGLE_HIDDEN_REGION} from "../actions/uiActions";
+import {SET_LAYOUT, SET_SNACKBAR_MESSAGE, SET_HIDDEN_REGIONS} from "../actions/uiActions";
 
 export default function ui(state = buildDefaultUiObject(), action) {
     switch(action.type) {
@@ -15,7 +15,7 @@ export default function ui(state = buildDefaultUiObject(), action) {
                     ...action.layout
                 }
             }
-        case TOGGLE_HIDDEN_REGION:
+        case SET_HIDDEN_REGIONS:
             return {
                 ...state,
                 hiddenRegions: {
@@ -33,6 +33,6 @@ function buildDefaultUiObject() {
     return {
         snackbar: {message: "", type: "", open: false},
         layout: {showEqpTreeButton: false, showEqpTree: false},
-        hiddenRegions: JSON.parse(localStorage.getItem("hiddenRegions")) || {},
+        hiddenRegions: JSON.parse(localStorage.getItem("hiddenRegions")) || {}
     }
 }

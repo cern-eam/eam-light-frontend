@@ -46,7 +46,7 @@ const WO_FILTERS = {
 const LOCAL_STORAGE_FILTER_KEY = 'filters:workorders';
 
 function EquipmentWorkOrders(props) {
-    const { equipmentcode, equipmenttype } = props;
+    const { defaultFilter, equipmentcode, equipmenttype } = props;
 
     let [events, setEvents] = useState([]);
     let [workorders, setWorkorders] = useState([]);

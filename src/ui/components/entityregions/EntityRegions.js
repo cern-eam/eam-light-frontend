@@ -12,9 +12,8 @@ const ENTITY_REGION_PARAMS = {
 
 const EntityRegions = (props) => {
     const { regions : inputRegions = [], showEqpTree, isNewEntity, getUniqueRegionID } = props;
-    const [visibleRegions, setVisibleRegions] = React.useState([]);
     const [regionMaximized, setRegionMaximized] = React.useState(undefined);
-    const [hiddenRegions, setRegionVisibility] = useLocalStorage('hiddenRegions', {});
+    const [hiddenRegions, setHiddenRegions] = useLocalStorage('hiddenRegions', {});
 
     const regions = inputRegions.filter(region => !region.ignore);
 
@@ -24,32 +23,43 @@ const EntityRegions = (props) => {
     const searchParams = queryString.parse(location.search, {arrayFormat: 'comma'});
     const visibleRegionsParam =  searchParams[ENTITY_REGION_PARAMS.VISIBLE] ? 
         [].concat(searchParams[ENTITY_REGION_PARAMS.VISIBLE]) : [];
-    
-    React.useEffect(() => {
-        let visibleRegions = {};
+
+    const findHiddenRegions = () => {
+        let initiallyHiddenRegions = {};
         regions.filter(region => hiddenRegions[region.id] === undefined)
             .forEach(region => {
-                visibleRegions = {...visibleRegions, [getUniqueRegionID(region.id)]: !region.initialVisibility };
+                initiallyHiddenRegions = {...initiallyHiddenRegions, [getUniqueRegionID(region.id)]: region.initialVisibility };
             });
-        setRegionVisibility(visibleRegions);
-    }, [inputRegions, getUniqueRegionID]);
+        
+        const hiddenRegs = Object.keys(hiddenRegions).length !== 0 ? hiddenRegions : initiallyHiddenRegions;
 
-    React.useEffect(() => {
-        setRegionVisibility(props.hiddenRegions);
-    }, [props.hiddenRegions]);
-    
-    React.useEffect(() => {
         const defaultVisibility = (region) => regionMaximized === region.id ||
             visibleRegionsParam.includes(region.id) ||
-            !visibleRegionsParam.length && !hiddenRegions[getUniqueRegionID(region.id)] && (region.customVisibility ? region.customVisibility() : true);
+            !visibleRegionsParam.length && hiddenRegs[getUniqueRegionID(region.id)] && (region.customVisibility ? region.customVisibility() : true);
 
-        setVisibleRegions(regions.reduce((acc, region) => ({
+        return regions.reduce((acc, region) => ({
             ...acc,
-            [region.id]: isNewEntity
+            [getUniqueRegionID(region.id)]: isNewEntity
                 ? region.isVisibleWhenNewEntity && defaultVisibility(region)
                 : defaultVisibility(region)
-        }), {}))
-    }, [inputRegions, isNewEntity, regionMaximized])
+        }), {});
+    }
+
+    React.useEffect(() => {
+        const hiddenRegs = findHiddenRegions();
+        setHiddenRegions(hiddenRegs);
+        props.setHiddenRegions(hiddenRegs);
+        console.log(hiddenRegs)
+    }, []);
+    
+    React.useEffect(() => {
+        const hiddenRegs = findHiddenRegions();
+        setHiddenRegions(hiddenRegs);
+    }, [inputRegions, isNewEntity, regionMaximized]);
+
+    React.useEffect(() => {
+        setHiddenRegions(props.hiddenRegions);
+    }, [props.hiddenRegions]);
 
     React.useEffect(() => {
         setRegionMaximized(searchParams.maximize);
@@ -103,7 +113,7 @@ const EntityRegions = (props) => {
                     <Grid key={column} item xs={gridDimensions.xs} sm={gridDimensions.sm} md={gridDimensions.md} lg={gridDimensions.lg}>
                         {columns[column]
                             .sort((a,b) => a.id === regionMaximized ? -1 : a.order - b.order)
-                            .filter(region => visibleRegions[region.id])
+                            .filter(region => hiddenRegions[getUniqueRegionID(region.id)])
                             .map(region => (
                                 <RegionPanel
                                     style={{ display: regionMaximized && region.id !== regionMaximized ? 'none' : '' }}

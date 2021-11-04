@@ -42,7 +42,11 @@ const EamlightToolbar = (props) => {
     const entityToolbarDiv = useRef();
     const deleteConfirmation = useRef();
     const newConfirmation = useRef();
-    const [hiddenRegions, toggleHiddenRegion] = useLocalStorage('hiddenRegions', {});
+    const [hiddenRegions, setHiddenRegions] = useLocalStorage('hiddenRegions', {});
+
+    useEffect(() => {
+        setHiddenRegions(props.hiddenRegions);
+    }, [props.hiddenRegions])
 
     useEffect(() => {
         window.addEventListener("resize", updateDimensions.bind(this));
@@ -145,7 +149,7 @@ const EamlightToolbar = (props) => {
                 ...hiddenRegions,
                 [getUniqueRegionID(region.id)]: !hiddenRegions[getUniqueRegionID(region.id)]
             }
-            toggleHiddenRegion(hidRegions);
+            setHiddenRegions(hidRegions);
             props.setHiddenRegions(hidRegions);
         }
         
@@ -153,7 +157,7 @@ const EamlightToolbar = (props) => {
             .filter(region => !region.ignore)
             .map(region => (
                 <MenuItem key={region.id} onClick={() => toggleRegion(region)}>
-                    <Checkbox disabled checked={!hiddenRegions[getUniqueRegionID(region.id)]}/>
+                    <Checkbox disabled checked={hiddenRegions[getUniqueRegionID(region.id)]}/>
                     {region.label}
                 </MenuItem>
         ))
