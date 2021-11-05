@@ -19,9 +19,12 @@ const getURLParameterByName = (name) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
+    const { userData, applicationData } = state.application;
     const woCode = getURLParameterByName("workordernum");
     return {
-        woCode
+        woCode,
+        userData,
+        applicationData,
     }
 };
 
