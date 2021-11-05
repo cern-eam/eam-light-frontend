@@ -12,12 +12,21 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Toolbar from './Toolbar';
+import Divider from '@material-ui/core/Divider';
 
+const verticalLineStyle = {
+    height: 25,
+    borderRight: "1px solid gray",
+    margin: 5
+};
+
+const SMALL_SCREEN_MODE_MAX_WIDTH = 375;
 
 class EamlightToolbar extends Component {
     state = {
         open: false,
         compactMenu: false,
+        smallScreenMode: false,
     };
 
     iconMenuStyle = {
@@ -38,7 +47,8 @@ class EamlightToolbar extends Component {
     updateDimensions(event) {
         if (this.entityToolbarDiv) {
             this.setState({
-                compactMenu: (this.entityToolbarDiv.clientWidth < this.props.width)
+                compactMenu: (this.entityToolbarDiv.clientWidth < this.props.width),
+                smallScreenMode: (this.entityToolbarDiv.clientWidth < SMALL_SCREEN_MODE_MAX_WIDTH),
             })
         }
     }
@@ -140,10 +150,57 @@ class EamlightToolbar extends Component {
     //
     //
     //
+
+    renderPanelSelectorMenu = (isInsideAMenu = false) => {
+        return (
+            <div style={{flexGrow: '1'}}>
+                {isInsideAMenu && <Divider/>}
+                <IconButton
+                    aria-label="More"
+                    aria-owns={this.state.visibilityMenu ? 'simple-menu' : null}
+                    onClick={this.handleVisibilityMenuClick.bind(this)}
+                >
+                    <TelevisionGuide style={isInsideAMenu ? {width: 18, marginRight: -5, marginLeft: 5} : {}}/> 
+                </IconButton>
+                {isInsideAMenu && <span>Panel Selector</span>}
+                <Menu
+                    id="simple-menu"
+                    anchorEl={this.state.visibilityMenu}
+                    open={Boolean(this.state.visibilityMenu)}
+                    onClose={this.handleVisibilityMenuClose.bind(this)}
+                >
+
+                    {this.getRegions()}
+
+                </Menu>
+            </div>
+        );
+    }
+
+    renderPanelSelector = () => {
+        const { entityScreen, isLocalAdministrator } = this.props;
+
+        return (
+            <>
+                {isLocalAdministrator && <>
+                    <span className='screen-code' style={{
+                        marginRight: 5,
+                        color: '#ccc',
+                        fontWeight: 'lighter',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        minWidth: '0px'}}>{entityScreen.screenCode}</span>
+                    {!this.state.smallScreenMode && <div style={{...verticalLineStyle, borderRightColor: '#ccc'}}/>}
+                </>}
+                {this.props.regions && this.renderPanelSelectorMenu()}
+            </>
+        );
+    }
+
     renderCompactMenu() {
         //this.props.entityToolbar.props.renderOption = 'MENUITEMS'
         return (
-            <div>
+            <div style={{display: 'flex'}}>
                 <Button
                     style={{padding: 8, minWidth: "unset"}}
                     aria-label="More"
@@ -167,6 +224,7 @@ class EamlightToolbar extends Component {
                         <div style={this.menuLabelStyle}> Delete</div>
                     </MenuItem>
                     {this.getToolbar('MENUITEMS')}
+                    {this.state.smallScreenMode && this.props.regions && this.renderPanelSelectorMenu(true)}
                 </Menu>
             </div>
         )
@@ -196,14 +254,6 @@ class EamlightToolbar extends Component {
     }
 
     render() {
-        const { entityScreen, isLocalAdministrator } = this.props;
-
-        const verticalLineStyle = {
-            height: 25,
-            borderRight: "1px solid gray",
-            margin: 5
-        };
-
         const entityCodeStyle = {
             marginLeft: 12,
             marginRight: 5,
@@ -216,15 +266,15 @@ class EamlightToolbar extends Component {
         return (
             <div className={"entityToolbar"} ref={entityToolbarDiv => this.entityToolbarDiv = entityToolbarDiv}>
 
-                <div className={"entityToolbarContent"} style={{flexShrink: 0}}>
-                    <div style={this.state.compactMenu ? {...entityCodeStyle, flexBasis: "8em"} : entityCodeStyle}>
+                <div className={"entityToolbarContent"}>
+                    <div style={this.state.compactMenu ? {...entityCodeStyle, flexBasis: "8em", flexShrink: '0'} : entityCodeStyle}>
                         <div style={{display: "flex", alignItems: "center", marginRight: 5}}>
-                            {this.props.entityIcon}
+                            {!this.state.compactMenu && this.props.entityIcon}
                             <span style={{marginLeft: 5}}>{this.props.entityName}</span>
                         </div>
                         <div>
                             {!this.props.newEntity && (<span
-                                style={{fontWeight: 500, whiteSpace: "nowrap"}}> {this.props.entityKeyCode}</span>)}
+                                style={{fontWeight: 500}}> {this.props.entityKeyCode}</span>)}
                         </div>
                     </div>
 
@@ -234,7 +284,7 @@ class EamlightToolbar extends Component {
                             disabled={this.isSaveButtonDisabled()}
                             startIcon={<SaveIcon className="iconButton"/>}
                     >
-                        Save
+                        <span className='save-label'>Save</span>
                     </Button>
 
                     {this.state.compactMenu ? this.renderCompactMenu() : this.renderDesktopMenu()}
@@ -242,35 +292,7 @@ class EamlightToolbar extends Component {
                 </div>
 
                 <div className={"entityToolbarContent"} style={{minWidth: 0}}>
-                    {isLocalAdministrator && <>
-                        <span style={{
-                            marginRight: 5,
-                            color: '#ccc',
-                            fontWeight: 'lighter',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            minWidth: '0px'}}>{entityScreen.screenCode}</span>
-                        <div style={{...verticalLineStyle, borderRightColor: '#ccc'}}/>
-                    </>}
-                    {this.props.regions && <div style={{flexGrow: '1'}}>
-                        <IconButton
-                            aria-label="More"
-                            aria-owns={this.state.visibilityMenu ? 'simple-menu' : null}
-                            onClick={this.handleVisibilityMenuClick.bind(this)}
-                        >
-                            <TelevisionGuide/>
-                        </IconButton>
-                        <Menu
-                            id="simple-menu"
-                            anchorEl={this.state.visibilityMenu}
-                            open={Boolean(this.state.visibilityMenu)}
-                            onClose={this.handleVisibilityMenuClose.bind(this)}
-                        >
-
-                            {this.getRegions()}
-
-                        </Menu>
-                    </div>}
+                    {!this.state.smallScreenMode && this.renderPanelSelector()}
                 </div>
 
                 <ConfirmationDialog
