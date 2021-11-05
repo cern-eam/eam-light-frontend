@@ -8,6 +8,8 @@ import BlockUi from 'react-block-ui';
 import WSWorkorders from '../../../tools/WSWorkorders';
 import WSJMTIntegration from './WSJMTIntegration';
 
+const FULL_PROCESS_GROUPS = ['MFPLUS'];
+
 const styles = () => ({
     paperWidthSm: {
         width: "700px"
@@ -32,12 +34,12 @@ const styles = () => ({
 //     return <div>Hello World! {data}</div>;
 // }
 const getLink = ({value, text, baseLink}) =>
-    <EAMLinkInput 
+    <EAMLinkInput
         value={value}
         isExternalLink={true}
         link={baseLink}
         top={15}>
-        <EAMInputMUI 
+        <EAMInputMUI
             label={text}
             disabled
             margin="dense"
@@ -82,12 +84,27 @@ class JMTIntegration extends React.Component {
     createJMTJob (woCode) {
         const { showNotification, handleError } = this.props;
         this.setState({loading: true});
-
         WSJMTIntegration.createJMTJob(woCode)
             .then(resp => {
                 showNotification('Job created');
                 this.setState({loading: false, loaded: false})
-            
+
+            })
+            .catch(error => {
+                this.setState({loading: false, loaded: false})
+                handleError(error)
+            })
+    }
+
+    createJMTJobAndCost (woCode) {
+        const { showNotification, handleError } = this.props;
+        this.setState({loading: true});
+
+        WSJMTIntegration.createJMTJobAndCost(woCode)
+            .then(resp => {
+                showNotification('Job created and cost lines added');
+                this.setState({loading: false, loaded: false})
+
             })
             .catch(error => {
                 this.setState({loading: false, loaded: false})
@@ -111,17 +128,23 @@ class JMTIntegration extends React.Component {
     }
 
     render () {
+        const { userData, applicationData} = this.props;
         const { loaded, woCode, jmtJobNo, loading } = this.state;
+        console.log(userData);
+        console.log(applicationData)
+        console.log(userData.eamAccount.userGroup);
+        const isSpecialGroup = FULL_PROCESS_GROUPS.includes(userData.eamAccount.userGroup);
         let component = null;
         if (!loaded) {
-            component = <div>Loading...</div> 
+            component = <div>Loading...</div>
         } else if (!jmtJobNo){
-            component = <Button 
-                color="primary" 
-                onClick={() => this.createJMTJob(woCode)}
-            >
-                Create JMT Job
-            </Button>
+            component =
+                <Button
+                    color="primary"
+                    onClick={() => isSpecialGroup ? this.createJMTJobAndCost(woCode) : this.createJMTJob(woCode)}
+                >
+                    Create JMT Job
+                </Button>
         } else if (!jmtJobNo.startsWith("J")) {
             component = <div>This work order is already linked to '{jmtJobNo}'.</div>
         } else {
@@ -129,26 +152,26 @@ class JMTIntegration extends React.Component {
                     <div style={{width: '280px', paddingLeft: '20px', paddingTop: '10px'}}>
                         {getLink({value: jmtJobNo, text: 'JMT Job', baseLink: 'https://edms5.cern.ch/jmt/plsql/jmtw_job.info?p_job_no='})}
                     </div>
-                    <Button 
-                        color="primary" 
+                    <Button
+                        color="primary"
                         onClick={() => this.addCostLinesToJMTJob(woCode, jmtJobNo, 'ESTIM')}
                     >
                         Add Cost Estimation
                     </Button>
-                    <Button 
-                        color="primary" 
+                    <Button
+                        color="primary"
                         onClick={() => this.addCostLinesToJMTJob(woCode, jmtJobNo, 'REAL')}
                     >
                         Add Real Cost
                     </Button>
                 </div>;
-        } 
+        }
 
         return <div style={{margin: 5, padding: 20, height: "100%", overflowY: "scroll"}}>
                 <BlockUi tag="div" blocking={loading}>
                     {component}
                 </BlockUi>
-                </div>
+            </div>
 
 
     }
