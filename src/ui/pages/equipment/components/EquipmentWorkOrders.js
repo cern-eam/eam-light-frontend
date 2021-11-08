@@ -52,15 +52,9 @@ function EquipmentWorkOrders(props) {
     let [workorders, setWorkorders] = useState([]);
     const [loadingData, setLoadingData] = useState(true);
 
-    const [workOrderFilter, setWorkOrderFilter] = useLocalStorage(LOCAL_STORAGE_FILTER_KEY, WO_FILTER_TYPES.ALL);
+    const [workOrderFilter, setWorkOrderFilter] = useLocalStorage(LOCAL_STORAGE_FILTER_KEY, WO_FILTER_TYPES.ALL, defaultFilter);
     let headers = ['Work Order', 'Equipment', 'Description', 'Status', 'Creation Date'];
     let propCodes = ['number', 'object','desc', 'status', 'createdDate'];
-
-    useEffect(() => {
-        if (Object.values(WO_FILTER_TYPES).includes(defaultFilter)) {
-            setWorkOrderFilter(defaultFilter);
-        }
-    }, [])
 
     if (workOrderFilter === WO_FILTER_TYPES.THIS) {
         headers = ['Work Order', 'Description', 'Status', 'Creation Date'];
