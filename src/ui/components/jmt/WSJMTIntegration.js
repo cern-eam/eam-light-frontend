@@ -27,6 +27,10 @@ class WSJMTIntegration {
         return ajax.post(this.baseUrl + `/jmt/workorders/${woCode}/jmtjobs`, {}, this.config);
     }
 
+    createJMTJobAndCost(woCode) {
+        return ajax.post(this.baseUrl + `/jmt/workorders/${woCode}/jmtjobsandcost`, {}, this.config);
+    }
+
     addCostLines(woCode, jmtJobNo, costType) {
         return ajax.post(this.baseUrl + `/jmt/workorders/${woCode}/jmtjobs/${jmtJobNo}/cost?costType=${costType}`, {}, this.config);
     }
