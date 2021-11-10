@@ -130,9 +130,6 @@ class JMTIntegration extends React.Component {
     render () {
         const { userData, applicationData} = this.props;
         const { loaded, woCode, jmtJobNo, loading } = this.state;
-        console.log(userData);
-        console.log(applicationData)
-        console.log(userData.eamAccount.userGroup);
         const isSpecialGroup = FULL_PROCESS_GROUPS.includes(userData.eamAccount.userGroup);
         let component = null;
         if (!loaded) {
