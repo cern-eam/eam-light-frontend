@@ -38,9 +38,16 @@ class EamlightMenu extends Component {
         this.menudiv.querySelector('#layout-tab-menu li > div.active').classList.remove('active');
         this.menudiv.querySelector('#menuscrollable > .layout-tab-submenu.active').classList.remove('active');
         // activate current menu and submenu
-        var rel = event.currentTarget.getAttribute('rel');
+        const rel = event.currentTarget.getAttribute('rel');
         event.currentTarget.classList.add('active');
         this.menudiv.querySelector('#' + rel).classList.add('active');
+        
+        // At the time of writing, this is required for the tab indicator on my team WOs to work
+        // Identified in issue https://github.com/mui-org/material-ui/issues/9337
+        // Fixed in material-ui on Aug 26th https://github.com/mui-org/material-ui/pull/27791
+        if (['myteamwos', 'mywos'].includes(rel)) {
+            window.dispatchEvent(new CustomEvent("resize"));
+        }
     }
 
     openSubMenu(rel) {
