@@ -26,13 +26,14 @@ const useStyles = makeStyles({
 
 function PartUsageDialog(props) {
 
-    let [partUsage, setPartUsage] = useState({});
-    let [partUsageLine, setPartUsageLine] = useState({});
-    let [binList, setBinList] = useState([]);
-    let [storeList, setStoreList] = useState([]);
-    let [activityList, setActivityList] = useState([]);
-    let [loading, setLoading] = useState(false);
-    let [uom, setUoM] = useState("");
+    const [partUsage, setPartUsage] = useState({});
+    const [partUsageLine, setPartUsageLine] = useState({});
+    const [binList, setBinList] = useState([]);
+    const [storeList, setStoreList] = useState([]);
+    const [activityList, setActivityList] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [uom, setUoM] = useState("");
+    const [isTrackedByAsset, setIsTrackedByAsset] = useState(false);
 
     useEffect(() => {
         if (props.isDialogOpen) {
@@ -127,7 +128,7 @@ function PartUsageDialog(props) {
         updatePartUsageLineProperty('bin', '');
         //Load the bin list
         loadBinList('', value);
-        loadUoM(value);
+        loadPartData(value);
     };
 
     let loadBinList = (binCode, partCode) => {
@@ -145,10 +146,11 @@ function PartUsageDialog(props) {
         });
     };
 
-    let loadUoM = (partCode) => {
+    let loadPartData = (partCode) => {
         if (!partCode) return;
 
         WSParts.getPart(partCode).then(response => {
+            setIsTrackedByAsset(response.body.data.trackByAsset === 'true');
             setUoM(response.body.data.uom);
         })
     }
@@ -213,7 +215,7 @@ function PartUsageDialog(props) {
                                        onChangeValue={handleStoreChange}
                                        children={props.children}/>
 
-                            <EAMSelect elementInfo={{...props.tabLayout['activity'], attribute: 'R'}}
+                            <EAMSelect elementInfo={{...props.tabLayout['activity'], attribute: 'R', readonly: !partUsage.storeCode}}
                                        valueKey="activityCode"
                                        values={activityList}
                                        value={partUsage.activityCode}
@@ -224,7 +226,7 @@ function PartUsageDialog(props) {
                                 handlePartChange(value);
                                 updatePartUsageLineProperty('partCode', value);
                             }} right={0} top={20}>
-                                <EAMAutocomplete elementInfo={props.tabLayout['partcode']}
+                                <EAMAutocomplete elementInfo={{...props.tabLayout['partcode'], readonly: !partUsage.storeCode}}
                                                  value={partUsageLine.partCode}
                                                  updateProperty={updatePartUsageLineProperty}
                                                  valueKey="partCode"
@@ -239,7 +241,7 @@ function PartUsageDialog(props) {
                                 handleAssetChange(value);
                                 updatePartUsageLineProperty('assetIDCode', value);
                             }} right={0} top={20}>
-                                <EAMAutocomplete elementInfo={props.tabLayout['assetid']}
+                                <EAMAutocomplete elementInfo={{...props.tabLayout['assetid'], readonly: !partUsage.storeCode || !isTrackedByAsset}}
                                                  value={partUsageLine.assetIDCode}
                                                  updateProperty={updatePartUsageLineProperty}
                                                  valueKey="assetIDCode"
@@ -250,7 +252,7 @@ function PartUsageDialog(props) {
                                                  children={props.children}/>
                             </EAMBarcodeInput>
 
-                            <EAMSelect elementInfo={props.tabLayout['bincode']}
+                            <EAMSelect elementInfo={{...props.tabLayout['bincode'], readonly: !partUsage.storeCode}}
                                        valueKey="bin"
                                        values={binList}
                                        value={partUsageLine.bin}
@@ -259,7 +261,7 @@ function PartUsageDialog(props) {
                                        suggestionsPixelHeight={200} 
                             />
 
-                            <EAMInput elementInfo={props.tabLayout['transactionquantity']}
+                            <EAMInput elementInfo={{...props.tabLayout['transactionquantity'], readonly: !partUsage.storeCode || isTrackedByAsset}}
                                       valueKey="transactionQty"
                                       endAdornment={uom}
                                       value={partUsageLine.transactionQty}
