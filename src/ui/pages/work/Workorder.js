@@ -331,7 +331,7 @@ class Workorder extends Entity {
                 label: 'Checklists',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () =>  (
+                render: ({panelQueryParams}) =>  (
                     <Checklists
                         workorder={workorder.number}
                         printingChecklistLinkToAIS={applicationData.EL_PRTCL}
@@ -343,6 +343,8 @@ class Workorder extends Entity {
                         handleError={handleError}
                         userCode={userData.eamAccount.userCode}
                         disabled={this.departmentalSecurity.readOnly}
+                        hideFilledItems={panelQueryParams.hideFilledItems === 'true'}
+                        activity={panelQueryParams.activity}
                         topSlot={
                             applicationData.EL_PRTCL &&
                                 <div style={{

@@ -103,6 +103,7 @@ const EntityRegions = (props) => {
                                     maximize={updateMaximize(region.id)}
                                     unMaximize={updateMaximize(undefined)}
                                     showMaximizeControls={region.maximizable}
+                                    initiallyExpanded={searchParams.expanded === undefined || searchParams.expanded === region.id}
                                     {...region.RegionPanelProps}>
                                     {region.render({ panelQueryParams: getRegionPanelQueryParams(region.id) })}
                                 </RegionPanel>
