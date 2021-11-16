@@ -37,11 +37,9 @@ export default function NameForm(props) {
         setBlocking(true);
         if (code) {
             WSEquipment.installEquipment(code)
-                .then((response) => {
+                .then(() => {
                     props.showNotification(`${childEq} was successfully attached to ${parentEq}`);
-
-                    props.setLayoutProperty('eqpTreeParent', parentEq);
-                    props.setLayoutProperty('eqpTreeChild', childEq);
+                    props.setLayoutProperty('eqpTreeNewChild', childEq);
                     setChildEq('');
                     setParentEq('');
                     setBlocking(false);
@@ -72,7 +70,12 @@ export default function NameForm(props) {
                                             value={parentEq}
                                             valueKey="parent"
                                             onChangeValue={changeParentHandler}
-                                            updateProperty={(key, value) => key === 'parent' && setParentEq(value)}
+                                            updateProperty={(key, value) => {
+                                                if (key === 'parent') {
+                                                    setParentEq(value);
+                                                    props.setLayoutProperty('eqpTreeNewRoot', value);
+                                                }
+                                            }}
                                             autocompleteHandler={WS.autocompleteEquipment}
                                         />
                                     </EAMBarcodeInput>

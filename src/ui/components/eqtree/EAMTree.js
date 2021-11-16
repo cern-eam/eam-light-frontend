@@ -1,52 +1,52 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect } from 'react';
 import TreeWS from './lib/TreeWS';
 import ErrorTypes from 'eam-components/dist/ui/components/eamgrid/lib/GridErrorTypes';
 import SortableTree from 'react-sortable-tree';
-import { addNodeUnderParent } from 'react-sortable-tree';
 import TreeTheme from './theme/TreeTheme';
 import TreeIcon from './components/TreeIcon';
 import TreeSelectParent from './components/TreeSelectParent';
 import BlockUi from 'react-block-ui';
 
-const ExpandedReducer = (state, action) => {
-    switch (action.type) {
-        case 'add':
-            return state.includes(action.data) ? state : [...state, action.data];
-        case 'remove':
-            state.splice(state.indexOf(action.data), 1);
-            return state;
-        case 'reset':
-            return [];
-        default:
-            break;
-    }
-};
-
 export default function EAMTree(props) {
     const [loading, setLoading] = useState(false);
     const [treeData, setTreeData] = useState([]);
-    const [expandedState, expandedDispatch] = useReducer(ExpandedReducer, []);
 
     useEffect(() => {
-        _loadTreeData(props.code);
-    }, []);
+        _loadTreeData(props.layout.eqpTreeNewRoot ?? treeData?.[0]?.id ?? props.code);
+    }, [props.layout.eqpTreeNewChild, props.layout.eqpTreeNewRoot]);
 
-    useEffect(() => {
-        if (props.layout.eqpTreeParent) {
-            _loadTreeData(treeData?.[0]?.id ?? props.layout.eqpTreeParent);
-        }
-    }, [props.layout.eqpTreeParent]);
-
-    const _reExpandNodes = (treeData) => {
-        if (treeData && treeData.length > 0) {
-            expandedState.forEach((ex) => _expandTreeToCode(treeData, ex));
+    const _loadTreeData = async (code) => {
+        setLoading(true);
+        try {
+            const { body } = await TreeWS.getEquipmentStructure(code);
+            const { data } = body;
+            if (treeData) {
+                await _reExpandNodes(data);
+            }
+            setTreeData(data);
+            setLoading(false);
+        } catch (error) {
+            if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
+                props.handleError(error);
+            }
         }
     };
 
-    /**
-     * Add expanded = true for those nodes that belong to the
-     * selected system/code path in the tree
-     */
+    const _reExpandNodes = async (newData) => {
+        if (newData && newData.length > 0) {
+            const expanded = await _getExpanded(treeData[0], []);
+            expanded.forEach((ex) => _expandTreeToCode(newData, ex));
+        }
+    };
+
+    const _getExpanded = async (data, already) => {
+        if (data?.expanded) {
+            already.push(data.id);
+            data.children.forEach((c) => _getExpanded(c, already));
+        }
+        return already;
+    };
+
     const _expandTreeToCode = (treeData, code) => {
         if (code && treeData && treeData.length > 0) {
             let nodes = treeData.filter((f) => code == f.id);
@@ -67,25 +67,6 @@ export default function EAMTree(props) {
             }
         }
         return false;
-    };
-
-    const _loadTreeData = (code) => {
-        setLoading(true);
-
-        TreeWS.getEquipmentStructure(code)
-            .then((data) => {
-                // get tree data
-                let treeData = data.body.data;
-                _reExpandNodes(treeData);
-                _expandTreeToCode(props.layout.eqpTreeChild);
-                setTreeData(treeData);
-                setLoading(false);
-            })
-            .catch((error) => {
-                if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
-                    props.handleError(error);
-                }
-            });
     };
 
     const _isNodeSelected = (node) => {
@@ -134,67 +115,59 @@ export default function EAMTree(props) {
     };
 
     return (
-        <React.Fragment>
+        <>
             <BlockUi tag="div" blocking={loading} />
             <div style={{ height: '100%', margin: 5 }}>
                 <SortableTree
+                    className="sortableTree"
                     canDrag={false}
                     treeData={treeData}
                     onChange={setTreeData}
-                    // this is to make the tree div height to fit the screen
-                    //style={{height: '100%'}}
-                    className="sortableTree"
-                    // set up our theme
                     theme={TreeTheme}
-                    onVisibilityToggle={({ node, expanded }) =>
-                        expandedDispatch({ type: expanded ? 'add' : 'remove', data: node.id })
-                    }
-                    generateNodeProps={(rowInfo) => {
-                        return {
-                            isNodeSelected: _isNodeSelected,
-                            onClick: nodeClickHandler(rowInfo),
-                            icons: rowInfo.node.isDirectory
-                                ? [
-                                      <div
-                                          style={{
-                                              borderLeft: 'solid 8px red',
-                                              borderBottom: 'solid 10px red',
-                                              marginRight: 10,
-                                              width: 16,
-                                              height: 12,
-                                              filter: rowInfo.node.expanded
-                                                  ? 'drop-shadow(1px 0 0 red) drop-shadow(0 1px 0 red) drop-shadow(0 -1px 0 red) drop-shadow(-1px 0 0 red)'
-                                                  : 'none',
-                                              borderColor: rowInfo.node.expanded ? 'white' : 'red',
-                                          }}
-                                      />,
-                                  ]
-                                : [
-                                      <div className="selectParentButton" style={{ marginLeft: '-10px' }}>
-                                          {!rowInfo.parentNode &&
-                                              rowInfo.node.parents &&
-                                              rowInfo.node.parents.length > 0 && (
-                                                  <TreeSelectParent
-                                                      parents={rowInfo.node.parents}
-                                                      reloadData={_loadTreeData}
-                                                  />
-                                              )}
-                                      </div>,
-                                      <TreeIcon
-                                          eqtype={rowInfo.node.type}
-                                          style={{
-                                              width: 15,
-                                              height: 15,
-                                              marginRight: 5,
-                                              marginTop: 3,
-                                              color: _getColorForType(rowInfo.node.type),
-                                          }}
-                                      />,
-                                  ],
-                        };
-                    }}
+                    generateNodeProps={(rowInfo) => ({
+                        isNodeSelected: _isNodeSelected,
+                        onClick: nodeClickHandler(rowInfo),
+                        icons: rowInfo.node.isDirectory
+                            ? [
+                                  <div
+                                      style={{
+                                          borderLeft: 'solid 8px red',
+                                          borderBottom: 'solid 10px red',
+                                          marginRight: 10,
+                                          width: 16,
+                                          height: 12,
+                                          filter: rowInfo.node.expanded
+                                              ? 'drop-shadow(1px 0 0 red) drop-shadow(0 1px 0 red) drop-shadow(0 -1px 0 red) drop-shadow(-1px 0 0 red)'
+                                              : 'none',
+                                          borderColor: rowInfo.node.expanded ? 'white' : 'red',
+                                      }}
+                                  />,
+                              ]
+                            : [
+                                  <div className="selectParentButton" style={{ marginLeft: -10 }}>
+                                      {!rowInfo.parentNode &&
+                                          rowInfo.node.parents &&
+                                          rowInfo.node.parents.length > 0 && (
+                                              <TreeSelectParent
+                                                  parents={rowInfo.node.parents}
+                                                  reloadData={_loadTreeData}
+                                              />
+                                          )}
+                                  </div>,
+                                  <TreeIcon
+                                      eqtype={rowInfo.node.type}
+                                      style={{
+                                          width: 15,
+                                          height: 15,
+                                          marginRight: 5,
+                                          marginTop: 3,
+                                          color: _getColorForType(rowInfo.node.type),
+                                      }}
+                                  />,
+                              ],
+                    })}
                 />
             </div>
-        </React.Fragment>
+        </>
     );
 }
