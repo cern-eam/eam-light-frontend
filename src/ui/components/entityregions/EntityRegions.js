@@ -22,6 +22,8 @@ const EntityRegions = (props) => {
     const searchParams = queryString.parse(location.search, {arrayFormat: 'comma'});
     const visibleRegionsParam =  searchParams[ENTITY_REGION_PARAMS.VISIBLE] ? 
         [].concat(searchParams[ENTITY_REGION_PARAMS.VISIBLE]) : [];
+
+    const expandedRegion = searchParams.expanded;
     
     React.useEffect(() => {
         regions.filter(region => getHiddenRegionState(region.id) === undefined)
@@ -29,7 +31,7 @@ const EntityRegions = (props) => {
     }, [inputRegions, isHiddenRegion, getHiddenRegionState, setRegionVisibility, getUniqueRegionID]);
 
     React.useEffect(() => {
-        const defaultVisibility = (region) => regionMaximized === region.id ||
+        const defaultVisibility = (region) => expandedRegion === region.id || regionMaximized === region.id ||
             visibleRegionsParam.includes(region.id) ||
             !visibleRegionsParam.length && !isHiddenRegion(region.id) && (region.customVisibility ? region.customVisibility() : true);
 
@@ -103,7 +105,7 @@ const EntityRegions = (props) => {
                                     maximize={updateMaximize(region.id)}
                                     unMaximize={updateMaximize(undefined)}
                                     showMaximizeControls={region.maximizable}
-                                    initiallyExpanded={searchParams.expanded === undefined || searchParams.expanded === region.id}
+                                    initiallyExpanded={expandedRegion === undefined || expandedRegion === region.id}
                                     {...region.RegionPanelProps}>
                                     {region.render({ panelQueryParams: getRegionPanelQueryParams(region.id) })}
                                 </RegionPanel>
