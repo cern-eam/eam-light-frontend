@@ -4,6 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import { EAMCellField } from 'eam-components/dist/ui/components/grids/eam/utils';
 import EAMGrid from 'eam-components/dist/ui/components/grids/eam/EAMGrid';
 import SyncedQueryParamsEAMGridContext from "../../../../tools/SyncedQueryParamsEAMGridContext";
+import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
+import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
 
 const cellRenderer = ({ column, value }) => {
     if (column.id === 'workordernum') {
@@ -13,7 +15,7 @@ const cellRenderer = ({ column, value }) => {
                     {value}
                 </Link>
             </Typography>
-        )   
+        )
     }
     return EAMCellField({ column, value });
 }

@@ -2,6 +2,36 @@ import React from 'react'
 import { useHistory } from "react-router";
 import GridTools from "./GridTools";
 import { EAMGridContextProvider } from "eam-components/dist/ui/components/grids/eam/EAMGridContext";
+import WS from "./WS";
+
+const columnOverrides = {
+    reportedby: {
+        dataType: "__AUTOCOMPLETE",
+        autocompleteHandler: WS.autocompleteEmployee,
+    },
+    workordernum: {
+        dataType: "__AUTOCOMPLETE",
+        autocompleteHandler: WS.autocompleteEmployee,
+    },
+    equipment: {
+        dataType: "__AUTOCOMPLETE",
+        autocompleteHandler: WS.autocompleteEmployee,
+    },
+    department: {
+        dataType: "__AUTOCOMPLETE",
+        autocompleteHandler: WS.autocompleteEmployee,
+    },
+}
+
+const createColumns = ({ gridField, defaultCreateColumns, cellRenderer }) => {
+    const columns = defaultCreateColumns({gridField, cellRenderer})
+        .map(s => ({
+            ...s,
+            ...columnOverrides[s.id],
+        }))
+        ;
+    return columns;
+}
 
 const SyncedQueryParamsEAMGridContext = (props) => {
     const { children, ...otherProps } = props;
@@ -20,6 +50,7 @@ const SyncedQueryParamsEAMGridContext = (props) => {
                 const params = GridTools.replaceUrlParam('gridDataspyID', newDataspy.code);
                 history.push(params);
             }}
+            createColumns={createColumns}
             {...otherProps}
         >
             {children}

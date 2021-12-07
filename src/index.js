@@ -19,7 +19,6 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 // EAM-480, en-GB locale used in order to have monday as first day of the week
 import { enGB } from "date-fns/locale";
 import { UPDATE_SCANNED_USER } from './actions/scannedUserActions';
-
 const jss = create(jssPreset());
 
 unregister();
