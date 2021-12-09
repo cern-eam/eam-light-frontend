@@ -113,7 +113,7 @@ function WorkorderDetails(props) {
                     updateProperty={updateWorkorderProperty}
                     link={() => workorder.parentWO && rpawClassesList.includes(workorder.classCode) ? rpawLink + workorder.parentWO : null}
                     icon={<OpenInAppIcon/>}/>
-                    
+
 
             <UDFChar fieldInfo={workOrderLayout.fields['udfchar01']}
                         fieldValue={workorder.userDefinedFields.udfchar01}
@@ -166,12 +166,20 @@ function WorkorderDetails(props) {
                         updateProperty={updateWorkorderProperty}
                         valueKey={`userDefinedFields.udfchkbox04`}
                         children={children}/>
-            
+
             <EAMCheckbox elementInfo={workOrderLayout.fields['udfchkbox05']}
                         value={workorder.userDefinedFields.udfchkbox05}
                         updateProperty={updateWorkorderProperty}
                         valueKey={`userDefinedFields.udfchkbox05`}
                         children={children}/>
+
+            <EAMCheckbox
+                elementInfo={workOrderLayout.fields['warranty']}
+                value={workorder.warranty ? 'true' : 'false'}
+                updateProperty={(key, value) => updateWorkorderProperty(key, value === 'true')}
+                valueKey={`warranty`}
+                children={children}
+            />
 
             <EAMInput
                 children={children}

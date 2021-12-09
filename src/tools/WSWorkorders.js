@@ -229,6 +229,13 @@ class WSWorkorders {
     getTaskPlan(taskCode, config={}) {
         return WS._get('/taskplan/' + taskCode, config);
     }
+
+    //
+    //WO Equipment Details
+    //
+    getWOEquipLinearDetails(eqCode, config={}) {
+        return WS._get(`/workordersmisc/equipment/${eqCode}/details`, config);
+    }
 }
 
 export default new WSWorkorders();

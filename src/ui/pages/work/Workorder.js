@@ -29,6 +29,7 @@ import { isCernMode } from '../../components/CERNMode';
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
 import WSParts from '../../../tools/WSParts';
+import WSWorkorders from '../../../tools/WSWorkorders';
 
 
 
@@ -59,7 +60,7 @@ class Workorder extends Entity {
         this.setPriorityValues();
         this.props.setLayoutProperty('showEqpTreeButton', false);
     }
-    
+
     componentDidMount() {
         super.componentDidMount();
     }
@@ -518,7 +519,7 @@ class Workorder extends Entity {
             this.enableChildren()
         }
         //Set work order equipment
-        this.setWOEquipment(workorder.equipmentCode);
+        this.setWOEquipment(workorder.equipmentCode, true);
     }
 
     postCopy = () => {
@@ -552,11 +553,29 @@ class Workorder extends Entity {
             });
     }
 
-    setWOEquipment = (code) =>
-        WSEquipment.getEquipment(code)
+    setWOEquipment = (code, initialLoad = false) => {
+        const {
+            showWarning,
+        } = this.props;
+        return Promise.all([
+            WSEquipment.getEquipment(code),
+            WSWorkorders.getWOEquipLinearDetails(code),
+        ])
             .then((response) => {
-                this.setLayout({ woEquipment: response.body.data });
-                return response.body.data.partCode ? WSParts.getPart(response.body.data.partCode) : null;
+                const isWarrantyActive = response[1].body.data?.ISWARRANTYACTIVE === 'true';
+                //this.setLayout({ woEquipment: response[0].body.data });
+                if (!initialLoad) {
+                    if (isWarrantyActive) {
+                        showWarning('This equipment is currently under warranty.');
+                    }
+                    this.setState(state => ({
+                        workorder: {
+                            ...state.workorder,
+                            warranty: isWarrantyActive,
+                        }
+                    }));
+                }
+                return response[0].body.data.partCode ? WSParts.getPart(response[0].body.data.partCode) : null;
             })
             .then((part) => {
                 if (part && part.body.data) {
@@ -571,6 +590,7 @@ class Workorder extends Entity {
             .catch(() => {
                 this.setLayout({ woEquipment: undefined });
             });
+    }
 
     setClosingCodes = prevState => {
         const { workorder = {}, layout } = this.state;
@@ -588,7 +608,7 @@ class Workorder extends Entity {
         if (!equalObjectProps(prevWorkorder, workorder,
                 ['problemCode', 'failureCode', 'causeCode', 'classCode', 'equipmentCode'])
                 || prevObjClass !== objClass) {
-    
+
             Promise.all([
                 WSWorkorder.getWorkOrderProblemCodeValues(classCode, objClass, equipmentCode),
                 WSWorkorder.getWorkOrderActionCodeValues(objClass, failureCode, problemCode, causeCode, equipmentCode),
@@ -601,7 +621,7 @@ class Workorder extends Entity {
                     causeCodeValues,
                     failureCodeValues
                 ] = responses.map(response => response.body.data);
-    
+
                 this.setLayout({
                     problemCodeValues,
                     actionCodeValues,
