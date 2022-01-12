@@ -27,13 +27,13 @@ function EquipmentHistory(props)  {
                         ...line,
                         relatedObject: (line.jobType === 'EDH')
                         ? (
-                            <a 
+                            <a
                                 target="_blank"
                                 href={"https://edh.cern.ch/Document/" + line.relatedObject}
                                 rel="noopener noreferrer">
                                 {line.relatedObject}
                             </a>
-                        ) 
+                        )
                         : line.relatedObject
                     })))
                 })
@@ -54,11 +54,10 @@ function EquipmentHistory(props)  {
         : (
             <BlockUi blocking={blocking} style={{ width: "100%" }}>
                 <EISTable data={historyData}
-                headers={headers}
-                propCodes={propCodes}
-                keyMap={keyMap}
-                defaultOrderBy='completedDate'
-                defaultOrder={Constants.SORT_DESC} />
+                    headers={headers}
+                    propCodes={propCodes}
+                    keyMap={keyMap}
+                />
             </BlockUi>
         )
     );
