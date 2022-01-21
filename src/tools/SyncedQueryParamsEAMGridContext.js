@@ -9,27 +9,14 @@ const columnOverrides = {
         dataType: "__AUTOCOMPLETE",
         autocompleteHandler: WS.autocompleteEmployee,
     },
-    workordernum: {
-        dataType: "__AUTOCOMPLETE",
-        autocompleteHandler: WS.autocompleteEmployee,
-    },
-    equipment: {
-        dataType: "__AUTOCOMPLETE",
-        autocompleteHandler: WS.autocompleteEmployee,
-    },
-    department: {
-        dataType: "__AUTOCOMPLETE",
-        autocompleteHandler: WS.autocompleteEmployee,
-    },
 }
 
 const createColumns = ({ gridField, defaultCreateColumns, cellRenderer }) => {
-    const columns = defaultCreateColumns({gridField, cellRenderer})
-        .map(s => ({
-            ...s,
-            ...columnOverrides[s.id],
-        }))
-        ;
+    const columns = defaultCreateColumns({ gridField, cellRenderer })
+    .map((s) => ({
+        ...s,
+        ...columnOverrides[s.id],
+    }));
     return columns;
 }
 
