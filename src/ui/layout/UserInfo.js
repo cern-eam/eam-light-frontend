@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Account, Logout} from "mdi-material-ui"
 import {IconButton} from "@material-ui/core";
+import { logout } from "../../AuthWrapper";
 
 export default class UserInfo extends Component {
 
@@ -42,9 +43,7 @@ export default class UserInfo extends Component {
             this.props.updateApplication({userData: null})
             sessionStorage.removeItem('inforContext');
         }
-        if (process.env.REACT_APP_LOGIN_METHOD === 'CERNSSO') {
-            window.location.href = "https://espace.cern.ch/authentication/_layouts/15/SignOut.aspx";
-        }
+        logout();
     }
 
     render() {
