@@ -18,7 +18,7 @@ const colorMap = {
   turquoise: '#7cc0b5'
 }
 
-const WorkorderSearchIcon = ({ column, value }) => {
+const StatusIcon = ({ column, value }) => {
     const [name, color] = value.split('@')
 
     if(!color || !color.length) {
@@ -50,4 +50,4 @@ const WorkorderSearchIcon = ({ column, value }) => {
     )
 }
 
-export default WorkorderSearchIcon;
+export default StatusIcon;
