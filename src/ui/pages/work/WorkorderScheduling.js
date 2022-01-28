@@ -7,7 +7,7 @@ import UDFChar from '../../components/userdefinedfields/UDFChar';
 import { Grid } from '@material-ui/core';
 
 const WorkorderScheduling = (props) => {
-    const { children, workOrderLayout, workorder, updateWorkorderProperty } = props;
+    const { children, workOrderLayout, workorder, updateWorkorderProperty, updateScheduleProperty } = props;
 
     if (
         'H' === workOrderLayout.fields.reqstartdate.attribute &&
@@ -93,7 +93,7 @@ const WorkorderScheduling = (props) => {
                 elementInfo={workOrderLayout.fields['schedstartdate']}
                 valueKey="scheduledStartDate"
                 value={workorder.scheduledStartDate || ''}
-                updateProperty={updateWorkorderProperty}
+                updateProperty={updateScheduleProperty}
             />
 
             <EAMDatePicker
@@ -101,7 +101,7 @@ const WorkorderScheduling = (props) => {
                 elementInfo={workOrderLayout.fields['schedenddate']}
                 valueKey="scheduledEndDate"
                 value={workorder.scheduledEndDate || ''}
-                updateProperty={updateWorkorderProperty}
+                updateProperty={updateScheduleProperty}
             />
 
             <EAMDateTimePicker
