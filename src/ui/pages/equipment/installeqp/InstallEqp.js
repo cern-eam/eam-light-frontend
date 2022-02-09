@@ -7,19 +7,36 @@ import WS from '../../../../tools/WS';
 import EAMBarcodeInput from 'eam-components/dist/ui/components/muiinputs/EAMBarcodeInput';
 import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete';
 import BlockUi from 'react-block-ui';
+import queryString from "query-string";
 
 export default function NameForm(props) {
     const [parentEq, setParentEq] = useState('');
-    const [parentEqDesc, setParentEqDesc] = useState('');
     const [childEq, setChildEq] = useState('');
     const [blocking, setBlocking] = useState(false);
 
     useEffect(() => {
+        //Check URL parameters
+        const values = queryString.parse(window.location.search)
+        const parent = values.parent;
+        const child = values.child;
+        //Get all the properties
+        if (parent) {
+            setParentEq(parent);
+        }
+        if (child) {
+            setChildEq(child);
+        }
+    }, [])
+
+    useEffect(() => {
         if (props.layout.eqpTreeCurrentNode) {
             setParentEq(props.layout.eqpTreeCurrentNode.id);
-            setParentEqDesc(props.layout.eqpTreeCurrentNode.name);
         }
     }, [props.layout.eqpTreeCurrentNode]);
+
+    useEffect(() => {
+        replaceSearchParams();
+    }, [childEq, parentEq])
 
     const createEquipmentStructure = (newParent, child) => {
         return {
@@ -27,6 +44,29 @@ export default function NameForm(props) {
             childCode: child,
         };
     };
+
+    const replaceSearchParams = () => {
+        let params = '?';
+        if (parentEq) {
+            params += `parent=${parentEq}`;
+        }
+        if (childEq) {
+            if (params !== '?') params += `&`;
+            params += `child=${childEq}`;
+        }
+        if (params === '?') {
+            params = '';
+        }
+        window.history.replaceState(
+            {},
+            document.title,
+            params
+        );
+    }
+
+    const flushSearchParams = () => {
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
 
     const installEqpHandler = (code) => {
         if (!parentEq || !childEq) {
@@ -43,6 +83,7 @@ export default function NameForm(props) {
                     setChildEq('');
                     setParentEq('');
                     setBlocking(false);
+                    flushSearchParams();
                 })
                 .catch((error) => {
                     props.handleError(error);
