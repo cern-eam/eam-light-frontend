@@ -64,10 +64,6 @@ export default function NameForm(props) {
         );
     }
 
-    const flushSearchParams = () => {
-        window.history.replaceState({}, document.title, window.location.pathname);
-    }
-
     const installEqpHandler = (code) => {
         if (!parentEq || !childEq) {
             props.showError('Please provide the Child and Parent Equipment.');
@@ -80,10 +76,7 @@ export default function NameForm(props) {
                 .then(() => {
                     props.showNotification(`${childEq} was successfully attached to ${parentEq}`);
                     props.setLayoutProperty('eqpTreeNewChild', childEq);
-                    setChildEq('');
-                    setParentEq('');
                     setBlocking(false);
-                    flushSearchParams();
                 })
                 .catch((error) => {
                     props.handleError(error);
