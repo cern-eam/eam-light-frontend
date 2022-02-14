@@ -73,6 +73,10 @@ class WS {
         return this._get('/autocomplete/employee/' + filter, config);
     };
 
+    autocompleteUsers = (filter, config = {}) => {
+        return this._get('/autocomplete/user/' + filter, config);
+    }
+
     autocompleteClass = (entity, filter, config = {}) => {
         return this._get(`/autocomplete/class/${entity}/${filter}`, config);
     };

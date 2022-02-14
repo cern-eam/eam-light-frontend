@@ -11,6 +11,7 @@
     "@material-ui/icons": "4.11.2",
     "@material-ui/lab": "4.0.0-alpha.57",
     "@material-ui/pickers": "3.2.7",
+    "amm-tools": "git+ssh://git@gitlab.cern.ch:7999/eis/amm/amm-tools.git#6de974466c4cfa74a5bec15b6e0d7a62bf6d8baf",
     "classnames": "2.2.6",
     "core-js": "3.1.4",
     "date-fns": "2.7.0",
