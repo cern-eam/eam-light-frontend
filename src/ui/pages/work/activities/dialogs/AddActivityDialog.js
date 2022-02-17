@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -11,6 +11,7 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAuto
 import WSWorkorders from '../../../../../tools/WSWorkorders';
 import EAMDatePicker from 'eam-components/dist/ui/components/muiinputs/EAMDatePicker';
 import KeyCode from '../../../../../enums/KeyCode';
+import { shiftDate } from "../../../../../tools/DateUtils";
 
 /**
  * Display detail of an activity
@@ -62,6 +63,12 @@ function AddActivityDialog(props) {
     let updateFormValues = (key, value) => {
         if (key === 'taskCode' && value) {
             onTaskCodeChanged(value);
+        }
+        if (key === 'startDate') {
+            shiftDate(setFormValues, 'endDate', value, 'startDate', 'endDate', false);
+        }
+        if (key === 'endDate') {
+            shiftDate(setFormValues, 'startDate', value, 'startDate', 'endDate');
         }
         setFormValues((prevFormValues) => ({
             ...prevFormValues,

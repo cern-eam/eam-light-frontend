@@ -29,7 +29,7 @@ import { isCernMode } from '../../components/CERNMode';
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
 import WSParts from '../../../tools/WSParts';
-
+import { shiftStartDate, shiftEndDate } from "../../../tools/DateUtils";
 
 
 const assignStandardWorkOrderValues = (workOrder, standardWorkOrder) => {
@@ -82,6 +82,34 @@ class Workorder extends Entity {
             }));
         })
     }
+
+    updateScheduleProperty = (key, value) => {
+        const { scheduledEndDate } = this.state[this.settings.entity];
+
+        if (!scheduledEndDate) this.updateEntityProperty(key, value);
+
+        this.setLayout({ isModified: true });
+
+        if (key === 'scheduledStartDate') {
+            this.setState((prevState) => ({
+                ...prevState,
+                [this.settings.entity]: {
+                    ...prevState[this.settings.entity],
+                    scheduledEndDate: shiftEndDate(value, prevState[this.settings.entity]['scheduledStartDate'], prevState[this.settings.entity]['scheduledEndDate']),
+                }
+            }), console.log(this.state));
+        }
+        if (key === 'scheduledEndDate') {
+            this.setState((prevState) => ({
+                ...prevState,
+                [this.settings.entity]: {
+                    ...prevState[this.settings.entity],
+                    scheduledStartDate: shiftStartDate(value, prevState[this.settings.entity]['scheduledStartDate'], prevState[this.settings.entity]['scheduledEndDate']),
+                }
+            }));
+        }
+        this.updateEntityProperty(key, value);
+    };
 
     onChangeEquipment = value => {
         if(!value) {
@@ -161,6 +189,7 @@ class Workorder extends Entity {
             workOrderLayout,
             userData,
             updateWorkorderProperty: this.updateEntityProperty.bind(this),
+            updateScheduleProperty: this.updateScheduleProperty.bind(this),
             children: this.children,
             setWOEquipment: this.setWOEquipment
         };

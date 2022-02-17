@@ -377,14 +377,12 @@ export default class readEntityEquipment extends Component {
 
     updateEntityProperty = (key, value) => {
         // Form was modified
-        this.setLayout({
-            isModified: true
-        })
+        this.setLayout({ isModified: true });
 
         // Set state with the clone of the entity that got the key set
         this.setState((prevState) => ({
-                     [this.settings.entity]: set({...prevState[this.settings.entity]}, key, value)
-                 }));
+            [this.settings.entity]: set({...prevState[this.settings.entity]}, key, value)
+        }));
     };
 
     //
