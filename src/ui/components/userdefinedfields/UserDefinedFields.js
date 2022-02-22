@@ -42,6 +42,7 @@ class UserDefinedFields extends Component {
             return null;
         }
 
+
         return this.sortProperties()
             .filter(prop => prop.startsWith('udfnum') && !exclusions.includes(prop))
             .map(prop => <EAMInput
@@ -50,7 +51,8 @@ class UserDefinedFields extends Component {
                 value={fields[prop]}
                 updateProperty={updateUDFProperty}
                 valueKey={`userDefinedFields.${prop}`}
-                children={children}/>);
+                children={children}
+                endAdornment={entityLayout[prop] && entityLayout[prop].udfUom}/>);
     };
 
     renderUdfDates = () => {
