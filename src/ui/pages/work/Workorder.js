@@ -629,8 +629,12 @@ class Workorder extends Entity {
         const terminalStatuses = ['T', 'TF', 'TT', 'TP', 'TI', 'TX'];
 
         // Check for open checklist items on a terminé status update
-        if (this.checklists.hasIncompleteChecklists() &&
-         terminalStatuses.includes(this.state.workorder.statusCode)) {
+        if (
+            this.checklists 
+            && this.checklists.hasIncompleteChecklists 
+            && this.checklists.hasIncompleteChecklists() 
+            && terminalStatuses.includes(this.state.workorder.statusCode)
+        ){
             this.incompleteChecklistsConfirmation.show();
         } else {
             this.commitSave();
@@ -642,7 +646,7 @@ class Workorder extends Entity {
         if (this.state.layout.newEntity) {
             this.createEntity(this.state[this.settings.entity])
         } else {
-            this.updateEntity(this.state[this.settings.entity])
+            this.updateEntity({...this.state[this.settings.entity], confirmedIncompleteChecklist: true})
         }
     }
 
