@@ -5,6 +5,7 @@ import {
     setLayoutProperty,
     showError,
     showNotification,
+    showWarning,
     toggleHiddenRegion,
     setRegionVisibility,
 } from '../../../actions/uiActions'
@@ -29,6 +30,7 @@ function mapStateToProps(state) {
 const WorkorderContainer = connect(mapStateToProps, {
         showNotification,
         showError,
+        showWarning,
         handleError,
         updateMyWorkOrders,
         setLayoutProperty,
