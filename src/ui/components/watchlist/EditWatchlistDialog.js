@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
+import IconButton from "@material-ui/core/IconButton";
+import Typography from '@material-ui/core/Typography';
+import { Close } from 'mdi-material-ui';
 import WSWatchers from '../../../tools/WSWatchers';
 import WS from '../../../tools/WS';
 import Watchlist from './Watchlist';
+
 
 const EditWatchlistDialog = ({ open, woCode, userCode, handleClose, handleError }) => {
     const [isWatching, setIsWatching] = useState(false);
@@ -47,10 +50,9 @@ const EditWatchlistDialog = ({ open, woCode, userCode, handleClose, handleError 
         }
     };
 
-    const addUserToWatchlist = (values) => {
-        if (values) {
-            const userCodes = values.map((v) => v.usercode);
-            WSWatchers.addWatchersToWorkOrder(woCode, userCodes).then(getWatchers);
+    const addUserToWatchlist = (value) => {
+        if (value) {
+            WSWatchers.addWatchersToWorkOrder(woCode, [value.usercode]).then(getWatchers);
         }
     };
 
@@ -60,15 +62,20 @@ const EditWatchlistDialog = ({ open, woCode, userCode, handleClose, handleError 
 
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-            <DialogTitle id="alert-dialog-title">Watchlist</DialogTitle>
-            <DialogContent style={{minHeight: 500}}>
+            <DialogTitle disableTypography id="alert-dialog-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Typography variant="h6" color="textPrimary">Watchlist</Typography>
+                <IconButton onClick={handleClose}>
+                    <Close />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent style={{minHeight: 450}}>
                 <Button
                     fullWidth
                     onClick={toggleWatcherStatus}
                     variant="contained"
                     disabled={isLoading}
-                    color="primary"
-                    style={{ margin: "5px" }}
+                    color='primary'
+                    style={{ marginBottom: "5px", marginTop: -5, backgroundColor: isWatching && !isLoading && "#d32f2f" }}
                 >
                     {isWatching ? 'Remove Me' : 'Add Me'}
                 </Button>
@@ -79,9 +86,6 @@ const EditWatchlistDialog = ({ open, woCode, userCode, handleClose, handleError 
                     watchers={watchers}
                 />
             </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose}>Close</Button>
-            </DialogActions>
         </Dialog>
     );
 };
