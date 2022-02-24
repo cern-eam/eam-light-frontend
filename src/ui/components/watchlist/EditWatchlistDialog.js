@@ -18,21 +18,14 @@ const EditWatchlistDialog = ({ open, woCode, userCode, handleClose, handleError 
 
     const getWatchers = async () => {
         setIsLoading(true);
-        const response = await WSWatchers.getWatchersForWorkOrder(woCode);
-        const watchersCodes = response.body.data.map((watcher) => watcher.WAT_PERSON);
-        const watcherPromises = [];
-        watchersCodes.forEach((watcher) => {
-            const watcherPromise = WS.autocompleteUsers(watcher);
-            watcherPromises.push(watcherPromise);
-        });
 
-        Promise.all(watcherPromises).then((results) => {
-            const watchers = results.flatMap((result) => result.body.data);
-            setWatchers(watchers);
-            const isWatcher = watchersCodes.some((watcher) => watcher === userCode);
-            setIsWatching(isWatcher);
-            setIsLoading(false);
-        });
+        const response = await WSWatchers.getWatchersForWorkOrder(woCode);
+        setWatchers(response.body.data);
+        
+        const isWatcher = response.body.data.some((watcher) => watcher.userCode === userCode);
+        setIsWatching(isWatcher);
+
+        setIsLoading(false);
     };
 
     useEffect(() => {

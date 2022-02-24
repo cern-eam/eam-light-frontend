@@ -26,7 +26,7 @@ const Watchlist = (props) => {
     const { addUserToWatchlist, isLoading, removeUserFromWatchlist, watchers } = props;
     
     const filterOptions = (candidate) => {
-        if (watchers?.find((watcherCode) => watcherCode.usercode === candidate.value)) return false;
+        if (watchers?.find((watcherCode) => watcherCode.userCode === candidate.value)) return false;
         return candidate.data.isactive;
     };
 
@@ -52,8 +52,8 @@ const Watchlist = (props) => {
                             <>
                                 <div style={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid #ebebeb' }}>
                                     <Account />
-                                    <Typography variant="subtitle2" color="textPrimary">{watcher.description.toUpperCase()}</Typography>
-                                    <IconButton onClick={() => removeUserFromWatchlist(watcher.usercode)} size='small' style={{ marginLeft: 'auto' }}>
+                                    <Typography variant="subtitle2" color="textPrimary">{watcher.userDesc.toUpperCase()}</Typography>
+                                    <IconButton onClick={() => removeUserFromWatchlist(watcher.userCode)} size='small' style={{ marginLeft: 'auto' }}>
                                         <Delete />
                                     </IconButton>
                                 </div>
@@ -67,12 +67,12 @@ const Watchlist = (props) => {
                     )
                 }
             </Paper>
-            
+
             <EAMFormLabel label="Add Watchers" labelStyle={{fontWeight: 'normal', marginTop: '0.3rem'}} />
             <AMMSingleAutocomplete
                 loadOptions={getAutocompleteOptions}
-                getOptionValue={(option) => option.usercode}
-                getOptionLabel={(option) => option.description}
+                getOptionValue={(option) => option.userCode}
+                getOptionLabel={(option) => option.userDesc}
                 components={{
                     Option: UserOption,
                 }}
