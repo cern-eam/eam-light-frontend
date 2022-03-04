@@ -8,6 +8,7 @@ import MenuItem from './MenuItem'
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import FormatListBulletedTriangle from 'mdi-material-ui/FormatListBulletedTriangle'
 import EamlightSubmenu from "./EamlightSubmenu";
 import SpeedometerIcon from 'mdi-material-ui/Speedometer'
 import AutorenewIcon from 'mdi-material-ui/Autorenew'
@@ -18,6 +19,7 @@ import MenuTools from './MenuTools'
 import RoomIcon from '@material-ui/icons/Room';
 import BuildIcon from '@material-ui/icons/Build';
 import CERNMode from '../../components/CERNMode';
+import MenuGridLink from "./MenuGridLink";
 
 const getScreenHeaderFunction = (screens = {}) => ({ screenName, screen, updateScreenLayout }) =>
     <ScreenChange
@@ -83,7 +85,7 @@ class EamlightMenu extends Component {
   
         const { myOpenWorkOrders, myTeamWorkOrders, userData, applicationData, showNotification, showError, updateWorkOrderScreenLayout, 
             updateAssetScreenLayout, updatePositionScreenLayout, updateSystemScreenLayout, updatePartScreenLayout, updateLocationScreenLayout } = this.props;
-        const { workOrderScreen, assetScreen, positionScreen, systemScreen, partScreen, locationScreen, eamAccount, screens } = userData;
+        const { workOrderScreen, assetScreen, positionScreen, systemScreen, partScreen, locationScreen, eamAccount, screens, reports } = userData;
         
         const currentPartScreen = screens[partScreen] || {};
         const currentWorkOrderScreen = screens[workOrderScreen] || {};
@@ -185,6 +187,16 @@ class EamlightMenu extends Component {
                             <div rel="settings" onClick={this.mainMenuClickHandler}>
                                 <Tooltip title="ADMIN SETTINGS" placement="right">
                                     <Tune style={iconStyles} />
+                                </Tooltip>
+                            </div>
+                        </li>
+                        }
+
+                        {reports &&
+                        <li>
+                            <div rel="customgrids" onClick={this.mainMenuClickHandler}>
+                                <Tooltip title="CUSTOM GRIDS" placement="right">
+                                    <FormatListBulletedTriangle style={iconStyles} />
                                 </Tooltip>
                             </div>
                         </li>
@@ -358,6 +370,15 @@ class EamlightMenu extends Component {
                         <MenuItem label="Refresh EAM Light Cache"
                                   icon={<DatabaseRefresh style={menuIconStyle}/>}
                                   onClick={MenuTools.refreshCache.bind(null, showNotification, showError)}/>
+                    </EamlightSubmenu>
+                    }
+
+                    {reports &&
+                    <EamlightSubmenu id="customgrids" header={<span>CUSTOM GRIDS</span>}>
+                        {reports.map( report => (
+                            <MenuGridLink grid={report}/>
+                            ))
+                        }
                     </EamlightSubmenu>
                     }
                 </div>
