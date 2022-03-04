@@ -89,7 +89,7 @@ class WS {
 
     autocompleteEquipment = (filter, config = {}) => {
         filter = encodeURIComponent(filter);
-        return this._get('/autocomplete/eqp?s=' + filter, config);
+        return this._get(`/autocomplete/eqp?s=${filter}&a=${filter}&n=${filter}`, config);
     };
 
     autocompleteEquipmentSelected = (filter, config) => {
