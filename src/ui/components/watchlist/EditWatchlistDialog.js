@@ -61,14 +61,14 @@ const EditWatchlistDialog = ({ open, woCode, userCode, handleClose, handleError 
                     <Close />
                 </IconButton>
             </DialogTitle>
-            <DialogContent style={{minHeight: 450}}>
+            <DialogContent style={{minHeight: 325}}>
                 <Button
                     fullWidth
                     onClick={toggleWatcherStatus}
                     variant="contained"
                     disabled={isLoading}
                     color='primary'
-                    style={{ marginBottom: "5px", marginTop: -5, backgroundColor: isWatching && !isLoading && "#d32f2f" }}
+                    style={{ marginTop: -5, backgroundColor: isWatching && !isLoading && "#d32f2f" }}
                 >
                     {isWatching ? 'Remove Me' : 'Add Me'}
                 </Button>
