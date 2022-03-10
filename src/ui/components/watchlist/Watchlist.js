@@ -4,9 +4,10 @@ import EAMFormLabel from 'eam-components/dist/ui/components/inputs/EAMFormLabel'
 import { Account, Delete } from 'mdi-material-ui';
 import WS from '../../../tools/WS';
 import { Autocomplete } from '@material-ui/lab';
+import WSWorkorders from '../../../tools/WSWorkorders';
 
 const Watchlist = (props) => {
-    const { addUserToWatchlist, isLoading, removeUserFromWatchlist, watchers } = props;
+    const { addUserToWatchlist, isLoading, removeUserFromWatchlist, watchers, woCode } = props;
 
     const [options, setOptions] = useState([]);
 
@@ -15,7 +16,7 @@ const Watchlist = (props) => {
 
     const getAutocompleteOptions = async (hint) => {
         if (hint) {
-            const result = await WS.autocompleteUsers(hint);
+            const result = await WSWorkorders.autocompleteUsersWithAccess(woCode, hint);
             setOptions(result.body.data);
         }
     };
@@ -78,7 +79,9 @@ const Watchlist = (props) => {
                 options={options}
                 filterOptions={filterOptions}
                 onInputChange={(_, value) => getAutocompleteOptions(value)}
-                onChange={(_, value) => addUserToWatchlist(value)}
+                onChange={(_, value) => 
+                    addUserToWatchlist(value)
+                }
                 getOptionLabel={(option) => option.description.toUpperCase()}
                 blurOnSelect
                 onFocus={() => setOptions([])}

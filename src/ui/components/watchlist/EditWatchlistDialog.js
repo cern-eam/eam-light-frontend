@@ -45,7 +45,7 @@ const EditWatchlistDialog = ({ open, woCode, userCode, handleClose, handleError 
 
     const addUserToWatchlist = (value) => {
         if (value) {
-            WSWatchers.addWatchersToWorkOrder(woCode, [value.usercode]).then(getWatchers);
+            WSWatchers.addWatchersToWorkOrder(woCode, [value.userCode]).then(getWatchers);
         }
     };
 
@@ -73,6 +73,7 @@ const EditWatchlistDialog = ({ open, woCode, userCode, handleClose, handleError 
                     {isWatching ? 'Remove Me' : 'Add Me'}
                 </Button>
                 <Watchlist
+                    woCode={woCode}
                     addUserToWatchlist={addUserToWatchlist}
                     isLoading={isLoading}
                     removeUserFromWatchlist={removeUserFromWatchlist}
