@@ -5,10 +5,11 @@ import IconButton from "@material-ui/core/IconButton";
 import Divider from '@material-ui/core/Divider';
 import { WorkorderIcon } from "eam-components/dist/ui/components/icons";
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
-import {Barcode, ContentCopy, EmailOutline, Map, Printer, Domain, Camera} from 'mdi-material-ui';
+import {Barcode, ContentCopy, EmailOutline, Map, Printer, Domain, Camera, Eye} from 'mdi-material-ui';
 import { RadiationIcon } from "eam-components/dist/ui/components/icons";
 import { Link } from "react-router-dom";
-import CERNMode, { isCernMode } from "./CERNMode"
+import { isCernMode } from "./CERNMode";
+import EditWatchlistDialog from './watchlist/EditWatchlistDialog';
 
 export const ENTITY_TYPE = {
     WORKORDER: 'WORKORDER',
@@ -35,6 +36,7 @@ export const BUTTON_KEYS = {
     DISMAC: "DISMAC",
     TREC: "TREC",
     CREATE_WORKORDER: "CREATE_WORKORDER",
+    WATCHLIST: "WATCHLIST",
 }
 
 class Toolbar extends React.Component {
@@ -68,8 +70,10 @@ class Toolbar extends React.Component {
         textDecoration: "none"
     }
 
+    state = { watchlistOpen: false };
+
     getButtonDefinitions = () => {
-        const {copyHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity, departmentalSecurity, screens, workorderScreencode} = this.props;
+        const {copyHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity, departmentalSecurity, screens, workorderScreencode, userCode} = this.props;
 
         return {
             [BUTTON_KEYS.COPY] : {
@@ -266,7 +270,16 @@ class Toolbar extends React.Component {
                 getLinkTo: (entity, entityCode) => {
                     return `/workorder?equipmentCode=${entity.code}`;
                 }
-            }
+            },
+            [BUTTON_KEYS.WATCHLIST]: {
+                isVisible: () => true,
+                getOnClick: (entityType, entity) => () => this.setState({watchlistOpen: true}),
+                isDisabled: () => newEntity,
+                values: {
+                    icon: <Eye />,
+                    text: "Watchlist"
+                },
+            },
         };
     }
 
@@ -284,6 +297,7 @@ class Toolbar extends React.Component {
                     BUTTON_KEYS.OSVC,
                     BUTTON_KEYS.DISMAC,
                     BUTTON_KEYS.TREC,
+                    BUTTON_KEYS.WATCHLIST
                 ]
                 break;
             case ENTITY_TYPE.EQUIPMENT:
@@ -322,7 +336,16 @@ class Toolbar extends React.Component {
                 entityType: entityType,
                 entity: entity
             }));
-        return buttonsRender;   
+        return (<>
+            {buttonsRender}
+            <EditWatchlistDialog
+                open={this.state.watchlistOpen}
+                woCode={this.props.entity.number}
+                userCode={this.props.userCode}
+                handleError={console.log} 
+                handleClose={() => this.setState({ watchlistOpen: false })}
+            />
+        </>);   
     }
 
     generateContent = ({renderOption, buttonDefinition, entityType, entity}) => {

@@ -42,6 +42,10 @@ class WSWorkorders {
         return WS._get(`/autocomplete/standardworkorder?userGroup=${encodeURIComponent(userGroup)}&s=${filter}`, config);
     };
 
+    autocompleteUsersWithAccess = (wo, hint = null, config = {}) => {
+        return WS._get(`/autocomplete/workorders/${wo}/users/search?hint=${hint}`, config);
+    };
+
     //
     // DROP DOWN VALUES FOR WOS
     //
