@@ -4,7 +4,8 @@ import { applicationGetters } from '../../reducers/applicationReducers';
 
 const mapStateToProps = (state) => {
     return {
-        isLocalAdministrator: applicationGetters(state.application).isLocalAdministrator()
+        isLocalAdministrator: applicationGetters(state.application).isLocalAdministrator(),
+        userCode: state.application.userData.eamAccount.userCode,
     }
 };
 

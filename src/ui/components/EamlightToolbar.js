@@ -231,7 +231,7 @@ class EamlightToolbar extends Component {
     }
 
     getToolbar = renderOption => 
-        <Toolbar {...this.props.toolbarProps} renderOption={renderOption}/>
+        <Toolbar {...this.props.toolbarProps} renderOption={renderOption} userCode={this.props.userCode}/>
 
     renderDesktopMenu() {
         return (
