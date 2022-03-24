@@ -3,6 +3,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import BlockIcon from '@material-ui/icons/Block';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorOutlinedIcon from '@material-ui/icons/ErrorOutlined';
+import LockIcon from '@material-ui/icons/Lock';
 import ReportIcon from '@material-ui/icons/Report';
 import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 import {EISIcon, RadioactiveWarningIcon} from 'eam-components/dist/ui/components/icons/index'
@@ -13,6 +14,7 @@ const STATUS_KEYS = {
     EIS: "EIS",
     RADIOACTIVE: 'RADIOACTIVE',
     SAFETY_CONFORMITY: 'SAFETY_CONFORMITY',
+    LOCKED_OUT: 'LOCKED_OUT',
 }
 
 const iconStyle = {
@@ -60,6 +62,13 @@ const STATUSES = [
         getIcon: (entity) => getSafetyConformity(entity).icon,
         getDescription: (entity) => getSafetyConformity(entity).description,
         getTooltip: (entity) => getSafetyConformity(entity).tooltip,
+    },
+    {
+        key: STATUS_KEYS.LOCKED_OUT,
+        shouldRender: (entity, entityType) => isCernMode && entityType === "equipment" && entity.userDefinedFields.udfchkbox08 === "true",
+        getIcon: () => <LockIcon style={{color: 'green', ...iconStyle}}/>,
+        getDescription: () => "Equipment Locked-out",
+        getTooltip: () => "Equipment Locked-out",
     },
 ]
 
