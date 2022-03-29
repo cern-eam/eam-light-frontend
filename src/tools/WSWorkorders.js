@@ -240,6 +240,17 @@ class WSWorkorders {
     getWOEquipLinearDetails(eqCode, config={}) {
         return WS._get(`/workordersmisc/equipment/${eqCode}/details`, config);
     }
+
+    //
+    //AdditionalCosts
+    //
+    createAdditionalCost(additionalCost, workorder, config = {}) {
+        return WS._post('/workorders/' + workorder + '/additionalcosts', additionalCost, config);
+    }
+
+    getAdditionalCostsList(workorder, config = {}) {
+        return WS._get('/workorders/' + workorder + '/additionalcosts', config);
+    }
 }
 
 export default new WSWorkorders();

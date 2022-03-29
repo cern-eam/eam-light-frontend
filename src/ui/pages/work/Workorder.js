@@ -13,6 +13,7 @@ import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIf
 import Entity from '../Entity';
 import EamlightToolbarContainer from './../../components/EamlightToolbarContainer';
 import Activities from './activities/Activities';
+import AdditionalCostsContainer from "./additionalcosts/AdditionalCostsContainer";
 import WorkorderChildren from "./childrenwo/WorkorderChildren";
 import MeterReadingContainerWO from './meter/MeterReadingContainerWO';
 import WorkorderMultiequipment from "./multiequipmentwo/WorkorderMultiequipment";
@@ -228,6 +229,24 @@ class Workorder extends Entity {
                 order: 4,
                 ignore: !getTabAvailability(tabs, TAB_CODES.PART_USAGE),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PART_USAGE)
+            },
+            {
+                id: 'ADDITONALCOSTS',
+                label: 'Additional Costs',
+                isVisibleWhenNewEntity: false,
+                maximizable: false,
+                customVisibility: () => WorkorderTools.isRegionAvailable('ACO', commonProps.workOrderLayout),
+                render: () =>
+                    <AdditionalCostsContainer
+                        workorder={workorder}
+                        tabLayout={commonProps.workOrderLayout.tabs.ACO}
+                        equipmentMEC={equipmentMEC}
+                        disabled={this.departmentalSecurity.readOnly} />
+                ,
+                column: 1,
+                order: 4,
+                ignore: !getTabAvailability(tabs, TAB_CODES.ADDITIONAL_COSTS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.ADDITIONAL_COSTS)
             },
             {
                 id: 'CHILDRENWOS',
