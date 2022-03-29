@@ -25,4 +25,5 @@ yarn-error.log*
 
 # Build artefacts
 *.tar.gz
+yarn.lock
 
