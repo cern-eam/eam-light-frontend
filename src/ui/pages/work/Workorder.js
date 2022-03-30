@@ -364,7 +364,7 @@ class Workorder extends Entity {
                         userCode={userData.eamAccount.userCode}
                         disabled={this.departmentalSecurity.readOnly}
                         hideFilledItems={panelQueryParams.hideFilledItems === 'true'}
-                        activity={panelQueryParams.activity}
+                        activity={panelQueryParams.CHECKLISTSactivity}
                         topSlot={
                             applicationData.EL_PRTCL &&
                                 <div style={{
