@@ -90,7 +90,8 @@ class AssetDetails extends Component {
                     elementInfo={assetLayout.fields['model']}
                     value={equipment.model}
                     updateProperty={updateEquipmentProperty}
-                    valueKey="model"/>
+                    valueKey="model"
+                    inputProps={{maxLength: 30}}/>
 
                 <EAMAutocomplete children={children}
                                     elementInfo={assetLayout.fields['part']}
