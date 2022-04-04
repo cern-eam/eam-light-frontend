@@ -6,6 +6,7 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAuto
 import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
 import OpenInAppIcon from 'mdi-material-ui/OpenInApp'
+import { Link } from 'react-router-dom';
 
 class AssetDetails extends Component {
     render() {

@@ -487,6 +487,53 @@ class Workorder extends Entity {
         this.setState({equipmentMEC: data})
     }
 
+    getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
+        if (!eqCode || !swoCode) {
+            return;
+        }
+
+        const response = await WSWorkorder.getEquipmentStandardWOMaxStep(eqCode, swoCode);
+
+        return response.body.data;
+    }
+
+    async repeatStepHandler() {
+        this.setLayout({newEntity: true, reading: true, assignUrlParams: false});
+
+        const { workorder } = this.state;
+        const { customField, number, equipmentCode, standardWO } = workorder;
+    
+        const maxSWO = (await this.getEquipmentStandardWOMaxStep(equipmentCode, standardWO)).step;
+        let value;
+
+        const fpIndex = maxSWO.indexOf('.')
+        if (fpIndex === -1) {
+            value = maxSWO + '.1';
+        } else {
+            const prefloat = maxSWO.substring(0, fpIndex)
+            const postfloat = maxSWO.substring(fpIndex + 1)
+            value = `${prefloat}.${parseInt(postfloat) + 1}`
+        }
+
+        const newCustomFields = customField.map(
+            (cf) => cf.code === "MTFEVP1" ? {...cf, value} : cf
+        )
+
+        this.setState({
+            workorder: {
+                ...workorder,
+                classCode: 'MTF2',
+                customField: newCustomFields,
+                copyFrom: number,
+                assignedTo: workorder.assignedTo || this.props.userData.eamAccount.employeeCode
+            }
+        });
+
+        this.postInit();
+        this.postCopy();
+        this.setLayout({reading: false});
+        this.saveHandler();
+    }
     //
     // CALLBACKS FOR ENTITY CLASS
     //
@@ -694,6 +741,7 @@ class Workorder extends Entity {
                                         userGroup: userData.eamAccount.userGroup,
                                         screencode: userData.screens[userData.workOrderScreen].screenCode,
                                         copyHandler: this.copyEntity.bind(this),
+                                        repeatStepHandler: this.repeatStepHandler.bind(this),
                                         entityDesc: this.settings.entityDesc,
                                         entityType: ENTITY_TYPE.WORKORDER,
                                         departmentalSecurity: this.departmentalSecurity,

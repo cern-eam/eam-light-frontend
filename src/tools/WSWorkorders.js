@@ -119,6 +119,10 @@ class WSWorkorders {
         return WS._get('/workordersmisc/eqpmecwo/' + workOrder, config);
     }
 
+    getEquipmentStandardWOMaxStep(eqCode, swo, config = {}) {
+        return WS._get(`/equipment/${eqCode}/mtfsteps/maxstep?swo=${swo}`, config);
+    }
+
     //
     //Children work order
     //

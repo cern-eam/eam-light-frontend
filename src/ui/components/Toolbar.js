@@ -5,11 +5,12 @@ import IconButton from "@material-ui/core/IconButton";
 import Divider from '@material-ui/core/Divider';
 import { WorkorderIcon } from "eam-components/dist/ui/components/icons";
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
-import {Barcode, ContentCopy, EmailOutline, Map, Printer, Domain, Camera, Eye} from 'mdi-material-ui';
+import {Barcode, ContentCopy, EmailOutline, Map, Printer, Domain, Camera, Eye, Repeat} from 'mdi-material-ui';
 import { RadiationIcon } from "eam-components/dist/ui/components/icons";
 import { Link } from "react-router-dom";
 import { isCernMode } from "./CERNMode";
 import EditWatchlistDialog from './watchlist/EditWatchlistDialog';
+import WorkorderTools from '../pages/work/WorkorderTools'
 
 export const ENTITY_TYPE = {
     WORKORDER: 'WORKORDER',
@@ -37,6 +38,7 @@ export const BUTTON_KEYS = {
     TREC: "TREC",
     CREATE_WORKORDER: "CREATE_WORKORDER",
     WATCHLIST: "WATCHLIST",
+    REPEAT_STEP: "REPEAT_STEP",
 }
 
 class Toolbar extends React.Component {
@@ -73,7 +75,7 @@ class Toolbar extends React.Component {
     state = { watchlistOpen: false };
 
     getButtonDefinitions = () => {
-        const {copyHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity, departmentalSecurity, screens, workorderScreencode, userCode} = this.props;
+        const {copyHandler, repeatStepHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity, departmentalSecurity, screens, workorderScreencode, userCode} = this.props;
 
         return {
             [BUTTON_KEYS.COPY] : {
@@ -280,6 +282,15 @@ class Toolbar extends React.Component {
                     text: "Watchlist"
                 },
             },
+            [BUTTON_KEYS.REPEAT_STEP]: {
+                isVisible: () => isCernMode && entity.standardWO && WorkorderTools.isClosedWorkOrder(entity.statusCode) && entity.classCode.startsWith('MTF'),
+                onClick: repeatStepHandler,
+                isDisabled: () => newEntity || departmentalSecurity.readOnly,
+                values: {
+                    icon: <Repeat />,
+                    text: "Repeat Step"
+                },
+            },
         };
     }
 
@@ -297,7 +308,8 @@ class Toolbar extends React.Component {
                     BUTTON_KEYS.OSVC,
                     BUTTON_KEYS.DISMAC,
                     BUTTON_KEYS.TREC,
-                    BUTTON_KEYS.WATCHLIST
+                    BUTTON_KEYS.WATCHLIST, 
+                    BUTTON_KEYS.REPEAT_STEP,
                 ]
                 break;
             case ENTITY_TYPE.EQUIPMENT:
