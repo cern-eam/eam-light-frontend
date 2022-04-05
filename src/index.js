@@ -26,6 +26,17 @@ const jss = create(jssPreset());
 unregister();
 polyfill();
 
+Ajax.getAxiosInstance().interceptors.request.use(
+    config => {
+        if (tokens?.token) {
+            config.headers['Authorization'] = `Bearer ${tokens.token}`;
+        }
+        return config;
+    }, error => {
+        Promise.reject(error);
+    }
+)
+
 function createAxiosAuthMiddleware() {
     return ({ getState }) =>
         (next) =>
@@ -39,19 +50,6 @@ function createAxiosAuthMiddleware() {
                 Ajax.getAxiosInstance().defaults.headers.common.INFOR_ORGANIZATION = inforContext.INFOR_ORGANIZATION;
                 Ajax.getAxiosInstance().defaults.headers.common.INFOR_SESSIONID = inforContext.INFOR_SESSIONID;
                 Ajax.getAxiosInstance().defaults.headers.common.INFOR_TENANT = inforContext.INFOR_TENANT;
-            }
-            
-            if (process.env.REACT_APP_LOGIN_METHOD) {
-                Ajax.getAxiosInstance().interceptors.request.use(
-                    config => {
-                        if (tokens?.token) {
-                            config.headers['Authorization'] = `Bearer ${tokens.token}`;
-                        }
-                        return config;
-                    }, error => {
-                        Promise.reject(error);
-                    }
-                )
             }
             next(action);
         };

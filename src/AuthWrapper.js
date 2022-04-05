@@ -1,6 +1,6 @@
-import React from 'react';
-import { ReactKeycloakProvider } from '@react-keycloak/web';
-import Keycloak from 'keycloak-js';
+import React from "react";
+import { ReactKeycloakProvider } from "@react-keycloak/web";
+import Keycloak from "keycloak-js";
 
 const keycloak = new Keycloak({
     url: process.env.REACT_APP_KEYCLOAK_URL,
@@ -16,20 +16,20 @@ const handleTokens = (freshTokens) => {
 
 export default (props) => {
     switch (process.env.REACT_APP_LOGIN_METHOD) {
-        case 'OPENID':
-            console.log('Using OpenID');
+        case "OPENID":
+            console.log("Using OpenID");
             return (
                 <ReactKeycloakProvider
                     authClient={keycloak}
                     onTokens={handleTokens}
-                    initOptions={{ onLoad: 'login-required' }}
+                    initOptions={{ onLoad: "login-required" }}
                     LoadingComponent={() => <></>}
                 >
                     {props.children}
                 </ReactKeycloakProvider>
             );
-        case 'CERNSSO':
-        case 'LOCAL':
+        case "CERNSSO":
+        case "LOCAL":
             return props.children;
         default:
             return <div>No authentication flow declared.</div>;
@@ -38,13 +38,14 @@ export default (props) => {
 
 const logout = () => {
     switch (process.env.REACT_APP_LOGIN_METHOD) {
-        case 'OPENID':
+        case "OPENID":
             keycloak.logout();
             break;
-        case 'CERNSSO':
-            window.location.href = 'https://espace.cern.ch/authentication/_layouts/15/SignOut.aspx';
+        case "CERNSSO":
+            window.location.href =
+                "https://espace.cern.ch/authentication/_layouts/15/SignOut.aspx";
             break;
-        case 'LOCAL':
+        case "LOCAL":
             alert(`LOCAL development: logout just shows this alert.`);
             break;
         default:
