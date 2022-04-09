@@ -1,7 +1,7 @@
 import React from "react";
-import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
-import EAMCheckbox from "eam-components/dist/ui/components/muiinputs/EAMCheckbox";
-import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
+import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
+import EAMCheckbox from "eam-components/ui/components/muiinputs/EAMCheckbox";
+import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocomplete";
 import WS from "../../../../tools/WS";
 
 const LocationDetails = props => {

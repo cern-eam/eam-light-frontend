@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect'
-import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
-import EAMDatePicker from 'eam-components/dist/ui/components/muiinputs/EAMDatePicker'
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
+import EAMSelect from 'eam-components/ui/components/muiinputs/EAMSelect'
+import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput'
+import EAMDatePicker from 'eam-components/ui/components/muiinputs/EAMDatePicker'
+import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete'
 import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
 import OpenInAppIcon from 'mdi-material-ui/OpenInApp'

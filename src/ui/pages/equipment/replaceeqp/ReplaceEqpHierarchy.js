@@ -1,9 +1,9 @@
 import React from 'react';
-import EISPanel from 'eam-components/dist/ui/components/panel';
-import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
-import EAMCheckbox from "eam-components/dist/ui/components/muiinputs/EAMCheckbox";
+import EISPanel from 'eam-components/ui/components/panel';
+import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
+import EAMCheckbox from "eam-components/ui/components/muiinputs/EAMCheckbox";
 import WSEquipment from "../../../../tools/WSEquipment";
-import EISTable from 'eam-components/dist/ui/components/table';
+import EISTable from 'eam-components/ui/components/table';
 
 class ReplaceEqpHierarchy extends React.Component {
 

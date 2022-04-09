@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import WSUDF from "../../../tools/WSUDF";
-import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
-import EAMSelect from "eam-components/dist/ui/components/muiinputs/EAMSelect";
-import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
+import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocomplete";
+import EAMSelect from "eam-components/ui/components/muiinputs/EAMSelect";
+import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
 
 const NONE = 'NONE';
 const CODE = 'CODE';

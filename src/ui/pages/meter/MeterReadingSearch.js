@@ -1,8 +1,8 @@
 import React from 'react';
-import EISPanel from 'eam-components/dist/ui/components/panel';
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete';
+import EISPanel from 'eam-components/ui/components/panel';
+import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete';
 import WSMeters from "../../../tools/WSMeters";
-import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
+import EAMBarcodeInput from "eam-components/ui/components/muiinputs/EAMBarcodeInput";
 
 class MeterReadingSearch extends React.Component {
 

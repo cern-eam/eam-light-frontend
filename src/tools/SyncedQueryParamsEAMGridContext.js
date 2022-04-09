@@ -1,7 +1,7 @@
 import React from 'react'
 import { useHistory } from "react-router";
 import GridTools from "./GridTools";
-import { EAMGridContextProvider } from "eam-components/dist/ui/components/grids/eam/EAMGridContext";
+import { EAMGridContextProvider } from "eam-components/ui/components/grids/eam/EAMGridContext";
 
 const SyncedQueryParamsEAMGridContext = (props) => {
     const { children, ...otherProps } = props;

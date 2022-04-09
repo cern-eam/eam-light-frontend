@@ -1,6 +1,6 @@
 import React from 'react';
-import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
-import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect'
+import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput'
+import EAMSelect from 'eam-components/ui/components/muiinputs/EAMSelect'
 import tools from '../CustomFieldTools'
 
 function CustomFieldCHAR(props) {

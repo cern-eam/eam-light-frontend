@@ -6,8 +6,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BlockUi from 'react-block-ui';
 import WSWorkorders from "../../../../tools/WSWorkorders";
-import EAMSelect from "eam-components/dist/ui/components/muiinputs/EAMSelect";
-import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
+import EAMSelect from "eam-components/ui/components/muiinputs/EAMSelect";
+import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
 
 const AdditionalCostDialog = (props) => {
     const [additionalCost, setAdditionalCost] = useState({ costType: "MISC" });

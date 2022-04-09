@@ -1,6 +1,6 @@
 import React from 'react';
 import './BookLabours.css';
-import EISTable from 'eam-components/dist/ui/components/table';
+import EISTable from 'eam-components/ui/components/table';
 
 const propCodes = ['employeeDesc', 'dateWorked', 'hoursWorked'];
 

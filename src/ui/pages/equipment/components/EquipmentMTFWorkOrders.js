@@ -1,8 +1,8 @@
 import React from "react";
-import { DATA_GRID_SORT_TYPES, DATA_GRID_SORT_DIRECTIONS } from "eam-components/dist/ui/components/datagrid/Constants";
-import EAMTable from "eam-components/dist/ui/components/eamtable/EAMTable";
+import { DATA_GRID_SORT_TYPES, DATA_GRID_SORT_DIRECTIONS } from "eam-components/ui/components/datagrid/Constants";
+import EAMTable from "eam-components/ui/components/eamtable/EAMTable";
 import { Link } from 'react-router-dom';
-import EAMTableGridRequestAdapter from "eam-components/dist/ui/components/eamtable/EAMTableGridRequestAdapter";
+import EAMTableGridRequestAdapter from "eam-components/ui/components/eamtable/EAMTableGridRequestAdapter";
 import compareAsc from 'date-fns/compareAsc'
 import parse from 'date-fns/parse'
 import { withCernMode } from '../../../components/CERNMode';

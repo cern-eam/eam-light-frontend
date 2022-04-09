@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import InfoPage from '../components/infopage/InfoPage'
 import BlockUi from 'react-block-ui'
 import 'react-block-ui/style.css'
-import Ajax from 'eam-components/dist/tools/ajax'
+import Ajax from 'eam-components/tools/ajax'
 import ErrorTypes from "../../enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";

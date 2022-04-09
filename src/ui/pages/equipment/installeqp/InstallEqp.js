@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import EISPanel from 'eam-components/dist/ui/components/panel';
+import EISPanel from 'eam-components/ui/components/panel';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid'
 import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
-import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete';
+import EAMBarcodeInput from "eam-components/ui/components/muiinputs/EAMBarcodeInput";
+import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete';
 import BlockUi from 'react-block-ui';
 
 export default function NameForm(props) {

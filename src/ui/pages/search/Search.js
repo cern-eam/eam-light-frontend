@@ -9,7 +9,7 @@ import {getLink} from "./SearchLinkUtils";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import KeyCode from '../../../enums/KeyCode'
 import ErrorTypes from "../../../enums/ErrorTypes";
-import Ajax from 'eam-components/dist/tools/ajax'
+import Ajax from 'eam-components/tools/ajax'
 
 const INITIAL_STATE = {
     results: [],

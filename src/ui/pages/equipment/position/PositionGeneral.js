@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect'
-import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
+import EAMSelect from 'eam-components/ui/components/muiinputs/EAMSelect'
+import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput'
+import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete'
 import WSEquipment from "../../../../tools/WSEquipment";
 import StatusRow from "../../../components/statusrow/StatusRow"
 import EquipmentTools from '../EquipmentTools';

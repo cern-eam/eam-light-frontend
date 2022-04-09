@@ -1,4 +1,4 @@
-import ajax from 'eam-components/dist/tools/ajax';
+import ajax from 'eam-components/tools/ajax';
 
 // const_get(url, config = {}) {
 //     return ajax.get(process.env.REACT_APP_BACKEND + url, config);

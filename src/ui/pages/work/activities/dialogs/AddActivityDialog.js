@@ -6,10 +6,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BlockUi from 'react-block-ui';
 import './AddActivityDialog.css';
-import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput';
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete';
+import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput';
+import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete';
 import WSWorkorders from '../../../../../tools/WSWorkorders';
-import EAMDatePicker from 'eam-components/dist/ui/components/muiinputs/EAMDatePicker';
+import EAMDatePicker from 'eam-components/ui/components/muiinputs/EAMDatePicker';
 import KeyCode from '../../../../../enums/KeyCode';
 
 /**

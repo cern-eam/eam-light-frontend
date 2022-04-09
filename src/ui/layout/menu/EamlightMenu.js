@@ -11,7 +11,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import EamlightSubmenu from "./EamlightSubmenu";
 import SpeedometerIcon from 'mdi-material-ui/Speedometer'
 import AutorenewIcon from 'mdi-material-ui/Autorenew'
-import {AssetIcon, PartIcon, PositionIcon, SystemIcon, WorkorderIcon} from 'eam-components/dist/ui/components/icons'
+import {AssetIcon, PartIcon, PositionIcon, SystemIcon, WorkorderIcon} from 'eam-components/ui/components/icons'
 import {Account, AccountMultiple, Settings, Tune, DatabaseRefresh} from "mdi-material-ui"
 import ScreenChange from "./ScreenChange";
 import MenuTools from './MenuTools'

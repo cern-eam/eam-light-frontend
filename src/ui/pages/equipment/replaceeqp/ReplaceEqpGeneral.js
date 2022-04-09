@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import EISPanel from 'eam-components/dist/ui/components/panel';
+import EISPanel from 'eam-components/ui/components/panel';
 import WSEquipment from "../../../../tools/WSEquipment";
-import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
-import EAMSelect from "eam-components/dist/ui/components/muiinputs/EAMSelect";
+import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocomplete";
+import EAMSelect from "eam-components/ui/components/muiinputs/EAMSelect";
 import Button from '@material-ui/core/Button';
 import Refresh from '@material-ui/icons/Refresh';
 import Dialog from '@material-ui/core/Dialog';
@@ -15,7 +15,7 @@ import swapping from './modes/mode_swapping.svg';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
+import EAMBarcodeInput from "eam-components/ui/components/muiinputs/EAMBarcodeInput";
 
 const buttonStyle = {
     bottom: '-10px',

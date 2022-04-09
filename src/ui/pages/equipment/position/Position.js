@@ -9,15 +9,15 @@ import 'react-block-ui/style.css'
 import PositionGeneral from './PositionGeneral'
 import PositionDetails from './PositionDetails'
 import PositionHierarchy from './PositionHierarchy'
-import EDMSWidgetContainer from 'eam-components/dist/ui/components/edms/EDMSWidgetContainer';
+import EDMSWidgetContainer from 'eam-components/ui/components/edms/EDMSWidgetContainer';
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
-import {PositionIcon} from 'eam-components/dist/ui/components/icons'
+import {PositionIcon} from 'eam-components/ui/components/icons'
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import {ENTITY_TYPE} from "../../../components/Toolbar";
-import Comments from 'eam-components/dist/ui/components/comments/Comments';
-import EDMSWidget from 'eam-components/dist/ui/components/edms/EDMSWidget';
+import Comments from 'eam-components/ui/components/comments/Comments';
+import EDMSWidget from 'eam-components/ui/components/edms/EDMSWidget';
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';

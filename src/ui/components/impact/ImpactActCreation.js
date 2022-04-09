@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import WSImpact from '../../../tools/WSImpact';
-import EAMInputMUI from 'eam-components/dist/ui/components/inputs/EAMInput';
-import EAMDatePickerMUI from 'eam-components/dist/ui/components/inputs/EAMDatePicker';
+import EAMInputMUI from 'eam-components/ui/components/inputs/EAMInput';
+import EAMDatePickerMUI from 'eam-components/ui/components/inputs/EAMDatePicker';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import BlockUi from 'react-block-ui';
-import EAMSelectMUI from 'eam-components/dist/ui/components/inputs/EAMSelect';
+import EAMSelectMUI from 'eam-components/ui/components/inputs/EAMSelect';
 
 class ImpactActCreation extends Component {
 

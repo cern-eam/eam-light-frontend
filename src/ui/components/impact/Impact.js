@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import WSImpact from '../../../tools/WSImpact';
-import EISPanel from 'eam-components/dist/ui/components/panel';
-import EAMInputMUI from 'eam-components/dist/ui/components/inputs/EAMInput';
+import EISPanel from 'eam-components/ui/components/panel';
+import EAMInputMUI from 'eam-components/ui/components/inputs/EAMInput';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import EISTable from 'eam-components/dist/ui/components/table';
-import EAMLinkInput from "eam-components/dist/ui/components/inputs/EAMLinkInput";
+import EISTable from 'eam-components/ui/components/table';
+import EAMLinkInput from "eam-components/ui/components/inputs/EAMLinkInput";
 import ImpactActCreation from "./ImpactActCreation";
 import ImpactActGrid from "./ImpactActGrid";
 import DialogTitle from '@material-ui/core/DialogTitle';

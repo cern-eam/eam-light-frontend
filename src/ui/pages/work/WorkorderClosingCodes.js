@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect';
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete';
+import EAMSelect from 'eam-components/ui/components/muiinputs/EAMSelect';
+import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete';
 import WSWorkorders from "../../../tools/WSWorkorders";
 import BlockUi from 'react-block-ui';
 

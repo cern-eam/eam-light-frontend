@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import UDFChar from "./UDFChar";
-import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
-import EAMDatePicker from "eam-components/dist/ui/components/muiinputs/EAMDatePicker";
-import EAMDateTimePicker from "eam-components/dist/ui/components/muiinputs/EAMDateTimePicker";
-import EAMCheckbox from "eam-components/dist/ui/components/muiinputs/EAMCheckbox";
+import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
+import EAMDatePicker from "eam-components/ui/components/muiinputs/EAMDatePicker";
+import EAMDateTimePicker from "eam-components/ui/components/muiinputs/EAMDateTimePicker";
+import EAMCheckbox from "eam-components/ui/components/muiinputs/EAMCheckbox";
 
 /**
  * Receive props:

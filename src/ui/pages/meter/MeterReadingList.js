@@ -1,5 +1,5 @@
 import React from 'react';
-import EISPanel from 'eam-components/dist/ui/components/panel';
+import EISPanel from 'eam-components/ui/components/panel';
 import MeterReadingContent from "./MeterReadingContent";
 import './MeterReading.css';
 
