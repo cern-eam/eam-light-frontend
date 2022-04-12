@@ -1,6 +1,6 @@
 import React from 'react';
-import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect'
-import EAMDatePicker from 'eam-components/dist/ui/components/muiinputs/EAMDatePicker'
+import EAMSelect from 'eam-components/ui/components/muiinputs/EAMSelect'
+import EAMDatePicker from 'eam-components/ui/components/muiinputs/EAMDatePicker'
 import tools from '../CustomFieldTools'
 
 function CustomFieldDATE(props) {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
+import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput'
 import KeyCode from '../../../enums/KeyCode';
 import WS from '../../../tools/WS';
 import BlockUi from 'react-block-ui';

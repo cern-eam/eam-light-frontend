@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
+import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput'
+import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete'
 import WSEquipment from "../../../../tools/WSEquipment";
-import EAMCheckbox from 'eam-components/dist/ui/components/muiinputs/EAMCheckbox';
+import EAMCheckbox from 'eam-components/ui/components/muiinputs/EAMCheckbox';
 
 const fieldIsHidden = (info) =>
     info && info.attribute === 'H'

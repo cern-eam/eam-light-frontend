@@ -1,7 +1,7 @@
 import React from 'react';
 import FontIcon from '@material-ui/core/Icon';
-import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
-import EAMCheckbox from "eam-components/dist/ui/components/muiinputs/EAMCheckbox";
+import EAMBarcodeInput from "eam-components/ui/components/muiinputs/EAMBarcodeInput";
+import EAMCheckbox from "eam-components/ui/components/muiinputs/EAMCheckbox";
 
 const SEARCH_TYPES = {
     PART: {

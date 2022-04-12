@@ -1,7 +1,7 @@
 import React from 'react';
-import EAMDateTimePicker from 'eam-components/dist/ui/components/muiinputs/EAMDateTimePicker';
-import EAMDatePicker from 'eam-components/dist/ui/components/muiinputs/EAMDatePicker';
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete';
+import EAMDateTimePicker from 'eam-components/ui/components/muiinputs/EAMDateTimePicker';
+import EAMDatePicker from 'eam-components/ui/components/muiinputs/EAMDatePicker';
+import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete';
 import WS from '../../../tools/WS';
 import UDFChar from '../../components/userdefinedfields/UDFChar';
 import { Grid } from '@material-ui/core';

@@ -1,8 +1,8 @@
 import Button from '@material-ui/core/Button';
 import grey from '@material-ui/core/colors/grey';
 import { withStyles } from '@material-ui/core/styles';
-import EAMInputMUI from 'eam-components/dist/ui/components/inputs/EAMInput';
-import EAMLinkInput from "eam-components/dist/ui/components/inputs/EAMLinkInput";
+import EAMInputMUI from 'eam-components/ui/components/inputs/EAMInput';
+import EAMLinkInput from "eam-components/ui/components/inputs/EAMLinkInput";
 import React from 'react';
 import BlockUi from 'react-block-ui';
 import WSWorkorders from '../../../tools/WSWorkorders';

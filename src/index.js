@@ -13,7 +13,7 @@ import { unregister } from './registerServiceWorker';
 import { create } from 'jss';
 import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import SnackbarContainer from './ui/components/snackbar/SnackbarContainer';
-import Ajax from 'eam-components/dist/tools/ajax';
+import Ajax from 'eam-components/tools/ajax';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 // EAM-480, en-GB locale used in order to have monday as first day of the week

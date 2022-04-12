@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {format} from 'date-fns'
 import WSEquipment from '../../../../tools/WSEquipment';
-import EISTable, {TRANSFORM_KEYS} from 'eam-components/dist/ui/components/table';
-import EISTableFilter from 'eam-components/dist/ui/components/table/EISTableFilter';
+import EISTable, {TRANSFORM_KEYS} from 'eam-components/ui/components/table';
+import EISTableFilter from 'eam-components/ui/components/table/EISTableFilter';
 import EquipmentMTFWorkOrders from "./EquipmentMTFWorkOrders"
 import BlockUi from 'react-block-ui';
 import { isCernMode } from '../../../components/CERNMode';
-import Constants from 'eam-components/dist/enums/Constants';
+import Constants from 'eam-components/enums/Constants';
 import useLocalStorage from '../../../../hooks/useLocalStorage';
 
 const WO_FILTER_TYPES = {

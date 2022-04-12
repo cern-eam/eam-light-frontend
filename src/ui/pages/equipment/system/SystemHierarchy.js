@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
+import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput'
+import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete'
 import WSEquipment from "../../../../tools/WSEquipment";
 
 class SystemHierarchy extends Component {

@@ -1,5 +1,5 @@
 import React from 'react';
-import {AssetIcon, PositionIcon, SystemIcon} from 'eam-components/dist/ui/components/icons';
+import {AssetIcon, PositionIcon, SystemIcon} from 'eam-components/ui/components/icons';
 import LocationIcon from '@material-ui/icons/Room';
 
 export const EAMIcon = ({ eqtype, style, classes }) => (

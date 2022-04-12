@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import CustomFieldInput from './CustomFieldInput';
 import WSCustomFields from "../../../tools/WSCustomFields";
-import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/SimpleEmptyState'
+import SimpleEmptyState from 'eam-components/ui/components/emptystates/SimpleEmptyState'
 import { isCernMode } from "../CERNMode"
 
 function CustomFields(props) {

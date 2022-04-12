@@ -1,6 +1,6 @@
 import React from "react";
-import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
-import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
+import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocomplete";
+import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
 import WS from '../../../../tools/WS';
 
 const LocationHierarchy = props => {

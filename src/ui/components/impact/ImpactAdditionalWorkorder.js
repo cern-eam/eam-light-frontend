@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import EAMGrid from 'eam-components/dist/ui/components/eamgrid';
+import EAMGrid from 'eam-components/ui/components/eamgrid';
 
 class ImpactAdditionalWorkorder extends Component {
 

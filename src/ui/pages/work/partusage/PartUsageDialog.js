@@ -6,11 +6,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BlockUi from 'react-block-ui';
 import WSWorkorders from "../../../../tools/WSWorkorders";
-import EAMRadio from "eam-components/dist/ui/components/muiinputs/EAMRadio";
-import EAMSelect from "eam-components/dist/ui/components/muiinputs/EAMSelect";
-import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
-import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
-import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
+import EAMRadio from "eam-components/ui/components/muiinputs/EAMRadio";
+import EAMSelect from "eam-components/ui/components/muiinputs/EAMSelect";
+import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocomplete";
+import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
+import EAMBarcodeInput from "eam-components/ui/components/muiinputs/EAMBarcodeInput";
 import WSParts from '../../../../tools/WSParts';
 import { makeStyles } from '@material-ui/core/styles';
 

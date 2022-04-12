@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CircularProgress, IconButton, Paper, TextField, Typography } from '@material-ui/core';
-import EAMFormLabel from 'eam-components/dist/ui/components/inputs/EAMFormLabel';
+import EAMFormLabel from 'eam-components/ui/components/inputs/EAMFormLabel';
 import { Account, Delete } from 'mdi-material-ui';
 import WS from '../../../tools/WS';
 import { Autocomplete } from '@material-ui/lab';

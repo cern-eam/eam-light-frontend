@@ -1,5 +1,5 @@
 import React from 'react';
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
+import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete'
 import WSCustomFields from "../../../../tools/WSCustomFields";
 
 function CustomFieldRENT(props) {

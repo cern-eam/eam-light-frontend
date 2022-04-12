@@ -1,0 +1,4 @@
+.autocomplete .suggestions {
+    z-index: 2000;
+    position: absolute;
+}
