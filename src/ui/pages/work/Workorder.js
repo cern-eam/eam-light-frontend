@@ -286,13 +286,18 @@ class Workorder extends Entity {
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
                 render: () =>
-                    <EDMSWidget
-                        objectID={workorder.number}
+                    <EDMSDoclightIframeContainer
                         objectType="J"
-                        creationMode="NCR"
-                        edmsDocListLink={applicationData.EL_EDMSL}
-                        showError={showError}
-                        showSuccess={showNotification} />
+                        objectID={workorder.number}
+                        edmsdoclightURL="http://localhost:3007/ncr"
+                    />
+                    // <EDMSWidget
+                    //     objectID={workorder.number}
+                    //     objectType="J"
+                    //     creationMode="NCR"
+                    //     edmsDocListLink={applicationData.EL_EDMSL}
+                    //     showError={showError}
+                    //     showSuccess={showNotification} />
                 ,
                 column: 2,
                 order: 6,
