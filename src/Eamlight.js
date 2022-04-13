@@ -73,8 +73,8 @@ class Eamlight extends Component {
 
         // Render real application once user data is there and user has an EAM account
         return (
-            <Router basename={process.env.PUBLIC_URL}>
-                <ThemeProvider theme={selectedTheme}>
+              <ThemeProvider theme={selectedTheme}>
+                 <Router basename={process.env.PUBLIC_URL}>
                     <Switch>
                     <Route path="/impact"
                            component={ImpactContainer}/>
@@ -132,8 +132,8 @@ class Eamlight extends Component {
                         </div>
                     </ApplicationLayoutContainer>
                     </Switch>
-                </ThemeProvider>
-            </Router>
+                 </Router>
+            </ThemeProvider>
         )
     }
 }
