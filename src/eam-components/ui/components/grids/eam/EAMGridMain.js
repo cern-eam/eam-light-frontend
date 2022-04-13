@@ -134,7 +134,6 @@ const EAMGridMain = (props) => {
                 )}
             </CellMeasurer>
         )},
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         [getCellProps, getRowProps, prepareRow, rows, selectedFlatRows, _cache]
     )
 
