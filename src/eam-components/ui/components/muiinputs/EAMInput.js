@@ -1,7 +1,7 @@
 import React from 'react';
 import EAMBaseInput from './EAMBaseInput';
 import EAMTextField from './EAMTextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import InputAdornment from '@mui/material/InputAdornment';
 
 class EAMInput extends EAMBaseInput {
 

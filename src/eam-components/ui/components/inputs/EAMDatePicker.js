@@ -1,10 +1,10 @@
 import React from 'react';
 import {DatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
-import {Icon} from '@material-ui/core';
+import {Icon} from '@mui/material';
 import EAMBaseInput, {formStyles} from './EAMBaseInput'
 import DateFnsUtils from '@date-io/date-fns';
 import EAMFormLabel from "./EAMFormLabel";
-import {withStyles} from "@material-ui/core/styles/index";
+import withStyles from '@mui/styles/withStyles';
 import {format} from "date-fns";
 import parse from "date-fns/parse";
 import Constants from '../../../enums/Constants';

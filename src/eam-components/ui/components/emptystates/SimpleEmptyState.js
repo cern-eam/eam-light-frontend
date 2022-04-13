@@ -1,6 +1,8 @@
 import React from 'react'
-import InfoIcon from '@material-ui/icons/Info';
-import { Typography, withStyles } from '@material-ui/core';
+import InfoIcon from '@mui/icons-material/Info';
+import { Typography } from '@mui/material';
+
+import withStyles from '@mui/styles/withStyles';
 
 const styles = theme => ({
     root: {

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Button from '@mui/material/Button';
+import MuiExpansionPanel from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import WSChecklists from '../../../tools/WSChecklists';
 import ChecklistEquipment from "./ChecklistEquipment";
 import ChecklistItem from './ChecklistItem';
@@ -11,11 +11,11 @@ import ChecklistSignature from './ChecklistSignature';
 import BlockUi from 'react-block-ui';
 import EAMSelect from '../inputs/EAMSelect'
 import SimpleEmptyState from '../../components/emptystates/SimpleEmptyState';
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Dialog from '@material-ui/core/Dialog';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import withStyles from '@mui/styles/withStyles';
+import Paper from '@mui/material/Paper';
+import Dialog from '@mui/material/Dialog';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const SIGNATURE_TYPES = {
     PERFORMER_1: 'PB01',
@@ -245,13 +245,13 @@ class Checklists extends Component {
                 expanded={!collapsed}
                 TransitionProps={{ unmountOnExit: true, timeout: 0 }}
                 onChange={(_, expanded) => this.setCollapsedEquipment(!expanded, activity.index, equipmentCode)}>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                 <ChecklistEquipment 
                     key={firstChecklist.checkListCode + "_equipment"}
                     equipmentCode={equipmentCode}
                     equipmentDesc={firstChecklist.equipmentDesc}/>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails style={{marginTop: -18}}>
+            </AccordionSummary>
+            <AccordionDetails style={{marginTop: -18}}>
                 <div style={{width: "100%"}}>
                     {checklists.map(checklist => <ChecklistItem 
                         key={'checklistItem$' + checklist.checkListCode}
@@ -267,7 +267,7 @@ class Checklists extends Component {
                         disabled={isDisabled}
                     />)}
                 </div>
-            </ExpansionPanelDetails>
+            </AccordionDetails>
         </EquipmentExpansionPanel>;
     }
 
@@ -416,7 +416,7 @@ class Checklists extends Component {
                     TransitionProps={{ unmountOnExit: true, timeout: 0 }}
                     onChange={(_, expanded) => this.setCollapsedActivity(!expanded, activity.index)}
                     style={{marginTop: '5px'}}>
-                    <ExpansionPanelSummary expandIcon={
+                    <AccordionSummary expandIcon={
                         <ExpandMoreIcon/>}>
                         <div style={{padding: 2,
                             flexGrow: "1",
@@ -440,24 +440,24 @@ class Checklists extends Component {
                                 Create Follow-up WO
                             </Button>}
                         </div>
-                    </ExpansionPanelSummary>
+                    </AccordionSummary>
                     
-                    <ExpansionPanelDetails style={{margin: 0, padding: 0}}>
+                    <AccordionDetails style={{margin: 0, padding: 0}}>
                         <div style={{width: "100%"}}>{this.renderChecklistsForActivity(activity, filteredEquipment)}
                         </div>
-                    </ExpansionPanelDetails>
+                    </AccordionDetails>
                     {activity.signatures && renderedSignatures.length &&
                         <ActivityExpansionPanel style={{backgroundColor: 'white', border: '0px'}}
                                                 expanded={!this.state.signaturesCollapsed[activity.activityCode]}
                                                 onChange={(_, expanded) => this.expandSignature(activity, expanded)}>
-                            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+                            <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                                 <span style={{fontWeight: 500}}>E-SIGNATURES</span>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails style={{margin: 0, padding: '0 24px', backgroundColor: 'white', minHeight: '50px'}}>
+                            </AccordionSummary>
+                            <AccordionDetails style={{margin: 0, padding: '0 24px', backgroundColor: 'white', minHeight: '50px'}}>
                                 <div style={{width: "100%"}}>
                                     {renderedSignatures}
                                 </div>
-                            </ExpansionPanelDetails>               
+                            </AccordionDetails>               
                         </ActivityExpansionPanel>
                     }
                 </ActivityExpansionPanel>

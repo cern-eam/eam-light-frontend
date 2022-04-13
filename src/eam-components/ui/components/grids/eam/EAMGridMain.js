@@ -5,11 +5,11 @@ import {
     TableRow,
     TableCell,
     TableBody,
-    withStyles,
     Table,
     TableSortLabel,
     Typography,
-} from "@material-ui/core";
+} from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
 import { CellMeasurer, CellMeasurerCache, List, AutoSizer } from "react-virtualized";
 import { ScrollSync, ScrollSyncPane } from "react-scroll-sync";
 

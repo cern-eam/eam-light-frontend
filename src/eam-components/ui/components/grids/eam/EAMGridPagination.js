@@ -1,4 +1,5 @@
-import { TablePagination, withStyles } from "@material-ui/core";
+import { TablePagination } from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
 import React from "react";
 
 const defaultOptions = [50, 100, 250, 500, 1000];

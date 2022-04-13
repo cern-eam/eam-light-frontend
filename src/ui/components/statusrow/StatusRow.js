@@ -1,11 +1,11 @@
 import React from 'react';
-import Tooltip from '@material-ui/core/Tooltip';
-import BlockIcon from '@material-ui/icons/Block';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ErrorOutlinedIcon from '@material-ui/icons/ErrorOutlined';
-import LockIcon from '@material-ui/icons/Lock';
-import ReportIcon from '@material-ui/icons/Report';
-import ReportProblemIcon from '@material-ui/icons/ReportProblem';
+import Tooltip from '@mui/material/Tooltip';
+import BlockIcon from '@mui/icons-material/Block';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorOutlinedIcon from '@mui/icons-material/ErrorOutlined';
+import LockIcon from '@mui/icons-material/Lock';
+import ReportIcon from '@mui/icons-material/Report';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import {EISIcon, RadioactiveWarningIcon} from 'eam-components/ui/components/icons/index'
 import {isCernMode} from '../CERNMode';
 

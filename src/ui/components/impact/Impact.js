@@ -2,21 +2,21 @@ import React, {Component} from 'react';
 import WSImpact from '../../../tools/WSImpact';
 import EISPanel from 'eam-components/ui/components/panel';
 import EAMInputMUI from 'eam-components/ui/components/inputs/EAMInput';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
 import EISTable from 'eam-components/ui/components/table';
 import EAMLinkInput from "eam-components/ui/components/inputs/EAMLinkInput";
 import ImpactActCreation from "./ImpactActCreation";
 import ImpactActGrid from "./ImpactActGrid";
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
 import BlockUi from 'react-block-ui';
 import ImpactAdditionalWorkorderContainer from "./ImpactAdditionalWorkorderContainer";
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import {withStyles} from '@material-ui/core/styles';
-import grey from '@material-ui/core/colors/grey';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import withStyles from '@mui/styles/withStyles';
 import {format, parseISO} from 'date-fns'
+import { grey } from '@mui/material/colors';
 
 const styles = () => ({
     paperWidthSm: {

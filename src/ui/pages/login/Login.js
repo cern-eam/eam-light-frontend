@@ -1,13 +1,13 @@
 import React, {Component} from 'react'
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField'
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField'
 import WS from "../../../tools/WS";
-import {withStyles} from "@material-ui/core";
+import withStyles from '@mui/styles/withStyles';
 
 
 const styles = theme => ({

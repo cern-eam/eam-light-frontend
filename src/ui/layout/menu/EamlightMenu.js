@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from '@mui/material/Tooltip';
 import '../ApplicationLayout.css'
 import './EamlightMenu.css'
 import MenuMyWorkorders from './MenuMyWorkorders'
 import MenuMyTeamWorkorders from './MenuMyTeamWorkorders'
 import MenuItem from './MenuItem'
-import AddIcon from '@material-ui/icons/Add';
-import SearchIcon from '@material-ui/icons/Search';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FormatListBulletedTriangle from 'mdi-material-ui/FormatListBulletedTriangle'
 import EamlightSubmenu from "./EamlightSubmenu";
 import SpeedometerIcon from 'mdi-material-ui/Speedometer'
@@ -16,8 +16,8 @@ import {AssetIcon, PartIcon, PositionIcon, SystemIcon, WorkorderIcon} from 'eam-
 import {Account, AccountMultiple, Settings, Tune, DatabaseRefresh} from "mdi-material-ui"
 import ScreenChange from "./ScreenChange";
 import MenuTools from './MenuTools'
-import RoomIcon from '@material-ui/icons/Room';
-import BuildIcon from '@material-ui/icons/Build';
+import RoomIcon from '@mui/icons-material/Room';
+import BuildIcon from '@mui/icons-material/Build';
 import CERNMode from '../../components/CERNMode';
 import MenuGridLink from "./MenuGridLink";
 

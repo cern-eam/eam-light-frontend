@@ -7,7 +7,7 @@ import { EAMGridContext } from "./EAMGridContext";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import EAMGridKeyboardHandler from "./EAMGridKeyboardHandler";
-import { Box, Button } from "@material-ui/core";
+import { Box, Button } from "@mui/material";
 
 
 const EAMGrid = (props) => {

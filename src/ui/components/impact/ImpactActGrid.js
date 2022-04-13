@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Icon from '@material-ui/core/Icon';
+import Icon from '@mui/material/Icon';
 import EAMGrid from 'eam-components/ui/components/eamgrid';
 
 class ImpactActGrid extends Component {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import { EAMCellField } from 'eam-components/ui/components/grids/eam/utils';
 import EAMGrid from 'eam-components/ui/components/grids/eam/EAMGrid';
 import SyncedQueryParamsEAMGridContext from "../../../../tools/SyncedQueryParamsEAMGridContext";

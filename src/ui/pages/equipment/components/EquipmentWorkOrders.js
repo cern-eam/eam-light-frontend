@@ -29,14 +29,14 @@ const WO_FILTERS = {
             return data.filter((workOrder) => workOrder.status && ['T', 'C'].every(statusCode => !workOrder.status.startsWith(statusCode)));
         }
     },
-    ...isCernMode ? {[WO_FILTER_TYPES.MTF]: {
+    ...(isCernMode ? {[WO_FILTER_TYPES.MTF]: {
         text: WO_FILTER_TYPES.MTF,
         process: (data) => {
             return data.filter((workOrder) => {
                 return workOrder.mrc && (workOrder.mrc.startsWith("ICF") || workOrder.mrc.startsWith("MTF"));
             })
         }
-    }} : {},
+    }} : {}),
     [WO_FILTER_TYPES.THIS]: {
         text: WO_FILTER_TYPES.THIS,
         process: data => [...data]

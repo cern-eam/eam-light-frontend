@@ -7,7 +7,7 @@ import {toggleSortField} from './lib/sorting';
 import {clearFilters, saveGridRequestInLocalStorage, loadGridRequestFromLocalStorage, setFilter, getFilters} from './lib/filtering';
 import ErrorTypes from "./lib/GridErrorTypes";
 import axios from "axios/index";
-import {withStyles} from "@material-ui/core/styles/index";
+import withStyles from '@mui/styles/withStyles';
 import KeyCode from "./enums/KeyCode";
 import HttpStatus from "./enums/HttpStatus";
 

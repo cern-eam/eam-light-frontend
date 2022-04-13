@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import BlockUi from 'react-block-ui';
 import WSWorkorders from "../../../../tools/WSWorkorders";
 import EAMRadio from "eam-components/ui/components/muiinputs/EAMRadio";
@@ -12,7 +12,7 @@ import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocompl
 import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
 import EAMBarcodeInput from "eam-components/ui/components/muiinputs/EAMBarcodeInput";
 import WSParts from '../../../../tools/WSParts';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 const transactionTypes = [{code: 'ISSUE', desc: 'Issue'}, {code: 'RETURN', desc: 'Return'}];
 
@@ -188,7 +188,6 @@ function PartUsageDialog(props) {
                 open={props.isDialogOpen}
                 onClose={props.handleCancel}
                 aria-labelledby="form-dialog-title"
-                disableBackdropClick={true}
                 classes={{
                     paper: classes.paper
                 }}>
@@ -287,7 +286,7 @@ function PartUsageDialog(props) {
                 </DialogActions>
             </Dialog>
         </div>
-    )
+    );
 
 }
 

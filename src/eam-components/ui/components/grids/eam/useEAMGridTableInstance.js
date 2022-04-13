@@ -1,5 +1,6 @@
 import React from "react";
-import { Checkbox, withStyles } from "@material-ui/core";
+import { Checkbox } from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
 import { useFilters, useFlexLayout, useRowSelect, useSortBy, useTable } from "react-table";
 
 const DefaultCheckbox = withStyles(() => ({

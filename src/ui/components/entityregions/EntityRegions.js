@@ -1,6 +1,6 @@
 import React from 'react'
 import RegionPanel from './regionpanel/RegionPanel';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import { useHistory, useLocation } from 'react-router-dom';
 import queryString from "query-string"
 

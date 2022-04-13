@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Dropzone from 'react-dropzone'
 import Tune from 'mdi-material-ui/Tune'
 import ContentSaveOutline from 'mdi-material-ui/ContentSaveOutline'
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@mui/material/IconButton';
 import FilePlus from 'mdi-material-ui/FilePlus'
 import DotsVertial from 'mdi-material-ui/DotsVertical'
 import NCRCreationProperties from "./NCRCreationProperties";
@@ -224,18 +224,20 @@ class NCRCreation extends Component {
 
                         </div>
                         <div>
-                            <IconButton onClick={() => this.dropzone.open()}>
+                            <IconButton onClick={() => this.dropzone.open()} size="large">
                             <FilePlus/>
                         </IconButton>
                         </div>
                         <div>
-                            <IconButton onClick={this.createDocumentHandler}>
+                            <IconButton onClick={this.createDocumentHandler} size="large">
                                 <ContentSaveOutline/>
                             </IconButton>
                         </div>
                         <div>
-                            <IconButton style={this.computeNCRPropertiesButtonStyle()}
-                                        onClick={() => this.setState({showNCRProperties: !this.state.showNCRProperties})}>
+                            <IconButton
+                                style={this.computeNCRPropertiesButtonStyle()}
+                                onClick={() => this.setState({showNCRProperties: !this.state.showNCRProperties})}
+                                size="large">
                                 <DotsVertial/>
                             </IconButton>
                         </div>
@@ -266,7 +268,7 @@ class NCRCreation extends Component {
                                            showNCRProperties={this.state.showNCRProperties}/>
                 </Dropzone>
             </div>
-        )
+        );
     }
 }
 

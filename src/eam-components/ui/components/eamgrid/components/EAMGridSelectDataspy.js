@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Button from '@material-ui/core/Button'
-import SearchIcon from '@material-ui/icons/Search';
-import {InputBase, MenuItem} from '@material-ui/core';
-import { FormControl } from '@material-ui/core';
-import Select from '@material-ui/core/Select';
-import { withStyles } from '@material-ui/core/styles';
+import Button from '@mui/material/Button'
+import SearchIcon from '@mui/icons-material/Search';
+import {InputBase, MenuItem} from '@mui/material';
+import { FormControl } from '@mui/material';
+import Select from '@mui/material/Select';
+import withStyles from '@mui/styles/withStyles';
 import classNames from 'classnames';
 import FilterOutline from 'mdi-material-ui/FilterOutline';
 import FilterRemoveOutline from 'mdi-material-ui/FilterRemoveOutline';

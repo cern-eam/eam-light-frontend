@@ -1,9 +1,9 @@
 import React from 'react';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
+import SvgIcon from '@mui/material/SvgIcon';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 import { ToggleSwitch, HomeModern, HelpCircle} from 'mdi-material-ui';
-import CheckCircle from '@material-ui/icons/CheckCircle';
-import green from '@material-ui/core/colors/green';
+import CheckCircle from '@mui/icons-material/CheckCircle';
+import { green } from '@mui/material/colors';
 
 export const PartIcon = React.forwardRef((props, ref) => (
     <SvgIcon {...props} ref={ref} viewBox='0 0 199 199'>

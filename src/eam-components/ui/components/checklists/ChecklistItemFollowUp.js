@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { Link } from 'react-router-dom';
 
 export default class ChecklistItemFollowUp extends Component {

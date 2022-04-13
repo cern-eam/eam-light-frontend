@@ -1,5 +1,5 @@
-import {withStyles} from "@material-ui/core";
-import Tabs from "@material-ui/core/Tabs";
+import withStyles from '@mui/styles/withStyles';
+import Tabs from "@mui/material/Tabs";
 
 // At the time of writing, this is required for the tab indicator on my team WOs to display nicely
 // Identified in issue https://github.com/mui-org/material-ui/issues/9337

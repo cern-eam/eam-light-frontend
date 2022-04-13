@@ -1,6 +1,6 @@
 import React from "react";
 import Comments from "eam-components/ui/components/comments/Comments";
-import LocationIcon from "@material-ui/icons/Room";
+import LocationIcon from "@mui/icons-material/Room";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import WSLocation from "../../../../tools/WSLocation";

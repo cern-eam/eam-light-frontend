@@ -1,8 +1,8 @@
 import React, {Component, Fragment} from 'react';
-import {withStyles} from "@material-ui/core/styles/index";
-import Button from '@material-ui/core/Button';
-import CheckBox from '@material-ui/icons/CheckBox';
-import CheckBoxOutlineBlank from '@material-ui/icons/CheckBoxOutlineBlank';
+import withStyles from '@mui/styles/withStyles';
+import Button from '@mui/material/Button';
+import CheckBox from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 
 const styles = {
   actionBar: {

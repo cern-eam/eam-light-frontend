@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {ChevronDown, ChevronRight} from 'mdi-material-ui'
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@mui/material/IconButton';
 import FileList from './FileList'
 import MoreDetailsList from './MoreDetailsList'
 import Dropzone from 'react-dropzone'
@@ -115,8 +115,10 @@ class DocumentRow extends Component {
                 <div>
                     <div style={this.docStyle}>
                         <div>
-                            <IconButton onClick={() => this.setState({filesVisible: !this.state.filesVisible})}
-                                        style={this.computeFilesButtonStyle()}>
+                            <IconButton
+                                onClick={() => this.setState({filesVisible: !this.state.filesVisible})}
+                                style={this.computeFilesButtonStyle()}
+                                size="large">
                                 {this.state.filesVisible ? <ChevronDown/> : <ChevronRight />}
                             </IconButton>
                         </div>
@@ -142,7 +144,7 @@ class DocumentRow extends Component {
                         </div>}
                 </div>
             </Dropzone>
-            )
+        );
     }
 }
 

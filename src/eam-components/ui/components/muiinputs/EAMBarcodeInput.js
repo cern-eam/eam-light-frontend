@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { BrowserMultiFormatReader } from '@zxing/library';
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@mui/material/IconButton';
 import { BarcodeScan } from 'mdi-material-ui';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 
 class EAMBarcodeInput extends Component {
     codeReader = null;
@@ -84,7 +84,10 @@ class EAMBarcodeInput extends Component {
             <div style={{ position: 'relative' }}>
                 {this.props.children}
 
-                <IconButton style={iconButtonStyle} onClick={this.handleClickOpen.bind(this)}>
+                <IconButton
+                    style={iconButtonStyle}
+                    onClick={this.handleClickOpen.bind(this)}
+                    size="large">
                     <BarcodeScan />
                 </IconButton>
 

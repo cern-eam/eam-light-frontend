@@ -1,7 +1,7 @@
 import React from "react";
-import TableBody from "@material-ui/core/TableBody";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
 import { DataGridContext } from "../..//DataGridContext";
 
 const defaultCellRenderer = ({ columnMetadata, getDisplayValue, CellComponent }) => (

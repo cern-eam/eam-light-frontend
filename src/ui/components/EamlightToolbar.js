@@ -1,18 +1,18 @@
 import './EamlightToolbar.css'
 import React, {Component} from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import SaveIcon from 'mdi-material-ui/ContentSaveOutline'
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
 import TelevisionGuide from 'mdi-material-ui/TelevisionGuide'
 import DeleteIcon from 'mdi-material-ui/DeleteVariant'
 import ConfirmationDialog from './ConfirmationDialog'
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import SvgIcon from '@mui/material/SvgIcon';
+import Checkbox from '@mui/material/Checkbox';
+import IconButton from '@mui/material/IconButton';
 import Toolbar from './Toolbar';
-import Divider from '@material-ui/core/Divider';
+import Divider from '@mui/material/Divider';
 
 const verticalLineStyle = {
     height: 25,
@@ -159,7 +159,7 @@ class EamlightToolbar extends Component {
                     aria-label="More"
                     aria-owns={this.state.visibilityMenu ? 'simple-menu' : null}
                     onClick={this.handleVisibilityMenuClick.bind(this)}
-                >
+                    size="large">
                     <TelevisionGuide style={isInsideAMenu ? {width: 18, marginRight: -5, marginLeft: 5} : {}}/> 
                 </IconButton>
                 {isInsideAMenu && <span>Panel Selector</span>}

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import FontIcon from '@material-ui/core/Icon';
-import IconButton from '@material-ui/core/IconButton';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import FontIcon from '@mui/material/Icon';
+import IconButton from '@mui/material/IconButton';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
-import Fullscreen from '@material-ui/icons/Fullscreen';
+import Fullscreen from '@mui/icons-material/Fullscreen';
 import { FullscreenExit } from 'mdi-material-ui';
 
 class EISPanel extends Component {
@@ -73,7 +73,7 @@ class EISPanel extends Component {
                 expanded={this.props.alwaysExpanded ? true : this.state.panelExpanded}
                 TransitionProps={{ timeout: 300 }}
                 onChange={this._onPanelChange}
-                {...this.props.ExpansionPanelProps}
+                {...this.props.AccordionProps}
             >
                 <AccordionSummary
                     expandIcon={this.props.alwaysExpanded ? undefined : <ExpandMoreIcon />}
@@ -88,7 +88,7 @@ class EISPanel extends Component {
                             <IconButton
                                 onClick={this.linkClickHandler.bind(this)}
                                 style={{ height: 'auto', width: 35 }}
-                            >
+                                size="large">
                                 <linkIcon style={this.linkIconStyle} />
                             </IconButton>
                         )}
@@ -113,7 +113,7 @@ export const withFullscreen = (props) => (Component) => {
                             e.stopPropagation();
                             onFullscreenOpen();
                         }}
-                    >
+                        size="large">
                         <Fullscreen />
                     </IconButton>
                 ) : (
@@ -122,7 +122,7 @@ export const withFullscreen = (props) => (Component) => {
                             e.stopPropagation();
                             onFullscreenClose();
                         }}
-                    >
+                        size="large">
                         <FullscreenExit />
                     </IconButton>
                 )

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import FileRow from './FileRow'
 import FilePlus from 'mdi-material-ui/FilePlus'
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@mui/material/IconButton';
 
 class FileList extends Component {
 
@@ -33,14 +33,16 @@ class FileList extends Component {
         return (
             <div style={this.fileListStyle}>
                 <div style={this.fileAttachmentStyle}>
-                    <IconButton style={{color: "rgb(0, 170, 255)"}}
-                                onClick={() => this.props.dropzone.open()}>
+                    <IconButton
+                        style={{color: "rgb(0, 170, 255)"}}
+                        onClick={() => this.props.dropzone.open()}
+                        size="large">
                         <FilePlus/>
                     </IconButton>
                 </div>
                 {this.generateFileList()}
             </div>
-        )
+        );
     }
 }
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import BlockUi from 'react-block-ui';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import ReplaceEqpHierarchy from "./ReplaceEqpHierarchy";
 import ReplaceEqpGeneral from "./ReplaceEqpGeneral";
 import WSEquipment from "../../../../tools/WSEquipment";

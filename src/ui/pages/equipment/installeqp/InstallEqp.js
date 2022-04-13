@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import EISPanel from 'eam-components/ui/components/panel';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid'
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid'
 import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
 import EAMBarcodeInput from "eam-components/ui/components/muiinputs/EAMBarcodeInput";

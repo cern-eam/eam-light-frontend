@@ -4,7 +4,7 @@ import EAMDatePicker from 'eam-components/ui/components/muiinputs/EAMDatePicker'
 import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete';
 import WS from '../../../tools/WS';
 import UDFChar from '../../components/userdefinedfields/UDFChar';
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
 const WorkorderScheduling = (props) => {
     const { children, workOrderLayout, workorder, updateWorkorderProperty } = props;
@@ -25,7 +25,7 @@ const WorkorderScheduling = (props) => {
 
     return (
         <div style={{ width: '100%', marginTop: 0 }}>
-            <Grid container justify="space-between" spacing={2}>
+            <Grid container justifyContent="space-between" spacing={2}>
                 <Grid item xs={6}>
                     <EAMAutocomplete
                         children={children}

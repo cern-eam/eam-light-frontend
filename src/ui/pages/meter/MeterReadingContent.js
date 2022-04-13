@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import Input from '@material-ui/core/Input';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Divider from '@material-ui/core/Divider';
-import Button from '@material-ui/core/Button';
-import Save from '@material-ui/icons/Save';
+import Accordion from '@mui/material/Accordion';
+import AccordionActions from '@mui/material/AccordionActions';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import Save from '@mui/icons-material/Save';
 import './MeterReading.css';
 import KeyCode from "../../../enums/KeyCode";;
 
@@ -51,8 +51,8 @@ function MeterReadingContent(props) {
 
     return (
         <div style={{width: '100%', height: '100%'}}>
-            <ExpansionPanel defaultExpanded>
-                <ExpansionPanelSummary>
+            <Accordion defaultExpanded>
+                <AccordionSummary>
                     <div className={`meterContentDetails`}>
                         <div className={`meterContentDetail`}>
                             <div className={`meterContentTitleContentH`}>Equipment:</div>
@@ -66,8 +66,8 @@ function MeterReadingContent(props) {
                         }
                         
                     </div>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                </AccordionSummary>
+                <AccordionDetails>
                     <div className={`meterContentDetails`}>
                         <div className={`meterContentDetail`}>
                             <div className={`meterContentTitleContentH`}>Last Reading Date:</div>
@@ -79,9 +79,9 @@ function MeterReadingContent(props) {
                             </div>
                         </div>
                     </div>
-                </ExpansionPanelDetails>
+                </AccordionDetails>
                 <Divider/>
-                <ExpansionPanelActions>
+                <AccordionActions>
 
                     <FormControl style={{width: '100%', marginLeft: '15px', marginRight: '15px'}}>
                         <InputLabel htmlFor="readingValue">{props.disabled ? 'Recording meter readings is disabled' : 'New Value'}</InputLabel>
@@ -104,8 +104,8 @@ function MeterReadingContent(props) {
                         Save
                     </Button>
                     }
-                </ExpansionPanelActions>
-            </ExpansionPanel>
+                </AccordionActions>
+            </Accordion>
         </div>
     );
 }

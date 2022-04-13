@@ -1,12 +1,12 @@
 import React from 'react';
 import {DateTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
-import {Icon} from '@material-ui/core';
+import {Icon} from '@mui/material';
 import EAMBaseInput, {formStyles} from './EAMBaseInput'
 import {format} from 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
 import parse from 'date-fns/parse';
 import EAMFormLabel from "./EAMFormLabel";
-import {withStyles} from "@material-ui/core/styles/index";
+import withStyles from '@mui/styles/withStyles';
 
 const styles = theme => {
     const defaultStyles = formStyles(theme);

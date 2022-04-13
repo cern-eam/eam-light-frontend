@@ -1,6 +1,7 @@
 import React from 'react';
-import {Search} from '@material-ui/icons';
-import {Dialog, DialogContent, withStyles} from '@material-ui/core';
+import {Search} from '@mui/icons-material';
+import { Dialog, DialogContent } from '@mui/material';
+import withStyles from '@mui/styles/withStyles';
 import EAMGrid from '../eamgrid';
 import {handleError} from '../actions/uiActions';
 import PropTypes from 'prop-types';

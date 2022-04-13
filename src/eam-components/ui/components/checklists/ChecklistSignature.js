@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
 import WSChecklists from '../../../tools/WSChecklists';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
 const modalStyle = {
     padding: '30px',

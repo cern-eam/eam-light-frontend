@@ -1,7 +1,7 @@
 import React from 'react';
-import Select from '@material-ui/core/Select';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@mui/material/Select';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import MenuItem from '@mui/material/MenuItem';
 
 const filterSelectStyle = {
     fontSize: '0.8125rem',

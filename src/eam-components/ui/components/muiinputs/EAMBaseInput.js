@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@mui/material/IconButton';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
 import { Link } from 'react-router-dom';
 
@@ -191,7 +191,7 @@ export default class EAMBaseInput extends Component {
             <div style={this.mainDivStyle}>
                 {this.renderComponent()}
                 {this.props.link && this.props.link(this.state.value) && (
-                    <IconButton style={this.linkButtonStyle} component={eamLink}>
+                    <IconButton style={this.linkButtonStyle} component={eamLink} size="large">
                         {this.props.icon}
                     </IconButton>
                 )}

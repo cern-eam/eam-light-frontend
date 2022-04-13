@@ -1,10 +1,10 @@
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import MenuItem from '@material-ui/core/MenuItem';
-import { withStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
+import MenuItem from '@mui/material/MenuItem';
+import withStyles from '@mui/styles/withStyles';
+import InputAdornment from '@mui/material/InputAdornment';
 import axios from "axios/index";
 
 /**

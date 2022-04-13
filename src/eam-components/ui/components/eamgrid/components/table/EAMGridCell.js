@@ -1,5 +1,5 @@
 import React from 'react';
-import {withStyles} from "@material-ui/core/styles/index";
+import withStyles from '@mui/styles/withStyles';
 
 const styles = {
     searchRowCell: {

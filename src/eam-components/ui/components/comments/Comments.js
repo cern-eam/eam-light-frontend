@@ -3,7 +3,7 @@ import WSComments from "../../../tools/WSComments";
 import Comment from "./Comment";
 import CommentNew from "./CommentNew";
 import EISPanel from '../panel';
-import List from '@material-ui/core/List';
+import List from '@mui/material/List';
 import PropTypes from "prop-types";
 
 const datatablePanelStyle = {

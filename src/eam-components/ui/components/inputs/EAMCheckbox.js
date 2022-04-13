@@ -1,8 +1,8 @@
 import React from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
+import Checkbox from '@mui/material/Checkbox';
 import EAMBaseInput, {formStyles} from "./EAMBaseInput";
 import EAMFormLabel from "./EAMFormLabel";
-import {withStyles} from "@material-ui/core/styles/index";
+import withStyles from '@mui/styles/withStyles';
 
 class EAMCheckbox extends EAMBaseInput {
 

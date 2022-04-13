@@ -4,8 +4,8 @@ import CommentUser from "./CommentUser";
 import CommentBar from "./CommentBar";
 import CommentAvatar from "./CommentAvatar"
 import TextareaAutosize from 'react-autosize-textarea';
-import ListItem from '@material-ui/core/ListItem';
-import { withStyles } from '@material-ui/core/styles';
+import ListItem from '@mui/material/ListItem';
+import withStyles from '@mui/styles/withStyles';
 import {FlagCheckered, PlusBoxOutline, Pencil} from 'mdi-material-ui';
 
 import CKEditor from '@ckeditor/ckeditor5-react';

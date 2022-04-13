@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import CommentIcon from '@material-ui/icons/Comment';
+import CommentIcon from '@mui/icons-material/Comment';
 
 export default class ChecklistItemNotes extends Component {
     constructor(props) {

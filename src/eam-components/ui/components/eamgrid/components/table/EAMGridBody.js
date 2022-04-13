@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import DataGridLoadingSpinner from '../EAMGridLoadingSpinner';
-import Checkbox from '@material-ui/core/Checkbox';
-import CheckBox from '@material-ui/icons/CheckBox';
-import CheckBoxOutlineBlank from '@material-ui/icons/CheckBoxOutlineBlank';
-import grey from '@material-ui/core/colors/grey';
-import Typography from '@material-ui/core/Typography';
-import {withStyles} from "@material-ui/core/styles/index";
-import Edit from "@material-ui/icons/Edit";
+import Checkbox from '@mui/material/Checkbox';
+import CheckBox from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
+import Typography from '@mui/material/Typography';
+import withStyles from '@mui/styles/withStyles';
+import Edit from "@mui/icons-material/Edit";
 import classNames from "classnames";
 import EAMGridCell from "./EAMGridCell";
+import { grey } from '@mui/material/colors';
 
 const styles = {
     searchRow: {

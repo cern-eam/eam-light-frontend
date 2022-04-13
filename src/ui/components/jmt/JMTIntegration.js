@@ -1,12 +1,12 @@
-import Button from '@material-ui/core/Button';
-import grey from '@material-ui/core/colors/grey';
-import { withStyles } from '@material-ui/core/styles';
+import Button from '@mui/material/Button';
+import withStyles from '@mui/styles/withStyles';
 import EAMInputMUI from 'eam-components/ui/components/inputs/EAMInput';
 import EAMLinkInput from "eam-components/ui/components/inputs/EAMLinkInput";
 import React from 'react';
 import BlockUi from 'react-block-ui';
 import WSWorkorders from '../../../tools/WSWorkorders';
 import WSJMTIntegration from './WSJMTIntegration';
+import { grey } from '@mui/material/colors';
 
 const FULL_PROCESS_GROUPS = ['MFPLUS'];
 

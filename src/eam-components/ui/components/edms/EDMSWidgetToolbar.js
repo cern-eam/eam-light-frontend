@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@mui/material/IconButton';
 import ImageFilter from 'mdi-material-ui/ImageFilter'
 import FormatListBulleted from 'mdi-material-ui/FormatListBulleted'
 import PlusBox from 'mdi-material-ui/PlusBox'
@@ -39,28 +39,37 @@ class EDMSWidgetToolbar extends Component {
             <div style={this.mainDivStyle}>
 
                 {this.props.link && (
-                    <IconButton onClick={this.linkClickHandler.bind(this)} style={{ color: "#00aaff" }}>
+                    <IconButton
+                        onClick={this.linkClickHandler.bind(this)}
+                        style={{ color: "#00aaff" }}
+                        size="large">
                         <OpenInNewIcon />
                     </IconButton>
                 )}
 
                 {!this.props.documentCreationDisabled &&
-                    <IconButton onClick={this.props.documentCreationHandler}
-                                style={this.computeDocumentCreationStyle()}>
+                    <IconButton
+                        onClick={this.props.documentCreationHandler}
+                        style={this.computeDocumentCreationStyle()}
+                        size="large">
                         <PlusBox/>
                     </IconButton>}
 
                 <div style={this.separatorStyle}/>
-                <IconButton onClick={this.props.doclistClickHandler}
-                            style={this.computeDoclistButtonStyle()}>
+                <IconButton
+                    onClick={this.props.doclistClickHandler}
+                    style={this.computeDoclistButtonStyle()}
+                    size="large">
                     <FormatListBulleted/>
                 </IconButton>
-                <IconButton onClick={this.props.galleriaClickHandler}
-                            style={this.computeGalleriaButtonStyle()}>
+                <IconButton
+                    onClick={this.props.galleriaClickHandler}
+                    style={this.computeGalleriaButtonStyle()}
+                    size="large">
                 <ImageFilter/>
                 </IconButton>
             </div>
-        )
+        );
     }
 }
 

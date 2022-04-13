@@ -1,9 +1,9 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 import EAMBaseInput, {formStyles} from './EAMBaseInput';
-import {withStyles} from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 import EAMFormLabel from "./EAMFormLabel";
-import InputAdornment from '@material-ui/core/InputAdornment';
+import InputAdornment from '@mui/material/InputAdornment';
 
 class EAMInput extends EAMBaseInput {
 
