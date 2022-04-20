@@ -293,7 +293,7 @@ class Workorder extends Entity {
                     />
                 ,
                 RegionPanelProps: {
-                    detailsStyle: { padding: 0 }
+                    detailsStyle: { padding: 0, minHeight: 150 }
                 },
                 column: 2,
                 order: 6,
