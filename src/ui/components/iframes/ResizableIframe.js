@@ -6,14 +6,11 @@ const ResizableIFrame = ({
     id, 
     className, 
     style,
-    title, 
     iframeResizerOptions = {} 
 }) => (
     <IframeResizer
         {...iframeResizerOptions}
-        log
         autoResize
-        title={title}
         src={src}
         id={id}
         className={className}
