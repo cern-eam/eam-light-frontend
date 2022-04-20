@@ -1,6 +1,5 @@
 import Checklists from 'eam-components/dist/ui/components/checklists/Checklists';
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
-import EDMSWidget from 'eam-components/dist/ui/components/edms/EDMSWidget';
 import {WorkorderIcon} from 'eam-components/dist/ui/components/icons';
 import React from 'react';
 import BlockUi from 'react-block-ui';
@@ -10,6 +9,7 @@ import WS from '../../../tools/WS'
 import {ENTITY_TYPE} from "../../components/Toolbar";
 import CustomFields from '../../components/customfields/CustomFields';
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
+import NCRIframeContainer from "../../components/iframes/NCRIframeContainer";
 import Entity from '../Entity';
 import EamlightToolbarContainer from './../../components/EamlightToolbarContainer';
 import Activities from './activities/Activities';
@@ -286,21 +286,18 @@ class Workorder extends Entity {
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
                 render: () =>
-                    <EDMSDoclightIframeContainer
+                    <NCRIframeContainer
                         objectType="J"
                         objectID={workorder.number}
-                        edmsdoclightURL="http://localhost:3007/ncr"
+                        mode='NCR'                        
                     />
-                    // <EDMSWidget
-                    //     objectID={workorder.number}
-                    //     objectType="J"
-                    //     creationMode="NCR"
-                    //     edmsDocListLink={applicationData.EL_EDMSL}
-                    //     showError={showError}
-                    //     showSuccess={showNotification} />
                 ,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0 }
+                },
                 column: 2,
                 order: 6,
+                
                 ignore: !isCernMode && !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS)
             },

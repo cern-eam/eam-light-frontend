@@ -1,38 +1,24 @@
-import React, {Component} from 'react';
-import {iframeResizer} from 'iframe-resizer';
+import React from 'react';
+import IframeResizer from 'iframe-resizer-react'
 
-class ResizableIFrame extends Component {
-    componentWillUnmount() {
-        const mountedIframe = this.refs.frame.iFrameResizer
-        if(!mountedIframe) return;
-        mountedIframe.removeListeners();
-    }
-
-    resize = () => {
-        const frame = this.refs.frame;
-        const { iframeResizerOptions } = this.props;
-        if (!frame) return;
-        iframeResizer(iframeResizerOptions, frame);
-    }
-
-    render() {
-        const { src, id, className, style, title } = this.props;
-        return (
-        <iframe
-            ref="frame"
-            title={title}
-            src={src}
-            id={id}
-            className={className}
-            style={style}
-            onLoad={this.resize}
-        />
-        );
-    }
-}
-
-ResizableIFrame.defaultProps = {
-    iframeResizerOptions: {}
-}
+const ResizableIFrame = ({ 
+    src,
+    id, 
+    className, 
+    style,
+    title, 
+    iframeResizerOptions = {} 
+}) => (
+    <IframeResizer
+        {...iframeResizerOptions}
+        log
+        autoResize
+        title={title}
+        src={src}
+        id={id}
+        className={className}
+        style={style}
+    />
+);
 
 export default ResizableIFrame;

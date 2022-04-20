@@ -4,23 +4,24 @@ import { withCernMode } from '../CERNMode'
 
 function mapStateToProps(state) {
     return {
-        edmsdoclightURL: state.application.applicationData.EL_DOCLI
+         // TODO: add as app setting on r5install
     }
 }
 
-const EDMSDoclightIframeContainer = connect(
+const NCRIframeContainer = connect(
     mapStateToProps,
     {},
     (state, dispatch, own) => ({
         ...state, 
         ...dispatch,
         ...own,
-        iframeTitle: 'DOCS',
+        iframeTitle: 'NCR',
         mode: 'write',
         profile: 'EAMLIGHT',
         collapsible: false,
-        title: ''
-    }),
+        edmsdoclightURL: "http://localhost:3007/ncr",
+        creationMode: 'NCR'
+    })
 )(ComponentIframe)
 
-export default withCernMode(EDMSDoclightIframeContainer)
+export default withCernMode(NCRIframeContainer)
