@@ -11,15 +11,14 @@ class ComponentIframe extends Component {
     }
 
     render() {
-        const { edmsdoclightURL, iframeTitle, ...params } = this.props;
+        const { edmsdoclightURL, options,  ...params } = this.props;
 
         return (
             <ResizableIframe
-                title={iframeTitle}
                 iframeResizerOptions={{
                     scrolling: false,
                     checkOrigin: false, // CHECK: disable this option or list allowed origins
-                    heightCalculationMethod: 'bodyOffset'
+                    ...options
                 }}
                 src={`${this.props.edmsdoclightURL}?${queryString.stringify(params)}`}
                 style={this.docLightStyle}/>

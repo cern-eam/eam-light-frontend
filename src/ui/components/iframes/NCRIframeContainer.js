@@ -15,12 +15,13 @@ const NCRIframeContainer = connect(
         ...state, 
         ...dispatch,
         ...own,
-        iframeTitle: 'NCR',
         mode: 'write',
         profile: 'EAMLIGHT',
-        collapsible: false,
         edmsdoclightURL: "http://localhost:3007/ncr",
-        creationMode: 'NCR'
+        creationMode: 'NCR',
+        options: {
+            heightCalculationMethod: 'taggedElement'
+        }
     })
 )(ComponentIframe)
 
