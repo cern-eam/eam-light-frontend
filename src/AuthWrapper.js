@@ -23,7 +23,7 @@ export default (props) => {
                     authClient={keycloak}
                     onTokens={handleTokens}
                     initOptions={{ onLoad: "login-required" }}
-                    LoadingComponent={() => <></>}
+                    LoadingComponent={React.Fragment}
                 >
                     {props.children}
                 </ReactKeycloakProvider>
