@@ -7,8 +7,8 @@ import SearchHeader from "./SearchHeader";
 import {Redirect} from "react-router-dom";
 import {getLink} from "./SearchLinkUtils";
 import LinearProgress from "@mui/material/LinearProgress";
-import KeyCode from '../../../enums/KeyCode'
-import ErrorTypes from "../../../enums/ErrorTypes";
+import KeyCode from 'eam-components/enums/KeyCode'
+import ErrorTypes from "eam-components/enums/ErrorTypes";
 import Ajax from 'eam-components/tools/ajax'
 
 const INITIAL_STATE = {

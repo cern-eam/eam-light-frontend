@@ -1,3 +1,7 @@
+import './Eamlight.css';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import ApplicationLayoutContainer from './ui/layout/ApplicationLayoutContainer';
@@ -11,10 +15,6 @@ import SystemSearchContainer from './ui/pages/equipment/system/search/SystemSear
 import LocationSearchContainer from './ui/pages/equipment/location/search/LocationSearchContainer';
 import BlockUi from 'react-block-ui';
 import InfoPage from './ui/components/infopage/InfoPage';
-import ImpactContainer from './ui/components/impact/ImpactContainer';
-import './Eamlight.css';
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
 import PartContainer from "./ui/pages/part/PartContainer";
 import SearchContainer from "./ui/pages/search/SearchContainer";
 import ReplaceEqpContainer from "./ui/pages/equipment/replaceeqp/ReplaceEqpContainer";
@@ -24,7 +24,6 @@ import MeterReadingContainer from './ui/pages/meter/MeterReadingContainer';
 import EquipmentContainer from "./ui/pages/equipment/EquipmentContainer";
 import LoginContainer from "./ui/pages/login/LoginContainer";
 import Grid from "./ui/pages/grid/Grid";
-import JMTIntegrationContainer from "./ui/components/jmt/JMTIntegrationContainer";
 import EqpTree from "./ui/components/eqtree/EqpTree";
 import InstallEqpContainer from "./ui/pages/equipment/installeqp/InstallEqpContainer";
 import Themes from 'eam-components/ui/components/theme';
@@ -77,61 +76,57 @@ class Eamlight extends Component {
                       <ThemeProvider theme={selectedTheme}>
                          <Router basename={process.env.PUBLIC_URL}>
                             <Switch>
-                            <Route path="/impact"
-                                   component={ImpactContainer}/>
-                            <Route path="/jmt"
-                                   component={JMTIntegrationContainer}/>
-                             <Route path="/eqptree"
-                                   component={EqpTree}/>
-                            <ApplicationLayoutContainer>
-                                <EamlightMenuContainer/>
-                                <div style={{height: "100%"}}>
-                                        <Route exact path="/"
-                                               component={SearchContainer}/>
+                                   <Route path="/eqptree" component={EqpTree}/>
 
-                                        <Route path="/workorder/:code?"
-                                               component={WorkorderContainer}/>
+                                   <ApplicationLayoutContainer>
+                                          <EamlightMenuContainer/>
+                                          <div style={{height: "100%"}}>
+                                                 <Route exact path="/"
+                                                        component={SearchContainer}/>
 
-                                        <Route path="/wosearch"
-                                               component={WorkorderSearchContainer}/>
+                                                 <Route path="/workorder/:code?"
+                                                        component={WorkorderContainer}/>
 
-                                        <Route path="/part/:code?"
-                                               component={PartContainer}/>
+                                                 <Route path="/wosearch"
+                                                        component={WorkorderSearchContainer}/>
 
-                                               <Route path="/partsearch"
-                                               component={PartSearchContainer}/>
+                                                 <Route path="/part/:code?"
+                                                        component={PartContainer}/>
 
-                                        <Route path="/assetsearch"
-                                               component={AssetSearchContainer}/>
+                                                        <Route path="/partsearch"
+                                                        component={PartSearchContainer}/>
 
-                                        <Route path="/positionsearch"
-                                               component={PositionSearchContainer}/>
+                                                 <Route path="/assetsearch"
+                                                        component={AssetSearchContainer}/>
 
-                                        <Route path="/systemsearch"
-                                               component={SystemSearchContainer}/>
+                                                 <Route path="/positionsearch"
+                                                        component={PositionSearchContainer}/>
 
-                                        <Route path="/locationsearch"
-                                               component={LocationSearchContainer}/>
+                                                 <Route path="/systemsearch"
+                                                        component={SystemSearchContainer}/>
 
-                                        <Route path="/equipment/:code?"
-                                               component={EquipmentRedirect}/>
+                                                 <Route path="/locationsearch"
+                                                        component={LocationSearchContainer}/>
 
-                                        <Route path="/replaceeqp"
-                                               component={ReplaceEqpContainer}/>
+                                                 <Route path="/equipment/:code?"
+                                                        component={EquipmentRedirect}/>
 
-                                        <Route path="/meterreading"
-                                               component={MeterReadingContainer}/>
+                                                 <Route path="/replaceeqp"
+                                                        component={ReplaceEqpContainer}/>
 
-                                        <Route path="/installeqp"
-                                               component={InstallEqpContainer}/>
+                                                 <Route path="/meterreading"
+                                                        component={MeterReadingContainer}/>
 
-                                        <Route path="/grid"
-                                               component={Grid}/>
+                                                 <Route path="/installeqp"
+                                                        component={InstallEqpContainer}/>
 
-                                        <Route path={eqpRegex}
-                                               component={EquipmentContainer}/>
-                                </div>
-                            </ApplicationLayoutContainer>
+                                                 <Route path="/grid"
+                                                        component={Grid}/>
+
+                                                 <Route path={eqpRegex}
+                                                        component={EquipmentContainer}/>
+                                          </div>
+                                   </ApplicationLayoutContainer>
                             </Switch>
                          </Router>
                     </ThemeProvider>

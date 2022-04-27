@@ -4,7 +4,7 @@ class MenuTools {
     refreshCache(showNotificatoin, showError) {
         WS.refreshCache().then(response => {
             showNotificatoin(response.body.data)
-        }).catch(error => {
+        }).catch(_ => {
             showError('EAM Light Cache Refresh has failed.')
         })
     }

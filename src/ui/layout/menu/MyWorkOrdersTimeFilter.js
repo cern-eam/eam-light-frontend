@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import Tabs from '@mui/material/Tabs';
+import React from "react";
 import StyledTab from './StyledTab';
 import StyledTabs from './StyledTabs';
 import MenuTools from './MenuTools';

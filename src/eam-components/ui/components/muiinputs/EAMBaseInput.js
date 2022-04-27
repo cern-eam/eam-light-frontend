@@ -3,8 +3,6 @@ import IconButton from '@mui/material/IconButton';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
 import { Link } from 'react-router-dom';
 
-const typingNumberReg = /^\-?\d*\.?\d*?$/;
-
 export default class EAMBaseInput extends Component {
     //PROPS
     // VALIDATORS (list not required) default([])
@@ -45,7 +43,8 @@ export default class EAMBaseInput extends Component {
 
     initBase = (props) => {
         // Register as children
-        let { children, elementInfo, customValidators, valueKey, transformers } = props;
+        let { children, elementInfo, customValidators, transformers } = props;
+        
         if (children && elementInfo) {
             const key =
                 typeof elementInfo.xpath === 'string' ? elementInfo.xpath : elementInfo.text + elementInfo.elementId;

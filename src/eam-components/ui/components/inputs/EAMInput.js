@@ -61,7 +61,6 @@ class EAMInput extends EAMBaseInput {
                     }}
                     inputProps={inputProps}
                     InputProps={{
-                        disableUnderline: true,
                         classes: {
                             root: classes.textFieldRoot,
                             input: classes.textFieldInput

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Settings from 'mdi-material-ui/Settings';
+import Cog from 'mdi-material-ui/Cog';
 
 export default class ChecklistEquipment extends Component {
 
@@ -19,7 +19,7 @@ export default class ChecklistEquipment extends Component {
     render() {
         return (
             <div style={this.mainStyle}>
-                <Settings style={this.settingsIconStyle}/>
+                <Cog style={this.settingsIconStyle}/>
                 {this.props.equipmentCode} — {this.props.equipmentDesc}
             </div>
         )

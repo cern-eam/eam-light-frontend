@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
 import IconButton from '@mui/material/IconButton';
-import ImageFilter from 'mdi-material-ui/ImageFilter'
-import FormatListBulleted from 'mdi-material-ui/FormatListBulleted'
-import PlusBox from 'mdi-material-ui/PlusBox'
-import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
+import { ImageFilterNone, FormatListBulleted, PlusBox, OpenInNew } from 'mdi-material-ui'
 
 class EDMSWidgetToolbar extends Component {
 
@@ -43,7 +40,7 @@ class EDMSWidgetToolbar extends Component {
                         onClick={this.linkClickHandler.bind(this)}
                         style={{ color: "#00aaff" }}
                         size="large">
-                        <OpenInNewIcon />
+                        <OpenInNew />
                     </IconButton>
                 )}
 
@@ -66,7 +63,7 @@ class EDMSWidgetToolbar extends Component {
                     onClick={this.props.galleriaClickHandler}
                     style={this.computeGalleriaButtonStyle()}
                     size="large">
-                <ImageFilter/>
+                <ImageFilterNone/>
                 </IconButton>
             </div>
         );

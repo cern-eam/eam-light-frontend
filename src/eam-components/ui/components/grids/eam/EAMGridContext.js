@@ -6,7 +6,7 @@ import React, {
     useMemo,
     useEffect,
 } from "react";
-import GridWS from "../../eamgrid/lib/GridWS";
+import WSGrid from "../../../../tools/WSGrid";
 import { EAMCellField, EAMFilterField, getRowAsAnObject } from "./utils";
 import useEAMGridTableInstance from "./useEAMGridTableInstance";
 import { useAsyncDebounce } from "react-table";
@@ -206,7 +206,7 @@ export const EAMGridContextProvider = (props) => {
             }
             const newFetchDataCancelToken = Axios.CancelToken.source();
             setFetchDataCancelToken(newFetchDataCancelToken);
-            GridWS.getGridData(gr, {
+            WSGrid.getGridData(gr, {
                 cancelToken: newFetchDataCancelToken.token,
             })
                 .then((response) => {
@@ -244,7 +244,7 @@ export const EAMGridContextProvider = (props) => {
 
     const handleExportToCSV = useCallback(() => {
         setLoadingExportToCSV(true);
-        return GridWS.exportDataToCSV(gridRequest)
+        return WSGrid.exportDataToCSV(gridRequest)
             .then((result) => {
                 const hiddenElement = document.createElement("a");
                 // utf8BOM used to enable detection of utf-8 encoding by excel when opening the CSV file

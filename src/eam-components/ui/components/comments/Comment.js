@@ -6,18 +6,11 @@ import CommentAvatar from "./CommentAvatar"
 import TextareaAutosize from 'react-autosize-textarea';
 import ListItem from '@mui/material/ListItem';
 import withStyles from '@mui/styles/withStyles';
-import {FlagCheckered, PlusBoxOutline, Pencil} from 'mdi-material-ui';
+import { FlagCheckered, PlusBoxOutline, Pencil } from 'mdi-material-ui';
 
 import CKEditor from '@ckeditor/ckeditor5-react';
 
 import BalloonEditor from '@ckeditor/ckeditor5-editor-balloon/src/ballooneditor';
-import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
-import InlineEditor from '@ckeditor/ckeditor5-editor-inline/src/inlineeditor';
-import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
-import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
-import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import sanitizeHtml from 'sanitize-html';
 
 

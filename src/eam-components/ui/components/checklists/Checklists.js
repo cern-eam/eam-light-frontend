@@ -327,7 +327,7 @@ class Checklists extends Component {
         }
         this.setState({blocking: true});
 
-        WSChecklists.createFolowUpWorkOrders(activity)
+        WSChecklists.createFollowUpWorkOrders(activity)
             .then(resp => {
                 this.readActivities(activity.workOrderNumber);
                 this.props.showSuccess('Follow-up workorders successfully created.');

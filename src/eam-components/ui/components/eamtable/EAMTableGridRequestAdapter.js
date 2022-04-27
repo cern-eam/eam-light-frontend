@@ -1,5 +1,5 @@
 import React from "react";
-import GridWS from "../eamgrid/lib/GridWS";
+import WSGrid from "../../../tools/WSGrid";
 import EAMTableDataAdapter from "./EAMTableDataAdapter";
 
 const EAMTableGridRequestAdapter = props => {
@@ -15,7 +15,7 @@ const EAMTableGridRequestAdapter = props => {
 
     return (
         <EAMTableDataAdapter
-            fetchData={async () => GridWS.getGridData(gridRequest)}
+            fetchData={async () => WSGrid.getGridData(gridRequest)}
             convertRowData={convertRowData}
             convertColumnMetadata={convertColumnMetadata} >
                 {(context) => props.children(context)}

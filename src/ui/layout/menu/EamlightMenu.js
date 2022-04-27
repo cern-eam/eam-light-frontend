@@ -13,7 +13,7 @@ import EamlightSubmenu from "./EamlightSubmenu";
 import SpeedometerIcon from 'mdi-material-ui/Speedometer'
 import AutorenewIcon from 'mdi-material-ui/Autorenew'
 import {AssetIcon, PartIcon, PositionIcon, SystemIcon, WorkorderIcon} from 'eam-components/ui/components/icons'
-import {Account, AccountMultiple, Settings, Tune, DatabaseRefresh} from "mdi-material-ui"
+import { Account, AccountMultiple, Tune, DatabaseRefresh, Cog } from "mdi-material-ui"
 import ScreenChange from "./ScreenChange";
 import MenuTools from './MenuTools'
 import RoomIcon from '@mui/icons-material/Room';
@@ -166,7 +166,7 @@ class EamlightMenu extends Component {
                         <li>
                             <div rel="equipment" onClick={this.mainMenuClickHandler}>
                                 <Tooltip title="EQUIPMENT" placement="right">
-                                    <Settings style={iconStyles} />
+                                    <Cog style={iconStyles} />
                                 </Tooltip>
                             </div>
                         </li>

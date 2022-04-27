@@ -9,53 +9,51 @@ const DEFAULT_TIMEOUT = 20000;
 
 class Ajax {
 
+
+  /**
+   * @returns the static Axios instance exported by 'axios'
+   */
+  getAxiosInstance = () => axios
+
   /**
    * Make a HTTP GET request
    */
-  get(url, config = {}) {
-    return (
+  get = (url, config = {}) =>
       axios
-        .get(url, {timeout: DEFAULT_TIMEOUT, ...config})
-        .then(response => this._convertResponse(response))
-        .catch(error => {throw this._convertError(error)})
-    );
-  }
-
+        .get(url, config)
+        .then(response => this.#convertResponse(response))
+        .catch(error => {throw this.#convertError(error)})
+    
+  
   /**
    * Make a HTTP POST request
    */
-  post(url, data, config = {}) {
-    return (
+  post = (url, data, config = {}) => 
       axios
         .post(url, data, config)
-        .then(response => this._convertResponse(response))
-        .catch(error => {throw this._convertError(error)})
-    );
-  }
-
+        .then(response => this.#convertResponse(response))
+        .catch(error => {throw this.#convertError(error)})
+    
+  
   /**
    * Make a HTTP PUT request
    */
-  put(url, data, config = {}) {
-    return (
+  put = (url, data, config = {}) => 
       axios
         .put(url, data, config)
-        .then(response => this._convertResponse(response))
-        .catch(error => {throw this._convertError(error)})
-    );
-  }
+        .then(response => this.#convertResponse(response))
+        .catch(error => {throw this.#convertError(error)})
+
 
   /**
    * Make a HTTP DELETE request
    */
-  delete(url, config = {}) {
-    return (
+  delete = (url, config = {}) => 
       axios
         .delete(url, config)
-        .then(response => this._convertResponse(response))
-        .catch(error => {throw this._convertError(error)})
-    );
-  }
+        .then(response => this.#convertResponse(response))
+        .catch(error => {throw this.#convertError(error)})
+
 
   /**
    * Convert Axios Response to our standard format
@@ -63,51 +61,41 @@ class Ajax {
    * @returns {{status, body}}
    * @private
    */
-  _convertResponse(response) {
-    return {
-      status: response.status,
-      body: response.data
-    }
-  }
-
+  #convertResponse = (response) => ({ status: response.status, body: response.data })
+  
   /**
    * Convert Axios error to our standard format
    * @param error
    * @returns {{status: number, body: T}}
    * @private
    */
-  _convertError(error) {
-    if(axios.isCancel(error)) {
-      return {
-        type: ErrorTypes.REQUEST_CANCELLED
+  #convertError = (error) => {
+      if (axios.isCancel(error)) {
+          return {
+              type: ErrorTypes.REQUEST_CANCELLED
+          }
       }
-    }
 
-    if (error.response) {
-      return {
-        type: ErrorTypes.SERVER_ERROR,
-        response: {
-          status: error.response.status,
-          body: error.response.data
-        }
+      if (error.response) {
+          return {
+              type: ErrorTypes.SERVER_ERROR,
+              response: {
+                  status: error.response.status,
+                  body: error.response.data
+              }
+          }
       }
-    }
-    else if (error.code === 'ECONNABORTED') {
-      return {
-        type: ErrorTypes.CONNECTION_ABORDED
+
+      if (error.code === 'ECONNABORTED') {
+          return {
+              type: ErrorTypes.CONNECTION_ABORDED
+          }
       }
-    }
-    else {
-        // Because we are behind IT-DB proxy this will be only reached when a redirect was sent (i.e. SSO session has expired)
-        // TODO: should be carefully studied
-         //window.location.reload(true)
-    }
+
+      // Because we are behind IT-DB proxy this will be only reached when a redirect was sent (i.e. SSO session has expired)
+      // TODO: should be carefully studied
+      // window.location.reload(true)
   }
-
-  getAxiosInstance() {
-    return axios;
-  }
-
 }
 
 export default new Ajax();

@@ -1,44 +1,23 @@
-import ajax from './ajax';
+import WS from './WS';
 
+const eamServicesPath = process.env.REACT_APP_BACKEND
+    .replace('/logbookws/rest', '/cern-eam-services/rest')
+    .replace('/eamlightws/rest', '/cern-eam-services/rest')
 /**
  * Handles all calls to REST Api
  */
 class WSEDMS {
+    getEDMSDocuments = (objectID, objectType, mode, config = {}) =>
+        WS._get(`${eamServicesPath}/edms/documents?objectid=${objectID}&objectType=${objectType}&mode=${mode}`, config);
 
-    //
-    //EDMS
-    //
-    getEDMSDocuments(objectID, objectType, mode, config = {}) {
-        objectType = encodeURIComponent(objectType);
-        return ajax.get(process.env.REACT_APP_BACKEND
-            .replace('/logbookws/rest', '/cern-eam-services/rest')
-            .replace('/eamlightws/rest', '/cern-eam-services/rest')
-             + `/edms/documents?objectid=${objectID}&objectType=${objectType}&mode=${mode}`, config);
-    }
+    getEquipmentWorkOrders = (objectType, objectID, config = {}) => 
+        WS._get(`${eamServicesPath}/edms/equipmentwos?objectType=${objectType}&objectCode=${objectID}`, config);
 
-    createNewDocument(data, config = {}) {
-        return ajax.post(process.env.REACT_APP_BACKEND
-            .replace('/logbookws/rest', '/cern-eam-services/rest')
-            .replace('/eamlightws/rest', '/cern-eam-services/rest') + `/edms/createdocument`, data, config);
-    }
+    createNewDocument = (data, config = {}) => WS._post(`${eamServicesPath}/edms/createdocument`, data, config);
 
-    getNCRProperties(objectType, objectID, config = {}) {
-        return ajax.get(process.env.REACT_APP_BACKEND
-            .replace('/logbookws/rest', '/cern-eam-services/rest')
-            .replace('/eamlightws/rest', '/cern-eam-services/rest') + `/edms/ncrproperties`, config);
-    }
-
-    getNCRKeyWords(objectID, config = {}) {
-        return ajax.get(process.env.REACT_APP_BACKEND
-            .replace('/logbookws/rest', '/cern-eam-services/rest')
-            .replace('/eamlightws/rest', '/cern-eam-services/rest') + `/edms/ncrkeywords/${objectID}`, config);
-    }
-
-    getEquipmentWorkOrders(objectType, objectID, config = {}) {
-        return ajax.get(process.env.REACT_APP_BACKEND
-            .replace('/logbookws/rest', '/cern-eam-services/rest')
-            .replace('/eamlightws/rest', '/cern-eam-services/rest') + `/edms/equipmentwos?objectType=${objectType}&objectCode=${objectID}`, config);
-    }
+    getNCRProperties = (config = {}) => WS._get(`${eamServicesPath}/edms/ncrproperties`, config);
+    
+    getNCRKeyWords = (objectID, config = {}) => WS._get(`${eamServicesPath}/edms/ncrkeywords/${objectID}`, config);
 }
 
 export default new WSEDMS();

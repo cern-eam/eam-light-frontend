@@ -11,7 +11,7 @@ import WSWorkorders from "../../../../../tools/WSWorkorders";
 import EAMSelect from "eam-components/ui/components/muiinputs/EAMSelect";
 import EAMDatePicker from "eam-components/ui/components/muiinputs/EAMDatePicker";
 import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocomplete";
-import KeyCode from "../../../../../enums/KeyCode";
+import KeyCode from "eam-components/enums/KeyCode";
 
 /**
  * Display detail of an activity

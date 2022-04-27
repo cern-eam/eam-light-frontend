@@ -25,7 +25,7 @@ import {
     Rhombus,
     RhombusOutline
 } from 'mdi-material-ui';
-import { DatePicker, DateTimePicker } from "@material-ui/pickers";
+import { DatePicker, DateTimePicker } from "@mui/lab";
 import {
     Clear as ClearIcon,
     InsertInvitation as CalendarIcon
@@ -169,21 +169,6 @@ const getEAMFilterOperators = ({ column }) => {
             ];
         default:
             return [];
-    }
-}
-
-const getEAMInitialState = ({ columns }) => {
-    const initialFilters = columns.reduce((acc, column) => {
-        return [
-            ...acc,
-            {
-                id: column.id,
-                value: getDefaultFilterValue(column)
-            }
-        ]
-    }, []);
-    return {
-        filters: initialFilters
     }
 }
 
@@ -348,13 +333,13 @@ const EAMFilterField = ({ column }) => {
             return (
                 <DatePicker
                     autoOk
-                    clearable={1}
+                    clearable
                     variant="inline"
                     ampm={false}
                     value={localFilter._dateValue || null}
                     onChange={handleDatePickersChange}
-                    format="dd-MMM-yyyy"
-                    TextFieldComponent={FilterTextField}
+                    inputFormat="dd-MMM-yyyy"
+                    renderInput={(props) => <FilterTextField {...props} />}
                     InputProps={{
                         startAdornment: (
                             <QualifierMenuAdornment
@@ -374,13 +359,13 @@ const EAMFilterField = ({ column }) => {
             return (
                 <DateTimePicker
                     autoOk
-                    clearable={1}
+                    clearable
                     variant="inline"
                     ampm={false}
                     value={localFilter._dateValue || null}
                     onChange={handleDatePickersChange}
                     format="dd-MMM-yyyy HH:mm"
-                    TextFieldComponent={FilterTextField}
+                    renderInput={(props) => <FilterTextField {...props}/>}
                     InputProps={{
                         startAdornment: (
                             <QualifierMenuAdornment
@@ -435,5 +420,4 @@ export {
 
 export default {
     getEAMFilterOperators,
-    getEAMInitialState,
 }

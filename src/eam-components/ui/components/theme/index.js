@@ -3,8 +3,8 @@ import { blue, green, red, lightBlue, lightGreen, deepOrange } from '@mui/materi
 
 const muiSettings = ({ primaryColor, secondaryColor }) => ({
     palette: {
-        primary: {main: primaryColor}, //EAMLight blue '#2196F3'
-        secondary: {main: secondaryColor} //Darker blue '#01579b'
+        primary: { main: primaryColor }, // EAMLight blue '#2196F3'
+        secondary: { main: secondaryColor } // Darker blue '#01579b'
     },
     typography: {
         body1: {

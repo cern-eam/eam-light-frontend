@@ -11,7 +11,7 @@ import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import Save from '@mui/icons-material/Save';
 import './MeterReading.css';
-import KeyCode from "../../../enums/KeyCode";;
+import KeyCode from "eam-components/enums/KeyCode";
 
 function MeterReadingContent(props) {
 

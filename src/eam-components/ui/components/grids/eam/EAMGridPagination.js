@@ -43,8 +43,8 @@ const EAMGridPagination = ({
             rowsPerPageOptions={rowsPerPageOptions}
             labelRowsPerPage={labelRowsPerPage}
             labelDisplayedRows={label}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
         />
     );
 };

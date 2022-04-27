@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import TreeWS from './lib/TreeWS';
-import ErrorTypes from 'eam-components/ui/components/eamgrid/lib/GridErrorTypes';
+import ErrorTypes from 'eam-components/enums/ErrorTypes';
 import {connect} from "react-redux";
 import {handleError} from "../../../actions/uiActions";
 import SortableTree from 'react-sortable-tree';

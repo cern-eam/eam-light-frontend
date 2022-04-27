@@ -10,7 +10,7 @@ import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput';
 import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete';
 import WSWorkorders from '../../../../../tools/WSWorkorders';
 import EAMDatePicker from 'eam-components/ui/components/muiinputs/EAMDatePicker';
-import KeyCode from '../../../../../enums/KeyCode';
+import KeyCode from 'eam-components/enums/KeyCode';
 
 /**
  * Display detail of an activity

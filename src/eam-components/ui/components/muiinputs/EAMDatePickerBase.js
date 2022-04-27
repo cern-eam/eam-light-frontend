@@ -1,8 +1,7 @@
-import DateFnsUtils from '@date-io/date-fns';
 import Icon from '@mui/material/Icon';
 import { format } from 'date-fns';
 import parse from "date-fns/parse";
-import { DatePicker, DateTimePicker } from '@material-ui/pickers';
+import { DatePicker, DateTimePicker } from '@mui/lab';
 import PropTypes from 'prop-types';
 import React from 'react';
 import EAMBaseInput from './EAMBaseInput';
@@ -75,7 +74,7 @@ export default class EAMDatePicker extends EAMBaseInput {
             label: elementInfo && elementInfo.text,
             leftArrowIcon: <Icon> keyboard_arrow_left </Icon>,
             rightArrowIcon: <Icon> keyboard_arrow_right </Icon>,
-            TextFieldComponent: EAMTextField,
+            renderInput: (props) => <EAMTextField {...props} />,
         }
     }
 

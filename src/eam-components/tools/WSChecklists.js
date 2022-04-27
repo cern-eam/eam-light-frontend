@@ -5,28 +5,16 @@ import WS from './WS';
  */
 class WSChecklists {
 
-    getWorkOrderActivities(number, config = {timeout: 60000}) {
-        return WS._get('/activities/read/?workorder=' + number, config);
-    }
-    //
-    //CHECKLIST
-    //
+    getWorkOrderActivities = (number, config = { timeout: 60000 }) => WS._get('/activities/read/?workorder=' + number, config);
+    
+    updateChecklistItem = (checklistItem, config = {}) => WS._put('/checklists/', checklistItem, config);
+    
+    createFollowUpWorkOrders = (activity, config = {}) => WS._post('/checklists/workorders', activity, config);
 
-    updateChecklistItem(checklistItem, config = {}) {
-        return WS._put('/checklists/', checklistItem, config);
-    }
-
-    createFolowUpWorkOrders(activity, config = {}) {
-        return WS._post('/checklists/workorders', activity, config);
-    }
-
-    esignChecklist(checklistSignature, config = {}) {
-        return WS._put('/checklists/esign', checklistSignature);
-    }
-
-    getChecklistDefinition(taskCode, checklistDefinitionCode, config = {}) {
-        return WS._get(`/checklists/definition/${taskCode}/${checklistDefinitionCode}`, config);
-    }
+    esignChecklist = (checklistSignature, config = {}) => WS._put('/checklists/esign', checklistSignature, config);
+    
+    getChecklistDefinition = (taskCode, checklistDefinitionCode, config = {}) => 
+        WS._get(`/checklists/definition/${taskCode}/${checklistDefinitionCode}`, config);
 }
 
 export default new WSChecklists();

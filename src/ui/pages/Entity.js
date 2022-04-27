@@ -3,7 +3,7 @@ import InfoPage from '../components/infopage/InfoPage'
 import BlockUi from 'react-block-ui'
 import 'react-block-ui/style.css'
 import Ajax from 'eam-components/tools/ajax'
-import ErrorTypes from "../../enums/ErrorTypes";
+import ErrorTypes from "eam-components/enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
 import {assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType} from './EntityTools';

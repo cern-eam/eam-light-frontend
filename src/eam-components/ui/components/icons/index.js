@@ -41,6 +41,7 @@ export const PositionIcon = props => (
     <ToggleSwitch {...props} />
 );
 
+// UNUSED IN EAMLIGHT
 export const LocationIcon = props => (
     <HomeModern {...props} />
 );
@@ -62,6 +63,7 @@ export const AssetIcon = props => (
     </SvgIcon>
 );
 
+// UNUSED IN EAMLIGHT
 export const TRECIcon = props => {
     const {className, ...other} = props;
 
@@ -199,6 +201,7 @@ export const RadioactiveWarningIcon = props => (
     </SvgIcon>
 );
 
+// UNUSED IN EAMLIGHT
 export const FluidWarningIcon = ({color = "#81D4FA", ...otherProps}) => (
     <SvgIcon {...otherProps} viewBox='0 0 31 27'>
         <g>
@@ -214,6 +217,7 @@ export const FluidWarningIcon = ({color = "#81D4FA", ...otherProps}) => (
     </SvgIcon>
 );
 
+// UNUSED IN EAMLIGHT
 export const ChemicalWarningIcon = ({color = "#FB8C00", ...otherProps}) => (
     <SvgIcon {...otherProps} viewBox='0 0 31 27'>
         <g>
@@ -229,6 +233,7 @@ export const ChemicalWarningIcon = ({color = "#FB8C00", ...otherProps}) => (
     </SvgIcon>
 );
 
+// UNUSED IN EAMLIGHT
 export const ContaminationWarningIcon = ({color = "#FFF176", ...otherProps}) => (
     <SvgIcon {...otherProps} viewBox='0 0 31 27'>
         <g>
@@ -244,14 +249,17 @@ export const ContaminationWarningIcon = ({color = "#FFF176", ...otherProps}) => 
     </SvgIcon>
 );
 
+// UNUSED IN EAMLIGHT
 export const NonRadioactiveWarningIcon = props => (
     <CheckCircle style={{color:green['A700']}} />
 );
 
+// UNUSED IN EAMLIGHT
 export const QuestionMarkCircleIcon = props => (
     <HelpCircle />
 );
 
+// UNUSED IN EAMLIGHT
 export const TRECLogo = props => {
     const {
         size = "20",

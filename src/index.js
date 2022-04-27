@@ -3,10 +3,11 @@ import 'regenerator-runtime';
 import { polyfill } from 'es6-promise';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import * as ReactDOMClient from 'react-dom/client'
 import { Provider } from 'react-redux';
 import './index.css';
 import EamlightContainer from './EamlightContainer';
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, compose } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
 import { unregister } from './registerServiceWorker';
@@ -15,8 +16,8 @@ import StylesProvider from '@mui/styles/StylesProvider';
 import jssPreset from '@mui/styles/jssPreset';
 import SnackbarContainer from './ui/components/snackbar/SnackbarContainer';
 import Ajax from 'eam-components/tools/ajax';
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { LocalizationProvider } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
 // EAM-480, en-GB locale used in order to have monday as first day of the week
 import { enGB } from 'date-fns/locale';
 import { UPDATE_SCANNED_USER } from './actions/scannedUserActions';
@@ -56,19 +57,20 @@ function createAxiosAuthMiddleware() {
         };
 }
 
-const store = createStore(rootReducer, applyMiddleware(createAxiosAuthMiddleware(), thunk))
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(createAxiosAuthMiddleware(), thunk)))
 
-ReactDOM.render(
+ReactDOMClient.createRoot(document.getElementById('root')).render(
     <AuthWrapper>
         <StylesProvider jss={jss}>
             <Provider store={store}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={enGB}>
+                <LocalizationProvider dateAdapter={AdapterDateFns} locale={enGB}>
                     <div style={{width: "100%", height: "100%"}}>
                         <EamlightContainer />
                         <SnackbarContainer />
                     </div>
-                </MuiPickersUtilsProvider>
+                </LocalizationProvider>
             </Provider>
         </StylesProvider>
     </AuthWrapper>,
-    document.getElementById('root'));
+);
