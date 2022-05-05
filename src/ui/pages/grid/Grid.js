@@ -50,6 +50,7 @@ const Grid = () => {
             gridName={values.gridName}
             cellRenderer={cellRenderer(values)}
             searchOnMount
+            key={values.gridName}
         >
             <EAMGrid />
         </SyncedQueryParamsEAMGridContext>

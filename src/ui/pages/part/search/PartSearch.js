@@ -26,6 +26,7 @@ const PartSearch = (props) => {
             searchOnMount={partScreen.startupAction !== "N"}
             cellRenderer={cellRenderer}
             handleError={handleError}
+            key={partScreen.screenCode}
         >
             <EAMGrid />
         </SyncedQueryParamsEAMGridContext>
