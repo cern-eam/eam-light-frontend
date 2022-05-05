@@ -13,8 +13,9 @@ const cellRenderer = ({ column, value }) => {
                     {value}
                 </Link>
             </Typography>
-        )   
+        )
     }
+
     return EAMCellField({ column, value });
 }
 
