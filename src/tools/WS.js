@@ -91,9 +91,9 @@ class WS {
         return this._get(`/autocomplete/location?s=${filter}`, config);
     };
 
-    autocompleteEquipment = (filter, config = {}) => {
+    autocompleteEquipment = (filter, config = {timeout: 0}) => {
         filter = encodeURIComponent(filter);
-        return this._get(`/autocomplete/eqp?s=${filter}&a=${filter}&n=${filter}`, config);
+        return this._get(`/autocomplete/eqp?s=${filter.toUpperCase()}`, config);
     };
 
     autocompleteEquipmentSelected = (filter, config) => {
