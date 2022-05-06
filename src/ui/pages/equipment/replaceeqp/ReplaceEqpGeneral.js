@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import EISPanel from 'eam-components/dist/ui/components/panel';
-import WSEquipment from "../../../../tools/WSEquipment";
+import WS from "../../../../tools/WS";
 import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
 import EAMSelect from "eam-components/dist/ui/components/muiinputs/EAMSelect";
 import Button from '@material-ui/core/Button';
@@ -115,7 +115,7 @@ class ReplaceEqpGeneral extends Component {
                             value={this.props.replaceEquipment.oldEquipment}
                             updateProperty={this.props.updateProperty}
                             valueKey="oldEquipment"
-                            autocompleteHandler={WSEquipment.autocompleteEquipmentReplacement}
+                            autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
                             onChangeValue={this.props.onChangeOldEquipment}
                             children={this.children}
                             valueDesc={this.props.replaceEquipment.oldEquipmentDesc}
@@ -157,7 +157,7 @@ class ReplaceEqpGeneral extends Component {
                             value={this.props.replaceEquipment.newEquipment}
                             updateProperty={this.props.updateProperty}
                             valueKey="newEquipment"
-                            autocompleteHandler={WSEquipment.autocompleteEquipmentReplacement}
+                            autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
                             onChangeValue={this.props.onChangeNewEquipment}
                             children={this.children}
                             valueDesc={this.props.replaceEquipment.newEquipmentDesc}
