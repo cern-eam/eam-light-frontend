@@ -54,7 +54,7 @@ export default function NameForm(props) {
                                                          value={parentEq}
                                                          valueKey="parent"
                                                          updateProperty={(key, value) => (key === 'parent') && setParentEq(value)}
-                                                         autocompleteHandler={WS.autocompleteEquipment}/>
+                                                         autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}/>
                                     </EAMBarcodeInput>
 
                                     <EAMBarcodeInput updateProperty={setChildEq} right={0} top={16}>
@@ -62,7 +62,7 @@ export default function NameForm(props) {
                                                          value={childEq}
                                                          valueKey="child"
                                                          updateProperty={(key, value) => (key === 'child') && setChildEq(value)}
-                                                         autocompleteHandler={WS.autocompleteEquipment}/>
+                                                         autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}/>
                                     </EAMBarcodeInput>
 
                                     <Button
