@@ -27,8 +27,8 @@ const AdditionalCosts = (props) => {
     const adjustData = (data) => {
         return data.map((additionalCost) => ({
             ...additionalCost,
-            activitytrade_display: additionalCost.activitytrade_display.substring(0, additionalCost.activitytrade_display.indexOf(' ')),
-            additionalcostsdate: additionalCost.additionalcostsdate.substring(0, additionalCost.additionalcostsdate.indexOf(' ')),
+            activitytrade_display: additionalCost.activitytrade_display.split(' ')[0],
+            additionalcostsdate: additionalCost.additionalcostsdate.split(' ')[0],
         }));
     };
 

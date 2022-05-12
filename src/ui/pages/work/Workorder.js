@@ -231,7 +231,7 @@ class Workorder extends Entity {
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PART_USAGE)
             },
             {
-                id: 'ADDITONALCOSTS',
+                id: 'ADDITIONALCOSTS',
                 label: 'Additional Costs',
                 isVisibleWhenNewEntity: false,
                 maximizable: false,
