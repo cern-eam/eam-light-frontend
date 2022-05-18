@@ -1,7 +1,7 @@
 import Icon from '@mui/material/Icon';
 import { format } from 'date-fns';
 import parse from "date-fns/parse";
-import { DatePicker, DateTimePicker } from '@mui/lab';
+import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import PropTypes from 'prop-types';
 import React from 'react';
 import EAMBaseInput from './EAMBaseInput';
@@ -86,6 +86,7 @@ export default class EAMDatePicker extends EAMBaseInput {
         return (showTime ? 
             <DateTimePicker
                 {...pickerProps}
+                
                 ampm={false}
                 InputProps={{
                     endAdornment: <DefaultEndAdornment endAdornment={endAdornment} />

@@ -25,7 +25,7 @@ import {
     Rhombus,
     RhombusOutline
 } from 'mdi-material-ui';
-import { DatePicker, DateTimePicker } from "@mui/lab";
+import { DatePicker, DateTimePicker } from "@mui/x-date-pickers";
 import {
     Clear as ClearIcon,
     InsertInvitation as CalendarIcon

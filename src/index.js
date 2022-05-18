@@ -16,8 +16,8 @@ import StylesProvider from '@mui/styles/StylesProvider';
 import jssPreset from '@mui/styles/jssPreset';
 import SnackbarContainer from './ui/components/snackbar/SnackbarContainer';
 import Ajax from 'eam-components/tools/ajax';
-import { LocalizationProvider } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 // EAM-480, en-GB locale used in order to have monday as first day of the week
 import { enGB } from 'date-fns/locale';
 import { UPDATE_SCANNED_USER } from './actions/scannedUserActions';
