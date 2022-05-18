@@ -1,7 +1,7 @@
 import React from "react";
 import { DataGrid } from "../datagrid";
 import { MUITableHeader, MUITableBody } from "../datagrid/presentation/table";
-import { Table, TableCell, TableContainer, Checkbox, Fade } from "@mui/material";
+import { Table, TableCell, TableContainer, Checkbox } from "@mui/material";
 import withStyles from '@mui/styles/withStyles';
 import BlockUi from 'react-block-ui';
 
@@ -65,12 +65,7 @@ const EAMTable = (props) => {
 
     return loading ? (
             <div style={{ textAlign: "center", padding: 14 }}>
-                <Fade
-                    in={loading}
-                    style={{ transitionDelay: loading ? "200ms" : "0ms" }}
-                    unmountOnExit>
-                    <BlockUi blocking={loading}/>
-                </Fade>
+                <BlockUi blocking={loading}/>
             </div>
         ) : (
             <DataGrid
