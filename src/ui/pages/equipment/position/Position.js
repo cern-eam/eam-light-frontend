@@ -262,13 +262,6 @@ export default class Position extends Entity {
                         objectID={equipment.code}
                         edmsdoclightURL="http://localhost:3007/ncr"
                     />
-                    // <EDMSWidget
-                    //     objectID={equipment.code}
-                    //     objectType="S"
-                    //     creationMode="NCR"
-                    //     edmsDocListLink={applicationData.EL_EDMSL}
-                    //     showError={showError}
-                    //     showSuccess={showNotification} />
                 ,
                 column: 2,
                 order: 8,
