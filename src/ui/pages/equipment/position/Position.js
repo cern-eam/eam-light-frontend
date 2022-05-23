@@ -9,7 +9,6 @@ import 'react-block-ui/style.css'
 import PositionGeneral from './PositionGeneral'
 import PositionDetails from './PositionDetails'
 import PositionHierarchy from './PositionHierarchy'
-import EDMSWidgetContainer from 'eam-components/dist/ui/components/edms/EDMSWidgetContainer';
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
 import {PositionIcon} from 'eam-components/dist/ui/components/icons'
@@ -17,12 +16,12 @@ import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import {ENTITY_TYPE} from "../../../components/Toolbar";
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
-import EDMSWidget from 'eam-components/dist/ui/components/edms/EDMSWidget';
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
+import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 
 export default class Position extends Entity {
 
@@ -256,13 +255,10 @@ export default class Position extends Entity {
                 label: 'NCRs',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
-                    <EDMSDoclightIframeContainer
-                        objectType="S"
-                        objectID={equipment.code}
-                        edmsdoclightURL="http://localhost:3007/ncr"
-                    />
-                ,
+                render: () => <NCRIframeContainer 
+                    objectType="S"
+                    objectID={equipment.code}  
+                />,
                 column: 2,
                 order: 8,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),
