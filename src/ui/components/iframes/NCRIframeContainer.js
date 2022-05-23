@@ -17,7 +17,7 @@ const NCRIframeContainer = connect(
         ...own,
         mode: 'write',
         profile: 'EAMLIGHT',
-        edmsdoclightURL: "http://localhost:3007/ncr",
+        edmsdoclightURL: `${process.env.REACT_APP_TOOLBOX_URL}/ncr`,
         creationMode: 'NCR',
         options: {
             heightCalculationMethod: 'taggedElement'

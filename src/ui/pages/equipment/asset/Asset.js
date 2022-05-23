@@ -1,5 +1,4 @@
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
-import EDMSWidget from 'eam-components/dist/ui/components/edms/EDMSWidget';
 import { AssetIcon } from 'eam-components/dist/ui/components/icons';
 import React from 'react';
 import BlockUi from 'react-block-ui';
@@ -11,7 +10,6 @@ import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDocligh
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import Entity from '../../Entity';
 import EquipmentHistory from '../components/EquipmentHistory.js';
-import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EamlightToolbarContainer from './../../../components/EamlightToolbarContainer';
 import AssetDetails from './AssetDetails';
@@ -25,6 +23,7 @@ import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIfra
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
+import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 
 export default class Asset extends Entity {
 
@@ -309,13 +308,10 @@ export default class Asset extends Entity {
                 label: 'NCRs',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
-                    <EDMSDoclightIframeContainer
-                        objectType="A"
-                        objectID={equipment.code}
-                        edmsdoclightURL="http://localhost:3007/ncr"
-                    />
-                ,
+                render: () => <NCRIframeContainer 
+                    objectType="A"
+                    objectID={equipment.code}  
+                />,
                 column: 2,
                 order: 8,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
