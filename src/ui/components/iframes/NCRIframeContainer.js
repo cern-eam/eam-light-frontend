@@ -4,7 +4,8 @@ import { withCernMode } from '../CERNMode'
 
 function mapStateToProps(state) {
     return {
-        edmsdoclightURL: `${state.application.applicationData.EL_TBURL}/ncr`,
+        url: `${state.application.applicationData.EL_TBURL}/ncr`,
+        edmsDocListLink: state.application.applicationData.EL_EDMSL
     }
 }
 
