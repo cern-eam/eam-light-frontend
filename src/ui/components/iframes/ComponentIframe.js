@@ -11,7 +11,7 @@ class ComponentIframe extends Component {
     }
 
     render() {
-        const { edmsdoclightURL, options,  ...params } = this.props;
+        const { url, options,  ...params } = this.props;
 
         return (
             <ResizableIframe
@@ -20,7 +20,7 @@ class ComponentIframe extends Component {
                     checkOrigin: false, // CHECK: disable this option or list allowed origins
                     ...options
                 }}
-                src={`${this.props.edmsdoclightURL}?${queryString.stringify(params)}`}
+                src={`${url}?${queryString.stringify(params)}`}
                 style={this.docLightStyle}/>
         )
     }
