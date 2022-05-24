@@ -4,7 +4,7 @@ import { withCernMode } from '../CERNMode'
 
 function mapStateToProps(state) {
     return {
-         // TODO: add as app setting on r5install
+        edmsdoclightURL: `${state.application.applicationData.EL_TBURL}/ncr`,
     }
 }
 
@@ -17,7 +17,6 @@ const NCRIframeContainer = connect(
         ...own,
         mode: 'write',
         profile: 'EAMLIGHT',
-        edmsdoclightURL: `${process.env.REACT_APP_TOOLBOX_URL}/ncr`,
         creationMode: 'NCR',
         options: {
             heightCalculationMethod: 'taggedElement'
