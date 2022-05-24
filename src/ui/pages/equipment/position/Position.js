@@ -259,6 +259,9 @@ export default class Position extends Entity {
                     objectType="S"
                     objectID={equipment.code}  
                 />,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0, minHeight: 150 }
+                },
                 column: 2,
                 order: 8,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),

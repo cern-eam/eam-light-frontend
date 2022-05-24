@@ -312,6 +312,9 @@ export default class Asset extends Entity {
                     objectType="A"
                     objectID={equipment.code}  
                 />,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0, minHeight: 150 }
+                },
                 column: 2,
                 order: 8,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
