@@ -107,6 +107,24 @@ function WorkorderDetails(props) {
                     autocompleteHandler={WSWorkorders.autocompleteStandardWorkOrder.bind(null, userData.eamAccount.userGroup)}/>
 
             <EAMInput
+                children={children}
+                elementInfo={workOrderLayout.fields['targetvalue']}
+                value={
+                    // Avoid displaying 'NaN'
+                    workorder.targetValue &&
+                    // Show at least 2 decimal places or more according to the saved value.
+                    // The 2nd use of parseFloat() removes the non-significant trailing zeros set by the backend.
+                    parseFloat(workorder.targetValue).toFixed(
+                        Math.max(
+                            2,
+                            (parseFloat(workorder.targetValue).toString().split(".")[1] || []).length
+                        )
+                    )
+                }
+                updateProperty={updateWorkorderProperty}
+                valueKey="targetValue"/>
+
+            <EAMInput
                     elementInfo={{...workOrderLayout.fields['parentwo'], readonly: true}}
                     value={workorder.parentWO}
                     valueKey="parentWO"
