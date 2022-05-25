@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import EISPanel from 'eam-components/ui/components/panel';
-import WSEquipment from "../../../../tools/WSEquipment";
+import WS from "../../../../tools/WS";
 import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocomplete";
 import EAMSelect from "eam-components/ui/components/muiinputs/EAMSelect";
 import Button from '@mui/material/Button';

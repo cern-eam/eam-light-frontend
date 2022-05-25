@@ -1,6 +1,5 @@
 import Checklists from 'eam-components/ui/components/checklists/Checklists';
 import Comments from 'eam-components/ui/components/comments/Comments';
-import EDMSWidget from 'eam-components/ui/components/edms/EDMSWidget';
 import {WorkorderIcon} from 'eam-components/ui/components/icons';
 import React from 'react';
 import BlockUi from 'react-block-ui';
