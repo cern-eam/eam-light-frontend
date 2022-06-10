@@ -8,6 +8,7 @@ import BlockUi from 'react-block-ui';
 import WSWorkorders from "../../../../tools/WSWorkorders";
 import EAMSelect from "eam-components/dist/ui/components/muiinputs/EAMSelect";
 import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
+import EAMDatePicker from 'eam-components/dist/ui/components/muiinputs/EAMDatePicker';
 
 const AdditionalCostDialog = (props) => {
     const [additionalCost, setAdditionalCost] = useState({ costType: "MISC" });
@@ -44,7 +45,7 @@ const AdditionalCostDialog = (props) => {
 
     const handleSave = () => {
         setLoading(true);
-        WSWorkorders.createAdditionalCost({...additionalCost, date: new Date() }, props.workorder.number)
+        WSWorkorders.createAdditionalCost({...additionalCost }, props.workorder.number)
             .then(props.successHandler)
             .catch(props.handleError)
             .finally(() => setLoading(false));
@@ -87,6 +88,13 @@ const AdditionalCostDialog = (props) => {
                         value={additionalCost.cost}
                         updateProperty={updateAdditionalCostProperty}
                         children={props.children}/>
+
+                    <EAMDatePicker elementInfo={props.tabLayout['additionalcostsdate']}
+                        valueKey="date"
+                        value={additionalCost.date}
+                        updateProperty={updateAdditionalCostProperty}
+                        children={props.children}
+                    />
                 </BlockUi>
             </DialogContent>
             <DialogActions>
