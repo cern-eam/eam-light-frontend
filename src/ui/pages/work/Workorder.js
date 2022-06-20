@@ -491,9 +491,7 @@ class Workorder extends Entity {
         if (!eqCode || !swoCode) {
             return;
         }
-
         const response = await WSWorkorder.getEquipmentStandardWOMaxStep(eqCode, swoCode);
-
         return response.body.data;
     }
 
@@ -502,37 +500,42 @@ class Workorder extends Entity {
 
         const { workorder } = this.state;
         const { customField, number, equipmentCode, standardWO } = workorder;
-    
-        const maxSWO = (await this.getEquipmentStandardWOMaxStep(equipmentCode, standardWO)).step;
-        let value;
 
-        const fpIndex = maxSWO.indexOf('.')
-        if (fpIndex === -1) {
-            value = maxSWO + '.1';
-        } else {
-            const prefloat = maxSWO.substring(0, fpIndex)
-            const postfloat = maxSWO.substring(fpIndex + 1)
-            value = `${prefloat}.${parseInt(postfloat) + 1}`
-        }
+        try {
+            const maxSWO = await this.getEquipmentStandardWOMaxStep(equipmentCode, standardWO);
+            const maxSWOStep = maxSWO.step;
+            let value;
 
-        const newCustomFields = customField.map(
-            (cf) => cf.code === "MTFEVP1" ? {...cf, value} : cf
-        )
-
-        this.setState({
-            workorder: {
-                ...workorder,
-                classCode: 'MTF2',
-                customField: newCustomFields,
-                copyFrom: number,
-                assignedTo: workorder.assignedTo || this.props.userData.eamAccount.employeeCode
+            const fpIndex = maxSWOStep.indexOf('.')
+            if (fpIndex === -1) {
+                value = maxSWOStep + '.1';
+            } else {
+                const prefloat = maxSWOStep.substring(0, fpIndex)
+                const postfloat = maxSWOStep.substring(fpIndex + 1)
+                value = `${prefloat}.${parseInt(postfloat) + 1}`
             }
-        });
 
-        this.postInit();
-        this.postCopy();
-        this.setLayout({reading: false});
-        this.saveHandler();
+            const newCustomFields = customField.map(
+                (cf) => cf.code === "MTFEVP1" ? {...cf, value} : cf
+            )
+
+            this.setState({
+                workorder: {
+                    ...workorder,
+                    classCode: 'MTF2',
+                    customField: newCustomFields,
+                    copyFrom: number,
+                    assignedTo: workorder.assignedTo || this.props.userData.eamAccount.employeeCode
+                }
+            });
+
+            this.postInit();
+            this.postCopy();
+            this.setLayout({reading: false});
+            this.saveHandler();
+        } catch (err) {
+            this.props.showError(JSON.stringify(err), "Could not repeat step.");
+        }
     }
     //
     // CALLBACKS FOR ENTITY CLASS
