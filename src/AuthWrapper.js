@@ -53,4 +53,4 @@ const logout = () => {
     }
 };
 
-export { tokens, logout };
+export { tokens, keycloak, logout };
