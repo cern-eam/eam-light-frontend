@@ -100,24 +100,13 @@ function EquipmentWorkOrders(props) {
         }
     }, [equipmentcode, equipmenttype])
 
-    const getUrl = (equipmentType, objectCode) => {
-        const linkPrefix = {
-            A: 'asset',
-            P: 'position',
-            S: 'system',
-            L: 'location',
-        }[equipmentType];
-
-        return linkPrefix ? `${linkPrefix}/${objectCode}` : '';
-    }
-
     const fetchData = (equipmentCode, equipmentType) => {
         Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode, equipmentType)])
             .then(responses => {
                 const formatResponse = response => response.body.data.map(element => ({
                     ...element,
                     createdDate: element.createdDate && format(new Date(element.createdDate),'dd-MMM-yyyy'),
-                    objectUrl: getUrl(element.equipmentType, element.object)
+                    objectUrl: `equipment/${encodeURIComponent(element?.object || '')}`
                 }));
 
                 const [workorders, events] = responses.map(formatResponse);
