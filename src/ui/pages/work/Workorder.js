@@ -32,8 +32,6 @@ import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
 import WSParts from '../../../tools/WSParts';
 import WSWorkorders from '../../../tools/WSWorkorders';
 
-
-
 const assignStandardWorkOrderValues = (workOrder, standardWorkOrder) => {
     const swoToWoMap = ([k, v]) => [k, standardWorkOrder[v]];
 
@@ -58,7 +56,6 @@ class Workorder extends Entity {
 
     constructor(props) {
         super(props);
-        this.setPriorityValues();
         this.props.setLayoutProperty('showEqpTreeButton', false);
     }
 
@@ -68,7 +65,6 @@ class Workorder extends Entity {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         super.componentDidUpdate(prevProps, prevState, snapshot);
-        this.setClosingCodes(prevState);
     }
 
     onChangeStandardWorkOrder = standardWorkOrderCode => {
@@ -86,6 +82,7 @@ class Workorder extends Entity {
     }
 
     onChangeEquipment = value => {
+        console.log('change equipment', value)
         if(!value) {
             return;
         }
@@ -527,11 +524,13 @@ class Workorder extends Entity {
     }
 
     postRead(workorder) {
+        
         this.props.updateMyWorkOrders(workorder)
         this.setStatuses(workorder.statusCode, workorder.typeCode, false)
         this.setTypes(workorder.statusCode, workorder.typeCode, false)
 
-        if (this.departmentalSecurity.readOnly) {
+        if (this.departmentalSecurity(workorder.departmentCode).readOnly) {
+            console.log('disabling children')
             this.disableChildren();
         } else if (WorkorderTools.isClosedWorkOrder(workorder.statusCode)) {
             // If opening a terminated work order
@@ -539,6 +538,7 @@ class Workorder extends Entity {
             this.children['EAMID_WorkOrder_STATUS_STATUSCODE'].enable()
         } else {
             this.enableChildren()
+            console.log('children enabled')
         }
         //Set work order equipment
         this.setWOEquipment(workorder.equipmentCode, true);
@@ -566,13 +566,6 @@ class Workorder extends Entity {
             .then(response => {
                 this.setLayout({typeValues: response.body.data})
             })
-    }
-
-    setPriorityValues() {
-        WSWorkorder.getWorkOrderPriorities()
-            .then(response => {
-                this.setLayout({priorityValues: response.body.data})
-            });
     }
 
     setWOEquipment = (code, initialLoad = false) => {
@@ -612,47 +605,6 @@ class Workorder extends Entity {
             .catch(() => {
                 this.setLayout({ woEquipment: undefined });
             });
-    }
-
-    setClosingCodes = prevState => {
-        const { workorder = {}, layout } = this.state;
-        const { classCode, problemCode, failureCode, causeCode, equipmentCode } = workorder || {};
-        const objClass = layout.woEquipment && layout.woEquipment.classCode;
-
-        const { workorder: prevWorkorder = {}, layout: prevLayout } = prevState || {};
-        const prevObjClass = prevLayout && prevLayout.woEquipment && prevLayout.woEquipment.classCode;
-
-        if (layout.reading) {
-            return;
-        }
-
-        const equalObjectProps = (a, b, propNames) => propNames.every(field => a[field] === b[field]);
-        if (!equalObjectProps(prevWorkorder, workorder,
-                ['problemCode', 'failureCode', 'causeCode', 'classCode', 'equipmentCode'])
-                || prevObjClass !== objClass) {
-
-            Promise.all([
-                WSWorkorder.getWorkOrderProblemCodeValues(classCode, objClass, equipmentCode),
-                WSWorkorder.getWorkOrderActionCodeValues(objClass, failureCode, problemCode, causeCode, equipmentCode),
-                WSWorkorder.getWorkOrderCauseCodeValues(objClass, failureCode, problemCode, equipmentCode),
-                WSWorkorder.getWorkOrderFailureCodeValues(objClass, problemCode, equipmentCode)
-            ]).then(responses => {
-                const [
-                    problemCodeValues,
-                    actionCodeValues,
-                    causeCodeValues,
-                    failureCodeValues
-                ] = responses.map(response => response.body.data);
-
-                this.setLayout({
-                    problemCodeValues,
-                    actionCodeValues,
-                    causeCodeValues,
-                    failureCodeValues
-                });
-            });
-        }
-
     }
 
     postAddActivityHandler = () => {

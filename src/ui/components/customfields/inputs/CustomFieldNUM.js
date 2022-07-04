@@ -1,7 +1,7 @@
 import React from 'react';
-import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput'
-import EAMSelect from 'eam-components/ui/components/muiinputs/EAMSelect'
 import tools from '../CustomFieldTools'
+import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
+import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
 
 function CustomFieldNUM(props) {
 
@@ -17,7 +17,7 @@ function CustomFieldNUM(props) {
             updateProperty={updateCustomFieldValue}/>
     } else {
         return (
-            <EAMInput
+            <EAMTextField
                 children={children}
                 elementInfo={elementInfo}
                 value={customField.value}

@@ -1,5 +1,5 @@
+import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
 import React from 'react';
-import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete'
 import WSCustomFields from "../../../../tools/WSCustomFields";
 
 function CustomFieldRENT(props) {
@@ -10,7 +10,7 @@ function CustomFieldRENT(props) {
         <EAMAutocomplete children={children}
                          elementInfo={elementInfo}
                          value={customField.value}
-                         valueDesc={customField.valueDesc}
+                         desc={customField.valueDesc}
                          updateProperty={updateCustomFieldValue}
                          valueKey="value"
                          descKey="valueDesc"

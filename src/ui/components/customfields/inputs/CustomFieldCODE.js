@@ -1,7 +1,7 @@
 import React from 'react';
 import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput'
-import EAMSelect from 'eam-components/ui/components/muiinputs/EAMSelect'
 import tools from '../CustomFieldTools'
+import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
 
 function CustomFieldCODE(props) {
 
@@ -12,9 +12,11 @@ function CustomFieldCODE(props) {
         return <EAMSelect
             children={children}
             elementInfo={elementInfo}
-            valueKey="value"
-            values={lookupValues && lookupValues[customField.code]}
             value={customField.value}
+            valueKey="value"
+            desc={customField.valueDesc}
+            descKey="valueDesc"
+            options={lookupValues && lookupValues[customField.code]}
             updateProperty={updateCustomFieldValue}/>
     } else {
         return (

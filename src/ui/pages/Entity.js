@@ -79,7 +79,7 @@ export default class readEntityEquipment extends Component {
         
         if (this.state.layout.reading) {
             return;
-        }
+        } 
 
         // if we changed state from waiting for requests to not waiting from requests
         if (this.state.layout.requests === 0 && prevState.layout.requests > 0) {
@@ -101,7 +101,7 @@ export default class readEntityEquipment extends Component {
 
             return;
         }
-
+        
         const newEntity = this.state[this.settings.entity];
         const oldEntity = {...prevState[this.settings.entity]}; // {...undefined} = {}
 
@@ -216,14 +216,14 @@ export default class readEntityEquipment extends Component {
                 this.setState(() => ({
                     [this.settings.entity]: response.body.data,
                      readError: null
-                }))
+                }), () => this.setLayout({reading: false}))
                 // Invoke entity specific logic on the subclass
                 this.postRead(response.body.data)
                 // Disable all children when updates not allowed
                 if (!this.settings.entityScreen.updateAllowed) {
                     this.disableChildren()
                 }
-                this.setLayout({reading: false});
+                //this.setLayout({reading: false});
             })
             .catch(error => {
                 if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
@@ -491,10 +491,9 @@ export default class readEntityEquipment extends Component {
         })
     }
 
-    get departmentalSecurity() {
+    departmentalSecurity(departmentCode) {
         const { userData } = this.props;
-        const { [this.settings.entity]: entity } = this.state;
-        return userData.eamAccount.departmentalSecurity[entity.departmentCode] || {};
+        return userData.eamAccount.departmentalSecurity[departmentCode] || {};
     }
 
     //
