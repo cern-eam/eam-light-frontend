@@ -51,18 +51,35 @@ function EquipmentWorkOrders(props) {
     let [events, setEvents] = useState([]);
     let [workorders, setWorkorders] = useState([]);
     const [loadingData, setLoadingData] = useState(true);
-
     const [workOrderFilter, setWorkOrderFilter] = useLocalStorage(LOCAL_STORAGE_FILTER_KEY, WO_FILTER_TYPES.ALL, defaultFilter);
-    let headers = ['Work Order', 'Equipment', 'Description', 'Status', 'Creation Date'];
-    let propCodes = ['number', 'object','desc', 'status', 'createdDate'];
 
-    if (workOrderFilter === WO_FILTER_TYPES.THIS) {
-        headers = ['Work Order', 'Description', 'Status', 'Creation Date'];
-        propCodes = ['number', 'desc', 'status', 'createdDate'];
+    const filterHeaderMapping = {
+        [WO_FILTER_TYPES.THIS]: {
+            headers: ['Work Order', 'Description', 'Status', 'Creation Date'],
+            propCodes: ['number', 'desc', 'status', 'createdDate'],
+            sortBy: 'createdDate'
+        },
+        [WO_FILTER_TYPES.ALL]: {
+            headers: ['Work Order', 'Description', 'Status', 'Completed Date'],
+            propCodes: ['number', 'desc', 'status', 'completedDate'],
+            sortBy: 'completedDate'
+        },
+        [WO_FILTER_TYPES.OPEN]: {
+            headers: ['Work Order', 'Description', 'Status', 'Scheduled Date'],
+            propCodes: ['number', 'desc', 'status', 'schedulingStartDate'],
+            sortBy: 'schedulingStartDate'
+        },
+        [WO_FILTER_TYPES.MTF]: {
+            headers: ['Work Order', 'Equipment', 'Description', 'Status', 'Creation Date'],
+            propCodes: ['number', 'object','desc', 'status', 'createdDate'],
+            sortBy: 'createdDate'
+        },
     }
 
     // make spaces in header strings non-breaking so headers do not wrap to multiple lines
-    headers = headers.map(string => string.replaceAll(' ', '\u00a0'));
+    const headers = filterHeaderMapping[workOrderFilter].headers.map(string => string.replaceAll(' ', '\u00a0'));
+    const propCodes = filterHeaderMapping[workOrderFilter].propCodes;
+    const sortBy = filterHeaderMapping[workOrderFilter].sortBy;
 
     const linksMap = new Map([
         ['number', {
@@ -84,7 +101,9 @@ function EquipmentWorkOrders(props) {
     };
 
     const keyMap = {
-        createdDate: TRANSFORM_KEYS.DATE_DD_MMM_YYYY
+        createdDate: TRANSFORM_KEYS.DATE_DD_MMM_YYYY,
+        schedulingStartDate: TRANSFORM_KEYS.DATE_DD_MMM_YYYY,
+        completedDate: TRANSFORM_KEYS.DATE_DD_MMM_YYYY
     }
 
     let getFilteredWorkOrderList = (workOrders) => {
@@ -101,19 +120,24 @@ function EquipmentWorkOrders(props) {
     }, [equipmentcode, equipmenttype])
 
     const fetchData = (equipmentCode, equipmentType) => {
-        Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode, equipmentType)])
-            .then(responses => {
-                const formatResponse = response => response.body.data.map(element => ({
-                    ...element,
-                    createdDate: element.createdDate && format(new Date(element.createdDate),'dd-MMM-yyyy'),
-                    objectUrl: `equipment/${encodeURIComponent(element?.object || '')}`
-                }));
+        Promise.all([
+            WSEquipment.getEquipmentWorkOrders(equipmentCode),
+            WSEquipment.getEquipmentEvents(equipmentCode, equipmentType)
+        ])
+        .then(responses => {
+            const formatResponse = response => response.body.data.map(element => ({
+                ...element,
+                createdDate: element.createdDate && format(new Date(element.createdDate),'dd-MMM-yyyy'),
+                schedulingStartDate: element.schedulingStartDate && format(new Date(element.schedulingStartDate),'dd-MMM-yyyy'),
+                completedDate: element.completedDate ? format(new Date(element.completedDate),'dd-MMM-yyyy') : '-',
+                objectUrl: `equipment/${encodeURIComponent(element?.object || '')}`
+            }));
 
-                const [workorders, events] = responses.map(formatResponse);
-                setWorkorders(workorders);
-                setEvents(events);
-            })
-            .finally(() => setLoadingData(false));
+            const [workorders, events] = responses.map(formatResponse);
+            setWorkorders(workorders);
+            setEvents(events);
+        })
+        .finally(() => setLoadingData(false));
     }
 
     return (
@@ -124,21 +148,21 @@ function EquipmentWorkOrders(props) {
                     setWorkOrderFilter(newFilter)
                 }
                 activeFilter={workOrderFilter}
-                />
+            />
                 
             {workOrderFilter === WO_FILTER_TYPES.MTF ?
                 <EquipmentMTFWorkOrders equipmentcode={equipmentcode} />
                 :
                 <BlockUi blocking={loadingData} style={{overflowX: 'auto'}}>
                     <EISTable
-                    data={getFilteredWorkOrderList(workOrderFilter === WO_FILTER_TYPES.THIS ? workorders : events)}
-                    headers={headers}
-                    propCodes={propCodes}
-                    linksMap={linksMap}
-                    stylesMap={stylesMap}
-                    keyMap={keyMap}
-                    defaultOrderBy='createdDate'
-                    defaultOrder={Constants.SORT_DESC}
+                        data={getFilteredWorkOrderList(workOrderFilter === WO_FILTER_TYPES.THIS ? workorders : events)}
+                        headers={headers}
+                        propCodes={propCodes}
+                        linksMap={linksMap}
+                        stylesMap={stylesMap}
+                        keyMap={keyMap}
+                        defaultOrderBy={sortBy}
+                        defaultOrder={Constants.SORT_DESC}
                     />
                 </BlockUi>
             }
