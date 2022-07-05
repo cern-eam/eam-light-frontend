@@ -3,7 +3,7 @@ import AutocompleteDescription from './AutocompleteDescription';
 import EAMBarcodeScanner from './EAMBarcodeScanner';
 import EAMLink from './EAMLink';
 
-const inputStyle = {
+let inputStyle = {
     display: "block",
     width: "calc(100% - 18px)",
     padding: "7px 8px",
@@ -12,7 +12,7 @@ const inputStyle = {
     color: "#495057",
     backgroundClip: "padding-box",
     border: "1px solid #ced4da",
-    borderRadius: "0.25rem",
+    borderRadius: "5px",
     transition: "border-color .15s ease-in-out,box-shadow .15s ease-in-out",
     backgroundColor: "#fdfdfd",
 }
@@ -26,7 +26,7 @@ const divInputContainerStyle = {
     flex: "1 1 auto",
     display: "flex",
     alignItems: "center",
-    minWidth: "310px"
+    minWidth: "320px"
 }
 
 const divAdornmentStyle = {
@@ -37,8 +37,8 @@ const divAdornmentStyle = {
     height: "36px", // TODO: use the width of the input container 
     backgroundColor: "#f2f2f2",
     zIndex: 999,
-    borderTopRightRadius: "0.25rem",
-    borderBottomRightRadius: "0.25rem",
+    borderTopRightRadius: "5px",
+    borderBottomRightRadius: "5px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center"
@@ -46,18 +46,30 @@ const divAdornmentStyle = {
 
 const TextField = (props) => {
 
-    let {desc, value, valueKey, barcodeScanner, updateProperty, link, inputProps, hideDescription, endAdornment} = props;
+    let {desc, 
+        value, 
+        valueKey, 
+        barcodeScanner, 
+        updateProperty, 
+        link, 
+        inputProps, 
+        hideDescription, 
+        inputRef,
+        endTextAdornment, 
+        endAdornment,
+        error} = props;
 
     return (
         <div style={divInputContainerStyle}>
             <div style={divInputStyle} ref={props.InputProps?.ref}>
-                <input style={inputStyle} type="text" {...inputProps} />
+                <input style={inputStyle} type="text" ref={inputRef} {...inputProps} />
                 {!hideDescription &&<AutocompleteDescription
                     description = {desc}
                     value = {value}
                 />}
-                {endAdornment && <div style={divAdornmentStyle}>{endAdornment}</div>}
+                {endTextAdornment && <div style={divAdornmentStyle}>{endTextAdornment}</div>}
             </div>
+            {endAdornment}
             {barcodeScanner && <EAMBarcodeScanner updateProperty={updateProperty} valueKey = {valueKey}/>}
             {link && <EAMLink link = {link} value = {value}/>}
         </div>

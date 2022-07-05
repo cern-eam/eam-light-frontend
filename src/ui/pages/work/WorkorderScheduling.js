@@ -1,7 +1,7 @@
 import React from 'react';
-import EAMDateTimePicker from 'eam-components/ui/components/muiinputs/EAMDateTimePicker';
-import EAMDatePicker from 'eam-components/ui/components/muiinputs/EAMDatePicker';
-import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete';
+import EAMDateTimePicker from 'eam-components/ui/components/inputs-ng/EAMDateTimePicker';
+import EAMDatePicker from 'eam-components/ui/components/inputs-ng/EAMDatePicker';
+import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
 import WS from '../../../tools/WS';
 import UDFChar from '../../components/userdefinedfields/UDFChar';
 import { Grid } from '@mui/material';
@@ -56,7 +56,7 @@ const WorkorderScheduling = (props) => {
                 value={workorder.reportedBy}
                 updateProperty={updateWorkorderProperty}
                 valueKey="reportedBy"
-                valueDesc={workorder.reportedByDesc}
+                desc={workorder.reportedByDesc}
                 descKey="reportedByDesc"
                 autocompleteHandler={WS.autocompleteEmployee}
             />
@@ -67,8 +67,9 @@ const WorkorderScheduling = (props) => {
                 value={workorder.assignedTo}
                 updateProperty={updateWorkorderProperty}
                 valueKey="assignedTo"
-                valueDesc={workorder.assignedToDesc}
+                desc={workorder.assignedToDesc}
                 descKey="assignedToDesc"
+                barcodeScanner={true}
                 autocompleteHandler={WS.autocompleteEmployee}
             />
 

@@ -25,7 +25,7 @@ function CustomFieldDATI(props) {
                 value={customField.value}
                 updateProperty={updateCustomFieldValue}
                 valueKey="value"
-                endAdornment={UoM}/>
+                endTextAdornment={UoM}/>
         )
     }
 

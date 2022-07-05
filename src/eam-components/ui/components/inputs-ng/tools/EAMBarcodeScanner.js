@@ -75,9 +75,9 @@ const EAMBarcodeScanner = (props) => {
             <div>
 
                 <IconButton
-                    style={iconButtonStyle}
+                    
                     onClick={handleClickOpen}
-                    size="large">
+                    >
                     <BarcodeScan />
                 </IconButton>
 

@@ -26,7 +26,7 @@ function CustomFieldCHAR(props) {
                 updateProperty={updateCustomFieldValue}
                 valueKey="value"
                 readonly={props.readonly}
-                endAdornment={UoM}/>
+                endTextAdornment={UoM}/>
         )
     }
 

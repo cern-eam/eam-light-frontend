@@ -1,6 +1,7 @@
 import isEqual from 'lodash/isEqual';
 import { Box } from '@mui/material';
 import HistoryIcon from '@mui/icons-material/History';
+import TextField from './TextField';
 
 export const isRequired = (elementInfo) =>
         elementInfo &&
@@ -30,6 +31,15 @@ export const renderOptionHandler = (renderValue, props, option) => (
          {formatLabel(renderValue, option)}
          </Box>)
 
+
+export const renderDatePickerInput = ({ inputRef, inputProps, InputProps }, isInvalidDate) => {
+        console.log('is invalid', isInvalidDate)
+        let endAdornment = (<div style={{marginRight: 12, marginLeft: -8}}>{InputProps?.endAdornment}</div>)
+        
+        return (
+          <TextField inputRef={inputRef} inputProps={inputProps} endAdornment={endAdornment} error={isInvalidDate}/>
+        )
+}
 
 export const formatLabel = (renderValue, option) => {
    return renderValue ? renderValue(option) :  `${option.code} - ${option.desc}`

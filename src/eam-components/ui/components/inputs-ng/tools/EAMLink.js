@@ -3,15 +3,6 @@ import IconButton from '@mui/material/IconButton';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
 import { Link } from 'react-router-dom';
 
-const linkButtonStyle = {
-    backgroundColor: 'white',
-    marginLeft: 3,
-    width: 32,
-    height: 32,
-    zIndex: 100,
-    padding: 0,
-};
-
 const EAMLink = ({link, value}) => {
 
     let eamLink = null;
@@ -26,7 +17,7 @@ const EAMLink = ({link, value}) => {
         }
     }
 
-    return (<IconButton style={linkButtonStyle} component={eamLink} disabled={!value} size="large">
+    return (<IconButton component={eamLink} disabled={!value}>
                 <OpenInNewIcon />
             </IconButton>);
 }
