@@ -2,6 +2,7 @@ import React from 'react';
 import AutocompleteDescription from './AutocompleteDescription';
 import EAMBarcodeScanner from './EAMBarcodeScanner';
 import EAMLink from './EAMLink';
+import './TextField.css'
 
 let inputStyle = {
     display: "block",
@@ -29,19 +30,16 @@ const divInputContainerStyle = {
     minWidth: "320px"
 }
 
-const divAdornmentStyle = {
-    position: "absolute",
-    right: "1px",
-    top: "1px",
-    width: "70px",
-    height: "36px", // TODO: use the width of the input container 
-    backgroundColor: "#f2f2f2",
-    zIndex: 999,
-    borderTopRightRadius: "5px",
-    borderBottomRightRadius: "5px",
+const divRootContainer = {
+    flex: "1 1 auto",
     display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
+    flexDirection: "column"
+}
+
+const divErrorStyle = {
+    margin: 3, 
+    color: "red",
+    fontSize: 12
 }
 
 const TextField = (props) => {
@@ -57,21 +55,25 @@ const TextField = (props) => {
         inputRef,
         endTextAdornment, 
         endAdornment,
+        disabled,
         error} = props;
 
     return (
-        <div style={divInputContainerStyle}>
-            <div style={divInputStyle} ref={props.InputProps?.ref}>
-                <input style={inputStyle} type="text" ref={inputRef} {...inputProps} />
-                {!hideDescription &&<AutocompleteDescription
-                    description = {desc}
-                    value = {value}
-                />}
-                {endTextAdornment && <div style={divAdornmentStyle}>{endTextAdornment}</div>}
+        <div style={divRootContainer}>
+            <div style={divInputContainerStyle}>
+                <div style={divInputStyle} ref={props.InputProps?.ref}>
+                    <input style={inputStyle} type="text" ref={inputRef} {...inputProps} />
+                    {!hideDescription &&<AutocompleteDescription
+                        description = {desc}
+                        value = {value}
+                    />}
+                    {endTextAdornment && <div className="divTextAdornmentStyle">{endTextAdornment}</div>}
+                </div>
+                {endAdornment}
+                {barcodeScanner && !disabled && <EAMBarcodeScanner updateProperty={updateProperty} valueKey = {valueKey}/>}
+                {link && <EAMLink link = {link} value = {value}/>}
             </div>
-            {endAdornment}
-            {barcodeScanner && <EAMBarcodeScanner updateProperty={updateProperty} valueKey = {valueKey}/>}
-            {link && <EAMLink link = {link} value = {value}/>}
+            {error && <div style={divErrorStyle}>{error}</div>}
         </div>
     )
 

@@ -16,6 +16,7 @@ const EAMDateTimePicker = (props) => {
                 <DateTimePicker
                     renderInput={renderDatePickerInput}
                     value={value}
+                    disableMaskedInput
                     inputFormat="dd-MMM-yyyy HH:mm"
                     onChange={(newValue) => {updateProperty(valueKey, newValue.toISOString())}}
                     ampm={false}

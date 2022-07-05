@@ -26,6 +26,7 @@ const EAMDatePicker = (props) => {
                 <DatePicker
                     renderInput={(props) => renderDatePickerInput(props, isInvalidDate)}
                     value={value}
+                    disableMaskedInput
                     inputFormat="dd-MMM-yyyy"
                     onChange={onChangeHandler}
                 />

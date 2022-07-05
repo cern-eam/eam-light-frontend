@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import useFetchAutocompleteOptions from './hooks/useFetchAutocompleteOptions';
-import {areEqual, getElementKey, renderOptionHandler, saveHistory} from './tools/input-tools'
+import {areEqual, getElementKey, renderOptionHandler} from './tools/input-tools'
 import EAMBaseInput from './tools/EAMBaseInput';
 import TextField from './tools/TextField';
+import { saveHistory } from './tools/history-tools';
 
 const autocompleteDivStyle = {
   flex: "1 1 auto",
@@ -53,10 +54,10 @@ const EAMAutocomplete = React.memo((props) => {
       setOpen(false)
       // Only to be fired when we blur and the inputValue is not empty 
       // (if the inputValue is empty onChangeHandler is fired with reason = 'clear')
-      if (reason === 'blur' && inputValue) {
+      if (reason === 'blur' && inputValue?.trim()) {
         updateProperty(valueKey, inputValue);
         // TODO: validation (+ description)
-      }
+      } 
     }
 
     return (

@@ -33,28 +33,18 @@ export const renderOptionHandler = (renderValue, props, option) => (
 
 
 export const renderDatePickerInput = ({ inputRef, inputProps, InputProps }, isInvalidDate) => {
+        let error = '';
+        if (isInvalidDate) {
+                error = "Wrong Date format";
+        }
         console.log('is invalid', isInvalidDate)
         let endAdornment = (<div style={{marginRight: 12, marginLeft: -8}}>{InputProps?.endAdornment}</div>)
         
         return (
-          <TextField inputRef={inputRef} inputProps={inputProps} endAdornment={endAdornment} error={isInvalidDate}/>
+          <TextField inputRef={inputRef} inputProps={inputProps} endAdornment={endAdornment} error={error}/>
         )
 }
 
 export const formatLabel = (renderValue, option) => {
    return renderValue ? renderValue(option) :  `${option.code} - ${option.desc}`
-}
-
-
-export const saveHistory = (key, value, desc) => {
-        console.log("save history", key, value, desc);
-}
-
-export const fetchHistory = (key) => {
-        return [
-            {code: "A", desc: "A - Desc", type: "H"},
-            {code: "B", desc: "B - Desc", type: "H"},
-            {code: "C", desc: "C - Desc", type: "H"},
-            {code: "D", desc: "D - Desc", type: "H"}
-        ]
 }
