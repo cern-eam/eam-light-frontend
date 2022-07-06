@@ -1,6 +1,6 @@
 import React from 'react';
-import EAMSelect from 'eam-components/ui/components/muiinputs/EAMSelect'
-import EAMDatePicker from 'eam-components/ui/components/muiinputs/EAMDatePicker'
+import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect'
+import EAMDatePicker from 'eam-components/ui/components/inputs-ng/EAMDatePicker'
 import tools from '../CustomFieldTools'
 
 function CustomFieldDATE(props) {
@@ -13,7 +13,7 @@ function CustomFieldDATE(props) {
             children={children}
             elementInfo={elementInfo}
             valueKey="value"
-            values={lookupValues && lookupValues[customField.code]}
+            options={lookupValues && lookupValues[customField.code]}
             value={customField.value}
             updateProperty={updateCustomFieldValue}/>
     } else {

@@ -1,9 +1,8 @@
 import {useState, useEffect, useMemo, useRef} from "react"
 import debounce from 'lodash/debounce';
-import axios from 'axios/index';
 import { fetchHistory } from "../tools/history-tools";
 
-const useFetchAutocompleteOptions = (autocompleteHandler, autocompleteHandlerParams = [], inputValue, value, open) => {
+const useFetchAutocompleteOptions = (autocompleteHandler, autocompleteHandlerParams = [], inputValue, value, open, fieldId) => {
   
     const [options, setOptions] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -24,7 +23,7 @@ const useFetchAutocompleteOptions = (autocompleteHandler, autocompleteHandlerPar
             if (!open) {
                 return; // Don't proceed if the input is empty or there is no popup
             } else {
-                setOptions(fetchHistory()); // By focus on empty inputy fetch the history
+                setOptions(fetchHistory(fieldId)); // By focus on empty inputy fetch the history
                 return;
             }
         }

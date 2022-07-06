@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
-import {areEqual, getElementKey, isRequired, renderOptionHandler, formatLabel} from './tools/input-tools'
+import {areEqual, getElementKey, isRequired, renderOptionHandler, formatLabel, updateCodeDesc} from './tools/input-tools'
 import EAMBaseInput from './components/EAMBaseInput';
 import TextField from './components/TextField';
 import useFetchSelectOptions from './hooks/useFetchSelectOptions';
@@ -13,16 +13,12 @@ const autocompleteDivStyle = {
 
 const EAMSelect = React.memo((props) => {
    
-  let {autocompleteHandler, 
-    autocompleteHandlerParams, 
-    value, 
-    valueKey,
-    descKey,
-    desc,
+  let {autocompleteHandler, autocompleteHandlerParams, 
+    value, valueKey, descKey, desc,
     updateProperty,
     options, 
     elementInfo,
-    renderValue} = props;
+    renderValue, endTextAdornment} = props;
 
     let [inputValue, setInputValue] = useState("")
     let [fetchedOptions, loading] = useFetchSelectOptions(autocompleteHandler, autocompleteHandlerParams, value, desc, options)
@@ -47,7 +43,7 @@ const EAMSelect = React.memo((props) => {
 
     const onInputChangeHandler = (event, newInputValue) => {
         setInputValue(newInputValue);
-        if (newInputValue !== value) {
+        if (newInputValue !== value && descKey) {
          updateProperty(descKey, '');
         }
        }
@@ -66,13 +62,15 @@ const EAMSelect = React.memo((props) => {
         if (isRequired(elementInfo)) {
             return;
         }
-        updateProperty(valueKey, '');
-        updateProperty(descKey, '');
+        updateCodeDesc(updateProperty, valueKey, '', descKey, '');
         return;
       }
 
-      updateProperty(valueKey, newValue.code);
-      updateProperty(descKey, newValue.desc);
+      updateCodeDesc(updateProperty, valueKey, newValue.code, descKey, newValue.desc);
+
+      // Don't bubble up any events (won't trigger a save when we select something by pressing enter)
+      event.stopPropagation();
+      event.preventDefault();
     }
 
 
@@ -80,8 +78,7 @@ const EAMSelect = React.memo((props) => {
         if (reason === 'blur' && inputValue) {
             if (getOptions().some(o => o.code === inputValue)) {
                 let option = getOptions().find(o => o.code === inputValue);
-                updateProperty(valueKey, option.code);
-                updateProperty(descKey, option.desc);
+                updateCodeDesc(updateProperty, valueKey, option.code, descKey, option.desc);
             }
         }
       }
@@ -107,10 +104,10 @@ const EAMSelect = React.memo((props) => {
             size="small"
             fullWidth
             renderInput={(params) => <TextField hideDescription = {true} {...params} {...props} 
-                                                endAdornment={<KeyboardArrowDownIcon style={{marginRight: 6, 
-                                                                                             marginLeft: -30, 
+                                                endAdornment={<KeyboardArrowDownIcon style={{marginRight: endTextAdornment? 76 : 6,
+                                                                                             marginLeft: endTextAdornment ? -100 : -30, 
                                                                                              zIndex: 999,
-                                                                                             color: "#bdbdbd",
+                                                                                             color: "#757575",
                                                                                              pointerEvents: "none"}}/>}/>}
           />
         </div>

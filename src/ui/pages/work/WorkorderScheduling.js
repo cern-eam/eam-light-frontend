@@ -5,6 +5,7 @@ import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocompl
 import WS from '../../../tools/WS';
 import UDFChar from '../../components/userdefinedfields/UDFChar';
 import { Grid } from '@mui/material';
+import EAMUDF from 'eam-components/ui/components/inputs-ng/EAMUDF';
 
 const WorkorderScheduling = (props) => {
     const { children, workOrderLayout, workorder, updateWorkorderProperty } = props;
@@ -129,24 +130,22 @@ const WorkorderScheduling = (props) => {
                 updateProperty={updateWorkorderProperty}
             />
 
-            <UDFChar
-                fieldInfo={workOrderLayout.fields['udfchar17']}
-                fieldValue={workorder.userDefinedFields.udfchar17}
-                fieldValueDesc={workorder.userDefinedFields.udfchar17Desc}
-                fieldKey={`userDefinedFields.udfchar17`}
+            <EAMUDF
+                elementInfo={workOrderLayout.fields['udfchar17']}
+                value={workorder.userDefinedFields.udfchar17}
+                valueKey={`userDefinedFields.udfchar17`}
+                desc={workorder.userDefinedFields.udfchar17Desc}
                 descKey={`userDefinedFields.udfchar17Desc`}
-                updateUDFProperty={updateWorkorderProperty}
-                children={children}
+                updateProperty={updateWorkorderProperty}
             />
 
-            <UDFChar
-                fieldInfo={workOrderLayout.fields['udfchar19']}
-                fieldValue={workorder.userDefinedFields.udfchar19}
-                fieldValueDesc={workorder.userDefinedFields.udfchar19Desc}
-                fieldKey={`userDefinedFields.udfchar19`}
+            <EAMUDF
+                elementInfo={workOrderLayout.fields['udfchar19']}
+                value={workorder.userDefinedFields.udfchar19}
+                valueKey={`userDefinedFields.udfchar19`}
+                desc={workorder.userDefinedFields.udfchar19Desc}
                 descKey={`userDefinedFields.udfchar19Desc`}
-                updateUDFProperty={updateWorkorderProperty}
-                children={children}
+                updateProperty={updateWorkorderProperty}
             />
         </div>
     );

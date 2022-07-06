@@ -31,8 +31,27 @@ export const renderOptionHandler = (renderValue, props, option) => (
          </Box>)
 
 
-
-
 export const formatLabel = (renderValue, option) => {
-   return renderValue ? renderValue(option) :  `${option.code} - ${option.desc}`
+        if (renderValue) {
+                return renderValue(option);
+        }
+
+        if (option.code === option.desc) {
+                return option.code;
+        }
+
+        // { code: "Long Shutdown", desc: null }
+        if (!option.desc) {
+                return option.code
+        }
+
+        return `${option.code} - ${option.desc}`;
+}
+
+
+export const updateCodeDesc = (updateProperty, valueKey, value, descKey, desc) => {
+        updateProperty(valueKey, value);
+        if (descKey) {
+                updateProperty(descKey, desc);
+        }
 }

@@ -44,19 +44,13 @@ const divErrorStyle = {
 
 const TextField = (props) => {
 
-    let {desc, 
-        value, 
-        valueKey, 
-        barcodeScanner, 
-        updateProperty, 
-        link, 
+    let {desc, value, valueKey, 
+        barcodeScanner, link, 
+        updateProperty,       
         inputProps, 
-        hideDescription, 
         inputRef,
-        endTextAdornment, 
-        endAdornment,
-        disabled,
-        errorText} = props;
+        endTextAdornment, endAdornment,
+        hideDescription, disabled, errorText} = props;
 
     return (
         <div style={divRootContainer}>

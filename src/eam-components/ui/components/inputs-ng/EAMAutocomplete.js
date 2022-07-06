@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import useFetchAutocompleteOptions from './hooks/useFetchAutocompleteOptions';
-import {areEqual, getElementKey, renderOptionHandler} from './tools/input-tools'
+import {areEqual, getElementKey, renderOptionHandler, updateCodeDesc} from './tools/input-tools'
 import EAMBaseInput from './components/EAMBaseInput';
 import TextField from './components/TextField';
 import { saveHistory } from './tools/history-tools';
@@ -13,18 +13,13 @@ const autocompleteDivStyle = {
 
 const EAMAutocomplete = React.memo((props) => {
    
-  let {autocompleteHandler, 
-    autocompleteHandlerParams, 
-    value, 
-    valueKey,
-    descKey,
-    updateProperty,
-    elementInfo,
-    renderValue} = props;
+  let {autocompleteHandler, autocompleteHandlerParams, 
+       value, valueKey, descKey,
+       updateProperty, elementInfo,renderValue} = props;
 
     let [inputValue, setInputValue] = useState("")
     let [open, setOpen] = useState(false)
-    let [fetchedOptions, loading] = useFetchAutocompleteOptions(autocompleteHandler, autocompleteHandlerParams, inputValue, value, open)
+    let [fetchedOptions, loading] = useFetchAutocompleteOptions(autocompleteHandler, autocompleteHandlerParams, inputValue, value, open, getElementKey(elementInfo))
   
     const getOptionLabelHandler = option => {
         return option.code ?? option;
@@ -32,21 +27,23 @@ const EAMAutocomplete = React.memo((props) => {
 
     const onInputChangeHandler = (event, newInputValue) => {
      setInputValue(newInputValue);
-     if (newInputValue !== value) {
+     if (newInputValue !== value && descKey) {
       updateProperty(descKey, '');
      }
     }
 
     const onChangeHandler = (event, newValue, reason) => {
       if (reason === 'clear') {
-        updateProperty(valueKey, '');
-        updateProperty(descKey, '');
+        updateCodeDesc(updateProperty, valueKey, '', descKey, '');
         return;
       }
       
       saveHistory(getElementKey(elementInfo), newValue.code, newValue.desc)
-      updateProperty(valueKey, newValue.code);
-      updateProperty(descKey, newValue.desc);
+      updateCodeDesc(updateProperty, valueKey, newValue.code, descKey, newValue.desc);
+
+      // Don't bubble up any events (won't trigger a save when we select something by pressing enter)
+      event.stopPropagation();
+      event.preventDefault();
     }
 
 

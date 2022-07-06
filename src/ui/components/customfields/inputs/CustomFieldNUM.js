@@ -12,9 +12,10 @@ function CustomFieldNUM(props) {
             children={children}
             elementInfo={elementInfo}
             valueKey="value"
-            values={lookupValues && lookupValues[customField.code]}
+            options={lookupValues && lookupValues[customField.code]}
             value={customField.value}
-            updateProperty={updateCustomFieldValue}/>
+            updateProperty={updateCustomFieldValue}
+            endTextAdornment={UoM}/>
     } else {
         return (
             <EAMTextField
