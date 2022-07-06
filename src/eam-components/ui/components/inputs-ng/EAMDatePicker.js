@@ -28,7 +28,7 @@ const EAMDatePicker = (props) => {
                     renderInput={(props) => renderDatePickerInput(props, isInvalidDate)}
                     value={value}
                     disableMaskedInput
-                    inputFormat="dd-MMM-yyyy"
+                    inputFormat="dd-MMM-yyyy" //TODO shouldn't be hardcoded 
                     onChange={onChangeHandler}
                 />
          </LocalizationProvider>

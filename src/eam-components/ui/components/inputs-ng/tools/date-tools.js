@@ -9,6 +9,8 @@ export const renderDatePickerInput = ({ inputRef, inputProps, InputProps }, isIn
     let endAdornment = (<div style={{marginRight: 12, marginLeft: -8}}>{InputProps?.endAdornment}</div>)
     
     return (
-      <TextField inputRef={inputRef} inputProps={inputProps} endAdornment={endAdornment} error={error}/>
+      <TextField inputRef={inputRef} 
+                 inputProps={inputProps} 
+                 endAdornment={endAdornment} error={error}/>
     )
 }

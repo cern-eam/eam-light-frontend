@@ -4,6 +4,7 @@ import {areEqual, getElementKey, isRequired, renderOptionHandler, formatLabel} f
 import EAMBaseInput from './components/EAMBaseInput';
 import TextField from './components/TextField';
 import useFetchSelectOptions from './hooks/useFetchSelectOptions';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const autocompleteDivStyle = {
   flex: "1 1 auto",
@@ -105,7 +106,12 @@ const EAMSelect = React.memo((props) => {
             loading = {loading}
             size="small"
             fullWidth
-            renderInput={(params) => <TextField hideDescription = {true} {...params}  {...props} />}
+            renderInput={(params) => <TextField hideDescription = {true} {...params} {...props} 
+                                                endAdornment={<KeyboardArrowDownIcon style={{marginRight: 6, 
+                                                                                             marginLeft: -30, 
+                                                                                             zIndex: 999,
+                                                                                             color: "#bdbdbd",
+                                                                                             pointerEvents: "none"}}/>}/>}
           />
         </div>
       </EAMBaseInput>
