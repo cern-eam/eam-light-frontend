@@ -1,15 +1,13 @@
 /*
  * The history stores the most recent items chronologically.
- * 'MAX_LEN' defines the maximum number of stored entries in the history.
+ * 'MAX_LENGTH' defines the maximum number of stored entries in the history.
  * Type: 'H' is necessary as it draws the 'history' icon.
  */
 export const saveHistory = (key, value, desc) => {
-    console.log("save history", key, value, desc); // 
-    
-    const MAX_LEN = 5;
+    const MAX_LENGTH = 5;
 
     // Sanity check
-    if (!key || !value) {
+    if (!key || !value || !desc) {
         return;
     }
 
@@ -17,7 +15,7 @@ export const saveHistory = (key, value, desc) => {
     if (!localStorage.getItem(key)) {
 	    localStorage.setItem(key, JSON.stringify([]));
     }
-    
+
     // Get current history
     const history = JSON.parse(localStorage.getItem(key));
 
@@ -35,7 +33,7 @@ export const saveHistory = (key, value, desc) => {
     history.unshift({code: value, desc: desc, type: "H"});
 
     // Remove oldest entry from history 
-    if (history.length > MAX_LEN) {
+    if (history.length > MAX_LENGTH) {
 	    history.pop();
     }
 
