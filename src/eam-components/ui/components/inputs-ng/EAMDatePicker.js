@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {areEqual, renderDatePickerInput} from './tools/input-tools'
-import EAMBaseInput from './tools/EAMBaseInput';
+import {areEqual} from './tools/input-tools'
+import {renderDatePickerInput} from './tools/date-tools'
+import EAMBaseInput from './components/EAMBaseInput';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';

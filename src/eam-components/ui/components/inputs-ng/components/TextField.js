@@ -56,7 +56,7 @@ const TextField = (props) => {
         endTextAdornment, 
         endAdornment,
         disabled,
-        error} = props;
+        errorText} = props;
 
     return (
         <div style={divRootContainer}>
@@ -73,7 +73,7 @@ const TextField = (props) => {
                 {barcodeScanner && !disabled && <EAMBarcodeScanner updateProperty={updateProperty} valueKey = {valueKey}/>}
                 {link && <EAMLink link = {link} value = {value}/>}
             </div>
-            {error && <div style={divErrorStyle}>{error}</div>}
+            {errorText && <div style={divErrorStyle}>{errorText}</div>}
         </div>
     )
 

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {areEqual} from './tools/input-tools'
-import EAMBaseInput from './tools/EAMBaseInput';
-import TextField from './tools/TextField';
+import EAMBaseInput from './components/EAMBaseInput';
+import TextField from './components/TextField';
 
 const EAMTextField = (props) => {
 

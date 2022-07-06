@@ -1,6 +1,6 @@
 import React from 'react';
 import Checkbox from '@mui/material/Checkbox';
-import EAMBaseInput from './tools/EAMBaseInput';
+import EAMBaseInput from './components/EAMBaseInput';
 import { areEqual } from './tools/input-tools';
 
 

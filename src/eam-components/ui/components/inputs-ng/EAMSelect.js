@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Box } from '@mui/material';
 import {areEqual, getElementKey, isRequired, renderOptionHandler, formatLabel} from './tools/input-tools'
-import EAMBaseInput from './tools/EAMBaseInput';
-import TextField from './tools/TextField';
+import EAMBaseInput from './components/EAMBaseInput';
+import TextField from './components/TextField';
 import useFetchSelectOptions from './hooks/useFetchSelectOptions';
 
 const autocompleteDivStyle = {

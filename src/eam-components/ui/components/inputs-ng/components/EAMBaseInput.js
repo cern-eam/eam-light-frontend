@@ -1,5 +1,5 @@
 import React from 'react';
-import {isRequired, isHidden} from './input-tools'
+import {isRequired, isHidden} from '../tools/input-tools'
 
 const rootStyle = {
     margin: "8px",
