@@ -6,12 +6,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import BlockUi from 'react-block-ui'
 import './AddActivityDialog.css'
-import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
 import WSWorkorders from "../../../../../tools/WSWorkorders";
-import EAMSelect from "eam-components/ui/components/muiinputs/EAMSelect";
-import EAMDatePicker from "eam-components/ui/components/muiinputs/EAMDatePicker";
-import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocomplete";
 import KeyCode from "eam-components/enums/KeyCode";
+import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
+import EAMDatePicker from 'eam-components/ui/components/inputs-ng/EAMDatePicker';
+import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
 
 /**
  * Display detail of an activity
@@ -100,7 +100,7 @@ function AddActivityDialog(props) {
             handleSave();
         }
     }
-
+    
     return (
         <div onKeyDown={onKeyDown}>
             <Dialog
@@ -118,7 +118,7 @@ function AddActivityDialog(props) {
                                 elementInfo={props.layout.booactivity}
                                 valueKey="activityCode"
                                 value={formValues['activityCode'] || ''}
-                                values={props.activities.map(activity => {
+                                options={props.activities.map(activity => {
                                     return {
                                         code: activity.activityCode,
                                         desc: activity.tradeCode
@@ -131,8 +131,8 @@ function AddActivityDialog(props) {
                                 autocompleteHandler={WSWorkorders.autocompleteBOOEmployee}
                                 elementInfo={props.layout.employee}
                                 valueKey="employeeCode"
-                                value={formValues['employeeCode']}
-                                valueDesc={formValues['employeeDesc']}
+                                value={formValues['employeeCode'] || ''}
+                                desc={formValues['employeeDesc']}
                                 descKey="employeeDesc"
                                 updateProperty={updateFormValues}
                             />
@@ -141,8 +141,8 @@ function AddActivityDialog(props) {
                                 autocompleteHandler={WSWorkorders.autocompleteBOODepartment}
                                 elementInfo={props.layout.department}
                                 valueKey="departmentCode"
-                                value={formValues['departmentCode']}
-                                valueDesc={formValues['departmentDesc']}
+                                value={formValues['departmentCode'] || ''}
+                                desc={formValues['departmentDesc']}
                                 descKey="departmentDesc"
                                 updateProperty={updateFormValues}
                             />
@@ -162,7 +162,7 @@ function AddActivityDialog(props) {
                                 updateProperty={updateFormValues}
                             />
 
-                            <EAMInput
+                            <EAMTextField
                                 elementInfo={props.layout.hrswork}
                                 valueKey="hoursWorked"
                                 value={formValues['hoursWorked']}

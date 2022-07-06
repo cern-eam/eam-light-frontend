@@ -6,11 +6,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import BlockUi from 'react-block-ui';
 import './AddActivityDialog.css';
-import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput';
-import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete';
 import WSWorkorders from '../../../../../tools/WSWorkorders';
-import EAMDatePicker from 'eam-components/ui/components/muiinputs/EAMDatePicker';
 import KeyCode from 'eam-components/enums/KeyCode';
+import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
+import EAMDatePicker from 'eam-components/ui/components/inputs-ng/EAMDatePicker';
 
 /**
  * Display detail of an activity
@@ -103,14 +103,14 @@ function AddActivityDialog(props) {
                 <DialogContent id="content">
                     <div>
                         <BlockUi tag="div" blocking={loading}>
-                            <EAMInput
+                            <EAMTextField
                                 elementInfo={props.layout.activity}
                                 valueKey="activityCode"
                                 value={formValues['activityCode']}
                                 updateProperty={updateFormValues}
                             />
 
-                            <EAMInput
+                            <EAMTextField
                                 elementInfo={props.layout.activitynote}
                                 valueKey="activityNote"
                                 value={formValues['activityNote']}
@@ -122,7 +122,7 @@ function AddActivityDialog(props) {
                                 elementInfo={props.layout.task}
                                 valueKey="taskCode"
                                 value={formValues['taskCode']}
-                                valueDesc={formValues['taskDesc']}
+                                desc={formValues['taskDesc']}
                                 descKey="taskDesc"
                                 updateProperty={updateFormValues}
                             />
@@ -132,7 +132,7 @@ function AddActivityDialog(props) {
                                 elementInfo={props.layout.matlcode}
                                 valueKey="materialList"
                                 value={formValues['materialList']}
-                                valueDesc={formValues['materialListDesc']}
+                                desc={formValues['materialListDesc']}
                                 descKey="materialListDesc"
                                 updateProperty={updateFormValues}
                                 maxHeight={200}
@@ -143,12 +143,12 @@ function AddActivityDialog(props) {
                                 elementInfo={props.layout.trade}
                                 valueKey="tradeCode"
                                 value={formValues['tradeCode']}
-                                valueDesc={formValues['tradeDesc']}
+                                desc={formValues['tradeDesc']}
                                 descKey="tradeDesc"
                                 updateProperty={updateFormValues}
                             />
 
-                            <EAMInput
+                            <EAMTextField
                                 required={true}
                                 elementInfo={props.layout.personsreq}
                                 valueKey="peopleRequired"
@@ -156,7 +156,7 @@ function AddActivityDialog(props) {
                                 updateProperty={updateFormValues}
                             />
 
-                            <EAMInput
+                            <EAMTextField
                                 required={true}
                                 elementInfo={props.layout.esthrs}
                                 valueKey="estimatedHours"

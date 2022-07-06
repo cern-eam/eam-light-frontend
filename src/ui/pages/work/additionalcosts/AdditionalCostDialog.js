@@ -6,9 +6,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import BlockUi from 'react-block-ui';
 import WSWorkorders from "../../../../tools/WSWorkorders";
-import EAMSelect from "eam-components/ui/components/muiinputs/EAMSelect";
-import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
-import EAMDatePicker from 'eam-components/ui/components/muiinputs/EAMDatePicker';
+import EAMSelect from "eam-components/ui/components/inputs-ng/EAMSelect";
+import EAMDatePicker from 'eam-components/ui/components/inputs-ng/EAMDatePicker';
+import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
 
 const AdditionalCostDialog = (props) => {
     const [additionalCost, setAdditionalCost] = useState({ costType: "MISC" });
@@ -65,24 +65,24 @@ const AdditionalCostDialog = (props) => {
                 <BlockUi tag="div" blocking={loading || props.isLoading}>
                     <EAMSelect elementInfo={props.tabLayout['activitytrade']}
                         valueKey="activityCode"
-                        values={activityList}
+                        options={activityList}
                         value={additionalCost.activityCode}
                         updateProperty={updateAdditionalCostProperty}
                         children={props.children}/>
 
-                    <EAMInput elementInfo={props.tabLayout['costdescription']}
+                    <EAMTextField elementInfo={props.tabLayout['costdescription']}
                         valueKey="costDescription"
                         value={additionalCost.costDescription}
                         updateProperty={updateAdditionalCostProperty}
                         children={props.children}/>
 
-                    <EAMInput elementInfo={{...props.tabLayout['costtype'], readonly: true }}
+                    <EAMTextField elementInfo={{...props.tabLayout['costtype'], readonly: true }}
                         valueKey="costType"
                         value="Parts/Services"
                         updateProperty={updateAdditionalCostProperty}
                         children={props.children}/>
 
-                    <EAMInput elementInfo={props.tabLayout['cost']}
+                    <EAMTextField elementInfo={props.tabLayout['cost']}
                         valueKey="cost"
                         value={additionalCost.cost}
                         updateProperty={updateAdditionalCostProperty}
