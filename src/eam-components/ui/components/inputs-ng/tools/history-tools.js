@@ -1,12 +1,48 @@
+/*
+ * The history stores the most recent items chronologically.
+ * 'MAX_LEN' defines the maximum number of stored entries in the history.
+ * Type: 'H' is necessary as it draws the 'history' icon.
+ */
 export const saveHistory = (key, value, desc) => {
-    console.log("save history", key, value, desc); // Type: 'H' is necessery as it draws the 'history' icon 
+    console.log("save history", key, value, desc); // 
+    
+    const MAX_LEN = 5;
+
+    // Sanity check
+    if (!key || !value) {
+        return;
+    }
+
+    // Create item in local storage if it doesn't exist already
+    if (!localStorage.getItem(key)) {
+	    localStorage.setItem(key, JSON.stringify([]));
+    }
+    
+    // Get current history
+    const history = JSON.parse(localStorage.getItem(key));
+
+    // Check if entry is already in the history
+    const existingIndex = history.findIndex((elem) => elem.code === value );
+
+    // If the entry already existed, update history chronologically
+    if (existingIndex !== -1) {
+        history.unshift(history.splice(existingIndex, 1)[0]); // move entry to beginning
+        localStorage.setItem(key, JSON.stringify(history));
+        return;
+    }
+
+    // Add new entry to beginning of history structure
+    history.unshift({code: value, desc: desc, type: "H"});
+
+    // Remove oldest entry from history 
+    if (history.length > MAX_LEN) {
+	    history.pop();
+    }
+
+    // Add to local storage
+    localStorage.setItem(key, JSON.stringify(history));
 }
 
 export const fetchHistory = (key) => {
-    return [
-        {code: "A", desc: "A - Desc", type: "H"}, 
-        {code: "B", desc: "B - Desc", type: "H"},
-        {code: "C", desc: "C - Desc", type: "H"},
-        {code: "D", desc: "D - Desc", type: "H"}
-    ]
+    return JSON.parse(localStorage.getItem(key)) || [];
 }
