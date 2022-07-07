@@ -96,7 +96,7 @@ class EISPanel extends Component {
                     </div>
                 </AccordionSummary>
 
-                <AccordionDetails style={{ ...this.props.detailsStyle }}>{this.props.children}</AccordionDetails>
+                <AccordionDetails style={{ backgroundColor: "#fafafa", ...this.props.detailsStyle }}>{this.props.children}</AccordionDetails>
             </Accordion>
         );
     }

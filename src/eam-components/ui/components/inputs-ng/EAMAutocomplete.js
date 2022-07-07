@@ -73,6 +73,7 @@ const EAMAutocomplete = React.memo((props) => {
             onChange={onChangeHandler} 
             onInputChange={onInputChangeHandler}
             // Misc
+            filterOptions={x => x}
             id={getElementKey(elementInfo)}
             freeSolo = {true}
             value={value}

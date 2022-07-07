@@ -13,7 +13,8 @@ const divLabelStyle = {
     flex: "0 0 140px",
     fontSize: 14,
     margin: "5px 10px 5px 0px",
-    color: "rgb(0, 101, 152)",
+    //color: "rgb(0, 101, 152)",
+    color: "#1a237e"
     //fontWeight: "bold"
 }
 
@@ -35,8 +36,6 @@ const EAMBaseInput = (props) => {
     if (false) {
 
     }
-
-    console.log('rendering', elementInfo)
 
     return (<div style={rootStyle}>
         <div style ={divLabelStyle}>

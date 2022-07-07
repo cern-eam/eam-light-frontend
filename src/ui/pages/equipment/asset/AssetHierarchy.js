@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput'
-import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete'
 import WSEquipment from "../../../../tools/WSEquipment";
-import EAMBarcodeInput from "eam-components/ui/components/muiinputs/EAMBarcodeInput";
-import EAMCheckbox from 'eam-components/ui/components/muiinputs/EAMCheckbox';
+import EAMUDF from 'eam-components/ui/components/inputs-ng/EAMUDF';
+import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
+import EAMCheckbox from 'eam-components/ui/components/inputs-ng/EAMCheckbox';
 
 const fieldIsHidden = (info) =>
     info && info.attribute === 'H'
@@ -77,14 +76,14 @@ class AssetHierarchy extends Component {
         return (
             <div style={{width: "100%", marginTop: 0}}>
 
-                <EAMInput
+                <EAMUDF
                     children = {children}
                     elementInfo={{...assetLayout.fields['udfchar13'],readonly:true}}
                     value={equipment.userDefinedFields.udfchar13}
                     updateProperty={updateEquipmentProperty}
                     valueKey="userDefinedFields.udfchar13"/>
 
-                <EAMInput
+                <EAMUDF
                     children = {children}
                     elementInfo={{...assetLayout.fields['udfchar11'],readonly:true}}
                     value={equipment.userDefinedFields.udfchar11}
@@ -92,18 +91,17 @@ class AssetHierarchy extends Component {
                     valueKey="userDefinedFields.udfchar11"/>
 
                 {!fieldIsHidden(assetLayout.fields['parentasset']) && <>
-                    <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyAssetCode', value)} right={0} top={20}>
                         <EAMAutocomplete
                             children = {children}
                             elementInfo={assetLayout.fields['parentasset']}
                             value={equipment.hierarchyAssetCode}
                             updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
                             valueKey="hierarchyAssetCode"
-                            valueDesc={equipment.hierarchyAssetDesc}
+                            desc={equipment.hierarchyAssetDesc}
                             descKey="hierarchyAssetDesc"
+                            barcodeScanner={true}
                             autocompleteHandler={WSEquipment.autocompleteAssetParent}/>
-                    </EAMBarcodeInput>
-
+                    
                     <div style={this.styles.dependencyRowStyle}>
                         <div style={this.styles.dependencyCheckboxWrapperStyle}>
                             <span style={this.styles.labelStyle}>Dependent</span>
@@ -120,18 +118,17 @@ class AssetHierarchy extends Component {
                 </>}
 
                 {!fieldIsHidden(assetLayout.fields['position']) && <>
-                    <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyPositionCode', value)} right={0} top={20}>
-                        <EAMAutocomplete
+                       <EAMAutocomplete
                             children = {children}
                             elementInfo={assetLayout.fields['position']}
                             value={equipment.hierarchyPositionCode}
                             updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
                             valueKey="hierarchyPositionCode"
-                            valueDesc={equipment.hierarchyPositionDesc}
+                            desc={equipment.hierarchyPositionDesc}
                             descKey="hierarchyPositionDesc"
+                            barcodeScanner={true}
                             autocompleteHandler={WSEquipment.autocompletePositionParent}/>
-                    </EAMBarcodeInput>
-
+                    
                     <div style={this.styles.dependencyRowStyle}>
                         <div style={this.styles.dependencyCheckboxWrapperStyle}>
                             <span style={this.styles.labelStyle}>Dependent</span>
@@ -148,18 +145,17 @@ class AssetHierarchy extends Component {
                 </>}
 
                 {!fieldIsHidden(assetLayout.fields['primarysystem']) && <>
-                    <EAMBarcodeInput updateProperty={value => updateEquipmentProperty('hierarchyPrimarySystemCode', value)} right={0} top={20}>
                         <EAMAutocomplete
                             children = {children}
                             elementInfo={assetLayout.fields['primarysystem']}
                             value={equipment.hierarchyPrimarySystemCode}
                             updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
                             valueKey="hierarchyPrimarySystemCode"
-                            valueDesc={equipment.hierarchyPrimarySystemDesc}
+                            desc={equipment.hierarchyPrimarySystemDesc}
                             descKey="hierarchyPrimarySystemDesc"
+                            barcodeScanner={true}
                             autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}/>
-                    </EAMBarcodeInput>
-
+                    
                     <div style={this.styles.dependencyRowStyle}>
                         <div style={this.styles.dependencyCheckboxWrapperStyle}>
                             <span style={this.styles.labelStyle}>Dependent</span>
@@ -181,7 +177,7 @@ class AssetHierarchy extends Component {
                     value={equipment.hierarchyLocationCode}
                     updateProperty={updateEquipmentProperty}
                     valueKey="hierarchyLocationCode"
-                    valueDesc={equipment.hierarchyLocationDesc}
+                    desc={equipment.hierarchyLocationDesc}
                     descKey="hierarchyLocationDesc"
                     autocompleteHandler={WSEquipment.autocompleteLocation}/>
             </div>

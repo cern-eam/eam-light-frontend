@@ -3,7 +3,6 @@ import EAMDateTimePicker from 'eam-components/ui/components/inputs-ng/EAMDateTim
 import EAMDatePicker from 'eam-components/ui/components/inputs-ng/EAMDatePicker';
 import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
 import WS from '../../../tools/WS';
-import UDFChar from '../../components/userdefinedfields/UDFChar';
 import { Grid } from '@mui/material';
 import EAMUDF from 'eam-components/ui/components/inputs-ng/EAMUDF';
 

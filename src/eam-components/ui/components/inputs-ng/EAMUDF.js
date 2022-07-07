@@ -45,6 +45,7 @@ const EAMUDF = (props) => {
                     desc={desc}
                     updateProperty={updateProperty}
                     autocompleteHandler={WSUDF.autocompleteUserDefinedField}
+                    autocompleteHandlerParams={[udfLookupEntity]}
                 />)
         case NONE:
         default:

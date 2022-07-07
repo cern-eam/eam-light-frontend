@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import EAMSelect from 'eam-components/ui/components/muiinputs/EAMSelect'
-import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput'
-import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete'
 import WSEquipment from "../../../../tools/WSEquipment";
 import StatusRow from "../../../components/statusrow/StatusRow"
 import CERNMode from "../../../components/CERNMode"
 import EquipmentTools from "../EquipmentTools"
+import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMUDF from 'eam-components/ui/components/inputs-ng/EAMUDF';
+import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
+import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
+import WSUDF from "tools/WSUDF";
 
 class AssetGeneral extends Component {
 
@@ -18,14 +20,14 @@ class AssetGeneral extends Component {
             <div style={{width: "100%", marginTop: 0}}>
 
                 {layout.newEntity &&
-                <EAMInput
+                <EAMTextField
                     children = {children}
                     elementInfo={assetLayout.fields['equipmentno']}
                     value={equipment.code}
                     updateProperty={updateEquipmentProperty}
                     valueKey="code"/>}
 
-                <EAMInput
+                <EAMTextField
                     children = {children}
                     elementInfo={assetLayout.fields['alias']}
                     value={equipment.alias}
@@ -33,7 +35,7 @@ class AssetGeneral extends Component {
                     valueKey="alias"
                 />
 
-                <EAMInput
+                <EAMUDF
                     children = {children}
                     elementInfo={assetLayout.fields['udfchar45']}
                     value={equipment.userDefinedFields.udfchar45}
@@ -41,7 +43,7 @@ class AssetGeneral extends Component {
                     valueKey="userDefinedFields.udfchar45"
                 />
 
-                <EAMInput
+                <EAMTextField
                     children = {children}
                     elementInfo={assetLayout.fields['equipmentdesc']}
                     value={equipment.description}
@@ -52,7 +54,7 @@ class AssetGeneral extends Component {
                     children = {children}
                     elementInfo={assetLayout.fields['department']}
                     value={equipment.departmentCode}
-                    valueDesc={equipment.departmentDesc}
+                    desc={equipment.departmentDesc}
                     updateProperty={updateEquipmentProperty}
                     valueKey="departmentCode"
                     descKey="departmentDesc"
@@ -62,7 +64,7 @@ class AssetGeneral extends Component {
                     children = {children}
                     elementInfo={assetLayout.fields['assetstatus']}
                     value={equipment.statusCode}
-                    values={layout.statusValues}
+                    options={layout.statusValues}
                     updateProperty={this.updateEquipmentStatus}
                     valueKey="statusCode"/>
                 
@@ -70,7 +72,7 @@ class AssetGeneral extends Component {
                     children={children}
                     elementInfo={assetLayout.fields['state']}
                     value={equipment.stateCode}
-                    values={layout.stateValues}
+                    options={layout.stateValues}
                     updateProperty={updateEquipmentProperty}
                     valueKey="stateCode"/>
 

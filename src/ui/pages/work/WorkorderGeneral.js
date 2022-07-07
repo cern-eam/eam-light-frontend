@@ -1,8 +1,6 @@
 import React, {useCallback} from 'react';
-import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput'
 import EAMCheckbox from 'eam-components/ui/components/inputs-ng/EAMCheckbox'
 import WS from '../../../tools/WS'
-import UDFChar from "../../components/userdefinedfields/UDFChar";
 import WSWorkorders from "../../../tools/WSWorkorders"
 import OpenInAppIcon from 'mdi-material-ui/OpenInApp'
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew'

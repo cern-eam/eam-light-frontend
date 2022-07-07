@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import UDFChar from "./UDFChar";
-import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
-import EAMDatePicker from "eam-components/ui/components/muiinputs/EAMDatePicker";
-import EAMDateTimePicker from "eam-components/ui/components/muiinputs/EAMDateTimePicker";
-import EAMCheckbox from "eam-components/ui/components/muiinputs/EAMCheckbox";
+import EAMUDF from 'eam-components/ui/components/inputs-ng/EAMUDF';
+import EAMCheckbox from 'eam-components/ui/components/inputs-ng/EAMCheckbox';
+
 
 /**
  * Receive props:
@@ -25,13 +23,14 @@ class UserDefinedFields extends Component {
             .filter(prop => prop.startsWith('udfchar')
                 && !prop.includes('Desc')
                 && !exclusions.includes(prop))
-            .map(prop => <UDFChar
+            .map(prop => <EAMUDF
                 key={prop}
-                fieldInfo={entityLayout[prop]}
-                fieldValue={fields[prop]}
-                fieldValueDesc={fields[`${prop}Desc`]}
-                fieldKey={`userDefinedFields.${prop}`}
-                updateUDFProperty={updateUDFProperty}
+                elementInfo={entityLayout[prop]}
+                value={fields[prop]}
+                valueKey={`userDefinedFields.${prop}`}
+                desc={fields[`${prop}Desc`]}  
+                descKey={`userDefinedFields.${prop}Desc`}
+                updateProperty={updateUDFProperty}
                 children={children}/>);
     };
 
@@ -45,7 +44,7 @@ class UserDefinedFields extends Component {
 
         return this.sortProperties()
             .filter(prop => prop.startsWith('udfnum') && !exclusions.includes(prop))
-            .map(prop => <EAMInput
+            .map(prop => <EAMUDF
                 key={prop}
                 elementInfo={entityLayout[prop]}
                 value={fields[prop]}
@@ -65,11 +64,11 @@ class UserDefinedFields extends Component {
         return this.sortProperties()
             .filter(prop => prop.startsWith('udfdate') && !exclusions.includes(prop))
             .map(prop => {
-                const PickerComponent = entityLayout[prop].fieldType === 'datetime'
-                    ? EAMDateTimePicker
-                    : EAMDatePicker;
+                // const PickerComponent = entityLayout[prop].fieldType === 'datetime'
+                //     ? EAMDateTimePicker
+                //     : EAMDatePicker;
 
-                return <PickerComponent
+                return <EAMUDF
                     key={prop}
                     elementInfo={entityLayout[prop]}
                     value={fields[prop]}

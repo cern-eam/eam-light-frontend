@@ -16,6 +16,7 @@ let inputStyle = {
     borderRadius: "5px",
     transition: "border-color .15s ease-in-out,box-shadow .15s ease-in-out",
     backgroundColor: "#fdfdfd",
+    //backgroundColor: "#fefefe"
 }
 
 const divInputStyle = {
