@@ -6,7 +6,8 @@ import './TextField.css'
 
 let inputStyle = {
     display: "block",
-    width: "calc(100% - 18px)",
+    width: "100%",
+    boxSizing: "border-box",
     padding: "7px 8px",
     fontSize: "15px",
     lineHeight: 1.5,

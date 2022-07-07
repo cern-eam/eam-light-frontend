@@ -8,6 +8,14 @@ import IconButton from '@mui/material/IconButton';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
 import Fullscreen from '@mui/icons-material/Fullscreen';
 import { FullscreenExit } from 'mdi-material-ui';
+import { styled } from '@mui/styles';
+
+const CssAccordion = styled(Accordion)({
+    "&.MuiAccordion-root": {
+        boxShadow: "none",
+        //margin: "8px"
+      }
+});
 
 class EISPanel extends Component {
     state = {
@@ -68,7 +76,7 @@ class EISPanel extends Component {
     render() {
         const linkIcon = this.props.icon;
         return (
-            <Accordion
+            <CssAccordion
                 defaultExpanded
                 expanded={this.props.alwaysExpanded ? true : this.state.panelExpanded}
                 TransitionProps={{ timeout: 300 }}
@@ -97,7 +105,7 @@ class EISPanel extends Component {
                 </AccordionSummary>
 
                 <AccordionDetails style={{ backgroundColor: "#fafafa", ...this.props.detailsStyle }}>{this.props.children}</AccordionDetails>
-            </Accordion>
+            </CssAccordion>
         );
     }
 }

@@ -4,6 +4,12 @@ import EAMBaseInput from './components/EAMBaseInput';
 import { areEqual } from './tools/input-tools';
 
 
+const rootStyle = {
+    width: "calc(50% - 20px)",
+    boxSizing: "border-box",
+    //float: "left"
+}
+
 const EAMCheckbox = (props) => {
     
     const { 
@@ -22,9 +28,9 @@ const EAMCheckbox = (props) => {
 
 
     return (
-        <EAMBaseInput {...props}>
+        <EAMBaseInput {...props} rootStyle={rootStyle}>
             <Checkbox
-                style={{marginLeft: -11}}
+                style={{boxSizing: "border-box"}}
                 color="primary"
                 checked={isChecked(value)}
                 onChange={handleChange}

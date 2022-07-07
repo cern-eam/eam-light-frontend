@@ -2,6 +2,7 @@ import React from 'react';
 import {isRequired, isHidden} from '../tools/input-tools'
 
 const rootStyle = {
+    width: "100%",
     margin: "8px",
     display: "flex",
     flexDirection: "row",
@@ -37,7 +38,7 @@ const EAMBaseInput = (props) => {
 
     }
 
-    return (<div style={rootStyle}>
+    return (<div style={{...rootStyle, ...props.rootStyle}}>
         <div style ={divLabelStyle}>
             <span>{elementInfo.text}</span>
             {isRequired(elementInfo) && <span style={requiredStyle}>*</span>}

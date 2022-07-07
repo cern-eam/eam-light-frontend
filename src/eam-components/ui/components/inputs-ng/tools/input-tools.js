@@ -14,7 +14,8 @@ export const areEqual = (prevProps, nextProps) => {
     return prevProps.value === nextProps.value &&
            prevProps.desc === nextProps.desc &&
            isEqual(prevProps.autocompleteHandlerParams, nextProps.autocompleteHandlerParams) &&
-           isEqual(prevProps.options, nextProps.options);
+           isEqual(prevProps.options, nextProps.options) &&
+           isEqual(prevProps.renderDependencies, nextProps.renderDependencies);
 }
 
 export const getElementKey = (elementInfo) => {

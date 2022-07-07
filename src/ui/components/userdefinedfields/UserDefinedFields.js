@@ -108,7 +108,7 @@ class UserDefinedFields extends Component {
 
     render() {
         return (
-            <div style={{width: "100%", marginTop: 0}}>
+            <div style={{width: "100%", marginTop: 0, display: "flex", flexWrap: "wrap"}}>
                 {this.renderUdfChars()}
                 {this.renderUdfNums()}
                 {this.renderUdfDates()}
