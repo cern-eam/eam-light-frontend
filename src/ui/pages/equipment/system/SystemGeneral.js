@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import EAMSelect from 'eam-components/ui/components/muiinputs/EAMSelect'
-import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput'
-import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete'
+import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
+import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
 import WSEquipment from "../../../../tools/WSEquipment";
 import StatusRow from "../../../components/statusrow/StatusRow";
 import EquipmentTools from "../EquipmentTools"
@@ -17,21 +17,21 @@ class SystemGeneral extends Component {
             <div style={{width: "100%", marginTop: 0}}>
 
                 {layout.newEntity &&
-                <EAMInput
+                <EAMTextField
                     children={children}
                     elementInfo={systemLayout.fields['equipmentno']}
                     value={equipment.code}
                     updateProperty={updateEquipmentProperty}
                     valueKey="code"/>}
 
-                <EAMInput
+                <EAMTextField
                     children={children}
                     elementInfo={systemLayout.fields['alias']}
                     value={equipment.alias}
                     updateProperty={updateEquipmentProperty}
                     valueKey="alias"/>
 
-                <EAMInput
+                <EAMTextField
                     children={children}
                     elementInfo={systemLayout.fields['udfchar45']}
                     value={equipment.userDefinedFields.udfchar45}
@@ -39,7 +39,7 @@ class SystemGeneral extends Component {
                     valueKey="userDefinedFields.udfchar45"
                 />
 
-                <EAMInput
+                <EAMTextField
                     children={children}
                     elementInfo={systemLayout.fields['equipmentdesc']}
                     value={equipment.description}
@@ -50,7 +50,7 @@ class SystemGeneral extends Component {
                     children={children}
                     elementInfo={systemLayout.fields['department']}
                     value={equipment.departmentCode}
-                    valueDesc={equipment.departmentDesc}
+                    desc={equipment.departmentDesc}
                     updateProperty={updateEquipmentProperty}
                     valueKey="departmentCode"
                     descKey="departmentDesc"
@@ -60,7 +60,7 @@ class SystemGeneral extends Component {
                     children={children}
                     elementInfo={systemLayout.fields['assetstatus']}
                     value={equipment.statusCode}
-                    values={layout.statusValues}
+                    options={layout.statusValues}
                     updateProperty={this.updateEquipmentStatus}
                     valueKey="statusCode"/>
 

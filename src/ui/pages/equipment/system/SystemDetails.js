@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import EAMSelect from 'eam-components/ui/components/muiinputs/EAMSelect'
-import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput'
-import EAMDatePicker from 'eam-components/ui/components/muiinputs/EAMDatePicker'
-import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete'
+import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
+import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMDatePicker from 'eam-components/ui/components/inputs-ng/EAMDatePicker.js'
+import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
 import WS from "../../../../tools/WS";
 import WSEquipment from "../../../../tools/WSEquipment";
 
@@ -17,7 +17,7 @@ class SystemDetails extends Component {
                     children={children}
                     elementInfo={systemLayout.fields['class']}
                     value={equipment.classCode}
-                    valueDesc={equipment.classDesc}
+                    desc={equipment.classDesc}
                     updateProperty={updateEquipmentProperty}
                     valueKey="classCode"
                     descKey="classDesc"
@@ -28,7 +28,7 @@ class SystemDetails extends Component {
                     children={children}
                     elementInfo={systemLayout.fields['category']}
                     value={equipment.categoryCode}
-                    valueDesc={equipment.categoryDesc}
+                    desc={equipment.categoryDesc}
                     updateProperty={updateEquipmentProperty}
                     valueKey="categoryCode"
                     descKey="categoryDesc"
@@ -46,7 +46,7 @@ class SystemDetails extends Component {
                                     value={equipment.assignedTo}
                                     updateProperty={updateEquipmentProperty}
                                     valueKey="assignedTo"
-                                    valueDesc={equipment.assignedToDesc}
+                                    desc={equipment.assignedToDesc}
                                     descKey="assignedToDesc"
                                     autocompleteHandler={WS.autocompleteEmployee}/>
 
@@ -54,7 +54,7 @@ class SystemDetails extends Component {
                     children={children}
                     elementInfo={systemLayout.fields['criticality']}
                     value={equipment.criticality}
-                    values={layout.criticalityValues}
+                    options={layout.criticalityValues}
                     updateProperty={updateEquipmentProperty}
                     valueKey="criticality"/>
 
@@ -63,18 +63,18 @@ class SystemDetails extends Component {
                                     updateProperty={updateEquipmentProperty}
                                     value={equipment.manufacturerCode}
                                     valueKey="manufacturerCode"
-                                    valueDesc={equipment.manufacturerDesc}
+                                    desc={equipment.manufacturerDesc}
                                     descKey="manufacturerDesc"
                                     autocompleteHandler={WSEquipment.autocompleteManufacturer}/>
 
-                <EAMInput
+                <EAMTextField
                     children={children}
                     elementInfo={systemLayout.fields['serialnumber']}
                     value={equipment.serialNumber}
                     updateProperty={updateEquipmentProperty}
                     valueKey="serialNumber"/>
 
-                <EAMInput
+                <EAMTextField
                     children={children}
                     elementInfo={systemLayout.fields['model']}
                     value={equipment.model}

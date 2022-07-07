@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import EAMSelect from 'eam-components/ui/components/muiinputs/EAMSelect'
-import EAMInput from 'eam-components/ui/components/muiinputs/EAMInput'
-import EAMDatePicker from 'eam-components/ui/components/muiinputs/EAMDatePicker'
-import EAMAutocomplete from 'eam-components/ui/components/muiinputs/EAMAutocomplete'
+import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
+import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMDatePicker from 'eam-components/ui/components/inputs-ng/EAMDatePicker'
+import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
 import WS from "../../../../tools/WS";
 import WSEquipment from "../../../../tools/WSEquipment";
 
@@ -17,7 +17,7 @@ class PositionDetails extends Component {
                     children={children}
                     elementInfo={positionLayout.fields['class']}
                     value={equipment.classCode}
-                    valueDesc={equipment.classDesc}
+                    desc={equipment.classDesc}
                     updateProperty={updateEquipmentProperty}
                     valueKey="classCode"
                     descKey="classDesc"
@@ -27,7 +27,7 @@ class PositionDetails extends Component {
                     children={children}
                     elementInfo={positionLayout.fields['category']}
                     value={equipment.categoryCode}
-                    valueDesc={equipment.categoryDesc}
+                    desc={equipment.categoryDesc}
                     updateProperty={updateEquipmentProperty}
                     valueKey="categoryCode"
                     descKey="categoryDesc"
@@ -40,40 +40,42 @@ class PositionDetails extends Component {
                     updateProperty={updateEquipmentProperty}
                     valueKey="comissionDate"/>
 
-                <EAMAutocomplete children={children}
-                                    elementInfo={positionLayout.fields['assignedto']}
-                                    value={equipment.assignedTo}
-                                    updateProperty={updateEquipmentProperty}
-                                    valueKey="assignedTo"
-                                    valueDesc={equipment.assignedToDesc}
-                                    descKey="assignedToDesc"
-                                    autocompleteHandler={WS.autocompleteEmployee}/>
+                <EAMAutocomplete
+                    children={children}
+                    elementInfo={positionLayout.fields['assignedto']}
+                    value={equipment.assignedTo}
+                    updateProperty={updateEquipmentProperty}
+                    valueKey="assignedTo"
+                    desc={equipment.assignedToDesc}
+                    descKey="assignedToDesc"
+                    autocompleteHandler={WS.autocompleteEmployee}/>
 
                 <EAMSelect
                     children={children}
                     elementInfo={positionLayout.fields['criticality']}
                     value={equipment.criticality}
-                    values={layout.criticalityValues}
+                    options={layout.criticalityValues}
                     updateProperty={updateEquipmentProperty}
                     valueKey="criticality"/>
 
-                <EAMAutocomplete children={children}
-                                    elementInfo={positionLayout.fields['manufacturer']}
-                                    updateProperty={updateEquipmentProperty}
-                                    value={equipment.manufacturerCode}
-                                    valueKey="manufacturerCode"
-                                    valueDesc={equipment.manufacturerDesc}
-                                    descKey="manufacturerDesc"
-                                    autocompleteHandler={WSEquipment.autocompleteManufacturer}/>
+                <EAMAutocomplete
+                    children={children}
+                    elementInfo={positionLayout.fields['manufacturer']}
+                    updateProperty={updateEquipmentProperty}
+                    value={equipment.manufacturerCode}
+                    valueKey="manufacturerCode"
+                    desc={equipment.manufacturerDesc}
+                    descKey="manufacturerDesc"
+                    autocompleteHandler={WSEquipment.autocompleteManufacturer}/>
 
-                <EAMInput
+                <EAMTextField
                     children={children}
                     elementInfo={positionLayout.fields['serialnumber']}
                     value={equipment.serialNumber}
                     updateProperty={updateEquipmentProperty}
                     valueKey="serialNumber"/>
 
-                <EAMInput
+                <EAMTextField
                     children={children}
                     elementInfo={positionLayout.fields['model']}
                     value={equipment.model}

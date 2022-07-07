@@ -103,7 +103,7 @@ export default class Position extends Entity {
     }
 
     postRead(equipment) {
-        this.setStatuses(false)
+        this.setStatuses(false, equipment.statusCode)
         this.props.setLayoutProperty('showEqpTreeButton', true)
         this.props.setLayoutProperty('equipment', equipment)
 
@@ -114,8 +114,7 @@ export default class Position extends Entity {
         }
     }
 
-    setStatuses(neweqp) {
-        const oldStatusCode = this.state.equipment && this.state.equipment.statusCode;
+    setStatuses(neweqp, oldStatusCode) {
         WSEquipment.getEquipmentStatusValues(this.props.userData.eamAccount.userGroup, neweqp, oldStatusCode)
             .then(response => {
                 this.setLayout({statusValues: response.body.data})
