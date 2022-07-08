@@ -30,7 +30,7 @@ function WorkorderDetails(props) {
                     valueKey="equipmentCode"
                     desc={workorder.equipmentDesc}
                     descKey="equipmentDesc"
-                    barcodeScanner = {true}
+                    barcodeScanner
                     updateProperty={updateWorkorderProperty}
                     autocompleteHandler={WS.autocompleteEquipment}
                     link={() => workorder.equipmentCode ? "/equipment/" + workorder.equipmentCode : null}/>
@@ -92,7 +92,6 @@ function WorkorderDetails(props) {
                 valueKey="priorityCode"
                 value={workorder.priorityCode}
                 descKey="priorityDesc"
-                onChangeValue = {console.log}
                 desc={workorder.priorityDesc}
                 updateProperty={updateWorkorderProperty}
                 autocompleteHandler={WSWorkorders.getWorkOrderPriorities}/>

@@ -98,7 +98,7 @@ class AssetHierarchy extends Component {
                     valueKey="hierarchyAssetCode"
                     desc={equipment.hierarchyAssetDesc}
                     descKey="hierarchyAssetDesc"
-                    barcodeScanner={true}
+                    barcodeScanner
                     autocompleteHandler={WSEquipment.autocompleteAssetParent}
                     renderDependencies={[equipment.hierarchyAssetDependent]}
                     endAdornment={<Dependency updateProperty={updateEquipmentProperty}
@@ -114,7 +114,7 @@ class AssetHierarchy extends Component {
                     valueKey="hierarchyPositionCode"
                     desc={equipment.hierarchyPositionDesc}
                     descKey="hierarchyPositionDesc"
-                    barcodeScanner={true}
+                    barcodeScanner
                     autocompleteHandler={WSEquipment.autocompletePositionParent}
                     renderDependencies={[equipment.hierarchyPositionDependent]}
                     endAdornment={<Dependency updateProperty={updateEquipmentProperty}
@@ -130,7 +130,7 @@ class AssetHierarchy extends Component {
                     valueKey="hierarchyPrimarySystemCode"
                     desc={equipment.hierarchyPrimarySystemDesc}
                     descKey="hierarchyPrimarySystemDesc"
-                    barcodeScanner={true}
+                    barcodeScanner
                     autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}
                     renderDependencies={[equipment.hierarchyPrimarySystemDependent]}
                     endAdornment={<Dependency updateProperty={updateEquipmentProperty}

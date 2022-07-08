@@ -14,3 +14,16 @@ export const renderDatePickerInput = ({ inputRef, inputProps, InputProps }, isIn
                  endAdornment={endAdornment} errorText={errorText}/>
     )
 }
+
+export const onChangeHandler = (updateProperty, setIsInvalidDate, valueKey, newValue) => {
+    try {
+        if (newValue) {
+            updateProperty(valueKey, newValue.toISOString())   
+        } else {
+            updateProperty(valueKey, '');
+        }
+        setIsInvalidDate(false);
+    } catch {
+        setIsInvalidDate(true)
+    }
+}

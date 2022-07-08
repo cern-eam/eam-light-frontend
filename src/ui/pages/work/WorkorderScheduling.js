@@ -69,7 +69,7 @@ const WorkorderScheduling = (props) => {
                 valueKey="assignedTo"
                 desc={workorder.assignedToDesc}
                 descKey="assignedToDesc"
-                barcodeScanner={true}
+                barcodeScanner
                 autocompleteHandler={WS.autocompleteEmployee}
             />
 

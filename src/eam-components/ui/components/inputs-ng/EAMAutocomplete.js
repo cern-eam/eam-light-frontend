@@ -53,7 +53,7 @@ const EAMAutocomplete = React.memo((props) => {
       // (if the inputValue is empty onChangeHandler is fired with the reason = 'clear')
       if (reason === 'blur' && inputValue?.trim() && inputValue !== value) {
         updateProperty(valueKey, inputValue);
-        onChangeValue(inputValue)
+        onChangeValue?.(inputValue)
         // TODO: validation (+ description)
       } 
     }

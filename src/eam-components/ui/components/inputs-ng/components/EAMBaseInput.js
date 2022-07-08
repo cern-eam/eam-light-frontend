@@ -1,14 +1,6 @@
 import React from 'react';
 import {isRequired, isHidden} from '../tools/input-tools'
 
-const rootStyle = {
-    width: "100%",
-    margin: "8px",
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-}
 
 const divLabelStyle = {
     flex: "0 0 140px",
@@ -26,17 +18,29 @@ const requiredStyle = {
 
 const EAMBaseInput = (props) => {
 
-    const {elementInfo} = props;
+    const {elementInfo, disabled} = props;
 
     // Hide 
     if (isHidden(elementInfo)) {
         return React.Fragment;
     }
 
-    // Disable
-    if (false) {
-
+    const rootStyle = {
+        width: "100%",
+        margin: "8px",
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignItems: "center",
     }
+
+    // Disable
+    if (disabled || ( elementInfo && elementInfo.readonly)) {
+        rootStyle.opacity = "0.8";
+        rootStyle.pointerEvents = "none";
+    }
+
+    console.log("render", elementInfo.text)
 
     return (<div style={{...rootStyle, ...props.rootStyle}}>
         <div style ={divLabelStyle}>

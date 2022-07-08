@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {areEqual} from './tools/input-tools'
-import {renderDatePickerInput} from './tools/date-tools'
+import {renderDatePickerInput, onChangeHandler} from './tools/date-tools'
 import EAMBaseInput from './components/EAMBaseInput';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -12,15 +12,6 @@ const EAMDatePicker = (props) => {
     let {value, valueKey, updateProperty} = props;
     let [isInvalidDate, setIsInvalidDate] = useState(false);
 
-    const onChangeHandler = (newValue) => {
-        try {
-            updateProperty(valueKey, newValue.toISOString())
-            setIsInvalidDate(false);
-        } catch {
-            setIsInvalidDate(true)
-        }
-    }
-
     return (
         <EAMBaseInput {...props}>
             <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enLocale}>
@@ -29,7 +20,7 @@ const EAMDatePicker = (props) => {
                     value={value}
                     disableMaskedInput
                     inputFormat="dd-MMM-yyyy" //TODO shouldn't be hardcoded 
-                    onChange={onChangeHandler}
+                    onChange={onChangeHandler.bind(null, updateProperty, setIsInvalidDate, valueKey)}
                 />
          </LocalizationProvider>
         </EAMBaseInput>
