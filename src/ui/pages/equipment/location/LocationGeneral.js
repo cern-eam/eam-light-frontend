@@ -1,6 +1,6 @@
 import React from "react";
-import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
-import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocomplete";
+import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
 import WS from "../../../../tools/WS";
 import StatusRow from "../../../components/statusrow/StatusRow";
 
@@ -16,7 +16,7 @@ const AssetGeneral = props => {
     return (
         <div style={{ width: "100%", marginTop: 0 }}>
             {layout.newEntity && (
-                <EAMInput
+                <EAMTextField
                     children={children}
                     elementInfo={locationLayout.fields["equipmentno"]}
                     value={location.code}
@@ -25,7 +25,7 @@ const AssetGeneral = props => {
                 />
             )}
 
-            <EAMInput
+            <EAMTextField
                 children={children}
                 elementInfo={locationLayout.fields["udfchar45"]}
                 value={location.userDefinedFields.udfchar45}
@@ -33,7 +33,7 @@ const AssetGeneral = props => {
                 valueKey="userDefinedFields.udfchar45"
             />
 
-            <EAMInput
+            <EAMTextField
                 children={children}
                 elementInfo={locationLayout.fields["equipmentdesc"]}
                 value={location.description}
@@ -45,7 +45,7 @@ const AssetGeneral = props => {
                 children={children}
                 elementInfo={locationLayout.fields["department"]}
                 value={location.departmentCode}
-                valueDesc={location.departmentDesc}
+                desc={location.departmentDesc}
                 updateProperty={updateEquipmentProperty}
                 valueKey="departmentCode"
                 descKey="departmentDesc"

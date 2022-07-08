@@ -1,7 +1,7 @@
 import React from "react";
-import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
-import EAMCheckbox from "eam-components/ui/components/muiinputs/EAMCheckbox";
-import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocomplete";
+import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMCheckbox from 'eam-components/ui/components/inputs-ng/EAMCheckbox'
+import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
 import WS from "../../../../tools/WS";
 
 const LocationDetails = props => {
@@ -18,7 +18,7 @@ const LocationDetails = props => {
                 children={children}
                 elementInfo={locationLayout.fields["class"]}
                 value={location.classCode}
-                valueDesc={location.classDesc}
+                desc={location.classDesc}
                 valueKey="classCode"
                 descKey="classDesc"
                 updateProperty={updateEquipmentProperty}
@@ -27,11 +27,10 @@ const LocationDetails = props => {
                 }
             />
 
-            <EAMInput
+            <EAMTextField
                 children={children}
                 elementInfo={locationLayout.fields["costcode"]}
                 value={location.costCode}
-                updatePropert
                 valueKey="costCode"
                 updateProperty={updateEquipmentProperty}
             />
