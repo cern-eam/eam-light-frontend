@@ -29,14 +29,14 @@ const useFetchAutocompleteOptions = (autocompleteHandler, autocompleteHandlerPar
         }
         abortController.current = new AbortController();
 
-        fetchOptionsDebounced(inputValue, value, open)
+        fetchOptionsDebounced(autocompleteHandlerParams, inputValue)
     }, [inputValue, value, open]) 
 
     const fetchOptionsDebounced = useMemo(
         () => debounce( (...args) => fetchOptions(...args), 200), []
     );
 
-    const fetchOptions = (inputValue, value, open) => {
+    const fetchOptions = (autocompleteHandlerParams, inputValue) => {
         setLoading(true);
         callHandler(...autocompleteHandlerParams, inputValue, { signal: abortController.current.signal })
     }
