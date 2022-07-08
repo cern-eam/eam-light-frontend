@@ -34,9 +34,6 @@ function PartUsageDialog(props) {
     const [uom, setUoM] = useState("");
     const [isTrackedByAsset, setIsTrackedByAsset] = useState(false);
 
-    console.log("partUsage.storeCode:", partUsage);
-    console.log("partUsage.storeCode:", partUsage.storeCode);
-
     useEffect(() => {
         if (props.isDialogOpen) {
             initNewPartUsage(props.workorder);
@@ -70,7 +67,6 @@ function PartUsageDialog(props) {
     };
 
     let updatePartUsageProperty = (key, value) => {
-        console.log("updatePartUsageProperty K,V:", key, value);
         setPartUsage(prevPartUsage => ({
             ...prevPartUsage,
             [key]: value
@@ -78,7 +74,6 @@ function PartUsageDialog(props) {
     };
 
     let updatePartUsageLineProperty = (key, value) => {
-        console.log("updatePartUsageLineProperty K,V:", key, value)
         setPartUsageLine(prevPartUsageLine => ({
             ...prevPartUsageLine,
             [key]: value
@@ -183,8 +178,6 @@ function PartUsageDialog(props) {
     }
 
     const classes = useStyles();
-
-    console.log("partUsage (below): ",partUsage);
 
     return (
         <div>
