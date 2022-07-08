@@ -7,10 +7,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import BlockUi from 'react-block-ui';
 import WSWorkorders from "../../../../tools/WSWorkorders";
 import EAMRadio from "eam-components/ui/components/muiinputs/EAMRadio";
-import EAMSelect from "eam-components/ui/components/muiinputs/EAMSelect";
-import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocomplete";
-import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
-import EAMBarcodeInput from "eam-components/ui/components/muiinputs/EAMBarcodeInput";
+import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
+// import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocomplete";
+import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
+import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMBarcodeInput from "eam-components/ui/components/muiinputs/EAMBarcodeInput"; // TODO: remove
 import WSParts from '../../../../tools/WSParts';
 import makeStyles from '@mui/styles/makeStyles';
 
@@ -26,7 +27,7 @@ const useStyles = makeStyles({
 
 function PartUsageDialog(props) {
 
-    const [partUsage, setPartUsage] = useState({});
+    const [partUsage, setPartUsage] = useState({storeCode: ""});
     const [partUsageLine, setPartUsageLine] = useState({});
     const [binList, setBinList] = useState([]);
     const [storeList, setStoreList] = useState([]);
@@ -34,6 +35,9 @@ function PartUsageDialog(props) {
     const [loading, setLoading] = useState(false);
     const [uom, setUoM] = useState("");
     const [isTrackedByAsset, setIsTrackedByAsset] = useState(false);
+
+    console.log("partUsage.storeCode:", partUsage);
+    console.log("partUsage.storeCode:", partUsage.storeCode);
 
     useEffect(() => {
         if (props.isDialogOpen) {
@@ -68,6 +72,7 @@ function PartUsageDialog(props) {
     };
 
     let updatePartUsageProperty = (key, value) => {
+        console.log("updatePartUsageProperty K,V:", key, value);
         setPartUsage(prevPartUsage => ({
             ...prevPartUsage,
             [key]: value
@@ -75,6 +80,7 @@ function PartUsageDialog(props) {
     };
 
     let updatePartUsageLineProperty = (key, value) => {
+        console.log("updatePartUsageLineProperty K,V:", key, value)
         setPartUsageLine(prevPartUsageLine => ({
             ...prevPartUsageLine,
             [key]: value
@@ -180,6 +186,8 @@ function PartUsageDialog(props) {
 
     const classes = useStyles();
 
+    console.log("partUsage (below): ",partUsage);
+
     return (
         <div>
             <Dialog
@@ -206,66 +214,95 @@ function PartUsageDialog(props) {
                                       children={props.children}
                             />
 
-                            <EAMSelect elementInfo={{...props.tabLayout['storecode'], attribute: 'R'}}
-                                       valueKey="storeCode"
-                                       values={storeList}
-                                       value={partUsage.storeCode}
-                                       updateProperty={updatePartUsageProperty}
-                                       onChangeValue={handleStoreChange}
-                                       children={props.children}/>
+                            <EAMSelect
+                                elementInfo={{...props.tabLayout['storecode'], attribute: 'R'}}
+                                valueKey="storeCode"
+                                options={storeList}
+                                value={partUsage.storeCode}
+                                updateProperty={updatePartUsageProperty}
+                                onChangeValue={handleStoreChange}
+                                children={props.children}/>
 
-                            <EAMSelect elementInfo={{...props.tabLayout['activity'], attribute: 'R', readonly: !partUsage.storeCode}}
-                                       valueKey="activityCode"
-                                       values={activityList}
-                                       value={partUsage.activityCode}
-                                       updateProperty={updatePartUsageProperty}
-                                       children={props.children}/>
 
-                            <EAMBarcodeInput updateProperty={value => {
-                                handlePartChange(value);
-                                updatePartUsageLineProperty('partCode', value);
-                            }} right={0} top={20}>
-                                <EAMAutocomplete elementInfo={{...props.tabLayout['partcode'], readonly: !partUsage.storeCode}}
-                                                 value={partUsageLine.partCode}
-                                                 updateProperty={updatePartUsageLineProperty}
-                                                 valueKey="partCode"
-                                                 valueDesc={partUsageLine.partDesc}
-                                                 descKey="partDesc"
-                                                 autocompleteHandler={(value, config) => WSWorkorders.getPartUsagePart(props.workorder.number, partUsage.storeCode, value, config)}
-                                                 onChangeValue={handlePartChange}
-                                                 children={props.children}/>
+                            <EAMSelect
+                                elementInfo={{
+                                    ...props.tabLayout["activity"],
+                                    attribute: "R",
+                                    readonly: !partUsage.storeCode,
+                                }}
+                                valueKey="activityCode"
+                                options={activityList}
+                                value={partUsage.activityCode}
+                                updateProperty={updatePartUsageProperty}
+                                children={props.children}/>
 
-                            </EAMBarcodeInput>
-                            <EAMBarcodeInput updateProperty={value => {
-                                handleAssetChange(value);
-                                updatePartUsageLineProperty('assetIDCode', value);
-                            }} right={0} top={20}>
-                                <EAMAutocomplete elementInfo={{...props.tabLayout['assetid'], readonly: !partUsage.storeCode || !isTrackedByAsset}}
-                                                 value={partUsageLine.assetIDCode}
-                                                 updateProperty={updatePartUsageLineProperty}
-                                                 valueKey="assetIDCode"
-                                                 valueDesc={partUsageLine.assetIDDesc}
-                                                 descKey="assetIDDesc"
-                                                 autocompleteHandler={(value, config) => WSWorkorders.getPartUsageAsset(partUsage.transactionType, partUsage.storeCode, value, config)}
-                                                 onChangeValue={handleAssetChange}
-                                                 children={props.children}/>
-                            </EAMBarcodeInput>
+                            <EAMAutocomplete
+                                elementInfo={{
+                                    ...props.tabLayout["partcode"],
+                                    readonly: !partUsage.storeCode,
+                                }}
+                                value={partUsageLine.partCode}
+                                updateProperty={updatePartUsageLineProperty}
+                                valueKey="partCode"
+                                desc={partUsageLine.partDesc}
+                                descKey="partDesc"
+                                autocompleteHandler={
+                                    WSWorkorders.getPartUsagePart
+                                }
+                                autocompleteHandlerParams={[props.workorder.number, partUsage.storeCode]}
+                                onChangeValue={handlePartChange}
+                                barcodeScanner = {true}
+                                children={props.children}
+                                />
 
-                            <EAMSelect elementInfo={{...props.tabLayout['bincode'], readonly: !partUsage.storeCode}}
-                                       valueKey="bin"
-                                       values={binList}
-                                       value={partUsageLine.bin}
-                                       updateProperty={updatePartUsageLineProperty}
-                                       children={props.children}
-                                       suggestionsPixelHeight={200} 
-                            />
+                            <EAMAutocomplete
+                                elementInfo={{
+                                    ...props.tabLayout["assetid"],
+                                    readonly:
+                                        !partUsage.storeCode ||
+                                        !isTrackedByAsset,
+                                }}
+                                value={partUsageLine.assetIDCode}
+                                updateProperty={updatePartUsageLineProperty}
+                                valueKey="assetIDCode"
+                                desc={partUsageLine.assetIDDesc}
+                                descKey="assetIDDesc"
+                                autocompleteHandler={(value, config) =>
+                                    WSWorkorders.getPartUsageAsset(
+                                        partUsage.transactionType,
+                                        partUsage.storeCode,
+                                        value,
+                                        config
+                                    )
+                                }
+                                onChangeValue={handleAssetChange}
+                                barcodeScanner = {true}
+                                children={props.children}/>
 
-                            <EAMInput elementInfo={{...props.tabLayout['transactionquantity'], readonly: !partUsage.storeCode || isTrackedByAsset}}
-                                      valueKey="transactionQty"
-                                      endAdornment={uom}
-                                      value={partUsageLine.transactionQty}
-                                      updateProperty={updatePartUsageLineProperty}
-                                      children={props.children}/>
+                            <EAMSelect
+                                elementInfo={{
+                                    ...props.tabLayout["bincode"],
+                                    readonly: !partUsage.storeCode,
+                                }}
+                                valueKey="bin"
+                                options={binList}
+                                value={partUsageLine.bin}
+                                updateProperty={updatePartUsageLineProperty}
+                                children={props.children}
+                                suggestionsPixelHeight={200}/>
+
+                            <EAMTextField
+                                elementInfo={{
+                                    ...props.tabLayout["transactionquantity"],
+                                    readonly:
+                                        !partUsage.storeCode ||
+                                        isTrackedByAsset,
+                                }}
+                                valueKey="transactionQty"
+                                endAdornment={uom}
+                                value={partUsageLine.transactionQty}
+                                updateProperty={updatePartUsageLineProperty}
+                                children={props.children}/>
 
                         </BlockUi>
                     </div>
