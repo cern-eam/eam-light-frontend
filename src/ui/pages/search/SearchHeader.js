@@ -1,7 +1,7 @@
 import React from 'react';
 import FontIcon from '@mui/material/Icon';
 import EAMBarcodeInput from "eam-components/ui/components/muiinputs/EAMBarcodeInput";
-import EAMCheckbox from "eam-components/ui/components/muiinputs/EAMCheckbox";
+import EAMCheckbox from 'eam-components/ui/components/inputs-ng/EAMCheckbox';
 
 const SEARCH_TYPES = {
     PART: {

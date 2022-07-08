@@ -100,7 +100,7 @@ class AssetHierarchy extends Component {
                     descKey="hierarchyAssetDesc"
                     barcodeScanner
                     autocompleteHandler={WSEquipment.autocompleteAssetParent}
-                    renderDependencies={[equipment.hierarchyAssetDependent]}
+                    renderDependencies={[equipment.hierarchyAssetDependent, equipment.hierarchyPositionDependent, equipment.hierarchyPrimarySystemDependent]}
                     endAdornment={<Dependency updateProperty={updateEquipmentProperty}
                                                 value={equipment.hierarchyAssetDependent}
                                                 valueKey="hierarchyAssetDependent"/>}
@@ -116,7 +116,7 @@ class AssetHierarchy extends Component {
                     descKey="hierarchyPositionDesc"
                     barcodeScanner
                     autocompleteHandler={WSEquipment.autocompletePositionParent}
-                    renderDependencies={[equipment.hierarchyPositionDependent]}
+                    renderDependencies={[equipment.hierarchyAssetDependent, equipment.hierarchyPositionDependent, equipment.hierarchyPrimarySystemDependent]}
                     endAdornment={<Dependency updateProperty={updateEquipmentProperty}
                                             value={equipment.hierarchyPositionDependent}
                                             valueKey="hierarchyPositionDependent"/>}
@@ -132,7 +132,7 @@ class AssetHierarchy extends Component {
                     descKey="hierarchyPrimarySystemDesc"
                     barcodeScanner
                     autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}
-                    renderDependencies={[equipment.hierarchyPrimarySystemDependent]}
+                    renderDependencies={[equipment.hierarchyAssetDependent, equipment.hierarchyPositionDependent, equipment.hierarchyPrimarySystemDependent]}
                     endAdornment={<Dependency updateProperty={updateEquipmentProperty}
                                             value={equipment.hierarchyPrimarySystemDependent}
                                             valueKey="hierarchyPrimarySystemDependent"/>}

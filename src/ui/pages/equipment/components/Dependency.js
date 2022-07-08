@@ -10,6 +10,7 @@ const Dependency = ({value, valueKey, updateProperty}) => {
         return checkedTextValue.toLowerCase() === true.toString();
     };
 
+    
     return <div>
         <IconButton>
             {isTrue(value) && <LinkIcon onClick={() => updateProperty(valueKey, "false")}/>}
