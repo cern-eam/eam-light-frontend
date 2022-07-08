@@ -15,7 +15,7 @@ const EAMAutocomplete = React.memo((props) => {
    
   let {autocompleteHandler, autocompleteHandlerParams, 
        value, valueKey, descKey,
-       updateProperty, elementInfo,renderValue} = props;
+       updateProperty, elementInfo, renderValue, onChangeValue} = props;
 
     let [inputValue, setInputValue] = useState("")
     let [open, setOpen] = useState(false)
@@ -34,12 +34,12 @@ const EAMAutocomplete = React.memo((props) => {
 
     const onChangeHandler = (event, newValue, reason) => {
       if (reason === 'clear') {
-        updateCodeDesc(updateProperty, valueKey, '', descKey, '');
+        updateCodeDesc(updateProperty, valueKey, '', descKey, '', onChangeValue);
         return;
       }
       
       saveHistory(getElementKey(elementInfo), newValue.code, newValue.desc)
-      updateCodeDesc(updateProperty, valueKey, newValue.code, descKey, newValue.desc);
+      updateCodeDesc(updateProperty, valueKey, newValue.code, descKey, newValue.desc, onChangeValue);
 
       // Don't bubble up any events (won't trigger a save when we select something by pressing enter)
       event.stopPropagation();
@@ -49,10 +49,11 @@ const EAMAutocomplete = React.memo((props) => {
 
     const onCloseHandler = (event, reason) => {
       setOpen(false)
-      // Only to be fired when we blur and the inputValue is not empty 
-      // (if the inputValue is empty onChangeHandler is fired with reason = 'clear')
-      if (reason === 'blur' && inputValue?.trim()) {
+      // Only to be fired when we blur, the inputValue is not empty and different than the original value
+      // (if the inputValue is empty onChangeHandler is fired with the reason = 'clear')
+      if (reason === 'blur' && inputValue?.trim() && inputValue !== value) {
         updateProperty(valueKey, inputValue);
+        onChangeValue(inputValue)
         // TODO: validation (+ description)
       } 
     }
@@ -92,7 +93,7 @@ const EAMAutocomplete = React.memo((props) => {
 }, areEqual);
 
 EAMAutocomplete.defaultProps = {
-  mode: "AUTOCOMPLETE" 
+  
 }
 
 export default React.memo(EAMAutocomplete, areEqual);

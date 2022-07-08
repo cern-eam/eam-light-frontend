@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
 import EAMUDF from 'eam-components/ui/components/inputs-ng/EAMUDF';
 import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
-import EAMCheckbox from 'eam-components/ui/components/inputs-ng/EAMCheckbox';
-import Dependency from './Dependency';
+import Dependency from '../components/Dependency';
 
 const fieldIsHidden = (info) =>
     info && info.attribute === 'H'
@@ -91,61 +90,54 @@ class AssetHierarchy extends Component {
                     updateProperty={updateEquipmentProperty}
                     valueKey="userDefinedFields.udfchar11"/>
 
-                {!fieldIsHidden(assetLayout.fields['parentasset']) && 
-                    <EAMAutocomplete
-                        children = {children}
-                        elementInfo={assetLayout.fields['parentasset']}
-                        value={equipment.hierarchyAssetCode}
-                        updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
-                        valueKey="hierarchyAssetCode"
-                        desc={equipment.hierarchyAssetDesc}
-                        descKey="hierarchyAssetDesc"
-                        barcodeScanner={true}
-                        autocompleteHandler={WSEquipment.autocompleteAssetParent}
-                        renderDependencies={[equipment.hierarchyAssetDependent]}
-                        endAdornment={<Dependency updateProperty={updateEquipmentProperty}
-                                                  value={equipment.hierarchyAssetDependent}
-                                                  valueKey="hierarchyAssetDependent"/>}
-                    />
-                }
-
-                {!fieldIsHidden(assetLayout.fields['position']) && 
-                       <EAMAutocomplete
-                            children = {children}
-                            elementInfo={assetLayout.fields['position']}
-                            value={equipment.hierarchyPositionCode}
-                            updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
-                            valueKey="hierarchyPositionCode"
-                            desc={equipment.hierarchyPositionDesc}
-                            descKey="hierarchyPositionDesc"
-                            barcodeScanner={true}
-                            autocompleteHandler={WSEquipment.autocompletePositionParent}
-                            renderDependencies={[equipment.hierarchyPositionDependent]}
-                            endAdornment={<Dependency updateProperty={updateEquipmentProperty}
-                                                  value={equipment.hierarchyPositionDependent}
-                                                  valueKey="hierarchyPositionDependent"/>}
-                    />
-                    }
-
-                {!fieldIsHidden(assetLayout.fields['primarysystem']) && 
-                        <EAMAutocomplete
-                            children = {children}
-                            elementInfo={assetLayout.fields['primarysystem']}
-                            value={equipment.hierarchyPrimarySystemCode}
-                            updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
-                            valueKey="hierarchyPrimarySystemCode"
-                            desc={equipment.hierarchyPrimarySystemDesc}
-                            descKey="hierarchyPrimarySystemDesc"
-                            barcodeScanner={true}
-                            autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}
-                            renderDependencies={[equipment.hierarchyPrimarySystemDependent]}
-                            endAdornment={<Dependency updateProperty={updateEquipmentProperty}
-                                                  value={equipment.hierarchyPrimarySystemDependent}
-                                                  valueKey="hierarchyPrimarySystemDependent"/>}
+                <EAMAutocomplete
+                    children = {children}
+                    elementInfo={assetLayout.fields['parentasset']}
+                    value={equipment.hierarchyAssetCode}
+                    updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
+                    valueKey="hierarchyAssetCode"
+                    desc={equipment.hierarchyAssetDesc}
+                    descKey="hierarchyAssetDesc"
+                    barcodeScanner={true}
+                    autocompleteHandler={WSEquipment.autocompleteAssetParent}
+                    renderDependencies={[equipment.hierarchyAssetDependent]}
+                    endAdornment={<Dependency updateProperty={updateEquipmentProperty}
+                                                value={equipment.hierarchyAssetDependent}
+                                                valueKey="hierarchyAssetDependent"/>}
+                />
+                
+                <EAMAutocomplete
+                    children = {children}
+                    elementInfo={assetLayout.fields['position']}
+                    value={equipment.hierarchyPositionCode}
+                    updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
+                    valueKey="hierarchyPositionCode"
+                    desc={equipment.hierarchyPositionDesc}
+                    descKey="hierarchyPositionDesc"
+                    barcodeScanner={true}
+                    autocompleteHandler={WSEquipment.autocompletePositionParent}
+                    renderDependencies={[equipment.hierarchyPositionDependent]}
+                    endAdornment={<Dependency updateProperty={updateEquipmentProperty}
+                                            value={equipment.hierarchyPositionDependent}
+                                            valueKey="hierarchyPositionDependent"/>}
+                />
+                
+                <EAMAutocomplete
+                    children = {children}
+                    elementInfo={assetLayout.fields['primarysystem']}
+                    value={equipment.hierarchyPrimarySystemCode}
+                    updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
+                    valueKey="hierarchyPrimarySystemCode"
+                    desc={equipment.hierarchyPrimarySystemDesc}
+                    descKey="hierarchyPrimarySystemDesc"
+                    barcodeScanner={true}
+                    autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}
+                    renderDependencies={[equipment.hierarchyPrimarySystemDependent]}
+                    endAdornment={<Dependency updateProperty={updateEquipmentProperty}
+                                            value={equipment.hierarchyPrimarySystemDependent}
+                                            valueKey="hierarchyPrimarySystemDependent"/>}
                     />
                     
-                    }
-
                 <EAMAutocomplete
                     children = {children}
                     elementInfo={assetLayout.fields['location']}

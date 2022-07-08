@@ -50,9 +50,14 @@ export const formatLabel = (renderValue, option) => {
 }
 
 
-export const updateCodeDesc = (updateProperty, valueKey, value, descKey, desc) => {
+export const updateCodeDesc = (updateProperty, valueKey, value, descKey, desc, onChangeValue) => {
         updateProperty(valueKey, value);
+        
         if (descKey) {
                 updateProperty(descKey, desc);
+        }
+
+        if (onChangeValue) {
+                onChangeValue(value);
         }
 }

@@ -92,6 +92,7 @@ function WorkorderDetails(props) {
                 valueKey="priorityCode"
                 value={workorder.priorityCode}
                 descKey="priorityDesc"
+                onChangeValue = {console.log}
                 desc={workorder.priorityDesc}
                 updateProperty={updateWorkorderProperty}
                 autocompleteHandler={WSWorkorders.getWorkOrderPriorities}/>

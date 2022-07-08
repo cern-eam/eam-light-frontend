@@ -15,7 +15,7 @@ const EAMSelect = React.memo((props) => {
    
   let {autocompleteHandler, autocompleteHandlerParams, 
     value, valueKey, descKey, desc,
-    updateProperty,
+    updateProperty, onChangeValue,
     options, 
     elementInfo,
     renderValue, endTextAdornment} = props;
@@ -62,11 +62,11 @@ const EAMSelect = React.memo((props) => {
         if (isRequired(elementInfo)) {
             return;
         }
-        updateCodeDesc(updateProperty, valueKey, '', descKey, '');
+        updateCodeDesc(updateProperty, valueKey, '', descKey, '', onChangeValue);
         return;
       }
 
-      updateCodeDesc(updateProperty, valueKey, newValue.code, descKey, newValue.desc);
+      updateCodeDesc(updateProperty, valueKey, newValue.code, descKey, newValue.desc, onChangeValue);
 
       // Don't bubble up any events (won't trigger a save when we select something by pressing enter)
       event.stopPropagation();
@@ -78,7 +78,7 @@ const EAMSelect = React.memo((props) => {
         if (reason === 'blur' && inputValue) {
             if (getOptions().some(o => o.code === inputValue)) {
                 let option = getOptions().find(o => o.code === inputValue);
-                updateCodeDesc(updateProperty, valueKey, option.code, descKey, option.desc);
+                updateCodeDesc(updateProperty, valueKey, option.code, descKey, option.desc, onChangeValue);
             }
         }
       }
