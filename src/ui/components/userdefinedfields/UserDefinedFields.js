@@ -108,12 +108,12 @@ class UserDefinedFields extends Component {
 
     render() {
         return (
-            <div style={{width: "100%", marginTop: 0, display: "flex", flexWrap: "wrap"}}>
+            <React.Fragment>
                 {this.renderUdfChars()}
                 {this.renderUdfNums()}
                 {this.renderUdfDates()}
                 {this.renderUdfCheckboxs()}
-            </div>
+            </React.Fragment>
         );
     }
 }

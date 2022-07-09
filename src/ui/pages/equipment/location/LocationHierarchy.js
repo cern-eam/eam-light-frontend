@@ -11,7 +11,7 @@ const LocationHierarchy = props => {
         updateEquipmentProperty
     } = props;
     return (
-        <div style={{ width: "100%", marginTop: 0 }}>
+        <React.Fragment>
             <EAMAutocomplete
                 children={children}
                 elementInfo={locationLayout.fields["parentlocation"]}
@@ -33,7 +33,7 @@ const LocationHierarchy = props => {
                 updateProperty={updateEquipmentProperty}
                 valueKey="userDefinedFields.udfchar11"
             />
-        </div>
+        </React.Fragment>
     );
 };
 

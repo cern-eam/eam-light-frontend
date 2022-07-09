@@ -70,7 +70,7 @@ class PositionHierarchy extends Component {
         let {equipment, children, positionLayout, updateEquipmentProperty} = this.props
 
         return (
-            <div style={{width: "100%", marginTop: 0}}>
+            <React.Fragment>
 
                 <EAMTextField
                     children={children}
@@ -141,7 +141,7 @@ class PositionHierarchy extends Component {
                     descKey="hierarchyLocationDesc"
                     autocompleteHandler={WSEquipment.autocompleteLocation}/>
 
-            </div>
+            </React.Fragment>
         )
     }
 }

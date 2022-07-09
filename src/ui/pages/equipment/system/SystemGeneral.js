@@ -14,7 +14,7 @@ class SystemGeneral extends Component {
         let {equipment, children, systemLayout, updateEquipmentProperty, layout} = this.props;
 
         return (
-            <div style={{width: "100%", marginTop: 0}}>
+            <React.Fragment>
 
                 {layout.newEntity &&
                 <EAMTextField
@@ -69,7 +69,7 @@ class SystemGeneral extends Component {
                     entityType={"equipment"}
                     style={{marginTop: "10px", marginBottom: "-10px"}}
                 />
-            </div>
+            </React.Fragment>
         )
     }
 }

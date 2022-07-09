@@ -12,7 +12,7 @@ class AssetDetails extends Component {
         let {equipment, children, assetLayout, updateEquipmentProperty, layout} = this.props;
 
         return (
-            <div style={{width: "100%", marginTop: 0}}>
+            <React.Fragment>
 
                 <EAMAutocomplete
                     children={children}
@@ -122,7 +122,7 @@ class AssetDetails extends Component {
                                     descKey="binDesc"
                                     autocompleteHandler={(filter, config) => WSEquipment.autocompleteEquipmentBin(this.props.equipment.storeCode, filter, config)}/>
 
-            </div>
+            </React.Fragment>
         )
     }
 }

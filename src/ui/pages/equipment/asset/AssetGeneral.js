@@ -17,7 +17,7 @@ class AssetGeneral extends Component {
         let { equipment, children, assetLayout, updateEquipmentProperty, layout } = this.props
 
         return (
-            <div style={{width: "100%", marginTop: 0}}>
+            <React.Fragment>
 
                 {layout.newEntity &&
                 <EAMTextField
@@ -81,7 +81,7 @@ class AssetGeneral extends Component {
                     entityType={"equipment"}
                     style={{marginTop: "10px", marginBottom: "-10px"}}
                 />
-            </div>
+            </React.Fragment>
         )
     }
 }

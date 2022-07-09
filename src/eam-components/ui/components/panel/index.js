@@ -17,6 +17,13 @@ const CssAccordion = styled(Accordion)({
       }
 });
 
+
+const accordionDetailsStyle = {
+    backgroundColor: "#fafafa",
+    display: "flex",
+    flexWrap: "wrap"
+}
+
 class EISPanel extends Component {
     state = {
         panelExpanded: true,
@@ -104,7 +111,7 @@ class EISPanel extends Component {
                     </div>
                 </AccordionSummary>
 
-                <AccordionDetails style={{ backgroundColor: "#fafafa", ...this.props.detailsStyle }}>{this.props.children}</AccordionDetails>
+                <AccordionDetails style={{ ...accordionDetailsStyle, ...this.props.detailsStyle }}>{this.props.children}</AccordionDetails>
             </CssAccordion>
         );
     }

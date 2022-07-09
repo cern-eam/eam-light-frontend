@@ -18,7 +18,7 @@ class WorkorderClosingCodes extends Component {
         }
 
         return (
-            <div style={{width: "100%", marginTop: 0}}>
+            <React.Fragment>
                 <EAMSelect children={children}
                             elementInfo={workOrderLayout.fields['problemcode']}
                             valueKey="problemCode"
@@ -60,7 +60,7 @@ class WorkorderClosingCodes extends Component {
                                     descKey="costCodeDesc"
                                     autocompleteHandler={WSWorkorders.autocompleteCostCode}/>
 
-            </div>
+            </React.Fragment>
         )
     }
 }

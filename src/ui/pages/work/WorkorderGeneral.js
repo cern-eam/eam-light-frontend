@@ -15,7 +15,7 @@ function WorkorderDetails(props) {
     const rpawLink = applicationData && applicationData.EL_TRPAW;
 
     return (
-        <div style={{width: "100%", marginTop: 0}}>
+        <React.Fragment>
 
             <EAMTextField
                 children={children}
@@ -215,7 +215,7 @@ function WorkorderDetails(props) {
                 updateProperty={updateWorkorderProperty}
                 valueKey="downtimeHours"/>
 
-        </div>
+        </React.Fragment>
     )
 
 }

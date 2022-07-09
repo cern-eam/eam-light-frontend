@@ -24,10 +24,11 @@ const WorkorderScheduling = (props) => {
     }
 
     return (
-        <div style={{ width: '100%', marginTop: 0 }}>
+        <React.Fragment>
             <Grid container justifyContent="space-between" spacing={2}>
                 <Grid item xs={6}>
                     <EAMAutocomplete
+                        style = {{minWidth: 0}}
                         children={children}
                         elementInfo={workOrderLayout.fields['createdby']}
                         value={workorder.createdBy}
@@ -41,6 +42,7 @@ const WorkorderScheduling = (props) => {
 
                 <Grid item xs={6}>
                     <EAMDatePicker
+                        style = {{minWidth: 0}}
                         children={children}
                         elementInfo={workOrderLayout.fields['datecreated']}
                         valueKey="createdDate"
@@ -146,7 +148,7 @@ const WorkorderScheduling = (props) => {
                 descKey={`userDefinedFields.udfchar19Desc`}
                 updateProperty={updateWorkorderProperty}
             />
-        </div>
+        </React.Fragment>
     );
 };
 

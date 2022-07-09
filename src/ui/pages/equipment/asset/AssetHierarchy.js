@@ -74,7 +74,7 @@ class AssetHierarchy extends Component {
         let { equipment, children, assetLayout, updateEquipmentProperty } = this.props
 
         return (
-            <div style={{width: "100%", marginTop: 0}}>
+            <React.Fragment>
 
                 <EAMUDF
                     children = {children}
@@ -147,7 +147,7 @@ class AssetHierarchy extends Component {
                     desc={equipment.hierarchyLocationDesc}
                     descKey="hierarchyLocationDesc"
                     autocompleteHandler={WSEquipment.autocompleteLocation}/>
-            </div>
+            </React.Fragment>
         )
     }
 }

@@ -14,7 +14,7 @@ const AssetGeneral = props => {
     } = props;
 
     return (
-        <div style={{ width: "100%", marginTop: 0 }}>
+        <React.Fragment>
             {layout.newEntity && (
                 <EAMTextField
                     children={children}
@@ -57,7 +57,7 @@ const AssetGeneral = props => {
                 entityType={"equipment"}
                 style={{marginTop: "10px", marginBottom: "-10px"}}
             />
-        </div>
+        </React.Fragment>
     );
 };
 

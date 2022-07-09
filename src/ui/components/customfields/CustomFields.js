@@ -28,7 +28,7 @@ function CustomFields(props) {
         isEmptyState
         ? <SimpleEmptyState message="No Custom Fields to show." />
         : (
-            <div style={{width: "100%", marginTop: 0}}>
+            <React.Fragment>
                 {customFields.map((customField, index) => {
                     {/* The custom fields starting with MTFX were temporarily used to have a similar functionality to
                         the Line Title in the Associate Custom Fields screen of Infor EAM. They may now be hidden. */}
@@ -45,7 +45,7 @@ function CustomFields(props) {
                         />
                     )
                 })}
-            </div>
+            </React.Fragment>
         )
     )
 

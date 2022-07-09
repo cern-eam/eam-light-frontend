@@ -27,7 +27,7 @@ const EAMBaseInput = (props) => {
 
     const rootStyle = {
         width: "100%",
-        margin: "8px",
+        margin: "5px",
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
@@ -40,13 +40,14 @@ const EAMBaseInput = (props) => {
         rootStyle.pointerEvents = "none";
     }
 
-    console.log("render", elementInfo.text)
+    console.log("render", elementInfo?.text)
 
     return (<div style={{...rootStyle, ...props.rootStyle}}>
-        <div style ={divLabelStyle}>
+        {elementInfo?.text &&
+        <div style = {divLabelStyle}>
             <span>{elementInfo.text}</span>
             {isRequired(elementInfo) && <span style={requiredStyle}>*</span>}
-        </div>
+        </div>}
         {props.children}
     </div>);
 }

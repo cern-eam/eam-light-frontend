@@ -13,7 +13,7 @@ const LocationDetails = props => {
     } = props;
 
     return (
-        <div style={{ width: "100%", marginTop: 0 }}>
+        <React.Fragment>
             <EAMAutocomplete
                 children={children}
                 elementInfo={locationLayout.fields["class"]}
@@ -50,7 +50,7 @@ const LocationDetails = props => {
                 updateProperty={updateEquipmentProperty}
                 valueKey="outOfService"
             />
-        </div>
+        </React.Fragment>
     );
 };
 

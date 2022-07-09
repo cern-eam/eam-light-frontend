@@ -11,7 +11,7 @@ class PositionDetails extends Component {
         let {equipment, children, positionLayout, updateEquipmentProperty, layout} = this.props;
 
         return (
-            <div style={{width: "100%", marginTop: 0}}>
+            <React.Fragment>
 
                 <EAMAutocomplete
                     children={children}
@@ -82,7 +82,7 @@ class PositionDetails extends Component {
                     updateProperty={updateEquipmentProperty}
                     valueKey="model"/>
 
-            </div>
+            </React.Fragment>
         )
     }
 }

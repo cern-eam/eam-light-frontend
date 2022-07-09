@@ -29,13 +29,14 @@ const divInputContainerStyle = {
     flex: "1 1 auto",
     display: "flex",
     alignItems: "center",
-    minWidth: "320px"
+    
 }
 
-const divRootContainer = {
+const divRootContainerStyle = {
     flex: "1 1 auto",
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    minWidth: "320px"
 }
 
 const divErrorStyle = {
@@ -52,10 +53,10 @@ const TextField = (props) => {
         inputProps, 
         inputRef,
         endTextAdornment, endAdornment,
-        hideDescription, disabled, errorText} = props;
+        hideDescription, disabled, errorText, style} = props;
 
     return (
-        <div style={divRootContainer}>
+        <div style={{...divRootContainerStyle, ...style}}>
             <div style={divInputContainerStyle}>
                 <div style={divInputStyle} ref={props.InputProps?.ref}>
                     <input style={inputStyle} type="text" ref={inputRef} {...inputProps} />

@@ -32,7 +32,7 @@ const useFetchAutocompleteOptions = (autocompleteHandler, autocompleteHandlerPar
         fetchOptionsDebounced(autocompleteHandlerParams, inputValue)
     }, [inputValue, value, open]) 
 
-    // Memoizing as I don't really know how fast the debounce function is 
+    // Memoizing as we always need the same instance of the function that remembers / debounces previous requests 
     const fetchOptionsDebounced = useMemo(
         () => debounce( (...args) => fetchOptions(...args), 200), []
     );
