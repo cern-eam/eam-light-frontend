@@ -56,53 +56,41 @@ const EAMBarcodeScanner = (props) => {
         setOpen(false);
     }
 
-    let iconButtonStyle = {
-        backgroundColor: 'white',
-        marginLeft: 3,
-        width: 32,
-        height: 32,
-        zIndex: 100,
-        padding: 0,
-    };
-
-        // Display just the children when no support for user media
-        if (!showBarcodeButton) {
-            return React.Fragment;
-        }
-
-        // Active quagga when support for user media
-        return (
-            <div>
-
-                <IconButton
-                    
-                    onClick={handleClickOpen}
-                    >
-                    <BarcodeScan />
-                </IconButton>
-
-                <Dialog
-                    TransitionProps={{
-                        onEntered: () =>
-                            startScanner(onDetectedCallback, handleClose),
-                    }}
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogContent style={{ maxWidth: 320, maxHeight: 320 }}>
-                        <video id="video" width="200" height="200"></video>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary" autoFocus>
-                            Cancel
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-        );
+    // Display just the children when no support for user media
+    if (!showBarcodeButton) {
+        return React.Fragment;
     }
+
+    // Active quagga when support for user media
+    return (
+        <div>
+
+            <IconButton onClick={handleClickOpen}>
+                <BarcodeScan />
+            </IconButton>
+
+            <Dialog
+                TransitionProps={{
+                    onEntered: () =>
+                        startScanner(onDetectedCallback, handleClose),
+                }}
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogContent style={{ maxWidth: 320, maxHeight: 320 }}>
+                    <video id="video" width="200" height="200"></video>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary" autoFocus>
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
+}
 
 
 

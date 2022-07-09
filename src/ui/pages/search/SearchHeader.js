@@ -1,7 +1,7 @@
 import React from 'react';
 import FontIcon from '@mui/material/Icon';
-import EAMBarcodeInput from "eam-components/ui/components/muiinputs/EAMBarcodeInput";
 import EAMCheckbox from 'eam-components/ui/components/inputs-ng/EAMCheckbox';
+import EAMBarcodeScanner from 'eam-components/ui/components/inputs-ng/components/EAMBarcodeScanner';
 
 const SEARCH_TYPES = {
     PART: {
@@ -84,7 +84,7 @@ export default class SearchHeader extends React.Component {
     renderInput = () => {
         const entityTypes = this.state.searchOn.join(',');
         return (
-            <EAMBarcodeInput updateProperty={val => this.props.fetchDataHandler(val, entityTypes)} top={3} right={-7}>
+            <div style={{display: "flex", alignItems: "center"}}>
                 <input
                     onInput={this.handleSearchInput.bind(this)}
                     id="searchInputText"
@@ -92,7 +92,8 @@ export default class SearchHeader extends React.Component {
                     value={this.props.keyword}
                     style={{textTransform: "uppercase"}}
                     ref={(input) => { this.searchInput = input; }} />
-            </EAMBarcodeInput>
+                    <EAMBarcodeScanner updateProperty={(valKey, val) => this.props.fetchDataHandler(val, entityTypes)}/>
+            </div>
         );
     };
 

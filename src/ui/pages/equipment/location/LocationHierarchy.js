@@ -1,6 +1,6 @@
+import EAMAutocomplete from "eam-components/ui/components/inputs-ng/EAMAutocomplete";
+import EAMUDF from "eam-components/ui/components/inputs-ng/EAMUDF";
 import React from "react";
-import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocomplete";
-import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
 import WS from '../../../../tools/WS';
 
 const LocationHierarchy = props => {
@@ -18,12 +18,12 @@ const LocationHierarchy = props => {
                 value={location.hierarchyLocationCode}
                 updateProperty={updateEquipmentProperty}
                 valueKey="hierarchyLocationCode"
-                valueDesc={location.hierarchyLocationDesc}
+                desc={location.hierarchyLocationDesc}
                 descKey="hierarchyLocationDesc"
                 autocompleteHandler={WS.autocompleteLocation}
             />
 
-            <EAMInput
+            <EAMUDF
                 children={children}
                 elementInfo={{
                     ...locationLayout.fields["udfchar11"],
