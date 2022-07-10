@@ -6,7 +6,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import BlockUi from 'react-block-ui';
 import WSWorkorders from "../../../../tools/WSWorkorders";
-import EAMRadio from "eam-components/ui/components/muiinputs/EAMRadio";
 import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
 // import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocomplete";
 import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
@@ -14,6 +13,7 @@ import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
 import EAMBarcodeInput from "eam-components/ui/components/muiinputs/EAMBarcodeInput"; // TODO: remove
 import WSParts from '../../../../tools/WSParts';
 import makeStyles from '@mui/styles/makeStyles';
+import EAMRadio from 'eam-components/ui/components/inputs-ng/EAMRadio';
 
 const transactionTypes = [{code: 'ISSUE', desc: 'Issue'}, {code: 'RETURN', desc: 'Return'}];
 
