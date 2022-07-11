@@ -242,7 +242,7 @@ function PartUsageDialog(props) {
                                 }
                                 autocompleteHandlerParams={[props.workorder.number, partUsage.storeCode]}
                                 onChangeValue={handlePartChange}
-                                barcodeScanner = {true}
+                                barcodeScanner
                                 children={props.children}
                                 />
 
@@ -267,7 +267,7 @@ function PartUsageDialog(props) {
                                     )
                                 }
                                 onChangeValue={handleAssetChange}
-                                barcodeScanner = {true}
+                                barcodeScanner
                                 children={props.children}/>
 
                             <EAMSelect
