@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 
 function PartUsageDialog(props) {
 
-    const [partUsage, setPartUsage] = useState({storeCode: ""});
+    const [partUsage, setPartUsage] = useState({});
     const [partUsageLine, setPartUsageLine] = useState({});
     const [binList, setBinList] = useState([]);
     const [storeList, setStoreList] = useState([]);
@@ -101,7 +101,8 @@ function PartUsageDialog(props) {
         updatePartUsageLineProperty('bin', '');
     };
 
-    let handleAssetChange = (value) => {
+    let handleAssetChange_old = (value) => {
+        // TODO: why would we clear the part and bin?
         //Clear part and bin selection
         updatePartUsageLineProperty('partCode', '');
         updatePartUsageLineProperty('partDesc', '');
@@ -110,14 +111,28 @@ function PartUsageDialog(props) {
         WSWorkorders.getPartUsageSelectedAsset(props.workorder.number, partUsage.transactionType,
             partUsage.storeCode, value).then(response => {
             const completeData = response.body.data[0];
+            // TODO: but then we get here and we don't have the .bin and .part
+            //       the .part we can discard because assets are only shows for the selected .part
+            //       so we don't want to clear it. If the user wants to have another the asset search
+            //       for any part, then he should clear the part input.
+            //       Also, notice how we are not even updating the part desc
             if (completeData) {
                 updatePartUsageLineProperty('bin', completeData.bin);
                 updatePartUsageLineProperty('partCode', completeData.part);
                 loadBinList(completeData.bin, completeData.part);
+                console.log('completeData', completeData);
+                console.log('bin', completeData.bin);
+                console.log('partCode', completeData.part);
             }
         }).catch(error => {
             props.handleError(error);
         });
+    };
+
+    const handleAssetChange = (assetIDCode) => {
+        console.log("assetCode", assetIDCode);
+        // TODO: handle case of no part code selected
+        // TODO: make sure asset is only fillable when store and activity are selected
     };
 
     let handlePartChange = (value) => {
@@ -178,6 +193,11 @@ function PartUsageDialog(props) {
     }
 
     const classes = useStyles();
+
+    console.log("=== partCode:", partUsageLine.partCode);
+    console.log("=== isTrackedByAsset:", isTrackedByAsset);
+    // console.log("=== assetIDCode:", partUsageLine.assetIDCode);
+    // console.log("=== activityCode:", partUsage.activityCode);
 
     return (
         <div>
@@ -251,21 +271,17 @@ function PartUsageDialog(props) {
                                     ...props.tabLayout["assetid"],
                                     readonly:
                                         !partUsage.storeCode ||
-                                        !isTrackedByAsset,
+                                        !partUsage.activityCode ||
+                                        (partUsage.storeCode?.trim() === '' &&
+                                            !isTrackedByAsset), // TODO: confirm this is being set as intended
                                 }}
                                 value={partUsageLine.assetIDCode}
                                 updateProperty={updatePartUsageLineProperty}
                                 valueKey="assetIDCode"
                                 desc={partUsageLine.assetIDDesc}
                                 descKey="assetIDDesc"
-                                autocompleteHandler={(value, config) =>
-                                    WSWorkorders.getPartUsageAsset(
-                                        partUsage.transactionType,
-                                        partUsage.storeCode,
-                                        value,
-                                        config
-                                    )
-                                }
+                                autocompleteHandler={WSWorkorders.getPartUsageAsset}
+                                autocompleteHandlerParams={[partUsage.transactionType, partUsage.storeCode]}
                                 onChangeValue={handleAssetChange}
                                 barcodeScanner
                                 children={props.children}/>
