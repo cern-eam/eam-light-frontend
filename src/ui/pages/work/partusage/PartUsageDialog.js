@@ -34,13 +34,19 @@ function PartUsageDialog(props) {
     const [uom, setUoM] = useState("");
     const [isTrackedByAsset, setIsTrackedByAsset] = useState(false);
 
+    console.log("/// partUsageLine \\\\\\:", partUsageLine);
+    console.log("/// partUsageLine.partCode \\\\\\:", partUsageLine.partCode);
+
+
     useEffect(() => {
+        console.log("*** (useffect) ***");
         if (props.isDialogOpen) {
             initNewPartUsage(props.workorder);
         }
     }, [props.isDialogOpen])
 
     let initNewPartUsage = (workorder) => {
+        console.log("*** (initNewPartUsage) ***");
         setLoading(true);
         //Fetch the new part usage object
         WSWorkorders.getInitNewPartUsage(workorder).then(response => {
@@ -55,6 +61,7 @@ function PartUsageDialog(props) {
     };
 
     let loadLists = (workorder) => {
+        console.log("*** (loadLists) ***");
         Promise.all([WSWorkorders.getPartUsageStores(),
                             WSWorkorders.getWorkOrderActivities(workorder.number)]).then(responses => {
             setStoreList(responses[0].body.data);
@@ -67,20 +74,33 @@ function PartUsageDialog(props) {
     };
 
     let updatePartUsageProperty = (key, value) => {
-        setPartUsage(prevPartUsage => ({
-            ...prevPartUsage,
-            [key]: value
-        }));
+        console.log("*** (updatePartUsageProperty) ***");
+        // console.log("\t= partUsage", partUsage);
+        console.log("\t key:", key, "| value:", value);
+        setPartUsage((prevPartUsage) => {
+            console.log("\t=< prevPartUsage", prevPartUsage);
+            return {
+                ...prevPartUsage,
+                [key]: value
+            }
+        });
     };
 
     let updatePartUsageLineProperty = (key, value) => {
-        setPartUsageLine(prevPartUsageLine => ({
-            ...prevPartUsageLine,
-            [key]: value
-        }));
+        console.log("*** (updatePartUsageLineProperty) ***");
+        // console.log("\t=> partUsageLine:", partUsageLine);
+        console.log("\t key:", key, "| value:", value);
+        setPartUsageLine((prevPartUsageLine) => {
+            console.log("\t=> prevPartUsageLine:", prevPartUsageLine);
+            return {
+                ...prevPartUsageLine,
+                [key]: value
+            }
+        });
     };
 
     let handleTransactionChange = (value) => {
+        console.log("*** (handleTransactionChange) ***");
         //Init all properties
         updatePartUsageLineProperty('partCode', '');
         updatePartUsageLineProperty('partDesc', '');
@@ -92,6 +112,7 @@ function PartUsageDialog(props) {
     };
 
     let handleStoreChange = (value) => {
+        console.log("*** (handleStoreChange) ***");
         updatePartUsageLineProperty('partCode', '');
         updatePartUsageLineProperty('partDesc', '');
         updatePartUsageLineProperty('assetIDCode', '');
@@ -101,41 +122,48 @@ function PartUsageDialog(props) {
         updatePartUsageLineProperty('bin', '');
     };
 
-    let handleAssetChange_old = (value) => {
-        // TODO: why would we clear the part and bin?
-        //Clear part and bin selection
-        updatePartUsageLineProperty('partCode', '');
-        updatePartUsageLineProperty('partDesc', '');
-        updatePartUsageLineProperty('bin', '');
-        //Complete data for change Asset
-        WSWorkorders.getPartUsageSelectedAsset(props.workorder.number, partUsage.transactionType,
-            partUsage.storeCode, value).then(response => {
-            const completeData = response.body.data[0];
-            // TODO: but then we get here and we don't have the .bin and .part
-            //       the .part we can discard because assets are only shows for the selected .part
-            //       so we don't want to clear it. If the user wants to have another the asset search
-            //       for any part, then he should clear the part input.
-            //       Also, notice how we are not even updating the part desc
-            if (completeData) {
-                updatePartUsageLineProperty('bin', completeData.bin);
-                updatePartUsageLineProperty('partCode', completeData.part);
-                loadBinList(completeData.bin, completeData.part);
-                console.log('completeData', completeData);
-                console.log('bin', completeData.bin);
-                console.log('partCode', completeData.part);
-            }
-        }).catch(error => {
-            props.handleError(error);
-        });
-    };
-
+    /* This function handles at least 3 cases:
+     * 1) The part is selected so we only need to update the bin and bin list states
+     *    (hence the conditions for whether the part is defined).
+     * 2) The user searches for an asset ID directly (without selecting a part), so we
+     *    have to set more state: partCode, partDesc, bin and bin list.
+     * 3) The input is cleared // TODO: check behavior is ok
+     */
     const handleAssetChange = (assetIDCode) => {
-        console.log("assetCode", assetIDCode);
-        // TODO: handle case of no part code selected
-        // TODO: make sure asset is only fillable when store and activity are selected
+        console.log("*** (handleAssetChange) ***")
+        console.log("\t| partUsageLine:", partUsageLine);
+        //Clear part and bin selection
+        if (!partUsageLine.partCode) {
+            console.log("\tpartCode not defined:", partUsageLine.partCode);
+            // updatePartUsageLineProperty('partCode', '');
+            // updatePartUsageLineProperty('partDesc', '');
+        }
+        // updatePartUsageLineProperty('bin', '');
+        // //Complete data for change Asset
+        // WSWorkorders.getPartUsageSelectedAsset(props.workorder.number, partUsage.transactionType,
+        //     partUsage.storeCode, assetIDCode).then(response => {
+        //     const completeData = response.body.data[0];
+        //     if (completeData) {
+        //         updatePartUsageLineProperty('bin', completeData.bin);
+        //         loadBinList(completeData.bin, completeData.part);
+        //         if (!partUsageLine.partCode){
+        //             updatePartUsageLineProperty('partCode', completeData.part);
+        //         }
+        //     }
+        //     if (!partUsageLine.partCode) {
+        //         WSParts.getPart(completeData.part).then((response) => {
+        //             setIsTrackedByAsset(response.body.data.trackByAsset === "true");
+        //             setUoM(response.body.data.uom);
+        //             updatePartUsageLineProperty('partDesc', response.body.data.description);
+        //         });
+        //     }
+        // }).catch(error => {
+        //     props.handleError(error);
+        // });
     };
 
     let handlePartChange = (value) => {
+        console.log("*** (handlePartChange) ***")
         //Clear asset and bin selection
         updatePartUsageLineProperty('assetIDCode', '');
         updatePartUsageLineProperty('assetIDDesc', '');
@@ -146,6 +174,7 @@ function PartUsageDialog(props) {
     };
 
     let loadBinList = (binCode, partCode) => {
+        console.log("*** (loadBinList) ***")
         if (!partCode)
             return;
         WSWorkorders.getPartUsageBin(partUsage.transactionType,
@@ -161,6 +190,7 @@ function PartUsageDialog(props) {
     };
 
     let loadPartData = (partCode) => {
+        console.log("*** (loadPartData) ***")
         if (!partCode) return;
 
         WSParts.getPart(partCode).then(response => {
@@ -170,6 +200,7 @@ function PartUsageDialog(props) {
     }
 
     let handleSave = () => {
+        console.log("*** (handleSave) ***")
         //Call the handle save from the parent
         setLoading(true);
         const relatedWorkOrder = props.equipmentMEC && props.equipmentMEC.length > 0 ? props.workorder.number : null;
@@ -186,6 +217,7 @@ function PartUsageDialog(props) {
     };
 
     let transformActivities = (activities) => {
+        console.log("*** (transformActivities) ***")
         return activities.map(activity => ({
             code: activity.activityCode,
             desc: activity.tradeCode
@@ -193,11 +225,6 @@ function PartUsageDialog(props) {
     }
 
     const classes = useStyles();
-
-    console.log("=== partCode:", partUsageLine.partCode);
-    console.log("=== isTrackedByAsset:", isTrackedByAsset);
-    // console.log("=== assetIDCode:", partUsageLine.assetIDCode);
-    // console.log("=== activityCode:", partUsage.activityCode);
 
     return (
         <div>
@@ -273,7 +300,7 @@ function PartUsageDialog(props) {
                                         !partUsage.storeCode ||
                                         !partUsage.activityCode ||
                                         (partUsage.storeCode?.trim() === '' &&
-                                            !isTrackedByAsset), // TODO: confirm this is being set as intended
+                                            !isTrackedByAsset),
                                 }}
                                 value={partUsageLine.assetIDCode}
                                 updateProperty={updatePartUsageLineProperty}
