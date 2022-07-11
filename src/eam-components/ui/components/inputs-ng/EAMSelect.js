@@ -96,7 +96,7 @@ const EAMSelect = React.memo((props) => {
             onInputChange={onInputChangeHandler}
             // Misc
             id={getElementKey(elementInfo)}
-            value={value === '' ? null : value} // Avoids the warning: The value provided to Autocomplete is invalid. None of the options match with `""`.
+            value={value === undefined ? '' : value} // Avoids the warning: The value provided to Autocomplete is invalid. None of the options match with `""`.
             isOptionEqualToValue={isOptionEqualToValueHandler}
             onClose={onCloseHandler}
             // Visuals 

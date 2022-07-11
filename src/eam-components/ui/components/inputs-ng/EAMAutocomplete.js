@@ -78,7 +78,7 @@ const EAMAutocomplete = React.memo((props) => {
             filterOptions={x => x}
             id={getElementKey(elementInfo)}
             freeSolo = {true}
-            value={value}
+            value={value === undefined ? '' : value}
             openOnFocus
             //blurOnSelect
             // Visuals 
