@@ -4,6 +4,7 @@ const useFetchSelectOptions = (autocompleteHandler, autocompleteHandlerParams = 
   
     const [fetchedOptions, setFetchedOptions] = useState([]);
     const [loading, setLoading] = useState(false);
+    const abortController = useRef(null);
 
     // SELECT
     useEffect( () => {    
@@ -12,7 +13,10 @@ const useFetchSelectOptions = (autocompleteHandler, autocompleteHandlerParams = 
             return;
         }
         
-        autocompleteHandler(...autocompleteHandlerParams)
+        abortController.current?.abort();
+        abortController.current = new AbortController();
+
+        autocompleteHandler(...autocompleteHandlerParams, { signal: abortController.current.signal })
         .then(result => {
             let fetchedOptionsTemp = optionsTransformer ? optionsTransformer(result.body.data) : result.body.data;
             
