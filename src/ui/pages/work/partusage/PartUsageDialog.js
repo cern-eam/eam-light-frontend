@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import BlockUi from 'react-block-ui';
-import WSWorkorders from "../../../../tools/WSWorkorders";
+import WSWorkorders from '../../../../tools/WSWorkorders';
 import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
 import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
 import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
@@ -23,19 +23,18 @@ const useStyles = makeStyles({
     paper: overflowStyle
 });
 
+// TODO: worth it to change all WS requests to async/await?
 function PartUsageDialog(props) {
 
-    const [partUsage, setPartUsage] = useState({});
-    const [partUsageLine, setPartUsageLine] = useState({});
     const [binList, setBinList] = useState([]);
     const [activityList, setActivityList] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [uom, setUoM] = useState("");
+    const [uom, setUoM] = useState('');
     const [isTrackedByAsset, setIsTrackedByAsset] = useState(false);
     const [formData, setFormData] = useState({});
     const [initPartUsageWSData, setInitPartUsageWSData] = useState({});
 
-    console.log("/// formData:", formData);
+    console.log('/// formData:', formData);
 
     // 'formData' contains all necessary state for the part usage submittal
     const updateFormDataProperty = (key, value) => {
@@ -48,15 +47,15 @@ function PartUsageDialog(props) {
     // We set every state key used even if they come null in the 'response'
     const assignInitialFormState = (response) => {
         const transactionLines = response.transactionlines[0];
-        updateFormDataProperty("activityCode", response.activityCode);
-        updateFormDataProperty("storeCode", response.storeCode);
-        updateFormDataProperty("transactionType", response.transactionType);
-        updateFormDataProperty("assetIDCode", transactionLines.assetIDCode);
-        updateFormDataProperty("assetIDDesc", transactionLines.assetIDDesc);
-        updateFormDataProperty("bin", transactionLines.bin);
-        updateFormDataProperty("partCode", transactionLines.partCode);
-        updateFormDataProperty("partDesc", transactionLines.partDesc);
-        updateFormDataProperty("transactionQty", transactionLines.transactionQty);
+        updateFormDataProperty('activityCode', response.activityCode);
+        updateFormDataProperty('storeCode', response.storeCode);
+        updateFormDataProperty('transactionType', response.transactionType);
+        updateFormDataProperty('assetIDCode', transactionLines.assetIDCode);
+        updateFormDataProperty('assetIDDesc', transactionLines.assetIDDesc);
+        updateFormDataProperty('bin', transactionLines.bin);
+        updateFormDataProperty('partCode', transactionLines.partCode);
+        updateFormDataProperty('partDesc', transactionLines.partDesc);
+        updateFormDataProperty('transactionQty', transactionLines.transactionQty);
     }
 
     useEffect(() => {
@@ -80,49 +79,62 @@ function PartUsageDialog(props) {
         }
     };
 
+    // TODO: use async/await
     const loadLists = (workorder) => {
+        // Activity List
         WSWorkorders.getWorkOrderActivities(workorder.number).then(response => {
             setActivityList(transformActivities(response.body.data));
         }).catch(error => {
             props.handleError(error);
         });
-        //Bin list
+        // Bin list
         setBinList([]);
     };
 
-    const resetFormDataAndBinListStates = () => {
-        // TODO: why are we not resetting the store?
+    const resetFormTransactionLinesAndBinListStates = () => {
         // Reset Form Data
-        updateFormDataProperty("assetIDCode", "");
-        updateFormDataProperty("assetIDDesc", "");
-        updateFormDataProperty("bin", "");
-        updateFormDataProperty("partCode", "");
-        updateFormDataProperty("partDesc", "");
+        updateFormDataProperty('assetIDCode', '');
+        updateFormDataProperty('assetIDDesc', '');
+        updateFormDataProperty('bin', '');
+        updateFormDataProperty('partCode', '');
+        updateFormDataProperty('partDesc', '');
         // Reset bin list
         setBinList([])
     }
 
     const handleTransactionChange = (value) => {
-        resetFormDataAndBinListStates();
+        // TODO: possible improvement: we currently leave only the store selected
+        // when changing from issue to return (radio button). We could leave more
+        // of the form filled with the previous values
+        resetFormTransactionLinesAndBinListStates();
     };
 
     const handleStoreChange = (value) => {
-        resetFormDataAndBinListStates();
+        resetFormTransactionLinesAndBinListStates();
     };
 
     /* This function handles at least 3 cases:
      * 1) The part is selected so we only need to update the bin and bin list states
-     *    (hence the conditions for whether the part is defined).
+     *    (hence the conditions for whether the 'partCode' is defined).
      * 2) The user searches for an asset ID directly (without selecting a part), so we
-     *    have to set more state: partCode, partDesc, bin and bin list.
-     * 3) The input is cleared // TODO: check behavior is ok
+     *    have to set more state: 'partCode', 'partDesc', 'bin' and bin list.
+     * 3) The input is cleared // TODO: double-check behavior is ok after the state problem is solved
      */
+    // TODO: refactor to extract logic for each of the cases to separate functions, even if
+    // this means duplicating code
+    // TODO: use async/await
     const handleAssetChange = (assetIDCode) => {
-        console.log("*** (handleAssetChange) ***", formData);
-        // console.log("\t| partUsageLine:", partUsageLine);
-        //Clear part and bin selection
+        console.log('*** (handleAssetChange) ***', formData);
+        // TODO: with the current state issue, we cannot handle this case
+        // because assetIDCode will always come as empty
+        // Handle case where the input was cleared
+        // if (formData.assetIDCode?.trim() === '') {
+        //     console.log('\t;;;;;; assetIDCode NOT defined ;;;;;;', formData.partCode);
+        //     resetFormTransactionLinesAndBinListStates();
+        //     return;
+        // }
         if (!formData.partCode) {
-            console.log("\t;;;;;; partCode NOT defined ;;;;;;", formData.partCode);
+            console.log('\t;;;;;; partCode NOT defined ;;;;;;', formData.partCode);
             updateFormDataProperty('partCode', '');
             updateFormDataProperty('partDesc', '');
         }
@@ -139,11 +151,20 @@ function PartUsageDialog(props) {
                 }
             }
             if (!formData.partCode) {
-                WSParts.getPart(completeData.part).then((response) => {
-                    setIsTrackedByAsset(response.body.data.trackByAsset === "true");
-                    setUoM(response.body.data.uom);
-                    updateFormDataProperty('partDesc', response.body.data.description);
-                }); // TODO: missing catch handleError 
+                WSParts.getPart(completeData.part)
+                    .then((response) => {
+                        setIsTrackedByAsset(
+                            response.body.data.trackByAsset === 'true'
+                        );
+                        setUoM(response.body.data.uom);
+                        updateFormDataProperty(
+                            'partDesc',
+                            response.body.data.description
+                        );
+                    })
+                    .catch((error) => {
+                        props.handleError(error);
+                    });
             }
         }).catch(error => {
             props.handleError(error);
@@ -151,16 +172,17 @@ function PartUsageDialog(props) {
     };
 
     const handlePartChange = (value) => {
-        console.log("*** (handlePartChange) ***");
-        //Clear asset and bin selection
+        console.log('*** (handlePartChange) ***');
+        // Clear asset and bin selection
         updateFormDataProperty('assetIDCode', '');
         updateFormDataProperty('assetIDDesc', '');
         updateFormDataProperty('bin', '');
-        //Load the bin list
+        // Load the bin list
         loadBinList('', value);
         loadPartData(value);
     };
 
+    // TODO: async/await
     const loadBinList = (binCode, partCode) => {
         if (!partCode)
             return;
@@ -176,13 +198,18 @@ function PartUsageDialog(props) {
         });
     };
 
+    // TODO: use async await
     const loadPartData = (partCode) => {
         if (!partCode) return;
 
-        WSParts.getPart(partCode).then(response => {
-            setIsTrackedByAsset(response.body.data.trackByAsset === 'true');
-            setUoM(response.body.data.uom);
-        }) // TODO: missing catch to handleError here
+        WSParts.getPart(partCode)
+            .then((response) => {
+                setIsTrackedByAsset(response.body.data.trackByAsset === 'true');
+                setUoM(response.body.data.uom);
+            })
+            .catch((error) => {
+                props.handleError(error);
+            });
     }
 
     const handleSave = () => {
@@ -229,8 +256,10 @@ function PartUsageDialog(props) {
         // Remove original transaction info propriety
         delete partUsageSubmitData.transactionInfo;
 
-        console.log("partUsageSubmitData (submit)", partUsageSubmitData);
+        console.log('partUsageSubmitData (submit)', partUsageSubmitData);
 
+        // TODO: can we simply pass the handle error reference to catch?
+        // TODO: use async/await
         // Save the record
         WSWorkorders.createPartUsage(partUsageSubmitData)
             .then(props.successHandler)
@@ -269,7 +298,7 @@ function PartUsageDialog(props) {
                 <DialogContent id="content" style={overflowStyle}>
                     <div>
                         <BlockUi tag="div" blocking={loading || props.isLoading}>
-                            <EAMRadio elementInfo={props.tabLayout['transactiontype']}
+                            <EAMRadio elementInfo={props.tabLayout["transactiontype"]}
                                       valueKey="transactionType"
                                       values={transactionTypes}
                                       value={formData.transactionType}
@@ -279,7 +308,7 @@ function PartUsageDialog(props) {
                             />
 
                             <EAMSelect
-                                elementInfo={{...props.tabLayout['storecode'], attribute: 'R'}}
+                                elementInfo={{...props.tabLayout["storecode"], attribute: "R"}}
                                 valueKey="storeCode"
                                 value={formData.storeCode}
                                 updateProperty={updateFormDataProperty}
@@ -329,7 +358,7 @@ function PartUsageDialog(props) {
                                     readonly:
                                         !formData.storeCode ||
                                         !formData.activityCode ||
-                                        (formData.storeCode?.trim() === '' &&
+                                        (formData.storeCode?.trim() === "" &&
                                             !isTrackedByAsset),
                                 }}
                                 value={formData.assetIDCode}
