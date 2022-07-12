@@ -28,11 +28,36 @@ function PartUsageDialog(props) {
     const [partUsage, setPartUsage] = useState({});
     const [partUsageLine, setPartUsageLine] = useState({});
     const [binList, setBinList] = useState([]);
-    const [storeList, setStoreList] = useState([]);
     const [activityList, setActivityList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [uom, setUoM] = useState("");
     const [isTrackedByAsset, setIsTrackedByAsset] = useState(false);
+    const [formData, setFormData] = useState({});
+    const [initPartUsageWSData, setInitPartUsageWSData] = useState({});
+
+    console.log("/// formData:", formData);
+
+    // 'formData' contains all necessary state for the part usage submittal
+    const updateFormDataProperty = (key, value) => {
+        setFormData((oldFormData) => ({
+            ...oldFormData,
+            [key]: value,
+        }));
+    };
+
+    // We set every state key used even if they come null in the 'response'
+    const assignInitialFormState = (response) => {
+        const transactionLines = response.transactionlines[0];
+        updateFormDataProperty("activityCode", response.activityCode);
+        updateFormDataProperty("storeCode", response.storeCode);
+        updateFormDataProperty("transactionType", response.transactionType);
+        updateFormDataProperty("assetIDCode", transactionLines.assetIDCode);
+        updateFormDataProperty("assetIDDesc", transactionLines.assetIDDesc);
+        updateFormDataProperty("bin", transactionLines.bin);
+        updateFormDataProperty("partCode", transactionLines.partCode);
+        updateFormDataProperty("partDesc", transactionLines.partDesc);
+        updateFormDataProperty("transactionQty", transactionLines.transactionQty);
+    }
 
     useEffect(() => {
         if (props.isDialogOpen) {
@@ -40,25 +65,24 @@ function PartUsageDialog(props) {
         }
     }, [props.isDialogOpen])
 
-    let initNewPartUsage = (workorder) => {
+    const initNewPartUsage = async (workorder) => {
         setLoading(true);
-        //Fetch the new part usage object
-        WSWorkorders.getInitNewPartUsage(workorder).then(response => {
+        try {
+            // Fetch the part usage object
+            const response = await WSWorkorders.getInitNewPartUsage(workorder);
             setLoading(false);
-            setPartUsage(response.body.data);
-            setPartUsageLine(response.body.data.transactionlines[0]);
-        }).catch(error => {
+            setInitPartUsageWSData(response.body.data);
+            assignInitialFormState(response.body.data);
+            // Load lists
+            loadLists(workorder);
+        } catch (error) {
             props.handleError(error);
-        });
-        //Load lists
-        loadLists(workorder);
+        }
     };
 
-    let loadLists = (workorder) => {
-        Promise.all([WSWorkorders.getPartUsageStores(),
-                            WSWorkorders.getWorkOrderActivities(workorder.number)]).then(responses => {
-            setStoreList(responses[0].body.data);
-            setActivityList(transformActivities(responses[1].body.data));
+    const loadLists = (workorder) => {
+        WSWorkorders.getWorkOrderActivities(workorder.number).then(response => {
+            setActivityList(transformActivities(response.body.data));
         }).catch(error => {
             props.handleError(error);
         });
@@ -66,39 +90,24 @@ function PartUsageDialog(props) {
         setBinList([]);
     };
 
-    let updatePartUsageProperty = (key, value) => {
-        setPartUsage((prevPartUsage) => ({
-            ...prevPartUsage,
-            [key]: value,
-        }));
-    };
-
-    let updatePartUsageLineProperty = (key, value) => {
-        setPartUsageLine((prevPartUsageLine) => ({
-            ...prevPartUsageLine,
-            [key]: value,
-        }));
-    };
-
-    let handleTransactionChange = (value) => {
-        //Init all properties
-        updatePartUsageLineProperty('partCode', '');
-        updatePartUsageLineProperty('partDesc', '');
-        updatePartUsageLineProperty('assetIDCode', '');
-        updatePartUsageLineProperty('assetIDDesc', '');
-        //Bin list
+    const resetFormDataAndBinListStates = () => {
+        // TODO: why are we not resetting the store?
+        // Reset Form Data
+        updateFormDataProperty("assetIDCode", "");
+        updateFormDataProperty("assetIDDesc", "");
+        updateFormDataProperty("bin", "");
+        updateFormDataProperty("partCode", "");
+        updateFormDataProperty("partDesc", "");
+        // Reset bin list
         setBinList([])
-        updatePartUsageLineProperty('bin', '');
+    }
+
+    const handleTransactionChange = (value) => {
+        resetFormDataAndBinListStates();
     };
 
-    let handleStoreChange = (value) => {
-        updatePartUsageLineProperty('partCode', '');
-        updatePartUsageLineProperty('partDesc', '');
-        updatePartUsageLineProperty('assetIDCode', '');
-        updatePartUsageLineProperty('assetIDDesc', '');
-        //Bin list
-        setBinList([])
-        updatePartUsageLineProperty('bin', '');
+    const handleStoreChange = (value) => {
+        resetFormDataAndBinListStates();
     };
 
     /* This function handles at least 3 cases:
@@ -109,89 +118,127 @@ function PartUsageDialog(props) {
      * 3) The input is cleared // TODO: check behavior is ok
      */
     const handleAssetChange = (assetIDCode) => {
-        console.log("*** (handleAssetChange) ***")
+        console.log("*** (handleAssetChange) ***", formData);
         // console.log("\t| partUsageLine:", partUsageLine);
         //Clear part and bin selection
-        if (!partUsageLine.partCode) {
-            console.log("\t;;;;;; partCode NOT defined ;;;;;;", partUsageLine.partCode);
-            updatePartUsageLineProperty('partCode', '');
-            updatePartUsageLineProperty('partDesc', '');
+        if (!formData.partCode) {
+            console.log("\t;;;;;; partCode NOT defined ;;;;;;", formData.partCode);
+            updateFormDataProperty('partCode', '');
+            updateFormDataProperty('partDesc', '');
         }
-        updatePartUsageLineProperty('bin', '');
+        updateFormDataProperty('bin', '');
         //Complete data for change Asset
-        WSWorkorders.getPartUsageSelectedAsset(props.workorder.number, partUsage.transactionType,
-            partUsage.storeCode, assetIDCode).then(response => {
+        WSWorkorders.getPartUsageSelectedAsset(props.workorder.number, formData.transactionType,
+            formData.storeCode, assetIDCode).then(response => {
             const completeData = response.body.data[0];
             if (completeData) {
-                updatePartUsageLineProperty('bin', completeData.bin);
+                updateFormDataProperty('bin', completeData.bin);
                 loadBinList(completeData.bin, completeData.part);
-                if (!partUsageLine.partCode){
-                    updatePartUsageLineProperty('partCode', completeData.part);
+                if (!formData.partCode){
+                    updateFormDataProperty('partCode', completeData.part);
                 }
             }
-            if (!partUsageLine.partCode) {
+            if (!formData.partCode) {
                 WSParts.getPart(completeData.part).then((response) => {
                     setIsTrackedByAsset(response.body.data.trackByAsset === "true");
                     setUoM(response.body.data.uom);
-                    updatePartUsageLineProperty('partDesc', response.body.data.description);
-                });
+                    updateFormDataProperty('partDesc', response.body.data.description);
+                }); // TODO: missing catch handleError 
             }
         }).catch(error => {
             props.handleError(error);
         });
     };
 
-    let handlePartChange = (value) => {
+    const handlePartChange = (value) => {
+        console.log("*** (handlePartChange) ***");
         //Clear asset and bin selection
-        updatePartUsageLineProperty('assetIDCode', '');
-        updatePartUsageLineProperty('assetIDDesc', '');
-        updatePartUsageLineProperty('bin', '');
+        updateFormDataProperty('assetIDCode', '');
+        updateFormDataProperty('assetIDDesc', '');
+        updateFormDataProperty('bin', '');
         //Load the bin list
         loadBinList('', value);
         loadPartData(value);
     };
 
-    let loadBinList = (binCode, partCode) => {
+    const loadBinList = (binCode, partCode) => {
         if (!partCode)
             return;
-        WSWorkorders.getPartUsageBin(partUsage.transactionType,
-            binCode, partCode, partUsage.storeCode).then(response => {
-            let binList = response.body.data;
+        WSWorkorders.getPartUsageBin(formData.transactionType,
+            binCode, partCode, formData.storeCode).then(response => {
+            const binList = response.body.data;
             setBinList(binList)
             if (binList.length === 1) {
-                updatePartUsageLineProperty('bin', binList[0].code);
+                updateFormDataProperty('bin', binList[0].code);
             }
         }).catch(error => {
             props.handleError(error);
         });
     };
 
-    let loadPartData = (partCode) => {
+    const loadPartData = (partCode) => {
         if (!partCode) return;
 
         WSParts.getPart(partCode).then(response => {
             setIsTrackedByAsset(response.body.data.trackByAsset === 'true');
             setUoM(response.body.data.uom);
-        })
+        }) // TODO: missing catch to handleError here
     }
 
-    let handleSave = () => {
-        //Call the handle save from the parent
+    const handleSave = () => {
         setLoading(true);
-        const relatedWorkOrder = props.equipmentMEC && props.equipmentMEC.length > 0 ? props.workorder.number : null;
-        let partUsageCopy = {...partUsage, relatedWorkOrder};
-        //Set the part usage Line
-        partUsageCopy.transactionlines = [partUsageLine];
-        //Remove transaction info prop
-        delete partUsageCopy.transactionInfo;
-        //Save the record
-        WSWorkorders.createPartUsage(partUsageCopy)
-        .then(props.successHandler)
-        .catch(props.handleError)
-        .finally(() => setLoading(false));
+
+        const relatedWorkOrder =
+            props.equipmentMEC?.length > 0 ? props.workorder.number : null;
+
+        // Extract state properties modifiable through user interaction
+        const {
+            activityCode,
+            storeCode,
+            transactionType,
+            assetIDCode,
+            assetIDDesc,
+            bin,
+            partCode,
+            partDesc,
+            transactionQty,
+        } = formData;
+
+        // Update upper level properties of part usage object
+        let partUsageSubmitData = {
+            ...initPartUsageWSData,
+            activityCode,
+            storeCode,
+            relatedWorkOrder,
+            transactionType,
+        };
+
+        // Update 'transactionlines' property of part usage object
+        partUsageSubmitData.transactionlines = [
+            {
+                ...initPartUsageWSData.transactionlines[0],
+                assetIDCode,
+                assetIDDesc,
+                bin,
+                partCode,
+                partDesc,
+                transactionQty,
+            },
+        ];
+
+        // Remove original transaction info propriety
+        delete partUsageSubmitData.transactionInfo;
+
+        console.log("partUsageSubmitData (submit)", partUsageSubmitData);
+
+        // Save the record
+        WSWorkorders.createPartUsage(partUsageSubmitData)
+            .then(props.successHandler)
+            .catch(props.handleError)
+            .finally(() => setLoading(false));
     };
 
-    let transformActivities = (activities) => {
+    const transformActivities = (activities) => {
         return activities.map(activity => ({
             code: activity.activityCode,
             desc: activity.tradeCode
@@ -199,6 +246,11 @@ function PartUsageDialog(props) {
     }
 
     const classes = useStyles();
+
+    // TODO: re-check w/ lukasz w/ lukasz
+    // if (!props.workorder) {
+    //     return React.Fragment;
+    // }
 
     return (
         <div>
@@ -220,8 +272,8 @@ function PartUsageDialog(props) {
                             <EAMRadio elementInfo={props.tabLayout['transactiontype']}
                                       valueKey="transactionType"
                                       values={transactionTypes}
-                                      value={partUsage.transactionType}
-                                      updateProperty={updatePartUsageProperty}
+                                      value={formData.transactionType}
+                                      updateProperty={updateFormDataProperty}
                                       onChangeValue={handleTransactionChange}
                                       children={props.children}
                             />
@@ -229,10 +281,10 @@ function PartUsageDialog(props) {
                             <EAMSelect
                                 elementInfo={{...props.tabLayout['storecode'], attribute: 'R'}}
                                 valueKey="storeCode"
-                                options={storeList}
-                                value={partUsage.storeCode}
-                                updateProperty={updatePartUsageProperty}
+                                value={formData.storeCode}
+                                updateProperty={updateFormDataProperty}
                                 onChangeValue={handleStoreChange}
+                                autocompleteHandler={WSWorkorders.getPartUsageStores}
                                 children={props.children}/>
 
 
@@ -240,28 +292,32 @@ function PartUsageDialog(props) {
                                 elementInfo={{
                                     ...props.tabLayout["activity"],
                                     attribute: "R",
-                                    readonly: !partUsage.storeCode,
+                                    readonly: !formData.storeCode,
                                 }}
                                 valueKey="activityCode"
                                 options={activityList}
-                                value={partUsage.activityCode}
-                                updateProperty={updatePartUsageProperty}
+                                value={formData.activityCode}
+                                updateProperty={updateFormDataProperty}
+                                // TODO: re-check w/ lukasz
+                                // autocompleteHandler={WSWorkorders.getWorkOrderActivities}
+                                // autocompleteHandlerParams={props.workorder.number}
+                                // optionsTransformer={transformActivities}
                                 children={props.children}/>
 
                             <EAMAutocomplete
                                 elementInfo={{
                                     ...props.tabLayout["partcode"],
-                                    readonly: !partUsage.storeCode,
+                                    readonly: !formData.storeCode,
                                 }}
-                                value={partUsageLine.partCode}
-                                updateProperty={updatePartUsageLineProperty}
+                                value={formData.partCode}
+                                updateProperty={updateFormDataProperty}
                                 valueKey="partCode"
-                                desc={partUsageLine.partDesc}
+                                desc={formData.partDesc}
                                 descKey="partDesc"
                                 autocompleteHandler={
                                     WSWorkorders.getPartUsagePart
                                 }
-                                autocompleteHandlerParams={[props.workorder.number, partUsage.storeCode]}
+                                autocompleteHandlerParams={[props.workorder.number, formData.storeCode]}
                                 onChangeValue={handlePartChange}
                                 barcodeScanner
                                 children={props.children}
@@ -271,18 +327,18 @@ function PartUsageDialog(props) {
                                 elementInfo={{
                                     ...props.tabLayout["assetid"],
                                     readonly:
-                                        !partUsage.storeCode ||
-                                        !partUsage.activityCode ||
-                                        (partUsage.storeCode?.trim() === '' &&
+                                        !formData.storeCode ||
+                                        !formData.activityCode ||
+                                        (formData.storeCode?.trim() === '' &&
                                             !isTrackedByAsset),
                                 }}
-                                value={partUsageLine.assetIDCode}
-                                updateProperty={updatePartUsageLineProperty}
+                                value={formData.assetIDCode}
+                                updateProperty={updateFormDataProperty}
                                 valueKey="assetIDCode"
-                                desc={partUsageLine.assetIDDesc}
+                                desc={formData.assetIDDesc}
                                 descKey="assetIDDesc"
                                 autocompleteHandler={WSWorkorders.getPartUsageAsset}
-                                autocompleteHandlerParams={[partUsage.transactionType, partUsage.storeCode]}
+                                autocompleteHandlerParams={[formData.transactionType, formData.storeCode]}
                                 onChangeValue={handleAssetChange}
                                 barcodeScanner
                                 children={props.children}/>
@@ -290,12 +346,12 @@ function PartUsageDialog(props) {
                             <EAMSelect
                                 elementInfo={{
                                     ...props.tabLayout["bincode"],
-                                    readonly: !partUsage.storeCode,
+                                    readonly: !formData.storeCode,
                                 }}
                                 valueKey="bin"
                                 options={binList}
-                                value={partUsageLine.bin}
-                                updateProperty={updatePartUsageLineProperty}
+                                value={formData.bin}
+                                updateProperty={updateFormDataProperty}
                                 children={props.children}
                                 suggestionsPixelHeight={200}/>
 
@@ -303,13 +359,13 @@ function PartUsageDialog(props) {
                                 elementInfo={{
                                     ...props.tabLayout["transactionquantity"],
                                     readonly:
-                                        !partUsage.storeCode ||
+                                        !formData.storeCode ||
                                         isTrackedByAsset,
                                 }}
                                 valueKey="transactionQty"
                                 endAdornment={uom}
-                                value={partUsageLine.transactionQty}
-                                updateProperty={updatePartUsageLineProperty}
+                                value={formData.transactionQty}
+                                updateProperty={updateFormDataProperty}
                                 children={props.children}/>
 
                         </BlockUi>
