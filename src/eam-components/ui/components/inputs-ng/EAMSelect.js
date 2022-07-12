@@ -11,7 +11,7 @@ const autocompleteDivStyle = {
   display: "flex"
 }
 
-const EAMSelect = React.memo((props) => {
+const EAMSelect = (props) => {
    
   let {autocompleteHandler, autocompleteHandlerParams, 
     value, valueKey, descKey, desc,
@@ -96,7 +96,7 @@ const EAMSelect = React.memo((props) => {
             onInputChange={onInputChangeHandler}
             // Misc
             id={getElementKey(elementInfo)}
-            value={value === undefined ? '' : value} // Avoids the warning: The value provided to Autocomplete is invalid. None of the options match with `""`.
+            value={value === undefined ? '' : value} 
             isOptionEqualToValue={isOptionEqualToValueHandler}
             onClose={onCloseHandler}
             // Visuals 
@@ -113,7 +113,7 @@ const EAMSelect = React.memo((props) => {
         </div>
       </EAMBaseInput>
       );
-}, areEqual);
+};
 
 EAMSelect.defaultProps = {
   

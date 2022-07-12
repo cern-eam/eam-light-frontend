@@ -11,7 +11,7 @@ const autocompleteDivStyle = {
   display: "flex"
 }
 
-const EAMAutocomplete = React.memo((props) => {
+const EAMAutocomplete = (props) => {
    
   let {autocompleteHandler, autocompleteHandlerParams, 
        value, valueKey, descKey,
@@ -82,6 +82,14 @@ const EAMAutocomplete = React.memo((props) => {
             openOnFocus
             //blurOnSelect
             // Visuals 
+            // componentsProps={{
+            //   paper: {
+            //     sx: {
+            //       marginTop: 1
+            //     }
+            //   }
+            // }}
+            selectOnFocus
             loading = {loading}
             size="small"
             fullWidth
@@ -91,7 +99,7 @@ const EAMAutocomplete = React.memo((props) => {
         </div>
       </EAMBaseInput>
       );
-}, areEqual);
+};
 
 EAMAutocomplete.defaultProps = {
   
