@@ -16,12 +16,12 @@ const EAMSelect = (props) => {
   let {autocompleteHandler, autocompleteHandlerParams, 
     value, valueKey, descKey, desc,
     updateProperty, onChangeValue,
-    options, 
+    options, optionsTransformer,
     elementInfo,
     renderValue, endTextAdornment} = props;
 
     let [inputValue, setInputValue] = useState("")
-    let [fetchedOptions, loading] = useFetchSelectOptions(autocompleteHandler, autocompleteHandlerParams, value, desc, options)
+    let [fetchedOptions, loading] = useFetchSelectOptions(autocompleteHandler, autocompleteHandlerParams, value, desc, options, optionsTransformer)
   
     const getOptionLabelHandler = option => {
         if (typeof option === 'object') {

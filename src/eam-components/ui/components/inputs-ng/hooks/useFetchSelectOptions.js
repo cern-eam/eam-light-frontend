@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react"
 
-const useFetchSelectOptions = (autocompleteHandler, autocompleteHandlerParams = [], value, desc, options) => {
+const useFetchSelectOptions = (autocompleteHandler, autocompleteHandlerParams = [], value, desc, options, optionsTransformer) => {
   
     const [fetchedOptions, setFetchedOptions] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -14,7 +14,7 @@ const useFetchSelectOptions = (autocompleteHandler, autocompleteHandlerParams = 
         
         autocompleteHandler(...autocompleteHandlerParams)
         .then(result => {
-            let fetchedOptionsTemp = result.body.data;
+            let fetchedOptionsTemp = optionsTransformer ? optionsTransformer(result.body.data) : result.body.data;
             
             // Add value to list of options if it's not there
             if (value && !fetchedOptionsTemp.some(o => o.code === value)) {
