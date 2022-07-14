@@ -13,8 +13,6 @@ import WSParts from '../../../../tools/WSParts';
 import makeStyles from '@mui/styles/makeStyles';
 import EAMRadio from 'eam-components/ui/components/inputs-ng/EAMRadio';
 
-const transactionTypes = [{code: 'ISSUE', desc: 'Issue'}, {code: 'RETURN', desc: 'Return'}];
-
 const overflowStyle = {
     overflowY: 'visible'
 }
@@ -23,20 +21,30 @@ const useStyles = makeStyles({
     paper: overflowStyle
 });
 
-// TODO: worth it to change all WS requests to async/await?
-function PartUsageDialog(props) {
+const transactionTypes = [{code: 'ISSUE', desc: 'Issue'}, {code: 'RETURN', desc: 'Return'}];
 
+// Contains some (inner) fields from the Part Usage object
+const FORM = {
+    ACTIVITY: 'activityCode',
+    STORE: 'storeCode',
+    TRANSACTION_TYPE: 'transactionType',
+    ASSET: 'assetIDCode',
+    ASSET_DESC: 'assetIDDesc',
+    BIN: 'bin',
+    PART: 'partCode',
+    PART_DESC: 'partDesc',
+    TRANSACTION_QTY: 'transactionQty'
+}
+
+function PartUsageDialog(props) {
     const [binList, setBinList] = useState([]);
     const [activityList, setActivityList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [uom, setUoM] = useState('');
-    const [isTrackedByAsset, setIsTrackedByAsset] = useState(false);
-    const [formData, setFormData] = useState({});
+    const [isTrackedByAsset, setIsTrackedByAsset] = useState();
+    const [formData, setFormData] = useState({}); // stores user changes (direct and indirect) for updating the part usage object
     const [initPartUsageWSData, setInitPartUsageWSData] = useState({});
 
-    console.log('/// formData:', formData);
-
-    // 'formData' contains all necessary state for the part usage submittal
     const updateFormDataProperty = (key, value) => {
         setFormData((oldFormData) => ({
             ...oldFormData,
@@ -47,22 +55,26 @@ function PartUsageDialog(props) {
     // We set every state key used even if they come null in the 'response'
     const assignInitialFormState = (response) => {
         const transactionLines = response.transactionlines[0];
-        updateFormDataProperty('activityCode', response.activityCode);
-        updateFormDataProperty('storeCode', response.storeCode);
-        updateFormDataProperty('transactionType', response.transactionType);
-        updateFormDataProperty('assetIDCode', transactionLines.assetIDCode);
-        updateFormDataProperty('assetIDDesc', transactionLines.assetIDDesc);
-        updateFormDataProperty('bin', transactionLines.bin);
-        updateFormDataProperty('partCode', transactionLines.partCode);
-        updateFormDataProperty('partDesc', transactionLines.partDesc);
-        updateFormDataProperty('transactionQty', transactionLines.transactionQty);
-    }
+        updateFormDataProperty(FORM.ACTIVITY, response.activityCode);
+        updateFormDataProperty(FORM.STORE, response.storeCode);
+        updateFormDataProperty(FORM.TRANSACTION_TYPE, response.transactionType);
+        updateFormDataProperty(FORM.ASSET, transactionLines.assetIDCode);
+        updateFormDataProperty(FORM.ASSET_DESC, transactionLines.assetIDDesc);
+        updateFormDataProperty(FORM.BIN, transactionLines.bin);
+        updateFormDataProperty(FORM.PART, transactionLines.partCode);
+        updateFormDataProperty(FORM.PART_DESC, transactionLines.partDesc);
+        updateFormDataProperty(FORM.TRANSACTION_QTY, transactionLines.transactionQty);
+    };
 
     useEffect(() => {
         if (props.isDialogOpen) {
             initNewPartUsage(props.workorder);
         }
-    }, [props.isDialogOpen])
+        return (params) => {
+            setUoM('');
+            resetFormTransactionLinesAndBinListStates();     
+        }
+    }, [props.isDialogOpen]);
 
     const initNewPartUsage = async (workorder) => {
         setLoading(true);
@@ -79,138 +91,159 @@ function PartUsageDialog(props) {
         }
     };
 
-    // TODO: use async/await
-    const loadLists = (workorder) => {
-        // Activity List
-        WSWorkorders.getWorkOrderActivities(workorder.number).then(response => {
+    const loadLists = async (workorder) => {
+        try {
+            const response = await WSWorkorders.getWorkOrderActivities(
+                workorder.number
+            );
             setActivityList(transformActivities(response.body.data));
-        }).catch(error => {
+        } catch (error) {
             props.handleError(error);
-        });
-        // Bin list
+        }
         setBinList([]);
     };
 
     const resetFormTransactionLinesAndBinListStates = () => {
-        // Reset Form Data
-        updateFormDataProperty('assetIDCode', '');
-        updateFormDataProperty('assetIDDesc', '');
-        updateFormDataProperty('bin', '');
-        updateFormDataProperty('partCode', '');
-        updateFormDataProperty('partDesc', '');
+        // Reset 'transactionlines' proprieties
+        updateFormDataProperty(FORM.ASSET, '');
+        updateFormDataProperty(FORM.ASSET_DESC, '');
+        updateFormDataProperty(FORM.BIN, '');
+        updateFormDataProperty(FORM.PART, '');
+        updateFormDataProperty(FORM.PART_DESC, '');
         // Reset bin list
-        setBinList([])
-    }
+        setBinList([]);
+    };
 
-    const handleTransactionChange = (value) => {
-        // TODO: possible improvement: we currently leave only the store selected
-        // when changing from issue to return (radio button). We could leave more
-        // of the form filled with the previous values
+    const handleTransactionChange = () => {
         resetFormTransactionLinesAndBinListStates();
     };
 
-    const handleStoreChange = (value) => {
+    const handleStoreChange = () => {
         resetFormTransactionLinesAndBinListStates();
     };
 
     /* This function handles at least 3 cases:
-     * 1) The part is selected so we only need to update the bin and bin list states
-     *    (hence the conditions for whether the 'partCode' is defined).
-     * 2) The user searches for an asset ID directly (without selecting a part), so we
-     *    have to set more state: 'partCode', 'partDesc', 'bin' and bin list.
-     * 3) The input is cleared // TODO: double-check behavior is ok after the state problem is solved
+     * 1) The asset ID input is cleared.
+     * 2) The user searches for an asset ID directly (without having selected a part),
+     *    so we have to update the remaining state concerning part and bin.
+     * 3) There was already a part selected so we only need to update the bin state.
      */
-    // TODO: refactor to extract logic for each of the cases to separate functions, even if
-    // this means duplicating code
-    // TODO: use async/await
-    const handleAssetChange = (assetIDCode) => {
-        console.log('*** (handleAssetChange) ***', formData);
-        // TODO: with the current state issue, we cannot handle this case
-        // because assetIDCode will always come as empty
-        // Handle case where the input was cleared
-        // if (formData.assetIDCode?.trim() === '') {
-        //     console.log('\t;;;;;; assetIDCode NOT defined ;;;;;;', formData.partCode);
-        //     resetFormTransactionLinesAndBinListStates();
-        //     return;
-        // }
-        if (!formData.partCode) {
-            console.log('\t;;;;;; partCode NOT defined ;;;;;;', formData.partCode);
-            updateFormDataProperty('partCode', '');
-            updateFormDataProperty('partDesc', '');
+    const handleAssetChange = async (assetIDCode) => {
+        // Asset input cleared
+        if (assetIDCode?.trim() === '') {
+            updateFormDataProperty(FORM.ASSET, '');
+            updateFormDataProperty(FORM.ASSET_DESC, '');
+            updateFormDataProperty(FORM.BIN, '');
+            setBinList([]);
+            return;
         }
-        updateFormDataProperty('bin', '');
-        //Complete data for change Asset
-        WSWorkorders.getPartUsageSelectedAsset(props.workorder.number, formData.transactionType,
-            formData.storeCode, assetIDCode).then(response => {
-            const completeData = response.body.data[0];
-            if (completeData) {
-                updateFormDataProperty('bin', completeData.bin);
-                loadBinList(completeData.bin, completeData.part);
-                if (!formData.partCode){
-                    updateFormDataProperty('partCode', completeData.part);
-                }
+        try {
+            setLoading(true);
+            const assetData = await getAssetData(assetIDCode);
+            if (!assetData) {
+                // TODO: present this warning to the user in a more elegant way
+                updateFormDataProperty(FORM.ASSET, `ASSET UNAVAILABLE FOR TRANSACTION TYPE: ${formData.transactionType}`);
+                return;
             }
-            if (!formData.partCode) {
-                WSParts.getPart(completeData.part)
-                    .then((response) => {
-                        setIsTrackedByAsset(
-                            response.body.data.trackByAsset === 'true'
-                        );
-                        setUoM(response.body.data.uom);
-                        updateFormDataProperty(
-                            'partDesc',
-                            response.body.data.description
-                        );
-                    })
-                    .catch((error) => {
-                        props.handleError(error);
-                    });
+            // Asset selected without a part selected
+            if (!formData.partCode || formData.partCode && formData.partCode !== assetData.part) {
+                return handleAssetUnspecifiedPart(assetData);
             }
-        }).catch(error => {
+            // Asset selected having already selected a part
+            return handleAssetSelectedWithPart(assetData);
+        } catch (error) {
             props.handleError(error);
-        });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const getAssetData = async (assetIDCode) => {
+        try {
+            const response = await WSWorkorders.getPartUsageSelectedAsset(
+                props.workorder.number,
+                formData.transactionType,
+                formData.storeCode,
+                assetIDCode
+            );
+            return response.body.data[0];
+        } catch (error) {
+            props.handleError(error);
+        }
+    };
+
+    const handleAssetSelectedWithPart = (assetData) => {
+        updateFormDataProperty(FORM.BIN, '');
+        if (assetData) {
+            updateFormDataProperty(FORM.BIN, assetData.bin);
+            loadBinList(assetData.bin, assetData.part);
+        }
+    };
+
+    const handleAssetUnspecifiedPart = async (assetData) => {
+        updateFormDataProperty(FORM.PART, '');
+        updateFormDataProperty(FORM.PART_DESC, '');
+        updateFormDataProperty(FORM.BIN, '');
+        if (assetData) {
+            updateFormDataProperty(FORM.BIN, assetData.bin);
+            loadBinList(assetData.bin, assetData.part);
+            updateFormDataProperty(FORM.PART, assetData.part);
+        }
+        // Set details of respective part
+        try {
+            const partData = await loadPartData(assetData.part);
+            updateFormDataProperty(FORM.PART_DESC, partData.description);
+        } catch (error) {
+            props.handleError(error);
+        }
     };
 
     const handlePartChange = (value) => {
-        console.log('*** (handlePartChange) ***');
         // Clear asset and bin selection
-        updateFormDataProperty('assetIDCode', '');
-        updateFormDataProperty('assetIDDesc', '');
-        updateFormDataProperty('bin', '');
-        // Load the bin list
+        updateFormDataProperty(FORM.ASSET, '');
+        updateFormDataProperty(FORM.ASSET_DESC, '');
+        updateFormDataProperty(FORM.BIN, '');
+        setIsTrackedByAsset(false);
+        // Load the bin list and part data
         loadBinList('', value);
         loadPartData(value);
     };
 
-    // TODO: async/await
-    const loadBinList = (binCode, partCode) => {
-        if (!partCode)
-            return;
-        WSWorkorders.getPartUsageBin(formData.transactionType,
-            binCode, partCode, formData.storeCode).then(response => {
-            const binList = response.body.data;
-            setBinList(binList)
-            if (binList.length === 1) {
-                updateFormDataProperty('bin', binList[0].code);
-            }
-        }).catch(error => {
-            props.handleError(error);
-        });
-    };
-
-    // TODO: use async await
-    const loadPartData = (partCode) => {
+    const loadBinList = async (binCode, partCode) => {
         if (!partCode) return;
 
-        WSParts.getPart(partCode)
-            .then((response) => {
-                setIsTrackedByAsset(response.body.data.trackByAsset === 'true');
-                setUoM(response.body.data.uom);
-            })
-            .catch((error) => {
-                props.handleError(error);
-            });
-    }
+        try {
+            const response = await WSWorkorders.getPartUsageBin(
+                formData.transactionType,
+                binCode,
+                partCode,
+                formData.storeCode
+            );
+            const binList = response.body.data;
+            setBinList(binList);
+            if (binList.length === 1) {
+                updateFormDataProperty(FORM.BIN, binList[0].code);
+            }
+        } catch (error) {
+            props.handleError(error);
+        }
+    };
+
+    const loadPartData = async (partCode) => {
+        if (!partCode) return;
+
+        try {
+            setLoading(true);
+            const response = await WSParts.getPart(partCode);
+            setIsTrackedByAsset(response.body.data.trackByAsset === 'true');
+            setUoM(response.body.data.uom);
+            return response.body.data;
+        } catch (error) {
+            props.handleError(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleSave = () => {
         setLoading(true);
@@ -253,14 +286,10 @@ function PartUsageDialog(props) {
             },
         ];
 
-        // Remove original transaction info propriety
+        // Remove original 'transactionInfo' propriety
         delete partUsageSubmitData.transactionInfo;
 
-        console.log('partUsageSubmitData (submit)', partUsageSubmitData);
-
-        // TODO: can we simply pass the handle error reference to catch?
-        // TODO: use async/await
-        // Save the record
+        // Submit the new part usage
         WSWorkorders.createPartUsage(partUsageSubmitData)
             .then(props.successHandler)
             .catch(props.handleError)
@@ -268,18 +297,13 @@ function PartUsageDialog(props) {
     };
 
     const transformActivities = (activities) => {
-        return activities.map(activity => ({
+        return activities.map((activity) => ({
             code: activity.activityCode,
-            desc: activity.tradeCode
+            desc: activity.tradeCode,
         }));
-    }
+    };
 
     const classes = useStyles();
-
-    // TODO: re-check w/ lukasz w/ lukasz
-    // if (!props.workorder) {
-    //     return React.Fragment;
-    // }
 
     return (
         <div>
@@ -290,126 +314,150 @@ function PartUsageDialog(props) {
                 onClose={props.handleCancel}
                 aria-labelledby="form-dialog-title"
                 classes={{
-                    paper: classes.paper
-                }}>
-
+                    paper: classes.paper,
+                }}
+            >
                 <DialogTitle id="form-dialog-title">Add Part Usage</DialogTitle>
 
                 <DialogContent id="content" style={overflowStyle}>
                     <div>
-                        <BlockUi tag="div" blocking={loading || props.isLoading}>
-                            <EAMRadio elementInfo={props.tabLayout["transactiontype"]}
-                                      valueKey="transactionType"
-                                      values={transactionTypes}
-                                      value={formData.transactionType}
-                                      updateProperty={updateFormDataProperty}
-                                      onChangeValue={handleTransactionChange}
-                                      children={props.children}
+                        <BlockUi
+                            tag="div"
+                            blocking={loading || props.isLoading}
+                        >
+                            <EAMRadio
+                                elementInfo={props.tabLayout['transactiontype']}
+                                valueKey={FORM.TRANSACTION_TYPE}
+                                values={transactionTypes}
+                                value={formData.transactionType}
+                                updateProperty={updateFormDataProperty}
+                                onChangeValue={handleTransactionChange}
+                                children={props.children}
                             />
 
                             <EAMSelect
-                                elementInfo={{...props.tabLayout["storecode"], attribute: "R"}}
-                                valueKey="storeCode"
+                                elementInfo={{
+                                    ...props.tabLayout['storecode'],
+                                    attribute: 'R',
+                                }}
+                                valueKey={FORM.STORE}
                                 value={formData.storeCode}
                                 updateProperty={updateFormDataProperty}
                                 onChangeValue={handleStoreChange}
-                                autocompleteHandler={WSWorkorders.getPartUsageStores}
-                                children={props.children}/>
-
+                                autocompleteHandler={
+                                    WSWorkorders.getPartUsageStores
+                                }
+                                children={props.children}
+                            />
 
                             <EAMSelect
                                 elementInfo={{
-                                    ...props.tabLayout["activity"],
-                                    attribute: "R",
+                                    ...props.tabLayout['activity'],
+                                    attribute: 'R',
                                     readonly: !formData.storeCode,
                                 }}
-                                valueKey="activityCode"
+                                valueKey={FORM.ACTIVITY}
                                 options={activityList}
                                 value={formData.activityCode}
                                 updateProperty={updateFormDataProperty}
-                                // TODO: re-check w/ lukasz
-                                // autocompleteHandler={WSWorkorders.getWorkOrderActivities}
-                                // autocompleteHandlerParams={props.workorder.number}
-                                // optionsTransformer={transformActivities}
-                                children={props.children}/>
+                                children={props.children}
+                            />
 
                             <EAMAutocomplete
                                 elementInfo={{
-                                    ...props.tabLayout["partcode"],
+                                    ...props.tabLayout['partcode'],
                                     readonly: !formData.storeCode,
                                 }}
                                 value={formData.partCode}
                                 updateProperty={updateFormDataProperty}
-                                valueKey="partCode"
+                                valueKey={FORM.PART}
                                 desc={formData.partDesc}
-                                descKey="partDesc"
+                                descKey={FORM.PART_DESC}
                                 autocompleteHandler={
                                     WSWorkorders.getPartUsagePart
                                 }
-                                autocompleteHandlerParams={[props.workorder.number, formData.storeCode]}
+                                autocompleteHandlerParams={[
+                                    props.workorder.number,
+                                    formData.storeCode,
+                                ]}
                                 onChangeValue={handlePartChange}
                                 barcodeScanner
                                 children={props.children}
-                                />
+                            />
 
                             <EAMAutocomplete
                                 elementInfo={{
-                                    ...props.tabLayout["assetid"],
+                                    ...props.tabLayout['assetid'],
                                     readonly:
                                         !formData.storeCode ||
                                         !formData.activityCode ||
-                                        (formData.storeCode?.trim() === "" &&
-                                            !isTrackedByAsset),
+                                        (formData.partCode && !isTrackedByAsset)
                                 }}
                                 value={formData.assetIDCode}
                                 updateProperty={updateFormDataProperty}
-                                valueKey="assetIDCode"
+                                valueKey={FORM.ASSET}
                                 desc={formData.assetIDDesc}
-                                descKey="assetIDDesc"
-                                autocompleteHandler={WSWorkorders.getPartUsageAsset}
-                                autocompleteHandlerParams={[formData.transactionType, formData.storeCode]}
+                                descKey={FORM.ASSET_DESC}
+                                autocompleteHandler={
+                                    WSWorkorders.getPartUsageAsset
+                                }
+                                autocompleteHandlerParams={[
+                                    formData.transactionType,
+                                    formData.storeCode,
+                                    formData.partCode
+                                ]}
                                 onChangeValue={handleAssetChange}
                                 barcodeScanner
-                                children={props.children}/>
+                                renderDependencies={[formData.partCode]}
+                                children={props.children}
+                            />
 
                             <EAMSelect
                                 elementInfo={{
-                                    ...props.tabLayout["bincode"],
+                                    ...props.tabLayout['bincode'],
                                     readonly: !formData.storeCode,
                                 }}
-                                valueKey="bin"
+                                valueKey={FORM.BIN}
                                 options={binList}
                                 value={formData.bin}
                                 updateProperty={updateFormDataProperty}
                                 children={props.children}
-                                suggestionsPixelHeight={200}/>
+                                suggestionsPixelHeight={200}
+                            />
 
                             <EAMTextField
                                 elementInfo={{
-                                    ...props.tabLayout["transactionquantity"],
+                                    ...props.tabLayout['transactionquantity'],
                                     readonly:
                                         !formData.storeCode ||
+                                        !formData.partCode ||
                                         isTrackedByAsset,
                                 }}
-                                valueKey="transactionQty"
-                                endAdornment={uom}
+                                valueKey={FORM.TRANSACTION_QTY}
+                                endTextAdornment={uom}
                                 value={formData.transactionQty}
                                 updateProperty={updateFormDataProperty}
-                                children={props.children}/>
-
+                                renderDependencies={uom}
+                                children={props.children}
+                            />
                         </BlockUi>
                     </div>
                 </DialogContent>
 
-
                 <DialogActions>
                     <div>
-                        <Button onClick={props.handleCancel} color="primary"
-                                disabled={loading || props.isLoading}>
+                        <Button
+                            onClick={props.handleCancel}
+                            color="primary"
+                            disabled={loading || props.isLoading}
+                        >
                             Cancel
                         </Button>
-                        <Button onClick={handleSave} color="primary"
-                                disabled={loading || props.isLoading}>
+                        <Button
+                            onClick={handleSave}
+                            color="primary"
+                            disabled={loading || props.isLoading}
+                        >
                             Save
                         </Button>
                     </div>
@@ -417,7 +465,6 @@ function PartUsageDialog(props) {
             </Dialog>
         </div>
     );
-
 }
 
 export default PartUsageDialog;
