@@ -150,8 +150,8 @@ class WSWorkorders {
         return WS._get(`/autocomplete/partusage/part/${workorder}/${store}/${code}`, config);
     }
 
-    getPartUsageAsset(transaction, store, code, config = {}) {
-        return WS._get(`/autocomplete/partusage/asset/${transaction}/${store}/${code}`, config);
+    getPartUsageAsset(transaction, store, part, code, config = {}) {
+        return WS._get(`/autocomplete/partusage/asset?transaction=${transaction}&store=${store}&part=${part}&code=${code}`, config);
     }
 
     getPartUsageBin(transaction, bin, part, store, config = {}) {
