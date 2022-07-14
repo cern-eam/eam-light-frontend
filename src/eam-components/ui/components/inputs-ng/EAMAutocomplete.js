@@ -7,7 +7,7 @@ import TextField from './components/TextField';
 import { saveHistory } from './tools/history-tools';
 
 const autocompleteDivStyle = {
-  flex: "1 1 auto",
+  flex: "999 1 auto",
   display: "flex"
 }
 
@@ -34,7 +34,7 @@ const EAMAutocomplete = (props) => {
 
     const onChangeHandler = (event, newValue, reason) => {
       if (reason === 'clear') {
-        updateCodeDesc(updateProperty, valueKey, '', descKey, '', onChangeValue);
+        // Case handled by the onCloseHandler as we don't want to fire the change event before blurying 
         return;
       }
       
@@ -49,15 +49,12 @@ const EAMAutocomplete = (props) => {
 
     const onCloseHandler = (event, reason) => {
       setOpen(false)
-      // Only to be fired when we blur, the inputValue is not empty and different than the original value
-      // (if the inputValue is empty onChangeHandler is fired with the reason = 'clear')
-      if (reason === 'blur' && inputValue?.trim() && inputValue !== value) {
-        updateProperty(valueKey, inputValue); // TODO: validation (+ description)
-        onChangeValue?.(inputValue)
-        
+      // Only to be fired when we blur and the inputValue is different than the original value
+      if (reason === 'blur' && inputValue !== value) {
+          // TODO: validation if inputValue is not empty 
+          updateCodeDesc(updateProperty, valueKey, inputValue, descKey, '', onChangeValue); 
       } 
     }
-
 
     return (
       <EAMBaseInput {...props}>
@@ -82,14 +79,13 @@ const EAMAutocomplete = (props) => {
             openOnFocus
             //blurOnSelect
             // Visuals 
-            // componentsProps={{
-            //   paper: {
-            //     sx: {
-            //       marginTop: 1
-            //     }
-            //   }
-            // }}
-            selectOnFocus
+            componentsProps={{
+              paper: {
+                sx: {
+                  marginTop: "2px"
+                }
+              }
+            }}
             loading = {loading}
             size="small"
             fullWidth

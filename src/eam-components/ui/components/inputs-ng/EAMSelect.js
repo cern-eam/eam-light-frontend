@@ -7,7 +7,7 @@ import useFetchSelectOptions from './hooks/useFetchSelectOptions';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const autocompleteDivStyle = {
-  flex: "1 1 auto",
+  flex: "999 1 auto",
   display: "flex"
 }
 
@@ -75,13 +75,13 @@ const EAMSelect = (props) => {
 
 
     const onCloseHandler = (event, reason) => {
-        if (reason === 'blur' && inputValue) {
-            if (getOptions().some(o => o.code === inputValue)) {
-                let option = getOptions().find(o => o.code === inputValue);
-                updateCodeDesc(updateProperty, valueKey, option.code, descKey, option.desc, onChangeValue);
-            }
+      if (reason === 'blur' && inputValue) {
+        if (getOptions().some(o => o.code === inputValue)) {
+            let option = getOptions().find(o => o.code === inputValue);
+            updateCodeDesc(updateProperty, valueKey, option.code, descKey, option.desc, onChangeValue);
         }
       }
+    }
 
     return (
       <EAMBaseInput {...props}>
@@ -103,6 +103,13 @@ const EAMSelect = (props) => {
             loading = {loading}
             size="small"
             fullWidth
+            componentsProps={{
+              paper: {
+                sx: {
+                  marginTop: "2px"
+                }
+              }
+            }}
             renderInput={(params) => <TextField hideDescription = {true} {...params} {...props} 
                                                 endAdornment={<KeyboardArrowDownIcon style={{marginRight: endTextAdornment? 76 : 6,
                                                                                              marginLeft: endTextAdornment ? -100 : -30, 

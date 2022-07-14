@@ -28,7 +28,7 @@ const AutocompleteDescription = ({description, value}) => {
     }
 
     return (<div style={rootStyle}>
-        <span>({description})</span>
+        <span>{description}</span>
     </div>);
 }
 

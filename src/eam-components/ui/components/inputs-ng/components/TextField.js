@@ -14,7 +14,7 @@ let inputStyle = {
     color: "#495057",
     backgroundClip: "padding-box",
     border: "1px solid #ced4da",
-    borderRadius: "5px",
+    borderRadius: "4px",
     transition: "border-color .15s ease-in-out,box-shadow .15s ease-in-out",
     backgroundColor: "#fdfdfd",
     //backgroundColor: "#fefefe"
@@ -33,7 +33,7 @@ const divInputContainerStyle = {
 }
 
 const divRootContainerStyle = {
-    flex: "1 1 auto",
+    flex: "999 1 auto",
     display: "flex",
     flexDirection: "column",
     minWidth: "320px"

@@ -3,7 +3,7 @@ import {isRequired, isHidden} from '../tools/input-tools'
 
 
 const divLabelStyle = {
-    flex: "0 0 140px",
+    flex: "1 0 140px",
     fontSize: 14,
     margin: "5px 10px 5px 0px",
     //color: "rgb(0, 101, 152)",
