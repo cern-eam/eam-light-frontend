@@ -6,11 +6,11 @@ import { areEqual } from './tools/input-tools';
 
 const rootStyle = {
     //width: "calc(50% - 20px)",
-    boxSizing: "border-box",
+    //boxSizing: "border-box",
     //float: "left",
     width: "auto",
-    flex: "1 1 170px"
-    //flexFlow: ""
+    flex: "1 1 170px",
+    flexFlow: "row nowrap"
 }
 
 const EAMCheckbox = (props) => {
