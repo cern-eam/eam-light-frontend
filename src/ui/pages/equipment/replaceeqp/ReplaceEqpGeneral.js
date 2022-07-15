@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import EISPanel from 'eam-components/ui/components/panel';
 import WS from "../../../../tools/WS";
-import EAMAutocomplete from "eam-components/ui/components/muiinputs/EAMAutocomplete";
-import EAMSelect from "eam-components/ui/components/muiinputs/EAMSelect";
+import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
+import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
 import Button from '@mui/material/Button';
 import Refresh from '@mui/icons-material/Refresh';
 import Dialog from '@mui/material/Dialog';
@@ -15,7 +15,6 @@ import swapping from './modes/mode_swapping.svg';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import EAMBarcodeInput from "eam-components/ui/components/muiinputs/EAMBarcodeInput";
 
 const buttonStyle = {
     bottom: '-10px',
@@ -106,21 +105,20 @@ class ReplaceEqpGeneral extends Component {
             <EISPanel heading="REPLACE EQUIPMENT" alwaysExpanded={true}>
                 <div style={{width: "100%", marginTop: 0}}>
 
-                    <EAMBarcodeInput updateProperty={value => {this.props.onChangeOldEquipment(value); return this.props.updateProperty('oldEquipment', value)}} right={0} top={20}>
-                        <EAMAutocomplete elementInfo={{
-                            ...this.props.equipmentLayout.fields['equipmentno'],
-                            attribute: "R",
-                            text: "Old Equipment", xpath: "OldEquipment"
-                        }}
-                            value={this.props.replaceEquipment.oldEquipment}
-                            updateProperty={this.props.updateProperty}
-                            valueKey="oldEquipment"
-                            autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
-                            onChangeValue={this.props.onChangeOldEquipment}
-                            children={this.children}
-                            valueDesc={this.props.replaceEquipment.oldEquipmentDesc}
-                            descKey="oldEquipmentDesc"/>
-                    </EAMBarcodeInput>
+                    <EAMAutocomplete elementInfo={{
+                        ...this.props.equipmentLayout.fields['equipmentno'],
+                        attribute: "R",
+                        text: "Old Equipment", xpath: "OldEquipment"
+                    }}
+                        value={this.props.replaceEquipment.oldEquipment}
+                        updateProperty={this.props.updateProperty}
+                        valueKey="oldEquipment"
+                        autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
+                        onChangeValue={this.props.onChangeOldEquipment}
+                        children={this.children}
+                        desc={this.props.replaceEquipment.oldEquipmentDesc}
+                        descKey="oldEquipmentDesc"
+                        barcodeScanner/>
 
                     <EAMSelect
                         elementInfo={{
@@ -130,11 +128,11 @@ class ReplaceEqpGeneral extends Component {
                             readonly: this.props.statusList.length === 0
                         }}
                         valueKey="oldEquipmentStatus"
-                        values={this.props.statusList}
+                        options={this.props.statusList}
                         value={this.props.replaceEquipment.oldEquipmentStatus}
                         updateProperty={this.props.updateProperty}
                         children={this.children} />
-
+                    
                     <EAMSelect
                         elementInfo={{
                             ...this.props.equipmentLayout.fields['assetstate'],
@@ -143,26 +141,25 @@ class ReplaceEqpGeneral extends Component {
                             readonly: !this.props.stateList || this.props.stateList.length === 0
                         }}
                         valueKey="oldEquipmentState"
-                        values={this.props.stateList}
+                        options={this.props.stateList}
                         value={this.props.replaceEquipment.oldEquipmentState}
                         updateProperty={this.props.updateProperty}
                         children={this.children} />
 
-                    <EAMBarcodeInput updateProperty={value => {this.props.onChangeNewEquipment(value); return this.props.updateProperty('newEquipment', value)}} right={0} top={20}>
-                        <EAMAutocomplete elementInfo={{
-                            ...this.props.equipmentLayout.fields['equipmentno'],
-                            attribute: "R",
-                            text: "New Equipment", xpath: "NewEquipment"
-                        }}
-                            value={this.props.replaceEquipment.newEquipment}
-                            updateProperty={this.props.updateProperty}
-                            valueKey="newEquipment"
-                            autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
-                            onChangeValue={this.props.onChangeNewEquipment}
-                            children={this.children}
-                            valueDesc={this.props.replaceEquipment.newEquipmentDesc}
-                            descKey="newEquipmentDesc"/>
-                    </EAMBarcodeInput>
+                    <EAMAutocomplete elementInfo={{
+                        ...this.props.equipmentLayout.fields['equipmentno'],
+                        attribute: "R",
+                        text: "New Equipment", xpath: "NewEquipment"
+                    }}
+                        value={this.props.replaceEquipment.newEquipment}
+                        updateProperty={this.props.updateProperty}
+                        valueKey="newEquipment"
+                        autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
+                        onChangeValue={this.props.onChangeNewEquipment}
+                        children={this.children}
+                        desc={this.props.replaceEquipment.newEquipmentDesc}
+                        descKey="newEquipmentDesc"
+                        barcodeScanner/>
 
                     {this.renderImageMode()}
 

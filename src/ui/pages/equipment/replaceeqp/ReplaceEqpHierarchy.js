@@ -1,7 +1,7 @@
 import React from 'react';
 import EISPanel from 'eam-components/ui/components/panel';
-import EAMInput from "eam-components/ui/components/muiinputs/EAMInput";
-import EAMCheckbox from "eam-components/ui/components/muiinputs/EAMCheckbox";
+import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMCheckbox from 'eam-components/ui/components/inputs-ng/EAMCheckbox'
 import WSEquipment from "../../../../tools/WSEquipment";
 import EISTable from 'eam-components/ui/components/table';
 
@@ -33,7 +33,7 @@ class ReplaceEqpHierarchy extends React.Component {
         }
         return (
             <div>
-                <EAMInput elementInfo={{...this.props.equipmentLayout.fields['parentasset'], readonly: true}}
+                <EAMTextField elementInfo={{...this.props.equipmentLayout.fields['parentasset'], readonly: true}}
                           value={this.props.equipment.hierarchyAssetCode}
                           valueKey="hierarchyAssetCode"/>
 
@@ -55,7 +55,7 @@ class ReplaceEqpHierarchy extends React.Component {
         }
         return (
             <div>
-                <EAMInput elementInfo={{...this.props.equipmentLayout.fields['position'], readonly: true}}
+                <EAMTextField elementInfo={{...this.props.equipmentLayout.fields['position'], readonly: true}}
                           value={this.props.equipment.hierarchyPositionCode}
                           valueKey="hierarchyPositionCode"/>
 
@@ -92,7 +92,7 @@ class ReplaceEqpHierarchy extends React.Component {
                     {this.renderPositionData()}
 
                     {this.props.equipment.hierarchyLocationCode &&
-                    <EAMInput elementInfo={{...this.props.equipmentLayout.fields['location'], readonly: true}}
+                    <EAMTextField elementInfo={{...this.props.equipmentLayout.fields['location'], readonly: true}}
                               value={this.props.equipment.hierarchyLocationCode}
                               valueKey="hierarchyLocationCode"/>
                     }
