@@ -1,106 +1,102 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import EISPanel from 'eam-components/ui/components/panel';
 import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
 import EAMCheckbox from 'eam-components/ui/components/inputs-ng/EAMCheckbox'
 import WSEquipment from "../../../../tools/WSEquipment";
 import EISTable from 'eam-components/ui/components/table';
 
-class ReplaceEqpHierarchy extends React.Component {
+const ReplaceEqpHierarchy = (props) => {
+    const {equipment, equipmentLayout, title} = props;
 
-    headers = ['Type', 'Equipment', 'Dependent', 'Cost Roll Up'];
-    propCodes = ['childTypeDesc', 'childCode', 'dependent', 'costRollUp'];
-    linksMap = new Map([['childCode', {linkType: 'fixed', linkValue: 'equipment/', linkPrefix: '/'}]]);
+    const headers = ['Type', 'Equipment', 'Dependent', 'Cost Roll Up'];
+    const propCodes = ['childTypeDesc', 'childCode', 'dependent', 'costRollUp'];
+    const linksMap = new Map([['childCode', {linkType: 'fixed', linkValue: 'equipment/', linkPrefix: '/'}]]);
 
-    state = {
-        children: []
-    };
+    const [children, setChildren] = useState([]);
 
-    componentWillReceiveProps(newProps) {
-        //Check if there is equipment
-        if (newProps.equipment && newProps.equipment !== this.props.equipment) {
-            //Fetch children
-            WSEquipment.getEquipmentChildren(newProps.equipment.code).then(response => {
-                this.setState(() => ({children: response.body.data}));
+    useEffect(() => {
+        //Fetch equipment children
+        if (equipment) {
+            WSEquipment.getEquipmentChildren(equipment.code).then(response => {
+                setChildren(response.body.data);
             }).catch(error => {
-                console.log(error);
+                console.log(error); // TODO: should we be passing handleError as props and use it here instead?
             })
         }
-    }
+    }, [equipment]);
 
-    renderAssetData = () => {
-        if (!this.props.equipment.hierarchyAssetCode) {
+    const renderAssetData = () => {
+        if (!equipment.hierarchyAssetCode) {
             return <div/>;
         }
         return (
             <div>
-                <EAMTextField elementInfo={{...this.props.equipmentLayout.fields['parentasset'], readonly: true}}
-                          value={this.props.equipment.hierarchyAssetCode}
+                <EAMTextField elementInfo={{...equipmentLayout.fields['parentasset'], readonly: true}}
+                          value={equipment.hierarchyAssetCode}
                           valueKey="hierarchyAssetCode"/>
 
                 <EAMCheckbox
-                    elementInfo={{...this.props.equipmentLayout.fields['dependentonparentasset'], readonly: true}}
-                    value={this.props.equipment.hierarchyAssetDependent}
+                    elementInfo={{...equipmentLayout.fields['dependentonparentasset'], readonly: true}}
+                    value={equipment.hierarchyAssetDependent}
                     valueKey="hierarchyAssetDependent"/>
 
                 <EAMCheckbox
-                    elementInfo={{...this.props.equipmentLayout.fields['costrollupparentasset'], readonly: true}}
-                    value={this.props.equipment.hierarchyAssetCostRollUp}
+                    elementInfo={{...equipmentLayout.fields['costrollupparentasset'], readonly: true}}
+                    value={equipment.hierarchyAssetCostRollUp}
                     valueKey="hierarchyAssetCostRollUp"/>
             </div>);
     };
 
-    renderPositionData = () => {
-        if (!this.props.equipment.hierarchyPositionCode) {
+    const renderPositionData = () => {
+        if (!equipment.hierarchyPositionCode) {
             return <div/>;
         }
         return (
             <div>
-                <EAMTextField elementInfo={{...this.props.equipmentLayout.fields['position'], readonly: true}}
-                          value={this.props.equipment.hierarchyPositionCode}
+                <EAMTextField elementInfo={{...equipmentLayout.fields['position'], readonly: true}}
+                          value={equipment.hierarchyPositionCode}
                           valueKey="hierarchyPositionCode"/>
 
-                <EAMCheckbox elementInfo={{...this.props.equipmentLayout.fields['dependentonposition'], readonly: true}}
-                             value={this.props.equipment.hierarchyPositionDependent}
+                <EAMCheckbox elementInfo={{...equipmentLayout.fields['dependentonposition'], readonly: true}}
+                             value={equipment.hierarchyPositionDependent}
                              valueKey="hierarchyPositionDependent"/>
 
-                <EAMCheckbox elementInfo={{...this.props.equipmentLayout.fields['costrollupposition'], readonly: true}}
-                             value={this.props.equipment.hierarchyPositionCostRollUp}
+                <EAMCheckbox elementInfo={{...equipmentLayout.fields['costrollupposition'], readonly: true}}
+                             value={equipment.hierarchyPositionCostRollUp}
                              valueKey="hierarchyPositionCostRollUp"/>
             </div>);
     };
 
-    renderChildren = () => {
-        if (this.state.children.length === 0) {
+    const renderChildren = () => {
+        if (children.length === 0) {
             return <div/>;
         }
         return (
             <div>
                 <h4 style={{marginBottom: '-5px'}}>Children</h4>
-                <EISTable data={this.state.children} headers={this.headers} propCodes={this.propCodes}
-                          linksMap={this.linksMap}/>
+                <EISTable data={children} headers={headers} propCodes={propCodes}
+                          linksMap={linksMap}/>
             </div>
         );
     }
 
-    render() {
-        if (!this.props.equipment) {
-            return <div/>;
-        }
-        return (<EISPanel heading={this.props.title}>
-                <div style={{width: "100%", marginTop: 0}}>
-                    {this.renderAssetData()}
-                    {this.renderPositionData()}
-
-                    {this.props.equipment.hierarchyLocationCode &&
-                    <EAMTextField elementInfo={{...this.props.equipmentLayout.fields['location'], readonly: true}}
-                              value={this.props.equipment.hierarchyLocationCode}
-                              valueKey="hierarchyLocationCode"/>
-                    }
-                    {this.renderChildren()}
-                </div>
-            </EISPanel>
-        );
+    if (!equipment) {
+        return <div/>;
     }
+    return (<EISPanel heading={title}>
+            <div style={{width: "100%", marginTop: 0}}>
+                {renderAssetData()}
+                {renderPositionData()}
+
+                {equipment.hierarchyLocationCode &&
+                <EAMTextField elementInfo={{...equipmentLayout.fields['location'], readonly: true}}
+                            value={equipment.hierarchyLocationCode}
+                            valueKey="hierarchyLocationCode"/>
+                }
+                {renderChildren()}
+            </div>
+        </EISPanel>
+    );
 };
 
 

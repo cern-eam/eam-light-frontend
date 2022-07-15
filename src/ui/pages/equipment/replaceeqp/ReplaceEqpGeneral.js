@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
 import EISPanel from 'eam-components/ui/components/panel';
 import WS from "../../../../tools/WS";
 import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
@@ -24,49 +24,62 @@ const buttonStyle = {
 const MODE_STANDARD = 'Standard';
 const MODE_SWAPPING = 'Swapping';
 
-class ReplaceEqpGeneral extends Component {
+const ReplaceEqpGeneral = (props) => {
+    const {
+        children, // TODO: not clear whether this will be props or component variable or both
+        equipmentLayout,
+        onChangeNewEquipment,
+        onChangeOldEquipment,
+        replaceEquipmentHandler,
+        replaceEquipment,
+        stateList,
+        statusList,
+        showError,
+        updateProperty,
+    } = props;
 
-    state = {
-        dialogOpen: false
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    // const children = {}; // TODO: is this logic required?
+
+    const closeDialog = () => {
+        setDialogOpen(false);
     };
 
-    children = {};
-
-    closeDialog = () => {
-        this.setState(() => ({dialogOpen: false}));
-    };
-
-    openDialog = () => {
+    const openDialog = () => {
         //Validate fields
-        if (!this.validateFields()) {
-            this.props.showError('Please fill the required fields');
+        if (!validateFields()) {
+            showError('Please fill the required fields');
             return;
         }
 
         //They cannot be the same equipment
-        if (this.props.replaceEquipment.oldEquipment === this.props.replaceEquipment.newEquipment) {
-            this.props.showError('New Equipment cannot be the same Old Equipment');
+        if (replaceEquipment.oldEquipment === replaceEquipment.newEquipment) {
+            showError('New Equipment cannot be the same Old Equipment');
             return;
         }
-        this.setState(() => ({dialogOpen: true}));
+        setDialogOpen(true);
     };
 
-    executeReplace = () => {
-        this.props.replaceEquipmentHandler();
-        this.setState(() => ({dialogOpen: false}));
+    const executeReplace = () => {
+        replaceEquipmentHandler();
+        setDialogOpen(false);
     };
 
-    validateFields = () => {
-        let validationPassed = true;
-        Object.keys(this.children).forEach(key => {
-            if (!this.children[key].validate()) {
-                validationPassed = false;
-            }
-        });
-        return validationPassed;
+    // TODO: implement validation
+    const validateFields = () => {
+        console.log("Field validation being skipped at the moment");
+        return true;
+        // let validationPassed = true;
+        // Object.keys(children).forEach(key => { // TODO: was `this.children`
+        //     if (!children[key].validate()) {
+        //         validationPassed = false;
+        //     }
+        // });
+        // return validationPassed;
     };
 
-    renderImageMode = () => {
+    const renderImageMode = () => {
         const imageStandard = {
             backgroundImage: `url('${standard}')`,
         };
@@ -81,116 +94,113 @@ class ReplaceEqpGeneral extends Component {
                 <RadioGroup
                     aria-label="replacementMode"
                     name="replacementMode"
-                    value={this.props.replaceEquipment.replacementMode}
-                    onChange={event => this.props.updateProperty('replacementMode', event.target.value)}
+                    value={replaceEquipment.replacementMode}
+                    onChange={event => updateProperty('replacementMode', event.target.value)}
                     style={{flexDirection: 'row'}}>
 
                     <FormControlLabel key={MODE_STANDARD} value={MODE_STANDARD} control={<Radio color="primary"/>}
                                       label={`Standard`}
                                       style={imageStandard}
-                                      className={`imageRadio ${this.props.replaceEquipment.replacementMode === MODE_STANDARD ? 'optionSelected' : ''}`}/>
+                                      className={`imageRadio ${replaceEquipment.replacementMode === MODE_STANDARD ? 'optionSelected' : ''}`}/>
 
                     <FormControlLabel key={MODE_SWAPPING} value={MODE_SWAPPING} control=
                         {<Radio color="primary"/>} label={`Swapping`} style={imageSwapping}
-                                      className={`imageRadio ${this.props.replaceEquipment.replacementMode === MODE_SWAPPING ? 'optionSelected' : ''}`}/>
+                                      className={`imageRadio ${replaceEquipment.replacementMode === MODE_SWAPPING ? 'optionSelected' : ''}`}/>
 
                 </RadioGroup>
             </div>
         );
     };
 
+    return (
+        <EISPanel heading="REPLACE EQUIPMENT" alwaysExpanded={true}>
+            <div style={{width: "100%", marginTop: 0}}>
 
-    render() {
-        return (
-            <EISPanel heading="REPLACE EQUIPMENT" alwaysExpanded={true}>
-                <div style={{width: "100%", marginTop: 0}}>
+                <EAMAutocomplete elementInfo={{
+                    ...equipmentLayout.fields['equipmentno'],
+                    attribute: "R",
+                    text: "Old Equipment", xpath: "OldEquipment"
+                }}
+                    value={replaceEquipment.oldEquipment}
+                    updateProperty={updateProperty}
+                    valueKey="oldEquipment"
+                    autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
+                    onChangeValue={onChangeOldEquipment}
+                    children={children}
+                    desc={replaceEquipment.oldEquipmentDesc}
+                    descKey="oldEquipmentDesc"
+                    barcodeScanner/>
 
-                    <EAMAutocomplete elementInfo={{
-                        ...this.props.equipmentLayout.fields['equipmentno'],
+                <EAMSelect
+                    elementInfo={{
+                        ...equipmentLayout.fields['assetstatus'],
                         attribute: "R",
-                        text: "Old Equipment", xpath: "OldEquipment"
+                        text: "Old Equipment Status after replacement",
+                        readonly: statusList.length === 0
                     }}
-                        value={this.props.replaceEquipment.oldEquipment}
-                        updateProperty={this.props.updateProperty}
-                        valueKey="oldEquipment"
-                        autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
-                        onChangeValue={this.props.onChangeOldEquipment}
-                        children={this.children}
-                        desc={this.props.replaceEquipment.oldEquipmentDesc}
-                        descKey="oldEquipmentDesc"
-                        barcodeScanner/>
-
-                    <EAMSelect
-                        elementInfo={{
-                            ...this.props.equipmentLayout.fields['assetstatus'],
-                            attribute: "R",
-                            text: "Old Equipment Status after replacement",
-                            readonly: this.props.statusList.length === 0
-                        }}
-                        valueKey="oldEquipmentStatus"
-                        options={this.props.statusList}
-                        value={this.props.replaceEquipment.oldEquipmentStatus}
-                        updateProperty={this.props.updateProperty}
-                        children={this.children} />
-                    
-                    <EAMSelect
-                        elementInfo={{
-                            ...this.props.equipmentLayout.fields['assetstate'],
-                            attribute: "R",
-                            text: "Old Equipment State after replacement",
-                            readonly: !this.props.stateList || this.props.stateList.length === 0
-                        }}
-                        valueKey="oldEquipmentState"
-                        options={this.props.stateList}
-                        value={this.props.replaceEquipment.oldEquipmentState}
-                        updateProperty={this.props.updateProperty}
-                        children={this.children} />
-
-                    <EAMAutocomplete elementInfo={{
-                        ...this.props.equipmentLayout.fields['equipmentno'],
+                    valueKey="oldEquipmentStatus"
+                    options={statusList}
+                    value={replaceEquipment.oldEquipmentStatus}
+                    updateProperty={updateProperty}
+                    children={children} />
+                
+                <EAMSelect
+                    elementInfo={{
+                        ...equipmentLayout.fields['assetstate'],
                         attribute: "R",
-                        text: "New Equipment", xpath: "NewEquipment"
+                        text: "Old Equipment State after replacement",
+                        readonly: !stateList || stateList.length === 0
                     }}
-                        value={this.props.replaceEquipment.newEquipment}
-                        updateProperty={this.props.updateProperty}
-                        valueKey="newEquipment"
-                        autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
-                        onChangeValue={this.props.onChangeNewEquipment}
-                        children={this.children}
-                        desc={this.props.replaceEquipment.newEquipmentDesc}
-                        descKey="newEquipmentDesc"
-                        barcodeScanner/>
+                    valueKey="oldEquipmentState"
+                    options={stateList}
+                    value={replaceEquipment.oldEquipmentState}
+                    updateProperty={updateProperty}
+                    children={children} />
 
-                    {this.renderImageMode()}
+                <EAMAutocomplete elementInfo={{
+                    ...equipmentLayout.fields['equipmentno'],
+                    attribute: "R",
+                    text: "New Equipment", xpath: "NewEquipment"
+                }}
+                    value={replaceEquipment.newEquipment}
+                    updateProperty={updateProperty}
+                    valueKey="newEquipment"
+                    autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
+                    onChangeValue={onChangeNewEquipment}
+                    children={children}
+                    desc={replaceEquipment.newEquipmentDesc}
+                    descKey="newEquipmentDesc"
+                    barcodeScanner/>
 
-                    <Button onClick={this.openDialog} color="primary" style={buttonStyle}>
-                        <Refresh/>
-                        Replace Equipment
-                    </Button>
+                {renderImageMode()}
 
-                    <Dialog
-                        open={this.state.dialogOpen}
-                        onClose={this.closeDialog}>
-                        <DialogTitle id="alert-dialog-title">{`Replace Equipment`}</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                Are you sure you want to
-                                replace {this.props.replaceEquipment.oldEquipment} with {this.props.replaceEquipment.newEquipment}?
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={this.closeDialog} color="primary">
-                                Cancel
-                            </Button>
-                            <Button onClick={this.executeReplace} color="primary" autoFocus>
-                                Replace Equipment
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-                </div>
-            </EISPanel>
-        );
-    }
+                <Button onClick={openDialog} color="primary" style={buttonStyle}>
+                    <Refresh/>
+                    Replace Equipment
+                </Button>
+
+                <Dialog
+                    open={dialogOpen}
+                    onClose={closeDialog}>
+                    <DialogTitle id="alert-dialog-title">{`Replace Equipment`}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Are you sure you want to
+                            replace {replaceEquipment.oldEquipment} with {replaceEquipment.newEquipment}?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={closeDialog} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={executeReplace} color="primary" autoFocus>
+                            Replace Equipment
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+        </EISPanel>
+    );
 }
 
 export default ReplaceEqpGeneral;
