@@ -12,6 +12,7 @@ import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIf
 import NCRIframeContainer from "../../components/iframes/NCRIframeContainer";
 import Entity from '../Entity';
 import EamlightToolbarContainer from './../../components/EamlightToolbarContainer';
+import ConfirmationDialog from '../../components/ConfirmationDialog'
 import Activities from './activities/Activities';
 import AdditionalCostsContainer from "./additionalcosts/AdditionalCostsContainer";
 import WorkorderChildren from "./childrenwo/WorkorderChildren";
@@ -659,6 +660,37 @@ class Workorder extends Entity {
         this.checklists && this.checklists.readActivities(this.state.workorder.number);
     };
 
+    saveHandler() {
+        // Validate all children and continue when all have passed
+        if (!this.validateFields(this.children)) {
+            this.props.showError('Several errors have occurred')
+            return
+        }
+
+        const terminalStatuses = ['T', 'TF', 'TT', 'TP', 'TI', 'TX'];
+
+        // Check for open checklist items on a terminé status update
+        if (
+            this.checklists 
+            && this.checklists.hasIncompleteChecklists 
+            && this.checklists.hasIncompleteChecklists() 
+            && terminalStatuses.includes(this.state.workorder.statusCode)
+        ){
+            this.incompleteChecklistsConfirmation.show();
+        } else {
+            this.commitSave();
+        }
+    }
+
+    commitSave() {
+        // Create new or update existing entity
+        if (this.state.layout.newEntity) {
+            this.createEntity(this.state[this.settings.entity])
+        } else {
+            this.updateEntity({...this.state[this.settings.entity], confirmedIncompleteChecklist: true})
+        }
+    }
+
     renderWorkOrder() {
         const { layout, workorder } = this.state;
         const {
@@ -674,6 +706,13 @@ class Workorder extends Entity {
         const regions = this.getRegions();
         return (
             <div className="entityContainer">
+                <ConfirmationDialog
+                    ref={incompleteChecklistsConfirmation => this.incompleteChecklistsConfirmation = incompleteChecklistsConfirmation}
+                    onConfirm={this.commitSave.bind(this)}
+                    title=""
+                    content="Open checklist items still exist. Continue?"
+                    confirmButtonText="Yes"
+                />
                 <BlockUi tag="div" blocking={layout.blocking} style={{height: "100%", width: "100%"}}>
 
                     <EamlightToolbarContainer isModified={layout.isModified}
