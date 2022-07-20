@@ -23,7 +23,7 @@ import WorkorderDetails from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
 import WorkorderTools from "./WorkorderTools";
 import EntityRegions from '../../components/entityregions/EntityRegions';
-import IconButton from '@mui/material/IconButton';
+import { IconButton, Typography } from '@mui/material';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
 import {assignValues, assignUserDefinedFields, assignCustomFieldFromCustomField, AssignmentType} from '../EntityTools';
 import { isCernMode } from '../../components/CERNMode';
@@ -375,7 +375,8 @@ class Workorder extends Entity {
                                         onClick={() => window.open(applicationData.EL_PRTCL + workorder.number, '_blank', 'noopener noreferrer')}
                                         style={{ color: "#00aaff" }}
                                         size="large">
-                                        <OpenInNewIcon />
+                                        <OpenInNewIcon style={{ padding: "9px" }} />
+                                        <Typography>Results</Typography>
                                     </IconButton>
                                 </div>
                         }/>
