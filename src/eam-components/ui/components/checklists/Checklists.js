@@ -225,6 +225,7 @@ class Checklists extends Component {
     renderChecklistsForEquipment(key, checklists, activity, isDisabled = false) {
         const {
             updateChecklistItem,
+            userResponsibilityCodes,
             minFindingsDropdown,
             handleError,
             getWoLink,
@@ -264,7 +265,7 @@ class Checklists extends Component {
                         minFindingsDropdown={minFindingsDropdown}
                         getWoLink={getWoLink}
                         resetSignatures={this.resetSignatures}
-                        disabled={isDisabled}
+                        disabled={isDisabled || !userResponsibilityCodes.includes(checklist.responsibility)}
                     />)}
                 </div>
             </AccordionDetails>
@@ -311,7 +312,7 @@ class Checklists extends Component {
             const start = equipmentBoundaries[i-1];
             const end = equipmentBoundaries[i];
             const equipmentCode = checklists[start].equipmentCode;
-            
+
             result.push(this.renderChecklistsForEquipment(equipmentCode + start, checklists.slice(start, end), activity, isDisabled));
         }
         

@@ -361,6 +361,7 @@ class Workorder extends Entity {
                         showError={showError}
                         handleError={handleError}
                         userCode={userData.eamAccount.userCode}
+                        userResponsibilityCodes={Object.keys(userData.eamAccount.responsibilities)}
                         disabled={this.departmentalSecurity.readOnly}
                         hideFilledItems={panelQueryParams.hideFilledItems === 'true'}
                         activity={panelQueryParams.CHECKLISTSactivity}
