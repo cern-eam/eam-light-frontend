@@ -1,4 +1,4 @@
-import ajax from 'eam-components/tools/ajax';
+import ajax from 'eam-components/dist/tools/ajax';
 
 /**
  * Handles all calls to REST Api

@@ -7,10 +7,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import BlockUi from 'react-block-ui';
 import './AddActivityDialog.css';
 import WSWorkorders from '../../../../../tools/WSWorkorders';
-import KeyCode from 'eam-components/enums/KeyCode';
-import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
-import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
-import EAMDatePicker from 'eam-components/ui/components/inputs-ng/EAMDatePicker';
+import KeyCode from 'eam-components/dist/enums/KeyCode';
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
+import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
 
 /**
  * Display detail of an activity

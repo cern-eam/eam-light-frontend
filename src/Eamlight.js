@@ -26,7 +26,7 @@ import LoginContainer from "./ui/pages/login/LoginContainer";
 import Grid from "./ui/pages/grid/Grid";
 import EqpTree from "./ui/components/eqtree/EqpTree";
 import InstallEqpContainer from "./ui/pages/equipment/installeqp/InstallEqpContainer";
-import Themes from 'eam-components/ui/components/theme';
+import Themes from 'eam-components/dist/ui/components/theme';
 import config from './config';
 
 class Eamlight extends Component {

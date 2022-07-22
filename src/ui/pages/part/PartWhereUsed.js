@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import WSParts from "../../../tools/WSParts";
-import EISTable from 'eam-components/ui/components/table';
+import EISTable from 'eam-components/dist/ui/components/table';
 
 function PartWhereUsed(props) {
 

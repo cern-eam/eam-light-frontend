@@ -1,7 +1,7 @@
 import React from "react";
-import EAMTable from "eam-components/ui/components/eamtable/EAMTable";
+import EAMTable from "eam-components/dist/ui/components/eamtable/EAMTable";
 import { Link } from 'react-router-dom';
-import EAMTableGridRequestAdapter from "eam-components/ui/components/eamtable/EAMTableGridRequestAdapter";
+import EAMTableGridRequestAdapter from "eam-components/dist/ui/components/eamtable/EAMTableGridRequestAdapter";
 
 const customCellStyle = {
     whiteSpace: "nowrap",

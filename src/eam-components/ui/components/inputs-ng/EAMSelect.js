@@ -114,7 +114,7 @@ const EAMSelect = (props) => {
                                                 endAdornment={<KeyboardArrowDownIcon style={{marginRight: endTextAdornment? 76 : 6,
                                                                                              marginLeft: endTextAdornment ? -100 : -30, 
                                                                                              zIndex: 999,
-                                                                                             color: "#757575",
+                                                                                             color: "#acacac",
                                                                                              pointerEvents: "none"}}/>}/>}
           />
         </div>

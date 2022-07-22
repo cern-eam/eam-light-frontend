@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import WSEquipment from '../../../../tools/WSEquipment';
-import EISTable from 'eam-components/ui/components/table';
-import SimpleEmptyState from 'eam-components/ui/components/emptystates/SimpleEmptyState'
+import EISTable from 'eam-components/dist/ui/components/table';
+import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/SimpleEmptyState'
 import BlockUi from 'react-block-ui';
 export default class EquipmentPartsAssociated extends Component {
 

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
-import EAMUDF from 'eam-components/ui/components/inputs-ng/EAMUDF';
-import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
+import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import Dependency from '../components/Dependency';
 
 const fieldIsHidden = (info) =>

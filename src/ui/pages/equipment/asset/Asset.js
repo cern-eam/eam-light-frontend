@@ -1,5 +1,5 @@
-import Comments from 'eam-components/ui/components/comments/Comments';
-import { AssetIcon } from 'eam-components/ui/components/icons';
+import Comments from 'eam-components/dist/ui/components/comments/Comments';
+import { AssetIcon } from 'eam-components/dist/ui/components/icons';
 import React from 'react';
 import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';

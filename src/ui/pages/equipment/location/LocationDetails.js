@@ -1,7 +1,7 @@
 import React from "react";
-import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
-import EAMCheckbox from 'eam-components/ui/components/inputs-ng/EAMCheckbox'
-import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox'
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WS from "../../../../tools/WS";
 
 const LocationDetails = props => {

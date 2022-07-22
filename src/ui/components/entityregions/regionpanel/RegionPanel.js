@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import EISPanel from 'eam-components/ui/components/panel';
+import EISPanel from 'eam-components/dist/ui/components/panel';
 import IconButton from '@mui/material/IconButton';
 import Fullscreen from '@mui/icons-material/Fullscreen';
 import FullscreenExit from '@mui/icons-material/FullscreenExit';

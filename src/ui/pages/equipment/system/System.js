@@ -9,10 +9,10 @@ import 'react-block-ui/style.css'
 import SystemGeneral from './SystemGeneral'
 import SystemDetails from './SystemDetails'
 import SystemHierarchy from './SystemHierarchy'
-import Comments from 'eam-components/ui/components/comments/Comments';
+import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
-import {SystemIcon} from 'eam-components/ui/components/icons'
+import {SystemIcon} from 'eam-components/dist/ui/components/icons'
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import {ENTITY_TYPE} from "../../../components/Toolbar";

@@ -1,12 +1,12 @@
 import React, {useCallback} from 'react';
-import EAMCheckbox from 'eam-components/ui/components/inputs-ng/EAMCheckbox'
+import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox'
 import WS from '../../../tools/WS'
 import WSWorkorders from "../../../tools/WSWorkorders"
 import OpenInAppIcon from 'mdi-material-ui/OpenInApp'
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
-import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
-import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
-import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
+import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 
 function WorkorderDetails(props) {
 

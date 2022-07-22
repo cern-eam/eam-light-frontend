@@ -1,8 +1,8 @@
 import React from 'react';
 import WSUDF from "tools/WSUDF";
-import EAMAutocomplete from "eam-components/ui/components/inputs-ng/EAMAutocomplete";
-import EAMSelect from "eam-components/ui/components/inputs-ng/EAMSelect";
-import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
+import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import { areEqual } from './tools/input-tools';
 
 const NONE = 'NONE';

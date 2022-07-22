@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
-import EAMGrid from 'eam-components/ui/components/grids/eam/EAMGrid';
-import { EAMCellField } from 'eam-components/ui/components/grids/eam/utils';
+import EAMGrid from 'eam-components/dist/ui/components/grids/eam/EAMGrid';
+import { EAMCellField } from 'eam-components/dist/ui/components/grids/eam/utils';
 import SyncedQueryParamsEAMGridContext from "../../../../tools/SyncedQueryParamsEAMGridContext";
 
 const cellRenderer = ({ column, value }) => {

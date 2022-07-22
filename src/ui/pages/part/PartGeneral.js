@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
-import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
+import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WSParts from "../../../tools/WSParts";
-import EAMCheckbox from 'eam-components/ui/components/inputs-ng/EAMCheckbox'
+import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox'
 import WS from "../../../tools/WS";
 import StatusRow from "../../components/statusrow/StatusRow"
-import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 
 class PartGeneral extends Component {
     render() {

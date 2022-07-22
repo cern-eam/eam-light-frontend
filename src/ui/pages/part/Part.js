@@ -6,13 +6,13 @@ import WSParts from '../../../tools/WSParts';
 import PartGeneral from "./PartGeneral";
 import UserDefinedFields from "../../components/userdefinedfields/UserDefinedFields";
 import PartStock from "./PartStock";
-import Comments from 'eam-components/ui/components/comments/Comments';
+import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import CustomFields from '../../components/customfields/CustomFields';
 import PartWhereUsed from "./PartWhereUsed";
 import PartAssets from "./PartAssets";
 import Entity from '../Entity';
 import PartTools from "./PartTools";
-import {PartIcon} from 'eam-components/ui/components/icons'
+import {PartIcon} from 'eam-components/dist/ui/components/icons'
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import {ENTITY_TYPE} from '../../components/Toolbar';
 import EntityRegions from "../../components/entityregions/EntityRegions";

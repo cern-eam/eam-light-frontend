@@ -1,4 +1,4 @@
-import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import React from 'react';
 import WSCustomFields from "../../../../tools/WSCustomFields";
 

@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import EISPanel from 'eam-components/ui/components/panel';
+import EISPanel from 'eam-components/dist/ui/components/panel';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid'
 import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
-import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import BlockUi from 'react-block-ui';
 
 export default function NameForm(props) {

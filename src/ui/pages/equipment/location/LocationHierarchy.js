@@ -1,5 +1,5 @@
-import EAMAutocomplete from "eam-components/ui/components/inputs-ng/EAMAutocomplete";
-import EAMUDF from "eam-components/ui/components/inputs-ng/EAMUDF";
+import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
+import EAMUDF from "eam-components/dist/ui/components/inputs-ng/EAMUDF";
 import React from "react";
 import WS from '../../../../tools/WS';
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import WSWorkorders from "../../../../tools/WSWorkorders";
-import EISTable from 'eam-components/ui/components/table';
+import EISTable from 'eam-components/dist/ui/components/table';
 import Button from '@mui/material/Button';
 import AdditionalCostDialog from "./AdditionalCostDialog";
 import BlockUi from 'react-block-ui';

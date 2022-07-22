@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import EISPanel from 'eam-components/ui/components/panel';
-import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
-import EAMCheckbox from 'eam-components/ui/components/inputs-ng/EAMCheckbox'
+import EISPanel from 'eam-components/dist/ui/components/panel';
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox'
 import WSEquipment from "../../../../tools/WSEquipment";
-import EISTable from 'eam-components/ui/components/table';
+import EISTable from 'eam-components/dist/ui/components/table';
 
 const ReplaceEqpHierarchy = (props) => {
     const {equipment, equipmentLayout, title} = props;

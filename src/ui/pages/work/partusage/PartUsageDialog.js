@@ -6,12 +6,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import BlockUi from 'react-block-ui';
 import WSWorkorders from '../../../../tools/WSWorkorders';
-import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
-import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
-import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import WSParts from '../../../../tools/WSParts';
 import makeStyles from '@mui/styles/makeStyles';
-import EAMRadio from 'eam-components/ui/components/inputs-ng/EAMRadio';
+import EAMRadio from 'eam-components/dist/ui/components/inputs-ng/EAMRadio';
 
 const overflowStyle = {
     overflowY: 'visible'

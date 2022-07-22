@@ -1,5 +1,5 @@
 import React from 'react';
-import { EAMCellField } from 'eam-components/ui/components/grids/eam/utils';
+import { EAMCellField } from 'eam-components/dist/ui/components/grids/eam/utils';
 
 const colorMap = {
   amber: '#f2bc41',

@@ -3,8 +3,8 @@ import queryString from "query-string";
 import { Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import SyncedQueryParamsEAMGridContext from "../../../tools/SyncedQueryParamsEAMGridContext";
-import EAMGrid from 'eam-components/ui/components/grids/eam/EAMGrid';
-import { EAMCellField } from 'eam-components/ui/components/grids/eam/utils';
+import EAMGrid from 'eam-components/dist/ui/components/grids/eam/EAMGrid';
+import { EAMCellField } from 'eam-components/dist/ui/components/grids/eam/utils';
 
 
 const treatParamAsList = (param) => (param === undefined || param === null) ? []

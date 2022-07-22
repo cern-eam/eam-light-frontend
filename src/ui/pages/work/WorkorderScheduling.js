@@ -1,10 +1,10 @@
 import React from 'react';
-import EAMDateTimePicker from 'eam-components/ui/components/inputs-ng/EAMDateTimePicker';
-import EAMDatePicker from 'eam-components/ui/components/inputs-ng/EAMDatePicker';
-import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
+import EAMDateTimePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDateTimePicker';
+import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WS from '../../../tools/WS';
 import { Grid } from '@mui/material';
-import EAMUDF from 'eam-components/ui/components/inputs-ng/EAMUDF';
+import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
 
 const WorkorderScheduling = (props) => {
     const { children, workOrderLayout, workorder, updateWorkorderProperty } = props;

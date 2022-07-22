@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input } from '@mui/material';
 import { Alert } from '@mui/material';
-import KeyCode from 'eam-components/enums/KeyCode';
+import KeyCode from 'eam-components/dist/enums/KeyCode';
 import WS from '../../../tools/WS';
 import BlockUi from 'react-block-ui';
 import { withCernMode } from '../CERNMode';

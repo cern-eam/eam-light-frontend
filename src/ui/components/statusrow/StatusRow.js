@@ -6,7 +6,7 @@ import ErrorOutlinedIcon from '@mui/icons-material/ErrorOutlined';
 import LockIcon from '@mui/icons-material/Lock';
 import ReportIcon from '@mui/icons-material/Report';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
-import {EISIcon, RadioactiveWarningIcon} from 'eam-components/ui/components/icons/index'
+import {EISIcon, RadioactiveWarningIcon} from 'eam-components/dist/ui/components/icons/index'
 import {isCernMode} from '../CERNMode';
 
 const STATUS_KEYS = {

@@ -2,7 +2,7 @@ import React from 'react';
 import WSMeters from '../../../../tools/WSMeters';
 import MeterReadingContent from "../../meter/MeterReadingContent";
 import EAMConfirmDialog from "../../../components/EAMConfirmDialog";
-import SimpleEmptyState from 'eam-components/ui/components/emptystates/SimpleEmptyState';
+import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/SimpleEmptyState';
 import BlockUi from 'react-block-ui';
 
 /**

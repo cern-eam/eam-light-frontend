@@ -1,6 +1,6 @@
 import React from 'react'
-import EAMTable from "eam-components/ui/components/eamtable/EAMTable";
-import EAMTableDataAdapter from "eam-components/ui/components/eamtable/EAMTableDataAdapter";
+import EAMTable from "eam-components/dist/ui/components/eamtable/EAMTable";
+import EAMTableDataAdapter from "eam-components/dist/ui/components/eamtable/EAMTableDataAdapter";
 import { Link } from 'react-router-dom';
 import WSParts from "../../../tools/WSParts";
 

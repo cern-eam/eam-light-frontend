@@ -1,5 +1,5 @@
 import React from "react";
-import Comments from "eam-components/ui/components/comments/Comments";
+import Comments from "eam-components/dist/ui/components/comments/Comments";
 import LocationIcon from "@mui/icons-material/Room";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";

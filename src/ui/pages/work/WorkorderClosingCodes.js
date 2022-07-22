@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import WSWorkorders from "../../../tools/WSWorkorders";
-import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
-import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
+import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 
 class WorkorderClosingCodes extends Component {
 

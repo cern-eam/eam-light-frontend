@@ -1,6 +1,6 @@
 import React from 'react';
-import EISPanel from 'eam-components/ui/components/panel';
-import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
+import EISPanel from 'eam-components/dist/ui/components/panel';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WSMeters from "../../../tools/WSMeters";
 
 class MeterReadingSearch extends React.Component {

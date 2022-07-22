@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import WSEquipment from '../../../../tools/WSEquipment';
-import EISTable, {TRANSFORM_KEYS} from 'eam-components/ui/components/table';
-import SimpleEmptyState from 'eam-components/ui/components/emptystates/SimpleEmptyState'
+import EISTable, {TRANSFORM_KEYS} from 'eam-components/dist/ui/components/table';
+import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/SimpleEmptyState'
 import BlockUi from 'react-block-ui';
 import { withCernMode } from '../../../components/CERNMode';
-import Constants from 'eam-components/enums/Constants';
+import Constants from 'eam-components/dist/enums/Constants';
 
 function EquipmentHistory(props)  {
     const headers = ['Date', 'Type', 'Related Value', 'Done By'];

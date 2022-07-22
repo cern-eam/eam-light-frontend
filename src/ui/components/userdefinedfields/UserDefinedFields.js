@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import EAMUDF from 'eam-components/ui/components/inputs-ng/EAMUDF';
-import EAMCheckbox from 'eam-components/ui/components/inputs-ng/EAMCheckbox';
+import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
+import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox';
 
 
 /**

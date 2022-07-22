@@ -1,5 +1,5 @@
-import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
-import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import React, {Component} from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
 import Dependency from '../components/Dependency';

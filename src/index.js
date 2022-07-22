@@ -15,7 +15,7 @@ import { create } from 'jss';
 import StylesProvider from '@mui/styles/StylesProvider';
 import jssPreset from '@mui/styles/jssPreset';
 import SnackbarContainer from './ui/components/snackbar/SnackbarContainer';
-import Ajax from 'eam-components/tools/ajax';
+import Ajax from 'eam-components/dist/tools/ajax';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 // EAM-480, en-GB locale used in order to have monday as first day of the week

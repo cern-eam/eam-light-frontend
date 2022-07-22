@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
 import OpenInAppIcon from 'mdi-material-ui/OpenInApp'
-import EAMDatePicker from 'eam-components/ui/components/inputs-ng/EAMDatePicker';
-import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
-import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
-import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
+import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 
 class AssetDetails extends Component {
     render() {

@@ -1,4 +1,4 @@
-import ErrorTypes from "eam-components/enums/ErrorTypes";
+import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 
 export const SET_SNACKBAR_MESSAGE = 'SET_SNACKBAR_MESSAGE';
 export const SET_LAYOUT = 'SET_LAYOUT';

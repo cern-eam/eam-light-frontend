@@ -3,10 +3,10 @@ import MenuItem from "@mui/material/MenuItem";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import Divider from '@mui/material/Divider';
-import { WorkorderIcon } from "eam-components/ui/components/icons";
+import { WorkorderIcon } from "eam-components/dist/ui/components/icons";
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
 import {Barcode, ContentCopy, EmailOutline, Map, Printer, Domain, Camera, Eye} from 'mdi-material-ui';
-import { RadiationIcon } from "eam-components/ui/components/icons";
+import { RadiationIcon } from "eam-components/dist/ui/components/icons";
 import { Link } from "react-router-dom";
 import { isCernMode } from "./CERNMode";
 import EditWatchlistDialog from './watchlist/EditWatchlistDialog';

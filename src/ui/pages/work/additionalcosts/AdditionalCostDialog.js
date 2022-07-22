@@ -6,9 +6,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import BlockUi from 'react-block-ui';
 import WSWorkorders from "../../../../tools/WSWorkorders";
-import EAMSelect from "eam-components/ui/components/inputs-ng/EAMSelect";
-import EAMDatePicker from 'eam-components/ui/components/inputs-ng/EAMDatePicker';
-import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
+import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
+import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 
 const AdditionalCostDialog = (props) => {
     const [additionalCost, setAdditionalCost] = useState({ costType: "MISC" });

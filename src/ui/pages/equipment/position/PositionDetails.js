@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import EAMSelect from 'eam-components/ui/components/inputs-ng/EAMSelect';
-import EAMTextField from 'eam-components/ui/components/inputs-ng/EAMTextField';
-import EAMDatePicker from 'eam-components/ui/components/inputs-ng/EAMDatePicker'
-import EAMAutocomplete from 'eam-components/ui/components/inputs-ng/EAMAutocomplete';
+import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker'
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WS from "../../../../tools/WS";
 import WSEquipment from "../../../../tools/WSEquipment";
 
