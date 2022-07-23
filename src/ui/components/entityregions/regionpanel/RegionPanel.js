@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import EISPanel from 'eam-components/dist/ui/components/panel';
 import IconButton from '@mui/material/IconButton';
 import Fullscreen from '@mui/icons-material/Fullscreen';
 import FullscreenExit from '@mui/icons-material/FullscreenExit';
+import Panel from 'ui/components/panel/Panel';
 
 const RegionPanel = (props) => {
     const { children, isMaximized, unMaximize, maximize, showMaximizeControls, style, initiallyExpanded } = props;
@@ -10,7 +10,7 @@ const RegionPanel = (props) => {
     const [panelExpanded, setPanelExpanded] = useState(initiallyExpanded);
 
     return (
-        <EISPanel
+        <Panel
             AccordionProps={{ style }}
             headingBar={
                 !showMaximizeControls
@@ -23,7 +23,7 @@ const RegionPanel = (props) => {
             onPanelChange={expanded => setPanelExpanded(expanded)}
             {...props}>
             {children}
-        </EISPanel>
+        </Panel>
     );
 }
 
