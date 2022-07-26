@@ -60,13 +60,24 @@ export default class SearchHeader extends React.Component {
                 value={searchOn.includes(searchType.value).toString()}
                 updateProperty={() => {
                     this.setState(
-                        {
-                            searchOn: searchOn.includes(searchType.value) ?
-                            searchOn.filter(val => val !== searchType.value)
-                            : [...searchOn, searchType.value]
-                        }
-                        , () => this.handleSearchInput({target: {value: this.props.keyword}})
-                    )
+                        (prevState) => {
+                            const prevSearchOn = prevState.searchOn;
+
+                            return {
+                                searchOn: prevSearchOn.includes(
+                                    searchType.value
+                                )
+                                    ? prevSearchOn.filter(
+                                          (val) => val !== searchType.value
+                                      )
+                                    : [...prevSearchOn, searchType.value],
+                            };
+                        },
+                        () =>
+                            this.handleSearchInput({
+                                target: { value: this.props.keyword },
+                            })
+                    );
                 }}
             />
     }
