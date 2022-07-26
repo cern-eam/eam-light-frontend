@@ -4,8 +4,8 @@ import EquipmentTree from './components/tree/EquipmentTree'
 import PositionContainer from "./position/PositionContainer";
 import AssetContainer from "./asset/AssetContainer";
 import SystemContainer from "./system/SystemContainer";
-import LocationContainer from "./location/LocationContainer";
 import Split from 'react-split'
+import Location from './location/Location';
 
 class Equipment extends Component {
 
@@ -44,7 +44,7 @@ class Equipment extends Component {
                             <Route path={"/system/:code(.+)?"}
                                    component={SystemContainer}/>
                             <Route path={"/location/:code(.+)?"}
-                                   component={LocationContainer}/>
+                                   component={Location}/>
                         </Switch>
                     </div>
 

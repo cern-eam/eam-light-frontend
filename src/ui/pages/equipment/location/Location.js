@@ -8,7 +8,6 @@ import {ENTITY_TYPE} from "../../../components/Toolbar";
 import CustomFields from "../../../components/customfields/CustomFields";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
-import Entity from "../../Entity";
 import EquipmentHistory from "../components/EquipmentHistory.js";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EamlightToolbarContainer from "./../../../components/EamlightToolbarContainer";
@@ -16,71 +15,79 @@ import LocationDetails from "./LocationDetails";
 import LocationGeneral from "./LocationGeneral";
 import LocationHierarchy from "./LocationHierarchy";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
-import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
+import { useSelector } from "react-redux";
+import useEntity from "./useEntity";
 
-export default class Location extends Entity {
-    settings = {
+export default Location = (props) => {
+    
+    
+    const {screenLayout: locationLayout, layout, entity: location, 
+        entityScreen, userData, applicationData, updateEquipmentProperty, 
+        isHiddenRegion2: isHiddenRegion, getHiddenRegionState2: getHiddenRegionState, getUniqueRegionID2: getUniqueRegionID, showEqpTree, departmentalSecurity, toggleHiddenRegion, setRegionVisibility} = useEntity();
+
+        // return {screenLayout, layout, entity, entityScreen, 
+        //     userData, applicationData, updateProperty, 
+        //     isHiddenRegion2, getHiddenRegionState2, getUniqueRegionID2, showEqpTree, departmentalSecurity, toggleHiddenRegion, setRegionVisibility};
+
+    const settings = {
         entity: "location",
         entityDesc: "Location",
         entityURL: "/location/",
         entityCodeProperty: "code",
-        entityScreen: this.props.userData.screens[this.props.userData.locationScreen],
-        renderEntity: this.renderLocation.bind(this),
+       // entityScreen: this.props.userData.screens[this.props.userData.locationScreen],
+       // renderEntity: this.renderLocation.bind(this),
         readEntity: WSLocation.get,
         updateEntity: WSLocation.update,
         createEntity: WSLocation.create,
         deleteEntity: WSLocation.remove,
-        initNewEntity: () => WSLocation.init(),
-        handlerFunctions: {
-            classCode: this.onChangeClass,
-        }
+        initNewEntity: () => WSLocation.init()
+        //handlerFunctions: {
+        //    classCode: this.onChangeClass,
+        //}
     }
 
-    postInit() {
-        this.props.setLayoutProperty('showEqpTreeButton', false)
-        this.enableChildren();
-    }
+    // postInit() {
+    //     this.props.setLayoutProperty('showEqpTreeButton', false)
+    //     this.enableChildren();
+    // }
 
-    postCreate(equipment) {
-        this.comments.createCommentForNewEntity();
-        this.props.setLayoutProperty("showEqpTreeButton", true)
-    }
+    // postCreate(equipment) {
+    //     this.comments.createCommentForNewEntity();
+    //     this.props.setLayoutProperty("showEqpTreeButton", true)
+    // }
 
-    postUpdate(equipment) {
-        this.comments.createCommentForNewEntity();
+    // postUpdate(equipment) {
+    //     this.comments.createCommentForNewEntity();
 
-        if (this.departmentalSecurity.readOnly) {
-            this.disableChildren();
-        } else {
-            this.enableChildren();
-        }
-    }
+    //     if (this.departmentalSecurity.readOnly) {
+    //         this.disableChildren();
+    //     } else {
+    //         this.enableChildren();
+    //     }
+    // }
 
-    postRead() {
-        this.props.setLayoutProperty("showEqpTreeButton", true)
-        this.props.setLayoutProperty("location", this.state.location)
+    // postRead() {
+    //     this.props.setLayoutProperty("showEqpTreeButton", true)
+    //     this.props.setLayoutProperty("location", this.state.location)
 
-        if (this.departmentalSecurity.readOnly) {
-            this.disableChildren();
-        } else {
-            this.enableChildren();
-        }
-    }
+    //     if (this.departmentalSecurity.readOnly) {
+    //         this.disableChildren();
+    //     } else {
+    //         this.enableChildren();
+    //     }
+    // }
 
-    getRegions = () => {
-        const { locationLayout, userData, applicationData } = this.props;
-        const { location, layout } = this.state;
+    const getRegions = () => {
         const tabs = locationLayout.tabs; 
 
         const commonProps = {
             location,
             layout,
             locationLayout,
-            updateEquipmentProperty: this.updateEntityProperty.bind(this),
-            children: this.children
+            updateEquipmentProperty
         }
 
         return [
@@ -191,27 +198,27 @@ export default class Location extends Entity {
             //     column: 2,
             //     order: 7
             // },
-            {
-                id: 'COMMENTS',
-                label: 'Comments',
-                isVisibleWhenNewEntity: true,
-                maximizable: false,
-                render: () => 
-                    <Comments ref={comments => this.comments = comments}
-                        entityCode="LOC"
-                        entityKeyCode={!layout.newEntity ? location.code : undefined}
-                        userCode={userData.eamAccount.userCode}
-                        allowHtml={true}
-                        disabled={this.departmentalSecurity.readOnly}/>
-                ,
-                RegionPanelProps: {
-                    detailsStyle: { padding: 0 }
-                },
-                column: 2,
-                order: 8,
-                ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
-                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
-            },
+            // {
+            //     id: 'COMMENTS',
+            //     label: 'Comments',
+            //     isVisibleWhenNewEntity: true,
+            //     maximizable: false,
+            //     render: () => 
+            //         <Comments ref={comments => this.comments = comments}
+            //             entityCode="LOC"
+            //             entityKeyCode={!layout.newEntity ? location.code : undefined}
+            //             userCode={userData.eamAccount.userCode}
+            //             allowHtml={true}
+            //             disabled={departmentalSecurity.readOnly}/>
+            //     ,
+            //     RegionPanelProps: {
+            //         detailsStyle: { padding: 0 }
+            //     },
+            //     column: 2,
+            //     order: 8,
+            //     ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
+            //     initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
+            // },
             {
                 id: 'USERDEFINEDFIELDS',
                 label: 'User Defined Fields',
@@ -221,8 +228,7 @@ export default class Location extends Entity {
                     <UserDefinedFields
                         fields={location.userDefinedFields}
                         entityLayout={locationLayout.fields}
-                        updateUDFProperty={this.updateEntityProperty}
-                        children={this.children} />
+                        updateUDFProperty={updateEquipmentProperty} />
                 ,
                 column: 2,
                 order: 9,
@@ -236,12 +242,11 @@ export default class Location extends Entity {
                 maximizable: false,
                 render: () => 
                     <CustomFields
-                        children={this.children}
                         entityCode='LOC'
                         entityKeyCode={location.code}
                         classCode={location.classCode}
                         customFields={location.customField}
-                        updateEntityProperty={this.updateEntityProperty.bind(this)} />
+                        updateEntityProperty={updateEquipmentProperty} />
                 ,
                 column: 2,
                 order: 10,
@@ -271,21 +276,6 @@ export default class Location extends Entity {
 
     }
 
-    renderLocation() {
-        const {
-            applicationData,
-            history,
-            showEqpTree,
-            toggleHiddenRegion,
-            setRegionVisibility,
-            userData,
-            isHiddenRegion,
-            getHiddenRegionState,
-            getUniqueRegionID
-        } = this.props;
-        const { location, layout } = this.state
-        const regions = this.getRegions();        
-
 
         return (
             <BlockUi tag="div" blocking={layout.blocking} style={{height: "100%", width: "100%"}}>
@@ -294,21 +284,21 @@ export default class Location extends Entity {
                                  entityScreen={userData.screens[userData.locationScreen]}
                                  entityName="Location"
                                  entityKeyCode={location.code}
-                                 saveHandler={this.saveHandler.bind(this)}
-                                 newHandler={() => history.push("/location")}
-                                 deleteHandler={this.deleteEntity.bind(this, location.code)}
+                                 //saveHandler={this.saveHandler.bind(this)}
+                                 //newHandler={() => history.push("/location")}
+                                 //deleteHandler={this.deleteEntity.bind(this, location.code)}
                                  toolbarProps={{
-                                    entityDesc: this.settings.entityDesc,
+                                    entityDesc: "Location",
                                     entity: location,
-                                    postInit: this.postInit.bind(this),
-                                    setLayout: this.setLayout.bind(this),
+                                    //postInit: this.postInit.bind(this),
+                                    //setLayout: this.setLayout.bind(this),
                                     newEntity: layout.newEntity,
                                     applicationData: applicationData,
                                     extendedLink: applicationData.EL_LOCLI,
                                     screencode: userData.screens[userData.locationScreen].screenCode,
-                                    copyHandler: this.copyEntity.bind(this),
+                                    //copyHandler: this.copyEntity.bind(this),
                                     entityType: ENTITY_TYPE.LOCATION,
-                                    departmentalSecurity: this.departmentalSecurity,
+                                    //departmentalSecurity: this.departmentalSecurity,
                                     screens: userData.screens,
                                     workorderScreencode: userData.workorderScreen
                                  }}
@@ -316,13 +306,14 @@ export default class Location extends Entity {
                                  entityIcon={<LocationIcon style={{height: 18}}/>}
                                  toggleHiddenRegion={toggleHiddenRegion}
                                  getUniqueRegionID={getUniqueRegionID}
-                                 regions={regions}
+                                 regions={getRegions()}
                                  isHiddenRegion={isHiddenRegion}
                                  getHiddenRegionState={getHiddenRegionState}
-                                 departmentalSecurity={this.departmentalSecurity} />
+                                 //departmentalSecurity={this.departmentalSecurity} 
+                                 />
                 <EntityRegions
                     showEqpTree={showEqpTree}
-                    regions={regions}
+                    regions={getRegions()}
                     isNewEntity={layout.newEntity} 
                     isHiddenRegion={isHiddenRegion}
                     setRegionVisibility={setRegionVisibility}
@@ -330,7 +321,7 @@ export default class Location extends Entity {
                     getHiddenRegionState={getHiddenRegionState}/>
             </BlockUi>
         )
-    }
+    
 }
 
 

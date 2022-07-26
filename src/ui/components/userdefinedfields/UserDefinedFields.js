@@ -87,7 +87,7 @@ class UserDefinedFields extends Component {
 
         return this.sortProperties()
             .filter(prop => prop.startsWith('udfchk') && !exclusions.includes(prop))
-            .map(prop => <EAMCheckbox
+            .map(prop => <EAMUDF
                 key={prop}
                 elementInfo={entityLayout[prop]}
                 value={fields[prop]}
