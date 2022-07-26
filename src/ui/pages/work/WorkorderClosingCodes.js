@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import WSWorkorders from "../../../tools/WSWorkorders";
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 class WorkorderClosingCodes extends Component {
 
@@ -19,46 +20,46 @@ class WorkorderClosingCodes extends Component {
 
         return (
             <React.Fragment>
-                <EAMSelect children={children}
-                            elementInfo={workOrderLayout.fields['problemcode']}
-                            valueKey="problemCode"
-                            value={workorder.problemCode || ''}
-                            updateProperty={updateWorkorderProperty}
-                            autocompleteHandler={WSWorkorders.getWorkOrderProblemCodeValues}
-                            autocompleteHandlerParams={[workorder.classCode, null, workorder.equipmentCode]}/>
+                <EAMSelect 
+                    {...processElementInfo(workOrderLayout.fields['problemcode'])}
+                    valueKey="problemCode"
+                    value={workorder.problemCode || ''}
+                    updateProperty={updateWorkorderProperty}
+                    autocompleteHandler={WSWorkorders.getWorkOrderProblemCodeValues}
+                    autocompleteHandlerParams={[workorder.classCode, null, workorder.equipmentCode]}/>
 
-                <EAMSelect children={children}
-                            elementInfo={workOrderLayout.fields['failurecode']}
-                            valueKey="failureCode"
-                            value={workorder.failureCode || ''}
-                            updateProperty={updateWorkorderProperty}
-                            autocompleteHandler={WSWorkorders.getWorkOrderFailureCodeValues}
-                            autocompleteHandlerParams={[null, workorder.problemCode, workorder.equipmentCode]}/>
+                <EAMSelect 
+                    {...processElementInfo(workOrderLayout.fields['failurecode'])}
+                    valueKey="failureCode"
+                    value={workorder.failureCode || ''}
+                    updateProperty={updateWorkorderProperty}
+                    autocompleteHandler={WSWorkorders.getWorkOrderFailureCodeValues}
+                    autocompleteHandlerParams={[null, workorder.problemCode, workorder.equipmentCode]}/>
 
-                <EAMSelect children={children}
-                            elementInfo={workOrderLayout.fields['causecode']}
-                            valueKey="causeCode"
-                            value={workorder.causeCode || ''}
-                            updateProperty={updateWorkorderProperty}
-                            autocompleteHandler={WSWorkorders.getWorkOrderCauseCodeValues}
-                            autocompleteHandlerParams={[null, workorder.failureCode, workorder.problemCode, workorder.equipmentCode]}/>
+                <EAMSelect 
+                    {...processElementInfo(workOrderLayout.fields['causecode'])}
+                    valueKey="causeCode"
+                    value={workorder.causeCode || ''}
+                    updateProperty={updateWorkorderProperty}
+                    autocompleteHandler={WSWorkorders.getWorkOrderCauseCodeValues}
+                    autocompleteHandlerParams={[null, workorder.failureCode, workorder.problemCode, workorder.equipmentCode]}/>
 
-                <EAMSelect children={children}
-                            elementInfo={workOrderLayout.fields['actioncode']}
-                            valueKey="actionCode"
-                            value={workorder.actionCode || ''}
-                            updateProperty={updateWorkorderProperty}
-                            autocompleteHandler={WSWorkorders.getWorkOrderActionCodeValues}
-                            autocompleteHandlerParams={[null,  workorder.failureCode, workorder.problemCode, workorder.causeCode, workorder.equipmentCode]}/>
+                <EAMSelect 
+                    {...processElementInfo(workOrderLayout.fields['actioncode'])}
+                    valueKey="actionCode"
+                    value={workorder.actionCode || ''}
+                    updateProperty={updateWorkorderProperty}
+                    autocompleteHandler={WSWorkorders.getWorkOrderActionCodeValues}
+                    autocompleteHandlerParams={[null,  workorder.failureCode, workorder.problemCode, workorder.causeCode, workorder.equipmentCode]}/>
 
-                <EAMAutocomplete children={children}
-                                    elementInfo={workOrderLayout.fields['costcode']}
-                                    value={workorder.costCode}
-                                    updateProperty={updateWorkorderProperty}
-                                    valueKey="costCode"
-                                    desc={workorder.costCodeDesc}
-                                    descKey="costCodeDesc"
-                                    autocompleteHandler={WSWorkorders.autocompleteCostCode}/>
+                <EAMAutocomplete 
+                    {...processElementInfo(workOrderLayout.fields['costcode'])}
+                    value={workorder.costCode}
+                    updateProperty={updateWorkorderProperty}
+                    valueKey="costCode"
+                    desc={workorder.costCodeDesc}
+                    descKey="costCodeDesc"
+                    autocompleteHandler={WSWorkorders.autocompleteCostCode}/>
 
             </React.Fragment>
         )

@@ -8,10 +8,11 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAuto
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
 
 function WorkorderDetails(props) {
 
-    const { children, workOrderLayout, workorder, updateWorkorderProperty, layout, applicationData, userData } = props;
+    const { workOrderLayout, workorder, updateWorkorderProperty, layout, applicationData, userData } = props;
     const rpawClassesList = (applicationData && applicationData.EL_TRPAC && applicationData.EL_TRPAC.split(',')) || [];
     const rpawLink = applicationData && applicationData.EL_TRPAW;
 
@@ -163,27 +164,27 @@ function WorkorderDetails(props) {
                         link={() => workorder.userDefinedFields.udfchar24 ? "https://its.cern.ch/jira/browse/" + workorder.userDefinedFields.udfchar24 : null}
                         icon={<OpenInNewIcon/>}/>
 
-            <EAMCheckbox {...processElementInfo(workOrderLayout.fields['udfchkbox01'])}
-                        value={workorder.userDefinedFields.udfchkbox01}
-                        updateProperty={updateWorkorderProperty}
-                        valueKey={`userDefinedFields.udfchkbox01`}/>
+            <EAMUDF elementInfo={workOrderLayout.fields['udfchkbox01']}
+                    value={workorder.userDefinedFields.udfchkbox01}
+                    updateProperty={updateWorkorderProperty}
+                    valueKey={`userDefinedFields.udfchkbox01`}/>
 
-            <EAMCheckbox {...processElementInfo(workOrderLayout.fields['udfchkbox02'])}
+            <EAMUDF elementInfo={workOrderLayout.fields['udfchkbox02']}
                         value={workorder.userDefinedFields.udfchkbox02}
                         updateProperty={updateWorkorderProperty}
                         valueKey={`userDefinedFields.udfchkbox02`}/>
 
-            <EAMCheckbox {...processElementInfo(workOrderLayout.fields['udfchkbox03'])}
+            <EAMUDF  elementInfo={workOrderLayout.fields['udfchkbox03']}
                         value={workorder.userDefinedFields.udfchkbox03}
                         updateProperty={updateWorkorderProperty}
                         valueKey={`userDefinedFields.udfchkbox03`}/>
 
-            <EAMCheckbox {...processElementInfo(workOrderLayout.fields['udfchkbox04'])}
+            <EAMUDF  elementInfo={workOrderLayout.fields['udfchkbox04']}
                         value={workorder.userDefinedFields.udfchkbox04}
                         updateProperty={updateWorkorderProperty}
                         valueKey={`userDefinedFields.udfchkbox04`}/>
 
-            <EAMCheckbox {...processElementInfo(workOrderLayout.fields['udfchkbox05'])}
+            <EAMUDF  elementInfo={workOrderLayout.fields['udfchkbox05']}
                         value={workorder.userDefinedFields.udfchkbox05}
                         updateProperty={updateWorkorderProperty}
                         valueKey={`userDefinedFields.udfchkbox05`}/>

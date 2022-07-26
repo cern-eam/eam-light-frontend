@@ -2,6 +2,7 @@ import React from 'react';
 import tools from '../CustomFieldTools'
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 function CustomFieldCODE(props) {
 
@@ -10,8 +11,7 @@ function CustomFieldCODE(props) {
 
     if (tools.isLookupCustomField(customField)) {
         return <EAMSelect
-            children={children}
-            elementInfo={elementInfo}
+            {...processElementInfo(elementInfo)}
             value={customField.value}
             valueKey="value"
             desc={customField.valueDesc}
@@ -21,8 +21,7 @@ function CustomFieldCODE(props) {
     } else {
         return (
             <EAMTextField
-                children={children}
-                elementInfo={elementInfo}
+                {...processElementInfo(elementInfo)}
                 value={customField.value}
                 updateProperty={updateCustomFieldValue}
                 valueKey="value"/>

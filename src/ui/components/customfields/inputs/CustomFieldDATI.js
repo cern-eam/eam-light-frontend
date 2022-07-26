@@ -2,6 +2,7 @@ import React from 'react';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect'
 import EAMDateTimePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDateTimePicker'
 import tools from '../CustomFieldTools'
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 function CustomFieldDATI(props) {
 
@@ -10,8 +11,7 @@ function CustomFieldDATI(props) {
 
     if (tools.isLookupCustomField(customField)) {
         return <EAMSelect
-            children={children}
-            elementInfo={elementInfo}
+            {...processElementInfo(elementInfo)}
             valueKey="value"
             options={lookupValues && lookupValues[customField.code]}
             value={customField.value}
@@ -19,8 +19,7 @@ function CustomFieldDATI(props) {
     } else {
         return (
             <EAMDateTimePicker
-                children={children}
-                elementInfo={elementInfo}
+                {...processElementInfo(elementInfo)}
                 value={customField.value}
                 updateProperty={updateCustomFieldValue}
                 valueKey="value"

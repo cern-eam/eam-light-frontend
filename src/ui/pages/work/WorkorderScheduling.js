@@ -5,6 +5,7 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAuto
 import WS from '../../../tools/WS';
 import { Grid } from '@mui/material';
 import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const WorkorderScheduling = (props) => {
     const { children, workOrderLayout, workorder, updateWorkorderProperty } = props;
@@ -29,8 +30,7 @@ const WorkorderScheduling = (props) => {
                 <Grid item xs={6}>
                     <EAMAutocomplete
                         style = {{minWidth: 0}}
-                        children={children}
-                        elementInfo={workOrderLayout.fields['createdby']}
+                        {...processElementInfo(workOrderLayout.fields['createdby'])}
                         value={workorder.createdBy}
                         updateProperty={updateWorkorderProperty}
                         valueKey="createdBy"
@@ -43,8 +43,7 @@ const WorkorderScheduling = (props) => {
                 <Grid item xs={6}>
                     <EAMDatePicker
                         style = {{minWidth: 0}}
-                        children={children}
-                        elementInfo={workOrderLayout.fields['datecreated']}
+                        {...processElementInfo(workOrderLayout.fields['datecreated'])}
                         valueKey="createdDate"
                         value={workorder.createdDate || ''}
                         updateProperty={updateWorkorderProperty}
@@ -53,8 +52,7 @@ const WorkorderScheduling = (props) => {
             </Grid>
 
             <EAMAutocomplete
-                children={children}
-                elementInfo={workOrderLayout.fields['reportedby']}
+                {...processElementInfo(workOrderLayout.fields['reportedby'])}
                 value={workorder.reportedBy}
                 updateProperty={updateWorkorderProperty}
                 valueKey="reportedBy"
@@ -64,8 +62,7 @@ const WorkorderScheduling = (props) => {
             />
 
             <EAMAutocomplete
-                children={children}
-                elementInfo={workOrderLayout.fields['assignedto']}
+                {...processElementInfo(workOrderLayout.fields['assignedto'])}
                 value={workorder.assignedTo}
                 updateProperty={updateWorkorderProperty}
                 valueKey="assignedTo"
@@ -76,56 +73,49 @@ const WorkorderScheduling = (props) => {
             />
 
             <EAMDatePicker
-                children={children}
-                elementInfo={workOrderLayout.fields['reqstartdate']}
+                {...processElementInfo(workOrderLayout.fields['reqstartdate'])}
                 valueKey="requestedStartDate"
                 value={workorder.requestedStartDate || ''}
                 updateProperty={updateWorkorderProperty}
             />
 
             <EAMDatePicker
-                children={children}
-                elementInfo={workOrderLayout.fields['reqenddate']}
+               {...processElementInfo(workOrderLayout.fields['reqenddate'])}
                 valueKey="requestedEndDate"
                 value={workorder.requestedEndDate || ''}
                 updateProperty={updateWorkorderProperty}
             />
 
             <EAMDatePicker
-                children={children}
-                elementInfo={workOrderLayout.fields['schedstartdate']}
+                {...processElementInfo(workOrderLayout.fields['schedstartdate'])}
                 valueKey="scheduledStartDate"
                 value={workorder.scheduledStartDate || ''}
                 updateProperty={updateWorkorderProperty}
             />
 
             <EAMDatePicker
-                children={children}
-                elementInfo={workOrderLayout.fields['schedenddate']}
+                {...processElementInfo(workOrderLayout.fields['schedenddate'])}
                 valueKey="scheduledEndDate"
                 value={workorder.scheduledEndDate || ''}
                 updateProperty={updateWorkorderProperty}
             />
 
             <EAMDateTimePicker
-                children={children}
-                elementInfo={workOrderLayout.fields['startdate']}
+                {...processElementInfo(workOrderLayout.fields['startdate'])}
                 valueKey="startDate"
                 value={workorder.startDate || ''}
                 updateProperty={updateWorkorderProperty}
             />
 
             <EAMDateTimePicker
-                children={children}
-                elementInfo={workOrderLayout.fields['datecompleted']}
+                {...processElementInfo(workOrderLayout.fields['datecompleted'])}
                 valueKey="completedDate"
                 value={workorder.completedDate || ''}
                 updateProperty={updateWorkorderProperty}
             />
 
             <EAMDateTimePicker
-                children={children}
-                elementInfo={workOrderLayout.fields['datereported']}
+                {...processElementInfo(workOrderLayout.fields['datereported'])}
                 valueKey="reportedDate"
                 value={workorder.reportedDate || ''}
                 updateProperty={updateWorkorderProperty}
