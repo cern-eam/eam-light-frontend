@@ -3,11 +3,11 @@ import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WS from "../../../../tools/WS";
 import StatusRow from "../../../components/statusrow/StatusRow";
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const AssetGeneral = props => {
     const {
         location,
-        children,
         locationLayout,
         updateEquipmentProperty,
         layout
@@ -17,8 +17,7 @@ const AssetGeneral = props => {
         <React.Fragment>
             {layout.newEntity && (
                 <EAMTextField
-                    children={children}
-                    elementInfo={locationLayout.fields["equipmentno"]}
+                    {...processElementInfo(locationLayout.fields["equipmentno"])}
                     value={location.code}
                     updateProperty={updateEquipmentProperty}
                     valueKey="code"
@@ -26,24 +25,21 @@ const AssetGeneral = props => {
             )}
 
             <EAMTextField
-                children={children}
-                elementInfo={locationLayout.fields["udfchar45"]}
+                {...processElementInfo(locationLayout.fields["udfchar45"])}
                 value={location.userDefinedFields.udfchar45}
                 updateProperty={updateEquipmentProperty}
                 valueKey="userDefinedFields.udfchar45"
             />
 
             <EAMTextField
-                children={children}
-                elementInfo={locationLayout.fields["equipmentdesc"]}
+                {...processElementInfo(locationLayout.fields["equipmentdesc"])}
                 value={location.description}
                 updateProperty={updateEquipmentProperty}
                 valueKey="description"
             />
 
             <EAMAutocomplete
-                children={children}
-                elementInfo={locationLayout.fields["department"]}
+                {...processElementInfo(locationLayout.fields["department"])}
                 value={location.departmentCode}
                 desc={location.departmentDesc}
                 updateProperty={updateEquipmentProperty}

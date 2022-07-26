@@ -48,19 +48,25 @@ export default function NameForm(props) {
                         <Grid item xs={12}>
                             <EISPanel heading="INSTALL EQUIPMENT">
                                 <div style={{width: "100%", marginTop: 0}}>
-                                        <EAMAutocomplete elementInfo={{attribute: "R", text: "Parent"}}
-                                                         value={parentEq}
-                                                         valueKey="parent"
-                                                         updateProperty={(key, value) => (key === 'parent') && setParentEq(value)}
-                                                         autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
-                                                         barcodeScanner/>
+                                        <EAMAutocomplete
+                                            required
+                                            label={"Parent"}
+                                            value={parentEq}
+                                            valueKey="parent"
+                                            updateProperty={(key, value) => (key === 'parent') && setParentEq(value)}
+                                            autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
+                                            barcodeScanner
+                                        />
 
-                                        <EAMAutocomplete elementInfo={{attribute: "R", text: "Child"}}
-                                                         value={childEq}
-                                                         valueKey="child"
-                                                         updateProperty={(key, value) => (key === 'child') && setChildEq(value)}
-                                                         autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
-                                                         barcodeScanner/>
+                                        <EAMAutocomplete 
+                                            required
+                                            label={"Child"}
+                                            value={childEq}
+                                            valueKey="child"
+                                            updateProperty={(key, value) => (key === 'child') && setChildEq(value)}
+                                            autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
+                                            barcodeScanner
+                                        />
 
                                     <Button
                                         style={{marginTop: 10}}

@@ -2,19 +2,18 @@ import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAuto
 import EAMUDF from "eam-components/dist/ui/components/inputs-ng/EAMUDF";
 import React from "react";
 import WS from '../../../../tools/WS';
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const LocationHierarchy = props => {
     const {
         location,
-        children,
         locationLayout,
         updateEquipmentProperty
     } = props;
     return (
         <React.Fragment>
             <EAMAutocomplete
-                children={children}
-                elementInfo={locationLayout.fields["parentlocation"]}
+                {...processElementInfo(locationLayout.fields["parentlocation"])}
                 value={location.hierarchyLocationCode}
                 updateProperty={updateEquipmentProperty}
                 valueKey="hierarchyLocationCode"
@@ -24,7 +23,6 @@ const LocationHierarchy = props => {
             />
 
             <EAMUDF
-                children={children}
                 elementInfo={{
                     ...locationLayout.fields["udfchar11"],
                     readonly: true

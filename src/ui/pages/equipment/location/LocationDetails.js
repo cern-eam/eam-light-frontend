@@ -3,11 +3,11 @@ import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox'
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WS from "../../../../tools/WS";
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const LocationDetails = props => {
     const {
         location,
-        children,
         locationLayout,
         updateEquipmentProperty
     } = props;
@@ -15,8 +15,7 @@ const LocationDetails = props => {
     return (
         <React.Fragment>
             <EAMAutocomplete
-                children={children}
-                elementInfo={locationLayout.fields["class"]}
+                {...processElementInfo(locationLayout.fields["class"])}
                 value={location.classCode}
                 desc={location.classDesc}
                 valueKey="classCode"
@@ -28,24 +27,21 @@ const LocationDetails = props => {
             />
 
             <EAMTextField
-                children={children}
-                elementInfo={locationLayout.fields["costcode"]}
+                {...processElementInfo(locationLayout.fields["costcode"])}
                 value={location.costCode}
                 valueKey="costCode"
                 updateProperty={updateEquipmentProperty}
             />
 
             <EAMCheckbox
-                children={children}
-                elementInfo={locationLayout.fields["safety"]}
+                {...processElementInfo(locationLayout.fields["safety"])}
                 value={`${location.safety}`}
                 updateProperty={updateEquipmentProperty}
                 valueKey="safety"
             />
 
             <EAMCheckbox
-                children={children}
-                elementInfo={locationLayout.fields["outofservice"]}
+                {...processElementInfo(locationLayout.fields["outofservice"])}
                 value={`${location.outOfService}`}
                 updateProperty={updateEquipmentProperty}
                 valueKey="outOfService"
