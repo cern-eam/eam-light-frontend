@@ -7,6 +7,7 @@ import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 function WorkorderDetails(props) {
 
@@ -18,26 +19,24 @@ function WorkorderDetails(props) {
         <React.Fragment>
 
             <EAMTextField
-                children={children}
-                elementInfo={workOrderLayout.fields['description']}
+                {...processElementInfo(workOrderLayout.fields['description'])}
                 value={workorder.description}
                 updateProperty={updateWorkorderProperty}
                 valueKey="description"/>
 
-            <EAMAutocomplete children={children}
-                    elementInfo={workOrderLayout.fields['equipment']}
-                    value={workorder.equipmentCode}
-                    valueKey="equipmentCode"
-                    desc={workorder.equipmentDesc}
-                    descKey="equipmentDesc"
-                    barcodeScanner
-                    updateProperty={updateWorkorderProperty}
-                    autocompleteHandler={WS.autocompleteEquipment}
-                    link={() => workorder.equipmentCode ? "/equipment/" + workorder.equipmentCode : null}/>
+            <EAMAutocomplete 
+                {...processElementInfo(workOrderLayout.fields['equipment'])}
+                value={workorder.equipmentCode}
+                valueKey="equipmentCode"
+                desc={workorder.equipmentDesc}
+                descKey="equipmentDesc"
+                barcodeScanner
+                updateProperty={updateWorkorderProperty}
+                autocompleteHandler={WS.autocompleteEquipment}
+                link={() => workorder.equipmentCode ? "/equipment/" + workorder.equipmentCode : null}/>
   
             <EAMAutocomplete
-                children={children}
-                elementInfo={workOrderLayout.fields['location']}
+                {...processElementInfo(workOrderLayout.fields['location'])}
                 value={workorder.locationCode}
                 valueKey="locationCode"
                 desc={workorder.locationDesc}
@@ -47,8 +46,7 @@ function WorkorderDetails(props) {
                 />
 
             <EAMAutocomplete
-                children={children}
-                elementInfo={workOrderLayout.fields['department']}
+                {...processElementInfo(workOrderLayout.fields['department'])}
                 value={workorder.departmentCode}
                 valueKey="departmentCode"
                 desc={workorder.departmentDesc}
@@ -57,8 +55,7 @@ function WorkorderDetails(props) {
                 autocompleteHandler={WS.autocompleteDepartment}/>
 
             <EAMSelect
-                children={children}
-                elementInfo={workOrderLayout.fields['workordertype']}
+                {...processElementInfo(workOrderLayout.fields['workordertype'])}
                 valueKey="typeCode"
                 value={workorder.typeCode}
                 descKey="typeDesc"
@@ -72,8 +69,7 @@ function WorkorderDetails(props) {
                 />
 
             <EAMSelect
-                children={children}
-                elementInfo={workOrderLayout.fields['workorderstatus']}
+                {...processElementInfo(workOrderLayout.fields['workorderstatus'])}
                 valueKey="statusCode"
                 value={workorder.statusCode}
                 descKey="statusDesc"
@@ -87,8 +83,7 @@ function WorkorderDetails(props) {
                 />
 
             <EAMSelect
-                children={children}
-                elementInfo={workOrderLayout.fields['priority']}
+                {...processElementInfo(workOrderLayout.fields['priority'])}
                 valueKey="priorityCode"
                 value={workorder.priorityCode}
                 descKey="priorityDesc"
@@ -96,9 +91,8 @@ function WorkorderDetails(props) {
                 updateProperty={updateWorkorderProperty}
                 autocompleteHandler={WSWorkorders.getWorkOrderPriorities}/>
 
-            <EAMAutocomplete
-                children={children}
-                elementInfo={workOrderLayout.fields['woclass']}
+            <EAMAutocomplete 
+                {...processElementInfo(workOrderLayout.fields['woclass'])}
                 value={workorder.classCode}
                 valueKey="classCode"
                 desc={workorder.classDesc}
@@ -106,8 +100,8 @@ function WorkorderDetails(props) {
                 updateProperty={updateWorkorderProperty}
                 autocompleteHandler={(filter, config) => WS.autocompleteClass('EVNT', filter, config)}/>
 
-            <EAMAutocomplete children={children}
-                    elementInfo={workOrderLayout.fields['standardwo']}
+            <EAMAutocomplete 
+                    {...processElementInfo(workOrderLayout.fields['standardwo'])}
                     value={workorder.standardWO}
                     valueKey="standardWO"
                     valueDesc={workorder.standardWODesc}
@@ -116,8 +110,7 @@ function WorkorderDetails(props) {
                     autocompleteHandler={WSWorkorders.autocompleteStandardWorkOrder.bind(null, userData.eamAccount.userGroup)}/>
 
             <EAMTextField
-                children={children}
-                elementInfo={workOrderLayout.fields['targetvalue']}
+                {...processElementInfo(workOrderLayout.fields['targetvalue'])}
                 value={
                     // Avoid displaying 'NaN'
                     workorder.targetValue &&
@@ -134,7 +127,7 @@ function WorkorderDetails(props) {
                 valueKey="targetValue"/>
 
             <EAMTextField
-                    elementInfo={{...workOrderLayout.fields['parentwo'], readonly: true}}
+                    {...processElementInfo({...workOrderLayout.fields['parentwo'], readonly: true})}
                     value={workorder.parentWO}
                     valueKey="parentWO"
                     updateProperty={updateWorkorderProperty}
@@ -142,75 +135,67 @@ function WorkorderDetails(props) {
                     icon={<OpenInAppIcon/>}/>
 
 
-            <EAMTextField elementInfo={workOrderLayout.fields['udfchar01']}
+            <EAMTextField 
+                        {...processElementInfo(workOrderLayout.fields['udfchar01'])}
                         value={workorder.userDefinedFields.udfchar01}
                         valueKey={`userDefinedFields.udfchar01`}
                         desc={workorder.userDefinedFields.udfchar01Desc}
                         descKey={`userDefinedFields.udfchar01Desc`}
                         updateProperty={updateWorkorderProperty}
-                        children={children}
                         link={() => workorder.userDefinedFields.udfchar01 ? "https://cern.service-now.com/task.do?sysparm_query=number=" + workorder.userDefinedFields.udfchar01 : null}
                         />
 
-            <EAMTextField elementInfo={workOrderLayout.fields['udfchar20']}
+            <EAMTextField 
+                        {...processElementInfo(workOrderLayout.fields['udfchar20'])}
                         value={workorder.userDefinedFields.udfchar20}
                         desc={workorder.userDefinedFields.udfchar20Desc}
                         valueKey={`userDefinedFields.udfchar20`}
                         descKey={`userDefinedFields.udfchar20Desc`}
-                        updateProperty={updateWorkorderProperty}
-                        children={children}/>
+                        updateProperty={updateWorkorderProperty}/>
 
-            <EAMTextField elementInfo={workOrderLayout.fields['udfchar24']}
+            <EAMTextField 
+                        {...processElementInfo(workOrderLayout.fields['udfchar24'])}
                         value={workorder.userDefinedFields.udfchar24}
                         desc={workorder.userDefinedFields.udfchar24Desc}
                         valueKey={`userDefinedFields.udfchar24`}
                         descKey={`userDefinedFields.udfchar01Desc`}
                         updateProperty={updateWorkorderProperty}
-                        children={children}
                         link={() => workorder.userDefinedFields.udfchar24 ? "https://its.cern.ch/jira/browse/" + workorder.userDefinedFields.udfchar24 : null}
                         icon={<OpenInNewIcon/>}/>
 
-            <EAMCheckbox elementInfo={workOrderLayout.fields['udfchkbox01']}
+            <EAMCheckbox {...processElementInfo(workOrderLayout.fields['udfchkbox01'])}
                         value={workorder.userDefinedFields.udfchkbox01}
                         updateProperty={updateWorkorderProperty}
-                        valueKey={`userDefinedFields.udfchkbox01`}
-                        children={children}/>
+                        valueKey={`userDefinedFields.udfchkbox01`}/>
 
-            <EAMCheckbox elementInfo={workOrderLayout.fields['udfchkbox02']}
+            <EAMCheckbox {...processElementInfo(workOrderLayout.fields['udfchkbox02'])}
                         value={workorder.userDefinedFields.udfchkbox02}
                         updateProperty={updateWorkorderProperty}
-                        valueKey={`userDefinedFields.udfchkbox02`}
-                        children={children}/>
+                        valueKey={`userDefinedFields.udfchkbox02`}/>
 
-            <EAMCheckbox elementInfo={workOrderLayout.fields['udfchkbox03']}
+            <EAMCheckbox {...processElementInfo(workOrderLayout.fields['udfchkbox03'])}
                         value={workorder.userDefinedFields.udfchkbox03}
                         updateProperty={updateWorkorderProperty}
-                        valueKey={`userDefinedFields.udfchkbox03`}
-                        children={children}/>
+                        valueKey={`userDefinedFields.udfchkbox03`}/>
 
-            <EAMCheckbox elementInfo={workOrderLayout.fields['udfchkbox04']}
+            <EAMCheckbox {...processElementInfo(workOrderLayout.fields['udfchkbox04'])}
                         value={workorder.userDefinedFields.udfchkbox04}
                         updateProperty={updateWorkorderProperty}
-                        valueKey={`userDefinedFields.udfchkbox04`}
-                        children={children}/>
+                        valueKey={`userDefinedFields.udfchkbox04`}/>
 
-            <EAMCheckbox elementInfo={workOrderLayout.fields['udfchkbox05']}
+            <EAMCheckbox {...processElementInfo(workOrderLayout.fields['udfchkbox05'])}
                         value={workorder.userDefinedFields.udfchkbox05}
                         updateProperty={updateWorkorderProperty}
-                        valueKey={`userDefinedFields.udfchkbox05`}
-                        children={children}/>
+                        valueKey={`userDefinedFields.udfchkbox05`}/>
 
-            <EAMCheckbox
-                elementInfo={workOrderLayout.fields['warranty']}
+            <EAMCheckbox {...processElementInfo(workOrderLayout.fields['warranty'])}
                 value={workorder.warranty}
                 updateProperty={updateWorkorderProperty}
                 valueKey={`warranty`}
-                children={children}
             />
 
             <EAMTextField
-                children={children}
-                elementInfo={workOrderLayout.fields['downtimehours']}
+                {...processElementInfo(workOrderLayout.fields['downtimehours'])}
                 value={workorder.downtimeHours}
                 updateProperty={updateWorkorderProperty}
                 valueKey="downtimeHours"/>
