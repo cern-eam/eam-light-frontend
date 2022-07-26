@@ -6,17 +6,17 @@ import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePi
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 class AssetDetails extends Component {
     render() {
-        let {equipment, children, assetLayout, updateEquipmentProperty, layout} = this.props;
+        let {equipment, assetLayout, updateEquipmentProperty, layout} = this.props;
 
         return (
             <React.Fragment>
 
                 <EAMAutocomplete
-                    children={children}
-                    elementInfo={assetLayout.fields['class']}
+                    {...processElementInfo(assetLayout.fields['class'])}
                     value={equipment.classCode}
                     desc={equipment.classDesc}
                     updateProperty={updateEquipmentProperty}
@@ -25,8 +25,7 @@ class AssetDetails extends Component {
                     autocompleteHandler={(filter) => WS.autocompleteClass('OBJ', filter)}/>
 
                 <EAMAutocomplete
-                    children={children}
-                    elementInfo={assetLayout.fields['category']}
+                    {...processElementInfo(assetLayout.fields['category'])}
                     value={equipment.categoryCode}
                     desc={equipment.categoryDesc}
                     updateProperty={updateEquipmentProperty}
@@ -36,8 +35,7 @@ class AssetDetails extends Component {
 
 
                 <EAMAutocomplete
-                    children={children}
-                    elementInfo={assetLayout.fields['costcode']}
+                    {...processElementInfo(assetLayout.fields['costcode'])}
                     value={equipment.costCode}
                     desc={equipment.costCodeDesc || ""}
                     updateProperty={updateEquipmentProperty}
@@ -46,14 +44,12 @@ class AssetDetails extends Component {
                     autocompleteHandler={WSEquipment.autocompleteCostCode}/>
 
                 <EAMDatePicker
-                    children={children}
-                    elementInfo={assetLayout.fields['commissiondate']}
+                    {...processElementInfo(assetLayout.fields['commissiondate'])}
                     value={equipment.comissionDate}
                     updateProperty={updateEquipmentProperty}
                     valueKey="comissionDate"/>
 
-                <EAMAutocomplete children={children}
-                                    elementInfo={assetLayout.fields['assignedto']}
+                <EAMAutocomplete {...processElementInfo(assetLayout.fields['assignedto'])}
                                     value={equipment.assignedTo}
                                     updateProperty={updateEquipmentProperty}
                                     valueKey="assignedTo"
@@ -62,15 +58,13 @@ class AssetDetails extends Component {
                                     autocompleteHandler={WS.autocompleteEmployee}/>
 
                 <EAMSelect
-                    children={children}
-                    elementInfo={assetLayout.fields['criticality']}
+                    {...processElementInfo(assetLayout.fields['criticality'])}
                     value={equipment.criticality}
                     options={layout.criticalityValues}
                     updateProperty={updateEquipmentProperty}
                     valueKey="criticality"/>
 
-                <EAMAutocomplete children={children}
-                                    elementInfo={assetLayout.fields['manufacturer']}
+                <EAMAutocomplete {...processElementInfo(assetLayout.fields['manufacturer'])}
                                     value={equipment.manufacturerCode}
                                     desc={equipment.manufacturerDesc}
                                     updateProperty={updateEquipmentProperty}
@@ -79,22 +73,19 @@ class AssetDetails extends Component {
                                     autocompleteHandler={WSEquipment.autocompleteManufacturer}/>
 
                 <EAMTextField
-                    children={children}
-                    elementInfo={assetLayout.fields['serialnumber']}
+                    {...processElementInfo(assetLayout.fields['serialnumber'])}
                     value={equipment.serialNumber}
                     updateProperty={updateEquipmentProperty}
                     valueKey="serialNumber"/>
 
                 <EAMTextField
-                    children={children}
-                    elementInfo={assetLayout.fields['model']}
+                    {...processElementInfo(assetLayout.fields['model'])}
                     value={equipment.model}
                     updateProperty={updateEquipmentProperty}
                     valueKey="model"
                     inputProps={{maxLength: 30}}/>
 
-                <EAMAutocomplete children={children}
-                                    elementInfo={assetLayout.fields['part']}
+                <EAMAutocomplete {...processElementInfo(assetLayout.fields['part'])}
                                     value={equipment.partCode}
                                     desc={equipment.partDesc}
                                     updateProperty={updateEquipmentProperty}
@@ -104,8 +95,7 @@ class AssetDetails extends Component {
                                     link={() => equipment.partCode ? "/part/" + equipment.partCode: null}
                                     />
 
-                <EAMAutocomplete children={children}
-                                    elementInfo={assetLayout.fields['store']}
+                <EAMAutocomplete {...processElementInfo(assetLayout.fields['store'])}
                                     value={equipment.storeCode}
                                     desc={equipment.storeDesc}
                                     updateProperty={updateEquipmentProperty}
@@ -113,8 +103,7 @@ class AssetDetails extends Component {
                                     descKey="storeDesc"
                                     autocompleteHandler={WSEquipment.autocompleteEquipmentStore}/>
 
-                <EAMAutocomplete children={children}
-                                    elementInfo={assetLayout.fields['bin']}
+                <EAMAutocomplete {...processElementInfo(assetLayout.fields['bin'])}
                                     value={equipment.bin}
                                     valueDesc={equipment.binDesc}
                                     updateProperty={updateEquipmentProperty}

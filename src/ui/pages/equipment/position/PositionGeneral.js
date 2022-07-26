@@ -5,50 +5,46 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAuto
 import WSEquipment from "../../../../tools/WSEquipment";
 import StatusRow from "../../../components/statusrow/StatusRow"
 import EquipmentTools from '../EquipmentTools';
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 class PositionGeneral extends Component {
 
     updateEquipmentStatus = EquipmentTools.getUpdateStatus(this.props.updateEquipmentProperty, this.props.showNotification);
 
     render() {
-        let {equipment, children, positionLayout, updateEquipmentProperty, layout} = this.props
+        let {equipment, positionLayout, updateEquipmentProperty, layout} = this.props
         
         return (
             <React.Fragment>
 
                 {layout.newEntity &&
                 <EAMTextField
-                    children = {children}
-                    elementInfo={positionLayout.fields['equipmentno']}
+                    {...processElementInfo(positionLayout.fields['equipmentno'])}
                     value={equipment.code}
                     updateProperty={updateEquipmentProperty}
                     valueKey="code"/>}
 
                 <EAMTextField
-                    children = {children}
-                    elementInfo={positionLayout.fields['alias']}
+                    {...processElementInfo(positionLayout.fields['alias'])}
                     value={equipment.alias}
                     updateProperty={updateEquipmentProperty}
                     valueKey="alias"/>
 
                 <EAMTextField
-                    children = {children}
-                    elementInfo={positionLayout.fields['udfchar45']}
+                    {...processElementInfo(positionLayout.fields['udfchar45'])}
                     value={equipment.userDefinedFields.udfchar45}
                     updateProperty={updateEquipmentProperty}
                     valueKey="userDefinedFields.udfchar45"
                 />
 
                 <EAMTextField
-                    children = {children}
-                    elementInfo={positionLayout.fields['equipmentdesc']}
+                    {...processElementInfo(positionLayout.fields['equipmentdesc'])}
                     value={equipment.description}
                     updateProperty={updateEquipmentProperty}
                     valueKey="description"/>
 
                 <EAMAutocomplete
-                    children = {children}
-                    elementInfo={positionLayout.fields['department']}
+                    {...processElementInfo(positionLayout.fields['department'])}
                     value={equipment.departmentCode}
                     desc={equipment.departmentDesc}
                     updateProperty={updateEquipmentProperty}
@@ -57,8 +53,7 @@ class PositionGeneral extends Component {
                     autocompleteHandler={WSEquipment.autocompleteEquipmentDepartment}/>
 
                 <EAMSelect
-                    children = {children}
-                    elementInfo={positionLayout.fields['assetstatus']}
+                    {...processElementInfo(positionLayout.fields['assetstatus'])}
                     value={equipment.statusCode}
                     options={layout.statusValues}
                     updateProperty={this.updateEquipmentStatus}

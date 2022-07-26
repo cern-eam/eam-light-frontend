@@ -3,6 +3,7 @@ import WSEquipment from "../../../../tools/WSEquipment";
 import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import Dependency from '../components/Dependency';
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const fieldIsHidden = (info) =>
     info && info.attribute === 'H'
@@ -71,28 +72,25 @@ class AssetHierarchy extends Component {
     }
 
     render() {
-        let { equipment, children, assetLayout, updateEquipmentProperty } = this.props
+        let { equipment, assetLayout, updateEquipmentProperty } = this.props
 
         return (
             <React.Fragment>
 
                 <EAMUDF
-                    children = {children}
                     elementInfo={{...assetLayout.fields['udfchar13'],readonly:true}}
                     value={equipment.userDefinedFields.udfchar13}
                     updateProperty={updateEquipmentProperty}
                     valueKey="userDefinedFields.udfchar13"/>
 
                 <EAMUDF
-                    children = {children}
                     elementInfo={{...assetLayout.fields['udfchar11'],readonly:true}}
                     value={equipment.userDefinedFields.udfchar11}
                     updateProperty={updateEquipmentProperty}
                     valueKey="userDefinedFields.udfchar11"/>
 
                 <EAMAutocomplete
-                    children = {children}
-                    elementInfo={assetLayout.fields['parentasset']}
+                    {...processElementInfo(assetLayout.fields['parentasset'])}
                     value={equipment.hierarchyAssetCode}
                     updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
                     valueKey="hierarchyAssetCode"
@@ -107,8 +105,7 @@ class AssetHierarchy extends Component {
                 />
                 
                 <EAMAutocomplete
-                    children = {children}
-                    elementInfo={assetLayout.fields['position']}
+                    {...processElementInfo(assetLayout.fields['position'])}
                     value={equipment.hierarchyPositionCode}
                     updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
                     valueKey="hierarchyPositionCode"
@@ -123,8 +120,7 @@ class AssetHierarchy extends Component {
                 />
                 
                 <EAMAutocomplete
-                    children = {children}
-                    elementInfo={assetLayout.fields['primarysystem']}
+                    {...processElementInfo(assetLayout.fields['primarysystem'])}
                     value={equipment.hierarchyPrimarySystemCode}
                     updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
                     valueKey="hierarchyPrimarySystemCode"
@@ -139,8 +135,7 @@ class AssetHierarchy extends Component {
                     />
                     
                 <EAMAutocomplete
-                    children = {children}
-                    elementInfo={assetLayout.fields['location']}
+                    {...processElementInfo(assetLayout.fields['location'])}
                     value={equipment.hierarchyLocationCode}
                     updateProperty={updateEquipmentProperty}
                     valueKey="hierarchyLocationCode"

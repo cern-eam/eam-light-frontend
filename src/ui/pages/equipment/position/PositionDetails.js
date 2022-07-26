@@ -5,17 +5,17 @@ import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePi
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WS from "../../../../tools/WS";
 import WSEquipment from "../../../../tools/WSEquipment";
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 class PositionDetails extends Component {
     render() {
-        let {equipment, children, positionLayout, updateEquipmentProperty, layout} = this.props;
+        let {equipment, positionLayout, updateEquipmentProperty, layout} = this.props;
 
         return (
             <React.Fragment>
 
                 <EAMAutocomplete
-                    children={children}
-                    elementInfo={positionLayout.fields['class']}
+                    {...processElementInfo(positionLayout.fields['class'])}
                     value={equipment.classCode}
                     desc={equipment.classDesc}
                     updateProperty={updateEquipmentProperty}
@@ -24,8 +24,7 @@ class PositionDetails extends Component {
                     autocompleteHandler={(filter, config) => WS.autocompleteClass('OBJ', filter, config)}/>
 
                 <EAMAutocomplete
-                    children={children}
-                    elementInfo={positionLayout.fields['category']}
+                    {...processElementInfo(positionLayout.fields['category'])}
                     value={equipment.categoryCode}
                     desc={equipment.categoryDesc}
                     updateProperty={updateEquipmentProperty}
@@ -34,15 +33,13 @@ class PositionDetails extends Component {
                     autocompleteHandler={filter => WSEquipment.autocompleteEquipmentCategory(filter, equipment.classCode)}/>
 
                 <EAMDatePicker
-                    children={children}
-                    elementInfo={positionLayout.fields['commissiondate']}
+                    {...processElementInfo(positionLayout.fields['commissiondate'])}
                     value={equipment.comissionDate}
                     updateProperty={updateEquipmentProperty}
                     valueKey="comissionDate"/>
 
                 <EAMAutocomplete
-                    children={children}
-                    elementInfo={positionLayout.fields['assignedto']}
+                    {...processElementInfo(positionLayout.fields['assignedto'])}
                     value={equipment.assignedTo}
                     updateProperty={updateEquipmentProperty}
                     valueKey="assignedTo"
@@ -51,16 +48,14 @@ class PositionDetails extends Component {
                     autocompleteHandler={WS.autocompleteEmployee}/>
 
                 <EAMSelect
-                    children={children}
-                    elementInfo={positionLayout.fields['criticality']}
+                    {...processElementInfo(positionLayout.fields['criticality'])}
                     value={equipment.criticality}
                     options={layout.criticalityValues}
                     updateProperty={updateEquipmentProperty}
                     valueKey="criticality"/>
 
                 <EAMAutocomplete
-                    children={children}
-                    elementInfo={positionLayout.fields['manufacturer']}
+                    {...processElementInfo(positionLayout.fields['manufacturer'])}
                     updateProperty={updateEquipmentProperty}
                     value={equipment.manufacturerCode}
                     valueKey="manufacturerCode"
@@ -69,15 +64,13 @@ class PositionDetails extends Component {
                     autocompleteHandler={WSEquipment.autocompleteManufacturer}/>
 
                 <EAMTextField
-                    children={children}
-                    elementInfo={positionLayout.fields['serialnumber']}
+                    {...processElementInfo(positionLayout.fields['serialnumber'])}
                     value={equipment.serialNumber}
                     updateProperty={updateEquipmentProperty}
                     valueKey="serialNumber"/>
 
                 <EAMTextField
-                    children={children}
-                    elementInfo={positionLayout.fields['model']}
+                    {...processElementInfo(positionLayout.fields['model'])}
                     value={equipment.model}
                     updateProperty={updateEquipmentProperty}
                     valueKey="model"/>

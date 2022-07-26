@@ -2,32 +2,32 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAuto
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import React, {Component} from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 class SystemHierarchy extends Component {
 
     render() {
-        let {equipment, children, systemLayout, updateEquipmentProperty} = this.props;
+        let {equipment, systemLayout, updateEquipmentProperty} = this.props;
 
         return (
             <React.Fragment>
 
                 <EAMTextField
-                    children={children}
-                    elementInfo={{...systemLayout.fields['udfchar13'], readonly: true}}
+                    {...processElementInfo(systemLayout.fields['udfchar13'])}
+                    readonly={true}
                     value={equipment.userDefinedFields.udfchar13}
                     updateProperty={updateEquipmentProperty}
                     valueKey="userDefinedFields.udfchar13"/>
 
                 <EAMTextField
-                    children={children}
-                    elementInfo={{...systemLayout.fields['udfchar11'], readonly: true}}
+                    {...processElementInfo(systemLayout.fields['udfchar11'])}
+                    readonly={true}
                     value={equipment.userDefinedFields.udfchar11}
                     updateProperty={updateEquipmentProperty}
                     valueKey="userDefinedFields.udfchar11"/>
 
                 <EAMAutocomplete
-                    children={children}
-                    elementInfo={systemLayout.fields['primarysystem']}
+                    {...processElementInfo(systemLayout.fields['primarysystem'])}
                     value={equipment.hierarchyPrimarySystemCode}
                     updateProperty={updateEquipmentProperty}
                     valueKey="hierarchyPrimarySystemCode"
@@ -36,8 +36,7 @@ class SystemHierarchy extends Component {
                     autocompleteHandler={WSEquipment.autocompletePrimarySystem}/>
 
                 <EAMAutocomplete
-                    children={children}
-                    elementInfo={systemLayout.fields['location']}
+                    {...processElementInfo(systemLayout.fields['location'])}
                     value={equipment.hierarchyLocationCode}
                     updateProperty={updateEquipmentProperty}
                     valueKey="hierarchyLocationCode"

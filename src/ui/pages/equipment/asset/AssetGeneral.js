@@ -8,35 +8,33 @@ import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import WSUDF from "tools/WSUDF";
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 class AssetGeneral extends Component {
 
     updateEquipmentStatus = EquipmentTools.getUpdateStatus(this.props.updateEquipmentProperty, this.props.showNotification);
 
     render() {
-        let { equipment, children, assetLayout, updateEquipmentProperty, layout } = this.props
+        let { equipment, assetLayout, updateEquipmentProperty, layout } = this.props
 
         return (
             <React.Fragment>
 
                 {layout.newEntity &&
                 <EAMTextField
-                    children = {children}
-                    elementInfo={assetLayout.fields['equipmentno']}
+                    {...processElementInfo(assetLayout.fields['equipmentno'])}
                     value={equipment.code}
                     updateProperty={updateEquipmentProperty}
                     valueKey="code"/>}
 
                 <EAMTextField
-                    children = {children}
-                    elementInfo={assetLayout.fields['alias']}
+                    {...processElementInfo(assetLayout.fields['alias'])}
                     value={equipment.alias}
                     updateProperty={updateEquipmentProperty}
                     valueKey="alias"
                 />
 
                 <EAMUDF
-                    children = {children}
                     elementInfo={assetLayout.fields['udfchar45']}
                     value={equipment.userDefinedFields.udfchar45}
                     updateProperty={updateEquipmentProperty}
@@ -44,15 +42,13 @@ class AssetGeneral extends Component {
                 />
 
                 <EAMTextField
-                    children = {children}
-                    elementInfo={assetLayout.fields['equipmentdesc']}
+                    {...processElementInfo(assetLayout.fields['equipmentdesc'])}
                     value={equipment.description}
                     updateProperty={updateEquipmentProperty}
                     valueKey="description"/>
 
                 <EAMAutocomplete
-                    children = {children}
-                    elementInfo={assetLayout.fields['department']}
+                    {...processElementInfo(assetLayout.fields['department'])}
                     value={equipment.departmentCode}
                     desc={equipment.departmentDesc}
                     updateProperty={updateEquipmentProperty}
@@ -61,16 +57,14 @@ class AssetGeneral extends Component {
                     autocompleteHandler={WSEquipment.autocompleteEquipmentDepartment}/>
 
                 <EAMSelect
-                    children = {children}
-                    elementInfo={assetLayout.fields['assetstatus']}
+                    {...processElementInfo(assetLayout.fields['assetstatus'])}
                     value={equipment.statusCode}
                     options={layout.statusValues}
                     updateProperty={this.updateEquipmentStatus}
                     valueKey="statusCode"/>
                 
                 <EAMSelect
-                    children={children}
-                    elementInfo={assetLayout.fields['state']}
+                    {...processElementInfo(assetLayout.fields['state'])}
                     value={equipment.stateCode}
                     options={layout.stateValues}
                     updateProperty={updateEquipmentProperty}
