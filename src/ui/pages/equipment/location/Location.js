@@ -18,20 +18,51 @@ import EntityRegions from "../../../components/entityregions/EntityRegions";
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
-import { useSelector } from "react-redux";
 import useEntity from "./useEntity";
 
 export default Location = (props) => {
     
-    
-    const {screenLayout: locationLayout, layout, entity: location, 
-        entityScreen, userData, applicationData, updateEquipmentProperty, 
-        isHiddenRegion2: isHiddenRegion, getHiddenRegionState2: getHiddenRegionState, getUniqueRegionID2: getUniqueRegionID, showEqpTree, departmentalSecurity, toggleHiddenRegion, setRegionVisibility} = useEntity();
+    const postRead = () => {
+        console.log('poast read');
+        setLayoutProperty("showEqpTreeButton", true);
+        setLayoutProperty("location", this.state.location);
 
-        // return {screenLayout, layout, entity, entityScreen, 
-        //     userData, applicationData, updateProperty, 
-        //     isHiddenRegion2, getHiddenRegionState2, getUniqueRegionID2, showEqpTree, departmentalSecurity, toggleHiddenRegion, setRegionVisibility};
+        // if (this.departmentalSecurity.readOnly) {
+        //     this.disableChildren();
+        // } else {
+        //     this.enableChildren();
+        // }
+    }
 
+    const postInit = () => {
+        // this.props.setLayoutProperty('showEqpTreeButton', false)
+        // this.enableChildren();
+    }
+
+
+    const {screenLayout: locationLayout, entity: location, loading,
+        entityScreen, userData, applicationData, newEntity,
+        isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree, 
+        departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
+        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty} = useEntity({
+            WS: {
+                create: WSLocation.create,
+                read: WSLocation.get,
+                update: WSLocation.update,
+                update: WSLocation.remove,
+                new:  WSLocation.init
+            },
+            postActions: {
+                read: postRead,
+                new: postInit
+            },
+            entityDesc: "Location",
+            entityURL: "/location/",
+            entityCodeProperty: "code"
+        
+        });
+
+        
     const settings = {
         entity: "location",
         entityDesc: "Location",
@@ -39,20 +70,13 @@ export default Location = (props) => {
         entityCodeProperty: "code",
        // entityScreen: this.props.userData.screens[this.props.userData.locationScreen],
        // renderEntity: this.renderLocation.bind(this),
-        readEntity: WSLocation.get,
-        updateEntity: WSLocation.update,
-        createEntity: WSLocation.create,
-        deleteEntity: WSLocation.remove,
-        initNewEntity: () => WSLocation.init()
+
         //handlerFunctions: {
         //    classCode: this.onChangeClass,
         //}
     }
 
-    // postInit() {
-    //     this.props.setLayoutProperty('showEqpTreeButton', false)
-    //     this.enableChildren();
-    // }
+
 
     // postCreate(equipment) {
     //     this.comments.createCommentForNewEntity();
@@ -69,23 +93,13 @@ export default Location = (props) => {
     //     }
     // }
 
-    // postRead() {
-    //     this.props.setLayoutProperty("showEqpTreeButton", true)
-    //     this.props.setLayoutProperty("location", this.state.location)
-
-    //     if (this.departmentalSecurity.readOnly) {
-    //         this.disableChildren();
-    //     } else {
-    //         this.enableChildren();
-    //     }
-    // }
 
     const getRegions = () => {
         const tabs = locationLayout.tabs; 
 
         const commonProps = {
             location,
-            layout,
+            newEntity,
             locationLayout,
             updateEquipmentProperty
         }
@@ -277,22 +291,27 @@ export default Location = (props) => {
     }
 
 
+
+    if (!location) {
+        return React.Fragment;
+    }
+
         return (
-            <BlockUi tag="div" blocking={layout.blocking} style={{height: "100%", width: "100%"}}>
-                <EamlightToolbarContainer isModified={layout.isModified}
-                                 newEntity={layout.newEntity}
+            <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}}>
+                <EamlightToolbarContainer isModified={true} // TODO
+                                 newEntity={newEntity}
                                  entityScreen={userData.screens[userData.locationScreen]}
                                  entityName="Location"
                                  entityKeyCode={location.code}
-                                 //saveHandler={this.saveHandler.bind(this)}
-                                 //newHandler={() => history.push("/location")}
-                                 //deleteHandler={this.deleteEntity.bind(this, location.code)}
+                                 saveHandler={saveHandler}
+                                 newHandler={newHandler}
+                                 deleteHandler={deleteHandler}
                                  toolbarProps={{
                                     entityDesc: "Location",
                                     entity: location,
                                     //postInit: this.postInit.bind(this),
                                     //setLayout: this.setLayout.bind(this),
-                                    newEntity: layout.newEntity,
+                                    newEntity: newEntity,
                                     applicationData: applicationData,
                                     extendedLink: applicationData.EL_LOCLI,
                                     screencode: userData.screens[userData.locationScreen].screenCode,
@@ -314,7 +333,7 @@ export default Location = (props) => {
                 <EntityRegions
                     showEqpTree={showEqpTree}
                     regions={getRegions()}
-                    isNewEntity={layout.newEntity} 
+                    isNewEntity={newEntity} 
                     isHiddenRegion={isHiddenRegion}
                     setRegionVisibility={setRegionVisibility}
                     getUniqueRegionID={getUniqueRegionID}

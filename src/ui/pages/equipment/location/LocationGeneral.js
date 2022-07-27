@@ -10,12 +10,12 @@ const AssetGeneral = props => {
         location,
         locationLayout,
         updateEquipmentProperty,
-        layout
+        newEntity,
     } = props;
 
     return (
         <React.Fragment>
-            {layout.newEntity && (
+            {newEntity && (
                 <EAMTextField
                     {...processElementInfo(locationLayout.fields["equipmentno"])}
                     value={location.code}
