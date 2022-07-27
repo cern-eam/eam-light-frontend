@@ -56,7 +56,7 @@ export default class SearchHeader extends React.Component {
         const { searchOn, setState } = this.state;
         return <EAMCheckbox
                 key={searchType.code}
-                elementInfo={{text: searchType.text}}
+                label={searchType.text}
                 value={searchOn.includes(searchType.value).toString()}
                 updateProperty={() => {
                     this.setState(
