@@ -11,6 +11,7 @@ import KeyCode from 'eam-components/dist/enums/KeyCode';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 /**
  * Display detail of an activity
@@ -104,14 +105,14 @@ function AddActivityDialog(props) {
                     <div>
                         <BlockUi tag="div" blocking={loading}>
                             <EAMTextField
-                                elementInfo={props.layout.activity}
+                                {...processElementInfo(props.layout.activity)}
                                 valueKey="activityCode"
                                 value={formValues['activityCode']}
                                 updateProperty={updateFormValues}
                             />
 
                             <EAMTextField
-                                elementInfo={props.layout.activitynote}
+                                {...processElementInfo(props.layout.activitynote)}
                                 valueKey="activityNote"
                                 value={formValues['activityNote']}
                                 updateProperty={updateFormValues}
@@ -119,7 +120,7 @@ function AddActivityDialog(props) {
 
                             <EAMAutocomplete
                                 autocompleteHandler={WSWorkorders.autocompleteACTTask}
-                                elementInfo={props.layout.task}
+                                {...processElementInfo(props.layout.task)}
                                 valueKey="taskCode"
                                 value={formValues['taskCode']}
                                 desc={formValues['taskDesc']}
@@ -129,7 +130,7 @@ function AddActivityDialog(props) {
 
                             <EAMAutocomplete
                                 autocompleteHandler={WSWorkorders.autocompleteACTMatList}
-                                elementInfo={props.layout.matlcode}
+                                {...processElementInfo(props.layout.matlcode)}
                                 valueKey="materialList"
                                 value={formValues['materialList']}
                                 desc={formValues['materialListDesc']}
@@ -140,7 +141,7 @@ function AddActivityDialog(props) {
 
                             <EAMAutocomplete
                                 autocompleteHandler={WSWorkorders.autocompleteACTTrade}
-                                elementInfo={props.layout.trade}
+                                {...processElementInfo(props.layout.trade)}
                                 valueKey="tradeCode"
                                 value={formValues['tradeCode']}
                                 desc={formValues['tradeDesc']}
@@ -150,7 +151,7 @@ function AddActivityDialog(props) {
 
                             <EAMTextField
                                 required={true}
-                                elementInfo={props.layout.personsreq}
+                                {...processElementInfo(props.layout.personsreq)}
                                 valueKey="peopleRequired"
                                 value={formValues['peopleRequired']}
                                 updateProperty={updateFormValues}
@@ -158,21 +159,21 @@ function AddActivityDialog(props) {
 
                             <EAMTextField
                                 required={true}
-                                elementInfo={props.layout.esthrs}
+                                {...processElementInfo(props.layout.esthrs)}
                                 valueKey="estimatedHours"
                                 value={formValues['estimatedHours']}
                                 updateProperty={updateFormValues}
                             />
 
                             <EAMDatePicker
-                                elementInfo={props.layout.actstartdate}
+                                {...processElementInfo(props.layout.actstartdate)}
                                 valueKey="startDate"
                                 value={formValues['startDate']}
                                 updateProperty={updateFormValues}
                             />
 
                             <EAMDatePicker
-                                elementInfo={props.layout.actenddate}
+                                {...processElementInfo(props.layout.actenddate)}
                                 valueKey="endDate"
                                 value={formValues['endDate']}
                                 updateProperty={updateFormValues}

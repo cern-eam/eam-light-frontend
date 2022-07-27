@@ -31,19 +31,26 @@ const ReplaceEqpHierarchy = (props) => {
         }
         return (
             <div>
-                <EAMTextField elementInfo={{...equipmentLayout.fields['parentasset'], readonly: true}}
-                          value={equipment.hierarchyAssetCode}
-                          valueKey="hierarchyAssetCode"/>
+                <EAMTextField 
+                    {...processElementInfo(equipmentLayout.fields['parentasset'])}
+                    disabled
+                    value={equipment.hierarchyAssetCode}
+                    valueKey="hierarchyAssetCode"
+                />
 
                 <EAMCheckbox
-                    elementInfo={{...equipmentLayout.fields['dependentonparentasset'], readonly: true}}
+                    {...processElementInfo(equipmentLayout.fields['dependentonparentasset'])}
+                    disabled
                     value={equipment.hierarchyAssetDependent}
-                    valueKey="hierarchyAssetDependent"/>
+                    valueKey="hierarchyAssetDependent"
+                />
 
                 <EAMCheckbox
-                    elementInfo={{...equipmentLayout.fields['costrollupparentasset'], readonly: true}}
+                    {...processElementInfo(equipmentLayout.fields['costrollupparentasset'])}
+                    disabled
                     value={equipment.hierarchyAssetCostRollUp}
-                    valueKey="hierarchyAssetCostRollUp"/>
+                    valueKey="hierarchyAssetCostRollUp"
+                />
             </div>);
     };
 
@@ -53,17 +60,26 @@ const ReplaceEqpHierarchy = (props) => {
         }
         return (
             <div>
-                <EAMTextField elementInfo={{...equipmentLayout.fields['position'], readonly: true}}
-                          value={equipment.hierarchyPositionCode}
-                          valueKey="hierarchyPositionCode"/>
+                <EAMTextField
+                    {...processElementInfo(equipmentLayout.fields['position'])}
+                    disabled
+                    value={equipment.hierarchyPositionCode}
+                    valueKey="hierarchyPositionCode"
+                />
 
-                <EAMCheckbox elementInfo={{...equipmentLayout.fields['dependentonposition'], readonly: true}}
-                             value={equipment.hierarchyPositionDependent}
-                             valueKey="hierarchyPositionDependent"/>
+                <EAMCheckbox 
+                    {...processElementInfo(equipmentLayout.fields['dependentonposition'])}
+                    disabled
+                    value={equipment.hierarchyPositionDependent}
+                    valueKey="hierarchyPositionDependent"
+                />
 
-                <EAMCheckbox elementInfo={{...equipmentLayout.fields['costrollupposition'], readonly: true}}
-                             value={equipment.hierarchyPositionCostRollUp}
-                             valueKey="hierarchyPositionCostRollUp"/>
+                <EAMCheckbox 
+                    {...processElementInfo(equipmentLayout.fields['costrollupposition'])}
+                    disabled
+                    value={equipment.hierarchyPositionCostRollUp}
+                    valueKey="hierarchyPositionCostRollUp"
+                />
             </div>);
     };
 
@@ -89,9 +105,12 @@ const ReplaceEqpHierarchy = (props) => {
                 {renderPositionData()}
 
                 {equipment.hierarchyLocationCode &&
-                <EAMTextField elementInfo={{...equipmentLayout.fields['location'], readonly: true}}
-                            value={equipment.hierarchyLocationCode}
-                            valueKey="hierarchyLocationCode"/>
+                    <EAMTextField
+                        {...processElementInfo(equipmentLayout.fields['location'])}
+                        disabled
+                        value={equipment.hierarchyLocationCode}
+                        valueKey="hierarchyLocationCode"
+                    />
                 }
                 {renderChildren()}
             </div>

@@ -15,6 +15,7 @@ import swapping from './modes/mode_swapping.svg';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const buttonStyle = {
     bottom: '-10px',
@@ -26,7 +27,6 @@ const MODE_SWAPPING = 'Swapping';
 
 const ReplaceEqpGeneral = (props) => {
     const {
-        children, // TODO: not clear whether this will be props or component variable or both
         equipmentLayout,
         onChangeNewEquipment,
         onChangeOldEquipment,
@@ -116,58 +116,53 @@ const ReplaceEqpGeneral = (props) => {
         <EISPanel heading="REPLACE EQUIPMENT" alwaysExpanded={true}>
             <div style={{width: "100%", marginTop: 0}}>
 
-                <EAMAutocomplete elementInfo={{
-                    ...equipmentLayout.fields['equipmentno'],
-                    attribute: "R",
-                    text: "Old Equipment", xpath: "OldEquipment"
-                }}
+                <EAMAutocomplete
+                    {...processElementInfo(equipmentLayout.fields['equipmentno'])}
+                    required
+                    label={"Old Equipment"}
+                    id={"OldEquipment"}
                     value={replaceEquipment.oldEquipment}
                     updateProperty={updateProperty}
                     valueKey="oldEquipment"
                     autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
                     onChangeValue={onChangeOldEquipment}
-                    children={children}
                     desc={replaceEquipment.oldEquipmentDesc}
                     descKey="oldEquipmentDesc"
                     barcodeScanner/>
 
                 <EAMSelect
-                    elementInfo={{
-                        ...equipmentLayout.fields['assetstatus'],
-                        attribute: "R",
-                        text: "Old Equipment Status after replacement",
-                        readonly: statusList.length === 0
-                    }}
+                    {...processElementInfo(equipmentLayout.fields['assetstatus'])}
+                    required
+                    label={"Old Equipment Status after replacement"}
+                    disabled={statusList.length === 0}
                     valueKey="oldEquipmentStatus"
                     options={statusList}
                     value={replaceEquipment.oldEquipmentStatus}
                     updateProperty={updateProperty}
-                    children={children} />
+                />
                 
                 <EAMSelect
-                    elementInfo={{
-                        ...equipmentLayout.fields['assetstate'],
-                        attribute: "R",
-                        text: "Old Equipment State after replacement",
-                        readonly: !stateList || stateList.length === 0
-                    }}
+                    // TODO: no 'assetstate' coming from the response, do we need this?
+                    // {...processElementInfo(equipmentLayout.fields['assetstate'])}
+                    required
+                    label={"Old Equipment State after replacement"}
+                    disabled={!stateList || stateList.length === 0}
                     valueKey="oldEquipmentState"
                     options={stateList}
                     value={replaceEquipment.oldEquipmentState}
                     updateProperty={updateProperty}
-                    children={children} />
+                />
 
-                <EAMAutocomplete elementInfo={{
-                    ...equipmentLayout.fields['equipmentno'],
-                    attribute: "R",
-                    text: "New Equipment", xpath: "NewEquipment"
-                }}
+                <EAMAutocomplete
+                    {...processElementInfo(equipmentLayout.fields['equipmentno'])}
+                    required
+                    label={"New Equipment"}
+                    id={"NewEquipment"}
                     value={replaceEquipment.newEquipment}
                     updateProperty={updateProperty}
                     valueKey="newEquipment"
                     autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
                     onChangeValue={onChangeNewEquipment}
-                    children={children}
                     desc={replaceEquipment.newEquipmentDesc}
                     descKey="newEquipmentDesc"
                     barcodeScanner/>

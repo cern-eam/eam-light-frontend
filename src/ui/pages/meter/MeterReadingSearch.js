@@ -13,7 +13,6 @@ class MeterReadingSearch extends React.Component {
             <EISPanel heading="SEARCH PANEL" alwaysExpanded={true}>
                 <div style={{width: "100%", marginTop: 0}}>
                     <EAMAutocomplete
-                        required={false}
                         label={"Meter Code"}
                         value={searchCriteria.meterCode}
                         updateProperty={parentProps.updateSearchProperty}
@@ -25,7 +24,6 @@ class MeterReadingSearch extends React.Component {
                         barcodeScanner
                     />
                     <EAMAutocomplete
-                        required={false}
                         label={"Equipment Code"}
                         value={searchCriteria.equipmentCode}
                         updateProperty={parentProps.updateSearchProperty}

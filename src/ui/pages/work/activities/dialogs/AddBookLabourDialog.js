@@ -12,6 +12,7 @@ import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 /**
  * Display detail of an activity
@@ -115,7 +116,7 @@ function AddActivityDialog(props) {
                     <div>
                         <BlockUi tag="div" blocking={loading}>
                             <EAMSelect
-                                elementInfo={props.layout.booactivity}
+                                {...processElementInfo(props.layout.booactivity)}
                                 valueKey="activityCode"
                                 value={formValues['activityCode'] || ''}
                                 options={props.activities.map(activity => {
@@ -129,7 +130,7 @@ function AddActivityDialog(props) {
 
                             <EAMAutocomplete
                                 autocompleteHandler={WSWorkorders.autocompleteBOOEmployee}
-                                elementInfo={props.layout.employee}
+                                {...processElementInfo(props.layout.employee)}
                                 valueKey="employeeCode"
                                 value={formValues['employeeCode'] || ''}
                                 desc={formValues['employeeDesc']}
@@ -139,7 +140,7 @@ function AddActivityDialog(props) {
 
                             <EAMAutocomplete
                                 autocompleteHandler={WSWorkorders.autocompleteBOODepartment}
-                                elementInfo={props.layout.department}
+                                {...processElementInfo(props.layout.department)}
                                 valueKey="departmentCode"
                                 value={formValues['departmentCode'] || ''}
                                 desc={formValues['departmentDesc']}
@@ -148,14 +149,14 @@ function AddActivityDialog(props) {
                             />
 
                             <EAMDatePicker
-                                elementInfo={props.layout.datework}
+                                {...processElementInfo(props.layout.datework)}
                                 valueKey="dateWorked"
                                 value={formValues['dateWorked']}
                                 updateProperty={updateFormValues}
                             />
 
                             <EAMSelect
-                                elementInfo={props.layout.octype}
+                                {...processElementInfo(props.layout.octype)}
                                 valueKey="typeOfHours"
                                 value={formValues['typeOfHours'] || ''}
                                 values={typesOfHours}
@@ -163,7 +164,7 @@ function AddActivityDialog(props) {
                             />
 
                             <EAMTextField
-                                elementInfo={props.layout.hrswork}
+                                {...processElementInfo(props.layout.hrswork)}
                                 valueKey="hoursWorked"
                                 value={formValues['hoursWorked']}
                                 updateProperty={updateFormValues}

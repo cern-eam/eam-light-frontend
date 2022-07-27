@@ -12,6 +12,7 @@ import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import WSParts from '../../../../tools/WSParts';
 import makeStyles from '@mui/styles/makeStyles';
 import EAMRadio from 'eam-components/dist/ui/components/inputs-ng/EAMRadio';
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const overflowStyle = {
     overflowY: 'visible'
@@ -326,20 +327,17 @@ function PartUsageDialog(props) {
                             blocking={loading || props.isLoading}
                         >
                             <EAMRadio
-                                elementInfo={props.tabLayout['transactiontype']}
+                                {...processElementInfo(props.tabLayout['transactiontype'])}
                                 valueKey={FORM.TRANSACTION_TYPE}
                                 values={transactionTypes}
                                 value={formData.transactionType}
                                 updateProperty={updateFormDataProperty}
                                 onChangeValue={handleTransactionChange}
-                                children={props.children}
                             />
 
                             <EAMSelect
-                                elementInfo={{
-                                    ...props.tabLayout['storecode'],
-                                    attribute: 'R',
-                                }}
+                                {...processElementInfo(props.tabLayout['storecode'])}
+                                required
                                 valueKey={FORM.STORE}
                                 value={formData.storeCode}
                                 updateProperty={updateFormDataProperty}
@@ -347,27 +345,21 @@ function PartUsageDialog(props) {
                                 autocompleteHandler={
                                     WSWorkorders.getPartUsageStores
                                 }
-                                children={props.children}
                             />
 
                             <EAMSelect
-                                elementInfo={{
-                                    ...props.tabLayout['activity'],
-                                    attribute: 'R',
-                                    readonly: !formData.storeCode,
-                                }}
+                                {...processElementInfo(props.tabLayout['activity'])}
+                                required
+                                disabled={!formData.storeCode}
                                 valueKey={FORM.ACTIVITY}
                                 options={activityList}
                                 value={formData.activityCode}
                                 updateProperty={updateFormDataProperty}
-                                children={props.children}
                             />
 
                             <EAMAutocomplete
-                                elementInfo={{
-                                    ...props.tabLayout['partcode'],
-                                    readonly: !formData.storeCode,
-                                }}
+                                {...processElementInfo(props.tabLayout['partcode'])}
+                                disabled={!formData.storeCode}
                                 value={formData.partCode}
                                 updateProperty={updateFormDataProperty}
                                 valueKey={FORM.PART}
@@ -382,17 +374,15 @@ function PartUsageDialog(props) {
                                 ]}
                                 onChangeValue={handlePartChange}
                                 barcodeScanner
-                                children={props.children}
                             />
 
                             <EAMAutocomplete
-                                elementInfo={{
-                                    ...props.tabLayout['assetid'],
-                                    readonly:
-                                        !formData.storeCode ||
-                                        !formData.activityCode ||
-                                        (formData.partCode && !isTrackedByAsset)
-                                }}
+                                {...processElementInfo(props.tabLayout['assetid'])}
+                                disabled={
+                                    !formData.storeCode ||
+                                    !formData.activityCode ||
+                                    (formData.partCode && !isTrackedByAsset)
+                                }
                                 value={formData.assetIDCode}
                                 updateProperty={updateFormDataProperty}
                                 valueKey={FORM.ASSET}
@@ -409,36 +399,30 @@ function PartUsageDialog(props) {
                                 onChangeValue={handleAssetChange}
                                 barcodeScanner
                                 renderDependencies={[formData.partCode]}
-                                children={props.children}
                             />
 
                             <EAMSelect
-                                elementInfo={{
-                                    ...props.tabLayout['bincode'],
-                                    readonly: !formData.storeCode,
-                                }}
+                                {...processElementInfo(props.tabLayout['bincode'])}
+                                disabled={!formData.storeCode}
                                 valueKey={FORM.BIN}
                                 options={binList}
                                 value={formData.bin}
                                 updateProperty={updateFormDataProperty}
-                                children={props.children}
                                 suggestionsPixelHeight={200}
                             />
 
                             <EAMTextField
-                                elementInfo={{
-                                    ...props.tabLayout['transactionquantity'],
-                                    readonly:
-                                        !formData.storeCode ||
-                                        !formData.partCode ||
-                                        isTrackedByAsset,
-                                }}
+                                {...processElementInfo(props.tabLayout['transactionquantity'])}
+                                disabled={
+                                    !formData.storeCode ||
+                                    !formData.partCode ||
+                                    isTrackedByAsset
+                                }
                                 valueKey={FORM.TRANSACTION_QTY}
                                 endTextAdornment={uom}
                                 value={formData.transactionQty}
                                 updateProperty={updateFormDataProperty}
                                 renderDependencies={uom}
-                                children={props.children}
                             />
                         </BlockUi>
                     </div>

@@ -9,6 +9,7 @@ import WSWorkorders from "../../../../tools/WSWorkorders";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const AdditionalCostDialog = (props) => {
     const [additionalCost, setAdditionalCost] = useState({ costType: "MISC" });
@@ -63,36 +64,42 @@ const AdditionalCostDialog = (props) => {
 
             <DialogContent id="content" style={{ overflowY: 'visible' }}>
                 <BlockUi tag="div" blocking={loading || props.isLoading}>
-                    <EAMSelect elementInfo={props.tabLayout['activitytrade']}
+                    <EAMSelect 
+                        {...processElementInfo(props.tabLayout['activitytrade'])}
                         valueKey="activityCode"
                         options={activityList}
                         value={additionalCost.activityCode}
                         updateProperty={updateAdditionalCostProperty}
-                        children={props.children}/>
+                    />
 
-                    <EAMTextField elementInfo={props.tabLayout['costdescription']}
+                    <EAMTextField 
+                        {...processElementInfo(props.tabLayout['costdescription'])}
                         valueKey="costDescription"
                         value={additionalCost.costDescription}
                         updateProperty={updateAdditionalCostProperty}
-                        children={props.children}/>
+                    />
 
-                    <EAMTextField elementInfo={{...props.tabLayout['costtype'], readonly: true }}
+                    <EAMTextField 
+                        {...processElementInfo(props.tabLayout['costtype'])}
+                        disabled
                         valueKey="costType"
                         value="Parts/Services"
                         updateProperty={updateAdditionalCostProperty}
-                        children={props.children}/>
+                    />
 
-                    <EAMTextField elementInfo={props.tabLayout['cost']}
+                    <EAMTextField 
+                        {...processElementInfo(props.tabLayout['cost'])}
                         valueKey="cost"
                         value={additionalCost.cost}
                         updateProperty={updateAdditionalCostProperty}
-                        children={props.children}/>
+                    />
 
-                    <EAMDatePicker elementInfo={props.tabLayout['additionalcostsdate']}
+                    <EAMDatePicker 
+                        {...processElementInfo(props.tabLayout['additionalcostsdate'])}
                         valueKey="date"
                         value={additionalCost.date}
                         updateProperty={updateAdditionalCostProperty}
-                        children={props.children}
+                    
                     />
                 </BlockUi>
             </DialogContent>
