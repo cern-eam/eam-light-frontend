@@ -54,7 +54,7 @@ export default Location = (props) => {
                 create: WSLocation.create,
                 read: WSLocation.get,
                 update: WSLocation.update,
-                update: WSLocation.remove,
+                delete: WSLocation.remove,
                 new:  WSLocation.init
             },
             postActions: {
@@ -65,8 +65,9 @@ export default Location = (props) => {
             },
             entityDesc: "Location",
             entityURL: "/location/",
-            entityCodeProperty: "code"
-        
+            entityCodeProperty: "code",
+            screenProperty: "locationScreen",
+            layoutProperty: "locationLayout"
         });
 
         

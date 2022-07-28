@@ -11,7 +11,7 @@ import { setLayoutProperty, showError, showNotification, handleError, toggleHidd
 
 const useEntity = (params) => {
 
-    const {WS, postActions, entityDesc, entityURL, entityCodeProperty} = params;
+    const {WS, postActions, entityDesc, entityURL, entityCodeProperty, screenProperty, layoutProperty} = params;
 
     const [loading, setLoading] = useState(false);
     const [entity, setEntity] = useState(null);
@@ -33,8 +33,8 @@ const useEntity = (params) => {
     const setRegionVisibilityParam = (...args) => dispatch(setRegionVisibility(...args));
 
     // Fetch data from the redux store
-    const screen = useSelector(state => state.application.userData.locationScreen);
-    const screenLayout = useSelector(state => state.application.locationLayout);
+    const screen = useSelector(state => state.application.userData[screenProperty]);
+    const screenLayout = useSelector(state => state.application[layoutProperty]);
     const entityScreen = useSelector(state => state.application.userData.screens[screen]);
     const userData = useSelector(state =>  state.application.userData);
     const applicationData = useSelector(state =>  state.application.applicationData);
@@ -53,6 +53,26 @@ const useEntity = (params) => {
             initNewEntity();
         }
     }, [code])
+
+    const createEntity = () => {
+        setLoading(true);
+
+        WS.create(entity)
+            .then(response => {
+                const createdEntity = response.body.data;
+                setEntity(createdEntity)
+                setNewEntity(false)
+                // Set new URL (will trigger a read)
+                window.history.pushState({}, '', process.env.PUBLIC_URL + entityURL + encodeURIComponent(createdEntity[entityCodeProperty]));
+                showNotificationParam(entityDesc + ' ' + createdEntity[entityCodeProperty] + ' has been successfully created.');
+                postActions.create(createdEntity);
+            })
+            .catch(error => {
+                setErrors(error);
+                handleErrorParam(error)
+            })
+            .finally( () => setLoading(false))
+    }
 
     const readEntity = (code) => {
 
@@ -77,6 +97,38 @@ const useEntity = (params) => {
             .finally( () => setLoading(false))
     }
 
+    const updateEntity = () => {
+        setLoading(true)
+
+        WS.update(entity)
+            .then(response => {
+                const entity = response.body.data;
+                setEntity(entity);
+
+                showNotificationParam(`${entityDesc} ${entity[entityCodeProperty]}  has been successfully updated.`);
+                // Invoke entity specific logic on the subclass
+                postActions.postUpdate(entity)
+            })
+            .catch(error => {
+                //TODO: error handling
+                handleErrorParam(error);
+            })
+            .finally( () => setLoading(false))
+    }
+
+    const deleteEntity = () => {
+        setLoading(true)
+
+        WS.delete(entity[entityCodeProperty])
+            .then(response => {
+                showNotificationParam(`${entityDesc} ${entity[entityCodeProperty]}  has been successfully deleted.`);
+                initNewEntity();
+            })
+            .catch(error => {
+                handleErrorParam(error)
+            })
+            .finally( () => setLoading(false))
+    }
 
     const initNewEntity = () => {
 
@@ -97,7 +149,27 @@ const useEntity = (params) => {
 
 
     //
-    // ASSIGN VALUES
+    // BUTTON HANDLERS
+    //
+    const saveHandler = () => {
+        // Create new or update existing entity
+        if (newEntity) {
+            createEntity()
+        } else {
+            updateEntity()
+        }
+    }
+
+    const newHandler = () => {
+        history.push(entityURL)
+    }
+
+    const deleteHandler = () => {
+        deleteEntity()
+    }
+
+    //
+    // HELPER METHODS
     //
     const assignValues = entity => {
         //let layoutPropertiesMap = settings.layoutPropertiesMap;
@@ -109,55 +181,9 @@ const useEntity = (params) => {
     }
 
 
-    const createEntity = () => {
-        setLoading(true);
-
-        WS.create(entity)
-            .then(response => {
-                const createdEntity = response.body.data;
-                setEntity(createdEntity)
-                setNewEntity(false)
-                // Set new URL (will trigger a read)
-                window.history.pushState({}, '', process.env.PUBLIC_URL + entityURL + encodeURIComponent(createdEntity[entityCodeProperty]));
-                showNotification(entityDesc + ' ' + createdEntity[entityCodeProperty] + ' has been successfully created.');
-                postActions.create(createdEntity);
-            })
-            .catch(error => {
-                setErrors(error);
-                handleErrorParam(error)
-            })
-            .finally( () => setLoading(false))
-    }
-
-    const saveHandler = () => {
-        // Create new or update existing entity
-        if (newEntity) {
-            // 
-            createEntity()
-        } else {
-            //this.updateEntity(entity)
-        }
-    }
-
-    const newHandler = () => {
-        history.push(entityURL)
-    }
-
-    const deleteHandler = (code) => {
-        WS.delete(code)
-        .then(response => {
-            // this.props.showNotification(this.settings.entityDesc + ' ' + code + ' has been successfully deleted.')
-            newHandler();
-        })
-        .catch(error => {
-
-        })
-    }
-
     const updateEntityProperty = (key, value) => {
         setEntity(prevEntity => set({...prevEntity}, key, value));
     };
-
 
 
     return {screenLayout, entity, entityScreen, 
