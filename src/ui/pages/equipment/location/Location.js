@@ -39,9 +39,14 @@ export default Location = (props) => {
         // this.enableChildren();
     }
 
+    const postCreate = (equipment) => {
+        commentsComponent.current.createCommentForNewEntity();
+        setLayoutProperty("showEqpTreeButton", true)
+    }
+
 
     const {screenLayout: locationLayout, entity: location, loading,
-        entityScreen, userData, applicationData, newEntity,
+        entityScreen, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree, 
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty} = useEntity({
@@ -53,8 +58,10 @@ export default Location = (props) => {
                 new:  WSLocation.init
             },
             postActions: {
+                create: postCreate,
                 read: postRead,
-                new: postInit
+                new: postInit,
+                
             },
             entityDesc: "Location",
             entityURL: "/location/",
@@ -78,10 +85,7 @@ export default Location = (props) => {
 
 
 
-    // postCreate(equipment) {
-    //     this.comments.createCommentForNewEntity();
-    //     this.props.setLayoutProperty("showEqpTreeButton", true)
-    // }
+
 
     // postUpdate(equipment) {
     //     this.comments.createCommentForNewEntity();
@@ -212,27 +216,27 @@ export default Location = (props) => {
             //     column: 2,
             //     order: 7
             // },
-            // {
-            //     id: 'COMMENTS',
-            //     label: 'Comments',
-            //     isVisibleWhenNewEntity: true,
-            //     maximizable: false,
-            //     render: () => 
-            //         <Comments ref={comments => this.comments = comments}
-            //             entityCode="LOC"
-            //             entityKeyCode={!layout.newEntity ? location.code : undefined}
-            //             userCode={userData.eamAccount.userCode}
-            //             allowHtml={true}
-            //             disabled={departmentalSecurity.readOnly}/>
-            //     ,
-            //     RegionPanelProps: {
-            //         detailsStyle: { padding: 0 }
-            //     },
-            //     column: 2,
-            //     order: 8,
-            //     ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
-            //     initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
-            // },
+             {
+                id: 'COMMENTS',
+                label: 'Comments',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <Comments ref={comments => commentsComponent.current = comments}
+                        entityCode="LOC"
+                        entityKeyCode={!newEntity ? location.code : undefined}
+                        userCode={userData.eamAccount.userCode}
+                        allowHtml={true}
+                        disabled={departmentalSecurity.readOnly}/>
+                ,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0 }
+                },
+                column: 2,
+                order: 8,
+                ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
+            },
             {
                 id: 'USERDEFINEDFIELDS',
                 label: 'User Defined Fields',

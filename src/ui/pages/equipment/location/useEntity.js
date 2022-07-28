@@ -20,6 +20,8 @@ const useEntity = (params) => {
     const {code} = useParams();
     const history = useHistory();
     const abortController = useRef(null);
+    const commentsComponent = useRef(null);
+    const departmentalSecurity = useState({})
 
     // Init dispatchers
     const dispatch = useDispatch();
@@ -37,8 +39,6 @@ const useEntity = (params) => {
     const userData = useSelector(state =>  state.application.userData);
     const applicationData = useSelector(state =>  state.application.applicationData);
     const showEqpTree = useSelector(state =>  state.ui.layout.showEqpTree);
-
-    const departmentalSecurity = useState({})
 
     // HIDDEN REGIONS
     const isHiddenRegionParam = useSelector(state => isHiddenRegion(state)(screen))
@@ -115,7 +115,8 @@ const useEntity = (params) => {
         WS.create(entity)
             .then(response => {
                 const createdEntity = response.body.data;
-                
+                setEntity(createEntity)
+                postActions.create();
                 // Set new URL (will trigger a read)
                 history.push(process.env.PUBLIC_URL + entityURL + encodeURIComponent(createdEntity[entityCodeProperty]));
                 showNotification(entityDesc + ' ' + createdEntity[entityCodeProperty] + ' has been successfully created.');
@@ -165,7 +166,7 @@ const useEntity = (params) => {
         isHiddenRegion: isHiddenRegionParam, 
         getHiddenRegionState: getHiddenRegionStateParam, 
         getUniqueRegionID: getUniqueRegionIDParam, 
-        
+        commentsComponent,
         setLayoutProperty: setLayoutPropertyParam,
         showEqpTree, departmentalSecurity, 
         // Dispatchers
