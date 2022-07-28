@@ -18,7 +18,7 @@ import EntityRegions from "../../../components/entityregions/EntityRegions";
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
-import useEntity from "./useEntity";
+import useEntity from "hooks/useEntity";
 
 export default Location = (props) => {
     
@@ -39,8 +39,8 @@ export default Location = (props) => {
         // this.enableChildren();
     }
 
-    const postCreate = (equipment) => {
-        commentsComponent.current.createCommentForNewEntity();
+    const postCreate = (location) => {
+        commentsComponent.current.createCommentForNewEntity(location.code);
         setLayoutProperty("showEqpTreeButton", true)
     }
 
