@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import queryString from "query-string";
 import EamlightToolbarContainer from './../../components/EamlightToolbarContainer';
 import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';
@@ -10,91 +11,107 @@ import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import CustomFields from '../../components/customfields/CustomFields';
 import PartWhereUsed from "./PartWhereUsed";
 import PartAssets from "./PartAssets";
-import Entity from '../Entity';
 import PartTools from "./PartTools";
 import {PartIcon} from 'eam-components/dist/ui/components/icons'
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import {ENTITY_TYPE} from '../../components/Toolbar';
 import EntityRegions from "../../components/entityregions/EntityRegions";
-import { isCernMode } from '../../components/CERNMode';
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
+import useEntity from "hooks/useEntity";
 
 const PART = 'PART';
 
-class Part extends Entity {
+const Part = (props) => {
+    const queryParams = queryString.parse(window.location.search).length > 0 ?
+                        queryString.parse(window.location.search) : '';
 
-    constructor(props) {
-        super(props)
-        this.props.setLayoutProperty('showEqpTreeButton', false)
+    // TODO: remove unused props?
+    const {screenLayout: partLayout, entity: part, loading,
+        entityScreen, userData, applicationData, newEntity, commentsComponent,
+        isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree, 
+        departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
+        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, handleError, showError, showNotification} = useEntity({
+            WS: {
+                create: WSParts.createPart,
+                read: WSParts.getPart,
+                update: WSParts.updatePart,
+                delete: WSParts.deletePart,
+                // new:  WSParts.initPart.bind(null, PART, "placeholder")
+                new:  WSParts.initPart.bind(null, PART, queryParams),
+                // TODO: when initPart was called before, it was: WSParts.initPart(PART, this.props.location.search), so I bind the equivalent. However, we might end up with a general handling logic for queryParams so I leave this comment.
+            },
+            postActions: {
+                create: postCreate,
+                read: postRead,
+                new: postInit,
+            },
+            entityDesc: "Part",
+            entityURL: "/part/",
+            entityCodeProperty: "code",
+            screenProperty: "partScreen",
+            layoutProperty: "partLayout"
+        });
+
+    useEffect(() => {
+        // TODO: was previously in the constructor confirm that this is a good place or whether it would make more sense to have it eg in postRead
+        setLayoutProperty('showEqpTreeButton', false) 
+    }, [])
+
+    // TODO: rm
+    const settings = {
+        // TODO: might have to add logic for layoutPropertiesMap
+        // layoutPropertiesMap: PartTools.layoutPropertiesMap,
+
+        // renderEntity: this.renderPart.bind(this),
+
+        //handlerFunctions: {
+        //    classCode: this.onChangeClass,
+        //}
     }
-
-    //
-    // SETTINGS OBJECT USED BY ENTITY CLASS
-    //
-    settings = {
-        entity: 'part',
-        entityDesc: 'Part',
-        entityURL: '/part/',
-        entityCodeProperty: 'code',
-        entityScreen: this.props.userData.screens[this.props.userData.partScreen],
-        renderEntity: this.renderPart.bind(this),
-        readEntity: WSParts.getPart.bind(WSParts),
-        updateEntity: WSParts.updatePart.bind(WSParts),
-        createEntity: WSParts.createPart.bind(WSParts),
-        deleteEntity: WSParts.deletePart.bind(WSParts),
-        initNewEntity: () => WSParts.initPart(PART, this.props.location.search),
-        layout: this.props.partLayout,
-        layoutPropertiesMap: PartTools.layoutPropertiesMap,
-        handlerFunctions: {
-            classCode: this.onChangeClass,
-        }
-    };
 
     //
     // CALLBACKS FOR ENTITY CLASS
     //
-    postInit() {
-        this.setTrackingMethods();
-        this.enableChildren();
+    const postInit = () => {
+        setTrackingMethods();
+        //this.enableChildren(); // TODO: rm but keep for context
     }
 
-    postCreate() {
-        this.comments.createCommentForNewEntity();
+    const postCreate = () => {
+        commentsComponent.createCommentForNewEntity();
     }
 
-    postUpdate() {
-        this.comments.createCommentForNewEntity();
+    const postUpdate = () => {
+        commentsComponent.createCommentForNewEntity();
     }
 
-    postRead(part) {
-        this.setTrackingMethods();
+    const postRead = () => {
+        setTrackingMethods();
     }
 
     //
     // DROP DOWN VALUES
     //
-    setTrackingMethods = () => {
+    // TODO: check that setLayoutProperty is the same as the previous 'this.setLayout', doubt arose because we replace layout for newEntity in LocationGeneral, but in the case of PartGeneral we also had layout.trackingMethods, besides the layout.newEntity
+    const setTrackingMethods = () => {
         WSParts.getPartTrackingMethods().then(response => {
-            this.setLayout({trackingMethods: response.body.data});
+            setLayoutProperty('trackingMethods', response.body.data);
         }).catch(error => {
-            this.props.handleError(error);
-            this.setLayout({blocking: false});
+            handleError(error);
+            setLayoutProperty('blocking', false);
         });
     };
 
-    getRegions = () => {
-        const { partLayout, userData, handleError } = this.props;
-        const { part, layout } = this.state;
+    const getRegions = () => {
         const tabs = partLayout.tabs;
 
         const commonProps = {
             part,
-            layout,
+            newEntity,
             partLayout,
             userData,
-            updatePartProperty: this.updateEntityProperty.bind(this),
-            children: this.children
+            updatePartProperty: updateEquipmentProperty,
         };
 
         return [
@@ -121,8 +138,8 @@ class Part extends Entity {
                     <UserDefinedFields
                         fields={part.userDefinedFields}
                         entityLayout={partLayout.fields}
-                        updateUDFProperty={this.updateEntityProperty}
-                        children={this.children} />
+                        updateUDFProperty={updateEquipmentProperty}
+                    />
                 ,
                 column: 1,
                 order: 2,
@@ -196,9 +213,9 @@ class Part extends Entity {
                 maximizable: false,
                 render: () => 
                     <Comments
-                        ref={comments => this.comments = comments}
+                        ref={comments => commentsComponent.current = comments}
                         entityCode={PART}
-                        entityKeyCode={!layout.newEntity ? part.code : undefined}
+                        entityKeyCode={!partLayout.newEntity ? part.code : undefined}
                         userCode={userData.eamAccount.userCode}
                         handleError={handleError}
                         allowHtml={true} />
@@ -219,12 +236,11 @@ class Part extends Entity {
                 maximizable: false,
                 render: () => 
                     <CustomFields
-                        children={this.children}
                         entityCode={PART}
                         entityKeyCode={part.code}
                         classCode={part.classCode}
                         customFields={part.customField}
-                        updateEntityProperty={this.updateEntityProperty}/>
+                        updateEntityProperty={updateEquipmentProperty}/>
                 ,
                 column: 2,
                 order: 7,
@@ -234,72 +250,57 @@ class Part extends Entity {
         ]
     }
 
-    renderPart() {
-        const {
-            applicationData,
-            history,
-            showEqpTree,
-            toggleHiddenRegion,
-            setRegionVisibility,
-            userData,
-            isHiddenRegion,
-            getHiddenRegionState,
-            getUniqueRegionID,
-            showNotification,
-            handleError,
-            showError
-        } = this.props;
-        const { part, layout } = this.state;
-        const regions = this.getRegions();       
-
-
-        return (
-            <div className="entityContainer">
-                <BlockUi tag="div" blocking={layout.blocking} style={{height: "100%", width: '100%'}}>
-                    <EamlightToolbarContainer
-                        isModified={layout.isModified}
-                        newEntity={layout.newEntity}
-                        entityScreen={userData.screens[userData.partScreen]}
-                        entityName={this.settings.entityDesc}
-                        entityKeyCode={part.code}
-                        saveHandler={this.saveHandler.bind(this)}
-                        newHandler={() => history.push('/part')}
-                        deleteHandler={this.deleteEntity.bind(this, part.code)}
-                        toolbarProps={{ 
-                            entity: part,
-                            postInit: this.postInit.bind(this),
-                            setLayout: this.setLayout.bind(this),
-                            newEntity: layout.newEntity,
-                            applicationData: applicationData,
-                            screencode: userData.partScreen,
-                            handleError: handleError,
-                            showNotification: showNotification,
-                            showError: showError,
-                            copyHandler: this.copyEntity.bind(this),
-                            entityType: ENTITY_TYPE.PART,
-                            entityDesc: this.settings.entityDesc,
-                            screens: userData.screens,
-                            workorderScreencode: userData.workorderScreen
-                        }}
-                        width={730}
-                        entityIcon={<PartIcon style={{height: 18}}/>}
-                        toggleHiddenRegion={toggleHiddenRegion}
-                        getUniqueRegionID={getUniqueRegionID}
-                        regions={regions}
-                        setRegionVisibility={setRegionVisibility}
-                        isHiddenRegion={isHiddenRegion} />
-                    <EntityRegions
-                        showEqpTree={showEqpTree}
-                        regions={regions}
-                        isNewEntity={layout.newEntity} 
-                        getHiddenRegionState={getHiddenRegionState}
-                        getUniqueRegionID={getUniqueRegionID}
-                        setRegionVisibility={setRegionVisibility}
-                        isHiddenRegion={isHiddenRegion}/>
-                </BlockUi>
-            </div>
-        );
+    if (!part) {
+        return React.Fragment;
     }
+
+    return (
+        <div className="entityContainer">
+            <BlockUi tag="div" blocking={loading} style={{height: "100%", width: '100%'}}>
+                <EamlightToolbarContainer
+                    isModified={true} // TODO: Location had a TODO here as well
+                    newEntity={newEntity}
+                    entityScreen={userData.screens[userData.partScreen]}
+                    entityName="Part" // TODO: hardcoded (following Location example)
+                    entityKeyCode={part.code}
+                    saveHandler={saveHandler}
+                    newHandler={newHandler}
+                    deleteHandler={deleteHandler}
+                    // TODO: check commented out props (following Location example)
+                    toolbarProps={{ 
+                        entity: part,
+                        // postInit: this.postInit.bind(this),
+                        // setLayout: this.setLayout.bind(this),
+                        newEntity: partLayout.newEntity,
+                        applicationData: applicationData,
+                        screencode: userData.partScreen,
+                        handleError: handleError,
+                        showNotification: showNotification,
+                        showError: showError, 
+                        // copyHandler: this.copyEntity.bind(this),
+                        entityType: ENTITY_TYPE.PART,
+                        entityDesc: "Part", // TODO: hardcoded (following Location example)
+                        screens: userData.screens,
+                        workorderScreencode: userData.workorderScreen
+                    }}
+                    width={730}
+                    entityIcon={<PartIcon style={{height: 18}}/>}
+                    toggleHiddenRegion={toggleHiddenRegion}
+                    getUniqueRegionID={getUniqueRegionID}
+                    regions={getRegions()}
+                    setRegionVisibility={setRegionVisibility}
+                    isHiddenRegion={isHiddenRegion} />
+                <EntityRegions
+                    showEqpTree={showEqpTree}
+                    regions={getRegions()}
+                    isNewEntity={newEntity} 
+                    getHiddenRegionState={getHiddenRegionState}
+                    getUniqueRegionID={getUniqueRegionID}
+                    setRegionVisibility={setRegionVisibility}
+                    isHiddenRegion={isHiddenRegion}/>
+            </BlockUi>
+        </div>
+    );
 }
 
 export default Part;

@@ -10,12 +10,12 @@ import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/
 
 class PartGeneral extends Component {
     render() {
-        let {partLayout, part, updatePartProperty, layout} = this.props;
+        let {partLayout, part, updatePartProperty, newEntity} = this.props;
 
         return (
             <div style={{width: "100%", marginTop: 0}}>
 
-                {layout.newEntity && <EAMTextField
+                {newEntity && <EAMTextField
                     {...processElementInfo(partLayout.fields['partcode'])}
                     value={part.code}
                     updateProperty={updatePartProperty}
@@ -65,7 +65,7 @@ class PartGeneral extends Component {
                     value={part.trackingMethod}
                     updateProperty={updatePartProperty}
                     valueKey="trackingMethod"
-                    options={layout.trackingMethods}
+                    options={partLayout.trackingMethods}
                 />
 
                 <EAMAutocomplete
