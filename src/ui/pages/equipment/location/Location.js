@@ -324,7 +324,7 @@ export default Location = (props) => {
                                     entityType: ENTITY_TYPE.LOCATION,
                                     //departmentalSecurity: this.departmentalSecurity,
                                     screens: userData.screens,
-                                    workorderScreencode: userData.workorderScreen
+                                    workorderScreencode: userData.workOrderScreen
                                  }}
                                  width={730}
                                  entityIcon={<LocationIcon style={{height: 18}}/>}
