@@ -50,7 +50,7 @@ class SystemDetails extends Component {
                 <EAMSelect
                     {...processElementInfo(systemLayout.fields['criticality'])}
                     value={equipment.criticality}
-                    options={layout.criticalityValues}
+                    autocompleteHandler={WSEquipment.getEquipmentCriticalityValues}
                     updateProperty={updateEquipmentProperty}
                     valueKey="criticality"/>
 
