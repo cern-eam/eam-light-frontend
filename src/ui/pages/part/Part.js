@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import queryString from "query-string";
 import EamlightToolbarContainer from './../../components/EamlightToolbarContainer';
 import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';
@@ -25,7 +24,7 @@ const PART = 'PART';
 const Part = () => {
     // TODO: remove unused prop?
     const {screenLayout: partLayout, entity: part, loading,
-        entityScreen, userData, applicationData, newEntity, commentsComponent,
+        screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, handleError, showError, showNotification} = useEntity({
@@ -34,7 +33,7 @@ const Part = () => {
                 read: WSParts.getPart,
                 update: WSParts.updatePart,
                 delete: WSParts.deletePart,
-                new:  WSParts.initPart,
+                new:  WSParts.initPart, // TODO: make sure we deal with extra parameters that were being passed before
             },
             postActions: {
                 create: postCreate,
@@ -222,7 +221,7 @@ const Part = () => {
                 <EamlightToolbarContainer
                     isModified={true} // TODO: Location had a TODO here as well
                     newEntity={newEntity}
-                    entityScreen={entityScreen}
+                    entityScreen={screenPermissions}
                     entityName="Part" // TODO: hardcoded (following Location example)
                     entityKeyCode={part.code}
                     saveHandler={saveHandler}
@@ -235,7 +234,7 @@ const Part = () => {
                         // setLayout: this.setLayout.bind(this),
                         newEntity: partLayout.newEntity,
                         applicationData: applicationData,
-                        screencode: entityScreen.screenCode,
+                        screencode: screenCode,
                         handleError: handleError,
                         showNotification: showNotification,
                         showError: showError,
