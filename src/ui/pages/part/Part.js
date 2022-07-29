@@ -48,19 +48,27 @@ const Part = () => {
             // layoutPropertiesMap: PartTools.layoutPropertiesMap, // TODO:
         });
 
+    // TODO: keeping for context
+    // settings = {
+    //     handlerFunctions: {
+    //         classCode: this.onChangeClass,
+    //     }
+    // };
+
     const postInit = () => {
         //this.enableChildren(); // TODO: rm but keep for context
     }
 
     const postCreate = () => {
-        commentsComponent.createCommentForNewEntity();
+        commentsComponent.current.createCommentForNewEntity();
     }
 
     const postUpdate = () => {
-        commentsComponent.createCommentForNewEntity();
+        commentsComponent.current.createCommentForNewEntity();
     }
 
     const postRead = () => {
+        // TODO: why was it again that we should do this here and not in empty dep useEffect. Why would we want to execute this on every read if we (from what I've seen) never change this for part again
         setLayoutProperty('showEqpTreeButton', false);
     }
 
@@ -232,7 +240,7 @@ const Part = () => {
                         entity: part,
                         // postInit: this.postInit.bind(this),
                         // setLayout: this.setLayout.bind(this),
-                        newEntity: partLayout.newEntity,
+                        newEntity: newEntity,
                         applicationData: applicationData,
                         screencode: screenCode,
                         handleError: handleError,
