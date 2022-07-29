@@ -23,7 +23,7 @@ import useEntity from "hooks/useEntity";
 const PART = 'PART';
 
 const Part = () => {
-    // TODO: remove unused props?
+    // TODO: remove unused prop?
     const {screenLayout: partLayout, entity: part, loading,
         entityScreen, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
@@ -222,7 +222,7 @@ const Part = () => {
                 <EamlightToolbarContainer
                     isModified={true} // TODO: Location had a TODO here as well
                     newEntity={newEntity}
-                    entityScreen={userData.screens[userData.partScreen]}
+                    entityScreen={entityScreen}
                     entityName="Part" // TODO: hardcoded (following Location example)
                     entityKeyCode={part.code}
                     saveHandler={saveHandler}
@@ -235,7 +235,7 @@ const Part = () => {
                         // setLayout: this.setLayout.bind(this),
                         newEntity: partLayout.newEntity,
                         applicationData: applicationData,
-                        screencode: userData.partScreen,
+                        screencode: entityScreen.screenCode,
                         handleError: handleError,
                         showNotification: showNotification,
                         showError: showError,
@@ -243,7 +243,7 @@ const Part = () => {
                         entityType: ENTITY_TYPE.PART,
                         entityDesc: "Part", // TODO: hardcoded (following Location example)
                         screens: userData.screens,
-                        workorderScreencode: userData.workorderScreen
+                        workorderScreencode: userData.workOrderScreen
                     }}
                     width={730}
                     entityIcon={<PartIcon style={{height: 18}}/>}
