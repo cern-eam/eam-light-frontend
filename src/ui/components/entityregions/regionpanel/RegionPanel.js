@@ -11,7 +11,7 @@ const RegionPanel = (props) => {
 
     return (
         <Panel
-            AccordionProps={{ style }}
+            ExpansionPanelProps={{ style }}
             headingBar={
                 !showMaximizeControls
                 ? null
