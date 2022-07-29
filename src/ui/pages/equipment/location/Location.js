@@ -46,7 +46,7 @@ export default Location = (props) => {
 
 
     const {screenLayout: locationLayout, entity: location, loading,
-        entityScreen, userData, applicationData, newEntity, commentsComponent,
+        screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree, 
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty} = useEntity({
@@ -305,7 +305,7 @@ export default Location = (props) => {
             <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}}>
                 <EamlightToolbarContainer isModified={true} // TODO
                                  newEntity={newEntity}
-                                 entityScreen={userData.screens[userData.locationScreen]}
+                                 entityScreen={screenPermissions}
                                  entityName="Location"
                                  entityKeyCode={location.code}
                                  saveHandler={saveHandler}
@@ -319,7 +319,7 @@ export default Location = (props) => {
                                     newEntity: newEntity,
                                     applicationData: applicationData,
                                     extendedLink: applicationData.EL_LOCLI,
-                                    screencode: userData.screens[userData.locationScreen].screenCode,
+                                    screencode: screenCode,
                                     //copyHandler: this.copyEntity.bind(this),
                                     entityType: ENTITY_TYPE.LOCATION,
                                     //departmentalSecurity: this.departmentalSecurity,

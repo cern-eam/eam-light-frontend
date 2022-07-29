@@ -33,17 +33,17 @@ const useEntity = (params) => {
     const setRegionVisibilityParam = (...args) => dispatch(setRegionVisibility(...args));
 
     // Fetch data from the redux store
-    const screen = useSelector(state => state.application.userData[screenProperty]);
+    const screenCode = useSelector(state => state.application.userData[screenProperty]);
     const screenLayout = useSelector(state => state.application[layoutProperty]);
-    const entityScreen = useSelector(state => state.application.userData.screens[screen]);
+    const screenPermissions = useSelector(state => state.application.userData.screens[screenCode]);
     const userData = useSelector(state =>  state.application.userData);
     const applicationData = useSelector(state =>  state.application.applicationData);
     const showEqpTree = useSelector(state =>  state.ui.layout.showEqpTree);
 
     // HIDDEN REGIONS
-    const isHiddenRegionParam = useSelector(state => isHiddenRegion(state)(screen))
-    const getHiddenRegionStateParam = useSelector(state => getHiddenRegionState(state)(screen))
-    const getUniqueRegionIDParam =  useSelector(state => getUniqueRegionID(state)(screen))
+    const isHiddenRegionParam = useSelector(state => isHiddenRegion(state)(screenCode))
+    const getHiddenRegionStateParam = useSelector(state => getHiddenRegionState(state)(screenCode))
+    const getUniqueRegionIDParam =  useSelector(state => getUniqueRegionID(state)(screenCode))
 
 
     useEffect( () => {
@@ -186,7 +186,7 @@ const useEntity = (params) => {
     };
 
 
-    return {screenLayout, entity, entityScreen, 
+    return {entity, screenCode, screenLayout, screenPermissions, 
         newEntity, loading,
         userData, applicationData, 
         isHiddenRegion: isHiddenRegionParam, 
