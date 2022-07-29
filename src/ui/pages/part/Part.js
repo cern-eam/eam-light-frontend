@@ -22,14 +22,11 @@ import useEntity from "hooks/useEntity";
 
 const PART = 'PART';
 
-const Part = (props) => {
-    const queryParams = queryString.parse(window.location.search).length > 0 ?
-                        queryString.parse(window.location.search) : '';
-
+const Part = () => {
     // TODO: remove unused props?
     const {screenLayout: partLayout, entity: part, loading,
         entityScreen, userData, applicationData, newEntity, commentsComponent,
-        isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree, 
+        isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, handleError, showError, showNotification} = useEntity({
             WS: {
@@ -37,9 +34,7 @@ const Part = (props) => {
                 read: WSParts.getPart,
                 update: WSParts.updatePart,
                 delete: WSParts.deletePart,
-                // new:  WSParts.initPart.bind(null, PART, "placeholder")
-                new:  WSParts.initPart.bind(null, PART, queryParams),
-                // TODO: when initPart was called before, it was: WSParts.initPart(PART, this.props.location.search), so I bind the equivalent. However, we might end up with a general handling logic for queryParams so I leave this comment.
+                new:  WSParts.initPart,
             },
             postActions: {
                 create: postCreate,
@@ -50,31 +45,11 @@ const Part = (props) => {
             entityURL: "/part/",
             entityCodeProperty: "code",
             screenProperty: "partScreen",
-            layoutProperty: "partLayout"
+            layoutProperty: "partLayout",
+            // layoutPropertiesMap: PartTools.layoutPropertiesMap, // TODO:
         });
 
-    useEffect(() => {
-        // TODO: was previously in the constructor confirm that this is a good place or whether it would make more sense to have it eg in postRead
-        setLayoutProperty('showEqpTreeButton', false) 
-    }, [])
-
-    // TODO: rm
-    const settings = {
-        // TODO: might have to add logic for layoutPropertiesMap
-        // layoutPropertiesMap: PartTools.layoutPropertiesMap,
-
-        // renderEntity: this.renderPart.bind(this),
-
-        //handlerFunctions: {
-        //    classCode: this.onChangeClass,
-        //}
-    }
-
-    //
-    // CALLBACKS FOR ENTITY CLASS
-    //
     const postInit = () => {
-        setTrackingMethods();
         //this.enableChildren(); // TODO: rm but keep for context
     }
 
@@ -87,21 +62,8 @@ const Part = (props) => {
     }
 
     const postRead = () => {
-        setTrackingMethods();
+        setLayoutProperty('showEqpTreeButton', false);
     }
-
-    //
-    // DROP DOWN VALUES
-    //
-    // TODO: check that setLayoutProperty is the same as the previous 'this.setLayout', doubt arose because we replace layout for newEntity in LocationGeneral, but in the case of PartGeneral we also had layout.trackingMethods, besides the layout.newEntity
-    const setTrackingMethods = () => {
-        WSParts.getPartTrackingMethods().then(response => {
-            setLayoutProperty('trackingMethods', response.body.data);
-        }).catch(error => {
-            handleError(error);
-            setLayoutProperty('blocking', false);
-        });
-    };
 
     const getRegions = () => {
         const tabs = partLayout.tabs;
@@ -267,7 +229,7 @@ const Part = (props) => {
                     newHandler={newHandler}
                     deleteHandler={deleteHandler}
                     // TODO: check commented out props (following Location example)
-                    toolbarProps={{ 
+                    toolbarProps={{
                         entity: part,
                         // postInit: this.postInit.bind(this),
                         // setLayout: this.setLayout.bind(this),
@@ -276,7 +238,7 @@ const Part = (props) => {
                         screencode: userData.partScreen,
                         handleError: handleError,
                         showNotification: showNotification,
-                        showError: showError, 
+                        showError: showError,
                         // copyHandler: this.copyEntity.bind(this),
                         entityType: ENTITY_TYPE.PART,
                         entityDesc: "Part", // TODO: hardcoded (following Location example)
@@ -293,7 +255,7 @@ const Part = (props) => {
                 <EntityRegions
                     showEqpTree={showEqpTree}
                     regions={getRegions()}
-                    isNewEntity={newEntity} 
+                    isNewEntity={newEntity}
                     getHiddenRegionState={getHiddenRegionState}
                     getUniqueRegionID={getUniqueRegionID}
                     setRegionVisibility={setRegionVisibility}

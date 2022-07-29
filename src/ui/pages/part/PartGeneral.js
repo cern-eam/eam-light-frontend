@@ -65,7 +65,7 @@ class PartGeneral extends Component {
                     value={part.trackingMethod}
                     updateProperty={updatePartProperty}
                     valueKey="trackingMethod"
-                    options={partLayout.trackingMethods}
+                    autocompleteHandler={WSParts.getPartTrackingMethods}
                 />
 
                 <EAMAutocomplete

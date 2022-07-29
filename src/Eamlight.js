@@ -15,7 +15,7 @@ import SystemSearchContainer from './ui/pages/equipment/system/search/SystemSear
 import LocationSearchContainer from './ui/pages/equipment/location/search/LocationSearchContainer';
 import BlockUi from 'react-block-ui';
 import InfoPage from './ui/components/infopage/InfoPage';
-import PartContainer from "./ui/pages/part/PartContainer";
+import Part from "./ui/pages/part/Part";
 import SearchContainer from "./ui/pages/search/SearchContainer";
 import ReplaceEqpContainer from "./ui/pages/equipment/replaceeqp/ReplaceEqpContainer";
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
@@ -91,7 +91,7 @@ class Eamlight extends Component {
                                                         component={WorkorderSearchContainer}/>
 
                                                  <Route path="/part/:code?"
-                                                        component={PartContainer}/>
+                                                        component={Part}/>
 
                                                         <Route path="/partsearch"
                                                         component={PartSearchContainer}/>
