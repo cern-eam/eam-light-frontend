@@ -117,8 +117,8 @@ const System = () => {
 
     const postRead = (equipment) => {
         // setStatuses(false, equipment.statusCode); // TODO: confirm it works as expected
-        setLayoutProperty('showEqpTreeButton', true)
-        setLayoutProperty('equipment', equipment)
+        setLayoutProperty('showEqpTreeButton', true);
+        setLayoutProperty('equipment', equipment); // TODO: should we be relying on the 'equipment' arg? Shouldn't we pass the 'equipment' from useEntity?
 
         if (departmentalSecurity.readOnly) {
             // this.disableChildren(); // TODO: keeping for context
@@ -127,7 +127,7 @@ const System = () => {
         }
     }
 
-    // TODO: Tested it and looked ok, but may be better to discuss
+    // TODO: Tested it and looked ok, but may be better to discuss because argument is called 'oldStatusCode' and we are passing the current status code.
     // const setStatuses = (neweqp, oldStatusCode) => {
     //     WSEquipment.getEquipmentStatusValues(userData.eamAccount.userGroup, neweqp, oldStatusCode)
     //         .then(response => {
@@ -380,8 +380,7 @@ const System = () => {
                 entityKeyCode={equipment.code}
                 saveHandler={saveHandler}
                 newHandler={newHandler}
-                deleteHandler={deleteHandler} // TODO: need binding of equipment.code?
-                // deleteHandler={this.deleteEntity.bind(this, equipment.code)}
+                deleteHandler={deleteHandler}
                 toolbarProps={{
                     entityDesc: "System", // TODO:
                     entity: equipment,

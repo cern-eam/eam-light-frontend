@@ -143,6 +143,7 @@ const Part = () => {
                 ignore: !getTabAvailability(tabs, TAB_CODES.WHERE_USED),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WHERE_USED)
             },
+            // TODO: selecting Assets crashes the application
             {
                 id: 'ASSETS',
                 label: 'Assets',
