@@ -1,6 +1,8 @@
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import { AssetIcon } from 'eam-components/dist/ui/components/icons';
-import React from 'react';
+import React, { useEffect }  from 'react';
+import { useSelector } from 'react-redux'; // TODO: rm
+import queryString from 'query-string';
 import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';
 import WSEquipment from "../../../../tools/WSEquipment";
@@ -8,7 +10,6 @@ import { ENTITY_TYPE } from "../../../components/Toolbar";
 import CustomFields from '../../../components/customfields/CustomFields';
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
-import Entity from '../../Entity';
 import EquipmentHistory from '../components/EquipmentHistory.js';
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EamlightToolbarContainer from './../../../components/EamlightToolbarContainer';
@@ -24,19 +25,22 @@ import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
+import useEntity from "hooks/useEntity";
+import { useState } from 'react';
 
-export default class Asset extends Entity {
+const Asset = () => {
+    const [part, setPart] = useState(part); // TODO: confirm whole associated behavior of part custom fields
+    const layout = useSelector(state => state.ui.layout); // TODO: should useEntity be returning this instead?
 
-    constructor(props) {
-        super(props)
-        this.setCriticalityValues()
-        this.setStateValues();
-        this.state = {
-            ...this.state
-        }
-    }
+    // TODO: some reason this might be needed?
+    // constructor(props) {
+    //     this.state = {
+    //         ...this.state
+    //     }
+    // }
 
-    onChangeCategoryCode = code => {
+    // TODO: move this to respective input?
+    const onChangeCategoryCode = code => {
         if(!code) {
             return;
         }
@@ -68,94 +72,112 @@ export default class Asset extends Entity {
         });
     };
 
-    settings = {
-        entity: 'equipment',
-        entityDesc: 'Asset',
-        entityURL: '/asset/',
-        entityCodeProperty: 'code',
-        entityScreen: this.props.userData.screens[this.props.userData.assetScreen],
-        renderEntity: this.renderAsset.bind(this),
-        readEntity: WSEquipment.getEquipment.bind(WSEquipment),
-        updateEntity: WSEquipment.updateEquipment.bind(WSEquipment),
-        createEntity: WSEquipment.createEquipment.bind(WSEquipment),
-        deleteEntity: WSEquipment.deleteEquipment.bind(WSEquipment),
-        initNewEntity: () => WSEquipment.initEquipment("OBJ", "A", this.props.location.search),
-        layout: this.props.assetLayout,
-        layoutPropertiesMap: EquipmentTools.assetLayoutPropertiesMap,
-        handlerFunctions: {
-            categoryCode: this.onChangeCategoryCode,
-            classCode: this.onChangeClass,
+    const queryParams = queryString.parse(window.location.search).length > 0 ?
+                        queryString.parse(window.location.search) : '';
+
+    // TODO: the entity was called equipment, should we rename to asset?
+    const {screenLayout: assetLayout, entity: equipment, loading,
+        screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
+        isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
+        departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
+        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, handleError, showError, showNotification} = useEntity({
+            WS: {
+                create: WSEquipment.createEquipment,
+                read: WSEquipment.getEquipment,
+                update: WSEquipment.updateEquipment,
+                delete: WSEquipment.deleteEquipment,
+                new:  WSEquipment.initEquipment.bind(null, "OBJ", "A", queryParams), // TODO: again we have extra arguments. What to do?
+            },
+            postActions: {
+                create: postCreate,
+                read: postRead,
+                new: postInit,
+            },
+            entityDesc: "Asset",
+            entityURL: "/asset/",
+            entityCodeProperty: "code",
+            screenProperty: "assetScreen",
+            layoutProperty: "assetLayout",
+            // layoutPropertiesMap: EquipmentTools.assetLayoutPropertiesMap, // TODO: 
+        });
+
+    // TODO: alternative to setAssetPart, ok?
+    useEffect(() => {
+        if (equipment?.partCode) {
+            WSParts.getPart(equipment.partCode).then(response => {
+                setPart(response.body.data);
+                setLayoutProperty('partCustomField', response.body.data.customField);
+            }).catch(error => {
+                // TODO: are we satisfied with this error handling? Its consequence is that upon selecting the Part Custom Fields panel it does not get rendered at all.
+                setPart(undefined);
+                setLayoutProperty('partCustomField', undefined);
+            });
         }
+    }, [equipment?.partCode]);
+
+    // TODO: keeping for context
+    // settings = {
+    //     handlerFunctions: {
+    //         categoryCode: this.onChangeCategoryCode,
+    //         classCode: this.onChangeClass,
+    //     }
+    // }
+
+    const postInit = () => {
+        // this.setStatuses(true); // TODO: confirm it works as expected, oldStatusCode arg
+        setLayoutProperty('showEqpTreeButton', false)
+        // this.enableChildren(); // TODO: keeping for context
     }
 
-    postInit() {
-        this.setStatuses(true)
-        this.props.setLayoutProperty('showEqpTreeButton', false)
-        this.enableChildren();
+    const postCreate = () => {
+        // this.setStatuses(false); // TODO: confirm it works as expected, oldStatusCode arg
+        commentsComponent.current.createCommentForNewEntity();
+        setLayoutProperty('showEqpTreeButton', true)
     }
 
-    postCreate() {
-        this.setStatuses(false);
-        this.comments.createCommentForNewEntity();
-        this.props.setLayoutProperty('showEqpTreeButton', true)
-    }
+    const postUpdate = () => {
+        commentsComponent.current.createCommentForNewEntity();
+        // setAssetPart(equipment.partCode) // TODO: keep for context but I'd remove from here to useEffect
 
-    postUpdate(equipment) {
-        this.comments.createCommentForNewEntity();
-        this.setAssetPart(this.state.equipment.partCode)
-
-        if (this.departmentalSecurity.readOnly) {
-            this.disableChildren();
+        if (departmentalSecurity.readOnly) {
+            // this.disableChildren(); // TODO: keeping for context
         } else {
-            this.enableChildren();
+            // this.enableChildren(); // TODO: keeping for context
         }
     }
 
-    postRead(equipment) {
-        this.setStatuses(false, equipment.statusCode)
-        this.props.setLayoutProperty('showEqpTreeButton', true)
-        this.props.setLayoutProperty('equipment', equipment);
-        this.setAssetPart(equipment.partCode);
+    const postRead = (equipment) => {
+        // this.setStatuses(false, equipment.statusCode) // TODO: confirm it works as expected, , oldStatusCode arg
+        setLayoutProperty('showEqpTreeButton', true)
+        setLayoutProperty('equipment', equipment);
+        // setAssetPart(equipment.partCode); // TODO: keep for context but I'd remove from here to useEffect
 
-        if (this.departmentalSecurity.readOnly) {
-            this.disableChildren();
+        if (departmentalSecurity.readOnly) {
+            // this.disableChildren(); // TODO: keeping for context
         } else {
-            this.enableChildren();
+            // this.enableChildren(); // TODO: keeping for context
         }
     }
 
-    setStatuses(neweqp, oldStatusCode) {
-        WSEquipment.getEquipmentStatusValues(this.props.userData.eamAccount.userGroup, neweqp, oldStatusCode)
-            .then(response => {
-                this.setLayout({ statusValues: response.body.data })
-            })
-    }
+    // TODO: Tested it and looked ok, but may be better to discuss because argument is called 'oldStatusCode' and we are passing the current status code.
+    // const setStatuses = (neweqp, oldStatusCode) => {
+    // WSEquipment.getEquipmentStatusValues(this.props.userData.eamAccount.userGroup, neweqp, oldStatusCode)
+    //         .then(response => {
+    //             this.setLayout({ statusValues: response.body.data })
+    //         })
+    // }
 
-    setCriticalityValues() {
-        WSEquipment.getEquipmentCriticalityValues()
-            .then(response => {
-                this.setLayout({ criticalityValues: response.body.data })
-            })
-    }
-
-    setStateValues() {
-        WSEquipment.getEquipmentStateValues()
-            .then(response => {
-                this.setLayout({ stateValues: response.body.data })
-            })
-    }
-
-    preCreateEntity(equipment) {
+    const preCreateEntity = (equipment) => {
         //Check hierarchy
-        return this.setValuesHierarchy(equipment);
+        return setValuesHierarchy(equipment);
     }
 
-    preUpdateEntity(equipment) {
+    const preUpdateEntity = (equipment) => {
         //Check hierarchy
-        return this.setValuesHierarchy(equipment);
+        return setValuesHierarchy(equipment);
     }
 
-    setValuesHierarchy = (equipment) => {
+    const setValuesHierarchy = (equipment) => {
         //If there is parent asset
         if (equipment.hierarchyAssetCode) {
             equipment.hierarchyAssetDependent = !equipment.hierarchyAssetDependent ? 'true' : equipment.hierarchyAssetDependent;
@@ -186,17 +208,15 @@ export default class Asset extends Entity {
     };
 
 
-    getRegions = () => {
-        const { assetLayout, userData, applicationData, showError, showNotification } = this.props;
-        const { equipment, layout } = this.state;
+    const getRegions = () => {
         const tabs = assetLayout.tabs;
 
         const commonProps = {
             equipment,
-            layout,
+            newEntity,
             assetLayout,
-            updateEquipmentProperty: this.updateEntityProperty.bind(this),
-            children: this.children,
+            updateEquipmentProperty,
+            userGroup: userData.eamAccount.userGroup,
         }
 
         return [
@@ -326,12 +346,12 @@ export default class Asset extends Entity {
                 maximizable: false,
                 render: () => 
                     <Comments
-                        ref={comments => this.comments = comments}
+                        ref={comments => commentsComponent.current = comments}
                         entityCode='OBJ'
-                        entityKeyCode={!layout.newEntity ? equipment.code : undefined}
+                        entityKeyCode={!newEntity ? equipment.code : undefined}
                         userCode={userData.eamAccount.userCode}
                         allowHtml={true}
-                        disabled={this.departmentalSecurity.readOnly} />
+                        disabled={departmentalSecurity.readOnly} />
                 ,
                 RegionPanelProps: {
                     detailsStyle: { padding: 0 }
@@ -350,8 +370,8 @@ export default class Asset extends Entity {
                     <UserDefinedFields
                         fields={equipment.userDefinedFields}
                         entityLayout={assetLayout.fields}
-                        updateUDFProperty={this.updateEntityProperty}
-                        children={this.children} />
+                        updateUDFProperty={updateEquipmentProperty}
+                    />
                 ,
                 column: 2,
                 order: 10,
@@ -365,34 +385,33 @@ export default class Asset extends Entity {
                 maximizable: false,
                 render: () => 
                     <CustomFields
-                        children={this.children}
                         entityCode='OBJ'
                         entityKeyCode={equipment.code}
                         classCode={equipment.classCode}
                         customFields={equipment.customField}
-                        updateEntityProperty={this.updateEntityProperty.bind(this)} />
+                        updateEntityProperty={updateEquipmentProperty} />
                 ,
                 column: 2,
                 order: 11,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
+            // TODO: figure out how we want to handle part state. We keep the useState?
             {
                 id : 'PARTCUSTOMFIELDS',
                 label : 'Part Custom Fields',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                customVisibility: () => this.state.part,
-                render: () => 
-                    <CustomFields 
-                        children={this.children}
+                customVisibility: () => part, // TODO: visibility set by existence of part state, not by checkbox? Even if there is no part but checkbox to open part custom fields, the user would expect an empty panel, not no panel. That makes it seem like our app is not responding. Is it because we set undefined in the setPart if the WS call fails? Actually might just be for the assets that don't have a part associated (eg https://testeamlight.cern.ch/asset/CFXM-00241) but then shouldn't we instead disable the option of opening the Part Custom Fields panel? Also don't assets always have to have a part associated?
+                render: () => {
+                    return <CustomFields 
                         entityCode='PART'
-                        entityKeyCode={this.state.part && this.state.part.code}
-                        classCode={this.state.part && this.state.part.classCode}
-                        customFields={layout.partCustomField}
-                        updateEntityProperty={this.updateEntityProperty.bind(this)}
+                        entityKeyCode={part?.code}
+                        classCode={part?.classCode}
+                        customFields={layout.partCustomField} // TODO: we rely on 'ui.layout' store state that we set in useEffect. Ok?
+                        updateEntityProperty={updateEquipmentProperty}
                         readonly={true}/>
-                ,
+                },
                 column: 2,
                 order: 12,
                 ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
@@ -420,76 +439,68 @@ export default class Asset extends Entity {
         ]
     }
 
-    setAssetPart = partCode=> {
-        return WSParts.getPart(partCode).then(response => {
-            this.setState({part: response.body.data})
-            this.setLayout({partCustomField: response.body.data.customField})
-        }).catch(error => {
-            this.setState({part: undefined})
-            this.setLayout({partCustomField: undefined})
-        });
-    };
+    // TODO: with the previous logic, this wouldn't run at all because the postXXX functions
+    // are not being called. Either way, we are now using a useEffect hook to accomplish
+    // the same. Ok?
+    // const setAssetPart = partCode => {
+    //     return WSParts.getPart(partCode).then(response => {
+    //         setPart(response.body.data);
+    //         setLayoutProperty('partCustomField', response.body.data.customField);
+    //     }).catch(error => {
+    //         setPart(undefined);
+    //         setLayoutProperty('partCustomField', undefined);
+    //     });
+    // };
 
-    renderAsset() {
-        const {
-            applicationData,
-            history,
-            showEqpTree,
-            toggleHiddenRegion,
-            setRegionVisibility,
-            userData,
-            isHiddenRegion,
-            getHiddenRegionState,
-            getUniqueRegionID
-        } = this.props;
-        const { equipment, layout } = this.state;
-        const regions = this.getRegions();
-
-        return (
-            <BlockUi tag="div" blocking={layout.blocking} style={{ height: "100%", width: "100%" }}>
-                <EamlightToolbarContainer
-                    isModified={layout.isModified}
-                    newEntity={layout.newEntity}
-                    entityScreen={userData.screens[userData.assetScreen]}
-                    entityName="Asset"
-                    entityKeyCode={equipment.code}
-                    saveHandler={this.saveHandler.bind(this)}
-                    newHandler={() => history.push('/asset')}
-                    deleteHandler={this.deleteEntity.bind(this, equipment.code)}
-                    toolbarProps={{
-                        entityDesc: this.settings.entityDesc,
-                        entity: equipment,
-                        postInit: this.postInit.bind(this),
-                        setLayout: this.setLayout.bind(this),
-                        newEntity: layout.newEntity,
-                        applicationData: applicationData,
-                        extendedLink: applicationData.EL_ASSLI,
-                        screencode: userData.assetScreen,
-                        copyHandler: this.copyEntity.bind(this),
-                        entityType: ENTITY_TYPE.EQUIPMENT,
-                        departmentalSecurity: this.departmentalSecurity,
-                        screens: userData.screens[userData.assetScreen],
-                        workorderScreencode: userData.workorderScreen
-                    }}
-                    width={730}
-                    entityIcon={<AssetIcon style={{ height: 18 }} />}
-                    toggleHiddenRegion={toggleHiddenRegion}
-                    getUniqueRegionID={getUniqueRegionID}
-                    regions={regions}
-                    isHiddenRegion={isHiddenRegion}
-                    getHiddenRegionState={getHiddenRegionState}
-                    departmentalSecurity={this.departmentalSecurity} />
-                <EntityRegions
-                    showEqpTree={showEqpTree}
-                    regions={regions}
-                    isNewEntity={layout.newEntity} 
-                    isHiddenRegion={isHiddenRegion}
-                    getUniqueRegionID={getUniqueRegionID}
-                    setRegionVisibility={setRegionVisibility}
-                    getHiddenRegionState={getHiddenRegionState}/>
-            </BlockUi>
-        )
+    if (!equipment) {
+        return React.Fragment;
     }
+
+    return (
+        <BlockUi tag="div" blocking={loading} style={{ height: "100%", width: "100%" }}>
+            <EamlightToolbarContainer
+                isModified={true} // TODO:
+                newEntity={newEntity}
+                entityScreen={screenPermissions}
+                entityName="Asset" // TODO:
+                entityKeyCode={equipment.code}
+                saveHandler={saveHandler}
+                newHandler={newHandler}
+                deleteHandler={deleteHandler}
+                toolbarProps={{
+                    entityDesc: "Asset", // TODO:
+                    entity: equipment,
+                    // postInit: this.postInit.bind(this),
+                    // setLayout: this.setLayout.bind(this),
+                    newEntity: newEntity,
+                    applicationData: applicationData,
+                    extendedLink: applicationData.EL_ASSLI,
+                    screencode: screenCode,
+                    // copyHandler: this.copyEntity.bind(this),
+                    entityType: ENTITY_TYPE.EQUIPMENT,
+                    departmentalSecurity: departmentalSecurity,
+                    screens: screenPermissions,
+                    // screens: userData.screens[userData.assetScreen], // TODO: should this be 'userData.screens' like we saw in Part, Location and System? Or should this one be different? Why?
+                    workorderScreencode: userData.workOrderScreen
+                }}
+                width={730}
+                entityIcon={<AssetIcon style={{ height: 18 }} />}
+                toggleHiddenRegion={toggleHiddenRegion}
+                getUniqueRegionID={getUniqueRegionID}
+                regions={getRegions()}
+                isHiddenRegion={isHiddenRegion}
+                getHiddenRegionState={getHiddenRegionState}
+                departmentalSecurity={departmentalSecurity} />
+            <EntityRegions
+                showEqpTree={showEqpTree}
+                regions={getRegions()}
+                isNewEntity={newEntity} 
+                isHiddenRegion={isHiddenRegion}
+                getUniqueRegionID={getUniqueRegionID}
+                setRegionVisibility={setRegionVisibility}
+                getHiddenRegionState={getHiddenRegionState}/>
+        </BlockUi>
+    )
 }
 
-
+export default Asset;
