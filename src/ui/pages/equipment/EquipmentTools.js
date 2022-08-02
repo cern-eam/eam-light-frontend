@@ -35,7 +35,7 @@ class EquipmentTools {
 export default new EquipmentTools();
 
 
-export const categoryChangeHandler = (category, updateProperty) => {
+export const onCategoryChange = (category, updateProperty) => {
 
     if(!category) {
         return;

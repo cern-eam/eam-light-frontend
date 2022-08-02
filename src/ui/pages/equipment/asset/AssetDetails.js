@@ -7,7 +7,7 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAuto
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
-import { categoryChangeHandler } from '../EquipmentTools';
+import { onCategoryChange } from '../EquipmentTools';
 
 class AssetDetails extends Component {
     render() {
@@ -32,8 +32,9 @@ class AssetDetails extends Component {
                     updateProperty={updateEquipmentProperty}
                     valueKey="categoryCode"
                     descKey="categoryDesc"
+                    renderDependencies={equipment.classCode}
                     autocompleteHandler={filter => WSEquipment.autocompleteEquipmentCategory(filter, equipment.classCode)}
-                    onChangeValue={categoryCode => categoryChangeHandler(categoryCode, updateEquipmentProperty)}/>
+                    onChangeValue={categoryCode => onCategoryChange(categoryCode, updateEquipmentProperty)}/>
 
                 <EAMAutocomplete
                     {...processElementInfo(assetLayout.fields['costcode'])}

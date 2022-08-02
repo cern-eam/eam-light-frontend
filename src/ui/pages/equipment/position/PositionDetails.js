@@ -6,6 +6,7 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAuto
 import WS from "../../../../tools/WS";
 import WSEquipment from "../../../../tools/WSEquipment";
 import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import { onCategoryChange } from '../EquipmentTools';
 
 class PositionDetails extends Component {
     render() {
@@ -30,7 +31,9 @@ class PositionDetails extends Component {
                     updateProperty={updateEquipmentProperty}
                     valueKey="categoryCode"
                     descKey="categoryDesc"
-                    autocompleteHandler={filter => WSEquipment.autocompleteEquipmentCategory(filter, equipment.classCode)}/>
+                    renderDependencies={equipment.classCode}
+                    autocompleteHandler={filter => WSEquipment.autocompleteEquipmentCategory(filter, equipment.classCode)}
+                    onChangeValue={categoryCode => onCategoryChange(categoryCode, updateEquipmentProperty)}/>
 
                 <EAMDatePicker
                     {...processElementInfo(positionLayout.fields['commissiondate'])}

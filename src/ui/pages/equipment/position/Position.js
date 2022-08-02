@@ -26,38 +26,6 @@ import useEntity from "hooks/useEntity";
 
 const Position = () => {
 
-    // TODO: move this to respective input?
-    const onChangeCategoryCode = code => {
-        if(!code) {
-            return;
-        }
-
-        //Fetch the category data
-        return WSEquipment.getCategoryData(code).then(response => {
-            const categoryData = response.body.data[0];
-
-            if(!categoryData) {
-                return;
-            }
-
-            this.setState(prevState => {
-                const equipment = {...prevState.equipment};
-
-                if(categoryData.categoryclass) {
-                    equipment.classCode = categoryData.categoryclass;
-                    equipment.classDesc = categoryData.categoryclassdesc;
-                }
-
-                if(categoryData.manufacturer) {
-                    equipment.manufacturerCode = categoryData.manufacturer;
-                }
-
-                return {equipment};
-            });
-        }).catch(error => {
-            console.log(error);
-        });
-    };
 
     const queryParams = queryString.parse(window.location.search).length > 0 ?
                         queryString.parse(window.location.search) : '';
@@ -80,20 +48,13 @@ const Position = () => {
                 read: postRead,
                 new: postInit,
             },
+            entityCode: "OBJ",
             entityDesc: "Position",
             entityURL: "/position/",
             entityCodeProperty: "code",
             screenProperty: "positionScreen",
             layoutProperty: "positionLayout",
         });
-
-    // TODO: keeping for context
-    // settings = {
-        // handlerFunctions: {
-        //     categoryCode: this.onChangeCategoryCode,
-        //     classCode: this.onChangeClass,
-        // }
-    // }
 
     function postInit() {
         // this.setStatuses(true) // TODO: confirm it works as expected, 
