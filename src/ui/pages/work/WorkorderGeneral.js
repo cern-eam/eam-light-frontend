@@ -12,7 +12,7 @@ import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
 
 function WorkorderDetails(props) {
 
-    const { workOrderLayout, workorder, updateWorkorderProperty, layout, applicationData, userData } = props;
+    const { workOrderLayout, workorder, updateWorkorderProperty, layout, applicationData, newEntity, userGroup } = props; // TODO: rm layout if not needed after deciding on autocomplete logic that were using it
     const rpawClassesList = (applicationData && applicationData.EL_TRPAC && applicationData.EL_TRPAC.split(',')) || [];
     const rpawLink = applicationData && applicationData.EL_TRPAW;
 
@@ -64,9 +64,9 @@ function WorkorderDetails(props) {
                 renderSuggestion={suggestion => suggestion.desc}
                 renderValue={value => value.desc || value.code}
                 updateProperty={updateWorkorderProperty}
-                options={layout.typeValues}
-                // autocompleteHandler={WSWorkorders.getWorkOrderTypeValues}
-                // autocompleteHandlerParams = {[userData.eamAccount.userGroup]}
+                // options={layout.typeValues} // TODO: should be fine to rm but confirm
+                autocompleteHandler={WSWorkorders.getWorkOrderTypeValues}
+                autocompleteHandlerParams = {[userGroup]}
                 />
 
             <EAMSelect
@@ -78,9 +78,9 @@ function WorkorderDetails(props) {
                 renderSuggestion={suggestion => suggestion.desc}
                 renderValue={value => value.desc || value.code}
                 updateProperty={updateWorkorderProperty}
-                options={layout.statusValues}
-                //autocompleteHandler={WSWorkorders.getWorkOrderStatusValues}
-                //autocompleteHandlerParams = {[userData.eamAccount.userGroup, workorder.statusCode, workorder.typeCode, false]}
+                // options={layout.statusValues} // TODO: rm or not depending on setStatuses final logic
+                autocompleteHandler={WSWorkorders.getWorkOrderStatusValues}
+                autocompleteHandlerParams = {[userGroup, workorder.statusCode, workorder.typeCode, newEntity]}
                 />
 
             <EAMSelect
@@ -108,7 +108,7 @@ function WorkorderDetails(props) {
                     valueDesc={workorder.standardWODesc}
                     descKey="standardWODesc"
                     updateProperty={updateWorkorderProperty}
-                    autocompleteHandler={WSWorkorders.autocompleteStandardWorkOrder.bind(null, userData.eamAccount.userGroup)}/>
+                    autocompleteHandler={WSWorkorders.autocompleteStandardWorkOrder.bind(null, userGroup)}/>
 
             <EAMTextField
                 {...processElementInfo(workOrderLayout.fields['targetvalue'])}

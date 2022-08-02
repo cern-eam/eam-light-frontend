@@ -1,8 +1,9 @@
 import Checklists from 'eam-components/dist/ui/components/checklists/Checklists';
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import {WorkorderIcon} from 'eam-components/dist/ui/components/icons';
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import BlockUi from 'react-block-ui';
+import { useSelector } from 'react-redux'; // TODO: keep?
 import WSEquipment from "../../../tools/WSEquipment";
 import WSWorkorder from "../../../tools/WSWorkorders";
 import WS from '../../../tools/WS'
@@ -10,7 +11,6 @@ import {ENTITY_TYPE} from "../../components/Toolbar";
 import CustomFields from '../../components/customfields/CustomFields';
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import NCRIframeContainer from "../../components/iframes/NCRIframeContainer";
-import Entity from '../Entity';
 import EamlightToolbarContainer from './../../components/EamlightToolbarContainer';
 import Activities from './activities/Activities';
 import AdditionalCostsContainer from "./additionalcosts/AdditionalCostsContainer";
@@ -31,6 +31,9 @@ import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
 import WSParts from '../../../tools/WSParts';
 import WSWorkorders from '../../../tools/WSWorkorders';
+import useEntity from "hooks/useEntity";
+import { updateMyWorkOrders } from '../../../actions/workorderActions' // TODO: keep?
+
 
 const assignStandardWorkOrderValues = (workOrder, standardWorkOrder) => {
     const swoToWoMap = ([k, v]) => [k, standardWorkOrder[v]];
@@ -52,22 +55,29 @@ const assignStandardWorkOrderValues = (workOrder, standardWorkOrder) => {
     return workOrder;
 };
 
-class Workorder extends Entity {
+const Workorder = () => {
+    const [equipmentMEC, setEquipmentMEC] = useState();
+    console.log('equipmentMEC', equipmentMEC);
+    const checklists = useRef(null);
+    const layout = useSelector(state => state.ui.layout); // TODO: should useEntity be returning this instead?
 
-    constructor(props) {
-        super(props);
-        this.props.setLayoutProperty('showEqpTreeButton', false);
-    }
+    // TODO: was in constructor, stay in useEffect or move to eg PostRead
+    useEffect(() => {
+        setLayoutProperty('showEqpTreeButton', false);
+    }, [])
 
-    componentDidMount() {
-        super.componentDidMount();
-    }
+    // TODO:
+    // const componentDidMount = () => {
+    //     super.componentDidMount();
+    // }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        super.componentDidUpdate(prevProps, prevState, snapshot);
-    }
+    // TODO:
+    // const componentDidUpdate = (prevProps, prevState, snapshot) => {
+    //     super.componentDidUpdate(prevProps, prevState, snapshot);
+    // }
 
-    onChangeStandardWorkOrder = standardWorkOrderCode => {
+    // TODO: waiting for handlers implementation to refactor
+    const onChangeStandardWorkOrder = standardWorkOrderCode => {
         if (!standardWorkOrderCode) {
             return;
         }
@@ -81,7 +91,8 @@ class Workorder extends Entity {
         })
     }
 
-    onChangeEquipment = value => {
+    // TODO: waiting for handlers implementation to refactor
+    const onChangeEquipment = value => {
         console.log('change equipment', value)
         if(!value) {
             return;
@@ -110,58 +121,57 @@ class Workorder extends Entity {
                     }
                 }));
             }),
-            this.setWOEquipment(value) //Set the equipment work order
+            setWOEquipment(value) //Set the equipment work order
         ]).catch(error => {
             //Simply don't assign values
         });
     };
 
-    //
-    // SETTINGS OBJECT USED BY ENTITY CLASS
-    //
-    settings = {
-        userData: this.props.userData,
-        entity: 'workorder',
-        entityDesc: 'Work Order',
-        entityURL: '/workorder/',
-        entityCodeProperty: 'number',
-        entityScreen: this.props.userData && this.props.userData.screens[this.props.userData.workOrderScreen],
-        renderEntity: this.renderWorkOrder.bind(this),
-        readEntity: WSWorkorder.getWorkOrder.bind(WSWorkorder),
-        updateEntity: WSWorkorder.updateWorkOrder.bind(WSWorkorder),
-        createEntity: WSWorkorder.createWorkOrder.bind(WSWorkorder),
-        deleteEntity: WSWorkorder.deleteWorkOrder.bind(WSWorkorder),
-        initNewEntity: WSWorkorder.initWorkOrder.bind(WSWorkorder, "EVNT"),
-        layout: this.props.workOrderLayout,
-        layoutPropertiesMap: WorkorderTools.layoutPropertiesMap,
-        handlerFunctions: {
-            equipmentCode: this.onChangeEquipment,
-            standardWO: this.onChangeStandardWorkOrder,
-            classCode: this.onChangeClass,
-        }
-    }
+    const {screenLayout: workOrderLayout, entity: workorder, loading,
+        screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
+        isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
+        departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
+        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateWorkorderProperty, handleError, showError, showNotification} = useEntity({
+            WS: {
+                create: WSWorkorder.createWorkOrder,
+                read: WSWorkorder.getWorkOrder,
+                update: WSWorkorder.updateWorkOrder,
+                delete: WSWorkorder.deleteWorkOrder,
+                new:  WSWorkorder.initWorkOrder.bind(null, "EVNT"), // TODO: again we have extra arguments. What to do?
+            },
+            postActions: {
+                create: postCreate,
+                read: postRead,
+                new: postInit,
+            },
+            entityDesc: "Work Order",
+            entityURL: "/workorder/",
+            entityCodeProperty: "number",
+            screenProperty: "workOrderScreen",
+            layoutProperty: "workOrderLayout",
+        });
 
+    // TODO: keeping for context
+    // settings = {
+        // layoutPropertiesMap: WorkorderTools.layoutPropertiesMap,
+        // handlerFunctions: {
+        //     equipmentCode: this.onChangeEquipment,
+        //     standardWO: this.onChangeStandardWorkOrder,
+        //     classCode: this.onChangeClass,
+        // }
+    // }
 
-    getRegions = () => {
-        const {
-            applicationData,
-            handleError,
-            showError,
-            showNotification,
-            userData,
-            workOrderLayout
-        } = this.props;
-        const { layout, workorder, equipmentMEC } = this.state;
-        const {tabs} = workOrderLayout;
+    const getRegions = () => {
+        const { tabs } = workOrderLayout;
 
         const commonProps = {
             workorder,
-            layout,
+            newEntity,
+            layout, // TODO: check which comps are using it
             workOrderLayout,
-            userData,
-            updateWorkorderProperty: this.updateEntityProperty.bind(this),
-            children: this.children,
-            setWOEquipment: this.setWOEquipment
+            userGroup: userData.eamAccount.userGroup,
+            updateWorkorderProperty,
+            // setWOEquipment: this.setWOEquipment // TODO: do we need to be passing this? It does not seem to be used in any child component
         };
 
         return [
@@ -218,9 +228,9 @@ class Workorder extends Entity {
                 render: () =>
                     <PartUsageContainer
                         workorder={workorder}
-                        tabLayout={commonProps.workOrderLayout.tabs.PAR}
+                        tabLayout={tabs.PAR}
                         equipmentMEC={equipmentMEC}
-                        disabled={this.departmentalSecurity.readOnly} />
+                        disabled={departmentalSecurity.readOnly} />
                 ,
                 column: 1,
                 order: 4,
@@ -236,9 +246,9 @@ class Workorder extends Entity {
                 render: () =>
                     <AdditionalCostsContainer
                         workorder={workorder}
-                        tabLayout={commonProps.workOrderLayout.tabs.ACO}
+                        tabLayout={tabs.ACO}
                         equipmentMEC={equipmentMEC}
-                        disabled={this.departmentalSecurity.readOnly} />
+                        disabled={departmentalSecurity.readOnly} />
                 ,
                 column: 1,
                 order: 4,
@@ -305,13 +315,13 @@ class Workorder extends Entity {
                 maximizable: false,
                 render: () =>
                     <Comments
-                        ref={comments => this.comments = comments}
+                        ref={comments => commentsComponent.current = comments}
                         entityCode='EVNT'
-                        entityKeyCode={!layout.newEntity ? workorder.number : undefined}
+                        entityKeyCode={!newEntity ? workorder.number : undefined}
                         userCode={userData.eamAccount.userCode}
                         handleError={handleError}
                         allowHtml={true}
-                        disabled={this.departmentalSecurity.readOnly} />
+                        disabled={departmentalSecurity.readOnly} />
                 ,
                 RegionPanelProps: {
                     detailsStyle: { padding: 0 }
@@ -331,14 +341,14 @@ class Workorder extends Entity {
                         workorder={workorder.number}
                         department={workorder.departmentCode}
                         departmentDesc={workorder.departmentDesc}
-                        layout={workOrderLayout.tabs}
+                        layout={tabs}
                         defaultEmployee={userData.eamAccount.employeeCode}
                         defaultEmployeeDesc={userData.eamAccount.employeeDesc}
-                        postAddActivityHandler={this.postAddActivityHandler}
-                        updateEntityProperty={this.updateEntityProperty.bind(this)}
+                        postAddActivityHandler={postAddActivityHandler}
+                        updateEntityProperty={updateWorkorderProperty}
                         updateCount={workorder.updateCount}
                         startDate={workorder.startDate}
-                        disabled={this.departmentalSecurity.readOnly} />
+                        disabled={departmentalSecurity.readOnly} />
                 ,
                 column: 2,
                 order: 8,
@@ -356,12 +366,12 @@ class Workorder extends Entity {
                         printingChecklistLinkToAIS={applicationData.EL_PRTCL}
                         maxExpandedChecklistItems={Math.abs(parseInt(applicationData.EL_MCHLS)) || 50}
                         getWoLink={wo => '/workorder/' + wo}
-                        ref={checklists => this.checklists = checklists}
+                        ref={checklists}
                         showSuccess={showNotification}
                         showError={showError}
                         handleError={handleError}
                         userCode={userData.eamAccount.userCode}
-                        disabled={this.departmentalSecurity.readOnly}
+                        disabled={departmentalSecurity.readOnly}
                         hideFilledItems={panelQueryParams.hideFilledItems === 'true'}
                         activity={panelQueryParams.CHECKLISTSactivity}
                         topSlot={
@@ -394,12 +404,11 @@ class Workorder extends Entity {
                 maximizable: false,
                 render: () =>
                     <CustomFields
-                        children={this.children}
                         entityCode='EVNT'
                         entityKeyCode={workorder.number}
                         classCode={workorder.classCode}
                         customFields={workorder.customField}
-                        updateEntityProperty={this.updateEntityProperty.bind(this)} />
+                        updateEntityProperty={updateWorkorderProperty} />
                 ,
                 column: 2,
                 order: 10,
@@ -413,12 +422,12 @@ class Workorder extends Entity {
                 customVisibility: () => WorkorderTools.isRegionAvailable('CUSTOM_FIELDS_EQP', commonProps.workOrderLayout),
                 maximizable: false,
                 render: () =>
-                    <CustomFields children={this.children}
+                    <CustomFields
                         entityCode='OBJ'
                         entityKeyCode={layout.woEquipment && layout.woEquipment.code}
                         classCode={layout.woEquipment && layout.woEquipment.classCode}
                         customFields={layout.woEquipment && layout.woEquipment.customField}
-                        updateEntityProperty={this.updateEntityProperty.bind(this)}
+                        updateEntityProperty={updateWorkorderProperty}
                         readonly={true} />
                 ,
                 column: 2,
@@ -435,12 +444,11 @@ class Workorder extends Entity {
                 maximizable: false,
                 render: () => (
                     <CustomFields
-                        children={this.children}
                         entityCode="OBJ"
                         entityKeyCode={layout.woEquipment && layout.woEquipment.partCode}
                         classCode={layout.woEquipment && layout.woEquipment.classCode}
                         customFields={layout.woEquipment && layout.woEquipment.partCustomFields}
-                        updateEntityProperty={this.updateEntityProperty.bind(this)}
+                        updateEntityProperty={updateWorkorderProperty}
                         readonly={true}
                     />
                 ),
@@ -455,7 +463,7 @@ class Workorder extends Entity {
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
                 render: () =>
-                    <MeterReadingContainerWO equipment={workorder.equipmentCode} disabled={this.departmentalSecurity.readOnly} />
+                    <MeterReadingContainerWO equipment={workorder.equipmentCode} disabled={departmentalSecurity.readOnly} />
                 ,
                 column: 2,
                 order: 12,
@@ -469,7 +477,7 @@ class Workorder extends Entity {
                 customVisibility: () => WorkorderTools.isRegionAvailable('MEC', commonProps.workOrderLayout),
                 maximizable: false,
                 render: () =>
-                    <WorkorderMultiequipment workorder={workorder.number} setEquipmentMEC={this.setEquipmentMEC.bind(this)}/>
+                    <WorkorderMultiequipment workorder={workorder.number} setEquipmentMEC={setEquipmentMEC}/>
                 ,
                 column: 2,
                 order: 13,
@@ -481,94 +489,93 @@ class Workorder extends Entity {
 
     }
 
-    setEquipmentMEC(data) {
-        this.setState({equipmentMEC: data})
-    }
-
     //
     // CALLBACKS FOR ENTITY CLASS
     //
-    postInit() {
-        this.setStatuses('', '', true)
-        this.setTypes('', '', true, false)
-        this.enableChildren()
+    const postInit = () => {
+        // setStatuses('', '', true) // TODO: confirm it works as expected
+        // setTypes('', '', true, false) // TODO: should be fine to rm
+        // this.enableChildren() // TODO: keep for context
     }
 
-    postCreate() {
-        this.setStatuses(this.state.workorder.statusCode, this.state.workorder.typeCode, false);
-        this.setTypes(this.state.workorder.statusCode, this.state.workorder.typeCode, false);
+    const postCreate = () => {
+        // setStatuses(workorder.statusCode, workorder.typeCode, false); // TODO: confirm it works as expected
+        // setTypes(this.state.workorder.statusCode, this.state.workorder.typeCode, false); // TODO: should be fine to rm
         // Comments panel might be hidden
-        if (this.comments) {
-            this.comments.createCommentForNewEntity();
+        if (commentsComponent.current) {
+            commentsComponent.current.createCommentForNewEntity();
         }
     }
 
-    postUpdate(workorder) {
-        this.props.updateMyWorkOrders(workorder)
-        this.setStatuses(workorder.statusCode, workorder.typeCode, false)
-        this.setTypes(workorder.statusCode, workorder.typeCode, false)
+    const postUpdate = (workorder) => {
+        updateMyWorkOrders(workorder); // TODO: confirm we want to be calling it from the import
+        // setStatuses(workorder.statusCode, workorder.typeCode, false); // TODO: confirm it works as expected
+        // setTypes(workorder.statusCode, workorder.typeCode, false) // TODO: should be fine to rm
 
-        if (this.departmentalSecurity.readOnly) {
-            this.disableChildren();
+        if (departmentalSecurity.readOnly) {
+            // this.disableChildren();  // TODO: keep for context
         } else if (WorkorderTools.isClosedWorkOrder(workorder.statusCode)) {
             // If opening a terminated work order
-            this.disableChildren()
-            this.children['EAMID_WorkOrder_STATUS_STATUSCODE'].enable()
+            // this.disableChildren()  // TODO: keep for context
+            // this.children['EAMID_WorkOrder_STATUS_STATUSCODE'].enable()  // TODO: keep for context
         } else {
-            this.enableChildren()
+            // this.enableChildren() // TODO: keep for context
         }
         // Comments panel might be hidden
-        if (this.comments) {
-            this.comments.createCommentForNewEntity();
+        if (commentsComponent.current) {
+            commentsComponent.current.createCommentForNewEntity();
         }
     }
 
-    postRead(workorder) {
-        
-        this.props.updateMyWorkOrders(workorder)
-        this.setStatuses(workorder.statusCode, workorder.typeCode, false)
-        this.setTypes(workorder.statusCode, workorder.typeCode, false)
+    // TODO:
+    const postRead = (workorder) => {
+        updateMyWorkOrders(workorder); // TODO: confirm we want to be calling it from the import
+        // setStatuses(workorder.statusCode, workorder.typeCode, false); // TODO: confirm it works as expected
+        // setTypes(workorder.statusCode, workorder.typeCode, false) // TODO: should be fine to rm
 
-        if (this.departmentalSecurity(workorder.departmentCode).readOnly) {
-            console.log('disabling children')
-            this.disableChildren();
+        if (departmentalSecurity(workorder.departmentCode).readOnly) {
+            console.log('disabling children') // TODO: rm
+            // this.disableChildren(); // TODO: keep for context
         } else if (WorkorderTools.isClosedWorkOrder(workorder.statusCode)) {
             // If opening a terminated work order
-            this.disableChildren()
-            this.children['EAMID_WorkOrder_STATUS_STATUSCODE'].enable()
+            // this.disableChildren()  // TODO: keep for context
+            // this.children['EAMID_WorkOrder_STATUS_STATUSCODE'].enable()  // TODO: keep for context
         } else {
-            this.enableChildren()
-            console.log('children enabled')
+            // this.enableChildren()  // TODO: keep for context
+            console.log('children enabled') // TODO: rm
         }
         //Set work order equipment
-        this.setWOEquipment(workorder.equipmentCode, true);
+        setWOEquipment(workorder.equipmentCode, true);
     }
 
-    postCopy = () => {
-        let fields = this.props.workOrderLayout.fields;
-        isCernMode && this.updateEntityProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
-        isCernMode && this.updateEntityProperty("typeCode", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD")
-        isCernMode && this.updateEntityProperty("completedDate", "");
+    const postCopy = () => {
+        let fields = workOrderLayout.fields;
+        isCernMode && updateWorkorderProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
+        isCernMode && updateWorkorderProperty("typeCode", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD")
+        isCernMode && updateWorkorderProperty("completedDate", "");
     }
 
     //
     // DROP DOWN VALUES
     //
-    setStatuses(status, type, newwo) {
-        WSWorkorder.getWorkOrderStatusValues(this.props.userData.eamAccount.userGroup, status, type, newwo)
-            .then(response => {
-                this.setLayout({statusValues: response.body.data})
-            })
-    }
+    // TODO: rm or not depending on setStatuses final logic
+    // const setStatuses = (status, type, newwo) => {
+    //     WSWorkorder.getWorkOrderStatusValues(this.props.userData.eamAccount.userGroup, status, type, newwo)
+    //         .then(response => {
+    //             this.setLayout({statusValues: response.body.data})
+    //         })
+    // }
 
-    setTypes(status, type, newwo, ppmwo) {
-        WSWorkorder.getWorkOrderTypeValues(this.props.userData.eamAccount.userGroup)
-            .then(response => {
-                this.setLayout({typeValues: response.body.data})
-            })
-    }
+    // TODO: should be fine to rm and keep it in inputs, since function args are not used and WS call only relies on fixed userGroup
+    // const setTypes = (status, type, newwo, ppmwo) => {
+    //     WSWorkorder.getWorkOrderTypeValues(this.props.userData.eamAccount.userGroup)
+    //         .then(response => {
+    //             this.setLayout({typeValues: response.body.data})
+    //         })
+    // }
 
-    setWOEquipment = (code, initialLoad = false) => {
+    // TODO: waiting for handler and postRead to refactor and test
+    const setWOEquipment = (code, initialLoad = false) => {
         const {
             showWarning,
         } = this.props;
@@ -607,70 +614,61 @@ class Workorder extends Entity {
             });
     }
 
-    postAddActivityHandler = () => {
+    // TODO: check if working
+    const postAddActivityHandler = () => {
         //Refresh the activities in the checklist
-        this.checklists && this.checklists.readActivities(this.state.workorder.number);
+        checklists.current && checklists.current.readActivities(workorder.number);
     };
 
-    renderWorkOrder() {
-        const { layout, workorder } = this.state;
-        const {
-            applicationData,
-            getUniqueRegionID,
-            history,
-            isHiddenRegion,
-            setRegionVisibility,
-            getHiddenRegionState,
-            toggleHiddenRegion,
-            userData
-        } = this.props;
-        const regions = this.getRegions();
-        return (
-            <div className="entityContainer">
-                <BlockUi tag="div" blocking={layout.blocking} style={{height: "100%", width: "100%"}}>
-
-                    <EamlightToolbarContainer isModified={layout.isModified}
-                                     newEntity={layout.newEntity}
-                                     entityScreen={userData.screens[userData.workOrderScreen]}
-                                     entityName="Work Order"
-                                     entityKeyCode={workorder.number}
-                                     saveHandler={this.saveHandler.bind(this)}
-                                     newHandler={() => history.push('/workorder')}
-                                     deleteHandler={this.deleteEntity.bind(this, workorder.number)}
-                                     width={790}
-                                     toolbarProps={{
-                                        entity: workorder,
-                                        postInit: this.postInit.bind(this),
-                                        setLayout: this.setLayout.bind(this),
-                                        newEntity: layout.newEntity,
-                                        applicationData: applicationData,
-                                        userGroup: userData.eamAccount.userGroup,
-                                        screencode: userData.screens[userData.workOrderScreen].screenCode,
-                                        copyHandler: this.copyEntity.bind(this),
-                                        entityDesc: this.settings.entityDesc,
-                                        entityType: ENTITY_TYPE.WORKORDER,
-                                        departmentalSecurity: this.departmentalSecurity,
-                                        screens: userData.screens,
-                                        workorderScreencode: userData.workorderScreen
-                                     }}
-                                     entityIcon={<WorkorderIcon style={{height: 18}}/>}
-                                     toggleHiddenRegion={toggleHiddenRegion}
-                                     regions={regions}
-                                     getUniqueRegionID={getUniqueRegionID}
-                                     getHiddenRegionState={getHiddenRegionState}
-                                     isHiddenRegion={isHiddenRegion}
-                                     departmentalSecurity={this.departmentalSecurity} />
-                    <EntityRegions
-                        regions={regions}
-                        isNewEntity={layout.newEntity}
-                        getUniqueRegionID={getUniqueRegionID}
-                        getHiddenRegionState={getHiddenRegionState}
-                        setRegionVisibility={setRegionVisibility}
-                        isHiddenRegion={this.props.isHiddenRegion} />
-                </BlockUi>
-            </div>
-        )
+    if (!workorder) {
+        return React.Fragment;
     }
+
+    return (
+        <div className="entityContainer">
+            <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}}>
+                <EamlightToolbarContainer
+                    isModified={true} // TODO:
+                    newEntity={newEntity}
+                    entityScreen={screenPermissions}
+                    entityName="Work Order"
+                    entityKeyCode={workorder.number}
+                    saveHandler={saveHandler}
+                    newHandler={newHandler}
+                    deleteHandler={deleteHandler}
+                    width={790}
+                    toolbarProps={{
+                        entity: workorder,
+                        // postInit: this.postInit.bind(this),
+                        // setLayout: this.setLayout.bind(this),
+                        newEntity: newEntity,
+                        applicationData: applicationData,
+                        userGroup: userData.eamAccount.userGroup,
+                        screencode: screenCode,
+                        // copyHandler: this.copyEntity.bind(this),
+                        entityDesc: "Work Order",
+                        entityType: ENTITY_TYPE.WORKORDER,
+                        departmentalSecurity: departmentalSecurity,
+                        screens: userData.screens,
+                        workorderScreencode: userData.workOrderScreen
+                    }}
+                    entityIcon={<WorkorderIcon style={{height: 18}}/>}
+                    toggleHiddenRegion={toggleHiddenRegion}
+                    regions={getRegions()}
+                    getUniqueRegionID={getUniqueRegionID}
+                    getHiddenRegionState={getHiddenRegionState}
+                    isHiddenRegion={isHiddenRegion}
+                    departmentalSecurity={departmentalSecurity} />
+                <EntityRegions
+                    regions={getRegions()}
+                    isNewEntity={newEntity}
+                    getUniqueRegionID={getUniqueRegionID}
+                    getHiddenRegionState={getHiddenRegionState}
+                    setRegionVisibility={setRegionVisibility}
+                    isHiddenRegion={isHiddenRegion} />
+            </BlockUi>
+        </div>
+    )
 }
 
 export default Workorder;

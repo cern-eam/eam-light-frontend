@@ -6,7 +6,7 @@ import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import ApplicationLayoutContainer from './ui/layout/ApplicationLayoutContainer';
 import EamlightMenuContainer from './ui/layout/menu/EamlightMenuContainer';
-import WorkorderContainer from './ui/pages/work/WorkorderContainer';
+import Workorder from './ui/pages/work/Workorder';
 import WorkorderSearchContainer from './ui/pages/work/search/WorkorderSearchContainer';
 import PartSearchContainer from './ui/pages/part/search/PartSearchContainer';
 import AssetSearchContainer from './ui/pages/equipment/asset/search/AssetSearchContainer';
@@ -85,7 +85,7 @@ class Eamlight extends Component {
                                                         component={SearchContainer}/>
 
                                                  <Route path="/workorder/:code?"
-                                                        component={WorkorderContainer}/>
+                                                        component={Workorder}/>
 
                                                  <Route path="/wosearch"
                                                         component={WorkorderSearchContainer}/>
