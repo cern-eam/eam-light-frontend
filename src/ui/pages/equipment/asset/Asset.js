@@ -1,7 +1,6 @@
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import { AssetIcon } from 'eam-components/dist/ui/components/icons';
 import React, { useEffect, useState }  from 'react';
-import { useSelector } from 'react-redux'; // TODO: rm
 import queryString from 'query-string';
 import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';
@@ -27,7 +26,7 @@ import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 
 const Asset = () => {
-    const [part, setPart] = useState(part); // TODO: confirm whole associated behavior of part custom fields
+    const [part, setPart] = useState(part);
 
     const queryParams = queryString.parse(window.location.search).length > 0 ?
                         queryString.parse(window.location.search) : '';
@@ -59,12 +58,16 @@ const Asset = () => {
         });
 
     useEffect(() => {
+        // Part input is cleared
+        if (equipment?.partCode === '') {
+            setPart(undefined);
+        }
+        // Part input is filled
         if (equipment?.partCode) {
             WSParts.getPart(equipment.partCode).then(response => {
                 setPart(response.body.data);
             }).catch(error => {
                 setPart(undefined);
-                setLayoutProperty('partCustomField', undefined);
             });
         }
     }, [equipment?.partCode]);
@@ -83,7 +86,6 @@ const Asset = () => {
 
     const postUpdate = () => {
         commentsComponent.current.createCommentForNewEntity();
-        // setAssetPart(equipment.partCode) // TODO: keep for context but I'd remove from here to useEffect
 
         if (departmentalSecurity.readOnly) {
             // this.disableChildren(); // TODO: keeping for context
@@ -96,7 +98,6 @@ const Asset = () => {
         // this.setStatuses(false, equipment.statusCode) // TODO: confirm it works as expected, , oldStatusCode arg
         setLayoutProperty('showEqpTreeButton', true)
         setLayoutProperty('equipment', equipment);
-        // setAssetPart(equipment.partCode); // TODO: keep for context but I'd remove from here to useEffect
 
         if (departmentalSecurity.readOnly) {
             // this.disableChildren(); // TODO: keeping for context
@@ -354,7 +355,7 @@ const Asset = () => {
                         entityCode='PART'
                         entityKeyCode={part?.code}
                         classCode={part?.classCode}
-                        customFields={part?.customField} // TODO: we rely on 'ui.layout' store state that we set in useEffect. Ok?
+                        customFields={part?.customField}
                         updateEntityProperty={updateEquipmentProperty}
                         readonly={true}/>
                 },
@@ -384,19 +385,6 @@ const Asset = () => {
             },
         ]
     }
-
-    // TODO: with the previous logic, this wouldn't run at all because the postXXX functions
-    // are not being called. Either way, we are now using a useEffect hook to accomplish
-    // the same. Ok?
-    // const setAssetPart = partCode => {
-    //     return WSParts.getPart(partCode).then(response => {
-    //         setPart(response.body.data);
-    //         setLayoutProperty('partCustomField', response.body.data.customField);
-    //     }).catch(error => {
-    //         setPart(undefined);
-    //         setLayoutProperty('partCustomField', undefined);
-    //     });
-    // };
 
     if (!equipment) {
         return React.Fragment;
