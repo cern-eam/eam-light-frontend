@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Route, Switch} from 'react-router-dom';
 import EquipmentTree from './components/tree/EquipmentTree'
-import PositionContainer from "./position/PositionContainer";
-import AssetContainer from "./asset/AssetContainer";
-import SystemContainer from "./system/SystemContainer";
+import Position from "./position/Position";
+import Asset from "./asset/Asset";
+import System from "./system/System";
 import Split from 'react-split'
 import Location from './location/Location';
 
@@ -38,11 +38,11 @@ class Equipment extends Component {
                     <div style={{backgroundColor: "white", height: "100%", width: "100%"}}>
                         <Switch>
                             <Route path={"/asset/:code(.+)?"}
-                                   component={AssetContainer}/>
+                                   component={Asset}/>
                             <Route path={"/position/:code(.+)?"}
-                                   component={PositionContainer}/>
+                                   component={Position}/>
                             <Route path={"/system/:code(.+)?"}
-                                   component={SystemContainer}/>
+                                   component={System}/>
                             <Route path={"/location/:code(.+)?"}
                                    component={Location}/>
                         </Switch>
