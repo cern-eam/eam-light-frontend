@@ -349,7 +349,7 @@ const Asset = () => {
                 label : 'Part Custom Fields',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                customVisibility: () => part, // TODO: visibility set by existence of part state, not by checkbox? Even if there is no part but checkbox to open part custom fields, the user would expect an empty panel, not no panel. That makes it seem like our app is not responding. Is it because we set undefined in the setPart if the WS call fails? Actually might just be for the assets that don't have a part associated (eg https://testeamlight.cern.ch/asset/CFXM-00241) but then shouldn't we instead disable the option of opening the Part Custom Fields panel? Also don't assets always have to have a part associated?
+                customVisibility: () => part,
                 render: () => {
                     return <CustomFields 
                         entityCode='PART'
@@ -414,7 +414,6 @@ const Asset = () => {
                     entityType: ENTITY_TYPE.EQUIPMENT,
                     departmentalSecurity: departmentalSecurity,
                     screens: screenPermissions,
-                    // screens: userData.screens[userData.assetScreen], // TODO: should this be 'userData.screens' like we saw in Part, Location and System? Or should this one be different? Why?
                     workorderScreencode: userData.workOrderScreen
                 }}
                 width={730}
