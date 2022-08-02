@@ -492,13 +492,13 @@ const Workorder = () => {
     //
     // CALLBACKS FOR ENTITY CLASS
     //
-    const postInit = () => {
+    function postInit() {
         // setStatuses('', '', true) // TODO: confirm it works as expected
         // setTypes('', '', true, false) // TODO: should be fine to rm
         // this.enableChildren() // TODO: keep for context
     }
 
-    const postCreate = () => {
+    function postCreate() {
         // setStatuses(workorder.statusCode, workorder.typeCode, false); // TODO: confirm it works as expected
         // setTypes(this.state.workorder.statusCode, this.state.workorder.typeCode, false); // TODO: should be fine to rm
         // Comments panel might be hidden
@@ -507,7 +507,7 @@ const Workorder = () => {
         }
     }
 
-    const postUpdate = (workorder) => {
+    function postUpdate(workorder) {
         updateMyWorkOrders(workorder); // TODO: confirm we want to be calling it from the import
         // setStatuses(workorder.statusCode, workorder.typeCode, false); // TODO: confirm it works as expected
         // setTypes(workorder.statusCode, workorder.typeCode, false) // TODO: should be fine to rm
@@ -528,7 +528,7 @@ const Workorder = () => {
     }
 
     // TODO:
-    const postRead = (workorder) => {
+    function postRead(workorder) {
         updateMyWorkOrders(workorder); // TODO: confirm we want to be calling it from the import
         // setStatuses(workorder.statusCode, workorder.typeCode, false); // TODO: confirm it works as expected
         // setTypes(workorder.statusCode, workorder.typeCode, false) // TODO: should be fine to rm
@@ -548,7 +548,7 @@ const Workorder = () => {
         setWOEquipment(workorder.equipmentCode, true);
     }
 
-    const postCopy = () => {
+    function postCopy() {
         let fields = workOrderLayout.fields;
         isCernMode && updateWorkorderProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
         isCernMode && updateWorkorderProperty("typeCode", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD")

@@ -21,29 +21,6 @@ import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import useEntity from "hooks/useEntity";
 
 export default Location = (props) => {
-    
-    const postRead = () => {
-        console.log('poast read');
-        setLayoutProperty("showEqpTreeButton", true);
-        setLayoutProperty("location", this.state.location);
-
-        // if (this.departmentalSecurity.readOnly) {
-        //     this.disableChildren();
-        // } else {
-        //     this.enableChildren();
-        // }
-    }
-
-    const postInit = () => {
-        // this.props.setLayoutProperty('showEqpTreeButton', false)
-        // this.enableChildren();
-    }
-
-    const postCreate = (location) => {
-        commentsComponent.current.createCommentForNewEntity(location.code);
-        setLayoutProperty("showEqpTreeButton", true)
-    }
-
 
     const {screenLayout: locationLayout, entity: location, loading,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
@@ -84,11 +61,29 @@ export default Location = (props) => {
         //}
     }
 
+    function postRead() {
+        console.log('poast read');
+        setLayoutProperty("showEqpTreeButton", true);
+        setLayoutProperty("location", this.state.location);
 
+        // if (this.departmentalSecurity.readOnly) {
+        //     this.disableChildren();
+        // } else {
+        //     this.enableChildren();
+        // }
+    }
 
+    function postInit() {
+        // this.props.setLayoutProperty('showEqpTreeButton', false)
+        // this.enableChildren();
+    }
 
+    function postCreate(location) {
+        commentsComponent.current.createCommentForNewEntity(location.code);
+        setLayoutProperty("showEqpTreeButton", true)
+    }
 
-    // postUpdate(equipment) {
+    // function postUpdate(equipment) {
     //     this.comments.createCommentForNewEntity();
 
     //     if (this.departmentalSecurity.readOnly) {
@@ -295,8 +290,6 @@ export default Location = (props) => {
 
     }
 
-
-
     if (!location) {
         return React.Fragment;
     }
@@ -347,5 +340,3 @@ export default Location = (props) => {
         )
     
 }
-
-

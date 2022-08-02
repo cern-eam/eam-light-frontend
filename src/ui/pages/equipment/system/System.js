@@ -93,19 +93,19 @@ const System = () => {
     //     }
     // };
 
-    const postInit = () => {
+    function postInit() {
         // setStatuses(true); // TODO: confirm it works as expected
         setLayoutProperty('showEqpTreeButton', false)
         // this.enableChildren(); // TODO: keeping for context
     }
 
-    const postCreate = () => {
+    function postCreate() {
         // setStatuses(false); // TODO: confirm it works as expected
         commentsComponent.current.createCommentForNewEntity();
         setLayoutProperty('showEqpTreeButton', true)
     }
 
-    const postUpdate = (equipment) => {
+    function postUpdate(equipment) {
         commentsComponent.current.createCommentForNewEntity();
 
         if (departmentalSecurity.readOnly) {
@@ -115,7 +115,7 @@ const System = () => {
         }
     }
 
-    const postRead = (equipment) => {
+    function postRead(equipment) {
         // setStatuses(false, equipment.statusCode); // TODO: confirm it works as expected
         setLayoutProperty('showEqpTreeButton', true);
         setLayoutProperty('equipment', equipment); // TODO: should we be relying on the 'equipment' arg? Shouldn't we pass the 'equipment' from useEntity?
@@ -136,13 +136,13 @@ const System = () => {
     // }
 
     // TODO:
-    const preCreateEntity= (equipment) => {
+    function preCreateEntity(equipment) {
         //Check hierarchy
         return setValuesHierarchy(equipment);
     }
 
     // TODO:
-    const preUpdateEntity = (equipment) =>  {
+    function preUpdateEntity(equipment) {
         //Check hierarchy
         return setValuesHierarchy(equipment);
     }

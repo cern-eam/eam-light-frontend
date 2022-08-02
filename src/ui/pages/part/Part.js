@@ -55,19 +55,19 @@ const Part = () => {
     //     }
     // };
 
-    const postInit = () => {
+    function postInit() {
         //this.enableChildren(); // TODO: rm but keep for context
     }
 
-    const postCreate = () => {
+    function postCreate() {
         commentsComponent.current.createCommentForNewEntity();
     }
 
-    const postUpdate = () => {
+    function postUpdate() {
         commentsComponent.current.createCommentForNewEntity();
     }
 
-    const postRead = () => {
+    function postRead() {
         // TODO: why was it again that we should do this here and not in empty dep useEffect. Why would we want to execute this on every read if we (from what I've seen) never change this for part again
         setLayoutProperty('showEqpTreeButton', false);
     }

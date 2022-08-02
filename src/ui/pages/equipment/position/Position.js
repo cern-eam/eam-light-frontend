@@ -95,19 +95,19 @@ const Position = () => {
         // }
     // }
 
-    const postInit = () => {
+    function postInit() {
         // this.setStatuses(true) // TODO: confirm it works as expected, 
         setLayoutProperty('showEqpTreeButton', false)
         // this.enableChildren(); // TODO: keeping for context
     }
 
-    const postCreate = () => {
+    function postCreate() {
         // this.setStatuses(false); // TODO: confirm it works as expected, 
         commentsComponent.current.createCommentForNewEntity();
         setLayoutProperty('showEqpTreeButton', true)
     }
 
-    const postUpdate = (equipment) => {
+    function postUpdate(equipment) {
         commentsComponent.current.createCommentForNewEntity();
 
         if (departmentalSecurity.readOnly) {
@@ -117,7 +117,7 @@ const Position = () => {
         }
     }
 
-    const postRead = (equipment) => {
+    function postRead(equipment) {
         // this.setStatuses(false, equipment.statusCode) // TODO: confirm it works as expected, 
         setLayoutProperty('showEqpTreeButton', true)
         setLayoutProperty('equipment', equipment)
