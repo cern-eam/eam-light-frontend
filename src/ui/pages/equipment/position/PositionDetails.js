@@ -9,7 +9,7 @@ import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/
 
 class PositionDetails extends Component {
     render() {
-        let {equipment, positionLayout, updateEquipmentProperty, layout} = this.props;
+        let {equipment, positionLayout, updateEquipmentProperty} = this.props;
 
         return (
             <React.Fragment>
@@ -50,7 +50,7 @@ class PositionDetails extends Component {
                 <EAMSelect
                     {...processElementInfo(positionLayout.fields['criticality'])}
                     value={equipment.criticality}
-                    options={layout.criticalityValues}
+                    autocompleteHandler={WSEquipment.getEquipmentCriticalityValues}
                     updateProperty={updateEquipmentProperty}
                     valueKey="criticality"/>
 

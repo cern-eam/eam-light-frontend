@@ -12,12 +12,12 @@ class PositionGeneral extends Component {
     updateEquipmentStatus = EquipmentTools.getUpdateStatus(this.props.updateEquipmentProperty, this.props.showNotification);
 
     render() {
-        let {equipment, positionLayout, updateEquipmentProperty, layout} = this.props
+        let {equipment, positionLayout, updateEquipmentProperty, newEntity, userGroup} = this.props
         
         return (
             <React.Fragment>
 
-                {layout.newEntity &&
+                {newEntity &&
                 <EAMTextField
                     {...processElementInfo(positionLayout.fields['equipmentno'])}
                     value={equipment.code}
@@ -55,7 +55,8 @@ class PositionGeneral extends Component {
                 <EAMSelect
                     {...processElementInfo(positionLayout.fields['assetstatus'])}
                     value={equipment.statusCode}
-                    options={layout.statusValues}
+                    autocompleteHandler={WSEquipment.getEquipmentStatusValues}
+                    autocompleteHandlerParams={[userGroup, newEntity, equipment.statusCode]}
                     updateProperty={this.updateEquipmentStatus}
                     valueKey="statusCode"/>
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import Entity from '../../Entity'
+import queryString from "query-string";
 import EquipmentHistory from '../components/EquipmentHistory.js'
 import EamlightToolbarContainer from './../../../components/EamlightToolbarContainer'
 import CustomFields from '../../../components/customfields/CustomFields'
@@ -22,15 +22,12 @@ import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
+import useEntity from "hooks/useEntity";
 
-export default class Position extends Entity {
+const Position = () => {
 
-    constructor(props) {
-        super(props)
-        this.setCriticalities()
-    }
-    
-    onChangeCategoryCode = code => {
+    // TODO: move this to respective input?
+    const onChangeCategoryCode = code => {
         if(!code) {
             return;
         }
@@ -62,84 +59,93 @@ export default class Position extends Entity {
         });
     };
 
-    settings = {
-        entity: 'equipment',
-        entityDesc: 'Position',
-        entityURL: '/position/',
-        entityCodeProperty: 'code',
-        entityScreen: this.props.userData.screens[this.props.userData.positionScreen],
-        renderEntity: this.renderPosition.bind(this),
-        readEntity: WSEquipment.getEquipment.bind(WSEquipment),
-        updateEntity: WSEquipment.updateEquipment.bind(WSEquipment),
-        createEntity: WSEquipment.createEquipment.bind(WSEquipment),
-        deleteEntity: WSEquipment.deleteEquipment.bind(WSEquipment),
-        initNewEntity: () => WSEquipment.initEquipment("OBJ", "P", this.props.location.search),
-        handlerFunctions: {
-            categoryCode: this.onChangeCategoryCode,
-            classCode: this.onChangeClass,
-        }
+    const queryParams = queryString.parse(window.location.search).length > 0 ?
+                        queryString.parse(window.location.search) : '';
+
+    // TODO: the entity was called equipment, should we rename to position?
+    const {screenLayout: positionLayout, entity: equipment, loading,
+        screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
+        isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
+        departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
+        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, handleError, showError, showNotification} = useEntity({
+            WS: {
+                create: WSEquipment.createEquipment,
+                read: WSEquipment.getEquipment,
+                update: WSEquipment.updateEquipment,
+                delete: WSEquipment.deleteEquipment,
+                new:  WSEquipment.initEquipment.bind(null, "OBJ", "P", queryParams), // TODO: again we have extra arguments. What to do?
+            },
+            postActions: {
+                create: postCreate,
+                read: postRead,
+                new: postInit,
+            },
+            entityDesc: "Position",
+            entityURL: "/position/",
+            entityCodeProperty: "code",
+            screenProperty: "positionScreen",
+            layoutProperty: "positionLayout",
+        });
+
+    // TODO: keeping for context
+    // settings = {
+        // handlerFunctions: {
+        //     categoryCode: this.onChangeCategoryCode,
+        //     classCode: this.onChangeClass,
+        // }
+    // }
+
+    const postInit = () => {
+        // this.setStatuses(true) // TODO: confirm it works as expected, 
+        setLayoutProperty('showEqpTreeButton', false)
+        // this.enableChildren(); // TODO: keeping for context
     }
 
-    postInit() {
-        this.setStatuses(true)
-        this.props.setLayoutProperty('showEqpTreeButton', false)
-        this.enableChildren();
+    const postCreate = () => {
+        // this.setStatuses(false); // TODO: confirm it works as expected, 
+        commentsComponent.current.createCommentForNewEntity();
+        setLayoutProperty('showEqpTreeButton', true)
     }
 
-    postCreate() {
-        this.setStatuses(false);
-        this.comments.createCommentForNewEntity();
-        this.props.setLayoutProperty('showEqpTreeButton', true)
-    }
+    const postUpdate = (equipment) => {
+        commentsComponent.current.createCommentForNewEntity();
 
-    postUpdate(equipment) {
-        this.comments.createCommentForNewEntity();
-
-        if (this.departmentalSecurity.readOnly) {
-            this.disableChildren();
+        if (departmentalSecurity.readOnly) {
+            // this.disableChildren(); // TODO: keeping for context
         } else {
-            this.enableChildren();
+            // this.enableChildren(); // TODO: keeping for context
         }
     }
 
-    postRead(equipment) {
-        this.setStatuses(false, equipment.statusCode)
-        this.props.setLayoutProperty('showEqpTreeButton', true)
-        this.props.setLayoutProperty('equipment', equipment)
+    const postRead = (equipment) => {
+        // this.setStatuses(false, equipment.statusCode) // TODO: confirm it works as expected, 
+        setLayoutProperty('showEqpTreeButton', true)
+        setLayoutProperty('equipment', equipment)
 
-        if (this.departmentalSecurity.readOnly) {
-            this.disableChildren();
+        if (departmentalSecurity.readOnly) {
+            // this.disableChildren(); // TODO: keeping for context
         } else {
-            this.enableChildren();
+            // this.enableChildren(); // TODO: keeping for context
         }
     }
 
-    setStatuses(neweqp, oldStatusCode) {
-        WSEquipment.getEquipmentStatusValues(this.props.userData.eamAccount.userGroup, neweqp, oldStatusCode)
-            .then(response => {
-                this.setLayout({statusValues: response.body.data})
-            })
-    }
+    // TODO: Tested it and looked ok, but may be better to discuss because argument is called 'oldStatusCode' and we are passing the current status code.
+    // const setStatuses = (neweqp, oldStatusCode) => {
+    //     WSEquipment.getEquipmentStatusValues(this.props.userData.eamAccount.userGroup, neweqp, oldStatusCode)
+    //         .then(response => {
+    //             this.setLayout({statusValues: response.body.data})
+    //         })
+    // }
 
-    setCriticalities() {
-        WSEquipment.getEquipmentCriticalityValues()
-            .then(response => {
-                this.setLayout({criticalityValues: response.body.data})
-            })
-    }
-
-    getRegions = () => {
-        const { positionLayout, userData, applicationData, showError, showNotification } = this.props;
-        const { equipment, layout } = this.state;
+    const getRegions = () => {
         const tabs = positionLayout.tabs;
-
 
         const commonProps = {
             equipment,
-            layout,
+            newEntity,
             positionLayout,
-            updateEquipmentProperty: this.updateEntityProperty.bind(this),
-            children: this.children,
+            userGroup: userData.eamAccount.userGroup,
+            updateEquipmentProperty,
         }
         
         return [
@@ -273,12 +279,12 @@ export default class Position extends Entity {
                 maximizable: false,
                 render: () => 
                     <Comments
-                        ref={comments => this.comments = comments}
+                        ref={comments => commentsComponent.current = comments}
                         entityCode='OBJ'
-                        entityKeyCode={!layout.newEntity ? equipment.code : undefined}
+                        entityKeyCode={!newEntity ? equipment.code : undefined}
                         userCode={userData.eamAccount.userCode}
                         allowHtml={true}
-                        disabled={this.departmentalSecurity.readOnly} />
+                        disabled={departmentalSecurity.readOnly} />
                 ,
                 RegionPanelProps: {
                     detailsStyle: { padding: 0 }
@@ -297,8 +303,8 @@ export default class Position extends Entity {
                     <UserDefinedFields
                         fields={equipment.userDefinedFields}
                         entityLayout={positionLayout.fields}
-                        updateUDFProperty={this.updateEntityProperty}
-                        children={this.children} />
+                        updateUDFProperty={updateEquipmentProperty}
+                    />
                 ,
                 column: 2,
                 order: 10,
@@ -312,12 +318,12 @@ export default class Position extends Entity {
                 maximizable: false,
                 render: () => 
                     <CustomFields
-                        children={this.children}
                         entityCode='OBJ'
                         entityKeyCode={equipment.code}
                         classCode={equipment.classCode}
                         customFields={equipment.customField}
-                        updateEntityProperty={this.updateEntityProperty.bind(this)} />
+                        updateEntityProperty={updateEquipmentProperty}
+                    />
                 ,
                 column: 2,
                 order: 11,
@@ -346,66 +352,54 @@ export default class Position extends Entity {
         ]
     }
 
-    renderPosition() {
-        const {
-            applicationData,
-            history,
-            showEqpTree,
-            toggleHiddenRegion,
-            setRegionVisibility,
-            userData,
-            isHiddenRegion,
-            getHiddenRegionState,
-            getUniqueRegionID
-        } = this.props;
-        const { equipment, layout } = this.state;
-        const regions = this.getRegions();        
-
-        return (
-            <BlockUi tag="div" blocking={layout.blocking} style={{width: '100%', height: "100%"}}>
-                <EamlightToolbarContainer
-                    isModified={layout.isModified}
-                    newEntity={layout.newEntity}
-                    entityScreen={userData.screens[userData.positionScreen]}
-                    entityName={this.settings.entityDesc}
-                    entityKeyCode={equipment.code}
-                    saveHandler={this.saveHandler.bind(this)}
-                    newHandler={() => history.push('/position')}
-                    deleteHandler={this.deleteEntity.bind(this, equipment.code)}
-                    toolbarProps={{
-                        entityDesc: this.settings.entityDesc,
-                        entity: equipment,
-                        postInit: this.postInit.bind(this),
-                        setLayout: this.setLayout.bind(this),
-                        newEntity: layout.newEntity,
-                        applicationData: applicationData,
-                        extendedLink: applicationData.EL_POSLI,
-                        screencode: userData.positionScreen,
-                        copyHandler: this.copyEntity.bind(this),
-                        entityType: ENTITY_TYPE.EQUIPMENT,
-                        departmentalSecurity: this.departmentalSecurity,
-                        screens: userData.screens,
-                        workorderScreencode: userData.workorderScreen
-                    }}
-                    width={730}
-                    entityIcon={<PositionIcon style={{height: 18}}/>}
-                    toggleHiddenRegion={toggleHiddenRegion}
-                    getUniqueRegionID={getUniqueRegionID}
-                    regions={regions}
-                    getHiddenRegionState={getHiddenRegionState}
-                    isHiddenRegion={isHiddenRegion}
-                    departmentalSecurity={this.departmentalSecurity} />
-                <EntityRegions
-                    showEqpTree={showEqpTree}
-                    regions={regions}
-                    isNewEntity={layout.newEntity} 
-                    getUniqueRegionID={getUniqueRegionID}
-                    getHiddenRegionState={getHiddenRegionState}
-                    setRegionVisibility={setRegionVisibility}
-                    isHiddenRegion={isHiddenRegion}/>
-            </BlockUi>
-        )
+    if (!equipment) {
+        return React.Fragment;
     }
+
+    return (
+        <BlockUi tag="div" blocking={loading} style={{width: '100%', height: "100%"}}>
+            <EamlightToolbarContainer
+                isModified={true} // TODO:
+                newEntity={newEntity}
+                entityScreen={screenPermissions}
+                entityName="Position"
+                entityKeyCode={equipment.code}
+                saveHandler={saveHandler}
+                newHandler={newHandler}
+                deleteHandler={deleteHandler}
+                toolbarProps={{
+                    entityDesc: "Position",
+                    entity: equipment,
+                    // postInit: this.postInit.bind(this),
+                    // setLayout: this.setLayout.bind(this),
+                    newEntity: newEntity,
+                    applicationData: applicationData,
+                    extendedLink: applicationData.EL_POSLI,
+                    screencode: screenCode,
+                    // copyHandler: this.copyEntity.bind(this),
+                    entityType: ENTITY_TYPE.EQUIPMENT,
+                    departmentalSecurity: departmentalSecurity,
+                    screens: userData.screens,
+                    workorderScreencode: userData.workOrderScreen
+                }}
+                width={730}
+                entityIcon={<PositionIcon style={{height: 18}}/>}
+                toggleHiddenRegion={toggleHiddenRegion}
+                getUniqueRegionID={getUniqueRegionID}
+                regions={getRegions()}
+                getHiddenRegionState={getHiddenRegionState}
+                isHiddenRegion={isHiddenRegion}
+                departmentalSecurity={departmentalSecurity} />
+            <EntityRegions
+                showEqpTree={showEqpTree}
+                regions={getRegions()}
+                isNewEntity={newEntity} 
+                getUniqueRegionID={getUniqueRegionID}
+                getHiddenRegionState={getHiddenRegionState}
+                setRegionVisibility={setRegionVisibility}
+                isHiddenRegion={isHiddenRegion}/>
+        </BlockUi>
+    )
 }
 
-
+export default Position;
