@@ -72,19 +72,19 @@ const Asset = () => {
         }
     }, [equipment?.partCode]);
 
-    const postInit = () => {
+    function postInit() {
         // this.setStatuses(true); // TODO: confirm it works as expected, oldStatusCode arg
         setLayoutProperty('showEqpTreeButton', false)
         // this.enableChildren(); // TODO: keeping for context
     }
 
-    const postCreate = () => {
+    function postCreate() {
         // this.setStatuses(false); // TODO: confirm it works as expected, oldStatusCode arg
         commentsComponent.current.createCommentForNewEntity();
         setLayoutProperty('showEqpTreeButton', true)
     }
 
-    const postUpdate = () => {
+    function postUpdate() {
         commentsComponent.current.createCommentForNewEntity();
 
         if (departmentalSecurity.readOnly) {
@@ -94,7 +94,7 @@ const Asset = () => {
         }
     }
 
-    const postRead = (equipment) => {
+    function postRead(equipment) {
         // this.setStatuses(false, equipment.statusCode) // TODO: confirm it works as expected, , oldStatusCode arg
         setLayoutProperty('showEqpTreeButton', true)
         setLayoutProperty('equipment', equipment);
@@ -114,12 +114,12 @@ const Asset = () => {
     //         })
     // }
 
-    const preCreateEntity = (equipment) => {
+    function preCreateEntity(equipment) {
         //Check hierarchy
         return setValuesHierarchy(equipment);
     }
 
-    const preUpdateEntity = (equipment) => {
+    function preUpdateEntity(equipment) {
         //Check hierarchy
         return setValuesHierarchy(equipment);
     }
