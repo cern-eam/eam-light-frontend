@@ -1,6 +1,6 @@
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import { AssetIcon } from 'eam-components/dist/ui/components/icons';
-import React, { useEffect }  from 'react';
+import React, { useEffect, useState }  from 'react';
 import { useSelector } from 'react-redux'; // TODO: rm
 import queryString from 'query-string';
 import BlockUi from 'react-block-ui';
@@ -26,7 +26,6 @@ import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
-import { useState } from 'react';
 
 const Asset = () => {
     const [part, setPart] = useState(part); // TODO: confirm whole associated behavior of part custom fields
