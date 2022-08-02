@@ -251,6 +251,13 @@ class WSWorkorders {
     getAdditionalCostsList(workorder, config = {}) {
         return WS._get('/workorders/' + workorder + '/additionalcosts', config);
     }
+
+    //
+    // WO Equipment to OtherId Mapping
+    //
+    getWOEquipToOtherIdMapping(workorder, config={}) {
+        return WS._get(`/workordersmisc/otherid/${workorder}`, config);
+    }
 }
 
 export default new WSWorkorders();

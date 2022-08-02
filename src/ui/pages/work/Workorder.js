@@ -356,6 +356,7 @@ class Workorder extends Entity {
                 render: ({panelQueryParams}) =>  (
                     <Checklists
                         workorder={workorder.number}
+                        eqpToOtherId={layout.otherIdMapping}
                         printingChecklistLinkToAIS={applicationData.EL_PRTCL}
                         maxExpandedChecklistItems={Math.abs(parseInt(applicationData.EL_MCHLS)) || 50}
                         getWoLink={wo => '/workorder/' + wo}
@@ -541,6 +542,7 @@ class Workorder extends Entity {
         }
         //Set work order equipment
         this.setWOEquipment(workorder.equipmentCode, true);
+        this.setOtherIdMapping();
     }
 
     postCopy = () => {
@@ -658,6 +660,13 @@ class Workorder extends Entity {
         //Refresh the activities in the checklist
         this.checklists && this.checklists.readActivities(this.state.workorder.number);
     };
+
+    setOtherIdMapping() {
+        WSWorkorder.getWOEquipToOtherIdMapping(this.state.workorder.number)
+            .then(response => {
+                this.setLayout({otherIdMapping: response.body.data})
+            })
+    }
 
     renderWorkOrder() {
         const { layout, workorder } = this.state;
