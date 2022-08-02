@@ -5,13 +5,14 @@ import {useParams, useHistory} from "react-router-dom"
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
-import { assignDefaultValues, assignQueryParamValues } from "ui/pages/EntityTools";
+import { assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType } from "ui/pages/EntityTools";
 import { setLayoutProperty, showError, showNotification, handleError, toggleHiddenRegion,
     setRegionVisibility } from "actions/uiActions";
+import WSCustomFields from "tools/WSCustomFields";
 
 const useEntity = (params) => {
 
-    const {WS, postActions, entityDesc, entityURL, entityCodeProperty, screenProperty, layoutProperty} = params;
+    const {WS, postActions, entityCode, entityDesc, entityURL, entityCodeProperty, screenProperty, layoutProperty} = params;
 
     const [loading, setLoading] = useState(false);
     const [entity, setEntity] = useState(null);
@@ -54,6 +55,9 @@ const useEntity = (params) => {
         }
     }, [code])
 
+    //
+    // CRUD
+    //
     const createEntity = () => {
         setLoading(true);
 
@@ -65,6 +69,7 @@ const useEntity = (params) => {
                 // Set new URL (will trigger a read)
                 window.history.pushState({}, '', process.env.PUBLIC_URL + entityURL + encodeURIComponent(createdEntity[entityCodeProperty]));
                 showNotificationParam(entityDesc + ' ' + createdEntity[entityCodeProperty] + ' has been successfully created.');
+                document.title = entityDesc + ' ' + createdEntity[entityCodeProperty];
                 postActions.create(createdEntity);
             })
             .catch(error => {
@@ -85,9 +90,10 @@ const useEntity = (params) => {
         WS.read(code, { signal: abortController.current.signal })
             .then(response => {
                 setNewEntity(false);
-                setEntity(response.body.data);
-                postActions.read(response.body.data)
-
+                let data = response.body.data;
+                setEntity(data);
+                document.title = entityDesc + ' ' + data[entityCodeProperty];
+                postActions.read(data)
             })
             .catch(error => {
                 if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
@@ -139,6 +145,7 @@ const useEntity = (params) => {
                 setNewEntity(true);
                 let entity = assignValues(response.body.data)
                 setEntity(entity);
+                document.title = 'New ' + entityDesc;
                 postActions.new(entity);
             })
             .catch(error => {
@@ -146,7 +153,6 @@ const useEntity = (params) => {
             })
             .finally( () => setLoading(false))
     }
-
 
     //
     // BUTTON HANDLERS
@@ -181,8 +187,30 @@ const useEntity = (params) => {
     }
 
 
+    const onChangeClass = newClass => {
+        return WSCustomFields.getCustomFields(entityCode, newClass).then(response => {
+            setEntity(prevEntity => {
+                const newCustomFields = response.body.data;
+                let entity = assignCustomFieldFromCustomField(prevEntity, newCustomFields, AssignmentType.SOURCE_NOT_EMPTY);
+    
+                // replace custom fields with ones in query parameters if we just created the entity
+                if(newEntity) {
+                    const queryParams = queryString.parse(window.location.search);
+                    entity = assignCustomFieldFromObject(entity, queryParams, AssignmentType.SOURCE_NOT_EMPTY);
+                }
+                console.log('entity', prevEntity, entity);
+                return entity;
+            });
+        })
+    }
+
+
     const updateEntityProperty = (key, value) => {
         setEntity(prevEntity => set({...prevEntity}, key, value));
+        // Fire handlers
+        if (key === 'classCode') {
+            onChangeClass(value)
+        }
     };
 
 

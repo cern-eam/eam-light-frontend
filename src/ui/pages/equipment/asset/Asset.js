@@ -16,7 +16,6 @@ import EamlightToolbarContainer from './../../../components/EamlightToolbarConta
 import AssetDetails from './AssetDetails';
 import AssetGeneral from './AssetGeneral';
 import AssetHierarchy from './AssetHierarchy';
-import EquipmentTools from "../EquipmentTools";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentPartsMadeOf from "../components/EquipmentPartsMadeOf";
 import WSParts from '../../../../tools/WSParts';
@@ -29,52 +28,10 @@ import useEntity from "hooks/useEntity";
 
 const Asset = () => {
     const [part, setPart] = useState(part); // TODO: confirm whole associated behavior of part custom fields
-    const layout = useSelector(state => state.ui.layout); // TODO: should useEntity be returning this instead?
-
-    // TODO: some reason this might be needed?
-    // constructor(props) {
-    //     this.state = {
-    //         ...this.state
-    //     }
-    // }
-
-    // TODO: move this to respective input?
-    const onChangeCategoryCode = code => {
-        if(!code) {
-            return;
-        }
-
-        //Fetch the category data
-        return WSEquipment.getCategoryData(code).then(response => {
-            const categoryData = response.body.data[0];
-
-            if(!categoryData) {
-                return;
-            }
-
-            this.setState(prevState => {
-                const equipment = {...prevState.equipment};
-
-                if(categoryData.categoryclass) {
-                    equipment.classCode = categoryData.categoryclass;
-                    equipment.classDesc = categoryData.categoryclassdesc;
-                }
-
-                if(categoryData.manufacturer) {
-                    equipment.manufacturerCode = categoryData.manufacturer;
-                }
-
-                return {equipment};
-            });
-        }).catch(error => {
-            console.log(error);
-        });
-    };
 
     const queryParams = queryString.parse(window.location.search).length > 0 ?
                         queryString.parse(window.location.search) : '';
 
-    // TODO: the entity was called equipment, should we rename to asset?
     const {screenLayout: assetLayout, entity: equipment, loading,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
@@ -92,6 +49,7 @@ const Asset = () => {
                 read: postRead,
                 new: postInit,
             },
+            entityCode: "OBJ",
             entityDesc: "Asset",
             entityURL: "/asset/",
             entityCodeProperty: "code",
@@ -100,27 +58,16 @@ const Asset = () => {
             // layoutPropertiesMap: EquipmentTools.assetLayoutPropertiesMap, // TODO: 
         });
 
-    // TODO: alternative to setAssetPart, ok?
     useEffect(() => {
         if (equipment?.partCode) {
             WSParts.getPart(equipment.partCode).then(response => {
                 setPart(response.body.data);
-                setLayoutProperty('partCustomField', response.body.data.customField);
             }).catch(error => {
-                // TODO: are we satisfied with this error handling? Its consequence is that upon selecting the Part Custom Fields panel it does not get rendered at all.
                 setPart(undefined);
                 setLayoutProperty('partCustomField', undefined);
             });
         }
     }, [equipment?.partCode]);
-
-    // TODO: keeping for context
-    // settings = {
-    //     handlerFunctions: {
-    //         categoryCode: this.onChangeCategoryCode,
-    //         classCode: this.onChangeClass,
-    //     }
-    // }
 
     const postInit = () => {
         // this.setStatuses(true); // TODO: confirm it works as expected, oldStatusCode arg
@@ -407,7 +354,7 @@ const Asset = () => {
                         entityCode='PART'
                         entityKeyCode={part?.code}
                         classCode={part?.classCode}
-                        customFields={layout.partCustomField} // TODO: we rely on 'ui.layout' store state that we set in useEffect. Ok?
+                        customFields={part?.customField} // TODO: we rely on 'ui.layout' store state that we set in useEffect. Ok?
                         updateEntityProperty={updateEquipmentProperty}
                         readonly={true}/>
                 },

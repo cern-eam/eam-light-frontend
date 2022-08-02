@@ -1,5 +1,6 @@
-class EquipmentTools {
+import WSEquipment from "tools/WSEquipment";
 
+class EquipmentTools {
 
     isRegionAvailable(regionCode, equipmentLayout, equipmentType) {
         //Fields and tabs
@@ -32,3 +33,29 @@ class EquipmentTools {
 }
 
 export default new EquipmentTools();
+
+
+export const categoryChangeHandler = (category, updateProperty) => {
+
+    if(!category) {
+        return;
+    }
+
+    WSEquipment.getCategoryData(category).then(response => {
+        const categoryData = response.body.data[0];
+
+            if(categoryData.categoryclass) {
+                updateProperty('classCode', categoryData.categoryclass);
+                updateProperty('classDesc', categoryData.categoryclassdesc);
+            }
+
+            if(categoryData.manufacturer) {
+                updateProperty('manufacturerCode', categoryData.manufacturer);
+            }
+
+        })
+    .catch(error => {
+        console.log(error);
+    });
+    
+}
