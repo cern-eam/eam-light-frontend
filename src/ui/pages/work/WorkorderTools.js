@@ -1,3 +1,5 @@
+import { assignCustomFieldFromCustomField, AssignmentType, assignUserDefinedFields, assignValues } from "../EntityTools";
+
 class WorkorderTools {
 
     //
@@ -81,3 +83,23 @@ class WorkorderTools {
 }
 
 export default new WorkorderTools();
+
+export const assignStandardWorkOrderValues = (workOrder, standardWorkOrder) => {
+    const swoToWoMap = ([k, v]) => [k, standardWorkOrder[v]];
+
+    workOrder = assignValues(workOrder, Object.fromEntries([
+        ['classCode', 'woClassCode'],
+        ['typeCode', 'workOrderTypeCode'],
+        ['problemCode', 'problemCode'],
+        ['priorityCode', 'priorityCode']
+    ].map(swoToWoMap)), AssignmentType.SOURCE_NOT_EMPTY);
+
+    workOrder = assignValues(workOrder, Object.fromEntries([
+        ['description', 'desc'],
+    ].map(swoToWoMap)), AssignmentType.DESTINATION_EMPTY);
+
+    workOrder = assignUserDefinedFields(workOrder, standardWorkOrder.userDefinedFields, AssignmentType.DESTINATION_EMPTY);
+    workOrder = assignCustomFieldFromCustomField(workOrder, standardWorkOrder.customField, AssignmentType.DESTINATION_EMPTY);
+
+    return workOrder;
+};

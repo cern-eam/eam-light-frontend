@@ -7,12 +7,13 @@ import queryString from "query-string";
 import set from "set-value";
 import { assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType } from "ui/pages/EntityTools";
 import { setLayoutProperty, showError, showNotification, handleError, toggleHiddenRegion,
-    setRegionVisibility } from "actions/uiActions";
+    setRegionVisibility, 
+    showWarning} from "actions/uiActions";
 import WSCustomFields from "tools/WSCustomFields";
 
 const useEntity = (params) => {
 
-    const {WS, postActions, entityCode, entityDesc, entityURL, entityCodeProperty, screenProperty, layoutProperty} = params;
+    const {WS, postActions, handlers, entityCode, entityDesc, entityURL, entityCodeProperty, screenProperty, layoutProperty} = params;
 
     const [loading, setLoading] = useState(false);
     const [entity, setEntity] = useState(null);
@@ -29,6 +30,7 @@ const useEntity = (params) => {
     const setLayoutPropertyParam = (...args) => dispatch(setLayoutProperty(...args));
     const showNotificationParam = (...args) => dispatch(showNotification(...args));
     const showErrorParam = (...args) => dispatch(showError(...args));
+    const showWarningParam = (...args) => dispatch(showWarning(...args));
     const handleErrorParam = (...args) => dispatch(handleError(...args));
     const toggleHiddenRegionParam = (...args) => dispatch(toggleHiddenRegion(...args));
     const setRegionVisibilityParam = (...args) => dispatch(setRegionVisibility(...args));
@@ -211,11 +213,12 @@ const useEntity = (params) => {
         if (key === 'classCode') {
             onChangeClass(value)
         }
+        handlers?.[key]?.(value);
     };
 
 
     return {entity, screenCode, screenLayout, screenPermissions, 
-        newEntity, loading,
+        newEntity, setEntity, loading,
         userData, applicationData, 
         isHiddenRegion: isHiddenRegionParam, 
         getHiddenRegionState: getHiddenRegionStateParam, 
@@ -224,7 +227,7 @@ const useEntity = (params) => {
         setLayoutProperty: setLayoutPropertyParam,
         showEqpTree, departmentalSecurity, 
         // Dispatchers
-        showError: showErrorParam, showNotification: showNotificationParam, handleError: handleErrorParam,
+        showError: showErrorParam, showNotification: showNotificationParam, handleError: handleErrorParam, showWarning: showWarningParam,
         toggleHiddenRegion: toggleHiddenRegionParam, setRegionVisibility: setRegionVisibilityParam,
         // 
         newHandler, saveHandler, deleteHandler, updateEntityProperty};

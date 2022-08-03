@@ -6,7 +6,6 @@ import BlockUi from 'react-block-ui';
 import { useSelector } from 'react-redux'; // TODO: keep?
 import WSEquipment from "../../../tools/WSEquipment";
 import WSWorkorder from "../../../tools/WSWorkorders";
-import WS from '../../../tools/WS'
 import {ENTITY_TYPE} from "../../components/Toolbar";
 import CustomFields from '../../components/customfields/CustomFields';
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
@@ -21,11 +20,10 @@ import PartUsageContainer from "./partusage/PartUsageContainer";
 import WorkorderClosingCodes from './WorkorderClosingCodes';
 import WorkorderDetails from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
-import WorkorderTools from "./WorkorderTools";
+import WorkorderTools, { assignStandardWorkOrderValues } from "./WorkorderTools";
 import EntityRegions from '../../components/entityregions/EntityRegions';
 import IconButton from '@mui/material/IconButton';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
-import {assignValues, assignUserDefinedFields, assignCustomFieldFromCustomField, AssignmentType} from '../EntityTools';
 import { isCernMode } from '../../components/CERNMode';
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
@@ -35,103 +33,22 @@ import useEntity from "hooks/useEntity";
 import { updateMyWorkOrders } from '../../../actions/workorderActions' // TODO: keep?
 
 
-const assignStandardWorkOrderValues = (workOrder, standardWorkOrder) => {
-    const swoToWoMap = ([k, v]) => [k, standardWorkOrder[v]];
-
-    workOrder = assignValues(workOrder, Object.fromEntries([
-        ['classCode', 'woClassCode'],
-        ['typeCode', 'workOrderTypeCode'],
-        ['problemCode', 'problemCode'],
-        ['priorityCode', 'priorityCode']
-    ].map(swoToWoMap)), AssignmentType.SOURCE_NOT_EMPTY);
-
-    workOrder = assignValues(workOrder, Object.fromEntries([
-        ['description', 'desc'],
-    ].map(swoToWoMap)), AssignmentType.DESTINATION_EMPTY);
-
-    workOrder = assignUserDefinedFields(workOrder, standardWorkOrder.userDefinedFields, AssignmentType.DESTINATION_EMPTY);
-    workOrder = assignCustomFieldFromCustomField(workOrder, standardWorkOrder.customField, AssignmentType.DESTINATION_EMPTY);
-
-    return workOrder;
-};
-
 const Workorder = () => {
     const [equipmentMEC, setEquipmentMEC] = useState();
+    const [equipment, setEquipment] = useState();
+    const [equipmentPart, setEquipmentPart] = useState();
     console.log('equipmentMEC', equipmentMEC);
     const checklists = useRef(null);
-    const layout = useSelector(state => state.ui.layout); // TODO: should useEntity be returning this instead?
 
-    // TODO: was in constructor, stay in useEffect or move to eg PostRead
-    useEffect(() => {
-        setLayoutProperty('showEqpTreeButton', false);
-    }, [])
-
-    // TODO:
-    // const componentDidMount = () => {
-    //     super.componentDidMount();
-    // }
-
-    // TODO:
-    // const componentDidUpdate = (prevProps, prevState, snapshot) => {
-    //     super.componentDidUpdate(prevProps, prevState, snapshot);
-    // }
-
-    // TODO: waiting for handlers implementation to refactor
-    const onChangeStandardWorkOrder = standardWorkOrderCode => {
-        if (!standardWorkOrderCode) {
-            return;
-        }
-
-        return WSWorkorder.getStandardWorkOrder(standardWorkOrderCode).then(response => {
-            const standardWorkOrder = response.body.data;
-
-            this.setState(state => ({
-                workorder: assignStandardWorkOrderValues({...state.workorder}, standardWorkOrder)
-            }));
-        })
-    }
-
-    // TODO: waiting for handlers implementation to refactor
-    const onChangeEquipment = value => {
-        console.log('change equipment', value)
-        if(!value) {
-            return;
-        }
-
-        //If there is a value, fetch location, department, cost code
-        //and custom fields
-        return Promise.all([
-            WS.autocompleteEquipmentSelected(value).then(response => {
-                const data = response.body.data[0];
-
-                if(!data) {
-                    return;
-                }
-
-                //Assign values
-                this.setState(prevState => ({
-                    workorder: {
-                        ...prevState.workorder,
-                        departmentCode: data.department,
-                        departmentDesc: data.departmentdisc, // 'disc' is not a typo (well, it is in Infor's response ;-) )
-                        locationCode: data.parentlocation,
-                        locationDesc: data.locationdesc,
-                        costCode: data.equipcostcode,
-                        costCodeDesc: ''
-                    }
-                }));
-            }),
-            setWOEquipment(value) //Set the equipment work order
-        ]).catch(error => {
-            //Simply don't assign values
-        });
-    };
-
-    const {screenLayout: workOrderLayout, entity: workorder, loading,
+    //
+    //
+    //
+    const {screenLayout: workOrderLayout, entity: workorder, setEntity: setWorkOrder, loading,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
-        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateWorkorderProperty, handleError, showError, showNotification} = useEntity({
+        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateWorkorderProperty, 
+        handleError, showError, showNotification, showWarning} = useEntity({
             WS: {
                 create: WSWorkorder.createWorkOrder,
                 read: WSWorkorder.getWorkOrder,
@@ -144,22 +61,84 @@ const Workorder = () => {
                 read: postRead,
                 new: postInit,
             },
+            handlers: {
+                standardWO: onChangeStandardWorkOrder,
+                equipmentCode: onChangeEquipment
+            },
+            entityCode: "EVNT",
             entityDesc: "Work Order",
             entityURL: "/workorder/",
             entityCodeProperty: "number",
             screenProperty: "workOrderScreen",
             layoutProperty: "workOrderLayout",
+    });
+
+    //
+    //
+    //
+    useEffect( () => {
+        setEquipment(null);
+        setEquipmentPart(null);
+        
+        if (!workorder?.equipmentCode) {
+            return;
+        }
+
+        WSEquipment.getEquipment(workorder.equipmentCode)
+        .then(response => {
+            const equipmentResponse = response.body.data;
+            setEquipment(equipmentResponse);
+            if (equipmentResponse.partCode) {
+                WSParts.getPart(equipmentResponse.partCode).then(response => setEquipmentPart(response.body.data))
+            }
+        })
+           
+    }, [workorder?.equipmentCode])
+
+    useEffect(() => {
+        setLayoutProperty('showEqpTreeButton', false);
+    }, [])
+
+    //
+    //
+    //
+    function onChangeEquipment(equipmentCode) {
+        if(!equipmentCode) {
+            return;
+        }
+
+        Promise.all([
+            WSEquipment.getEquipment(equipmentCode),
+            WSWorkorders.getWOEquipLinearDetails(equipmentCode),
+        ]).then( response => {
+            const equipment = response[0].body.data;
+            const linearDetails = response[1].body.data;
+
+            setWorkOrder(oldWorkOrder => ({
+                ...oldWorkOrder,
+                departmentCode: equipment.departmentCode,
+                departmentDesc: equipment.departmentDesc,
+                locationCode: equipment.hierarchyLocationCode,
+                locationDesc: equipment.hierarchyLocationDesc,
+                costCode: equipment.costCode,
+                costCodeDesc: equipment.costCodeDesc,
+                warranty: linearDetails.ISWARRANTYACTIVE
+            }))
+
+            if (linearDetails.ISWARRANTYACTIVE === 'true') {
+                showWarning('This equipment is currently under warranty.');
+            }
         });
 
-    // TODO: keeping for context
-    // settings = {
-        // layoutPropertiesMap: WorkorderTools.layoutPropertiesMap,
-        // handlerFunctions: {
-        //     equipmentCode: this.onChangeEquipment,
-        //     standardWO: this.onChangeStandardWorkOrder,
-        //     classCode: this.onChangeClass,
-        // }
-    // }
+    };
+
+    async function onChangeStandardWorkOrder(standardWorkOrderCode) {
+        if (standardWorkOrderCode) {
+            const response = await WSWorkorder.getStandardWorkOrder(standardWorkOrderCode)
+            setWorkOrder( oldWorkOrder => assignStandardWorkOrderValues(oldWorkOrder, response.body.data))
+        }
+    }
+
 
     const getRegions = () => {
         const { tabs } = workOrderLayout;
@@ -167,11 +146,9 @@ const Workorder = () => {
         const commonProps = {
             workorder,
             newEntity,
-            layout, // TODO: check which comps are using it
             workOrderLayout,
             userGroup: userData.eamAccount.userGroup,
-            updateWorkorderProperty,
-            // setWOEquipment: this.setWOEquipment // TODO: do we need to be passing this? It does not seem to be used in any child component
+            updateWorkorderProperty
         };
 
         return [
@@ -424,9 +401,9 @@ const Workorder = () => {
                 render: () =>
                     <CustomFields
                         entityCode='OBJ'
-                        entityKeyCode={layout.woEquipment && layout.woEquipment.code}
-                        classCode={layout.woEquipment && layout.woEquipment.classCode}
-                        customFields={layout.woEquipment && layout.woEquipment.customField}
+                        entityKeyCode={equipment?.code}
+                        classCode={equipment?.classCode}
+                        customFields={equipment?.customField}
                         updateEntityProperty={updateWorkorderProperty}
                         readonly={true} />
                 ,
@@ -445,9 +422,9 @@ const Workorder = () => {
                 render: () => (
                     <CustomFields
                         entityCode="OBJ"
-                        entityKeyCode={layout.woEquipment && layout.woEquipment.partCode}
-                        classCode={layout.woEquipment && layout.woEquipment.classCode}
-                        customFields={layout.woEquipment && layout.woEquipment.partCustomFields}
+                        entityKeyCode={equipmentPart?.Code}
+                        classCode={equipmentPart?.classCode}
+                        customFields={equipmentPart?.customField}
                         updateEntityProperty={updateWorkorderProperty}
                         readonly={true}
                     />
@@ -575,44 +552,7 @@ const Workorder = () => {
     // }
 
     // TODO: waiting for handler and postRead to refactor and test
-    const setWOEquipment = (code, initialLoad = false) => {
-        const {
-            showWarning,
-        } = this.props;
-        return Promise.all([
-            WSEquipment.getEquipment(code),
-            WSWorkorders.getWOEquipLinearDetails(code),
-        ])
-            .then((response) => {
-                const isWarrantyActive = response[1].body.data?.ISWARRANTYACTIVE === 'true';
-                //this.setLayout({ woEquipment: response[0].body.data });
-                if (!initialLoad) {
-                    if (isWarrantyActive) {
-                        showWarning('This equipment is currently under warranty.');
-                    }
-                    this.setState(state => ({
-                        workorder: {
-                            ...state.workorder,
-                            warranty: isWarrantyActive,
-                        }
-                    }));
-                }
-                return response[0].body.data.partCode ? WSParts.getPart(response[0].body.data.partCode) : null;
-            })
-            .then((part) => {
-                if (part && part.body.data) {
-                    this.setLayout({
-                        woEquipment: {
-                            ...this.state.layout.woEquipment,
-                            partCustomFields: part.body.data.customField,
-                        },
-                    });
-                }
-            })
-            .catch(() => {
-                this.setLayout({ woEquipment: undefined });
-            });
-    }
+
 
     // TODO: check if working
     const postAddActivityHandler = () => {
