@@ -1,4 +1,5 @@
 import set from "set-value";
+import queryString from "query-string";
 
 // clones an entity deeply
 export const cloneEntity = entity => ({
@@ -135,19 +136,9 @@ export const assignValues = (entity, values = {}, assignmentType) => {
     return newEntity;
 };
 
-export const assignQueryParamValues = (entity, queryParams = {}, assignmentType = AssignmentType.FORCED) => {
+export const assignQueryParamValues = (entity, assignmentType = AssignmentType.FORCED) => {
     throwIfInvalidAssignmentType(assignmentType);
-
-    // this function converts an object with case insensitive keys to an object with
-    // case sensitive keys, based on a target object
-    const toSensitive = (target, insensitive) => {
-        const mapping = Object.fromEntries(Object.entries(target)
-            .map(([k]) => [k.toLowerCase(), k]));
-
-        return Object.fromEntries(Object.entries(insensitive)
-            .map(([key, value]) => [mapping[key.toLowerCase()], value])
-            .filter(([key]) => key !== undefined));
-    }
+    let queryParams = queryString.parse(window.location.search);
 
     const caseSensitiveQueryParams = toSensitive(entity, queryParams);
 
@@ -163,6 +154,25 @@ export const assignQueryParamValues = (entity, queryParams = {}, assignmentType 
         .map(([key, value]) => ({[key.toLowerCase()]: value}))); // remove udf substring at the beginning from key
 
     return assignUserDefinedFields(entity, userDefinedFields, assignmentType);
+}
+
+export const fireHandlers = (entity, handlers) => {
+    let queryParams = queryString.parse(window.location.search);
+    const caseSensitiveQueryParams = toSensitive(entity, queryParams);
+    for (const param in caseSensitiveQueryParams) {
+        handlers?.[param]?.(caseSensitiveQueryParams[param])
+    }
+}
+
+// this function converts an object with case insensitive keys to an object with
+// case sensitive keys, based on a target object
+export const toSensitive = (target, insensitive) => {
+    const mapping = Object.fromEntries(Object.entries(target)
+        .map(([k]) => [k.toLowerCase(), k]));
+
+    return Object.fromEntries(Object.entries(insensitive)
+        .map(([key, value]) => [mapping[key.toLowerCase()], value])
+        .filter(([key]) => key !== undefined));
 }
 
 export const assignDefaultValues = (entity, layout, layoutPropertiesMap, assignmentType = AssignmentType.FORCED) => {

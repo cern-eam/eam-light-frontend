@@ -5,7 +5,7 @@ import {useParams, useHistory} from "react-router-dom"
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
-import { assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType } from "ui/pages/EntityTools";
+import { assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType, fireHandlers } from "ui/pages/EntityTools";
 import { setLayoutProperty, showError, showNotification, handleError, toggleHiddenRegion,
     setRegionVisibility, 
     showWarning} from "actions/uiActions";
@@ -147,6 +147,7 @@ const useEntity = (params) => {
                 setNewEntity(true);
                 let entity = assignValues(response.body.data)
                 setEntity(entity);
+                fireHandlers(entity, handlers);
                 document.title = 'New ' + entityDesc;
                 postActions.new(entity);
             })
@@ -181,13 +182,11 @@ const useEntity = (params) => {
     //
     const assignValues = entity => {
         //let layoutPropertiesMap = settings.layoutPropertiesMap;
-        let queryParams = queryString.parse(window.location.search);
 
         //entity = assignDefaultValues(entity, screenLayout, layoutPropertiesMap);
-        entity = assignQueryParamValues(entity, queryParams);
+        entity = assignQueryParamValues(entity);
         return entity;
     }
-
 
     const onChangeClass = newClass => {
         return WSCustomFields.getCustomFields(entityCode, newClass).then(response => {
@@ -200,7 +199,6 @@ const useEntity = (params) => {
                     const queryParams = queryString.parse(window.location.search);
                     entity = assignCustomFieldFromObject(entity, queryParams, AssignmentType.SOURCE_NOT_EMPTY);
                 }
-                console.log('entity', prevEntity, entity);
                 return entity;
             });
         })
