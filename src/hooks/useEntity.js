@@ -13,7 +13,7 @@ import WSCustomFields from "tools/WSCustomFields";
 
 const useEntity = (params) => {
 
-    const {WS, postActions, handlers, entityCode, entityDesc, entityURL, entityCodeProperty, screenProperty, layoutProperty} = params;
+    const {WS, postActions, handlers, entityCode, entityDesc, entityURL, entityCodeProperty, screenProperty, layoutProperty, layoutPropertiesMap} = params;
 
     const [loading, setLoading] = useState(false);
     const [entity, setEntity] = useState(null);
@@ -112,10 +112,9 @@ const useEntity = (params) => {
             .then(response => {
                 const entity = response.body.data;
                 setEntity(entity);
-
                 showNotificationParam(`${entityDesc} ${entity[entityCodeProperty]}  has been successfully updated.`);
-                // Invoke entity specific logic on the subclass
-                postActions.postUpdate(entity)
+                // Invoke entity specific logic 
+                postActions.update(entity)
             })
             .catch(error => {
                 //TODO: error handling
@@ -161,7 +160,6 @@ const useEntity = (params) => {
     // BUTTON HANDLERS
     //
     const saveHandler = () => {
-        // Create new or update existing entity
         if (newEntity) {
             createEntity()
         } else {
@@ -181,9 +179,7 @@ const useEntity = (params) => {
     // HELPER METHODS
     //
     const assignValues = entity => {
-        //let layoutPropertiesMap = settings.layoutPropertiesMap;
-
-        //entity = assignDefaultValues(entity, screenLayout, layoutPropertiesMap);
+        entity = assignDefaultValues(entity, screenLayout, layoutPropertiesMap);
         entity = assignQueryParamValues(entity);
         return entity;
     }

@@ -12,7 +12,7 @@ import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
 
 function WorkorderDetails(props) {
 
-    const { workOrderLayout, workorder, updateWorkorderProperty, layout, applicationData, newEntity, userGroup } = props; // TODO: rm layout if not needed after deciding on autocomplete logic that were using it
+    const { workOrderLayout, workorder, updateWorkorderProperty, layout, applicationData, statuses, userGroup } = props; // TODO: rm layout if not needed after deciding on autocomplete logic that were using it
     const rpawClassesList = (applicationData && applicationData.EL_TRPAC && applicationData.EL_TRPAC.split(',')) || [];
     const rpawLink = applicationData && applicationData.EL_TRPAW;
 
@@ -64,7 +64,6 @@ function WorkorderDetails(props) {
                 renderSuggestion={suggestion => suggestion.desc}
                 renderValue={value => value.desc || value.code}
                 updateProperty={updateWorkorderProperty}
-                // options={layout.typeValues} // TODO: should be fine to rm but confirm
                 autocompleteHandler={WSWorkorders.getWorkOrderTypeValues}
                 autocompleteHandlerParams = {[userGroup]}
                 />
@@ -78,9 +77,7 @@ function WorkorderDetails(props) {
                 renderSuggestion={suggestion => suggestion.desc}
                 renderValue={value => value.desc || value.code}
                 updateProperty={updateWorkorderProperty}
-                // options={layout.statusValues} // TODO: rm or not depending on setStatuses final logic
-                autocompleteHandler={WSWorkorders.getWorkOrderStatusValues}
-                autocompleteHandlerParams = {[userGroup, workorder.statusCode, workorder.typeCode, newEntity]}
+                options={statuses} 
                 />
 
             <EAMSelect

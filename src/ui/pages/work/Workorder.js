@@ -20,7 +20,7 @@ import PartUsageContainer from "./partusage/PartUsageContainer";
 import WorkorderClosingCodes from './WorkorderClosingCodes';
 import WorkorderDetails from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
-import { assignStandardWorkOrderValues, isClosedWorkOrder, isRegionAvailable } from "./WorkorderTools";
+import { assignStandardWorkOrderValues, isClosedWorkOrder, isRegionAvailable, layoutPropertiesMap } from "./WorkorderTools";
 import EntityRegions from '../../components/entityregions/EntityRegions';
 import IconButton from '@mui/material/IconButton';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
@@ -37,7 +37,7 @@ const Workorder = () => {
     const [equipmentMEC, setEquipmentMEC] = useState();
     const [equipment, setEquipment] = useState();
     const [equipmentPart, setEquipmentPart] = useState();
-    console.log('equipmentMEC', equipmentMEC);
+    const [statuses, setStatuses] = useState([])
     const checklists = useRef(null);
 
     //
@@ -45,7 +45,7 @@ const Workorder = () => {
     //
     const {screenLayout: workOrderLayout, entity: workorder, setEntity: setWorkOrder, loading,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
-        isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
+        isHiddenRegion, getHiddenRegionState, getUniqueRegionID,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, updateEntityProperty: updateWorkorderProperty, 
         handleError, showError, showNotification, showWarning} = useEntity({
@@ -60,6 +60,7 @@ const Workorder = () => {
                 create: postCreate,
                 read: postRead,
                 new: postInit,
+                update: postUpdate
             },
             handlers: {
                 standardWO: onChangeStandardWorkOrder,
@@ -71,11 +72,16 @@ const Workorder = () => {
             entityCodeProperty: "number",
             screenProperty: "workOrderScreen",
             layoutProperty: "workOrderLayout",
+            layoutPropertiesMap
     });
 
     //
     //
     //
+    useEffect(() => {
+        setLayoutProperty('showEqpTreeButton', false);
+    }, [])
+
     useEffect( () => {
         setEquipment(null);
         setEquipmentPart(null);
@@ -94,10 +100,6 @@ const Workorder = () => {
         })
            
     }, [workorder?.equipmentCode])
-
-    useEffect(() => {
-        setLayoutProperty('showEqpTreeButton', false);
-    }, [])
 
     //
     //
@@ -132,13 +134,12 @@ const Workorder = () => {
 
     };
 
-    async function onChangeStandardWorkOrder(standardWorkOrderCode) {
+    function onChangeStandardWorkOrder(standardWorkOrderCode) {
         if (standardWorkOrderCode) {
-            const response = await WSWorkorder.getStandardWorkOrder(standardWorkOrderCode)
-            setWorkOrder( oldWorkOrder => assignStandardWorkOrderValues(oldWorkOrder, response.body.data))
+            WSWorkorder.getStandardWorkOrder(standardWorkOrderCode)
+            .then(response => setWorkOrder( oldWorkOrder => assignStandardWorkOrderValues(oldWorkOrder, response.body.data)))
         }
     }
-
 
     const getRegions = () => {
         const { tabs } = workOrderLayout;
@@ -161,7 +162,8 @@ const Workorder = () => {
                     <WorkorderDetails
                         {...commonProps}
                         applicationData={applicationData}
-                        userData={userData} />
+                        userData={userData} 
+                        statuses={statuses}/>
                 ,
                 column: 1,
                 order: 1,
@@ -470,14 +472,12 @@ const Workorder = () => {
     // CALLBACKS FOR ENTITY CLASS
     //
     function postInit() {
-        // setStatuses('', '', true) // TODO: confirm it works as expected
-        // setTypes('', '', true, false) // TODO: should be fine to rm
+        setStatuses('', '', true) 
         // this.enableChildren() // TODO: keep for context
     }
 
-    function postCreate() {
-        // setStatuses(workorder.statusCode, workorder.typeCode, false); // TODO: confirm it works as expected
-        // setTypes(this.state.workorder.statusCode, this.state.workorder.typeCode, false); // TODO: should be fine to rm
+    function postCreate(workorder) {
+        readStatuses(workorder.statusCode, workorder.typeCode, false); 
         // Comments panel might be hidden
         if (commentsComponent.current) {
             commentsComponent.current.createCommentForNewEntity();
@@ -486,8 +486,7 @@ const Workorder = () => {
 
     function postUpdate(workorder) {
         updateMyWorkOrders(workorder); // TODO: confirm we want to be calling it from the import
-        // setStatuses(workorder.statusCode, workorder.typeCode, false); // TODO: confirm it works as expected
-        // setTypes(workorder.statusCode, workorder.typeCode, false) // TODO: should be fine to rm
+        readStatuses(workorder.statusCode, workorder.typeCode, false); 
 
         if (departmentalSecurity.readOnly) {
             // this.disableChildren();  // TODO: keep for context
@@ -504,11 +503,9 @@ const Workorder = () => {
         }
     }
 
-    // TODO:
     function postRead(workorder) {
         updateMyWorkOrders(workorder); // TODO: confirm we want to be calling it from the import
-        // setStatuses(workorder.statusCode, workorder.typeCode, false); // TODO: confirm it works as expected
-        // setTypes(workorder.statusCode, workorder.typeCode, false) // TODO: should be fine to rm
+        readStatuses(workorder.statusCode, workorder.typeCode, false); 
 
         if (departmentalSecurity(workorder.departmentCode).readOnly) {
             console.log('disabling children') // TODO: rm
@@ -535,24 +532,10 @@ const Workorder = () => {
     //
     // DROP DOWN VALUES
     //
-    // TODO: rm or not depending on setStatuses final logic
-    // const setStatuses = (status, type, newwo) => {
-    //     WSWorkorder.getWorkOrderStatusValues(this.props.userData.eamAccount.userGroup, status, type, newwo)
-    //         .then(response => {
-    //             this.setLayout({statusValues: response.body.data})
-    //         })
-    // }
-
-    // TODO: should be fine to rm and keep it in inputs, since function args are not used and WS call only relies on fixed userGroup
-    // const setTypes = (status, type, newwo, ppmwo) => {
-    //     WSWorkorder.getWorkOrderTypeValues(this.props.userData.eamAccount.userGroup)
-    //         .then(response => {
-    //             this.setLayout({typeValues: response.body.data})
-    //         })
-    // }
-
-    // TODO: waiting for handler and postRead to refactor and test
-
+    const readStatuses = (status, type, newwo) => {
+        WSWorkorder.getWorkOrderStatusValues(userData.eamAccount.userGroup, status, type, newwo)
+            .then(response => setStatuses(response.body.data))
+    }
 
     // TODO: check if working
     const postAddActivityHandler = () => {
