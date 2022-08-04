@@ -40,6 +40,7 @@ export default Location = (props) => {
                 new: postInit,
                 
             },
+            entityCode: "LOC",
             entityDesc: "Location",
             entityURL: "/location/",
             entityCodeProperty: "code",
@@ -62,7 +63,6 @@ export default Location = (props) => {
     }
 
     function postRead() {
-        console.log('poast read');
         setLayoutProperty("showEqpTreeButton", true);
         setLayoutProperty("location", this.state.location);
 

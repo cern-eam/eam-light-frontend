@@ -40,6 +40,7 @@ const Part = () => {
                 read: postRead,
                 new: postInit,
             },
+            entityCode: "OBJ",
             entityDesc: "Part",
             entityURL: "/part/",
             entityCodeProperty: "code",

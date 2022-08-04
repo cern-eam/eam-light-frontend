@@ -20,7 +20,7 @@ import PartUsageContainer from "./partusage/PartUsageContainer";
 import WorkorderClosingCodes from './WorkorderClosingCodes';
 import WorkorderDetails from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
-import WorkorderTools, { assignStandardWorkOrderValues } from "./WorkorderTools";
+import { assignStandardWorkOrderValues, isClosedWorkOrder, isRegionAvailable } from "./WorkorderTools";
 import EntityRegions from '../../components/entityregions/EntityRegions';
 import IconButton from '@mui/material/IconButton';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
@@ -173,7 +173,7 @@ const Workorder = () => {
                 label: 'Scheduling',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                customVisibility: () => WorkorderTools.isRegionAvailable('SCHEDULING', commonProps.workOrderLayout),
+                customVisibility: () => isRegionAvailable('SCHEDULING', commonProps.workOrderLayout),
                 render: () =>
                     <WorkorderScheduling {...commonProps} />
                 ,
@@ -187,7 +187,7 @@ const Workorder = () => {
                 label: 'Closing Codes',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                customVisibility: () => WorkorderTools.isRegionAvailable('CLOSING_CODES', commonProps.workOrderLayout),
+                customVisibility: () => isRegionAvailable('CLOSING_CODES', commonProps.workOrderLayout),
                 render: () =>
                     <WorkorderClosingCodes {...commonProps} />
                 ,
@@ -201,7 +201,7 @@ const Workorder = () => {
                 label: 'Part Usage',
                 isVisibleWhenNewEntity: false,
                 maximizable: false,
-                customVisibility: () => WorkorderTools.isRegionAvailable('PAR', commonProps.workOrderLayout),
+                customVisibility: () => isRegionAvailable('PAR', commonProps.workOrderLayout),
                 render: () =>
                     <PartUsageContainer
                         workorder={workorder}
@@ -219,7 +219,7 @@ const Workorder = () => {
                 label: 'Additional Costs',
                 isVisibleWhenNewEntity: false,
                 maximizable: false,
-                customVisibility: () => WorkorderTools.isRegionAvailable('ACO', commonProps.workOrderLayout),
+                customVisibility: () => isRegionAvailable('ACO', commonProps.workOrderLayout),
                 render: () =>
                     <AdditionalCostsContainer
                         workorder={workorder}
@@ -237,7 +237,7 @@ const Workorder = () => {
                 label: 'Child Work Orders',
                 isVisibleWhenNewEntity: false,
                 maximizable: false,
-                customVisibility: () => WorkorderTools.isRegionAvailable('CWO', commonProps.workOrderLayout),
+                customVisibility: () => isRegionAvailable('CWO', commonProps.workOrderLayout),
                 render: () =>
                     <WorkorderChildren workorder={workorder.number} />
                 ,
@@ -396,7 +396,7 @@ const Workorder = () => {
                 id: 'CUSTOMFIELDSEQP',
                 label: 'Custom Fields Equipment',
                 isVisibleWhenNewEntity: true,
-                customVisibility: () => WorkorderTools.isRegionAvailable('CUSTOM_FIELDS_EQP', commonProps.workOrderLayout),
+                customVisibility: () => isRegionAvailable('CUSTOM_FIELDS_EQP', commonProps.workOrderLayout),
                 maximizable: false,
                 render: () =>
                     <CustomFields
@@ -417,7 +417,7 @@ const Workorder = () => {
                 label: 'Custom Fields Part',
                 isVisibleWhenNewEntity: true,
                 customVisibility: () =>
-                    WorkorderTools.isRegionAvailable('CUSTOM_FIELDS_PART', commonProps.workOrderLayout),
+                    isRegionAvailable('CUSTOM_FIELDS_PART', commonProps.workOrderLayout),
                 maximizable: false,
                 render: () => (
                     <CustomFields
@@ -451,7 +451,7 @@ const Workorder = () => {
                 id: 'MULTIPLEEQUIPMENT',
                 label: 'Equipment',
                 isVisibleWhenNewEntity: false,
-                customVisibility: () => WorkorderTools.isRegionAvailable('MEC', commonProps.workOrderLayout),
+                customVisibility: () => isRegionAvailable('MEC', commonProps.workOrderLayout),
                 maximizable: false,
                 render: () =>
                     <WorkorderMultiequipment workorder={workorder.number} setEquipmentMEC={setEquipmentMEC}/>
@@ -491,7 +491,7 @@ const Workorder = () => {
 
         if (departmentalSecurity.readOnly) {
             // this.disableChildren();  // TODO: keep for context
-        } else if (WorkorderTools.isClosedWorkOrder(workorder.statusCode)) {
+        } else if (isClosedWorkOrder(workorder.statusCode)) {
             // If opening a terminated work order
             // this.disableChildren()  // TODO: keep for context
             // this.children['EAMID_WorkOrder_STATUS_STATUSCODE'].enable()  // TODO: keep for context
@@ -513,7 +513,7 @@ const Workorder = () => {
         if (departmentalSecurity(workorder.departmentCode).readOnly) {
             console.log('disabling children') // TODO: rm
             // this.disableChildren(); // TODO: keep for context
-        } else if (WorkorderTools.isClosedWorkOrder(workorder.statusCode)) {
+        } else if (isClosedWorkOrder(workorder.statusCode)) {
             // If opening a terminated work order
             // this.disableChildren()  // TODO: keep for context
             // this.children['EAMID_WorkOrder_STATUS_STATUSCODE'].enable()  // TODO: keep for context

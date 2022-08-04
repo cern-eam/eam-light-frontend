@@ -78,6 +78,7 @@ const System = () => {
                 read: postRead,
                 new: postInit,
             },
+            entityCode: "OBJ",
             entityDesc: "System",
             entityURL: "/system/",
             entityCodeProperty: "code",
