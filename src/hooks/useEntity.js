@@ -10,6 +10,8 @@ import { setLayoutProperty, showError, showNotification, handleError, toggleHidd
     setRegionVisibility, 
     showWarning} from "actions/uiActions";
 import WSCustomFields from "tools/WSCustomFields";
+import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
+import { get } from "lodash";
 
 const useEntity = (params) => {
 
@@ -200,7 +202,6 @@ const useEntity = (params) => {
         })
     }
 
-
     const updateEntityProperty = (key, value) => {
         setEntity(prevEntity => set({...prevEntity}, key, value));
         // Fire handlers
@@ -210,6 +211,21 @@ const useEntity = (params) => {
         handlers?.[key]?.(value);
     };
 
+    const register = (layoutKey, valueKey, descKey) => {
+        let data = processElementInfo(screenLayout.fields[layoutKey])
+
+        data.updateProperty = updateEntityProperty;
+
+        data.value = get(entity, valueKey);
+        data.valueKey = valueKey;
+
+        if (descKey) {
+            data.desc = get(entity, descKey);
+            data.descKey = descKey;
+        }
+
+        return data;
+    }
 
     return {entity, screenCode, screenLayout, screenPermissions, 
         newEntity, setEntity, loading,
@@ -224,7 +240,7 @@ const useEntity = (params) => {
         showError: showErrorParam, showNotification: showNotificationParam, handleError: handleErrorParam, showWarning: showWarningParam,
         toggleHiddenRegion: toggleHiddenRegionParam, setRegionVisibility: setRegionVisibilityParam,
         // 
-        newHandler, saveHandler, deleteHandler, updateEntityProperty};
+        newHandler, saveHandler, deleteHandler, updateEntityProperty, register};
 
     
 }

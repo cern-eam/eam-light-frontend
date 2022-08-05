@@ -47,7 +47,7 @@ const Workorder = () => {
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
-        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateWorkorderProperty, 
+        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateWorkorderProperty, register,
         handleError, showError, showNotification, showWarning} = useEntity({
             WS: {
                 create: WSWorkorder.createWorkOrder,
@@ -95,9 +95,10 @@ const Workorder = () => {
             const equipmentResponse = response.body.data;
             setEquipment(equipmentResponse);
             if (equipmentResponse.partCode) {
-                WSParts.getPart(equipmentResponse.partCode).then(response => setEquipmentPart(response.body.data))
+                WSParts.getPart(equipmentResponse.partCode).then(response => setEquipmentPart(response.body.data)).catch(error => {})
             }
         })
+        .catch(error => {})
            
     }, [workorder?.equipmentCode])
 
@@ -130,7 +131,8 @@ const Workorder = () => {
             if (linearDetails.ISWARRANTYACTIVE === 'true') {
                 showWarning('This equipment is currently under warranty.');
             }
-        });
+        })
+        .catch(error => {});
 
     };
 
@@ -149,7 +151,8 @@ const Workorder = () => {
             newEntity,
             workOrderLayout,
             userGroup: userData.eamAccount.userGroup,
-            updateWorkorderProperty
+            updateWorkorderProperty,
+            register
         };
 
         return [
@@ -472,7 +475,7 @@ const Workorder = () => {
     // CALLBACKS FOR ENTITY CLASS
     //
     function postInit() {
-        setStatuses('', '', true) 
+        readStatuses('', '', true) 
         // this.enableChildren() // TODO: keep for context
     }
 
