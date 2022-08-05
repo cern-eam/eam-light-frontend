@@ -22,7 +22,6 @@ import useEntity from "hooks/useEntity";
 const PART = 'PART';
 
 const Part = () => {
-    // TODO: remove unused prop?
     const {screenLayout: partLayout, entity: part, loading,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
@@ -37,7 +36,6 @@ const Part = () => {
             },
             postActions: {
                 create: postCreate,
-                read: postRead,
                 new: postInit,
             },
             entityCode: "OBJ",
@@ -45,16 +43,16 @@ const Part = () => {
             entityURL: "/part/",
             entityCodeProperty: "code",
             screenProperty: "partScreen",
-            layoutProperty: "partLayout",
-            // layoutPropertiesMap: PartTools.layoutPropertiesMap, // TODO:
+            layoutProperty: "partLayout"
         });
 
-    // TODO: keeping for context
-    // settings = {
-    //     handlerFunctions: {
-    //         classCode: this.onChangeClass,
-    //     }
-    // };
+
+    //
+    //
+    //
+    useEffect(() => {
+        setLayoutProperty('showEqpTreeButton', false);
+    }, [])
 
     function postInit() {
         //this.enableChildren(); // TODO: rm but keep for context
@@ -66,11 +64,6 @@ const Part = () => {
 
     function postUpdate() {
         commentsComponent.current.createCommentForNewEntity();
-    }
-
-    function postRead() {
-        // TODO: why was it again that we should do this here and not in empty dep useEffect. Why would we want to execute this on every read if we (from what I've seen) never change this for part again
-        setLayoutProperty('showEqpTreeButton', false);
     }
 
     const getRegions = () => {
