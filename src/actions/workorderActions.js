@@ -18,6 +18,7 @@ export function updateMyOpenWorkOrders(number) {
                     myOpenWorkOrders: response.body.data
                 }))
             })
+            .catch(error => console.error("Couldn't fetch my team's WOs."))
     }
 }
 
@@ -30,6 +31,7 @@ export function updateMyTeamWorkOrders(number) {
                     myTeamWorkOrders: response.body.data
                 }))
             })
+            .catch(error => console.error("Couldn't fetch my team's WOs."))
     }
 }
 

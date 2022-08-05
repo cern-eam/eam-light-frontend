@@ -19,7 +19,7 @@ const useEntity = (params) => {
 
     const [loading, setLoading] = useState(false);
     const [entity, setEntity] = useState(null);
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState([]);
     const [newEntity, setNewEntity] = useState(true);
     const {code} = useParams();
     const history = useHistory();
@@ -77,7 +77,7 @@ const useEntity = (params) => {
                 postActions.create(createdEntity);
             })
             .catch(error => {
-                setErrors(error);
+                setErrors(error?.response?.body?.errors);
                 handleErrorParam(error)
             })
             .finally( () => setLoading(false))
@@ -108,7 +108,8 @@ const useEntity = (params) => {
     }
 
     const updateEntity = () => {
-        setLoading(true)
+        setLoading(true);
+        setErrors(null);
 
         WS.update(entity)
             .then(response => {
@@ -119,8 +120,8 @@ const useEntity = (params) => {
                 postActions.update(entity)
             })
             .catch(error => {
-                //TODO: error handling
-                handleErrorParam(error);
+                setErrors(error?.response?.body?.errors);
+                handleErrorParam(error)
             })
             .finally( () => setLoading(false))
     }
@@ -134,6 +135,7 @@ const useEntity = (params) => {
                 initNewEntity();
             })
             .catch(error => {
+                setErrors(error?.response?.body?.errors);
                 handleErrorParam(error)
             })
             .finally( () => setLoading(false))
@@ -204,6 +206,7 @@ const useEntity = (params) => {
 
     const updateEntityProperty = (key, value) => {
         setEntity(prevEntity => set({...prevEntity}, key, value));
+        
         // Fire handlers
         if (key === 'classCode') {
             onChangeClass(value)
@@ -222,6 +225,11 @@ const useEntity = (params) => {
         if (descKey) {
             data.desc = get(entity, descKey);
             data.descKey = descKey;
+        }
+
+        let error = errors?.find(e => e.location === data.id);
+        if (error) {
+            data.errorText = error.message;
         }
 
         return data;

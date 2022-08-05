@@ -3,7 +3,6 @@ import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox
 import WS from '../../../tools/WS'
 import WSWorkorders from "../../../tools/WSWorkorders"
 import OpenInAppIcon from 'mdi-material-ui/OpenInApp'
-import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
@@ -67,8 +66,7 @@ function WorkorderDetails(props) {
 
             <EAMTextField
                 {...register('parentwo', 'parentWO')}
-                link={() => workorder.parentWO && rpawClassesList.includes(workorder.classCode) ? rpawLink + workorder.parentWO : null}
-                icon={<OpenInAppIcon/>}/>
+                link={() => workorder.parentWO && rpawClassesList.includes(workorder.classCode) ? rpawLink + workorder.parentWO : null}/>
 
             <EAMTextField 
                 {...register('udfchar01', 'userDefinedFields.udfchar01','userDefinedFields.udfchar01Desc')}
@@ -80,8 +78,7 @@ function WorkorderDetails(props) {
 
             <EAMTextField 
                 {...register('udfchar01', 'userDefinedFields.udfchar24','userDefinedFields.udfchar24Desc')}
-                link={() => workorder.userDefinedFields.udfchar24 ? "https://its.cern.ch/jira/browse/" + workorder.userDefinedFields.udfchar24 : null}
-                icon={<OpenInNewIcon/>}/>
+                link={() => workorder.userDefinedFields.udfchar24 ? "https://its.cern.ch/jira/browse/" + workorder.userDefinedFields.udfchar24 : null}/>
 
             <EAMUDF elementInfo={workOrderLayout.fields['udfchkbox01']}
                 value={workorder.userDefinedFields.udfchkbox01}
