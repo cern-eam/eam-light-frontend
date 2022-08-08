@@ -1,14 +1,11 @@
-import React, {Component} from 'react';
+import React from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
 import StatusRow from "../../../components/statusrow/StatusRow"
-import CERNMode from "../../../components/CERNMode"
 import EquipmentTools from "../EquipmentTools"
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
-import WSUDF from "tools/WSUDF";
-import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const AssetGeneral = (props) => {
 
@@ -19,8 +16,10 @@ const AssetGeneral = (props) => {
         showNotification,
         newEntity,
         userGroup,
+        register,
     } = props;
 
+    // TODO: find alternative
     const updateEquipmentStatus = EquipmentTools.getUpdateStatus(
         updateEquipmentProperty,
         showNotification
@@ -29,19 +28,9 @@ const AssetGeneral = (props) => {
     return (
         <React.Fragment>
 
-            {newEntity &&
-            <EAMTextField
-                {...processElementInfo(assetLayout.fields['equipmentno'])}
-                value={equipment.code}
-                updateProperty={updateEquipmentProperty}
-                valueKey="code"/>}
+            {newEntity && <EAMTextField {...register('equipmentno', 'code')} />}
 
-            <EAMTextField
-                {...processElementInfo(assetLayout.fields['alias'])}
-                value={equipment.alias}
-                updateProperty={updateEquipmentProperty}
-                valueKey="alias"
-            />
+            <EAMTextField {...register('alias', 'alias')} />
 
             <EAMUDF
                 elementInfo={assetLayout.fields['udfchar45']}
@@ -50,35 +39,30 @@ const AssetGeneral = (props) => {
                 valueKey="userDefinedFields.udfchar45"
             />
 
-            <EAMTextField
-                {...processElementInfo(assetLayout.fields['equipmentdesc'])}
-                value={equipment.description}
-                updateProperty={updateEquipmentProperty}
-                valueKey="description"/>
+            <EAMTextField {...register('equipmentdesc', 'description')} />
 
             <EAMAutocomplete
-                {...processElementInfo(assetLayout.fields['department'])}
-                value={equipment.departmentCode}
-                desc={equipment.departmentDesc}
-                updateProperty={updateEquipmentProperty}
-                valueKey="departmentCode"
-                descKey="departmentDesc"
-                autocompleteHandler={WSEquipment.autocompleteEquipmentDepartment}/>
+                {...register('department', 'departmentCode', 'departmentDesc')}
+                autocompleteHandler={
+                    WSEquipment.autocompleteEquipmentDepartment
+                }
+            />
 
             <EAMSelect
-                {...processElementInfo(assetLayout.fields['assetstatus'])}
-                value={equipment.statusCode}
+                {...register('assetstatus', 'statusCode')}
                 autocompleteHandler={WSEquipment.getEquipmentStatusValues}
-                autocompleteHandlerParams={[userGroup, newEntity, equipment.statusCode]}
-                updateProperty={updateEquipmentStatus}
-                valueKey="statusCode"/>
+                autocompleteHandlerParams={[
+                    userGroup,
+                    newEntity,
+                    equipment.statusCode,
+                ]}
+                // updateProperty={updateEquipmentStatus} // TODO: find alternative
+            />
             
             <EAMSelect
-                {...processElementInfo(assetLayout.fields['state'])}
-                value={equipment.stateCode}
+                {...register('state', 'stateCode')}
                 autocompleteHandler={WSEquipment.getEquipmentStateValues}
-                updateProperty={updateEquipmentProperty}
-                valueKey="stateCode"/>
+            />
 
             <StatusRow
                 entity={equipment}
@@ -89,4 +73,4 @@ const AssetGeneral = (props) => {
     )
 }
 
-export default AssetGeneral
+export default AssetGeneral;

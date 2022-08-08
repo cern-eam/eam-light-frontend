@@ -2,23 +2,14 @@ import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAuto
 import EAMUDF from "eam-components/dist/ui/components/inputs-ng/EAMUDF";
 import React from "react";
 import WS from '../../../../tools/WS';
-import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
-const LocationHierarchy = props => {
-    const {
-        location,
-        locationLayout,
-        updateEquipmentProperty
-    } = props;
+const LocationHierarchy = (props) => {
+    const { location, locationLayout, updateEquipmentProperty, register } = props;
+
     return (
         <React.Fragment>
             <EAMAutocomplete
-                {...processElementInfo(locationLayout.fields["parentlocation"])}
-                value={location.hierarchyLocationCode}
-                updateProperty={updateEquipmentProperty}
-                valueKey="hierarchyLocationCode"
-                desc={location.hierarchyLocationDesc}
-                descKey="hierarchyLocationDesc"
+                {...register('parentlocation', 'hierarchyLocationCode', 'hierarchyLocationDesc')}
                 autocompleteHandler={WS.autocompleteLocation}
             />
 

@@ -2,47 +2,35 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAuto
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import React, {Component} from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
-import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 class SystemHierarchy extends Component {
 
     render() {
-        let {equipment, systemLayout, updateEquipmentProperty} = this.props;
+        let { register } = this.props;
 
         return (
             <React.Fragment>
 
                 <EAMTextField
-                    {...processElementInfo(systemLayout.fields['udfchar13'])}
+                    {...register('udfchar13', 'userDefinedFields.udfchar13')}
                     readonly={true}
-                    value={equipment.userDefinedFields.udfchar13}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="userDefinedFields.udfchar13"/>
+                />
 
                 <EAMTextField
-                    {...processElementInfo(systemLayout.fields['udfchar11'])}
+                    {...register('udfchar11', 'userDefinedFields.udfchar11')}
                     readonly={true}
-                    value={equipment.userDefinedFields.udfchar11}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="userDefinedFields.udfchar11"/>
+                />
 
                 <EAMAutocomplete
-                    {...processElementInfo(systemLayout.fields['primarysystem'])}
-                    value={equipment.hierarchyPrimarySystemCode}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="hierarchyPrimarySystemCode"
-                    desc={equipment.hierarchyPrimarySystemDesc}
-                    descKey="hierarchyPrimarySystemDesc"
-                    autocompleteHandler={WSEquipment.autocompletePrimarySystem}/>
+                    {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc')}
+                    autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}
+                    // autocompleteHandler={WSEquipment.autocompletePrimarySystem} // TODO: this WS function was not defined, so I changed it to the closest that existed in name: 'autocompletePrimarySystemParent'?
+                />
 
                 <EAMAutocomplete
-                    {...processElementInfo(systemLayout.fields['location'])}
-                    value={equipment.hierarchyLocationCode}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="hierarchyLocationCode"
-                    desc={equipment.hierarchyLocationDesc}
-                    descKey="hierarchyLocationDesc"
-                    autocompleteHandler={WSEquipment.autocompleteLocation}/>
+                    {...register('location', 'hierarchyLocationCode', 'hierarchyLocationDesc')}
+                    autocompleteHandler={WSEquipment.autocompleteLocation}
+                />
 
             </React.Fragment>
         )

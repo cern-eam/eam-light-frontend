@@ -26,7 +26,6 @@ import useEntity from "hooks/useEntity";
 
 const Position = () => {
 
-
     const queryParams = queryString.parse(window.location.search).length > 0 ?
                         queryString.parse(window.location.search) : '';
 
@@ -35,7 +34,7 @@ const Position = () => {
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
-        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, handleError, showError, showNotification} = useEntity({
+        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, register, handleError, showError, showNotification} = useEntity({
             WS: {
                 create: WSEquipment.createEquipment,
                 read: WSEquipment.getEquipment,
@@ -107,6 +106,7 @@ const Position = () => {
             positionLayout,
             userGroup: userData.eamAccount.userGroup,
             updateEquipmentProperty,
+            register,
         }
         
         return [

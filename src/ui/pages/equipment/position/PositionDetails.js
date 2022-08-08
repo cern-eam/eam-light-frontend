@@ -5,34 +5,23 @@ import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePi
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WS from "../../../../tools/WS";
 import WSEquipment from "../../../../tools/WSEquipment";
-import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 import { onCategoryChange } from '../EquipmentTools';
 
 const PositionDetails = (props) => {
 
-    const { equipment, positionLayout, updateEquipmentProperty } = props;
+    const { equipment, updateEquipmentProperty, register } = props;
 
     return (
         <React.Fragment>
 
             <EAMAutocomplete
-                {...processElementInfo(positionLayout.fields['class'])}
-                value={equipment.classCode}
-                desc={equipment.classDesc}
-                updateProperty={updateEquipmentProperty}
-                valueKey="classCode"
-                descKey="classDesc"
+                {...register('class', 'classCode', 'classDesc')}
                 autocompleteHandler={WS.autocompleteClass}
                 autocompleteHandlerParams={['OBJ']}
             />
 
             <EAMAutocomplete
-                {...processElementInfo(positionLayout.fields['category'])}
-                value={equipment.categoryCode}
-                desc={equipment.categoryDesc}
-                updateProperty={updateEquipmentProperty}
-                valueKey="categoryCode"
-                descKey="categoryDesc"
+                {...register('category', 'categoryCode', 'categoryDesc')}
                 autocompleteHandler={WSEquipment.autocompleteEquipmentCategory}
                 autocompleteHandlerParams={[equipment.classCode]}
                 onChangeValue={(categoryCode) =>
@@ -40,51 +29,29 @@ const PositionDetails = (props) => {
                 }
             />
 
-            <EAMDatePicker
-                {...processElementInfo(positionLayout.fields['commissiondate'])}
-                value={equipment.comissionDate}
-                updateProperty={updateEquipmentProperty}
-                valueKey="comissionDate"/>
+            <EAMDatePicker {...register('commissiondate', 'comissionDate')} />
 
             <EAMAutocomplete
-                {...processElementInfo(positionLayout.fields['assignedto'])}
-                value={equipment.assignedTo}
-                updateProperty={updateEquipmentProperty}
-                valueKey="assignedTo"
-                desc={equipment.assignedToDesc}
-                descKey="assignedToDesc"
-                autocompleteHandler={WS.autocompleteEmployee}/>
+                {...register('assignedto', 'assignedTo', 'assignedToDesc')}
+                autocompleteHandler={WS.autocompleteEmployee}
+            />
 
             <EAMSelect
-                {...processElementInfo(positionLayout.fields['criticality'])}
-                value={equipment.criticality}
+                {...register('criticality', 'criticality')}
                 autocompleteHandler={WSEquipment.getEquipmentCriticalityValues}
-                updateProperty={updateEquipmentProperty}
-                valueKey="criticality"/>
+            />
 
             <EAMAutocomplete
-                {...processElementInfo(positionLayout.fields['manufacturer'])}
-                updateProperty={updateEquipmentProperty}
-                value={equipment.manufacturerCode}
-                valueKey="manufacturerCode"
-                desc={equipment.manufacturerDesc}
-                descKey="manufacturerDesc"
-                autocompleteHandler={WSEquipment.autocompleteManufacturer}/>
+                {...register('manufacturer', 'manufacturerCode', 'manufacturerDesc')}
+                autocompleteHandler={WSEquipment.autocompleteManufacturer}
+            />
 
-            <EAMTextField
-                {...processElementInfo(positionLayout.fields['serialnumber'])}
-                value={equipment.serialNumber}
-                updateProperty={updateEquipmentProperty}
-                valueKey="serialNumber"/>
+            <EAMTextField {...register('serialnumber', 'serialNumber')} />
 
-            <EAMTextField
-                {...processElementInfo(positionLayout.fields['model'])}
-                value={equipment.model}
-                updateProperty={updateEquipmentProperty}
-                valueKey="model"/>
+            <EAMTextField {...register('model', 'model')} />
 
         </React.Fragment>
-    )
+    );
 }
 
-export default PositionDetails
+export default PositionDetails;

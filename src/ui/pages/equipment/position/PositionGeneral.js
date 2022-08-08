@@ -5,19 +5,19 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAuto
 import WSEquipment from "../../../../tools/WSEquipment";
 import StatusRow from "../../../components/statusrow/StatusRow"
 import EquipmentTools from '../EquipmentTools';
-import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const PositionGeneral = (props) => {
 
     const {
         equipment,
-        positionLayout,
         updateEquipmentProperty,
         newEntity,
         userGroup,
         showNotification,
+        register,
     } = props;
 
+    // TODO: find alternative
     const updateEquipmentStatus = EquipmentTools.getUpdateStatus(
         updateEquipmentProperty,
         showNotification
@@ -25,57 +25,39 @@ const PositionGeneral = (props) => {
 
     return (
         <React.Fragment>
+            {newEntity && <EAMTextField {...register('equipmentno', 'code')} />}
 
-            {newEntity &&
-            <EAMTextField
-                {...processElementInfo(positionLayout.fields['equipmentno'])}
-                value={equipment.code}
-                updateProperty={updateEquipmentProperty}
-                valueKey="code"/>}
+            <EAMTextField {...register('alias', 'alias')} />
 
-            <EAMTextField
-                {...processElementInfo(positionLayout.fields['alias'])}
-                value={equipment.alias}
-                updateProperty={updateEquipmentProperty}
-                valueKey="alias"/>
+            <EAMTextField {...register('udfchar45', 'userDefinedFields.udfchar45')} />
 
-            <EAMTextField
-                {...processElementInfo(positionLayout.fields['udfchar45'])}
-                value={equipment.userDefinedFields.udfchar45}
-                updateProperty={updateEquipmentProperty}
-                valueKey="userDefinedFields.udfchar45"
-            />
-
-            <EAMTextField
-                {...processElementInfo(positionLayout.fields['equipmentdesc'])}
-                value={equipment.description}
-                updateProperty={updateEquipmentProperty}
-                valueKey="description"/>
+            <EAMTextField {...register('equipmentdesc', 'description')} />
 
             <EAMAutocomplete
-                {...processElementInfo(positionLayout.fields['department'])}
-                value={equipment.departmentCode}
-                desc={equipment.departmentDesc}
-                updateProperty={updateEquipmentProperty}
-                valueKey="departmentCode"
-                descKey="departmentDesc"
-                autocompleteHandler={WSEquipment.autocompleteEquipmentDepartment}/>
+                {...register('department', 'departmentCode', 'departmentDesc')}
+                autocompleteHandler={
+                    WSEquipment.autocompleteEquipmentDepartment
+                }
+            />
 
             <EAMSelect
-                {...processElementInfo(positionLayout.fields['assetstatus'])}
-                value={equipment.statusCode}
+                {...register('assetstatus', 'statusCode')}
                 autocompleteHandler={WSEquipment.getEquipmentStatusValues}
-                autocompleteHandlerParams={[userGroup, newEntity, equipment.statusCode]}
-                updateProperty={updateEquipmentStatus}
-                valueKey="statusCode"/>
+                autocompleteHandlerParams={[
+                    userGroup,
+                    newEntity,
+                    equipment.statusCode,
+                ]}
+                // updateProperty={updateEquipmentStatus} // TODO: find alternative
+            />
 
             <StatusRow
                 entity={equipment}
                 entityType={"equipment"}
-                style={{marginTop: "10px", marginBottom: "-10px"}}
+                style={{ marginTop: "10px", marginBottom: "-10px" }}
             />
         </React.Fragment>
-    )
+    );
 }
 
-export default PositionGeneral
+export default PositionGeneral;

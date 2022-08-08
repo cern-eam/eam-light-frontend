@@ -3,7 +3,6 @@ import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import React, {Component} from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
 import Dependency from '../components/Dependency';
-import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const fieldIsHidden = (info) =>
     info && info.attribute === 'H'
@@ -37,6 +36,7 @@ class PositionHierarchy extends Component {
         }
     }
 
+    // TODO: find alternative
     updateDependencyProperty = (key, value, equipment) => {
         let { updateEquipmentProperty } = this.props
         //inversed map of hierarchy properties. Asset Dependency has the highest priority.
@@ -68,32 +68,24 @@ class PositionHierarchy extends Component {
     }
 
     render() {
-        let {equipment, positionLayout, updateEquipmentProperty} = this.props
+        let { equipment, updateEquipmentProperty, register } = this.props
 
         return (
             <React.Fragment>
 
                 <EAMTextField
-                    {...processElementInfo(positionLayout.fields['udfchar13'])}
+                    {...register('udfchar13', 'userDefinedFields.udfchar13')}
                     readonly={true}
-                    value={equipment.userDefinedFields.udfchar13}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="userDefinedFields.udfchar13"/>
+                />
 
                 <EAMTextField
-                    {...processElementInfo(positionLayout.fields['udfchar11'])}
+                    {...register('udfchar11', 'userDefinedFields.udfchar11')}
                     readonly={true}
-                    value={equipment.userDefinedFields.udfchar11}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="userDefinedFields.udfchar11"/>
+                />
 
                 <EAMAutocomplete
-                    {...processElementInfo(positionLayout.fields['asset'])}
-                    value={equipment.hierarchyAssetCode}
-                    updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
-                    valueKey="hierarchyAssetCode"
-                    desc={equipment.hierarchyAssetDesc}
-                    descKey="hierarchyAssetDesc"
+                    {...register('asset', 'hierarchyAssetCode', 'hierarchyAssetDesc')}
+                    updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)} // TODO: find alternative
                     autocompleteHandler={WSEquipment.autocompleteAssetParent}
                     renderDependencies={[equipment.hierarchyAssetDependent, equipment.hierarchyPositionDependent, equipment.hierarchyPrimarySystemDependent]}
                     endAdornment={<Dependency updateProperty={updateEquipmentProperty}
@@ -102,12 +94,8 @@ class PositionHierarchy extends Component {
                 />
 
                 <EAMAutocomplete
-                    {...processElementInfo(positionLayout.fields['parentasset'])}
-                    value={equipment.hierarchyPositionCode}
-                    updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
-                    valueKey="hierarchyPositionCode"
-                    desc={equipment.hierarchyPositionDesc}
-                    descKey="hierarchyPositionDesc"
+                    {...register('parentasset', 'hierarchyPositionCode', 'hierarchyPositionDesc')}
+                    updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)} // TODO: find alternative
                     autocompleteHandler={WSEquipment.autocompletePositionParent}
                     renderDependencies={[equipment.hierarchyAssetDependent, equipment.hierarchyPositionDependent, equipment.hierarchyPrimarySystemDependent]}
                     endAdornment={<Dependency updateProperty={updateEquipmentProperty}
@@ -116,27 +104,19 @@ class PositionHierarchy extends Component {
                 />
 
                 <EAMAutocomplete
-                    {...processElementInfo(positionLayout.fields['primarysystem'])}
-                    value={equipment.hierarchyPrimarySystemCode}
-                    updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
-                    valueKey="hierarchyPrimarySystemCode"
-                    desc={equipment.hierarchyPrimarySystemDesc}
-                    descKey="hierarchyPrimarySystemDesc"
+                    {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc')}
+                    updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)} // TODO: find alternative
                     autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}
                     renderDependencies={[equipment.hierarchyAssetDependent, equipment.hierarchyPositionDependent, equipment.hierarchyPrimarySystemDependent]}
                     endAdornment={<Dependency updateProperty={updateEquipmentProperty}
                                             value={equipment.hierarchyPrimarySystemDependent}
                                             valueKey="hierarchyPrimarySystemDependent"/>}
-                    />
+                />
 
                 <EAMAutocomplete
-                    {...processElementInfo(positionLayout.fields['location'])}
-                    value={equipment.hierarchyLocationCode}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="hierarchyLocationCode"
-                    desc={equipment.hierarchyLocationDesc}
-                    descKey="hierarchyLocationDesc"
-                    autocompleteHandler={WSEquipment.autocompleteLocation}/>
+                    {...register('location', 'hierarchyLocationCode', 'hierarchyLocationDesc')}
+                    autocompleteHandler={WSEquipment.autocompleteLocation}
+                />
 
             </React.Fragment>
         )

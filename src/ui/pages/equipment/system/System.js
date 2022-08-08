@@ -60,12 +60,11 @@ const System = () => {
     const queryParams = queryString.parse(window.location.search).length > 0 ?
                         queryString.parse(window.location.search) : '';
 
-    // TODO: the entity was called equipment, should we rename to system?
     const {screenLayout: systemLayout, entity: equipment, loading,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
-        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, handleError, showError, showNotification} = useEntity({
+        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, register, handleError, showError, showNotification} = useEntity({
             WS: {
                 create: WSEquipment.createEquipment,
                 read: WSEquipment.getEquipment,
@@ -175,7 +174,8 @@ const System = () => {
             newEntity,
             systemLayout,
             userGroup: userData.eamAccount.userGroup,
-            updateEquipmentProperty, // TODO: here we already also referred to system just as equipment, whereas in part we specified
+            updateEquipmentProperty,
+            register,
         };
 
         return [

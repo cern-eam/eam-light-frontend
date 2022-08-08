@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WSParts from "../../../tools/WSParts";
@@ -6,92 +6,47 @@ import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox
 import WS from "../../../tools/WS";
 import StatusRow from "../../components/statusrow/StatusRow"
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
-import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const PartGeneral = (props) => {
 
-    const { partLayout, part, updatePartProperty, newEntity } = props;
+    const { part, newEntity, register } = props;
 
     return (
         <div style={{width: "100%", marginTop: 0}}>
 
-            {newEntity && <EAMTextField
-                {...processElementInfo(partLayout.fields['partcode'])}
-                value={part.code}
-                updateProperty={updatePartProperty}
-                valueKey="code"
-                />
-            }
+            {newEntity && <EAMTextField {...register('partcode', 'code')} />}
 
-            <EAMTextField
-                {...processElementInfo(partLayout.fields['description'])}
-                value={part.description}
-                updateProperty={updatePartProperty}
-                valueKey="description"
-            />
+            <EAMTextField {...register('description', 'description')} />
 
             <EAMAutocomplete
-                {...processElementInfo(partLayout.fields['class'])}
-                value={part.classCode}
-                updateProperty={updatePartProperty}
-                valueKey="classCode"
-                desc={part.classDesc}
-                descKey="classDesc"
+                {...register('class', 'classCode', 'classDesc')}
                 autocompleteHandler={WS.autocompleteClass}
                 autocompleteHandlerParams={['PART']}
             />
 
             <EAMAutocomplete
-                {...processElementInfo(partLayout.fields['category'])}
-                value={part.categoryCode}
-                updateProperty={updatePartProperty}
-                valueKey="categoryCode"
-                desc={part.categoryDesc}
-                descKey="categoryDesc"
+                {...register('category', 'categoryCode', 'categoryDesc')}
                 autocompleteHandler={WSParts.autocompletePartCategory}
             />
 
             <EAMAutocomplete
-                {...processElementInfo(partLayout.fields['uom'])}
-                value={part.uom}
-                updateProperty={updatePartProperty}
-                valueKey="uom"
-                desc={part.uomdesc}
-                descKey="uomdesc"
+                {...register('uom', 'uom', 'uomdesc')}
                 autocompleteHandler={WSParts.autocompletePartUOM}
             />
 
             <EAMSelect
-                {...processElementInfo(partLayout.fields['trackingtype'])}
-                value={part.trackingMethod}
-                updateProperty={updatePartProperty}
-                valueKey="trackingMethod"
+                {...register('trackingtype', 'trackingMethod')}
                 autocompleteHandler={WSParts.getPartTrackingMethods}
             />
 
             <EAMAutocomplete
-                {...processElementInfo(partLayout.fields['commoditycode'])}
-                value={part.commodityCode}
-                updateProperty={updatePartProperty}
-                valueKey="commodityCode"
-                desc={part.commodityDesc}
-                descKey="commodityDesc"
+                {...register('commoditycode', 'commodityCode', 'commodityDesc')}
                 autocompleteHandler={WSParts.autocompletePartCommodity}
             />
 
-            <EAMCheckbox
-                {...processElementInfo(partLayout.fields['trackbyasset'])}
-                value={part.trackByAsset}
-                updateProperty={updatePartProperty}
-                valueKey="trackByAsset"
-            />
+            <EAMCheckbox {...register('trackbyasset', 'trackByAsset')} />
 
-            <EAMCheckbox
-                {...processElementInfo(partLayout.fields['repairablespare'])}
-                value={part.trackCores}
-                updateProperty={updatePartProperty}
-                valueKey="trackCores"
-            />
+            <EAMCheckbox {...register('repairablespare', 'trackCores')} />
 
             <StatusRow
                 entity={part}

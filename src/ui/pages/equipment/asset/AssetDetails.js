@@ -1,39 +1,27 @@
 import React, {Component} from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
-import OpenInAppIcon from 'mdi-material-ui/OpenInApp'
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
-import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 import { onCategoryChange } from '../EquipmentTools';
 
 const AssetDetails = (props) => {
     
-    const { equipment, assetLayout, updateEquipmentProperty } = props;
+    const { equipment, updateEquipmentProperty, register } = props;
 
     return (
         <React.Fragment>
 
             <EAMAutocomplete
-                {...processElementInfo(assetLayout.fields['class'])}
-                value={equipment.classCode}
-                desc={equipment.classDesc}
-                updateProperty={updateEquipmentProperty}
-                valueKey="classCode"
-                descKey="classDesc"
+                {...register('class', 'classCode', 'classDesc')}
                 autocompleteHandler={WS.autocompleteClass}
                 autocompleteHandlerParams={['OBJ']}
             />
 
             <EAMAutocomplete
-                {...processElementInfo(assetLayout.fields['category'])}
-                value={equipment.categoryCode}
-                desc={equipment.categoryDesc}
-                updateProperty={updateEquipmentProperty}
-                valueKey="categoryCode"
-                descKey="categoryDesc"
+                {...register('category', 'categoryCode', 'categoryDesc')}
                 autocompleteHandler={WSEquipment.autocompleteEquipmentCategory}
                 autocompleteHandlerParams={[equipment.classCode]}
                 onChangeValue={(categoryCode) =>
@@ -42,86 +30,56 @@ const AssetDetails = (props) => {
             />
 
             <EAMAutocomplete
-                {...processElementInfo(assetLayout.fields['costcode'])}
-                value={equipment.costCode}
-                desc={equipment.costCodeDesc || ""}
-                updateProperty={updateEquipmentProperty}
-                valueKey="costCode"
-                descKey="costCodeDesc"
+                {...register('costcode', 'costCode', 'costCodeDesc')}
                 autocompleteHandler={WSEquipment.autocompleteCostCode}/>
 
             <EAMDatePicker
-                {...processElementInfo(assetLayout.fields['commissiondate'])}
-                value={equipment.comissionDate}
-                updateProperty={updateEquipmentProperty}
-                valueKey="comissionDate"/>
+                {...register('commissiondate', 'comissionDate')}
+            />
 
-            <EAMAutocomplete {...processElementInfo(assetLayout.fields['assignedto'])}
-                                value={equipment.assignedTo}
-                                updateProperty={updateEquipmentProperty}
-                                valueKey="assignedTo"
-                                desc={equipment.assignedToDesc}
-                                descKey="assignedToDesc"
-                                autocompleteHandler={WS.autocompleteEmployee}/>
+            <EAMAutocomplete
+                {...register('assignedto', 'assignedTo', 'assignedToDesc')}
+                autocompleteHandler={WS.autocompleteEmployee}
+            />
 
             <EAMSelect
-                {...processElementInfo(assetLayout.fields['criticality'])}
-                value={equipment.criticality}
+                {...register('criticality', 'criticality')}
                 autocompleteHandler={WSEquipment.getEquipmentCriticalityValues}
-                updateProperty={updateEquipmentProperty}
-                valueKey="criticality"/>
+            />
 
-            <EAMAutocomplete {...processElementInfo(assetLayout.fields['manufacturer'])}
-                                value={equipment.manufacturerCode}
-                                desc={equipment.manufacturerDesc}
-                                updateProperty={updateEquipmentProperty}
-                                valueKey="manufacturerCode"
-                                descKey="manufacturerDesc"
-                                autocompleteHandler={WSEquipment.autocompleteManufacturer}/>
+            <EAMAutocomplete
+                {...register('manufacturer', 'manufacturerCode', 'manufacturerDesc')}
+                autocompleteHandler={WSEquipment.autocompleteManufacturer}
+            />
 
             <EAMTextField
-                {...processElementInfo(assetLayout.fields['serialnumber'])}
-                value={equipment.serialNumber}
-                updateProperty={updateEquipmentProperty}
-                valueKey="serialNumber"/>
+                {...register('serialnumber', 'serialNumber')}
+            />
 
             <EAMTextField
-                {...processElementInfo(assetLayout.fields['model'])}
-                value={equipment.model}
-                updateProperty={updateEquipmentProperty}
-                valueKey="model"
-                inputProps={{maxLength: 30}}/>
+                {...register('model', 'model')}
+                inputProps={{maxLength: 30}}
+            />
 
-            <EAMAutocomplete {...processElementInfo(assetLayout.fields['part'])}
-                                value={equipment.partCode}
-                                desc={equipment.partDesc}
-                                updateProperty={updateEquipmentProperty}
-                                valueKey="partCode"
-                                descKey="partDesc"
-                                autocompleteHandler={WSEquipment.autocompleteEquipmentPart}
-                                link={() => equipment.partCode ? "/part/" + equipment.partCode: null}
-                                />
+            <EAMAutocomplete
+                {...register('part', 'partCode', 'partDesc')}
+                autocompleteHandler={WSEquipment.autocompleteEquipmentPart}
+                link={() => equipment.partCode ? "/part/" + equipment.partCode: null}
+            />
 
-            <EAMAutocomplete {...processElementInfo(assetLayout.fields['store'])}
-                                value={equipment.storeCode}
-                                desc={equipment.storeDesc}
-                                updateProperty={updateEquipmentProperty}
-                                valueKey="storeCode"
-                                descKey="storeDesc"
-                                autocompleteHandler={WSEquipment.autocompleteEquipmentStore}/>
+            <EAMAutocomplete
+                {...register('store', 'storeCode', 'storeDesc')}
+                autocompleteHandler={WSEquipment.autocompleteEquipmentStore}
+            />
 
-            <EAMAutocomplete {...processElementInfo(assetLayout.fields['bin'])}
-                                value={equipment.bin}
-                                desc={equipment.binDesc}
-                                updateProperty={updateEquipmentProperty}
-                                valueKey="bin"
-                                descKey="binDesc"
-                                autocompleteHandler={WSEquipment.autocompleteEquipmentBin}
-                                autocompleteHandlerParams={[equipment.storeCode]}
-                            />
+            <EAMAutocomplete
+                {...register('bin', 'bin', 'binDesc')}
+                autocompleteHandler={WSEquipment.autocompleteEquipmentBin}
+                autocompleteHandlerParams={[equipment.storeCode]}
+            />
 
         </React.Fragment>
     )
 }
 
-export default AssetDetails
+export default AssetDetails;

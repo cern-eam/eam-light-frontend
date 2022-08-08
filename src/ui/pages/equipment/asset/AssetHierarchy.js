@@ -3,7 +3,6 @@ import WSEquipment from "../../../../tools/WSEquipment";
 import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import Dependency from '../components/Dependency';
-import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const fieldIsHidden = (info) =>
     info && info.attribute === 'H'
@@ -72,7 +71,7 @@ class AssetHierarchy extends Component {
     }
 
     render() {
-        let { equipment, assetLayout, updateEquipmentProperty } = this.props
+        let { equipment, assetLayout, updateEquipmentProperty, register } = this.props
 
         return (
             <React.Fragment>
@@ -90,12 +89,7 @@ class AssetHierarchy extends Component {
                     valueKey="userDefinedFields.udfchar11"/>
 
                 <EAMAutocomplete
-                    {...processElementInfo(assetLayout.fields['parentasset'])}
-                    value={equipment.hierarchyAssetCode}
-                    updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
-                    valueKey="hierarchyAssetCode"
-                    desc={equipment.hierarchyAssetDesc}
-                    descKey="hierarchyAssetDesc"
+                    {...register('parentasset', 'hierarchyAssetCode', 'hierarchyAssetDesc')}
                     barcodeScanner
                     autocompleteHandler={WSEquipment.autocompleteAssetParent}
                     renderDependencies={[equipment.hierarchyAssetDependent, equipment.hierarchyPositionDependent, equipment.hierarchyPrimarySystemDependent]}
@@ -105,12 +99,7 @@ class AssetHierarchy extends Component {
                 />
                 
                 <EAMAutocomplete
-                    {...processElementInfo(assetLayout.fields['position'])}
-                    value={equipment.hierarchyPositionCode}
-                    updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
-                    valueKey="hierarchyPositionCode"
-                    desc={equipment.hierarchyPositionDesc}
-                    descKey="hierarchyPositionDesc"
+                    {...register('position', 'hierarchyPositionCode', 'hierarchyPositionDesc')}
                     barcodeScanner
                     autocompleteHandler={WSEquipment.autocompletePositionParent}
                     renderDependencies={[equipment.hierarchyAssetDependent, equipment.hierarchyPositionDependent, equipment.hierarchyPrimarySystemDependent]}
@@ -120,28 +109,19 @@ class AssetHierarchy extends Component {
                 />
                 
                 <EAMAutocomplete
-                    {...processElementInfo(assetLayout.fields['primarysystem'])}
-                    value={equipment.hierarchyPrimarySystemCode}
-                    updateProperty={(key, value) => this.updateDependencyProperty(key,value, equipment)}
-                    valueKey="hierarchyPrimarySystemCode"
-                    desc={equipment.hierarchyPrimarySystemDesc}
-                    descKey="hierarchyPrimarySystemDesc"
+                    {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc')}
                     barcodeScanner
                     autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}
                     renderDependencies={[equipment.hierarchyAssetDependent, equipment.hierarchyPositionDependent, equipment.hierarchyPrimarySystemDependent]}
                     endAdornment={<Dependency updateProperty={updateEquipmentProperty}
                                             value={equipment.hierarchyPrimarySystemDependent}
                                             valueKey="hierarchyPrimarySystemDependent"/>}
-                    />
+                />
                     
                 <EAMAutocomplete
-                    {...processElementInfo(assetLayout.fields['location'])}
-                    value={equipment.hierarchyLocationCode}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="hierarchyLocationCode"
-                    desc={equipment.hierarchyLocationDesc}
-                    descKey="hierarchyLocationDesc"
-                    autocompleteHandler={WSEquipment.autocompleteLocation}/>
+                    {...register('location', 'hierarchyLocationCode', 'hierarchyLocationDesc')}
+                    autocompleteHandler={WSEquipment.autocompleteLocation}
+                />
             </React.Fragment>
         )
     }

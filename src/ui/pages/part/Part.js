@@ -26,7 +26,7 @@ const Part = () => {
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
-        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, handleError, showError, showNotification} = useEntity({
+        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, register, handleError, showError, showNotification} = useEntity({
             WS: {
                 create: WSParts.createPart,
                 read: WSParts.getPart,
@@ -75,6 +75,7 @@ const Part = () => {
             partLayout,
             userData,
             updatePartProperty: updateEquipmentProperty,
+            register,
         };
 
         return [
