@@ -7,6 +7,7 @@ function CustomFieldRENT(props) {
 
     let {customField, updateCustomFieldValue, elementInfo, children} = props;
     elementInfo = {...elementInfo, readonly: props.readonly};
+
     return (
         <EAMAutocomplete {...processElementInfo(elementInfo)}
                          value={customField.value}
@@ -14,7 +15,8 @@ function CustomFieldRENT(props) {
                          updateProperty={updateCustomFieldValue}
                          valueKey="value"
                          descKey="valueDesc"
-                         autocompleteHandler={(filter, config) => WSCustomFields.autocompleteCustomFieldRENT(customField.rentCodeValue, filter, config)}
+                         autocompleteHandler={WSCustomFields.autocompleteCustomFieldRENT}
+                         autocompleteHandlerParams={[customField.rentCodeValue]}
         />
     )
 }

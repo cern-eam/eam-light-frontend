@@ -8,99 +8,99 @@ import StatusRow from "../../components/statusrow/StatusRow"
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
-class PartGeneral extends Component {
-    render() {
-        let {partLayout, part, updatePartProperty, newEntity} = this.props;
+const PartGeneral = (props) => {
 
-        return (
-            <div style={{width: "100%", marginTop: 0}}>
+    const { partLayout, part, updatePartProperty, newEntity } = props;
 
-                {newEntity && <EAMTextField
-                    {...processElementInfo(partLayout.fields['partcode'])}
-                    value={part.code}
-                    updateProperty={updatePartProperty}
-                    valueKey="code"
-                    />
-                }
+    return (
+        <div style={{width: "100%", marginTop: 0}}>
 
-                <EAMTextField
-                    {...processElementInfo(partLayout.fields['description'])}
-                    value={part.description}
-                    updateProperty={updatePartProperty}
-                    valueKey="description"
+            {newEntity && <EAMTextField
+                {...processElementInfo(partLayout.fields['partcode'])}
+                value={part.code}
+                updateProperty={updatePartProperty}
+                valueKey="code"
                 />
+            }
 
-                <EAMAutocomplete
-                    {...processElementInfo(partLayout.fields['class'])}
-                    value={part.classCode}
-                    updateProperty={updatePartProperty}
-                    valueKey="classCode"
-                    desc={part.classDesc}
-                    descKey="classDesc"
-                    autocompleteHandler={(filter, config) => WS.autocompleteClass('PART', filter, config)}
-                />
+            <EAMTextField
+                {...processElementInfo(partLayout.fields['description'])}
+                value={part.description}
+                updateProperty={updatePartProperty}
+                valueKey="description"
+            />
 
-                <EAMAutocomplete
-                    {...processElementInfo(partLayout.fields['category'])}
-                    value={part.categoryCode}
-                    updateProperty={updatePartProperty}
-                    valueKey="categoryCode"
-                    desc={part.categoryDesc}
-                    descKey="categoryDesc"
-                    autocompleteHandler={WSParts.autocompletePartCategory}
-                />
+            <EAMAutocomplete
+                {...processElementInfo(partLayout.fields['class'])}
+                value={part.classCode}
+                updateProperty={updatePartProperty}
+                valueKey="classCode"
+                desc={part.classDesc}
+                descKey="classDesc"
+                autocompleteHandler={WS.autocompleteClass}
+                autocompleteHandlerParams={['PART']}
+            />
 
-                <EAMAutocomplete
-                    {...processElementInfo(partLayout.fields['uom'])}
-                    value={part.uom}
-                    updateProperty={updatePartProperty}
-                    valueKey="uom"
-                    desc={part.uomdesc}
-                    descKey="uomdesc"
-                    autocompleteHandler={WSParts.autocompletePartUOM}
-                />
+            <EAMAutocomplete
+                {...processElementInfo(partLayout.fields['category'])}
+                value={part.categoryCode}
+                updateProperty={updatePartProperty}
+                valueKey="categoryCode"
+                desc={part.categoryDesc}
+                descKey="categoryDesc"
+                autocompleteHandler={WSParts.autocompletePartCategory}
+            />
 
-                <EAMSelect
-                    {...processElementInfo(partLayout.fields['trackingtype'])}
-                    value={part.trackingMethod}
-                    updateProperty={updatePartProperty}
-                    valueKey="trackingMethod"
-                    autocompleteHandler={WSParts.getPartTrackingMethods}
-                />
+            <EAMAutocomplete
+                {...processElementInfo(partLayout.fields['uom'])}
+                value={part.uom}
+                updateProperty={updatePartProperty}
+                valueKey="uom"
+                desc={part.uomdesc}
+                descKey="uomdesc"
+                autocompleteHandler={WSParts.autocompletePartUOM}
+            />
 
-                <EAMAutocomplete
-                    {...processElementInfo(partLayout.fields['commoditycode'])}
-                    value={part.commodityCode}
-                    updateProperty={updatePartProperty}
-                    valueKey="commodityCode"
-                    desc={part.commodityDesc}
-                    descKey="commodityDesc"
-                    autocompleteHandler={WSParts.autocompletePartCommodity}
-                />
+            <EAMSelect
+                {...processElementInfo(partLayout.fields['trackingtype'])}
+                value={part.trackingMethod}
+                updateProperty={updatePartProperty}
+                valueKey="trackingMethod"
+                autocompleteHandler={WSParts.getPartTrackingMethods}
+            />
 
-                <EAMCheckbox
-                    {...processElementInfo(partLayout.fields['trackbyasset'])}
-                    value={part.trackByAsset}
-                    updateProperty={updatePartProperty}
-                    valueKey="trackByAsset"
-                />
+            <EAMAutocomplete
+                {...processElementInfo(partLayout.fields['commoditycode'])}
+                value={part.commodityCode}
+                updateProperty={updatePartProperty}
+                valueKey="commodityCode"
+                desc={part.commodityDesc}
+                descKey="commodityDesc"
+                autocompleteHandler={WSParts.autocompletePartCommodity}
+            />
 
-                <EAMCheckbox
-                    {...processElementInfo(partLayout.fields['repairablespare'])}
-                    value={part.trackCores}
-                    updateProperty={updatePartProperty}
-                    valueKey="trackCores"
-                />
+            <EAMCheckbox
+                {...processElementInfo(partLayout.fields['trackbyasset'])}
+                value={part.trackByAsset}
+                updateProperty={updatePartProperty}
+                valueKey="trackByAsset"
+            />
 
-                <StatusRow
-                    entity={part}
-                    entityType={"part"}
-                    style={{marginTop: "10px", marginBottom: "-10px"}}
-                />
-                
-            </div>
-        );
-    }
+            <EAMCheckbox
+                {...processElementInfo(partLayout.fields['repairablespare'])}
+                value={part.trackCores}
+                updateProperty={updatePartProperty}
+                valueKey="trackCores"
+            />
+
+            <StatusRow
+                entity={part}
+                entityType={"part"}
+                style={{marginTop: "10px", marginBottom: "-10px"}}
+            />
+            
+        </div>
+    );
 }
 
 export default PartGeneral;

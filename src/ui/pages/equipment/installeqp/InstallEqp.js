@@ -54,7 +54,8 @@ export default function NameForm(props) {
                                             value={parentEq}
                                             valueKey="parent"
                                             updateProperty={(key, value) => (key === 'parent') && setParentEq(value)}
-                                            autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
+                                            autocompleteHandler={WS.autocompleteEquipment}
+                                            autocompleteHandlerParams={[true]}
                                             barcodeScanner
                                         />
 
@@ -64,7 +65,8 @@ export default function NameForm(props) {
                                             value={childEq}
                                             valueKey="child"
                                             updateProperty={(key, value) => (key === 'child') && setChildEq(value)}
-                                            autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
+                                            autocompleteHandler={WS.autocompleteEquipment}
+                                            autocompleteHandlerParams={[true]}
                                             barcodeScanner
                                         />
 

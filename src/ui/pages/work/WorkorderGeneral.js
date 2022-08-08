@@ -24,6 +24,7 @@ function WorkorderDetails(props) {
                 {...register('equipment', 'equipmentCode', 'equipmentDesc')}
                 barcodeScanner
                 autocompleteHandler={WS.autocompleteEquipment}
+                autocompleteHandlerParams={[false]}
                 link={() => workorder.equipmentCode ? "/equipment/" + workorder.equipmentCode : null}/>
   
             <EAMAutocomplete 
@@ -55,7 +56,9 @@ function WorkorderDetails(props) {
 
             <EAMAutocomplete 
                 {...register('woclass', 'classCode', 'classDesc')}
-                autocompleteHandler={(filter, config) => WS.autocompleteClass('EVNT', filter, config)}/>
+                autocompleteHandler={WS.autocompleteClass}
+                autocompleteHandlerParams={['EVNT']}
+            />
 
             <EAMAutocomplete 
                     {...register('standardwo', 'standardWO', 'standardWODesc')}

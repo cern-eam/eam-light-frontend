@@ -124,7 +124,8 @@ const ReplaceEqpGeneral = (props) => {
                     value={replaceEquipment.oldEquipment}
                     updateProperty={updateProperty}
                     valueKey="oldEquipment"
-                    autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
+                    autocompleteHandler={WS.autocompleteEquipment}
+                    autocompleteHandlerParams={[true]}
                     onChangeValue={onChangeOldEquipment}
                     desc={replaceEquipment.oldEquipmentDesc}
                     descKey="oldEquipmentDesc"
@@ -161,7 +162,8 @@ const ReplaceEqpGeneral = (props) => {
                     value={replaceEquipment.newEquipment}
                     updateProperty={updateProperty}
                     valueKey="newEquipment"
-                    autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}
+                    autocompleteHandler={WS.autocompleteEquipment}
+                    autocompleteHandlerParams={[true]}
                     onChangeValue={onChangeNewEquipment}
                     desc={replaceEquipment.newEquipmentDesc}
                     descKey="newEquipmentDesc"

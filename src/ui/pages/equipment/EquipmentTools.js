@@ -46,7 +46,7 @@ export const onCategoryChange = (category, updateProperty) => {
 
             if(categoryData.categoryclass) {
                 updateProperty('classCode', categoryData.categoryclass);
-                updateProperty('classDesc', categoryData.categoryclassdesc);
+                updateProperty('classDesc', categoryData.categoryclassdesc); // TODO: this does not appear to be included in the response
             }
 
             if(categoryData.manufacturer) {

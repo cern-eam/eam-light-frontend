@@ -76,7 +76,7 @@ class WSEquipment {
         return WS._get(`/autocomplete/eqp/bin?code=${filter}&store=${store}`, config);
     }
 
-    autocompleteEquipmentCategory(filter, eqpClass, config = {}) {
+    autocompleteEquipmentCategory(eqpClass, filter, config = {}) {
         filter = encodeURIComponent(filter);
         eqpClass = eqpClass === null ? '' : eqpClass;
         return WS._get(`/autocomplete/eqp/category/${filter}`, {

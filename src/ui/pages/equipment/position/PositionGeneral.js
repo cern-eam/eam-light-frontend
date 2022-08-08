@@ -7,67 +7,75 @@ import StatusRow from "../../../components/statusrow/StatusRow"
 import EquipmentTools from '../EquipmentTools';
 import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
-class PositionGeneral extends Component {
+const PositionGeneral = (props) => {
 
-    updateEquipmentStatus = EquipmentTools.getUpdateStatus(this.props.updateEquipmentProperty, this.props.showNotification);
+    const {
+        equipment,
+        positionLayout,
+        updateEquipmentProperty,
+        newEntity,
+        userGroup,
+        showNotification,
+    } = props;
 
-    render() {
-        let {equipment, positionLayout, updateEquipmentProperty, newEntity, userGroup} = this.props
-        
-        return (
-            <React.Fragment>
+    const updateEquipmentStatus = EquipmentTools.getUpdateStatus(
+        updateEquipmentProperty,
+        showNotification
+    );
 
-                {newEntity &&
-                <EAMTextField
-                    {...processElementInfo(positionLayout.fields['equipmentno'])}
-                    value={equipment.code}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="code"/>}
+    return (
+        <React.Fragment>
 
-                <EAMTextField
-                    {...processElementInfo(positionLayout.fields['alias'])}
-                    value={equipment.alias}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="alias"/>
+            {newEntity &&
+            <EAMTextField
+                {...processElementInfo(positionLayout.fields['equipmentno'])}
+                value={equipment.code}
+                updateProperty={updateEquipmentProperty}
+                valueKey="code"/>}
 
-                <EAMTextField
-                    {...processElementInfo(positionLayout.fields['udfchar45'])}
-                    value={equipment.userDefinedFields.udfchar45}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="userDefinedFields.udfchar45"
-                />
+            <EAMTextField
+                {...processElementInfo(positionLayout.fields['alias'])}
+                value={equipment.alias}
+                updateProperty={updateEquipmentProperty}
+                valueKey="alias"/>
 
-                <EAMTextField
-                    {...processElementInfo(positionLayout.fields['equipmentdesc'])}
-                    value={equipment.description}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="description"/>
+            <EAMTextField
+                {...processElementInfo(positionLayout.fields['udfchar45'])}
+                value={equipment.userDefinedFields.udfchar45}
+                updateProperty={updateEquipmentProperty}
+                valueKey="userDefinedFields.udfchar45"
+            />
 
-                <EAMAutocomplete
-                    {...processElementInfo(positionLayout.fields['department'])}
-                    value={equipment.departmentCode}
-                    desc={equipment.departmentDesc}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="departmentCode"
-                    descKey="departmentDesc"
-                    autocompleteHandler={WSEquipment.autocompleteEquipmentDepartment}/>
+            <EAMTextField
+                {...processElementInfo(positionLayout.fields['equipmentdesc'])}
+                value={equipment.description}
+                updateProperty={updateEquipmentProperty}
+                valueKey="description"/>
 
-                <EAMSelect
-                    {...processElementInfo(positionLayout.fields['assetstatus'])}
-                    value={equipment.statusCode}
-                    autocompleteHandler={WSEquipment.getEquipmentStatusValues}
-                    autocompleteHandlerParams={[userGroup, newEntity, equipment.statusCode]}
-                    updateProperty={this.updateEquipmentStatus}
-                    valueKey="statusCode"/>
+            <EAMAutocomplete
+                {...processElementInfo(positionLayout.fields['department'])}
+                value={equipment.departmentCode}
+                desc={equipment.departmentDesc}
+                updateProperty={updateEquipmentProperty}
+                valueKey="departmentCode"
+                descKey="departmentDesc"
+                autocompleteHandler={WSEquipment.autocompleteEquipmentDepartment}/>
 
-                <StatusRow
-                    entity={equipment}
-                    entityType={"equipment"}
-                    style={{marginTop: "10px", marginBottom: "-10px"}}
-                />
-            </React.Fragment>
-        )
-    }
+            <EAMSelect
+                {...processElementInfo(positionLayout.fields['assetstatus'])}
+                value={equipment.statusCode}
+                autocompleteHandler={WSEquipment.getEquipmentStatusValues}
+                autocompleteHandlerParams={[userGroup, newEntity, equipment.statusCode]}
+                updateProperty={updateEquipmentStatus}
+                valueKey="statusCode"/>
+
+            <StatusRow
+                entity={equipment}
+                entityType={"equipment"}
+                style={{marginTop: "10px", marginBottom: "-10px"}}
+            />
+        </React.Fragment>
+    )
 }
 
 export default PositionGeneral
