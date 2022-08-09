@@ -50,7 +50,6 @@ const useEntity = (params) => {
     const getHiddenRegionStateParam = useSelector(state => getHiddenRegionState(state)(screenCode))
     const getUniqueRegionIDParam =  useSelector(state => getUniqueRegionID(state)(screenCode))
 
-
     useEffect( () => {
         if (code) {
             readEntity(code);
@@ -236,20 +235,32 @@ const useEntity = (params) => {
 
         data.updateProperty = updateEntityProperty;
 
+        // Value
         data.value = get(entity, valueKey);
         data.valueKey = valueKey;
 
+        // Description 
         if (descKey) {
             data.desc = get(entity, descKey);
             data.descKey = descKey;
         }
 
+        // Errors
         let error = errors?.find?.(e => e.location === data.id);
         if (error) {
             data.errorText = error.message;
         }
 
+        // Readonly 
+        if (isReadOnly()) {
+            data.disabled = true;
+        }
+
         return data;
+    }
+
+    const isReadOnly = () => {
+        return !screenPermissions.updateAllowed && !newEntity;
     }
 
     return {entity, screenCode, screenLayout, screenPermissions, 
