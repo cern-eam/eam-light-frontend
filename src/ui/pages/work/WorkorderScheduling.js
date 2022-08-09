@@ -3,7 +3,6 @@ import EAMDateTimePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDa
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WS from '../../../tools/WS';
-import { Grid } from '@mui/material';
 import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
 
 const WorkorderScheduling = (props) => {
@@ -25,19 +24,11 @@ const WorkorderScheduling = (props) => {
 
     return (
         <React.Fragment>
-            <Grid container justifyContent="space-between" spacing={2}>
-                <Grid item xs={6}>
-                    <EAMAutocomplete
-                        {...register('createdby','createdBy','createdByDesc')}
-                        style = {{minWidth: 0}}/>
-                </Grid>
-
-                <Grid item xs={6}>
-                    <EAMDatePicker
-                        {...register('datecreated','createdDate')}
-                        style = {{minWidth: 0}}/>
-                </Grid>
-            </Grid>
+            
+            <div style={{display: "flex"}}>
+                <EAMAutocomplete {...register('createdby','createdBy','createdByDesc')}/>
+                <EAMDatePicker {...register('datecreated','createdDate')}/>
+            </div>
 
             <EAMAutocomplete
                 {...register('reportedby','reportedBy','reportedByDesc')}
