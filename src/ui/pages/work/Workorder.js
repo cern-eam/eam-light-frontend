@@ -3,7 +3,6 @@ import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import {WorkorderIcon} from 'eam-components/dist/ui/components/icons';
 import React, { useEffect, useState, useRef } from 'react';
 import BlockUi from 'react-block-ui';
-import { useSelector } from 'react-redux'; // TODO: keep?
 import WSEquipment from "../../../tools/WSEquipment";
 import WSWorkorder from "../../../tools/WSWorkorders";
 import {ENTITY_TYPE} from "../../components/Toolbar";
@@ -47,7 +46,7 @@ const Workorder = () => {
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
-        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateWorkorderProperty, register,
+        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateWorkorderProperty, register,
         handleError, showError, showNotification, showWarning} = useEntity({
             WS: {
                 create: WSWorkorder.createWorkOrder,
@@ -60,7 +59,8 @@ const Workorder = () => {
                 create: postCreate,
                 read: postRead,
                 new: postInit,
-                update: postUpdate
+                update: postUpdate,
+                copy: postCopy
             },
             handlers: {
                 standardWO: onChangeStandardWorkOrder,
@@ -95,7 +95,9 @@ const Workorder = () => {
             const equipmentResponse = response.body.data;
             setEquipment(equipmentResponse);
             if (equipmentResponse.partCode) {
-                WSParts.getPart(equipmentResponse.partCode).then(response => setEquipmentPart(response.body.data)).catch(error => {})
+                WSParts.getPart(equipmentResponse.partCode)
+                .then(response => setEquipmentPart(response.body.data))
+                .catch(error => {})
             }
         })
         .catch(error => {})
@@ -567,11 +569,11 @@ const Workorder = () => {
                         entity: workorder,
                         // postInit: this.postInit.bind(this),
                         // setLayout: this.setLayout.bind(this),
-                        newEntity: newEntity,
+                        newEntity,
                         applicationData: applicationData,
                         userGroup: userData.eamAccount.userGroup,
                         screencode: screenCode,
-                        // copyHandler: this.copyEntity.bind(this),
+                        copyHandler: copyHandler,
                         entityDesc: "Work Order",
                         entityType: ENTITY_TYPE.WORKORDER,
                         departmentalSecurity: departmentalSecurity,

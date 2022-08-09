@@ -160,6 +160,19 @@ const useEntity = (params) => {
             .finally( () => setLoading(false))
     }
 
+
+    const copyEntity = () => {
+        let code = entity[entityCodeProperty];
+        setNewEntity(true);
+        setEntity( oldEntity => ({
+            ...assignDefaultValues(oldEntity,
+                screenLayout,
+                layoutPropertiesMap),
+            copyFrom: code
+        }))
+        postActions?.copy?.();
+    }
+
     //
     // BUTTON HANDLERS
     //
@@ -177,6 +190,10 @@ const useEntity = (params) => {
 
     const deleteHandler = () => {
         deleteEntity()
+    }
+
+    const copyHandler = () => {
+        copyEntity();
     }
 
     //
@@ -227,7 +244,7 @@ const useEntity = (params) => {
             data.descKey = descKey;
         }
 
-        let error = errors?.find(e => e.location === data.id);
+        let error = errors?.find?.(e => e.location === data.id);
         if (error) {
             data.errorText = error.message;
         }
@@ -248,7 +265,7 @@ const useEntity = (params) => {
         showError: showErrorParam, showNotification: showNotificationParam, handleError: handleErrorParam, showWarning: showWarningParam,
         toggleHiddenRegion: toggleHiddenRegionParam, setRegionVisibility: setRegionVisibilityParam,
         // 
-        newHandler, saveHandler, deleteHandler, updateEntityProperty, register};
+        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty, register};
 
     
 }

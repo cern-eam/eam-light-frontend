@@ -64,7 +64,8 @@ const System = () => {
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
-        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, register, handleError, showError, showNotification} = useEntity({
+        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register, 
+        handleError, showError, showNotification} = useEntity({
             WS: {
                 create: WSEquipment.createEquipment,
                 read: WSEquipment.getEquipment,
@@ -387,11 +388,11 @@ const System = () => {
                     entity: equipment,
                     // postInit: this.postInit.bind(this),
                     // setLayout: this.setLayout.bind(this),
-                    newEntity: newEntity,
+                    newEntity,
                     applicationData: applicationData,
                     extendedLink: applicationData.EL_SYSLI,
                     screencode: screenCode,
-                    // copyHandler: this.copyEntity.bind(this),
+                    copyHandler,
                     entityType: ENTITY_TYPE.EQUIPMENT,
                     departmentalSecurity: departmentalSecurity,
                     screens: userData.screens,
