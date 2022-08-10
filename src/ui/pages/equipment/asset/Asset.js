@@ -95,7 +95,6 @@ const Asset = () => {
         readStatuses(false, equipment.statusCode) 
         setLayoutProperty('showEqpTreeButton', true)
         setLayoutProperty('equipment', equipment);
-
     }
 
     const readStatuses = (neweqp, statusCode) => {

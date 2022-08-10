@@ -12,9 +12,9 @@ const PositionGeneral = (props) => {
         equipment,
         updateEquipmentProperty,
         newEntity,
-        userGroup,
         showNotification,
         register,
+        statuses
     } = props;
 
     // TODO: find alternative
@@ -42,13 +42,7 @@ const PositionGeneral = (props) => {
 
             <EAMSelect
                 {...register('assetstatus', 'statusCode')}
-                autocompleteHandler={WSEquipment.getEquipmentStatusValues}
-                autocompleteHandlerParams={[
-                    userGroup,
-                    newEntity,
-                    equipment.statusCode,
-                ]}
-                // updateProperty={updateEquipmentStatus} // TODO: find alternative
+                options = {statuses}
             />
 
             <StatusRow

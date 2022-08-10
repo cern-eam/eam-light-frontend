@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import queryString from "query-string";
 import EquipmentHistory from '../components/EquipmentHistory.js'
 import EamlightToolbarContainer from './../../../components/EamlightToolbarContainer'
@@ -25,7 +25,7 @@ import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 
 const Position = () => {
-
+    const [statuses, setStatuses] = useState([]);
     const queryParams = queryString.parse(window.location.search).length > 0 ?
                         queryString.parse(window.location.search) : '';
 
@@ -47,6 +47,7 @@ const Position = () => {
                 create: postCreate,
                 read: postRead,
                 new: postInit,
+                update: postUpdate
             },
             entityCode: "OBJ",
             entityDesc: "Position",
@@ -56,47 +57,33 @@ const Position = () => {
             layoutProperty: "positionLayout",
         });
 
-    function postInit() {
-        // this.setStatuses(true) // TODO: confirm it works as expected, 
-        setLayoutProperty('showEqpTreeButton', false)
-        // this.enableChildren(); // TODO: keeping for context
-    }
-
-    function postCreate() {
-        // this.setStatuses(false); // TODO: confirm it works as expected, 
-        commentsComponent.current.createCommentForNewEntity();
-        setLayoutProperty('showEqpTreeButton', true)
-    }
-
-    function postUpdate(equipment) {
-        commentsComponent.current.createCommentForNewEntity();
-
-        if (departmentalSecurity.readOnly) {
-            // this.disableChildren(); // TODO: keeping for context
-        } else {
-            // this.enableChildren(); // TODO: keeping for context
+        function postInit() {
+            readStatuses(true); 
+            setLayoutProperty('showEqpTreeButton', false)
         }
-    }
-
-    function postRead(equipment) {
-        // this.setStatuses(false, equipment.statusCode) // TODO: confirm it works as expected, 
-        setLayoutProperty('showEqpTreeButton', true)
-        setLayoutProperty('equipment', equipment)
-
-        if (departmentalSecurity.readOnly) {
-            // this.disableChildren(); // TODO: keeping for context
-        } else {
-            // this.enableChildren(); // TODO: keeping for context
+    
+        function postCreate() {
+            readStatuses(false, equipment.statusCode); 
+            commentsComponent.current?.createCommentForNewEntity();
+            setLayoutProperty('showEqpTreeButton', true)
         }
-    }
-
-    // TODO: Tested it and looked ok, but may be better to discuss because argument is called 'oldStatusCode' and we are passing the current status code.
-    // const setStatuses = (neweqp, oldStatusCode) => {
-    //     WSEquipment.getEquipmentStatusValues(this.props.userData.eamAccount.userGroup, neweqp, oldStatusCode)
-    //         .then(response => {
-    //             this.setLayout({statusValues: response.body.data})
-    //         })
-    // }
+    
+        function postUpdate() {
+            readStatuses(false, equipment.statusCode) 
+            commentsComponent.current?.createCommentForNewEntity();
+        }
+    
+        function postRead(equipment) {
+            readStatuses(false, equipment.statusCode) 
+            setLayoutProperty('showEqpTreeButton', true)
+            setLayoutProperty('equipment', equipment);
+        }
+    
+        const readStatuses = (neweqp, statusCode) => {
+            WSEquipment.getEquipmentStatusValues(userData.eamAccount.userGroup, neweqp, statusCode)
+                .then(response => setStatuses(response.body.data))
+                .catch(console.error)
+        }
 
     const getRegions = () => {
         const tabs = positionLayout.tabs;
@@ -120,7 +107,8 @@ const Position = () => {
                 render: () => 
                     <PositionGeneral
                         showNotification={showNotification}
-                        {...commonProps}/>
+                        {...commonProps}
+                        statuses={statuses}/>
                 ,
                 column: 1,
                 order: 1,

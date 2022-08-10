@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import queryString from "query-string";
 import EquipmentHistory from '../components/EquipmentHistory.js'
 import EamlightToolbarContainer from './../../../components/EamlightToolbarContainer'
@@ -24,38 +24,7 @@ import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import useEntity from "hooks/useEntity";
 
 const System = () => {
-    // TODO: move this to respective input?
-    const onChangeCategoryCode = code => {
-        if(!code) {
-            return;
-        }
-
-        //Fetch the category data
-        return WSEquipment.getCategoryData(code).then(response => {
-            const categoryData = response.body.data[0];
-
-            if(!categoryData) {
-                return;
-            }
-
-            this.setState(prevState => {
-                const equipment = {...prevState.equipment};
-
-                if(categoryData.categoryclass) {
-                    equipment.classCode = categoryData.categoryclass;
-                    equipment.classDesc = categoryData.categoryclassdesc;
-                }
-
-                if(categoryData.manufacturer) {
-                    equipment.manufacturerCode = categoryData.manufacturer;
-                }
-
-                return {equipment};
-            });
-        }).catch(error => {
-            console.log(error); // TODO: we should prob handleError?
-        });
-    };
+    const [statuses, setStatuses] = useState([]);
 
     const queryParams = queryString.parse(window.location.search).length > 0 ?
                         queryString.parse(window.location.search) : '';
@@ -77,6 +46,7 @@ const System = () => {
                 create: postCreate,
                 read: postRead,
                 new: postInit,
+                update: postUpdate
             },
             entityCode: "OBJ",
             entityDesc: "System",
@@ -86,55 +56,34 @@ const System = () => {
             layoutProperty: "systemLayout",
         });
 
-    // TODO: keeping for context
-    // settings = {
-    //     handlerFunctions: {
-    //         categoryCode: this.onChangeCategoryCode,
-    //         classCode: this.onChangeClass,
-    //     }
-    // };
-
-    function postInit() {
-        // setStatuses(true); // TODO: confirm it works as expected
-        setLayoutProperty('showEqpTreeButton', false)
-        // this.enableChildren(); // TODO: keeping for context
-    }
-
-    function postCreate() {
-        // setStatuses(false); // TODO: confirm it works as expected
-        commentsComponent.current.createCommentForNewEntity();
-        setLayoutProperty('showEqpTreeButton', true)
-    }
-
-    function postUpdate(equipment) {
-        commentsComponent.current.createCommentForNewEntity();
-
-        if (departmentalSecurity.readOnly) {
-            // this.disableChildren(); // TODO: keeping for context
-        } else {
-            // this.enableChildren(); // TODO: keeping for context
+  
+        function postInit() {
+            readStatuses(true); 
+            setLayoutProperty('showEqpTreeButton', false)
         }
-    }
-
-    function postRead(equipment) {
-        // setStatuses(false, equipment.statusCode); // TODO: confirm it works as expected
-        setLayoutProperty('showEqpTreeButton', true);
-        setLayoutProperty('equipment', equipment); // TODO: should we be relying on the 'equipment' arg? Shouldn't we pass the 'equipment' from useEntity?
-
-        if (departmentalSecurity.readOnly) {
-            // this.disableChildren(); // TODO: keeping for context
-        } else {
-            // this.enableChildren(); // TODO: keeping for context
+    
+        function postCreate() {
+            readStatuses(false, equipment.statusCode); 
+            commentsComponent.current?.createCommentForNewEntity();
+            setLayoutProperty('showEqpTreeButton', true)
         }
-    }
-
-    // TODO: Tested it and looked ok, but may be better to discuss because argument is called 'oldStatusCode' and we are passing the current status code.
-    // const setStatuses = (neweqp, oldStatusCode) => {
-    //     WSEquipment.getEquipmentStatusValues(userData.eamAccount.userGroup, neweqp, oldStatusCode)
-    //         .then(response => {
-    //             this.setLayout({statusValues: response.body.data})
-    //         });
-    // }
+    
+        function postUpdate() {
+            readStatuses(false, equipment.statusCode) 
+            commentsComponent.current?.createCommentForNewEntity();
+        }
+    
+        function postRead(equipment) {
+            readStatuses(false, equipment.statusCode) 
+            setLayoutProperty('showEqpTreeButton', true)
+            setLayoutProperty('equipment', equipment);
+        }
+    
+        const readStatuses = (neweqp, statusCode) => {
+            WSEquipment.getEquipmentStatusValues(userData.eamAccount.userGroup, neweqp, statusCode)
+                .then(response => setStatuses(response.body.data))
+                .catch(console.error)
+        }
 
     // TODO:
     function preCreateEntity(equipment) {
@@ -188,7 +137,8 @@ const System = () => {
                 render: () => 
                     <SystemGeneral
                         showNotification={showNotification}
-                        {...commonProps}/>
+                        {...commonProps}
+                        statuses={statuses}/>
                 ,
                 column: 1,
                 order: 1,

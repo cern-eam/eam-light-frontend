@@ -37,8 +37,7 @@ export default Location = (props) => {
             postActions: {
                 create: postCreate,
                 read: postRead,
-                new: postInit,
-                
+                new: postInit
             },
             entityCode: "LOC",
             entityDesc: "Location",
@@ -48,51 +47,20 @@ export default Location = (props) => {
             layoutProperty: "locationLayout"
         });
 
-        
-    const settings = {
-        entity: "location",
-        entityDesc: "Location",
-        entityURL: "/location/",
-        entityCodeProperty: "code",
-       // entityScreen: this.props.userData.screens[this.props.userData.locationScreen],
-       // renderEntity: this.renderLocation.bind(this),
-
-        //handlerFunctions: {
-        //    classCode: this.onChangeClass,
-        //}
-    }
 
     function postRead() {
         setLayoutProperty("showEqpTreeButton", true);
         setLayoutProperty("location", this.state.location);
-
-        // if (this.departmentalSecurity.readOnly) {
-        //     this.disableChildren();
-        // } else {
-        //     this.enableChildren();
-        // }
     }
 
     function postInit() {
-        // this.props.setLayoutProperty('showEqpTreeButton', false)
-        // this.enableChildren();
+        setLayoutProperty('showEqpTreeButton', false)
     }
 
     function postCreate(location) {
-        commentsComponent.current.createCommentForNewEntity(location.code);
+        commentsComponent.current?.createCommentForNewEntity(location.code);
         setLayoutProperty("showEqpTreeButton", true)
     }
-
-    // function postUpdate(equipment) {
-    //     this.comments.createCommentForNewEntity();
-
-    //     if (this.departmentalSecurity.readOnly) {
-    //         this.disableChildren();
-    //     } else {
-    //         this.enableChildren();
-    //     }
-    // }
-
 
     const getRegions = () => {
         const tabs = locationLayout.tabs; 
@@ -327,7 +295,6 @@ export default Location = (props) => {
                                  regions={getRegions()}
                                  isHiddenRegion={isHiddenRegion}
                                  getHiddenRegionState={getHiddenRegionState}
-                                 //departmentalSecurity={this.departmentalSecurity} 
                                  />
                 <EntityRegions
                     showEqpTree={showEqpTree}

@@ -23,6 +23,9 @@ const SystemDetails = (props) => {
                 {...register('category', 'categoryCode', 'categoryDesc')}
                 autocompleteHandler={WSEquipment.autocompleteEquipmentCategory}
                 autocompleteHandlerParams={[equipment.classCode]}
+                onChangeValue={(categoryCode) =>
+                    onCategoryChange(categoryCode, updateEquipmentProperty)
+                }
             />
 
             <EAMDatePicker {...register('commissiondate', 'comissionDate')} />
