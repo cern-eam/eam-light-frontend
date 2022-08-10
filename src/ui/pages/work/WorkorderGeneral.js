@@ -2,15 +2,15 @@ import React from 'react';
 import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox'
 import WS from '../../../tools/WS'
 import WSWorkorders from "../../../tools/WSWorkorders"
-import OpenInAppIcon from 'mdi-material-ui/OpenInApp'
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
+import { isDepartmentReadOnly } from '../EntityTools';
 
 function WorkorderDetails(props) {
 
-    const { workOrderLayout, workorder, updateWorkorderProperty, register, applicationData, statuses, userGroup } = props; 
+    const { workOrderLayout, workorder, updateWorkorderProperty, register, applicationData, statuses, userGroup, userData, screenPermissions } = props; 
     const rpawClassesList = (applicationData && applicationData.EL_TRPAC && applicationData.EL_TRPAC.split(',')) || [];
     const rpawLink = applicationData && applicationData.EL_TRPAW;
 
@@ -45,6 +45,7 @@ function WorkorderDetails(props) {
 
             <EAMSelect
                 {...register('workorderstatus', 'statusCode', 'statusDesc')}
+                disabled={isDepartmentReadOnly(workorder.departmentCode, userData) || !screenPermissions.updateAllowed}
                 renderSuggestion={suggestion => suggestion.desc}
                 renderValue={value => value.desc || value.code}
                 options={statuses} 

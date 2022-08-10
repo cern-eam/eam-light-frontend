@@ -15,7 +15,7 @@ const AssetGeneral = (props) => {
         updateEquipmentProperty,
         showNotification,
         newEntity,
-        userGroup,
+        statuses,
         register,
     } = props;
 
@@ -50,13 +50,7 @@ const AssetGeneral = (props) => {
 
             <EAMSelect
                 {...register('assetstatus', 'statusCode')}
-                autocompleteHandler={WSEquipment.getEquipmentStatusValues}
-                autocompleteHandlerParams={[
-                    userGroup,
-                    newEntity,
-                    equipment.statusCode,
-                ]}
-                // updateProperty={updateEquipmentStatus} // TODO: find alternative
+                options={statuses}
             />
             
             <EAMSelect

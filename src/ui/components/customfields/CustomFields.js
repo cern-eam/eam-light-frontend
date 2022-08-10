@@ -6,7 +6,7 @@ import { isCernMode } from "../CERNMode"
 
 function CustomFields(props) {
     let [lookupValues, setLookupValues] = useState(null);
-    let {updateEntityProperty, customFields, readonly, children, classCode, entityCode} = props;
+    let {updateEntityProperty, customFields, readonly, classCode, entityCode} = props;
 
     useEffect(() => {
         if (customFields) {
@@ -35,7 +35,6 @@ function CustomFields(props) {
                     if (isCernMode && customField.code.startsWith('MTFX')) return null;
                     return (
                         <CustomFieldInput
-                            children={children}
                             key={index}
                             updateCustomFieldValue={updateCustomFieldValue.bind(null, index)}
                             customField={customField}

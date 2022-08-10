@@ -6,7 +6,7 @@ import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/
 
 function CustomFieldCODE(props) {
 
-    let {customField, updateCustomFieldValue, elementInfo, children, lookupValues} = props;
+    let {customField, updateCustomFieldValue, elementInfo, lookupValues} = props;
     elementInfo = {...elementInfo, readonly: props.readonly};
 
     if (tools.isLookupCustomField(customField)) {

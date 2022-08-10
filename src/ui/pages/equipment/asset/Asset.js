@@ -27,6 +27,7 @@ import useEntity from "hooks/useEntity";
 
 const Asset = () => {
     const [part, setPart] = useState(part);
+    const [statuses, setStatuses] = useState([]);
 
     const queryParams = queryString.parse(window.location.search).length > 0 ?
                         queryString.parse(window.location.search) : '';
@@ -48,6 +49,7 @@ const Asset = () => {
                 create: postCreate,
                 read: postRead,
                 new: postInit,
+                update: postUpdate
             },
             entityCode: "OBJ",
             entityDesc: "Asset",
@@ -74,46 +76,34 @@ const Asset = () => {
     }, [equipment?.partCode]);
 
     function postInit() {
-        // this.setStatuses(true); // TODO: confirm it works as expected, oldStatusCode arg
+        readStatuses(true); 
         setLayoutProperty('showEqpTreeButton', false)
-        // this.enableChildren(); // TODO: keeping for context
     }
 
     function postCreate() {
-        // this.setStatuses(false); // TODO: confirm it works as expected, oldStatusCode arg
-        commentsComponent.current.createCommentForNewEntity();
+        readStatuses(false, equipment.statusCode); 
+        commentsComponent.current?.createCommentForNewEntity();
         setLayoutProperty('showEqpTreeButton', true)
     }
 
     function postUpdate() {
-        commentsComponent.current.createCommentForNewEntity();
-
-        if (departmentalSecurity.readOnly) {
-            // this.disableChildren(); // TODO: keeping for context
-        } else {
-            // this.enableChildren(); // TODO: keeping for context
-        }
+        readStatuses(false, equipment.statusCode) 
+        commentsComponent.current?.createCommentForNewEntity();
     }
 
     function postRead(equipment) {
-        // this.setStatuses(false, equipment.statusCode) // TODO: confirm it works as expected, , oldStatusCode arg
+        readStatuses(false, equipment.statusCode) 
         setLayoutProperty('showEqpTreeButton', true)
         setLayoutProperty('equipment', equipment);
 
-        if (departmentalSecurity.readOnly) {
-            // this.disableChildren(); // TODO: keeping for context
-        } else {
-            // this.enableChildren(); // TODO: keeping for context
-        }
     }
 
-    // TODO: Tested it and looked ok, but may be better to discuss because argument is called 'oldStatusCode' and we are passing the current status code.
-    // const setStatuses = (neweqp, oldStatusCode) => {
-    // WSEquipment.getEquipmentStatusValues(this.props.userData.eamAccount.userGroup, neweqp, oldStatusCode)
-    //         .then(response => {
-    //             this.setLayout({ statusValues: response.body.data })
-    //         })
-    // }
+    const readStatuses = (neweqp, statusCode) => {
+        WSEquipment.getEquipmentStatusValues(userData.eamAccount.userGroup, neweqp, statusCode)
+            .then(response => setStatuses(response.body.data))
+            .catch(console.error)
+    }
+
 
     function preCreateEntity(equipment) {
         //Check hierarchy
@@ -177,7 +167,8 @@ const Asset = () => {
                 render: () => 
                     <AssetGeneral
                         showNotification={showNotification}
-                        {...commonProps}/>
+                        {...commonProps}
+                        statuses={statuses}/>
                 ,
                 column: 1,
                 order: 1,

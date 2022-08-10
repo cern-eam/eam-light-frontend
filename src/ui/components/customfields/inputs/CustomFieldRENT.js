@@ -5,7 +5,7 @@ import WSCustomFields from "../../../../tools/WSCustomFields";
 
 function CustomFieldRENT(props) {
 
-    let {customField, updateCustomFieldValue, elementInfo, children} = props;
+    let {customField, updateCustomFieldValue, elementInfo} = props;
     elementInfo = {...elementInfo, readonly: props.readonly};
 
     return (

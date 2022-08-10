@@ -6,7 +6,7 @@ import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/
 
 function CustomFieldNUM(props) {
 
-    let {customField, updateCustomFieldValue, elementInfo, children, lookupValues, UoM} = props;
+    let {customField, updateCustomFieldValue, elementInfo, lookupValues, UoM} = props;
     elementInfo = {...elementInfo, readonly: props.readonly};
     if (tools.isLookupCustomField(customField)) {
         return <EAMSelect

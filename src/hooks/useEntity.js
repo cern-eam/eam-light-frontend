@@ -5,7 +5,7 @@ import {useParams, useHistory} from "react-router-dom"
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
-import { assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType, fireHandlers } from "ui/pages/EntityTools";
+import { assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType, fireHandlers, isDepartmentReadOnly } from "ui/pages/EntityTools";
 import { setLayoutProperty, showError, showNotification, handleError, toggleHiddenRegion,
     setRegionVisibility, 
     showWarning} from "actions/uiActions";
@@ -21,6 +21,7 @@ const useEntity = (params) => {
     const [entity, setEntity] = useState(null);
     const [errors, setErrors] = useState([]);
     const [newEntity, setNewEntity] = useState(true);
+    const [readOnly, setReadOnly] = useState(false);
     const {code} = useParams();
     const history = useHistory();
     const abortController = useRef(null);
@@ -83,7 +84,6 @@ const useEntity = (params) => {
     }
 
     const readEntity = (code) => {
-
         setLoading(true)
 
         // Cancel the old request in the case it was still active
@@ -96,6 +96,9 @@ const useEntity = (params) => {
                 let data = response.body.data;
                 setEntity(data);
                 document.title = entityDesc + ' ' + data[entityCodeProperty];
+
+                // Permissions
+                setReadOnly(!screenPermissions.updateAllowed || isDepartmentReadOnly(data.departmentCode, userData))
                 postActions.read(data)
             })
             .catch(error => {
@@ -106,6 +109,8 @@ const useEntity = (params) => {
             .finally( () => setLoading(false))
     }
 
+
+
     const updateEntity = () => {
         setLoading(true);
         setErrors(null);
@@ -114,7 +119,7 @@ const useEntity = (params) => {
             .then(response => {
                 const entity = response.body.data;
                 setEntity(entity);
-                showNotificationParam(`${entityDesc} ${entity[entityCodeProperty]}  has been successfully updated.`);
+                showNotificationParam(`${entityDesc} ${entity[entityCodeProperty]} has been successfully updated.`);
                 // Invoke entity specific logic 
                 postActions.update(entity)
             })
@@ -130,7 +135,7 @@ const useEntity = (params) => {
 
         WS.delete(entity[entityCodeProperty])
             .then(response => {
-                showNotificationParam(`${entityDesc} ${entity[entityCodeProperty]}  has been successfully deleted.`);
+                showNotificationParam(`${entityDesc} ${entity[entityCodeProperty]} has been successfully deleted.`);
                 initNewEntity();
             })
             .catch(error => {
@@ -210,7 +215,7 @@ const useEntity = (params) => {
                 const newCustomFields = response.body.data;
                 let entity = assignCustomFieldFromCustomField(prevEntity, newCustomFields, AssignmentType.SOURCE_NOT_EMPTY);
     
-                // replace custom fields with ones in query parameters if we just created the entity
+                // replace custom fields with ones in query parameters if we have just created the entity
                 if(newEntity) {
                     const queryParams = queryString.parse(window.location.search);
                     entity = assignCustomFieldFromObject(entity, queryParams, AssignmentType.SOURCE_NOT_EMPTY);
@@ -221,6 +226,7 @@ const useEntity = (params) => {
     }
 
     const updateEntityProperty = (key, value) => {
+        console.log('update property', key, value)
         setEntity(prevEntity => set({...prevEntity}, key, value));
         
         // Fire handlers
@@ -252,19 +258,15 @@ const useEntity = (params) => {
         }
 
         // Readonly 
-        if (isReadOnly()) {
+        if (readOnly) {
             data.disabled = true;
         }
 
         return data;
     }
 
-    const isReadOnly = () => {
-        return !screenPermissions.updateAllowed && !newEntity;
-    }
-
-    return {entity, screenCode, screenLayout, screenPermissions, 
-        newEntity, setEntity, loading,
+    return {screenCode, screenLayout, screenPermissions, 
+        entity, newEntity, setEntity, loading, readOnly, setReadOnly,
         userData, applicationData, 
         isHiddenRegion: isHiddenRegionParam, 
         getHiddenRegionState: getHiddenRegionStateParam, 

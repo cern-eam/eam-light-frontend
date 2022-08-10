@@ -30,19 +30,21 @@ import WSParts from '../../../tools/WSParts';
 import WSWorkorders from '../../../tools/WSWorkorders';
 import useEntity from "hooks/useEntity";
 import { updateMyWorkOrders } from '../../../actions/workorderActions' // TODO: keep?
+import { useDispatch } from 'react-redux';
 
 
 const Workorder = () => {
     const [equipmentMEC, setEquipmentMEC] = useState();
     const [equipment, setEquipment] = useState();
     const [equipmentPart, setEquipmentPart] = useState();
-    const [statuses, setStatuses] = useState([])
+    const [statuses, setStatuses] = useState([]);
     const checklists = useRef(null);
-
+    const dispatch = useDispatch();
+    const updateMyWorkOrdersConst = (...args) => dispatch(updateMyWorkOrders(...args));
     //
     //
     //
-    const {screenLayout: workOrderLayout, entity: workorder, setEntity: setWorkOrder, loading,
+    const {screenLayout: workOrderLayout, entity: workorder, setEntity: setWorkOrder, loading, readOnly, setReadOnly,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
@@ -168,7 +170,8 @@ const Workorder = () => {
                         {...commonProps}
                         applicationData={applicationData}
                         userData={userData} 
-                        statuses={statuses}/>
+                        statuses={statuses}
+                        screenPermissions={screenPermissions}/>
                 ,
                 column: 1,
                 order: 1,
@@ -392,7 +395,8 @@ const Workorder = () => {
                         entityKeyCode={workorder.number}
                         classCode={workorder.classCode}
                         customFields={workorder.customField}
-                        updateEntityProperty={updateWorkorderProperty} />
+                        updateEntityProperty={updateWorkorderProperty}
+                        readonly={readOnly} />
                 ,
                 column: 2,
                 order: 10,
@@ -477,57 +481,36 @@ const Workorder = () => {
     // CALLBACKS FOR ENTITY CLASS
     //
     function postInit() {
-        readStatuses('', '', true) 
-        // this.enableChildren() // TODO: keep for context
+        readStatuses('', '', true);
     }
 
     function postCreate(workorder) {
         readStatuses(workorder.statusCode, workorder.typeCode, false); 
+        setReadOnly(isClosedWorkOrder(workorder.statusCode));
         // Comments panel might be hidden
-        if (commentsComponent.current) {
-            commentsComponent.current.createCommentForNewEntity();
-        }
+        commentsComponent.current?.createCommentForNewEntity();
     }
 
     function postUpdate(workorder) {
-        updateMyWorkOrders(workorder); // TODO: confirm we want to be calling it from the import
+        updateMyWorkOrdersConst(workorder); 
         readStatuses(workorder.statusCode, workorder.typeCode, false); 
 
-        if (departmentalSecurity.readOnly) {
-            // this.disableChildren();  // TODO: keep for context
-        } else if (isClosedWorkOrder(workorder.statusCode)) {
-            // If opening a terminated work order
-            // this.disableChildren()  // TODO: keep for context
-            // this.children['EAMID_WorkOrder_STATUS_STATUSCODE'].enable()  // TODO: keep for context
-        } else {
-            // this.enableChildren() // TODO: keep for context
-        }
+        setReadOnly(isClosedWorkOrder(workorder.statusCode));
         // Comments panel might be hidden
-        if (commentsComponent.current) {
-            commentsComponent.current.createCommentForNewEntity();
-        }
+        commentsComponent.current?.createCommentForNewEntity();
     }
 
     function postRead(workorder) {
-        updateMyWorkOrders(workorder); // TODO: confirm we want to be calling it from the import
+        updateMyWorkOrdersConst(workorder); 
         readStatuses(workorder.statusCode, workorder.typeCode, false); 
-
-        if (departmentalSecurity(workorder.departmentCode).readOnly) {
-            console.log('disabling children') // TODO: rm
-            // this.disableChildren(); // TODO: keep for context
-        } else if (isClosedWorkOrder(workorder.statusCode)) {
-            // If opening a terminated work order
-            // this.disableChildren()  // TODO: keep for context
-            // this.children['EAMID_WorkOrder_STATUS_STATUSCODE'].enable()  // TODO: keep for context
-        } else {
-            // this.enableChildren()  // TODO: keep for context
-            console.log('children enabled') // TODO: rm
+        
+        if (isClosedWorkOrder(workorder.statusCode)) {
+            setReadOnly(true);
         }
-        //Set work order equipment
-        setWOEquipment(workorder.equipmentCode, true);
     }
 
     function postCopy() {
+        readStatuses('', '', true);
         let fields = workOrderLayout.fields;
         isCernMode && updateWorkorderProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
         isCernMode && updateWorkorderProperty("typeCode", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD")

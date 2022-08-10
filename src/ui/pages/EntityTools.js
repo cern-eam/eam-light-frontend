@@ -201,3 +201,8 @@ export const getTabInitialVisibility = (tabs, tabCode) => {
     if (!tabs[tabCode]) return true;
     return tabs[tabCode].alwaysDisplayed;
 }
+
+
+export const isDepartmentReadOnly = (departmentCode, userData) => {
+    return userData.eamAccount.departmentalSecurity[departmentCode]?.readOnly;
+}
