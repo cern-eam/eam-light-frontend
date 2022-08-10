@@ -35,7 +35,7 @@ const Position = () => {
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register, 
-        handleError, showError, showNotification} = useEntity({
+        handleError, showError, showNotification, showWarning} = useEntity({
             WS: {
                 create: WSEquipment.createEquipment,
                 read: WSEquipment.getEquipment,
@@ -108,6 +108,7 @@ const Position = () => {
             userGroup: userData.eamAccount.userGroup,
             updateEquipmentProperty,
             register,
+            showWarning,
         }
         
         return [
