@@ -14,12 +14,15 @@ const PositionHierarchy = (props) => {
     const { equipment, updateEquipmentProperty, register, showWarning } = props;
 
     const onChangeDependentInput = (value, dependencyKey) => {
-        // We only set a dependency when we still have no dependent set
-        if (value &&
-            equipment.hierarchyAssetDependent === 'false' &&
-            equipment.hierarchyPositionDependent === 'false' &&
-            equipment.hierarchyPrimarySystemDependent === 'false'
-        ) {
+        // Check whether there are no dependencies set
+        const noDependencySet = [
+            equipment.hierarchyAssetDependent,
+            equipment.hierarchyPositionDependent,
+            equipment.hierarchyPrimarySystemDependent,
+        ].every((dependency) => dependency === 'false');
+
+        // We only set a dependency when we still have no dependent
+        if (value && noDependencySet) {
             updateEquipmentProperty(dependencyKey, true.toString());
         // If there is already a dependency (not on the current input) we warn the users:
         } else if (value && equipment[dependencyKey] === 'false') {
