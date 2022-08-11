@@ -104,47 +104,6 @@ const Asset = () => {
     }
 
 
-    function preCreateEntity(equipment) {
-        //Check hierarchy
-        return setValuesHierarchy(equipment);
-    }
-
-    function preUpdateEntity(equipment) {
-        //Check hierarchy
-        return setValuesHierarchy(equipment);
-    }
-
-    const setValuesHierarchy = (equipment) => {
-        //If there is parent asset
-        if (equipment.hierarchyAssetCode) {
-            equipment.hierarchyAssetDependent = !equipment.hierarchyAssetDependent ? 'true' : equipment.hierarchyAssetDependent;
-            equipment.hierarchyAssetCostRollUp = !equipment.hierarchyAssetCostRollUp ? 'true' : equipment.hierarchyAssetCostRollUp;
-        } else {
-            equipment.hierarchyAssetDependent = 'false';
-            equipment.hierarchyAssetCostRollUp = 'false';
-        }
-
-        //Position
-        if (equipment.hierarchyPositionCode) {
-            equipment.hierarchyPositionDependent = !equipment.hierarchyPositionDependent ? 'true' : equipment.hierarchyPositionDependent;
-            equipment.hierarchyPositionCostRollUp = !equipment.hierarchyPositionCostRollUp ? 'true' : equipment.hierarchyPositionCostRollUp;
-        } else {
-            equipment.hierarchyPositionDependent = 'false';
-            equipment.hierarchyPositionCostRollUp = 'false';
-        }
-
-        //If there is primary system
-        if (equipment.hierarchyPrimarySystemCode) {
-            equipment.hierarchyPrimarySystemDependent = !equipment.hierarchyPrimarySystemDependent ? 'true' : equipment.hierarchyPrimarySystemDependent;
-            equipment.hierarchyPrimarySystemCostRollUp = !equipment.hierarchyPrimarySystemCostRollUp ? 'true' : equipment.hierarchyPrimarySystemCostRollUp;
-        } else {
-            equipment.hierarchyPrimarySystemDependent = 'false';
-            equipment.hierarchyPrimarySystemCostRollUp = 'false';
-        }
-        return equipment;
-    };
-
-
     const getRegions = () => {
         const tabs = assetLayout.tabs;
 

@@ -54,60 +54,36 @@ const System = () => {
             entityCodeProperty: "code",
             screenProperty: "systemScreen",
             layoutProperty: "systemLayout",
-        });
+    });
 
   
-        function postInit() {
-            readStatuses(true); 
-            setLayoutProperty('showEqpTreeButton', false)
-        }
-    
-        function postCreate() {
-            readStatuses(false, equipment.statusCode); 
-            commentsComponent.current?.createCommentForNewEntity();
-            setLayoutProperty('showEqpTreeButton', true)
-        }
-    
-        function postUpdate() {
-            readStatuses(false, equipment.statusCode) 
-            commentsComponent.current?.createCommentForNewEntity();
-        }
-    
-        function postRead(equipment) {
-            readStatuses(false, equipment.statusCode) 
-            setLayoutProperty('showEqpTreeButton', true)
-            setLayoutProperty('equipment', equipment);
-        }
-    
-        const readStatuses = (neweqp, statusCode) => {
-            WSEquipment.getEquipmentStatusValues(userData.eamAccount.userGroup, neweqp, statusCode)
-                .then(response => setStatuses(response.body.data))
-                .catch(console.error)
-        }
-
-    // TODO:
-    function preCreateEntity(equipment) {
-        //Check hierarchy
-        return setValuesHierarchy(equipment);
+    function postInit() {
+        readStatuses(true); 
+        setLayoutProperty('showEqpTreeButton', false)
     }
 
-    // TODO:
-    function preUpdateEntity(equipment) {
-        //Check hierarchy
-        return setValuesHierarchy(equipment);
+    function postCreate() {
+        readStatuses(false, equipment.statusCode); 
+        commentsComponent.current?.createCommentForNewEntity();
+        setLayoutProperty('showEqpTreeButton', true)
     }
 
-    const setValuesHierarchy = (equipment) => {
-        //If there is primary system
-        if (equipment.hierarchyPrimarySystemCode) {
-            equipment.hierarchyPrimarySystemDependent = !equipment.hierarchyPrimarySystemDependent ? 'true' : equipment.hierarchyPrimarySystemDependent;
-            equipment.hierarchyPrimarySystemCostRollUp = !equipment.hierarchyPrimarySystemCostRollUp ? 'true' : equipment.hierarchyPrimarySystemCostRollUp;
-        } else {
-            equipment.hierarchyPrimarySystemDependent = 'false';
-            equipment.hierarchyPrimarySystemCostRollUp = 'false';
-        }
-        return equipment;
-    };
+    function postUpdate() {
+        readStatuses(false, equipment.statusCode) 
+        commentsComponent.current?.createCommentForNewEntity();
+    }
+
+    function postRead(equipment) {
+        readStatuses(false, equipment.statusCode) 
+        setLayoutProperty('showEqpTreeButton', true)
+        setLayoutProperty('equipment', equipment);
+    }
+
+    const readStatuses = (neweqp, statusCode) => {
+        WSEquipment.getEquipmentStatusValues(userData.eamAccount.userGroup, neweqp, statusCode)
+            .then(response => setStatuses(response.body.data))
+            .catch(console.error)
+    }
 
     const getEDMSObjectType = (equipment) => {
         if (equipment.systemTypeCode === 'S' && ['B', 'M'].includes(equipment.typeCode)) {
