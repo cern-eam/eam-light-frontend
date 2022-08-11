@@ -226,7 +226,6 @@ const useEntity = (params) => {
     }
 
     const updateEntityProperty = (key, value) => {
-        console.log('update property', key, value)
         setEntity(prevEntity => set({...prevEntity}, key, value));
         
         // Fire handlers
@@ -240,6 +239,7 @@ const useEntity = (params) => {
         let data = processElementInfo(screenLayout.fields[layoutKey])
 
         data.updateProperty = updateEntityProperty;
+        data.elementInfo = screenLayout.fields[layoutKey]; // Return elementInfo as it is still needed in some cases (for example for UDFs)
 
         // Value
         data.value = get(entity, valueKey);

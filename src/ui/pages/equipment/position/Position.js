@@ -108,7 +108,9 @@ const Position = () => {
                     <PositionGeneral
                         showNotification={showNotification}
                         {...commonProps}
-                        statuses={statuses}/>
+                        statuses={statuses}
+                        userData={userData}
+                        screenPermissions={screenPermissions}/>
                 ,
                 column: 1,
                 order: 1,
@@ -252,9 +254,8 @@ const Position = () => {
                 maximizable: false,
                 render: () => 
                     <UserDefinedFields
-                        fields={equipment.userDefinedFields}
                         entityLayout={positionLayout.fields}
-                        updateUDFProperty={updateEquipmentProperty}
+                        {...commonProps}
                     />
                 ,
                 column: 2,

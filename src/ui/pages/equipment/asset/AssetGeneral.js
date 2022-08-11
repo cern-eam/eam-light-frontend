@@ -1,29 +1,22 @@
 import React from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
 import StatusRow from "../../../components/statusrow/StatusRow"
-import EquipmentTools from "../EquipmentTools"
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
-import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
+import { isDepartmentReadOnly } from 'ui/pages/EntityTools';
+import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
 
 const AssetGeneral = (props) => {
 
     const {
         equipment,
-        assetLayout,
-        updateEquipmentProperty,
-        showNotification,
         newEntity,
         statuses,
         register,
+        userData,
+        screenPermissions
     } = props;
-
-    // TODO: find alternative
-    const updateEquipmentStatus = EquipmentTools.getUpdateStatus(
-        updateEquipmentProperty,
-        showNotification
-    );
 
     return (
         <React.Fragment>
@@ -33,11 +26,7 @@ const AssetGeneral = (props) => {
             <EAMTextField {...register('alias', 'alias')} />
 
             <EAMUDF
-                elementInfo={assetLayout.fields['udfchar45']}
-                value={equipment.userDefinedFields.udfchar45}
-                updateProperty={updateEquipmentProperty}
-                valueKey="userDefinedFields.udfchar45"
-            />
+                {...register('udfchar45','userDefinedFields.udfchar45')}/>
 
             <EAMTextField {...register('equipmentdesc', 'description')} />
 
@@ -50,6 +39,7 @@ const AssetGeneral = (props) => {
 
             <EAMSelect
                 {...register('assetstatus', 'statusCode')}
+                disabled={isDepartmentReadOnly(equipment.departmentCode, userData) || !screenPermissions.updateAllowed}
                 options={statuses}
             />
             

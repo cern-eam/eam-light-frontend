@@ -101,9 +101,8 @@ const Part = () => {
                 maximizable: false,
                 render: () => 
                     <UserDefinedFields
-                        fields={part.userDefinedFields}
                         entityLayout={partLayout.fields}
-                        updateUDFProperty={updateEquipmentProperty}
+                        {...commonProps} 
                     />
                 ,
                 column: 1,

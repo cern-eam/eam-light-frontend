@@ -5,23 +5,18 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAuto
 import WSEquipment from "../../../../tools/WSEquipment";
 import StatusRow from "../../../components/statusrow/StatusRow"
 import EquipmentTools from '../EquipmentTools';
+import { isDepartmentReadOnly } from 'ui/pages/EntityTools';
 
 const PositionGeneral = (props) => {
 
     const {
         equipment,
-        updateEquipmentProperty,
         newEntity,
-        showNotification,
         register,
-        statuses
+        statuses,
+        userData,
+        screenPermissions
     } = props;
-
-    // TODO: find alternative
-    const updateEquipmentStatus = EquipmentTools.getUpdateStatus(
-        updateEquipmentProperty,
-        showNotification
-    );
 
     return (
         <React.Fragment>
@@ -42,6 +37,7 @@ const PositionGeneral = (props) => {
 
             <EAMSelect
                 {...register('assetstatus', 'statusCode')}
+                disabled={isDepartmentReadOnly(equipment.departmentCode, userData) || !screenPermissions.updateAllowed}
                 options = {statuses}
             />
 

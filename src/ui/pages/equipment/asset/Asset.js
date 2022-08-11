@@ -167,7 +167,9 @@ const Asset = () => {
                     <AssetGeneral
                         showNotification={showNotification}
                         {...commonProps}
-                        statuses={statuses}/>
+                        statuses={statuses}
+                        userData={userData}
+                        screenPermissions={screenPermissions}/>
                 ,
                 column: 1,
                 order: 1,
@@ -307,9 +309,8 @@ const Asset = () => {
                 maximizable: false,
                 render: () => 
                     <UserDefinedFields
-                        fields={equipment.userDefinedFields}
+                        {...commonProps}
                         entityLayout={assetLayout.fields}
-                        updateUDFProperty={updateEquipmentProperty}
                     />
                 ,
                 column: 2,

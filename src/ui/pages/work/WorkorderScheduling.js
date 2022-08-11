@@ -3,10 +3,10 @@ import EAMDateTimePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDa
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WS from '../../../tools/WS';
-import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
+import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
 
 const WorkorderScheduling = (props) => {
-    const { workOrderLayout, workorder, updateWorkorderProperty, register } = props;
+    const { workOrderLayout, register } = props;
 
     if (
         'H' === workOrderLayout.fields.reqstartdate.attribute &&
@@ -63,22 +63,10 @@ const WorkorderScheduling = (props) => {
                 {...register('datereported','reportedDate')}/>
 
             <EAMUDF
-                elementInfo={workOrderLayout.fields['udfchar17']}
-                value={workorder.userDefinedFields.udfchar17}
-                valueKey={`userDefinedFields.udfchar17`}
-                desc={workorder.userDefinedFields.udfchar17Desc}
-                descKey={`userDefinedFields.udfchar17Desc`}
-                updateProperty={updateWorkorderProperty}
-            />
+                {...register('udfchar17', `userDefinedFields.udfchar17`, `userDefinedFields.udfchar17Desc`)}/>
 
             <EAMUDF
-                elementInfo={workOrderLayout.fields['udfchar19']}
-                value={workorder.userDefinedFields.udfchar19}
-                valueKey={`userDefinedFields.udfchar19`}
-                desc={workorder.userDefinedFields.udfchar19Desc}
-                descKey={`userDefinedFields.udfchar19Desc`}
-                updateProperty={updateWorkorderProperty}
-            />
+                {...register('udfchar19', `userDefinedFields.udfchar19`, `userDefinedFields.udfchar19Desc`)}/>
         </React.Fragment>
     );
 };

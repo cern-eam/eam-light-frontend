@@ -1,6 +1,6 @@
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
-import EAMUDF from "eam-components/dist/ui/components/inputs-ng/EAMUDF";
 import React from "react";
+import EAMUDF from "ui/components/userdefinedfields/EAMUDF";
 import WS from '../../../../tools/WS';
 
 const LocationHierarchy = (props) => {
@@ -14,14 +14,7 @@ const LocationHierarchy = (props) => {
             />
 
             <EAMUDF
-                elementInfo={{
-                    ...locationLayout.fields["udfchar11"],
-                    readonly: true
-                }}
-                value={location.userDefinedFields.udfchar11}
-                updateProperty={updateEquipmentProperty}
-                valueKey="userDefinedFields.udfchar11"
-            />
+                {...register('udfchar11','userDefinedFields.udfchar11')}/>
         </React.Fragment>
     );
 };

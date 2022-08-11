@@ -138,7 +138,9 @@ const System = () => {
                     <SystemGeneral
                         showNotification={showNotification}
                         {...commonProps}
-                        statuses={statuses}/>
+                        statuses={statuses}
+                        userData={userData}
+                        screenPermissions={screenPermissions}/>
                 ,
                 column: 1,
                 order: 1,
@@ -266,12 +268,13 @@ const System = () => {
                 maximizable: false,
                 render: () => 
                     <UserDefinedFields
-                        fields={equipment.userDefinedFields}
                         entityLayout={systemLayout.fields}
-                        updateUDFProperty={updateEquipmentProperty}
                         exclusions={[
                             'udfchar45'
-                        ]} />
+                        ]} 
+                        {...commonProps}
+                        />
+                        
                 ,
                 column: 2,
                 order: 9,

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
-import EAMUDF from 'eam-components/dist/ui/components/inputs-ng/EAMUDF';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import Dependency from '../components/Dependency';
+import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
 
 const fieldIsHidden = (info) =>
     info && info.attribute === 'H'
@@ -77,16 +77,10 @@ class AssetHierarchy extends Component {
             <React.Fragment>
 
                 <EAMUDF
-                    elementInfo={{...assetLayout.fields['udfchar13'],readonly:true}}
-                    value={equipment.userDefinedFields.udfchar13}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="userDefinedFields.udfchar13"/>
+                    {...register('udfchar13','userDefinedFields.udfchar13')}/>
 
                 <EAMUDF
-                    elementInfo={{...assetLayout.fields['udfchar11'],readonly:true}}
-                    value={equipment.userDefinedFields.udfchar11}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="userDefinedFields.udfchar11"/>
+                    {...register('udfchar11','userDefinedFields.udfchar11')}/>
 
                 <EAMAutocomplete
                     {...register('parentasset', 'hierarchyAssetCode', 'hierarchyAssetDesc')}

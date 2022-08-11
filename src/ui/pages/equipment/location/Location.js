@@ -209,9 +209,8 @@ export default Location = (props) => {
                 maximizable: false,
                 render: () => 
                     <UserDefinedFields
-                        fields={location.userDefinedFields}
                         entityLayout={locationLayout.fields}
-                        updateUDFProperty={updateEquipmentProperty} />
+                        {...commonProps} />
                 ,
                 column: 2,
                 order: 9,
