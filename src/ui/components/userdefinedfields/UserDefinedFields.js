@@ -1,92 +1,33 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import EAMUDF from './EAMUDF';
 
-/**
- * Receive props:
- * fields: The user defined fields of the entity
- * entityLayout: Layout to identify which fields to render
- * updateUDFProperty: Function to update the property of a udf
- */
-class UserDefinedFields extends Component {
+const UserDefinedFields = (props) => {
 
-    renderUdfChars = () => {
-        const { entityLayout, exclusions, register } = this.props;
+    const { entityLayout, exclusions, register } = props;
 
-        if (!entityLayout) {
-            return null;
-        }
+    const renderUdfs = () => {
+        let udfs = [];
 
-        return this.sortProperties()
-            .filter(prop => prop.startsWith('udfchar')
-                && !prop.includes('Desc')
-                && !exclusions.includes(prop))
-            .map(prop => <EAMUDF
-                {...register(prop, `userDefinedFields.${prop}`, `userDefinedFields.${prop}Desc`)}/>);
+        udfs.push(...Object.keys(entityLayout).filter(key => key.startsWith('udfchar')));
+        udfs.push(...Object.keys(entityLayout).filter(key => key.startsWith('udfnum')));
+        udfs.push(...Object.keys(entityLayout).filter(key => key.startsWith('udfdate')));
+        udfs.push(...Object.keys(entityLayout).filter(key => key.startsWith('udfchk')));
+
+        return udfs.filter(prop => !prop.includes('Desc') && !exclusions.includes(prop))
+                            .map(prop => <EAMUDF {...register(prop, `userDefinedFields.${prop}`, prop.includes('Desc') ? `userDefinedFields.${prop}Desc` : undefined)}/>);
     };
 
-    renderUdfNums = () => {
-        const { entityLayout, exclusions, register } = this.props;
-
-        if (!entityLayout) {
-            return null;
-        }
-
-        return this.sortProperties()
-            .filter(prop => prop.startsWith('udfnum') && !exclusions.includes(prop))
-            .map(prop => <EAMUDF {...register(prop, `userDefinedFields.${prop}`)}/>);
-    };
-
-    renderUdfDates = () => {
-        const { entityLayout, exclusions, register } = this.props;
-
-        if (!entityLayout) {
-            return null;
-        }
-
-        return this.sortProperties()
-            .filter(prop => prop.startsWith('udfdate') && !exclusions.includes(prop))
-            .map(prop => <EAMUDF {...register(prop, `userDefinedFields.${prop}`)}/>);
-    };
-
-    renderUdfCheckboxs = () => {
-        const { entityLayout, exclusions, register } = this.props;
-
-        if (!entityLayout) {
-            return null;
-        }
-
-        return this.sortProperties()
-            .filter(prop => prop.startsWith('udfchk') && !exclusions.includes(prop))
-            .map(prop => <EAMUDF {...register(prop, `userDefinedFields.${prop}`)}/>);
-    };
-
-    sortProperties = () => {
-        let sortableProps = [];
-        for (let prop in this.props.entityLayout) {
-            if (this.props.entityLayout.hasOwnProperty(prop))
-                sortableProps.push(prop);
-        }
-        sortableProps.sort((x, y) => x < y ? -1 : x > y ? 1 : 0);
-        return sortableProps;
-    };
-
-    render() {
-        return (
-            <React.Fragment>
-                {this.renderUdfChars()}
-                {this.renderUdfNums()}
-                {this.renderUdfDates()}
-                {this.renderUdfCheckboxs()}
-            </React.Fragment>
-        );
-    }
+    return (
+        <React.Fragment>
+            {renderUdfs()}
+        </React.Fragment>
+    );
+    
 }
 
 UserDefinedFields.propTypes = {
     entityLayout: PropTypes.object.isRequired,
-    fields: PropTypes.object.isRequired,
-    updateUDFProperty: PropTypes.func,
     exclusions: PropTypes.array,
 };
 
