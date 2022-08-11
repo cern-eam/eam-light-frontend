@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker.js'

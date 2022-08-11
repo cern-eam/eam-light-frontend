@@ -37,7 +37,7 @@ const Asset = () => {
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register, 
-        handleError, showError, showNotification} = useEntity({
+        handleError, showError, showNotification, showWarning} = useEntity({
             WS: {
                 create: WSEquipment.createEquipment,
                 read: WSEquipment.getEquipment,
@@ -155,6 +155,7 @@ const Asset = () => {
             updateEquipmentProperty,
             register,
             userGroup: userData.eamAccount.userGroup,
+            showWarning
         }
 
         return [

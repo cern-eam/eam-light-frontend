@@ -60,13 +60,35 @@ export default class readEntityEquipment extends Component {
      * @param snapshot
      */
     componentDidUpdate(prevProps, prevState, snapshot) {
+        // console.log('this.settings.layout:', this.settings.layout);
+        // console.log('this.settings.layoutPropertiesMap', this.settings.layoutPropertiesMap);
+
+        // console.log('this.state', this.state); // workorder, layout -- assignURLParams,... {statusValues, typeValues}
+        // console.log('this.settings.entity', this.settings.entity);
+
+        // NOTE: location.key does not exist when opening a given entity, it is generated when creating a new one (eg t3hu0e).
+        // NOTE: location.key is the entity code
         if (prevProps.location.key !== this.props.location.key) {
+            // NOTE: the condition is fulfilled when creating/deleting an entity from an open one, any other time?
+            console.log('ENTERING location key condition')
             // Note: code below is trickier than it looks. From testing we have never seen
             // that nextCode !== previousCode, which feels quite strange and unexpected,
             // taking into account that these values change over time
+            // NOTE: if we have never seen it why are we handling that case below?
+            // NOTE: Why are we relying on prevProps.code instead of location.key? There must be a reason
+            //       It could be because we don't always have a location.key, but in that case we also
+            //       won't get inside this condition(?).
             let nextCode = this.props.match.params.code;
             let previousCode = prevProps.match.params.code;
+            // NOTE: Why is it called .match? I guess that path/url regex matching somehow
 
+            console.log('prevProps.location.key', prevProps.location.key, 'this.props.location.key', this.props.location.key); // NOTE: rm
+            console.log('previousCode', previousCode, 'nextCode', nextCode); // NOTE: rm
+
+
+            // NOTE: Why would we expect that 'nextCode !== previousCode' inside this condition,
+            //       if we seem to only fulfill it when pressing to create a new entity when
+            //       already in an entity? (prevProps.location.key !== this.props.location.key)
             if (nextCode && (nextCode !== previousCode)) {
                 nextCode = decodeURIComponent(nextCode);
                 this.readEntity(nextCode)
@@ -77,12 +99,15 @@ export default class readEntityEquipment extends Component {
             }
         }
         
+        // NOTE: stop executing while reading layout
         if (this.state.layout.reading) {
             return;
         } 
 
+        // NOTE: what is an example of a request that can be running in this case
         // if we changed state from waiting for requests to not waiting from requests
         if (this.state.layout.requests === 0 && prevState.layout.requests > 0) {
+            console.log("not waiting for requests");
             // unblock the user interface when all the requests are completed
             this.setLayout({blocking: false});
 
@@ -105,6 +130,7 @@ export default class readEntityEquipment extends Component {
         const newEntity = this.state[this.settings.entity];
         const oldEntity = {...prevState[this.settings.entity]}; // {...undefined} = {}
 
+        // NOTE: we are relying on the absence of a 'this.settings.entity' property so we don't get the "object" type AFAIU
         if(typeof newEntity !== 'object') {
             return;
         }
@@ -122,6 +148,7 @@ export default class readEntityEquipment extends Component {
         }
     }
 
+    // NOTE: maybe we could rework this with async to be easier to follow, but testing would be needed
     handleUpdate(key, value) {
         // finish the update handling, by decreasing the requests that are waiting to be completed by 1
         // note the use of prevLayout to prevent usage of an old incorrect layout state

@@ -59,3 +59,38 @@ export const onCategoryChange = (category, updateProperty) => {
     });
     
 }
+
+// Used in hierarchies to handle dependency-related behavior
+export const onChangeDependentInput = (
+    value,
+    dependencyKey,
+    dependencyKeysMap,
+    equipment,
+    updateEquipmentProperty,
+    showWarning
+) => {
+    // Check whether there are no dependencies set
+    const noDependencySet = Object.values(dependencyKeysMap)
+        .map((depKey) => equipment[depKey])
+        .every((dependency) => dependency === 'false');
+
+    // We only set a dependency when we still have no dependent
+    if (value && noDependencySet) {
+        updateEquipmentProperty(dependencyKey, true.toString());
+    // If there is already a dependency (not on the current input) we warn the users:
+    } else if (value && equipment[dependencyKey] === 'false') {
+        showWarning('Changing this value does not change the dependent.\
+                    Please press the respective dependency icon \
+                    if you would like to set it as dependent.');
+    // Set as not dependent on input clear
+    } else if (!value) {
+        updateEquipmentProperty(dependencyKey, false.toString());
+    }
+};
+
+// Check whether there is at least one dependency set
+export const isDependencySet = (equipment, dependencyKeysMap) => {
+    return Object.values(dependencyKeysMap)
+        .map((depKey) => equipment[depKey])
+        .includes('true');
+}

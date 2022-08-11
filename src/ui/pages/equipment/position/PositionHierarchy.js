@@ -1,46 +1,24 @@
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
-import React, { useEffect } from 'react';
+import React from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
 import Dependency from '../components/Dependency';
+import { onChangeDependentInput, isDependencySet } from '../EquipmentTools';
 
 const DEPENDENCY_KEYS = {
-    parentAsset: 'hierarchyAssetDependent',
-    parentPosition: 'hierarchyPositionDependent',
+    asset: 'hierarchyAssetDependent',
+    position: 'hierarchyPositionDependent',
     primarySystem: 'hierarchyPrimarySystemDependent'
 }
 
 const PositionHierarchy = (props) => {
     const { equipment, updateEquipmentProperty, register, showWarning } = props;
 
-    const onChangeDependentInput = (value, dependencyKey) => {
-        // Check whether there are no dependencies set
-        const noDependencySet = [
-            equipment.hierarchyAssetDependent,
-            equipment.hierarchyPositionDependent,
-            equipment.hierarchyPrimarySystemDependent,
-        ].every((dependency) => dependency === 'false');
-
-        // We only set a dependency when we still have no dependent
-        if (value && noDependencySet) {
-            updateEquipmentProperty(dependencyKey, true.toString());
-        // If there is already a dependency (not on the current input) we warn the users:
-        } else if (value && equipment[dependencyKey] === 'false') {
-            showWarning('Changing this value does not change the dependent.\
-                         Please press the respective dependency icon \
-                         if you would like to set it as dependent.');
-        // Set as not dependent on input clear
-        } else if (!value) {
-            updateEquipmentProperty(dependencyKey, false.toString());
-        }
-    };
-
-    // Check whether there is a dependency set
-    const disableLocationInput = [
-        equipment.hierarchyAssetDependent,
-        equipment.hierarchyPositionDependent,
-        equipment.hierarchyPrimarySystemDependent,
-    ].includes('true');
+    const renderDependenciesForDependencyInputs = [
+        equipment[DEPENDENCY_KEYS.asset],
+        equipment[DEPENDENCY_KEYS.position],
+        equipment[DEPENDENCY_KEYS.primarySystem],
+    ];
 
     return (
         <React.Fragment>
@@ -58,17 +36,24 @@ const PositionHierarchy = (props) => {
             <EAMAutocomplete
                 {...register('asset', 'hierarchyAssetCode', 'hierarchyAssetDesc')}
                 onChangeValue={(value) => {
-                    onChangeDependentInput(value, DEPENDENCY_KEYS.parentAsset);
+                    onChangeDependentInput(
+                        value,
+                        DEPENDENCY_KEYS.asset,
+                        DEPENDENCY_KEYS,
+                        equipment,
+                        updateEquipmentProperty,
+                        showWarning
+                    );
                 }}
                 autocompleteHandler={WSEquipment.autocompleteAssetParent}
-                renderDependencies={[equipment.hierarchyAssetDependent, equipment.hierarchyPositionDependent, equipment.hierarchyPrimarySystemDependent]}
+                renderDependencies={renderDependenciesForDependencyInputs}
                 endAdornment={
                     <Dependency
                         updateProperty={updateEquipmentProperty}
-                        value={equipment.hierarchyAssetDependent}
-                        valueKey={DEPENDENCY_KEYS.parentAsset}
+                        value={equipment[DEPENDENCY_KEYS.asset]}
+                        valueKey={DEPENDENCY_KEYS.asset}
                         disabled={!equipment.hierarchyAssetCode}
-                        relatedDependenciesKeysMap={DEPENDENCY_KEYS}
+                        dependencyKeysMap={DEPENDENCY_KEYS}
                     />
                 }
                 barcodeScanner
@@ -77,17 +62,24 @@ const PositionHierarchy = (props) => {
             <EAMAutocomplete
                 {...register('parentasset', 'hierarchyPositionCode', 'hierarchyPositionDesc')}
                 onChangeValue={(value) => {
-                    onChangeDependentInput(value, DEPENDENCY_KEYS.parentPosition);
+                    onChangeDependentInput(
+                        value,
+                        DEPENDENCY_KEYS.position,
+                        DEPENDENCY_KEYS,
+                        equipment,
+                        updateEquipmentProperty,
+                        showWarning
+                    );
                 }}
                 autocompleteHandler={WSEquipment.autocompletePositionParent}
-                renderDependencies={[equipment.hierarchyAssetDependent, equipment.hierarchyPositionDependent, equipment.hierarchyPrimarySystemDependent]}
+                renderDependencies={renderDependenciesForDependencyInputs}
                 endAdornment={
                     <Dependency
                         updateProperty={updateEquipmentProperty}
-                        value={equipment.hierarchyPositionDependent}
-                        valueKey={DEPENDENCY_KEYS.parentPosition}
+                        value={equipment[DEPENDENCY_KEYS.position]}
+                        valueKey={DEPENDENCY_KEYS.position}
                         disabled={!equipment.hierarchyPositionCode}
-                        relatedDependenciesKeysMap={DEPENDENCY_KEYS}
+                        dependencyKeysMap={DEPENDENCY_KEYS}
                     />
                 }
                 barcodeScanner
@@ -96,17 +88,24 @@ const PositionHierarchy = (props) => {
             <EAMAutocomplete
                 {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc')}
                 onChangeValue={(value) => {
-                    onChangeDependentInput(value, DEPENDENCY_KEYS.primarySystem);
+                    onChangeDependentInput(
+                        value,
+                        DEPENDENCY_KEYS.primarySystem,
+                        DEPENDENCY_KEYS,
+                        equipment,
+                        updateEquipmentProperty,
+                        showWarning
+                    );
                 }}
                 autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}
-                renderDependencies={[equipment.hierarchyAssetDependent, equipment.hierarchyPositionDependent, equipment.hierarchyPrimarySystemDependent]}
+                renderDependencies={renderDependenciesForDependencyInputs}
                 endAdornment={
                     <Dependency
                         updateProperty={updateEquipmentProperty}
-                        value={equipment.hierarchyPrimarySystemDependent}
+                        value={equipment[DEPENDENCY_KEYS.primarySystem]}
                         valueKey={DEPENDENCY_KEYS.primarySystem}
                         disabled={!equipment.hierarchyPrimarySystemCode}
-                        relatedDependenciesKeysMap={DEPENDENCY_KEYS}
+                        dependencyKeysMap={DEPENDENCY_KEYS}
                     />
                 }
                 barcodeScanner
@@ -115,7 +114,7 @@ const PositionHierarchy = (props) => {
             <EAMAutocomplete
                 {...register('location', 'hierarchyLocationCode', 'hierarchyLocationDesc')}
                 autocompleteHandler={WSEquipment.autocompleteLocation}
-                disabled={disableLocationInput}
+                disabled={isDependencySet(equipment, DEPENDENCY_KEYS)}
             />
 
         </React.Fragment>

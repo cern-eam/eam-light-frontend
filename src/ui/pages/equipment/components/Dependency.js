@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton';
 
 const Dependency = (props) => {
 
-    const { value, valueKey, updateProperty, disabled, relatedDependenciesKeysMap } = props;
+    const { value, valueKey, updateProperty, disabled, dependencyKeysMap } = props;
 
     const isTrue = (value) => {
         const checkedTextValue = value || '';
@@ -13,11 +13,11 @@ const Dependency = (props) => {
     };
 
     const unsetRelatedDependencies = () => {
-        const relatedDependencies = Object.values(relatedDependenciesKeysMap).filter(
-            (depKey) => {
-                return depKey !== valueKey;
-            }
-        );
+        const relatedDependencies = Object.values(
+            dependencyKeysMap
+        ).filter((depKey) => {
+            return depKey !== valueKey;
+        });
 
         relatedDependencies.forEach((relatedDependency) => {
             updateProperty(relatedDependency, false.toString());
@@ -26,7 +26,7 @@ const Dependency = (props) => {
 
     const onClickHandler = () => {
         // A 'value' of 'false' means the dependency will be set to 'true' afterwards
-        if (relatedDependenciesKeysMap && value === 'false') {
+        if (dependencyKeysMap && value === 'false') {
             unsetRelatedDependencies();
         }
 

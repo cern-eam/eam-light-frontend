@@ -1,40 +1,68 @@
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
-import React, {Component} from 'react';
+import React from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
+import Dependency from '../components/Dependency';
+import { onChangeDependentInput, isDependencySet } from '../EquipmentTools';
 
-class SystemHierarchy extends Component {
+const DEPENDENCY_KEYS = {
+    primarySystem: 'hierarchyPrimarySystemDependent'
+}
 
-    render() {
-        let { register } = this.props;
+const SystemHierarchy = (props) => {
 
-        return (
-            <React.Fragment>
+    const { equipment, updateEquipmentProperty, register, showWarning } = props;
 
-                <EAMTextField
-                    {...register('udfchar13', 'userDefinedFields.udfchar13')}
-                    readonly={true}
-                />
+    const renderDependenciesForDependencyInputs = [
+        equipment[DEPENDENCY_KEYS.primarySystem],
+    ];
 
-                <EAMTextField
-                    {...register('udfchar11', 'userDefinedFields.udfchar11')}
-                    readonly={true}
-                />
+    return (
+        <React.Fragment>
 
-                <EAMAutocomplete
-                    {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc')}
-                    autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}
-                    // autocompleteHandler={WSEquipment.autocompletePrimarySystem} // TODO: this WS function was not defined, so I changed it to the closest that existed in name: 'autocompletePrimarySystemParent'?
-                />
+            <EAMTextField
+                {...register('udfchar13', 'userDefinedFields.udfchar13')}
+                readonly={true}
+            />
 
-                <EAMAutocomplete
-                    {...register('location', 'hierarchyLocationCode', 'hierarchyLocationDesc')}
-                    autocompleteHandler={WSEquipment.autocompleteLocation}
-                />
+            <EAMTextField
+                {...register('udfchar11', 'userDefinedFields.udfchar11')}
+                readonly={true}
+            />
 
-            </React.Fragment>
-        )
-    }
+            <EAMAutocomplete
+                {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc')}
+                onChangeValue={(value) => {
+                    onChangeDependentInput(
+                        value,
+                        DEPENDENCY_KEYS.primarySystem,
+                        DEPENDENCY_KEYS,
+                        equipment,
+                        updateEquipmentProperty,
+                        showWarning
+                    );
+                }}
+                autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}
+                renderDependencies={renderDependenciesForDependencyInputs}
+                endAdornment={
+                    <Dependency
+                        updateProperty={updateEquipmentProperty}
+                        value={equipment[DEPENDENCY_KEYS.primarySystem]}
+                        valueKey={DEPENDENCY_KEYS.primarySystem}
+                        disabled={!equipment.hierarchyPrimarySystemCode}
+                    />
+                }
+                barcodeScanner
+            />
+
+            <EAMAutocomplete
+                {...register('location', 'hierarchyLocationCode', 'hierarchyLocationDesc')}
+                autocompleteHandler={WSEquipment.autocompleteLocation}
+                disabled={isDependencySet(equipment, DEPENDENCY_KEYS)}
+            />
+
+        </React.Fragment>
+    )
 }
 
 export default SystemHierarchy;
