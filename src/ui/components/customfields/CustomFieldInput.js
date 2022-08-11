@@ -7,11 +7,12 @@ import CustomFieldNUM from './inputs/CustomFieldNUM'
 import CustomFieldCODE from './inputs/CustomFieldCODE'
 
 const groupLabelStyle = {
-    "margin": "15px 0 0 0",
+    "marginTop": 17,
+    "marginBottom": 5,
     "fontWeight": "900",
     "color": "rgb(52 111 151)",
     "fontSize": "0.90rem",
-    "textAlign": "center"
+    "flex": "1 1 auto"
 }
 function CustomFieldInput(props) {
 
