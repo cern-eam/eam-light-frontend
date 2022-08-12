@@ -26,7 +26,7 @@ export default Location = (props) => {
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree, 
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
-        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, register} = useEntity({
+        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, register, onKeyDownHandler} = useEntity({
             WS: {
                 create: WSLocation.create,
                 read: WSLocation.get,
@@ -264,7 +264,7 @@ export default Location = (props) => {
     }
 
         return (
-            <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}}>
+            <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}} onKeyDown={onKeyDownHandler}>
                 <EamlightToolbarContainer isModified={true} // TODO
                                  newEntity={newEntity}
                                  entityScreen={screenPermissions}

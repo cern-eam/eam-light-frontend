@@ -44,11 +44,11 @@ const Workorder = () => {
     //
     //
     //
-    const {screenLayout: workOrderLayout, entity: workorder, setEntity: setWorkOrder, loading, readOnly, setReadOnly,
+    const {screenLayout: workOrderLayout, entity: workorder, setEntity: setWorkOrder, loading, readOnly, 
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
-        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateWorkorderProperty, register,
+        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateWorkorderProperty, register, onKeyDownHandler,
         handleError, showError, showNotification, showWarning} = useEntity({
             WS: {
                 create: WSWorkorder.createWorkOrder,
@@ -68,6 +68,7 @@ const Workorder = () => {
                 standardWO: onChangeStandardWorkOrder,
                 equipmentCode: onChangeEquipment
             },
+            isReadOnlyCustomHandler: isClosedWorkOrder,
             entityCode: "EVNT",
             entityDesc: "Work Order",
             entityURL: "/workorder/",
@@ -432,7 +433,7 @@ const Workorder = () => {
                 maximizable: false,
                 render: () => (
                     <CustomFields
-                        entityCode="OBJ"
+                        entityCode="PART"
                         entityKeyCode={equipmentPart?.Code}
                         classCode={equipmentPart?.classCode}
                         customFields={equipmentPart?.customField}
@@ -486,27 +487,18 @@ const Workorder = () => {
 
     function postCreate(workorder) {
         readStatuses(workorder.statusCode, workorder.typeCode, false); 
-        setReadOnly(isClosedWorkOrder(workorder.statusCode));
-        // Comments panel might be hidden
         commentsComponent.current?.createCommentForNewEntity();
     }
 
     function postUpdate(workorder) {
         updateMyWorkOrdersConst(workorder); 
-        readStatuses(workorder.statusCode, workorder.typeCode, false); 
-
-        setReadOnly(isClosedWorkOrder(workorder.statusCode));
-        // Comments panel might be hidden
+        readStatuses(workorder.statusCode, workorder.typeCode, false);      
         commentsComponent.current?.createCommentForNewEntity();
     }
 
     function postRead(workorder) {
         updateMyWorkOrdersConst(workorder); 
         readStatuses(workorder.statusCode, workorder.typeCode, false); 
-        
-        if (isClosedWorkOrder(workorder.statusCode)) {
-            setReadOnly(true);
-        }
     }
 
     function postCopy() {
@@ -536,7 +528,7 @@ const Workorder = () => {
     }
 
     return (
-        <div className="entityContainer">
+        <div className="entityContainer" onKeyDown={onKeyDownHandler}>
             <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}}>
                 <EamlightToolbarContainer
                     isModified={true} // TODO:

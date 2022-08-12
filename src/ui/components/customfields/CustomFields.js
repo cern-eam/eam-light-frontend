@@ -17,6 +17,7 @@ function CustomFields(props) {
     let fetchLookupValues = (entityCode, classCode) => {
         WSCustomFields.getCustomFieldsLookupValues(entityCode, classCode)
             .then(response => setLookupValues(response.body.data))
+            .catch(console.error)
     }
 
     let updateCustomFieldValue = (index, valueKey, value) => {

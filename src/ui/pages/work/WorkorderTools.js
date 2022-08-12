@@ -59,9 +59,9 @@ export const layoutPropertiesMap =  {
     }
 
 
-export function isClosedWorkOrder(status) {
+export function isClosedWorkOrder(workOrder) {
     let closedstatuses = ["RP", "C", "TF", "RV", "CANC", "TO", "TT", "TX", "TP", "T", "REJ"];
-    return closedstatuses.indexOf(status) > 0;
+    return closedstatuses.indexOf(workOrder?.statusCode) > 0;
 }
 
 export function isRegionAvailable(regionCode, workOrderLayout) {

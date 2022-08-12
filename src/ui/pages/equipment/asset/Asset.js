@@ -36,7 +36,7 @@ const Asset = () => {
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
-        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register, 
+        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register, onKeyDownHandler,
         handleError, showError, showNotification, showWarning} = useEntity({
             WS: {
                 create: WSEquipment.createEquipment,
@@ -344,7 +344,7 @@ const Asset = () => {
     }
 
     return (
-        <BlockUi tag="div" blocking={loading} style={{ height: "100%", width: "100%" }}>
+        <BlockUi tag="div" blocking={loading} style={{ height: "100%", width: "100%" }} onKeyDown={onKeyDownHandler}>
             <EamlightToolbarContainer
                 isModified={true} // TODO:
                 newEntity={newEntity}

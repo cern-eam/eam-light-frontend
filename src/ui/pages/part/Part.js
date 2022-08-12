@@ -24,7 +24,7 @@ const Part = () => {
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
-        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register, 
+        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register, onKeyDownHandler,
         handleError, showError, showNotification} = useEntity({
             WS: {
                 create: WSParts.createPart,
@@ -34,10 +34,9 @@ const Part = () => {
                 new:  WSParts.initPart, 
             },
             postActions: {
-                create: postCreate,
-                new: postInit,
+                create: postCreate
             },
-            entityCode: "OBJ",
+            entityCode: "PART",
             entityDesc: "Part",
             entityURL: "/part/",
             entityCodeProperty: "code",
@@ -52,10 +51,6 @@ const Part = () => {
     useEffect(() => {
         setLayoutProperty('showEqpTreeButton', false);
     }, [])
-
-    function postInit() {
-        //this.enableChildren(); // TODO: rm but keep for context
-    }
 
     function postCreate() {
         commentsComponent.current.createCommentForNewEntity();
@@ -158,7 +153,7 @@ const Part = () => {
                 maximizable: true,
                 render: () => 
                     <EDMSDoclightIframeContainer
-                        objectType={PART}
+                        objectType="PART"
                         objectID={part.code} />
                 ,
                 RegionPanelProps: {
@@ -177,7 +172,7 @@ const Part = () => {
                 render: () => 
                     <Comments
                         ref={comments => commentsComponent.current = comments}
-                        entityCode={PART}
+                        entityCode="PART"
                         entityKeyCode={!partLayout.newEntity ? part.code : undefined}
                         userCode={userData.eamAccount.userCode}
                         handleError={handleError}
@@ -199,7 +194,7 @@ const Part = () => {
                 maximizable: false,
                 render: () => 
                     <CustomFields
-                        entityCode={PART}
+                        entityCode="PART"
                         entityKeyCode={part.code}
                         classCode={part.classCode}
                         customFields={part.customField}
@@ -219,7 +214,7 @@ const Part = () => {
     }
 
     return (
-        <div className="entityContainer">
+        <div className="entityContainer" onKeyDown={onKeyDownHandler}>
             <BlockUi tag="div" blocking={loading} style={{height: "100%", width: '100%'}}>
                 <EamlightToolbarContainer
                     isModified={true} // TODO: Location had a TODO here as well

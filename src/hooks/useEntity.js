@@ -15,7 +15,7 @@ import { get } from "lodash";
 
 const useEntity = (params) => {
 
-    const {WS, postActions, handlers, entityCode, entityDesc, entityURL, entityCodeProperty, screenProperty, layoutProperty, layoutPropertiesMap} = params;
+    const {WS, postActions, handlers, entityCode, entityDesc, entityURL, entityCodeProperty, screenProperty, layoutProperty, layoutPropertiesMap, isReadOnlyCustomHandler} = params;
 
     const [loading, setLoading] = useState(false);
     const [entity, setEntity] = useState(null);
@@ -59,6 +59,9 @@ const useEntity = (params) => {
         }
     }, [code])
 
+    useEffect( () => {
+        console.log('entity updated', entity)
+    }, [entity])
     //
     // CRUD
     //
@@ -70,10 +73,11 @@ const useEntity = (params) => {
                 const createdEntity = response.body.data;
                 setEntity(createdEntity)
                 setNewEntity(false)
-                // Set new URL (will trigger a read)
                 window.history.pushState({}, '', process.env.PUBLIC_URL + entityURL + encodeURIComponent(createdEntity[entityCodeProperty]));
                 showNotificationParam(entityDesc + ' ' + createdEntity[entityCodeProperty] + ' has been successfully created.');
                 document.title = entityDesc + ' ' + createdEntity[entityCodeProperty];
+                // Render as read-only depending on screen rights, department security or custom handler
+                setReadOnly(!screenPermissions.updateAllowed || isDepartmentReadOnly(data.departmentCode, userData) || isReadOnlyCustomHandler?.(data))
                 postActions.create(createdEntity);
             })
             .catch(error => {
@@ -96,9 +100,8 @@ const useEntity = (params) => {
                 let data = response.body.data;
                 setEntity(data);
                 document.title = entityDesc + ' ' + data[entityCodeProperty];
-
-                // Permissions
-                setReadOnly(!screenPermissions.updateAllowed || isDepartmentReadOnly(data.departmentCode, userData))
+                // Render as read-only depending on screen rights, department security or custom handler
+                setReadOnly(!screenPermissions.updateAllowed || isDepartmentReadOnly(data.departmentCode, userData) || isReadOnlyCustomHandler?.(data))
                 postActions.read(data)
             })
             .catch(error => {
@@ -114,16 +117,18 @@ const useEntity = (params) => {
     const updateEntity = () => {
         setLoading(true);
         setErrors(null);
-
+        console.log('updating', entity)
         WS.update(entity)
             .then(response => {
-                const entity = response.body.data;
-                setEntity(entity);
-                showNotificationParam(`${entityDesc} ${entity[entityCodeProperty]} has been successfully updated.`);
-                // Permissions
-                setReadOnly(!screenPermissions.updateAllowed || isDepartmentReadOnly(data.departmentCode, userData))
+                const data = response.body.data;
+                setEntity(data);
+                showNotificationParam(`${entityDesc} ${data[entityCodeProperty]} has been successfully updated.`);
+                // Render as read-only depending on screen rights, department security or custom handler
+                setReadOnly(!screenPermissions.updateAllowed || 
+                            isDepartmentReadOnly(data.departmentCode, userData) || 
+                            isReadOnlyCustomHandler?.(data))
                 // Invoke entity specific logic 
-                postActions.update(entity)
+                postActions.update(data)
             })
             .catch(error => {
                 setErrors(error?.response?.body?.errors);
@@ -212,7 +217,8 @@ const useEntity = (params) => {
     }
 
     const onChangeClass = newClass => {
-        return WSCustomFields.getCustomFields(entityCode, newClass).then(response => {
+        return WSCustomFields.getCustomFields(entityCode, newClass)
+        .then(response => {
             setEntity(prevEntity => {
                 const newCustomFields = response.body.data;
                 let entity = assignCustomFieldFromCustomField(prevEntity, newCustomFields, AssignmentType.SOURCE_NOT_EMPTY);
@@ -225,11 +231,13 @@ const useEntity = (params) => {
                 return entity;
             });
         })
+        .catch(console.error)
     }
 
     const updateEntityProperty = (key, value) => {
+        console.log('updating', key, value)
         setEntity(prevEntity => set({...prevEntity}, key, value));
-        // Fire handlers
+        // Fire handler for the 'key'
         getHandlers()[key]?.(value);
     };
 
@@ -263,6 +271,11 @@ const useEntity = (params) => {
 
     const getHandlers = () => ({...handlers, "classCode": onChangeClass});
 
+    const onKeyDownHandler = event => { if (event.keyCode === 13 || event.keyCode === 121) {event.target.blur(); saveHandler();}}
+    
+    //
+    //
+    //
     return {screenCode, screenLayout, screenPermissions, 
         entity, newEntity, setEntity, loading, readOnly, setReadOnly,
         userData, applicationData, 
@@ -276,7 +289,7 @@ const useEntity = (params) => {
         showError: showErrorParam, showNotification: showNotificationParam, handleError: handleErrorParam, showWarning: showWarningParam,
         toggleHiddenRegion: toggleHiddenRegionParam, setRegionVisibility: setRegionVisibilityParam,
         // 
-        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty, register};
+        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty, register, onKeyDownHandler};
 
     
 }
