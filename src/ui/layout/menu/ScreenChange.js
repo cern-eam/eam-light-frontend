@@ -29,7 +29,6 @@ class ScreenChange extends Component {
                                 root: this.props.classes.root,
                                 icon: this.props.classes.icon
                             }}
-                            disableUnderline={true}
                             value={this.props.screen}
                             onChange={this.handleScreenChange.bind(this)}
                     >

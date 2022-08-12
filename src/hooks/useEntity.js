@@ -12,7 +12,6 @@ import { setLayoutProperty, showError, showNotification, handleError, toggleHidd
 import WSCustomFields from "tools/WSCustomFields";
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { get } from "lodash";
-import { ConsoleLine } from "mdi-material-ui";
 
 const useEntity = (params) => {
 
@@ -121,6 +120,8 @@ const useEntity = (params) => {
                 const entity = response.body.data;
                 setEntity(entity);
                 showNotificationParam(`${entityDesc} ${entity[entityCodeProperty]} has been successfully updated.`);
+                // Permissions
+                setReadOnly(!screenPermissions.updateAllowed || isDepartmentReadOnly(data.departmentCode, userData))
                 // Invoke entity specific logic 
                 postActions.update(entity)
             })
@@ -255,9 +256,7 @@ const useEntity = (params) => {
         }
 
         // Readonly 
-        if (readOnly) {
-            data.disabled = true;
-        }
+        data.disabled = readOnly;
 
         return data;
     }

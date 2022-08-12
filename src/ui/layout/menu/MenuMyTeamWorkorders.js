@@ -65,7 +65,6 @@ const MenuMyTeamWorkorders = props =>  {
                                 root: props.classes.root,
                                 icon: props.classes.icon
                             }}
-                            disableUnderline={true}
                             value={department}
                             onChange={event => setDepartment(event.target.value)}
                     >
