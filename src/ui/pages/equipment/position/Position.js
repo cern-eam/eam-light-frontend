@@ -26,11 +26,8 @@ import useEntity from "hooks/useEntity";
 
 const Position = () => {
     const [statuses, setStatuses] = useState([]);
-    const queryParams = queryString.parse(window.location.search).length > 0 ?
-                        queryString.parse(window.location.search) : '';
 
-    // TODO: the entity was called equipment, should we rename to position?
-    const {screenLayout: positionLayout, entity: equipment, loading,
+    const {screenLayout: positionLayout, entity: equipment, loading, readOnly,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
@@ -41,7 +38,7 @@ const Position = () => {
                 read: WSEquipment.getEquipment,
                 update: WSEquipment.updateEquipment,
                 delete: WSEquipment.deleteEquipment,
-                new:  WSEquipment.initEquipment.bind(null, "OBJ", "P", queryParams), // TODO: again we have extra arguments. What to do?
+                new:  WSEquipment.initEquipment.bind(null, "OBJ", "P"), // TODO: again we have extra arguments. What to do?
             },
             postActions: {
                 create: postCreate,
@@ -275,6 +272,7 @@ const Position = () => {
                         classCode={equipment.classCode}
                         customFields={equipment.customField}
                         updateEntityProperty={updateEquipmentProperty}
+                        readonly={readOnly}
                     />
                 ,
                 column: 2,

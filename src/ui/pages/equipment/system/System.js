@@ -26,10 +26,7 @@ import useEntity from "hooks/useEntity";
 const System = () => {
     const [statuses, setStatuses] = useState([]);
 
-    const queryParams = queryString.parse(window.location.search).length > 0 ?
-                        queryString.parse(window.location.search) : '';
-
-    const {screenLayout: systemLayout, entity: equipment, loading,
+    const {screenLayout: systemLayout, entity: equipment, loading, readOnly,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
@@ -40,7 +37,7 @@ const System = () => {
                 read: WSEquipment.getEquipment,
                 update: WSEquipment.updateEquipment,
                 delete: WSEquipment.deleteEquipment,
-                new:  WSEquipment.initEquipment.bind(null, "OBJ", "S", queryParams), // TODO: again we have extra arguments, does it perform basic functions without them?
+                new:  WSEquipment.initEquipment.bind(null, "OBJ", "S"), // TODO: again we have extra arguments, does it perform basic functions without them?
             },
             postActions: {
                 create: postCreate,
@@ -268,7 +265,8 @@ const System = () => {
                         entityKeyCode={equipment.code}
                         classCode={equipment.classCode}
                         customFields={equipment.customField}
-                        updateEntityProperty={updateEquipmentProperty} />
+                        updateEntityProperty={updateEquipmentProperty}
+                        readonly={readOnly} />
                 ,
                 column: 2,
                 order: 10,

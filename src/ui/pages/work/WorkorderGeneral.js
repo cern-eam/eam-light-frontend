@@ -17,23 +17,19 @@ function WorkorderDetails(props) {
     return (
         <React.Fragment>
 
-            <EAMTextField 
-                {...register('description', 'description')}/>
+            <EAMTextField {...register('description', 'description')}/>
 
-            <EAMAutocomplete 
-                {...register('equipment', 'equipmentCode', 'equipmentDesc')}
-                barcodeScanner
-                autocompleteHandler={WS.autocompleteEquipment}
-                autocompleteHandlerParams={[false]}
-                link={() => workorder.equipmentCode ? "/equipment/" + workorder.equipmentCode : null}/>
+            <EAMAutocomplete {...register('equipment', 'equipmentCode', 'equipmentDesc')}
+                             barcodeScanner
+                             autocompleteHandler={WS.autocompleteEquipment}
+                             autocompleteHandlerParams={[false]}
+                             link={() => workorder.equipmentCode ? "/equipment/" + workorder.equipmentCode : null}/>
   
-            <EAMAutocomplete 
-                {...register('location', 'locationCode', 'locationDesc')}
-                autocompleteHandler={WS.autocompleteLocation}/>
+            <EAMAutocomplete {...register('location', 'locationCode', 'locationDesc')}
+                             autocompleteHandler={WS.autocompleteLocation}/>
 
-            <EAMAutocomplete
-                {...register('department', 'departmentCode', 'departmentDesc')}
-                autocompleteHandler={WS.autocompleteDepartment}/>
+            <EAMAutocomplete {...register('department', 'departmentCode', 'departmentDesc')}
+                             autocompleteHandler={WS.autocompleteDepartment}/>
 
             <EAMSelect
                 {...register('workordertype', 'typeCode', 'typeDesc')}
@@ -72,9 +68,9 @@ function WorkorderDetails(props) {
             <EAMTextField {...register('udfchar01', 'userDefinedFields.udfchar01','userDefinedFields.udfchar01Desc')}
                           link={() => workorder.userDefinedFields.udfchar01 ? "https://cern.service-now.com/task.do?sysparm_query=number=" + workorder.userDefinedFields.udfchar01 : null}/>
 
-            <EAMTextField {...register('udfchar01', 'userDefinedFields.udfchar20','userDefinedFields.udfchar20Desc')}/>
+            <EAMTextField {...register('udfchar20', 'userDefinedFields.udfchar20','userDefinedFields.udfchar20Desc')}/>
 
-            <EAMTextField {...register('udfchar01', 'userDefinedFields.udfchar24','userDefinedFields.udfchar24Desc')}
+            <EAMTextField {...register('udfchar24', 'userDefinedFields.udfchar24','userDefinedFields.udfchar24Desc')}
                           link={() => workorder.userDefinedFields.udfchar24 ? "https://its.cern.ch/jira/browse/" + workorder.userDefinedFields.udfchar24 : null}/>
 
             <EAMUDF {...register('udfchkbox01', `userDefinedFields.udfchkbox01`)}/>
@@ -87,11 +83,9 @@ function WorkorderDetails(props) {
 
             <EAMUDF {...register('udfchkbox05', `userDefinedFields.udfchkbox05`)}/>
 
-            <EAMCheckbox 
-                {...register('warranty', 'warranty')}/>
+            <EAMCheckbox {...register('warranty', 'warranty')}/>
 
-            <EAMTextField
-                {...register('downtimehours', 'downtimeHours')}/>
+            <EAMTextField {...register('downtimehours', 'downtimeHours')}/>
 
         </React.Fragment>
     )

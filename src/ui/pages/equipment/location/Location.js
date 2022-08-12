@@ -22,7 +22,7 @@ import useEntity from "hooks/useEntity";
 
 export default Location = (props) => {
 
-    const {screenLayout: locationLayout, entity: location, loading,
+    const {screenLayout: locationLayout, entity: location, loading, readOnly,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree, 
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
@@ -228,7 +228,8 @@ export default Location = (props) => {
                         entityKeyCode={location.code}
                         classCode={location.classCode}
                         customFields={location.customField}
-                        updateEntityProperty={updateEquipmentProperty} />
+                        updateEntityProperty={updateEquipmentProperty}
+                        readonly={readOnly} />
                 ,
                 column: 2,
                 order: 10,

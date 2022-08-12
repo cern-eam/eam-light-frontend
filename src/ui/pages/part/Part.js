@@ -19,13 +19,11 @@ import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
 import useEntity from "hooks/useEntity";
 
-const PART = 'PART';
-
 const Part = () => {
-    const {screenLayout: partLayout, entity: part, loading,
+    const {screenLayout: partLayout, entity: part, loading, readOnly,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
-        departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
+        toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register, 
         handleError, showError, showNotification} = useEntity({
             WS: {
@@ -33,7 +31,7 @@ const Part = () => {
                 read: WSParts.getPart,
                 update: WSParts.updatePart,
                 delete: WSParts.deletePart,
-                new:  WSParts.initPart, // TODO: make sure we deal with extra parameters that were being passed before
+                new:  WSParts.initPart, 
             },
             postActions: {
                 create: postCreate,
@@ -205,7 +203,8 @@ const Part = () => {
                         entityKeyCode={part.code}
                         classCode={part.classCode}
                         customFields={part.customField}
-                        updateEntityProperty={updateEquipmentProperty}/>
+                        updateEntityProperty={updateEquipmentProperty}
+                        readonly={readOnly}/>
                 ,
                 column: 2,
                 order: 7,

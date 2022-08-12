@@ -29,10 +29,10 @@ const Asset = () => {
     const [part, setPart] = useState(part);
     const [statuses, setStatuses] = useState([]);
 
-    const queryParams = queryString.parse(window.location.search).length > 0 ?
-                        queryString.parse(window.location.search) : '';
+    // const queryParams = queryString.parse(window.location.search).length > 0 ?
+    //                     queryString.parse(window.location.search) : '';
 
-    const {screenLayout: assetLayout, entity: equipment, loading,
+    const {screenLayout: assetLayout, entity: equipment, loading, readOnly,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
@@ -43,7 +43,7 @@ const Asset = () => {
                 read: WSEquipment.getEquipment,
                 update: WSEquipment.updateEquipment,
                 delete: WSEquipment.deleteEquipment,
-                new:  WSEquipment.initEquipment.bind(null, "OBJ", "A", queryParams), // TODO: again we have extra arguments. What to do?
+                new:  WSEquipment.initEquipment.bind(null, "OBJ", "A"), // TODO: again we have extra arguments. What to do?
             },
             postActions: {
                 create: postCreate,
@@ -289,7 +289,8 @@ const Asset = () => {
                         entityKeyCode={equipment.code}
                         classCode={equipment.classCode}
                         customFields={equipment.customField}
-                        updateEntityProperty={updateEquipmentProperty} />
+                        updateEntityProperty={updateEquipmentProperty}
+                        readonly={readOnly} />
                 ,
                 column: 2,
                 order: 11,

@@ -55,7 +55,7 @@ const Workorder = () => {
                 read: WSWorkorder.getWorkOrder,
                 update: WSWorkorder.updateWorkOrder,
                 delete: WSWorkorder.deleteWorkOrder,
-                new:  WSWorkorder.initWorkOrder.bind(null, "EVNT"), // TODO: again we have extra arguments. What to do?
+                new:  WSWorkorder.initWorkOrder.bind(null, "EVNT"), 
             },
             postActions: {
                 create: postCreate,

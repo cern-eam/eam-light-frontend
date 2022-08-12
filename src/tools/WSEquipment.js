@@ -41,8 +41,8 @@ class WSEquipment {
         return WS._get('/equipment/type', { ...config, params: { c: equipmentCode }});
     }
 
-    initEquipment(entity, eqpType, params, config = {}) {
-        return WS._get(`/equipment/init/${entity}/${eqpType}${params}`, config);
+    initEquipment(entity, eqpType, config = {}) {
+        return WS._get(`/equipment/init/${entity}/${eqpType}`, config);
     }
 
     getEquipmentStatusValues(userGroup, neweqp, oldStatusCode, config = {}) {

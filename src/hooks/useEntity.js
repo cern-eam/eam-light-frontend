@@ -12,6 +12,7 @@ import { setLayoutProperty, showError, showNotification, handleError, toggleHidd
 import WSCustomFields from "tools/WSCustomFields";
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { get } from "lodash";
+import { ConsoleLine } from "mdi-material-ui";
 
 const useEntity = (params) => {
 
@@ -154,7 +155,7 @@ const useEntity = (params) => {
                 setNewEntity(true);
                 let entity = assignValues(response.body.data)
                 setEntity(entity);
-                fireHandlers(entity, handlers);
+                fireHandlers(entity, getHandlers());
                 document.title = 'New ' + entityDesc;
                 postActions.new(entity);
             })
@@ -227,12 +228,9 @@ const useEntity = (params) => {
 
     const updateEntityProperty = (key, value) => {
         setEntity(prevEntity => set({...prevEntity}, key, value));
-        
         // Fire handlers
-        if (key === 'classCode') {
-            onChangeClass(value)
-        }
-        handlers?.[key]?.(value);
+        console.log('update prop', key, value)
+        getHandlers()[key]?.(value);
     };
 
     const register = (layoutKey, valueKey, descKey) => {
@@ -264,6 +262,8 @@ const useEntity = (params) => {
 
         return data;
     }
+
+    const getHandlers = () => ({...handlers, "classCode": onChangeClass});
 
     return {screenCode, screenLayout, screenPermissions, 
         entity, newEntity, setEntity, loading, readOnly, setReadOnly,
