@@ -17,7 +17,8 @@ function WorkorderDetails(props) {
     return (
         <React.Fragment>
 
-            <EAMTextField {...register('description', 'description')}/>
+            <EAMTextField 
+                {...register('description', 'description')}/>
 
             <EAMAutocomplete {...register('equipment', 'equipmentCode', 'equipmentDesc')}
                              barcodeScanner

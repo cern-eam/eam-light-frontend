@@ -229,7 +229,6 @@ const useEntity = (params) => {
     const updateEntityProperty = (key, value) => {
         setEntity(prevEntity => set({...prevEntity}, key, value));
         // Fire handlers
-        console.log('update prop', key, value)
         getHandlers()[key]?.(value);
     };
 
