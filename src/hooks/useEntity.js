@@ -162,7 +162,7 @@ const useEntity = (params) => {
     }
 
     const initNewEntity = () => {
-        setLoading(true); setErrors(null);
+        setLoading(true); setErrors(null); setReadOnly(false);
         
         WS.new()
             .then(response => {
