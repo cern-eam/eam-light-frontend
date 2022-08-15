@@ -71,8 +71,13 @@ const useEntity = (params) => {
                 window.history.pushState({}, '', process.env.PUBLIC_URL + entityURL + encodeURIComponent(createdEntity[entityCodeProperty]));
                 showNotificationParam(entityDesc + ' ' + createdEntity[entityCodeProperty] + ' has been successfully created.');
                 document.title = entityDesc + ' ' + createdEntity[entityCodeProperty];
+                
                 // Render as read-only depending on screen rights, department security or custom handler
-                setReadOnly(!screenPermissions.updateAllowed || isDepartmentReadOnly(data.departmentCode, userData) || isReadOnlyCustomHandler?.(data))
+                setReadOnly(!screenPermissions.updateAllowed || 
+                            isDepartmentReadOnly(createdEntity.departmentCode, userData) || 
+                            isReadOnlyCustomHandler?.(createdEntity))
+                
+                // Invoke entity specific logic 
                 postActions.create(createdEntity);
             })
             .catch(error => {
@@ -92,12 +97,17 @@ const useEntity = (params) => {
         WS.read(code, { signal: abortController.current.signal })
             .then(response => {
                 setNewEntity(false);
-                let data = response.body.data;
-                setEntity(data);
-                document.title = entityDesc + ' ' + data[entityCodeProperty];
+                const readEntity = response.body.data;
+                setEntity(readEntity);
+                document.title = entityDesc + ' ' + readEntity[entityCodeProperty];
+                
                 // Render as read-only depending on screen rights, department security or custom handler
-                setReadOnly(!screenPermissions.updateAllowed || isDepartmentReadOnly(data.departmentCode, userData) || isReadOnlyCustomHandler?.(data))
-                postActions.read(data)
+                setReadOnly(!screenPermissions.updateAllowed || 
+                            isDepartmentReadOnly(readEntity.departmentCode, userData) || 
+                            isReadOnlyCustomHandler?.(readEntity))
+
+                // Invoke entity specific logic 
+                postActions.read(readEntity)
             })
             .catch(error => {
                 if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
@@ -116,15 +126,17 @@ const useEntity = (params) => {
 
         WS.update(entity)
             .then(response => {
-                const data = response.body.data;
-                setEntity(data);
-                showNotificationParam(`${entityDesc} ${data[entityCodeProperty]} has been successfully updated.`);
+                const updatedEntity = response.body.data;
+                setEntity(updatedEntity);
+                showNotificationParam(`${entityDesc} ${updatedEntity[entityCodeProperty]} has been successfully updated.`);
+                
                 // Render as read-only depending on screen rights, department security or custom handler
                 setReadOnly(!screenPermissions.updateAllowed || 
-                            isDepartmentReadOnly(data.departmentCode, userData) || 
-                            isReadOnlyCustomHandler?.(data))
+                            isDepartmentReadOnly(updatedEntity.departmentCode, userData) || 
+                            isReadOnlyCustomHandler?.(updatedEntity))
+                
                 // Invoke entity specific logic 
-                postActions.update(data)
+                postActions.update(updatedEntity)
             })
             .catch(error => {
                 setErrors(error?.response?.body?.errors);
@@ -139,6 +151,7 @@ const useEntity = (params) => {
         WS.delete(entity[entityCodeProperty])
             .then(response => {
                 showNotificationParam(`${entityDesc} ${entity[entityCodeProperty]} has been successfully deleted.`);
+                window.history.pushState({}, '', process.env.PUBLIC_URL + entityURL);
                 initNewEntity();
             })
             .catch(error => {
@@ -154,13 +167,13 @@ const useEntity = (params) => {
         WS.new()
             .then(response => {
                 setNewEntity(true);
-                let entity = response.body.data;
-                entity = assignDefaultValues(entity, screenLayout, layoutPropertiesMap);
-                entity = assignQueryParamValues(entity);
-                setEntity(entity);
-                fireHandlers(entity, getHandlers());
+                let newEntity = response.body.data;
+                newEntity = assignDefaultValues(newEntity, screenLayout, layoutPropertiesMap);
+                newEntity = assignQueryParamValues(newEntity);
+                setEntity(newEntity);
+                fireHandlers(newEntity, getHandlers());
                 document.title = 'New ' + entityDesc;
-                postActions.new(entity);
+                postActions.new(newEntity);
             })
             .catch(error => {
                 handleErrorParam(error)

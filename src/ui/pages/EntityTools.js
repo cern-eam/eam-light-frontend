@@ -159,7 +159,6 @@ export const assignQueryParamValues = (entity, assignmentType = AssignmentType.F
 export const fireHandlers = (entity, handlers) => {
     let queryParams = queryString.parse(window.location.search);
     const caseSensitiveQueryParams = toSensitive(entity, queryParams);
-    console.log("case", caseSensitiveQueryParams, handlers)
     for (const param in caseSensitiveQueryParams) {
         handlers?.[param]?.(caseSensitiveQueryParams[param])
     }
