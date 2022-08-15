@@ -25,7 +25,7 @@ export default Location = (props) => {
     const {screenLayout: locationLayout, entity: location, loading, readOnly,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree, 
-        departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
+        toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, register} = useEntity({
             WS: {
                 create: WSLocation.create,
@@ -192,7 +192,7 @@ export default Location = (props) => {
                         entityKeyCode={!newEntity ? location.code : undefined}
                         userCode={userData.eamAccount.userCode}
                         allowHtml={true}
-                        disabled={departmentalSecurity.readOnly}/>
+                        disabled={readOnly}/>
                 ,
                 RegionPanelProps: {
                     detailsStyle: { padding: 0 }
@@ -284,7 +284,6 @@ export default Location = (props) => {
                                     screencode: screenCode,
                                     //copyHandler: this.copyEntity.bind(this),
                                     entityType: ENTITY_TYPE.LOCATION,
-                                    //departmentalSecurity: this.departmentalSecurity,
                                     screens: userData.screens,
                                     workorderScreencode: userData.workOrderScreen
                                  }}

@@ -73,7 +73,7 @@ class Toolbar extends React.Component {
     state = { watchlistOpen: false };
 
     getButtonDefinitions = () => {
-        const {copyHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity, departmentalSecurity, screens, workorderScreencode, userCode} = this.props;
+        const {copyHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity, readOnly, screens, workorderScreencode, userCode} = this.props;
 
         return {
             [BUTTON_KEYS.COPY] : {
@@ -261,7 +261,7 @@ class Toolbar extends React.Component {
 
                 },
                 isDisabled: () => newEntity
-                    || departmentalSecurity.readOnly
+                    || readOnly
                     || (screens[workorderScreencode] && !screens[workorderScreencode].creationAllowed),
                 values: {
                     icon: <WorkorderIcon/>,
@@ -418,7 +418,6 @@ class Toolbar extends React.Component {
 }
 
 Toolbar.defaultProps = {
-    departmentalSecurity: {},
     screens: {},
 };
 

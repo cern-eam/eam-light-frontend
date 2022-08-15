@@ -73,7 +73,7 @@ class EamlightToolbar extends Component {
     };
 
     isSaveButtonDisabled() {
-        const { newEntity, entityScreen, departmentalSecurity } = this.props;
+        const { newEntity, entityScreen, readOnly } = this.props;
 
         if (!entityScreen) {
             return true;
@@ -81,7 +81,7 @@ class EamlightToolbar extends Component {
 
         return (!newEntity && !entityScreen.updateAllowed)
             || (newEntity && !entityScreen.creationAllowed)
-            || departmentalSecurity.readOnly;
+            || readOnly;
     }
 
     isNewButtonDisabled() {
@@ -95,7 +95,7 @@ class EamlightToolbar extends Component {
     }
 
     isDeleteButtonDisabled() {
-        const { newEntity, entityScreen, departmentalSecurity } = this.props;
+        const { newEntity, entityScreen, readOnly } = this.props;
 
         if (!entityScreen) {
             return true;
@@ -103,7 +103,7 @@ class EamlightToolbar extends Component {
 
         return newEntity
             || !entityScreen.deleteAllowed
-            || departmentalSecurity.readOnly;
+            || readOnly;
     }
 
     //
@@ -314,10 +314,6 @@ class EamlightToolbar extends Component {
             </div>
         )
     }
-}
-
-EamlightToolbar.defaultProps = {
-    departmentalSecurity: {},
 }
 
 export default EamlightToolbar

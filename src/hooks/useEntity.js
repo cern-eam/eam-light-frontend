@@ -19,14 +19,14 @@ const useEntity = (params) => {
 
     const [loading, setLoading] = useState(false);
     const [entity, setEntity] = useState(null);
-    const [errors, setErrors] = useState([]);
+    const [errors, setErrors] = useState(null);
     const [newEntity, setNewEntity] = useState(true);
     const [readOnly, setReadOnly] = useState(false);
     const {code} = useParams();
     const history = useHistory();
     const abortController = useRef(null);
     const commentsComponent = useRef(null);
-    const departmentalSecurity = useState({});
+    const validators = useRef({})
 
     // Init dispatchers
     const dispatch = useDispatch();
@@ -57,7 +57,13 @@ const useEntity = (params) => {
     // CRUD
     //
     const createEntity = () => {
+        if (!validate()) {
+            return;
+        }
+
         setLoading(true);
+        setErrors(null);
+
         WS.create(entity)
             .then(response => {
                 const createdEntity = response.body.data;
@@ -78,7 +84,8 @@ const useEntity = (params) => {
     }
 
     const readEntity = (code) => {
-        setLoading(true)
+        setLoading(true);
+        setErrors(null);
         // Cancel the old request in the case it was still active
         abortController.current?.abort();
         abortController.current = new AbortController();
@@ -102,8 +109,13 @@ const useEntity = (params) => {
     }
 
     const updateEntity = () => {
+        if (!validate()) {
+            return;
+        }
+
         setLoading(true);
         setErrors(null);
+
         WS.update(entity)
             .then(response => {
                 const data = response.body.data;
@@ -139,6 +151,7 @@ const useEntity = (params) => {
 
     const initNewEntity = () => {
         setLoading(true);
+        setErrors(null);
         WS.new()
             .then(response => {
                 setNewEntity(true);
@@ -158,6 +171,7 @@ const useEntity = (params) => {
 
     const copyEntity = () => {
         let code = entity[entityCodeProperty];
+        setErrors(null);
         setNewEntity(true);
         setEntity( oldEntity => ({
             ...assignDefaultValues(oldEntity,
@@ -208,25 +222,45 @@ const useEntity = (params) => {
 
     const register = (layoutKey, valueKey, descKey) => {
         let data = processElementInfo(screenLayout.fields[layoutKey])
-        console.log("elem", screenLayout.fields[layoutKey])
+        
         data.updateProperty = updateEntityProperty;
         data.disabled = data.disabled || readOnly; // It should remain disabled 
         data.elementInfo = screenLayout.fields[layoutKey]; // Return elementInfo as it is still needed in some cases (for example for UDFs)
+        
         // Value
         data.value = get(entity, valueKey);
         data.valueKey = valueKey;
+        
         // Description 
         if (descKey) {
             data.desc = get(entity, descKey);
             data.descKey = descKey;
         }
+        
         // Errors
-        let error = errors?.find?.(e => e.location === data.id);
+        let error = errors?.find?.(e => e.location === data.id || e.location === valueKey);
         if (error) {
             data.errorText = error.message;
         }
+        
+        // Validators TODO: array of possible validators for each element 
+        if (data.required) {
+            validators.current[valueKey] = value => value ? '' : `${data.label} field cannot be blank.`;
+        }
+        if (data.type === 'number') {
+            validators.current[valueKey] = value => !isNaN(value) ? '' : `${data.label} must be a valid number.`;
+        }
+
         return data;
     }
+
+    const validate = () => {
+        let errors = Object.entries(validators.current ?? {})
+                           .map(([valueKey, validator]) => ({location: valueKey, message: validator(get(entity, valueKey))}))
+                           .filter(e => e.message)
+        setErrors(errors);
+        return errors?.length === 0;
+    };
 
     const getHandlers = () => ({...handlers, "classCode": onChangeClass});
     
@@ -241,7 +275,7 @@ const useEntity = (params) => {
         getUniqueRegionID: getUniqueRegionIDParam, 
         commentsComponent,
         setLayoutProperty: setLayoutPropertyParam,
-        showEqpTree, departmentalSecurity, 
+        showEqpTree, 
         // Dispatchers
         showError: showErrorParam, showNotification: showNotificationParam, handleError: handleErrorParam, showWarning: showWarningParam,
         toggleHiddenRegion: toggleHiddenRegionParam, setRegionVisibility: setRegionVisibilityParam,

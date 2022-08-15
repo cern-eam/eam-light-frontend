@@ -30,7 +30,7 @@ const Position = () => {
     const {screenLayout: positionLayout, entity: equipment, loading, readOnly,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
-        departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
+        toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register,
         handleError, showError, showNotification, showWarning} = useEntity({
             WS: {
@@ -234,7 +234,7 @@ const Position = () => {
                         entityKeyCode={!newEntity ? equipment.code : undefined}
                         userCode={userData.eamAccount.userCode}
                         allowHtml={true}
-                        disabled={departmentalSecurity.readOnly} />
+                        disabled={readOnly} />
                 ,
                 RegionPanelProps: {
                     detailsStyle: { padding: 0 }
@@ -328,7 +328,6 @@ const Position = () => {
                     screencode: screenCode,
                     copyHandler,
                     entityType: ENTITY_TYPE.EQUIPMENT,
-                    departmentalSecurity: departmentalSecurity,
                     screens: userData.screens,
                     workorderScreencode: userData.workOrderScreen
                 }}
@@ -338,8 +337,7 @@ const Position = () => {
                 getUniqueRegionID={getUniqueRegionID}
                 regions={getRegions()}
                 getHiddenRegionState={getHiddenRegionState}
-                isHiddenRegion={isHiddenRegion}
-                departmentalSecurity={departmentalSecurity} />
+                isHiddenRegion={isHiddenRegion} />
             <EntityRegions
                 showEqpTree={showEqpTree}
                 regions={getRegions()}

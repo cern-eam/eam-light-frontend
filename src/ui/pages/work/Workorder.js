@@ -47,7 +47,7 @@ const Workorder = () => {
     const {screenLayout: workOrderLayout, entity: workorder, setEntity: setWorkOrder, loading, readOnly, 
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID,
-        departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
+        toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateWorkorderProperty, register,
         handleError, showError, showNotification, showWarning} = useEntity({
             WS: {
@@ -218,7 +218,7 @@ const Workorder = () => {
                         workorder={workorder}
                         tabLayout={tabs.PAR}
                         equipmentMEC={equipmentMEC}
-                        disabled={departmentalSecurity.readOnly} />
+                        disabled={readOnly} />
                 ,
                 column: 1,
                 order: 4,
@@ -236,7 +236,7 @@ const Workorder = () => {
                         workorder={workorder}
                         tabLayout={tabs.ACO}
                         equipmentMEC={equipmentMEC}
-                        disabled={departmentalSecurity.readOnly} />
+                        disabled={readOnly} />
                 ,
                 column: 1,
                 order: 4,
@@ -309,7 +309,7 @@ const Workorder = () => {
                         userCode={userData.eamAccount.userCode}
                         handleError={handleError}
                         allowHtml={true}
-                        disabled={departmentalSecurity.readOnly} />
+                        disabled={readOnly} />
                 ,
                 RegionPanelProps: {
                     detailsStyle: { padding: 0 }
@@ -336,7 +336,7 @@ const Workorder = () => {
                         updateEntityProperty={updateWorkorderProperty}
                         updateCount={workorder.updateCount}
                         startDate={workorder.startDate}
-                        disabled={departmentalSecurity.readOnly} />
+                        disabled={readOnly} />
                 ,
                 column: 2,
                 order: 8,
@@ -359,7 +359,7 @@ const Workorder = () => {
                         showError={showError}
                         handleError={handleError}
                         userCode={userData.eamAccount.userCode}
-                        disabled={departmentalSecurity.readOnly}
+                        disabled={readOnly}
                         hideFilledItems={panelQueryParams.hideFilledItems === 'true'}
                         activity={panelQueryParams.CHECKLISTSactivity}
                         topSlot={
@@ -452,7 +452,7 @@ const Workorder = () => {
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
                 render: () =>
-                    <MeterReadingContainerWO equipment={workorder.equipmentCode} disabled={departmentalSecurity.readOnly} />
+                    <MeterReadingContainerWO equipment={workorder.equipmentCode} disabled={readOnly} />
                 ,
                 column: 2,
                 order: 12,
@@ -551,7 +551,6 @@ const Workorder = () => {
                         copyHandler: copyHandler,
                         entityDesc: "Work Order",
                         entityType: ENTITY_TYPE.WORKORDER,
-                        departmentalSecurity: departmentalSecurity,
                         screens: userData.screens,
                         workorderScreencode: userData.workOrderScreen
                     }}
@@ -560,8 +559,7 @@ const Workorder = () => {
                     regions={getRegions()}
                     getUniqueRegionID={getUniqueRegionID}
                     getHiddenRegionState={getHiddenRegionState}
-                    isHiddenRegion={isHiddenRegion}
-                    departmentalSecurity={departmentalSecurity} />
+                    isHiddenRegion={isHiddenRegion} />
                 <EntityRegions
                     regions={getRegions()}
                     isNewEntity={newEntity}
