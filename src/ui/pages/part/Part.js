@@ -24,7 +24,7 @@ const Part = () => {
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
-        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register, onKeyDownHandler,
+        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register,
         handleError, showError, showNotification} = useEntity({
             WS: {
                 create: WSParts.createPart,
@@ -214,7 +214,7 @@ const Part = () => {
     }
 
     return (
-        <div className="entityContainer" onKeyDown={onKeyDownHandler}>
+        <div className="entityContainer">
             <BlockUi tag="div" blocking={loading} style={{height: "100%", width: '100%'}}>
                 <EamlightToolbarContainer
                     isModified={true} // TODO: Location had a TODO here as well

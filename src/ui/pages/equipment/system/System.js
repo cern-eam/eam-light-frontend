@@ -30,7 +30,7 @@ const System = () => {
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
-        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register, onKeyDownHandler,
+        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register,
         handleError, showError, showNotification} = useEntity({
             WS: {
                 create: WSEquipment.createEquipment,
@@ -300,7 +300,7 @@ const System = () => {
     }
 
     return (
-        <BlockUi tag="div" blocking={loading} style={{width: '100%', height: "100%"}} onKeyDown={onKeyDownHandler}>
+        <BlockUi tag="div" blocking={loading} style={{width: '100%', height: "100%"}}>
             <EamlightToolbarContainer
                 isModified={true} // TODO:
                 newEntity={newEntity}

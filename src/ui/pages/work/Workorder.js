@@ -48,7 +48,7 @@ const Workorder = () => {
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID,
         departmentalSecurity, toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
-        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateWorkorderProperty, register, onKeyDownHandler,
+        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateWorkorderProperty, register,
         handleError, showError, showNotification, showWarning} = useEntity({
             WS: {
                 create: WSWorkorder.createWorkOrder,
@@ -528,7 +528,7 @@ const Workorder = () => {
     }
 
     return (
-        <div className="entityContainer" onKeyDown={onKeyDownHandler}>
+        <div className="entityContainer">
             <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}}>
                 <EamlightToolbarContainer
                     isModified={true} // TODO:

@@ -26,7 +26,7 @@ const useEntity = (params) => {
     const history = useHistory();
     const abortController = useRef(null);
     const commentsComponent = useRef(null);
-    const departmentalSecurity = useState({})
+    const departmentalSecurity = useState({});
 
     // Init dispatchers
     const dispatch = useDispatch();
@@ -51,23 +51,13 @@ const useEntity = (params) => {
     const getHiddenRegionStateParam = useSelector(state => getHiddenRegionState(state)(screenCode))
     const getUniqueRegionIDParam =  useSelector(state => getUniqueRegionID(state)(screenCode))
 
-    useEffect( () => {
-        if (code) {
-            readEntity(code);
-        } else {
-            initNewEntity();
-        }
-    }, [code])
+    useEffect( () => code ? readEntity(code) : initNewEntity(), [code])
 
-    useEffect( () => {
-        console.log('entity updated', entity)
-    }, [entity])
     //
     // CRUD
     //
     const createEntity = () => {
         setLoading(true);
-
         WS.create(entity)
             .then(response => {
                 const createdEntity = response.body.data;
@@ -89,7 +79,6 @@ const useEntity = (params) => {
 
     const readEntity = (code) => {
         setLoading(true)
-
         // Cancel the old request in the case it was still active
         abortController.current?.abort();
         abortController.current = new AbortController();
@@ -112,12 +101,9 @@ const useEntity = (params) => {
             .finally( () => setLoading(false))
     }
 
-
-
     const updateEntity = () => {
         setLoading(true);
         setErrors(null);
-        console.log('updating', entity)
         WS.update(entity)
             .then(response => {
                 const data = response.body.data;
@@ -139,7 +125,6 @@ const useEntity = (params) => {
 
     const deleteEntity = () => {
         setLoading(true)
-
         WS.delete(entity[entityCodeProperty])
             .then(response => {
                 showNotificationParam(`${entityDesc} ${entity[entityCodeProperty]} has been successfully deleted.`);
@@ -153,13 +138,13 @@ const useEntity = (params) => {
     }
 
     const initNewEntity = () => {
-
         setLoading(true);
-
         WS.new()
             .then(response => {
                 setNewEntity(true);
-                let entity = assignValues(response.body.data)
+                let entity = response.body.data;
+                entity = assignDefaultValues(entity, screenLayout, layoutPropertiesMap);
+                entity = assignQueryParamValues(entity);
                 setEntity(entity);
                 fireHandlers(entity, getHandlers());
                 document.title = 'New ' + entityDesc;
@@ -170,7 +155,6 @@ const useEntity = (params) => {
             })
             .finally( () => setLoading(false))
     }
-
 
     const copyEntity = () => {
         let code = entity[entityCodeProperty];
@@ -187,35 +171,17 @@ const useEntity = (params) => {
     //
     // BUTTON HANDLERS
     //
-    const saveHandler = () => {
-        if (newEntity) {
-            createEntity()
-        } else {
-            updateEntity()
-        }
-    }
+    const saveHandler = () => newEntity ? createEntity() : updateEntity();
+        
+    const newHandler = () => history.push(entityURL);
 
-    const newHandler = () => {
-        history.push(entityURL)
-    }
+    const deleteHandler = () => deleteEntity();
 
-    const deleteHandler = () => {
-        deleteEntity()
-    }
-
-    const copyHandler = () => {
-        copyEntity();
-    }
+    const copyHandler = () => copyEntity();
 
     //
     // HELPER METHODS
     //
-    const assignValues = entity => {
-        entity = assignDefaultValues(entity, screenLayout, layoutPropertiesMap);
-        entity = assignQueryParamValues(entity);
-        return entity;
-    }
-
     const onChangeClass = newClass => {
         return WSCustomFields.getCustomFields(entityCode, newClass)
         .then(response => {
@@ -235,7 +201,6 @@ const useEntity = (params) => {
     }
 
     const updateEntityProperty = (key, value) => {
-        console.log('updating', key, value)
         setEntity(prevEntity => set({...prevEntity}, key, value));
         // Fire handler for the 'key'
         getHandlers()[key]?.(value);
@@ -243,41 +208,33 @@ const useEntity = (params) => {
 
     const register = (layoutKey, valueKey, descKey) => {
         let data = processElementInfo(screenLayout.fields[layoutKey])
-
+        console.log("elem", screenLayout.fields[layoutKey])
         data.updateProperty = updateEntityProperty;
+        data.disabled = data.disabled || readOnly; // It should remain disabled 
         data.elementInfo = screenLayout.fields[layoutKey]; // Return elementInfo as it is still needed in some cases (for example for UDFs)
-
         // Value
         data.value = get(entity, valueKey);
         data.valueKey = valueKey;
-
         // Description 
         if (descKey) {
             data.desc = get(entity, descKey);
             data.descKey = descKey;
         }
-
         // Errors
         let error = errors?.find?.(e => e.location === data.id);
         if (error) {
             data.errorText = error.message;
         }
-
-        // Readonly 
-        data.disabled = readOnly;
-
         return data;
     }
 
     const getHandlers = () => ({...handlers, "classCode": onChangeClass});
-
-    const onKeyDownHandler = event => { if (event.keyCode === 13 || event.keyCode === 121) {event.target.blur(); saveHandler();}}
     
     //
     //
     //
     return {screenCode, screenLayout, screenPermissions, 
-        entity, newEntity, setEntity, loading, readOnly, setReadOnly,
+        entity, newEntity, setEntity, loading, readOnly, 
         userData, applicationData, 
         isHiddenRegion: isHiddenRegionParam, 
         getHiddenRegionState: getHiddenRegionStateParam, 
@@ -289,9 +246,8 @@ const useEntity = (params) => {
         showError: showErrorParam, showNotification: showNotificationParam, handleError: handleErrorParam, showWarning: showWarningParam,
         toggleHiddenRegion: toggleHiddenRegionParam, setRegionVisibility: setRegionVisibilityParam,
         // 
-        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty, register, onKeyDownHandler};
+        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty, register};
 
-    
 }
 
 export default useEntity;

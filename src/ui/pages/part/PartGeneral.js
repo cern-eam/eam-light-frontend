@@ -12,7 +12,7 @@ const PartGeneral = (props) => {
     const { part, newEntity, register } = props;
 
     return (
-        <div style={{width: "100%", marginTop: 0}}>
+        <React.Fragment>
 
             {newEntity && <EAMTextField {...register('partcode', 'code')} />}
 
@@ -54,7 +54,7 @@ const PartGeneral = (props) => {
                 style={{marginTop: "10px", marginBottom: "-10px"}}
             />
             
-        </div>
+        </React.Fragment>
     );
 }
 
