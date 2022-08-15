@@ -22,6 +22,7 @@ import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import useEntity from "hooks/useEntity";
+import { isClosedEquipment } from '../EquipmentTools.js';
 
 const System = () => {
     const [statuses, setStatuses] = useState([]);
@@ -45,6 +46,7 @@ const System = () => {
                 new: postInit,
                 update: postUpdate
             },
+            isReadOnlyCustomHandler: isClosedEquipment,
             entityCode: "OBJ",
             entityDesc: "System",
             entityURL: "/system/",

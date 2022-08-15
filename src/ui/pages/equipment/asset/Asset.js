@@ -24,6 +24,7 @@ import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
+import { isClosedEquipment } from '../EquipmentTools';
 
 const Asset = () => {
     const [part, setPart] = useState(part);
@@ -51,6 +52,7 @@ const Asset = () => {
                 new: postInit,
                 update: postUpdate
             },
+            isReadOnlyCustomHandler: isClosedEquipment,
             entityCode: "OBJ",
             entityDesc: "Asset",
             entityURL: "/asset/",

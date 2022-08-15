@@ -71,12 +71,12 @@ const useEntity = (params) => {
                 window.history.pushState({}, '', process.env.PUBLIC_URL + entityURL + encodeURIComponent(createdEntity[entityCodeProperty]));
                 showNotificationParam(entityDesc + ' ' + createdEntity[entityCodeProperty] + ' has been successfully created.');
                 document.title = entityDesc + ' ' + createdEntity[entityCodeProperty];
-                
+
                 // Render as read-only depending on screen rights, department security or custom handler
                 setReadOnly(!screenPermissions.updateAllowed || 
                             isDepartmentReadOnly(createdEntity.departmentCode, userData) || 
                             isReadOnlyCustomHandler?.(createdEntity))
-                
+
                 // Invoke entity specific logic 
                 postActions.create(createdEntity);
             })

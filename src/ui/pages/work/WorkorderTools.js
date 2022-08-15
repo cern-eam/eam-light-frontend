@@ -58,10 +58,8 @@ export const layoutPropertiesMap =  {
         udfchar40:	"userDefinedFields.udfchar40",
     }
 
-
 export function isClosedWorkOrder(workOrder) {
-    let closedstatuses = ["RP", "C", "TF", "RV", "CANC", "TO", "TT", "TX", "TP", "T", "REJ"];
-    return closedstatuses.indexOf(workOrder?.statusCode) > 0;
+    return workOrder.systemStatusCode === 'C';
 }
 
 export function isRegionAvailable(regionCode, workOrderLayout) {

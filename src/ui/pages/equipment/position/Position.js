@@ -23,6 +23,7 @@ import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
+import { isClosedEquipment } from '../EquipmentTools.js';
 
 const Position = () => {
     const [statuses, setStatuses] = useState([]);
@@ -46,6 +47,7 @@ const Position = () => {
                 new: postInit,
                 update: postUpdate
             },
+            isReadOnlyCustomHandler: isClosedEquipment,
             entityCode: "OBJ",
             entityDesc: "Position",
             entityURL: "/position/",

@@ -94,3 +94,8 @@ export const isDependencySet = (equipment, dependencyKeysMap) => {
         .map((depKey) => equipment[depKey])
         .includes('true');
 }
+
+
+export function isClosedEquipment(equipment) {
+    return equipment.systemStatusCode === 'D';
+}
