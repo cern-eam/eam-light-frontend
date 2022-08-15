@@ -61,8 +61,7 @@ const useEntity = (params) => {
             return;
         }
 
-        setLoading(true);
-        setErrors(null);
+        setLoading(true); setErrors(null);
 
         WS.create(entity)
             .then(response => {
@@ -84,8 +83,8 @@ const useEntity = (params) => {
     }
 
     const readEntity = (code) => {
-        setLoading(true);
-        setErrors(null);
+        setLoading(true); setErrors(null);
+        
         // Cancel the old request in the case it was still active
         abortController.current?.abort();
         abortController.current = new AbortController();
@@ -113,8 +112,7 @@ const useEntity = (params) => {
             return;
         }
 
-        setLoading(true);
-        setErrors(null);
+        setLoading(true); setErrors(null);
 
         WS.update(entity)
             .then(response => {
@@ -135,8 +133,9 @@ const useEntity = (params) => {
             .finally( () => setLoading(false))
     }
 
-    const deleteEntity = () => {
-        setLoading(true)
+    const deleteEntity = () => {        
+        setLoading(true); setErrors(null);
+        
         WS.delete(entity[entityCodeProperty])
             .then(response => {
                 showNotificationParam(`${entityDesc} ${entity[entityCodeProperty]} has been successfully deleted.`);
@@ -150,8 +149,8 @@ const useEntity = (params) => {
     }
 
     const initNewEntity = () => {
-        setLoading(true);
-        setErrors(null);
+        setLoading(true); setErrors(null);
+        
         WS.new()
             .then(response => {
                 setNewEntity(true);
