@@ -1,5 +1,6 @@
 import set from "set-value";
 import queryString from "query-string";
+import { constant } from "lodash";
 
 // clones an entity deeply
 export const cloneEntity = entity => ({
@@ -187,9 +188,14 @@ export const assignDefaultValues = (entity, layout, layoutPropertiesMap, assignm
             .reduce((result, field) => set(result, layoutPropertiesMap[field.elementId], 
                     field.defaultValue === 'NULL' ? '' : field.defaultValue), {});
     }
+    
+    const userDefinedFields = defaultValues.userDefinedFields;
+    delete defaultValues.userDefinedFields;
 
     entity = assignValues(entity, defaultValues, assignmentType);
-    return assignUserDefinedFields(entity, defaultValues.userDefinedFields, assignmentType);
+    entity = assignUserDefinedFields(entity, userDefinedFields, assignmentType);
+
+    return entity;
 }
 
 export const getTabAvailability = (tabs, tabCode) => {

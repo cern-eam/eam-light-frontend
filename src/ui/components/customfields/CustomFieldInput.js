@@ -12,7 +12,8 @@ const groupLabelStyle = {
     "fontWeight": "900",
     "color": "rgb(52 111 151)",
     "fontSize": "0.90rem",
-    "flex": "1 1 auto"
+    "flex": "1 1 auto",
+    "textAlign": "center"
 }
 function CustomFieldInput(props) {
 

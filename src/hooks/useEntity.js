@@ -260,7 +260,7 @@ const useEntity = (params) => {
             validators.current[valueKey] = value => value ? '' : `${data.label} field cannot be blank.`;
         }
         if (data.type === 'number') {
-            validators.current[valueKey] = value => !isNaN(value) ? '' : `${data.label} must be a valid number.`;
+            validators.current[valueKey] = value => !isNaN(value ?? 0) ? '' : `${data.label} must be a valid number.`;
         }
 
         return data;
