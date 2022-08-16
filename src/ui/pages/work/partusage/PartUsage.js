@@ -73,6 +73,7 @@ function PartUsage(props) {
             </div>
             <PartUsageDialog
                 showNotification={props.showNotification}
+                showError={props.showError}
                 handleError={props.handleError}
                 handleCancel={() => setIsDialogOpen(false)}
                 tabLayout={props.tabLayout.fields}

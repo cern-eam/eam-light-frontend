@@ -158,10 +158,6 @@ class WSWorkorders {
         return WS._get(`/partusage/bins?transaction=${transaction}&bin=${bin}&part=${part}&store=${store}`, config);
     }
 
-    getPartUsageSelectedAsset(workorder, transaction, store, code, config = {}) {
-        return WS._get(`/autocomplete/partusage/asset/complete/${workorder}/${transaction}/${store}/${code}`, config);
-    }
-
     //
     // ACTIVITIES AND BOOKED LABOURS
     //

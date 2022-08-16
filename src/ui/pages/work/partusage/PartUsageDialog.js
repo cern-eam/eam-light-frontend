@@ -13,6 +13,7 @@ import WSParts from '../../../../tools/WSParts';
 import makeStyles from '@mui/styles/makeStyles';
 import EAMRadio from 'eam-components/dist/ui/components/inputs-ng/EAMRadio';
 import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import WSEquipment from "tools/WSEquipment";
 
 const overflowStyle = {
     overflowY: 'visible'
@@ -38,6 +39,18 @@ const FORM = {
 }
 
 function PartUsageDialog(props) {
+    const {
+        isDialogOpen,
+        handleError,
+        showError,
+        equipmentMEC,
+        successHandler,
+        handleCancel,
+        isLoading,
+        tabLayout,
+        workorder
+    } = props;
+
     const [binList, setBinList] = useState([]);
     const [activityList, setActivityList] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -68,16 +81,16 @@ function PartUsageDialog(props) {
     };
 
     useEffect(() => {
-        if (props.isDialogOpen) {
-            initNewPartUsage(props.workorder);
+        if (isDialogOpen) {
+            initNewPartUsage();
         }
-        return (params) => {
+        return () => {
             setUoM('');
-            resetFormTransactionLinesAndBinListStates();     
+            resetFormTransactionLinesAndBinListStates();
         }
-    }, [props.isDialogOpen]);
+    }, [isDialogOpen]);
 
-    const initNewPartUsage = async (workorder) => {
+    const initNewPartUsage = async () => {
         setLoading(true);
         try {
             // Fetch the part usage object
@@ -86,20 +99,20 @@ function PartUsageDialog(props) {
             setInitPartUsageWSData(response.body.data);
             assignInitialFormState(response.body.data);
             // Load lists
-            loadLists(workorder);
+            loadLists();
         } catch (error) {
-            props.handleError(error);
+            handleError(error);
         }
     };
 
-    const loadLists = async (workorder) => {
+    const loadLists = async () => {
         try {
             const response = await WSWorkorders.getWorkOrderActivities(
                 workorder.number
             );
             setActivityList(transformActivities(response.body.data));
         } catch (error) {
-            props.handleError(error);
+            handleError(error);
         }
         setBinList([]);
     };
@@ -142,18 +155,18 @@ function PartUsageDialog(props) {
             setLoading(true);
             const assetData = await getAssetData(assetIDCode);
             if (!assetData) {
-                // TODO: present this warning to the user in a more elegant way
-                updateFormDataProperty(FORM.ASSET, `ASSET UNAVAILABLE FOR TRANSACTION TYPE: ${formData.transactionType}`);
+                updateFormDataProperty(FORM.ASSET, '');
+                updateFormDataProperty(FORM.ASSET_DESC, '');
                 return;
             }
             // Asset selected without a part selected
-            if (!formData.partCode || formData.partCode && formData.partCode !== assetData.part) {
+            if (!formData.partCode || formData.partCode && formData.partCode !== assetData.partCode) {
                 return handleAssetUnspecifiedPart(assetData);
             }
             // Asset selected having already selected a part
             return handleAssetSelectedWithPart(assetData);
         } catch (error) {
-            props.handleError(error);
+            handleError(error);
         } finally {
             setLoading(false);
         }
@@ -161,41 +174,81 @@ function PartUsageDialog(props) {
 
     const getAssetData = async (assetIDCode) => {
         try {
-            const response = await WSWorkorders.getPartUsageSelectedAsset(
-                props.workorder.number,
-                formData.transactionType,
-                formData.storeCode,
-                assetIDCode
-            );
-            return response.body.data[0];
-        } catch (error) {
-            props.handleError(error);
+            const response = await WSEquipment.getEquipment(assetIDCode);
+
+            const responseStoreCode = response.body.data.storeCode;
+            const assetData = {
+                bin: response.body.data.bin,
+                partCode: response.body.data.partCode
+            }
+
+            // Can happen if user un-focuses the input with an unexpected equipment selected (e.g. "A")
+            if (Object.values(assetData).includes(null)) {
+                showError('Unexpected asset selected.');
+                return undefined;
+            }
+
+            // "ISSUE" transaction type
+            if (formData.transactionType === transactionTypes[0].code) {
+                if (!responseStoreCode) {
+                    showError('Asset not in store.');
+                    return undefined;
+                }
+
+                // Asset is in a store other than the selected (can happen by selecting asset from input history)
+                if (responseStoreCode !== formData.storeCode) {
+                    showError('Asset is in a different store than the selected.');
+                    return undefined;
+                }
+
+                return assetData;
+
+            // "RETURN" transaction type
+            } else if (formData.transactionType === transactionTypes[1].code) {
+                if (responseStoreCode) {
+                    showError('Asset is already in a store.');
+                    return undefined;
+                }
+
+                return assetData;
+            }
+
+            // Something is wrong if we get here (user input or code-related)
+            showError('Asset does not follow business rules.');
+            return undefined;
+
+        } catch (error){
+            handleError(error);
         }
     };
 
     const handleAssetSelectedWithPart = (assetData) => {
+        const { bin, partCode } = assetData;
+
         updateFormDataProperty(FORM.BIN, '');
         if (assetData) {
-            updateFormDataProperty(FORM.BIN, assetData.bin);
-            loadBinList(assetData.bin, assetData.part);
+            updateFormDataProperty(FORM.BIN, bin);
+            loadBinList(bin, partCode);
         }
     };
 
     const handleAssetUnspecifiedPart = async (assetData) => {
+        const { bin, partCode } = assetData;
+
         updateFormDataProperty(FORM.PART, '');
         updateFormDataProperty(FORM.PART_DESC, '');
         updateFormDataProperty(FORM.BIN, '');
         if (assetData) {
-            updateFormDataProperty(FORM.BIN, assetData.bin);
-            loadBinList(assetData.bin, assetData.part);
-            updateFormDataProperty(FORM.PART, assetData.part);
+            updateFormDataProperty(FORM.BIN, bin);
+            loadBinList(bin, partCode);
+            updateFormDataProperty(FORM.PART, partCode);
         }
         // Set details of respective part
         try {
-            const partData = await loadPartData(assetData.part);
+            const partData = await loadPartData(partCode);
             updateFormDataProperty(FORM.PART_DESC, partData.description);
         } catch (error) {
-            props.handleError(error);
+            handleError(error);
         }
     };
 
@@ -226,7 +279,7 @@ function PartUsageDialog(props) {
                 updateFormDataProperty(FORM.BIN, binList[0].code);
             }
         } catch (error) {
-            props.handleError(error);
+            handleError(error);
         }
     };
 
@@ -240,7 +293,7 @@ function PartUsageDialog(props) {
             setUoM(response.body.data.uom);
             return response.body.data;
         } catch (error) {
-            props.handleError(error);
+            handleError(error);
         } finally {
             setLoading(false);
         }
@@ -250,7 +303,7 @@ function PartUsageDialog(props) {
         setLoading(true);
 
         const relatedWorkOrder =
-            props.equipmentMEC?.length > 0 ? props.workorder.number : null;
+            equipmentMEC?.length > 0 ? workorder.number : null;
 
         // Extract state properties modifiable through user interaction
         const {
@@ -292,8 +345,8 @@ function PartUsageDialog(props) {
 
         // Submit the new part usage
         WSWorkorders.createPartUsage(partUsageSubmitData)
-            .then(props.successHandler)
-            .catch(props.handleError)
+            .then(successHandler)
+            .catch(handleError)
             .finally(() => setLoading(false));
     };
 
@@ -311,8 +364,8 @@ function PartUsageDialog(props) {
             <Dialog
                 fullWidth
                 id="addPartUsageDialog"
-                open={props.isDialogOpen}
-                onClose={props.handleCancel}
+                open={isDialogOpen}
+                onClose={handleCancel}
                 aria-labelledby="form-dialog-title"
                 classes={{
                     paper: classes.paper,
@@ -324,10 +377,10 @@ function PartUsageDialog(props) {
                     <div>
                         <BlockUi
                             tag="div"
-                            blocking={loading || props.isLoading}
+                            blocking={loading || isLoading}
                         >
                             <EAMRadio
-                                {...processElementInfo(props.tabLayout['transactiontype'])}
+                                {...processElementInfo(tabLayout['transactiontype'])}
                                 valueKey={FORM.TRANSACTION_TYPE}
                                 values={transactionTypes}
                                 value={formData.transactionType}
@@ -336,7 +389,7 @@ function PartUsageDialog(props) {
                             />
 
                             <EAMSelect
-                                {...processElementInfo(props.tabLayout['storecode'])}
+                                {...processElementInfo(tabLayout['storecode'])}
                                 required
                                 valueKey={FORM.STORE}
                                 value={formData.storeCode}
@@ -348,7 +401,7 @@ function PartUsageDialog(props) {
                             />
 
                             <EAMSelect
-                                {...processElementInfo(props.tabLayout['activity'])}
+                                {...processElementInfo(tabLayout['activity'])}
                                 required
                                 disabled={!formData.storeCode}
                                 valueKey={FORM.ACTIVITY}
@@ -358,7 +411,7 @@ function PartUsageDialog(props) {
                             />
 
                             <EAMAutocomplete
-                                {...processElementInfo(props.tabLayout['partcode'])}
+                                {...processElementInfo(tabLayout['partcode'])}
                                 disabled={!formData.storeCode}
                                 value={formData.partCode}
                                 updateProperty={updateFormDataProperty}
@@ -369,7 +422,7 @@ function PartUsageDialog(props) {
                                     WSWorkorders.getPartUsagePart
                                 }
                                 autocompleteHandlerParams={[
-                                    props.workorder.number,
+                                    workorder.number,
                                     formData.storeCode,
                                 ]}
                                 onChangeValue={handlePartChange}
@@ -377,7 +430,7 @@ function PartUsageDialog(props) {
                             />
 
                             <EAMAutocomplete
-                                {...processElementInfo(props.tabLayout['assetid'])}
+                                {...processElementInfo(tabLayout['assetid'])}
                                 disabled={
                                     !formData.storeCode ||
                                     !formData.activityCode ||
@@ -402,7 +455,7 @@ function PartUsageDialog(props) {
                             />
 
                             <EAMSelect
-                                {...processElementInfo(props.tabLayout['bincode'])}
+                                {...processElementInfo(tabLayout['bincode'])}
                                 disabled={!formData.storeCode}
                                 valueKey={FORM.BIN}
                                 options={binList}
@@ -412,7 +465,7 @@ function PartUsageDialog(props) {
                             />
 
                             <EAMTextField
-                                {...processElementInfo(props.tabLayout['transactionquantity'])}
+                                {...processElementInfo(tabLayout['transactionquantity'])}
                                 disabled={
                                     !formData.storeCode ||
                                     !formData.partCode ||
@@ -431,16 +484,16 @@ function PartUsageDialog(props) {
                 <DialogActions>
                     <div>
                         <Button
-                            onClick={props.handleCancel}
+                            onClick={handleCancel}
                             color="primary"
-                            disabled={loading || props.isLoading}
+                            disabled={loading || isLoading}
                         >
                             Cancel
                         </Button>
                         <Button
                             onClick={handleSave}
                             color="primary"
-                            disabled={loading || props.isLoading}
+                            disabled={loading || isLoading}
                         >
                             Save
                         </Button>
