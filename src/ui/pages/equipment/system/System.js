@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import queryString from "query-string";
 import EquipmentHistory from '../components/EquipmentHistory.js'
 import EamlightToolbarContainer from './../../../components/EamlightToolbarContainer'
 import CustomFields from '../../../components/customfields/CustomFields'
@@ -22,7 +21,7 @@ import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import useEntity from "hooks/useEntity";
-import { isClosedEquipment } from '../EquipmentTools.js';
+import { isClosedEquipment, systemLayoutPropertiesMap } from '../EquipmentTools.js';
 
 const System = () => {
     const [statuses, setStatuses] = useState([]);
@@ -53,6 +52,7 @@ const System = () => {
             entityCodeProperty: "code",
             screenProperty: "systemScreen",
             layoutProperty: "systemLayout",
+            layoutPropertiesMap: systemLayoutPropertiesMap
     });
 
   

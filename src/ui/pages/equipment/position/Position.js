@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import queryString from "query-string";
 import EquipmentHistory from '../components/EquipmentHistory.js'
 import EamlightToolbarContainer from './../../../components/EamlightToolbarContainer'
 import CustomFields from '../../../components/customfields/CustomFields'
@@ -23,7 +22,7 @@ import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
-import { isClosedEquipment } from '../EquipmentTools.js';
+import { isClosedEquipment, positionLayoutPropertiesMap } from '../EquipmentTools.js';
 
 const Position = () => {
     const [statuses, setStatuses] = useState([]);
@@ -54,6 +53,7 @@ const Position = () => {
             entityCodeProperty: "code",
             screenProperty: "positionScreen",
             layoutProperty: "positionLayout",
+            layoutPropertiesMap: positionLayoutPropertiesMap
         });
 
         function postInit() {
