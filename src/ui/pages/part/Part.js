@@ -10,7 +10,7 @@ import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import CustomFields from '../../components/customfields/CustomFields';
 import PartWhereUsed from "./PartWhereUsed";
 import PartAssets from "./PartAssets";
-import PartTools from "./PartTools";
+import PartTools, { layoutPropertiesMap } from "./PartTools";
 import {PartIcon} from 'eam-components/dist/ui/components/icons'
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import {ENTITY_TYPE} from '../../components/Toolbar';
@@ -41,7 +41,8 @@ const Part = () => {
             entityURL: "/part/",
             entityCodeProperty: "code",
             screenProperty: "partScreen",
-            layoutProperty: "partLayout"
+            layoutProperty: "partLayout",
+            layoutPropertiesMap
         });
 
 

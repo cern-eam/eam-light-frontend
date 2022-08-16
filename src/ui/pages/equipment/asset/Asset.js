@@ -25,6 +25,7 @@ import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment } from '../EquipmentTools';
+import { layoutPropertiesMap } from "./AssetTools";
 
 const Asset = () => {
     const [part, setPart] = useState(part);
@@ -59,7 +60,7 @@ const Asset = () => {
             entityCodeProperty: "code",
             screenProperty: "assetScreen",
             layoutProperty: "assetLayout",
-            // layoutPropertiesMap: EquipmentTools.assetLayoutPropertiesMap, // TODO: 
+            layoutPropertiesMap
         });
 
     useEffect(() => {
