@@ -94,6 +94,7 @@ const Position = () => {
             userGroup: userData.eamAccount.userGroup,
             updateEquipmentProperty,
             register,
+            readOnly,
             showWarning,
         }
         

@@ -12,7 +12,7 @@ const DEPENDENCY_KEYS = {
 }
 
 const AssetHierarchy = (props) => {
-    const { equipment, assetLayout, updateEquipmentProperty, register, showWarning } = props;
+    const { equipment, updateEquipmentProperty, register, readOnly, showWarning } = props;
 
     const renderDependenciesForDependencyInputs = [
         equipment[DEPENDENCY_KEYS.asset],
@@ -110,7 +110,7 @@ const AssetHierarchy = (props) => {
             <EAMAutocomplete
                 {...register('location', 'hierarchyLocationCode', 'hierarchyLocationDesc')}
                 autocompleteHandler={WSEquipment.autocompleteLocation}
-                disabled={isDependencySet(equipment, DEPENDENCY_KEYS)}
+                disabled={readOnly || isDependencySet(equipment, DEPENDENCY_KEYS)}
             />
         </React.Fragment>
     )

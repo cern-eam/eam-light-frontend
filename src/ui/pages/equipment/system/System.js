@@ -101,6 +101,7 @@ const System = () => {
             userGroup: userData.eamAccount.userGroup,
             updateEquipmentProperty,
             register,
+            readOnly,
         };
 
         return [

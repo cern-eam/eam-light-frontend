@@ -115,7 +115,8 @@ const Asset = () => {
             updateEquipmentProperty,
             register,
             userGroup: userData.eamAccount.userGroup,
-            showWarning
+            readOnly,
+            showWarning,
         }
 
         return [
