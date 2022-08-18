@@ -1,0 +1,30 @@
+import HistoryIcon from '@mui/icons-material/History';
+import HistoryToggleOffIcon from '@mui/icons-material/HistoryToggleOff';
+
+import MenuItem from './MenuItem';
+import { menuIconStyle, menuIconStyleDisabled } from './EamlightMenu';
+import useLocalStorage from 'hooks/useLocalStorage';
+import { INPUT_HISTORY_SETTING_KEY } from 'eam-components/src/ui/components/inputs-ng/tools/history-tools.js';
+
+const MenuItemInputHistory = () => {
+    const [historySetting, setHistorySetting] = useLocalStorage(
+        INPUT_HISTORY_SETTING_KEY,
+        false
+    );
+
+    const menuProps = historySetting
+        ? {
+              label: 'Disable Input history',
+              icon: <HistoryIcon style={menuIconStyle} />,
+              onClick: () => setHistorySetting(false),
+          }
+        : {
+              label: 'Enable Input history',
+              icon: <HistoryToggleOffIcon style={menuIconStyleDisabled} />,
+              onClick: () => setHistorySetting(true),
+          };
+
+    return <MenuItem {...menuProps} />;
+};
+
+export default MenuItemInputHistory;
