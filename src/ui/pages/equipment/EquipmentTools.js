@@ -37,18 +37,18 @@ export const onCategoryChange = (category, updateProperty) => {
         return;
     }
 
-    WSEquipment.getCategoryData(category).then(response => {
-        const categoryData = response.body.data[0];
+    WSEquipment.getCategory(category).then(response => {
+        const category = response.body.data;
 
-            if(categoryData.categoryclass) {
-                updateProperty('classCode', categoryData.categoryclass);
-                updateProperty('classDesc', categoryData.categoryclassdesc); // TODO: this does not appear to be included in the response
+            if(category.classCode) {
+                updateProperty('classCode', category.classCode);
+                updateProperty('classDesc', category.classDesc); // TODO: this does not appear to be included in the response
             }
 
-            if(categoryData.manufacturer) {
-                updateProperty('manufacturerCode', categoryData.manufacturer);
+            if(category.manufacturerCode) {
+                updateProperty('manufacturerCode', category.manufacturerCode);
+                updateProperty('manufacturerDesc', category.manufacturerDesc);
             }
-
         })
     .catch(error => {
         console.log(error);

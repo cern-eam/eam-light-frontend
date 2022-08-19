@@ -37,7 +37,7 @@ const System = () => {
                 read: WSEquipment.getEquipment,
                 update: WSEquipment.updateEquipment,
                 delete: WSEquipment.deleteEquipment,
-                new:  WSEquipment.initEquipment.bind(null, "OBJ", "S"), // TODO: again we have extra arguments, does it perform basic functions without them?
+                new:  WSEquipment.initEquipment.bind(null, "S"), // TODO: again we have extra arguments, does it perform basic functions without them?
             },
             postActions: {
                 create: postCreate,

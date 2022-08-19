@@ -5,6 +5,7 @@ import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePi
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WS from "../../../../tools/WS";
 import WSEquipment from "../../../../tools/WSEquipment";
+import { onCategoryChange } from '../EquipmentTools';
 
 const SystemDetails = (props) => {
 

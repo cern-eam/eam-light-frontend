@@ -25,7 +25,7 @@ const WorkorderScheduling = (props) => {
     return (
         <React.Fragment>
             
-            <div style={{display: "flex"}}>
+            <div style={{display: "flex", flex: "1 1 auto"}}>
                 <EAMAutocomplete {...register('createdby','createdBy','createdByDesc')}/>
                 <EAMDatePicker {...register('datecreated','createdDate')}/>
             </div>

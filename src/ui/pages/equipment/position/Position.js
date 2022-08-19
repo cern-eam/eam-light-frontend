@@ -38,7 +38,7 @@ const Position = () => {
                 read: WSEquipment.getEquipment,
                 update: WSEquipment.updateEquipment,
                 delete: WSEquipment.deleteEquipment,
-                new:  WSEquipment.initEquipment.bind(null, "OBJ", "P"), // TODO: again we have extra arguments. What to do?
+                new:  WSEquipment.initEquipment.bind(null, "P"), // TODO: again we have extra arguments. What to do?
             },
             postActions: {
                 create: postCreate,

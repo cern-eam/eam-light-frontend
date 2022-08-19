@@ -8,8 +8,8 @@ class WSWorkorders {
     //
     // WORK ORDERS
     //
-    initWorkOrder(entity, config = {}) {
-        return WS._get(`/workorders/init/${entity}`, config);
+    initWorkOrder(config = {}) {
+        return WS._get(`/workorders/init`, config);
     }
 
     getWorkOrder(number, config = {}) {

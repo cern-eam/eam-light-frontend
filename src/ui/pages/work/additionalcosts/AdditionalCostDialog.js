@@ -12,7 +12,9 @@ import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const AdditionalCostDialog = (props) => {
-    const [additionalCost, setAdditionalCost] = useState({ costType: "MISC" });
+    const [additionalCost, setAdditionalCost] = useState({ 
+        costType: "MISC" , 
+        date: new Date()});
     const [activityList, setActivityList] = useState([]);
     const [loading, setLoading] = useState(false);
 

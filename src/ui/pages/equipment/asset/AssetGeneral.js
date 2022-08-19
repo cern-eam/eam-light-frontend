@@ -23,7 +23,7 @@ const AssetGeneral = (props) => {
 
             {newEntity && <EAMTextField {...register('equipmentno', 'code')} />}
 
-            <EAMTextField {...register('alias', 'alias')} />
+            <EAMTextField {...register('alias', 'alias')} barcodeScanner/>
 
             <EAMUDF
                 {...register('udfchar45','userDefinedFields.udfchar45')}/>

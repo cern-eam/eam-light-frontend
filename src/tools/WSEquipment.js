@@ -41,8 +41,8 @@ class WSEquipment {
         return WS._get('/equipment/type', { ...config, params: { c: equipmentCode }});
     }
 
-    initEquipment(entity, eqpType, config = {}) {
-        return WS._get(`/equipment/init/${entity}/${eqpType}`, config);
+    initEquipment(eqpType, config = {}) {
+        return WS._get(`/equipment/init/${eqpType}`, config);
     }
 
     getEquipmentStatusValues(userGroup, neweqp, oldStatusCode, config = {}) {
@@ -129,7 +129,7 @@ class WSEquipment {
         return WS._get(`/equipment/partsassociated/${parentScreen}/${equipment}`, config);
     }
 
-    getCategoryData(categoryCode, config = {}) {
+    getCategory(categoryCode, config = {}) {
         return WS._get(`/autocomplete/eqp/categorydata/${categoryCode}`, config);
     }
 

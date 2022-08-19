@@ -55,7 +55,7 @@ const Workorder = () => {
                 read: WSWorkorder.getWorkOrder,
                 update: WSWorkorder.updateWorkOrder,
                 delete: WSWorkorder.deleteWorkOrder,
-                new:  WSWorkorder.initWorkOrder.bind(null, "EVNT"), 
+                new:  WSWorkorder.initWorkOrder, 
             },
             postActions: {
                 create: postCreate,

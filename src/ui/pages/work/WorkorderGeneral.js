@@ -67,12 +67,12 @@ function WorkorderDetails(props) {
                           link={() => workorder.parentWO && rpawClassesList.includes(workorder.classCode) ? rpawLink + workorder.parentWO : null}/>
 
             <EAMTextField {...register('udfchar01', 'userDefinedFields.udfchar01','userDefinedFields.udfchar01Desc')}
-                          link={() => workorder.userDefinedFields.udfchar01 ? "https://cern.service-now.com/task.do?sysparm_query=number=" + workorder.userDefinedFields.udfchar01 : null}/>
+                          link={() => workorder.userDefinedFields?.udfchar01 ? "https://cern.service-now.com/task.do?sysparm_query=number=" + workorder.userDefinedFields.udfchar01 : null}/>
 
             <EAMTextField {...register('udfchar20', 'userDefinedFields.udfchar20','userDefinedFields.udfchar20Desc')}/>
 
             <EAMTextField {...register('udfchar24', 'userDefinedFields.udfchar24','userDefinedFields.udfchar24Desc')}
-                          link={() => workorder.userDefinedFields.udfchar24 ? "https://its.cern.ch/jira/browse/" + workorder.userDefinedFields.udfchar24 : null}/>
+                          link={() => workorder.userDefinedFields?.udfchar24 ? "https://its.cern.ch/jira/browse/" + workorder.userDefinedFields.udfchar24 : null}/>
 
             <EAMUDF {...register('udfchkbox01', `userDefinedFields.udfchkbox01`)}/>
 

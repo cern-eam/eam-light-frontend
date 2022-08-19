@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
