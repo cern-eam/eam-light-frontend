@@ -4,6 +4,7 @@ import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox'
 import WSEquipment from "../../../../tools/WSEquipment";
 import EISTable from 'eam-components/dist/ui/components/table';
+import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 
 const ReplaceEqpHierarchy = (props) => {
     const {equipment, equipmentLayout, title} = props;
