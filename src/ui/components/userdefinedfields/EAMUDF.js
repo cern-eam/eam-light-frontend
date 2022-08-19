@@ -13,7 +13,7 @@ const RENT = 'RENT';
 
 const EAMUDF = (props) => {
 
-    const {udfLookupType, udfLookupEntity, elementId, fieldType} = props.elementInfo;
+    const {udfLookupType, udfLookupEntity, elementId, fieldType, udfUom} = props.elementInfo;
 
     if (fieldType === 'checkbox') {
         return (
@@ -53,7 +53,7 @@ const EAMUDF = (props) => {
             
             return (<EAMTextField
                     {...props}
-                    endTextAdornment={props.elementInfo.udfUom}
+                    endTextAdornment={udfUom}
                 />)
     }
 }
