@@ -14,12 +14,12 @@ const MenuItemInputHistory = () => {
 
     const menuProps = historySetting
         ? {
-              label: 'Disable Input history',
+              label: 'Disable Input History',
               icon: <HistoryIcon style={menuIconStyle} />,
               onClick: () => setHistorySetting(false),
           }
         : {
-              label: 'Enable Input history',
+              label: 'Enable Input History',
               icon: <HistoryToggleOffIcon style={menuIconStyleDisabled} />,
               onClick: () => setHistorySetting(true),
           };
