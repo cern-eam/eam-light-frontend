@@ -21,7 +21,6 @@ function AddActivityDialog(props) {
 
     let [loading, setLoading] = useState(false);
     let [formValues, setFormValues] = useState({});
-    let [typesOfHours, setTypesOfHours] = useState([]);
 
     useEffect(() => {
         if (props.open) {
@@ -40,7 +39,6 @@ function AddActivityDialog(props) {
             typeOfHours: 'N',
             dateWorked: new Date()
         });
-        WSWorkorders.getTypesOfHours().then(response => setTypesOfHours(response.body.data));
     };
 
     let handleClose = () => {
@@ -159,7 +157,7 @@ function AddActivityDialog(props) {
                                 {...processElementInfo(props.layout.octype)}
                                 valueKey="typeOfHours"
                                 value={formValues['typeOfHours'] || ''}
-                                values={typesOfHours}
+                                autocompleteHandler={WSWorkorders.getTypesOfHours}
                                 updateProperty={updateFormValues}
                             />
 
