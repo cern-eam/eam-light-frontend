@@ -31,7 +31,17 @@ import WSWorkorders from '../../../tools/WSWorkorders';
 import useEntity from "hooks/useEntity";
 import { updateMyWorkOrders } from '../../../actions/workorderActions' 
 import { useDispatch } from 'react-redux';
-
+import { Avatar } from '@mui/material';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import { deepOrange, green } from '@mui/material/colors';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import NotesIcon from '@mui/icons-material/Notes';
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import SportsScoreIcon from '@mui/icons-material/SportsScore';
+import ConstructionIcon from '@mui/icons-material/Construction';
+import SpeedIcon from '@mui/icons-material/Speed';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
 const Workorder = () => {
     const [equipmentMEC, setEquipmentMEC] = useState();
@@ -176,6 +186,7 @@ const Workorder = () => {
                 ,
                 column: 1,
                 order: 1,
+                summaryIcon: (<AssignmentIcon/>),
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -190,6 +201,7 @@ const Workorder = () => {
                 ,
                 column: 1,
                 order: 2,
+                summaryIcon: (<CalendarMonthIcon/>),
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -204,6 +216,7 @@ const Workorder = () => {
                 ,
                 column: 1,
                 order: 3,
+                summaryIcon: (<SportsScoreIcon/>),
                 ignore: !getTabAvailability(tabs, TAB_CODES.CLOSING_CODES),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CLOSING_CODES)
             },
@@ -316,6 +329,7 @@ const Workorder = () => {
                 },
                 column: 2,
                 order: 7,
+                summaryIcon: (<DriveFileRenameOutlineIcon/>),
                 ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
@@ -381,6 +395,7 @@ const Workorder = () => {
                 ,
                 column: 2,
                 order: 9,
+                summaryIcon: (<PlaylistAddCheckIcon/>),
                 ignore: !getTabAvailability(tabs, TAB_CODES.CHECKLIST),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CHECKLIST)
             },
@@ -401,6 +416,7 @@ const Workorder = () => {
                 ,
                 column: 2,
                 order: 10,
+                summaryIcon: (<ListAltIcon/>),
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -421,6 +437,7 @@ const Workorder = () => {
                 ,
                 column: 2,
                 order: 11,
+                summaryIcon: (<ConstructionIcon/>),
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -456,6 +473,7 @@ const Workorder = () => {
                 ,
                 column: 2,
                 order: 12,
+                summaryIcon: (<SpeedIcon/>),
                 ignore: !getTabAvailability(tabs, TAB_CODES.METER_READINGS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.METER_READINGS)
             },

@@ -101,6 +101,7 @@ const EntityRegions = (props) => {
                                     style={{ display: regionMaximized && region.id !== regionMaximized ? 'none' : '' }}
                                     key={region.id}
                                     heading={region.label.toUpperCase()}
+                                    summaryIcon={region.summaryIcon}
                                     isMaximized={region.id === regionMaximized}
                                     maximize={updateMaximize(region.id)}
                                     unMaximize={updateMaximize(undefined)}
