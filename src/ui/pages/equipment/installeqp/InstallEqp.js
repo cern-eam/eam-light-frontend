@@ -13,6 +13,8 @@ export default function NameForm(props) {
     const [childEq, setChildEq] = useState("");
     const [blocking, setBlocking] = useState(false);
 
+    const idPrefix = "EAMID_InstallEqp_";
+
     const createEquipmentStructure = (newParent, child) => {
         return {
             newParentCode: newParent,
@@ -57,6 +59,7 @@ export default function NameForm(props) {
                                             autocompleteHandler={WS.autocompleteEquipment}
                                             autocompleteHandlerParams={[true]}
                                             barcodeScanner
+                                            id={`${idPrefix}PARENT`}
                                         />
 
                                         <EAMAutocomplete 
@@ -68,6 +71,7 @@ export default function NameForm(props) {
                                             autocompleteHandler={WS.autocompleteEquipment}
                                             autocompleteHandlerParams={[true]}
                                             barcodeScanner
+                                            id={`${idPrefix}CHILD`}
                                         />
 
                                     <Button
