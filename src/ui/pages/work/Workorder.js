@@ -186,7 +186,7 @@ const Workorder = () => {
                 ,
                 column: 1,
                 order: 1,
-                summaryIcon: (<AssignmentIcon/>),
+                summaryIcon: AssignmentIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -201,7 +201,7 @@ const Workorder = () => {
                 ,
                 column: 1,
                 order: 2,
-                summaryIcon: (<CalendarMonthIcon/>),
+                summaryIcon: CalendarMonthIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -216,7 +216,7 @@ const Workorder = () => {
                 ,
                 column: 1,
                 order: 3,
-                summaryIcon: (<SportsScoreIcon/>),
+                summaryIcon: SportsScoreIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.CLOSING_CODES),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CLOSING_CODES)
             },
@@ -329,7 +329,7 @@ const Workorder = () => {
                 },
                 column: 2,
                 order: 7,
-                summaryIcon: (<DriveFileRenameOutlineIcon/>),
+                summaryIcon: DriveFileRenameOutlineIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
@@ -395,7 +395,7 @@ const Workorder = () => {
                 ,
                 column: 2,
                 order: 9,
-                summaryIcon: (<PlaylistAddCheckIcon/>),
+                summaryIcon: PlaylistAddCheckIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.CHECKLIST),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CHECKLIST)
             },
@@ -416,7 +416,7 @@ const Workorder = () => {
                 ,
                 column: 2,
                 order: 10,
-                summaryIcon: (<ListAltIcon/>),
+                summaryIcon: ListAltIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -437,7 +437,7 @@ const Workorder = () => {
                 ,
                 column: 2,
                 order: 11,
-                summaryIcon: (<ConstructionIcon/>),
+                summaryIcon: ConstructionIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -473,7 +473,7 @@ const Workorder = () => {
                 ,
                 column: 2,
                 order: 12,
-                summaryIcon: (<SpeedIcon/>),
+                summaryIcon: SpeedIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.METER_READINGS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.METER_READINGS)
             },

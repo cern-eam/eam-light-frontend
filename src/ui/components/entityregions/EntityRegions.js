@@ -3,11 +3,22 @@ import RegionPanel from './regionpanel/RegionPanel';
 import Grid from '@mui/material/Grid';
 import { useHistory, useLocation } from 'react-router-dom';
 import queryString from "query-string"
+import { styled } from '@mui/material/styles';
 
 const ENTITY_REGION_PARAMS = {
     MAXIMIZE: 'maximize',
     VISIBLE: 'visible'
 }
+
+const styleSummaryIcon = (SummaryIcon) => styled(SummaryIcon)(({theme}) => ({
+    '&': {
+        marginRight: 8, 
+        marginLeft: 3,
+        color: theme.palette.primary.main,
+        //backgroundColor: theme.palette.primary.extraLight
+        backgroundColor: 'transparent'
+    }
+}))
 
 const EntityRegions = (props) => {
     const { isHiddenRegion, regions : inputRegions = [], showEqpTree, isNewEntity, setRegionVisibility, getHiddenRegionState, getUniqueRegionID } = props;
@@ -101,7 +112,7 @@ const EntityRegions = (props) => {
                                     style={{ display: regionMaximized && region.id !== regionMaximized ? 'none' : '' }}
                                     key={region.id}
                                     heading={region.label.toUpperCase()}
-                                    summaryIcon={region.summaryIcon}
+                                    summaryIcon={region.summaryIcon && styleSummaryIcon(region.summaryIcon)}
                                     isMaximized={region.id === regionMaximized}
                                     maximize={updateMaximize(region.id)}
                                     unMaximize={updateMaximize(undefined)}

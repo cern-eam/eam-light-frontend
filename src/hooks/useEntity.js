@@ -22,6 +22,7 @@ const useEntity = (params) => {
     const [errors, setErrors] = useState(null);
     const [newEntity, setNewEntity] = useState(true);
     const [readOnly, setReadOnly] = useState(false);
+    const [isModified, setIsModified] = useState(false);
     const {code} = useParams();
     const history = useHistory();
     const abortController = useRef(null);
@@ -255,7 +256,8 @@ const useEntity = (params) => {
             data.errorText = error.message;
         }
         
-        // Validators TODO: array of possible validators for each element 
+        // Validators 
+        // TODO: array of possible validators for each element 
         if (data.required) {
             validators.current[valueKey] = value => value ? '' : `${data.label} field cannot be blank.`;
         }
