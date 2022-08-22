@@ -7,7 +7,7 @@ import WS from "../../../../tools/WS";
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import BlockUi from 'react-block-ui';
 
-export default function NameForm(props) {
+export default function InstallEqp(props) {
 
     const [parentEq, setParentEq] = useState("");
     const [childEq, setChildEq] = useState("");
