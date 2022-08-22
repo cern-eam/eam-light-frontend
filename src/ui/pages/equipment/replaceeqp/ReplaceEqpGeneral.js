@@ -40,6 +40,8 @@ const ReplaceEqpGeneral = (props) => {
 
     const [dialogOpen, setDialogOpen] = useState(false);
 
+    const idPrefix = "EAMID_ReplaceEqpGeneral_";
+
     // const children = {}; // TODO: is this logic required?
 
     const closeDialog = () => {
@@ -120,7 +122,7 @@ const ReplaceEqpGeneral = (props) => {
                     {...processElementInfo(equipmentLayout.fields['equipmentno'])}
                     required
                     label={"Old Equipment"}
-                    id={"OldEquipment"}
+                    id={`${idPrefix}OLDEQUIPMENT`}
                     value={replaceEquipment.oldEquipment}
                     updateProperty={updateProperty}
                     valueKey="oldEquipment"
@@ -158,7 +160,7 @@ const ReplaceEqpGeneral = (props) => {
                     {...processElementInfo(equipmentLayout.fields['equipmentno'])}
                     required
                     label={"New Equipment"}
-                    id={"NewEquipment"}
+                    id={`${idPrefix}NEWEQUIPMENT`}
                     value={replaceEquipment.newEquipment}
                     updateProperty={updateProperty}
                     valueKey="newEquipment"

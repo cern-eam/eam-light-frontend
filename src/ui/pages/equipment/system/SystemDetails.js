@@ -9,7 +9,7 @@ import { onCategoryChange } from '../EquipmentTools';
 
 const SystemDetails = (props) => {
 
-    const { equipment, register } = props;
+    const { equipment, register, updateEquipmentProperty } = props;
 
     return (
         <React.Fragment>

@@ -7,11 +7,13 @@ import WS from "../../../../tools/WS";
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import BlockUi from 'react-block-ui';
 
-export default function NameForm(props) {
+export default function InstallEqp(props) {
 
     const [parentEq, setParentEq] = useState("");
     const [childEq, setChildEq] = useState("");
     const [blocking, setBlocking] = useState(false);
+
+    const idPrefix = "EAMID_InstallEqp_";
 
     const createEquipmentStructure = (newParent, child) => {
         return {
@@ -57,6 +59,7 @@ export default function NameForm(props) {
                                             autocompleteHandler={WS.autocompleteEquipment}
                                             autocompleteHandlerParams={[true]}
                                             barcodeScanner
+                                            id={`${idPrefix}PARENT`}
                                         />
 
                                         <EAMAutocomplete 
@@ -68,6 +71,7 @@ export default function NameForm(props) {
                                             autocompleteHandler={WS.autocompleteEquipment}
                                             autocompleteHandlerParams={[true]}
                                             barcodeScanner
+                                            id={`${idPrefix}CHILD`}
                                         />
 
                                     <Button
@@ -83,5 +87,5 @@ export default function NameForm(props) {
                 </div>
             </BlockUi>
         </div>
-);
+    );
 }

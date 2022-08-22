@@ -9,6 +9,8 @@ class MeterReadingSearch extends React.Component {
         const {parentProps} = this.props;
         const {searchCriteria} = parentProps;    
 
+        const idPrefix = "EAMID_MeterReadingSearch_";
+
         return (
             <EISPanel heading="SEARCH PANEL" alwaysExpanded={true}>
                 <div style={{width: "100%", marginTop: 0}}>
@@ -22,6 +24,7 @@ class MeterReadingSearch extends React.Component {
                         desc={searchCriteria.meterDesc}
                         descKey="meterDesc"
                         barcodeScanner
+                        id={`${idPrefix}METERCODE`}
                     />
                     <EAMAutocomplete
                         label={"Equipment Code"}
@@ -33,6 +36,7 @@ class MeterReadingSearch extends React.Component {
                         desc={searchCriteria.equipmentDesc}
                         descKey="equipmentDesc"
                         barcodeScanner
+                        id={`${idPrefix}EQUIPMENTCODE`}
                     />
                 </div>
             </EISPanel>
