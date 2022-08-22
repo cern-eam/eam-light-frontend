@@ -87,5 +87,5 @@ export default function NameForm(props) {
                 </div>
             </BlockUi>
         </div>
-);
+    );
 }
