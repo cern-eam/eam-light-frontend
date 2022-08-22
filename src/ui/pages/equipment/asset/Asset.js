@@ -29,10 +29,7 @@ const Asset = () => {
     const [part, setPart] = useState(part);
     const [statuses, setStatuses] = useState([]);
 
-    // const queryParams = queryString.parse(window.location.search).length > 0 ?
-    //                     queryString.parse(window.location.search) : '';
-
-    const {screenLayout: assetLayout, entity: equipment, loading, readOnly,
+    const {screenLayout: assetLayout, entity: equipment, loading, readOnly, isModified,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
@@ -348,7 +345,7 @@ const Asset = () => {
     return (
         <BlockUi tag="div" blocking={loading} style={{ height: "100%", width: "100%" }}>
             <EamlightToolbarContainer
-                isModified={true} // TODO:
+                isModified={isModified} 
                 newEntity={newEntity}
                 entityScreen={screenPermissions}
                 entityName="Asset" // TODO:

@@ -27,7 +27,7 @@ import { isClosedEquipment, positionLayoutPropertiesMap } from '../EquipmentTool
 const Position = () => {
     const [statuses, setStatuses] = useState([]);
 
-    const {screenLayout: positionLayout, entity: equipment, loading, readOnly,
+    const {screenLayout: positionLayout, entity: equipment, loading, readOnly, isModified,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
@@ -312,7 +312,7 @@ const Position = () => {
     return (
         <BlockUi tag="div" blocking={loading} style={{width: '100%', height: "100%"}}>
             <EamlightToolbarContainer
-                isModified={true} // TODO:
+                isModified={isModified} 
                 newEntity={newEntity}
                 entityScreen={screenPermissions}
                 entityName="Position"

@@ -1,10 +1,10 @@
 import './EamlightToolbar.css'
 import React, {Component} from 'react';
 import Button from '@mui/material/Button';
-import SaveIcon from 'mdi-material-ui/ContentSaveOutline'
+import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
 import TelevisionGuide from 'mdi-material-ui/TelevisionGuide'
-import DeleteIcon from 'mdi-material-ui/DeleteVariant'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ConfirmationDialog from './ConfirmationDialog'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -220,7 +220,7 @@ class EamlightToolbar extends Component {
                         <div style={this.menuLabelStyle}> New</div>
                     </MenuItem>
                     <MenuItem onClick={() => this.deleteConfirmation.show()} disabled={this.isDeleteButtonDisabled()}>
-                        <DeleteIcon className="iconButton" style={this.iconMenuStyle}/>
+                        <DeleteOutlineIcon className="iconButton" style={this.iconMenuStyle}/>
                         <div style={this.menuLabelStyle}> Delete</div>
                     </MenuItem>
                     {this.getToolbar('MENUITEMS')}
@@ -244,7 +244,7 @@ class EamlightToolbar extends Component {
                 </Button>
                 <Button onClick={() => this.deleteConfirmation.show()}
                         disabled={this.isDeleteButtonDisabled()}
-                        startIcon={<DeleteIcon/>}
+                        startIcon={<DeleteOutlineIcon/>}
                 >
                     Delete
                 </Button>
@@ -282,9 +282,9 @@ class EamlightToolbar extends Component {
 
                     <Button onClick={this.props.saveHandler}
                             disabled={this.isSaveButtonDisabled()}
-                            startIcon={<SaveIcon className="iconButton"/>}
+                            startIcon={<SaveIcon/>}
                     >
-                        <span className='save-label'>Save</span>
+                        Save
                     </Button>
 
                     {this.state.compactMenu ? this.renderCompactMenu() : this.renderDesktopMenu()}

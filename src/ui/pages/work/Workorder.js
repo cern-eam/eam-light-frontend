@@ -54,7 +54,7 @@ const Workorder = () => {
     //
     //
     //
-    const {screenLayout: workOrderLayout, entity: workorder, setEntity: setWorkOrder, loading, readOnly, 
+    const {screenLayout: workOrderLayout, entity: workorder, setEntity: setWorkOrder, loading, readOnly, isModified,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID,
         toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
@@ -549,7 +549,7 @@ const Workorder = () => {
         <div className="entityContainer">
             <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}}>
                 <EamlightToolbarContainer
-                    isModified={true} // TODO:
+                    isModified={isModified}
                     newEntity={newEntity}
                     entityScreen={screenPermissions}
                     entityName="Work Order"

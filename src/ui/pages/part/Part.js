@@ -20,7 +20,7 @@ import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
 import useEntity from "hooks/useEntity";
 
 const Part = () => {
-    const {screenLayout: partLayout, entity: part, loading, readOnly,
+    const {screenLayout: partLayout, entity: part, loading, readOnly, isModified,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
@@ -218,7 +218,7 @@ const Part = () => {
         <div className="entityContainer">
             <BlockUi tag="div" blocking={loading} style={{height: "100%", width: '100%'}}>
                 <EamlightToolbarContainer
-                    isModified={true} // TODO: Location had a TODO here as well
+                    isModified={isModified} 
                     newEntity={newEntity}
                     entityScreen={screenPermissions}
                     entityName="Part" // TODO: hardcoded (following Location example)

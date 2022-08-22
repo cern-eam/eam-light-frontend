@@ -62,13 +62,13 @@ const useEntity = (params) => {
             return;
         }
 
-        setLoading(true); setErrors(null);
+        setLoading(true); setErrors(null); 
 
         WS.create(entity)
             .then(response => {
                 const createdEntity = response.body.data;
                 setEntity(createdEntity)
-                setNewEntity(false)
+                setNewEntity(false); setIsModified(false);
                 window.history.pushState({}, '', process.env.PUBLIC_URL + entityURL + encodeURIComponent(createdEntity[entityCodeProperty]));
                 showNotificationParam(entityDesc + ' ' + createdEntity[entityCodeProperty] + ' has been successfully created.');
                 document.title = entityDesc + ' ' + createdEntity[entityCodeProperty];
@@ -89,7 +89,7 @@ const useEntity = (params) => {
     }
 
     const readEntity = (code) => {
-        setLoading(true); setErrors(null);
+        setLoading(true); setErrors(null); setIsModified(false);
         
         // Cancel the old request in the case it was still active
         abortController.current?.abort();
@@ -123,7 +123,7 @@ const useEntity = (params) => {
             return;
         }
 
-        setLoading(true); setErrors(null);
+        setLoading(true); setErrors(null); setIsModified(false);
 
         WS.update(entity)
             .then(response => {
@@ -147,7 +147,7 @@ const useEntity = (params) => {
     }
 
     const deleteEntity = () => {        
-        setLoading(true); setErrors(null);
+        setLoading(true); setErrors(null); setIsModified(false);
         
         WS.delete(entity[entityCodeProperty])
             .then(response => {
@@ -163,7 +163,7 @@ const useEntity = (params) => {
     }
 
     const initNewEntity = () => {
-        setLoading(true); setErrors(null); setReadOnly(false);
+        setLoading(true); setErrors(null); setReadOnly(false); setIsModified(false);
         
         WS.new()
             .then(response => {
@@ -231,6 +231,10 @@ const useEntity = (params) => {
         setEntity(prevEntity => set({...prevEntity}, key, value));
         // Fire handler for the 'key'
         getHandlers()[key]?.(value);
+        // 
+        if (!key.endsWith("Desc")) {
+            setIsModified(true);
+        }
     };
 
     const register = (layoutKey, valueKey, descKey) => {
@@ -282,7 +286,7 @@ const useEntity = (params) => {
     //
     //
     return {screenCode, screenLayout, screenPermissions, 
-        entity, newEntity, setEntity, loading, readOnly, 
+        entity, newEntity, setEntity, loading, readOnly, isModified,
         userData, applicationData, 
         isHiddenRegion: isHiddenRegionParam, 
         getHiddenRegionState: getHiddenRegionStateParam, 

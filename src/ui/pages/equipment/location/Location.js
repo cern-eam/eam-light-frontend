@@ -22,7 +22,7 @@ import useEntity from "hooks/useEntity";
 
 export default Location = (props) => {
 
-    const {screenLayout: locationLayout, entity: location, loading, readOnly,
+    const {screenLayout: locationLayout, entity: location, loading, readOnly, isModified,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree, 
         toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
@@ -265,7 +265,8 @@ export default Location = (props) => {
 
         return (
             <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}}>
-                <EamlightToolbarContainer isModified={true} // TODO
+                <EamlightToolbarContainer 
+                                isModified={isModified} 
                                  newEntity={newEntity}
                                  entityScreen={screenPermissions}
                                  entityName="Location"
