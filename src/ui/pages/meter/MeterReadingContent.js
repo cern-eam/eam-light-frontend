@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Save from '@mui/icons-material/Save';
 import './MeterReading.css';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import { formatDateTime } from '../EntityTools';
 
 function MeterReadingContent(props) {
 
@@ -60,7 +61,7 @@ function MeterReadingContent(props) {
                     <div className={`meterContentDetails`}>
                         <div className={`meterContentDetail`}>
                             <div className={`meterContentTitleContentH`}>Last Reading Date:</div>
-                            <div className={`meterContentTitleContentC`}>{reading.lastUpdateDate}</div>
+                            <div className={`meterContentTitleContentC`}>{formatDateTime(reading.lastUpdateDate)}</div>
                         </div>
                         <div className={`meterContentDetail`}>
                             <div className={`meterContentTitleContentH`}>Last Value:</div>

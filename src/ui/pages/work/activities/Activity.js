@@ -3,6 +3,7 @@ import BookLabours from "./BookLabours";
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import './Activity.css'
+import { formatDate } from 'ui/pages/EntityTools';
 
 const add = (a, b) => a + b
 
@@ -49,7 +50,7 @@ function Activity(props){
             <Grid item xs={6} md={6} lg={4}></Grid>
 
             <Grid item xs={6} md={6} lg={2}>{layout.ACT.fields.actstartdate.text}</Grid>
-            <Grid item xs={6} md={6} lg={4}>{activity.startDate}</Grid>
+            <Grid item xs={6} md={6} lg={4}>{formatDate(activity.startDate)}</Grid>
 
           </Grid>
 

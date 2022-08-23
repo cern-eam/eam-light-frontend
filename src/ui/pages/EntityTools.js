@@ -1,6 +1,8 @@
 import set from "set-value";
 import queryString from "query-string";
 import { constant } from "lodash";
+import formatfns from "date-fns/format";
+import { parseISO } from "date-fns";
 
 // clones an entity deeply
 export const cloneEntity = entity => ({
@@ -212,3 +214,18 @@ export const getTabInitialVisibility = (tabs, tabCode) => {
 export const isDepartmentReadOnly = (departmentCode, userData) => {
     return userData.eamAccount.departmentalSecurity[departmentCode]?.readOnly;
 }
+
+export const formatDate = date => format(date, 'dd-MMM-yyyy');
+
+export const formatDateTime = date => format(date, 'dd-MMM-yyyy HH:mm');
+
+const format = (date, dateFormat) => {
+    try {
+        return formatfns(parseISO(date), dateFormat)
+    } catch(error) {
+        console.error("formatDate error" + error);
+    }
+
+    return null;
+}
+
