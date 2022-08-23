@@ -1,5 +1,4 @@
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
-import { AssetIcon, PartIcon } from 'eam-components/dist/ui/components/icons';
 import React, { useEffect, useState }  from 'react';
 import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';
@@ -25,11 +24,19 @@ import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, assetLayoutPropertiesMap } from '../EquipmentTools';
 
+import { AssetIcon, PartIcon } from 'eam-components/dist/ui/components/icons';
 import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded'; 
 import ShareIcon from '@mui/icons-material/Share';
-
+import DescriptionIcon from '@mui/icons-material/Description';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
+import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import HardwareIcon from '@mui/icons-material/Hardware';
 
 const Asset = () => {
     const [part, setPart] = useState(part);
@@ -138,6 +145,7 @@ const Asset = () => {
                 ,
                 column: 1,
                 order: 1,
+                summaryIcon: DescriptionIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -152,6 +160,7 @@ const Asset = () => {
                 ,
                 column: 1,
                 order: 2,
+                summaryIcon: AssignmentIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -198,6 +207,7 @@ const Asset = () => {
                 ,
                 column: 1,
                 order: 5,
+                summaryIcon: ManageHistoryIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -228,6 +238,7 @@ const Asset = () => {
                 },
                 column: 2,
                 order: 7,
+                summaryIcon: FunctionsRoundedIcon,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS)
             },
@@ -268,6 +279,7 @@ const Asset = () => {
                 },
                 column: 2,
                 order: 9,
+                summaryIcon: DriveFileRenameOutlineIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
@@ -284,6 +296,7 @@ const Asset = () => {
                 ,
                 column: 2,
                 order: 10,
+                summaryIcon: AssignmentIndIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -303,6 +316,7 @@ const Asset = () => {
                 ,
                 column: 2,
                 order: 11,
+                summaryIcon: ListAltIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -323,6 +337,7 @@ const Asset = () => {
                 },
                 column: 2,
                 order: 12,
+                summaryIcon: HardwareIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
             },

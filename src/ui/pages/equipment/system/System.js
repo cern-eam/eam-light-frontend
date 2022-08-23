@@ -11,7 +11,6 @@ import SystemHierarchy from './SystemHierarchy'
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
-import {SystemIcon} from 'eam-components/dist/ui/components/icons'
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import {ENTITY_TYPE} from "../../../components/Toolbar";
@@ -22,6 +21,18 @@ import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, systemLayoutPropertiesMap } from '../EquipmentTools.js';
+
+import {SystemIcon, PartIcon} from 'eam-components/dist/ui/components/icons'
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import DescriptionIcon from '@mui/icons-material/Description';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import ShareIcon from '@mui/icons-material/Share';
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded'; 
+import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 
 const System = () => {
     const [statuses, setStatuses] = useState([]);
@@ -120,6 +131,7 @@ const System = () => {
                 ,
                 column: 1,
                 order: 1,
+                summaryIcon: DescriptionIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -134,6 +146,7 @@ const System = () => {
                 ,
                 column: 1,
                 order: 2,
+                summaryIcon: AssignmentIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -148,6 +161,7 @@ const System = () => {
                 ,
                 column: 1,
                 order: 3,
+                summaryIcon: AccountTreeRoundedIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -164,6 +178,7 @@ const System = () => {
                 ,
                 column: 1,
                 order: 4,
+                summaryIcon: ContentPasteIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
@@ -178,6 +193,7 @@ const System = () => {
                 ,
                 column: 1,
                 order: 5,
+                summaryIcon: ManageHistoryIcon,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
@@ -193,6 +209,7 @@ const System = () => {
                 ,
                 column: 1,
                 order: 6,
+                summaryIcon: PartIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
             },
@@ -211,6 +228,7 @@ const System = () => {
                 },
                 column: 2,
                 order: 7,
+                summaryIcon: FunctionsRoundedIcon,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_SYSTEMS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_SYSTEMS)
             },
@@ -234,6 +252,7 @@ const System = () => {
                 },
                 column: 2,
                 order: 8,
+                summaryIcon: DriveFileRenameOutlineIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
@@ -254,6 +273,7 @@ const System = () => {
                 ,
                 column: 2,
                 order: 9,
+                summaryIcon: AssignmentIndIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -273,6 +293,7 @@ const System = () => {
                 ,
                 column: 2,
                 order: 10,
+                summaryIcon: ListAltIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -292,6 +313,7 @@ const System = () => {
                 },
                 column: 2,
                 order: 11,
+                summaryIcon: ShareIcon,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_SYSTEMS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_SYSTEMS)
             },

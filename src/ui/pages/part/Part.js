@@ -11,13 +11,21 @@ import CustomFields from '../../components/customfields/CustomFields';
 import PartWhereUsed from "./PartWhereUsed";
 import PartAssets from "./PartAssets";
 import PartTools, { layoutPropertiesMap } from "./PartTools";
-import {PartIcon} from 'eam-components/dist/ui/components/icons'
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import {ENTITY_TYPE} from '../../components/Toolbar';
 import EntityRegions from "../../components/entityregions/EntityRegions";
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
 import useEntity from "hooks/useEntity";
+
+import { AssetIcon, PartIcon } from 'eam-components/dist/ui/components/icons'
+import DescriptionIcon from '@mui/icons-material/Description';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import PlaceIcon from '@mui/icons-material/Place';
 
 const Part = () => {
     const {screenLayout: partLayout, entity: part, loading, readOnly, isModified,
@@ -85,6 +93,7 @@ const Part = () => {
                 ,
                 column: 1,
                 order: 1,
+                summaryIcon: DescriptionIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -101,6 +110,7 @@ const Part = () => {
                 ,
                 column: 1,
                 order: 2,
+                summaryIcon: AssignmentIndIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -115,6 +125,7 @@ const Part = () => {
                 ,
                 column: 1,
                 order: 3,
+                summaryIcon: InventoryIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.STOCK),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.STOCK)
             },
@@ -129,10 +140,10 @@ const Part = () => {
                 ,
                 column: 1,
                 order: 4,
+                summaryIcon: PlaceIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.WHERE_USED),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WHERE_USED)
             },
-            // TODO: selecting Assets crashes the application
             {
                 id: 'ASSETS',
                 label: 'Assets',
@@ -144,6 +155,7 @@ const Part = () => {
                 ,
                 column: 1,
                 order: 5,
+                summaryIcon: AssetIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.WHERE_USED),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WHERE_USED)
             },
@@ -162,6 +174,7 @@ const Part = () => {
                 },
                 column: 2,
                 order: 5,
+                summaryIcon: FunctionsRoundedIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_PARTS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_PARTS)
             },
@@ -184,6 +197,7 @@ const Part = () => {
                 },
                 column: 2,
                 order: 6,
+                summaryIcon: DriveFileRenameOutlineIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
@@ -204,6 +218,7 @@ const Part = () => {
                 ,
                 column: 2,
                 order: 7,
+                summaryIcon: ListAltIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },

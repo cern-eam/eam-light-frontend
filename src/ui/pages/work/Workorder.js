@@ -45,6 +45,10 @@ import SegmentRoundedIcon from '@mui/icons-material/SegmentRounded';
 import { PendingActions } from '@mui/icons-material';
 import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import { PartIcon } from 'eam-components/dist/ui/components/icons';
+import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
+import HardwareIcon from '@mui/icons-material/Hardware';
+import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
 
 const Workorder = () => {
     const [equipmentMEC, setEquipmentMEC] = useState();
@@ -238,6 +242,7 @@ const Workorder = () => {
                 ,
                 column: 1,
                 order: 4,
+                summaryIcon: PartIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.PART_USAGE),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PART_USAGE)
             },
@@ -288,6 +293,7 @@ const Workorder = () => {
                 },
                 column: 2,
                 order: 5,
+                summaryIcon: FunctionsRoundedIcon,
                 ignore: !isCernMode && !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS)
             },
@@ -464,6 +470,7 @@ const Workorder = () => {
                 ),
                 column: 2,
                 order: 12,
+                summaryIcon: HardwareIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
             },
@@ -492,6 +499,7 @@ const Workorder = () => {
                 ,
                 column: 2,
                 order: 13,
+                summaryIcon: PrecisionManufacturingIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_TAB_WO_SCREEN),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_TAB_WO_SCREEN)
             },

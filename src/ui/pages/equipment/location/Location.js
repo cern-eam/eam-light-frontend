@@ -20,6 +20,16 @@ import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import useEntity from "hooks/useEntity";
 
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import DescriptionIcon from '@mui/icons-material/Description';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded'; 
+import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+
 export default Location = (props) => {
 
     const {screenLayout: locationLayout, entity: location, loading, readOnly, isModified,
@@ -85,6 +95,7 @@ export default Location = (props) => {
                 ,
                 column: 1,
                 order: 1,
+                summaryIcon: DescriptionIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -99,6 +110,7 @@ export default Location = (props) => {
                 ,
                 column: 1,
                 order: 2,
+                summaryIcon: AssignmentIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -113,6 +125,7 @@ export default Location = (props) => {
                 ,
                 column: 1,
                 order: 3,
+                summaryIcon: AccountTreeRoundedIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -129,6 +142,7 @@ export default Location = (props) => {
                 ,
                 column: 1,
                 order: 4,
+                summaryIcon: ContentPasteIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
@@ -143,6 +157,7 @@ export default Location = (props) => {
                 ,
                 column: 1,
                 order: 5,
+                summaryIcon: ManageHistoryIcon,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
@@ -161,6 +176,7 @@ export default Location = (props) => {
                 },
                 column: 2,
                 order: 6,
+                summaryIcon: FunctionsRoundedIcon,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_LOCATIONS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_LOCATIONS)
             },
@@ -199,6 +215,7 @@ export default Location = (props) => {
                 },
                 column: 2,
                 order: 8,
+                summaryIcon: DriveFileRenameOutlineIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
@@ -214,6 +231,7 @@ export default Location = (props) => {
                 ,
                 column: 2,
                 order: 9,
+                summaryIcon: AssignmentIndIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -233,6 +251,7 @@ export default Location = (props) => {
                 ,
                 column: 2,
                 order: 10,
+                summaryIcon: ListAltIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
