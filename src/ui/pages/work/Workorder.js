@@ -1,6 +1,5 @@
 import Checklists from 'eam-components/dist/ui/components/checklists/Checklists';
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
-import {WorkorderIcon} from 'eam-components/dist/ui/components/icons';
 import React, { useEffect, useState, useRef } from 'react';
 import BlockUi from 'react-block-ui';
 import WSEquipment from "../../../tools/WSEquipment";
@@ -31,17 +30,21 @@ import WSWorkorders from '../../../tools/WSWorkorders';
 import useEntity from "hooks/useEntity";
 import { updateMyWorkOrders } from '../../../actions/workorderActions' 
 import { useDispatch } from 'react-redux';
-import { Avatar } from '@mui/material';
+
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import { deepOrange, green } from '@mui/material/colors';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import NotesIcon from '@mui/icons-material/Notes';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import SportsScoreIcon from '@mui/icons-material/SportsScore';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import SpeedIcon from '@mui/icons-material/Speed';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import PeopleIcon from '@mui/icons-material/People';
+import MonetizationOnRoundedIcon from '@mui/icons-material/MonetizationOnRounded'; 
+import SegmentRoundedIcon from '@mui/icons-material/SegmentRounded';
+import { PendingActions } from '@mui/icons-material';
+import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 
 const Workorder = () => {
     const [equipmentMEC, setEquipmentMEC] = useState();
@@ -253,6 +256,7 @@ const Workorder = () => {
                 ,
                 column: 1,
                 order: 4,
+                summaryIcon: MonetizationOnRoundedIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.ADDITIONAL_COSTS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.ADDITIONAL_COSTS)
             },
@@ -262,11 +266,10 @@ const Workorder = () => {
                 isVisibleWhenNewEntity: false,
                 maximizable: false,
                 customVisibility: () => isRegionAvailable('CWO', commonProps.workOrderLayout),
-                render: () =>
-                    <WorkorderChildren workorder={workorder.number} />
-                ,
+                render: () => <WorkorderChildren workorder={workorder.number} />,
                 column: 1,
                 order: 4,
+                summaryIcon: SegmentRoundedIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.CHILD_WO),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CHILD_WO)
             },
@@ -305,7 +308,7 @@ const Workorder = () => {
                 },
                 column: 2,
                 order: 6,
-                
+                summaryIcon: BookmarkBorderRoundedIcon,
                 ignore: !isCernMode && !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS)
             },
@@ -354,6 +357,7 @@ const Workorder = () => {
                 ,
                 column: 2,
                 order: 8,
+                summaryIcon: PendingActions,
                 ignore: !getTabAvailability(tabs, TAB_CODES.ACTIVITIES) && !getTabAvailability(tabs, TAB_CODES.BOOK_LABOR),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.ACTIVITIES) || getTabInitialVisibility(tabs, TAB_CODES.BOOK_LABOR)
             },
@@ -572,7 +576,7 @@ const Workorder = () => {
                         screens: userData.screens,
                         workorderScreencode: userData.workOrderScreen
                     }}
-                    entityIcon={<WorkorderIcon style={{height: 18}}/>}
+                    entityIcon={<ContentPasteIcon style={{height: 18}}/>}
                     toggleHiddenRegion={toggleHiddenRegion}
                     regions={getRegions()}
                     getUniqueRegionID={getUniqueRegionID}

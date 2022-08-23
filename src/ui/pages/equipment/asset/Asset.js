@@ -1,5 +1,5 @@
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
-import { AssetIcon } from 'eam-components/dist/ui/components/icons';
+import { AssetIcon, PartIcon } from 'eam-components/dist/ui/components/icons';
 import React, { useEffect, useState }  from 'react';
 import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';
@@ -24,6 +24,12 @@ import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, assetLayoutPropertiesMap } from '../EquipmentTools';
+
+import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded'; 
+import ShareIcon from '@mui/icons-material/Share';
+
 
 const Asset = () => {
     const [part, setPart] = useState(part);
@@ -160,6 +166,7 @@ const Asset = () => {
                 ,
                 column: 1,
                 order: 3,
+                summaryIcon: AccountTreeRoundedIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -176,6 +183,7 @@ const Asset = () => {
                 ,
                 column: 1,
                 order: 4,
+                summaryIcon: ContentPasteIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
@@ -201,6 +209,7 @@ const Asset = () => {
                 render: () => <EquipmentPartsMadeOf equipmentcode={equipment.code} />,
                 column: 1,
                 order: 6,
+                summaryIcon: PartIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
             },
@@ -236,6 +245,7 @@ const Asset = () => {
                 },
                 column: 2,
                 order: 8,
+                summaryIcon: BookmarkBorderRoundedIcon,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS)
             },
@@ -332,6 +342,7 @@ const Asset = () => {
                 },
                 column: 2,
                 order: 13,
+                summaryIcon: ShareIcon,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS)
             },
