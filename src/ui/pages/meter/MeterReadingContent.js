@@ -3,20 +3,16 @@ import Accordion from '@mui/material/Accordion';
 import AccordionActions from '@mui/material/AccordionActions';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import Save from '@mui/icons-material/Save';
 import './MeterReading.css';
-import KeyCode from "eam-components/dist/enums/KeyCode";
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 
 function MeterReadingContent(props) {
 
-    const {reading} = props;
-    let [readingValue, setReadingValue] = useState('');
+    const { reading, disabled, parentProps } = props;
+    const [readingValue, setReadingValue] = useState('');
 
     // Clean the input field
     useEffect(() => {
@@ -25,7 +21,7 @@ function MeterReadingContent(props) {
         }
     },[reading.lastValue])
 
-    let createNewReading = () => {
+    const createNewReading = () => {
         const isRollover = reading.rolloverValue && reading.rolloverValue < readingValue;
         //Initialize meter reading object
         const newReading = {
@@ -34,20 +30,13 @@ function MeterReadingContent(props) {
             actualValue: readingValue
         };
         //Execute parent save handler
-        props.parentProps.saveHandler(newReading, isRollover);
-    };
-
-    let handleKeyDown = (event) => {
-        if (event.keyCode === KeyCode.ENTER) {
-            createNewReading();
-        }
+        parentProps.saveHandler(newReading, isRollover);
     };
 
     //Check that there is a meter reading to render
-    if (!props.reading) {
+    if (!reading) {
         return null;
     }
-
 
     return (
         <div style={{width: '100%', height: '100%'}}>
@@ -82,28 +71,20 @@ function MeterReadingContent(props) {
                 </AccordionDetails>
                 <Divider/>
                 <AccordionActions>
-
-                    <FormControl style={{width: '100%', marginLeft: '15px', marginRight: '15px'}}>
-                        <InputLabel htmlFor="readingValue">{props.disabled ? 'Recording meter readings is disabled' : 'New Value'}</InputLabel>
-                        <Input
-                            id="readingValue"
-                            type="number"
-                            value={readingValue}
-                            onChange={event => setReadingValue(event.target.value)}
-                            onKeyDown={handleKeyDown}
-                            disabled={props.disabled}
-                            endAdornment={<InputAdornment position="end"
-                                                          className="readingValueUOM">[{reading.uomDesc}]</InputAdornment>}
-                        />
-                    </FormControl>
-
-                    {readingValue &&
-                    <Button style={{top: '8px'}} size="small" color="primary"
-                            onClick={createNewReading}>
-                        <Save/>
-                        Save
-                    </Button>
-                    }
+                    <EAMTextField
+                        value={readingValue}
+                        disabled={disabled}
+                        onChangeValue={setReadingValue}
+                        onChangeInput={setReadingValue}
+                        endTextAdornment={reading.uomDesc}
+                        endAdornment={
+                            readingValue && (
+                                <Button size="small" onClick={createNewReading}>
+                                    <Save /> Save
+                                </Button>
+                            )
+                        }
+                    />
                 </AccordionActions>
             </Accordion>
         </div>
