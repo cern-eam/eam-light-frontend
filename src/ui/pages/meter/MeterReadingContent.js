@@ -79,11 +79,13 @@ function MeterReadingContent(props) {
                         onChangeInput={setReadingValue}
                         endTextAdornment={reading.uomDesc}
                         endAdornment={
-                            readingValue && (
-                                <Button size="small" onClick={createNewReading}>
-                                    <Save /> Save
-                                </Button>
-                            )
+                            <Button
+                                size="small"
+                                onClick={createNewReading}
+                                disabled={!readingValue}
+                            >
+                                <Save /> Save
+                            </Button>
                         }
                     />
                 </AccordionActions>
