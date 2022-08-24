@@ -16,8 +16,8 @@ const RegionPanel = (props) => {
                 !showMaximizeControls
                 ? null
                 : isMaximized
-                ? <IconButton onClick={(e) => { e.stopPropagation(); unMaximize(); }} size="large"><FullscreenExit /></IconButton>
-                : <IconButton onClick={(e) => { e.stopPropagation(); maximize() }} size="large"><Fullscreen /></IconButton>
+                ? <IconButton style={{marginLeft: 'auto'}} onClick={(e) => { e.stopPropagation(); unMaximize(); }} size="large"><FullscreenExit /></IconButton>
+                : <IconButton style={{marginLeft: 'auto'}} onClick={(e) => { e.stopPropagation(); maximize() }} size="large"><Fullscreen /></IconButton>
             }
             panelExpanded={panelExpanded}
             onPanelChange={expanded => setPanelExpanded(expanded)}
