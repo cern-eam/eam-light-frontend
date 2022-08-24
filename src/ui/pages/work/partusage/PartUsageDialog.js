@@ -191,13 +191,13 @@ function PartUsageDialog(props) {
             // "ISSUE" transaction type
             if (formData.transactionType === transactionTypes[0].code) {
                 if (!responseStoreCode) {
-                    showError('Asset not in store.');
+                    showError('Asset is not in any store.');
                     return undefined;
                 }
 
                 // Asset is in a store other than the selected (can happen by selecting asset from input history)
                 if (responseStoreCode !== formData.storeCode) {
-                    showError('Asset is in a different store than the selected.');
+                    showError(`Asset is in a different store (${responseStoreCode}) than the selected.`);
                     return undefined;
                 }
 
@@ -206,7 +206,7 @@ function PartUsageDialog(props) {
             // "RETURN" transaction type
             } else if (formData.transactionType === transactionTypes[1].code) {
                 if (responseStoreCode) {
-                    showError('Asset is already in a store.');
+                    showError(`Asset is already in a store (${responseStoreCode}).`);
                     return undefined;
                 }
 
