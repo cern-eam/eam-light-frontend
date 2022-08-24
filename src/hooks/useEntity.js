@@ -31,13 +31,13 @@ const useEntity = (params) => {
 
     // Init dispatchers
     const dispatch = useDispatch();
-    const setLayoutPropertyParam = (...args) => dispatch(setLayoutProperty(...args));
-    const showNotificationParam = (...args) => dispatch(showNotification(...args));
-    const showErrorParam = (...args) => dispatch(showError(...args));
-    const showWarningParam = (...args) => dispatch(showWarning(...args));
-    const handleErrorParam = (...args) => dispatch(handleError(...args));
-    const toggleHiddenRegionParam = (...args) => dispatch(toggleHiddenRegion(...args));
-    const setRegionVisibilityParam = (...args) => dispatch(setRegionVisibility(...args));
+    const setLayoutPropertyConst = (...args) => dispatch(setLayoutProperty(...args));
+    const showNotificationConst = (...args) => dispatch(showNotification(...args));
+    const showErrorConst = (...args) => dispatch(showError(...args));
+    const showWarningConst = (...args) => dispatch(showWarning(...args));
+    const handleErrorConst = (...args) => dispatch(handleError(...args));
+    const toggleHiddenRegionConst = (...args) => dispatch(toggleHiddenRegion(...args));
+    const setRegionVisibilityConst = (...args) => dispatch(setRegionVisibility(...args));
 
     // Fetch data from the redux store
     const screenCode = useSelector(state => state.application.userData[screenProperty]);
@@ -48,9 +48,9 @@ const useEntity = (params) => {
     const showEqpTree = useSelector(state =>  state.ui.layout.showEqpTree);
 
     // HIDDEN REGIONS
-    const isHiddenRegionParam = useSelector(state => isHiddenRegion(state)(screenCode))
-    const getHiddenRegionStateParam = useSelector(state => getHiddenRegionState(state)(screenCode))
-    const getUniqueRegionIDParam =  useSelector(state => getUniqueRegionID(state)(screenCode))
+    const isHiddenRegionConst = useSelector(state => isHiddenRegion(state)(screenCode))
+    const getHiddenRegionStateConst = useSelector(state => getHiddenRegionState(state)(screenCode))
+    const getUniqueRegionIDConst =  useSelector(state => getUniqueRegionID(state)(screenCode))
 
     useEffect( () => code ? readEntity(code) : initNewEntity(), [code])
 
@@ -70,7 +70,7 @@ const useEntity = (params) => {
                 setEntity(createdEntity)
                 setNewEntity(false); setIsModified(false);
                 window.history.pushState({}, '', process.env.PUBLIC_URL + entityURL + encodeURIComponent(createdEntity[entityCodeProperty]));
-                showNotificationParam(entityDesc + ' ' + createdEntity[entityCodeProperty] + ' has been successfully created.');
+                showNotificationConst(entityDesc + ' ' + createdEntity[entityCodeProperty] + ' has been successfully created.');
                 document.title = entityDesc + ' ' + createdEntity[entityCodeProperty];
 
                 // Render as read-only depending on screen rights, department security or custom handler
@@ -83,7 +83,7 @@ const useEntity = (params) => {
             })
             .catch(error => {
                 setErrors(error?.response?.body?.errors);
-                handleErrorParam(error)
+                handleErrorConst(error)
             })
             .finally( () => setLoading(false))
     }
@@ -112,7 +112,7 @@ const useEntity = (params) => {
             })
             .catch(error => {
                 if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
-                    handleErrorParam(error)
+                    handleErrorConst(error)
                 }
             })
             .finally( () => setLoading(false))
@@ -129,7 +129,7 @@ const useEntity = (params) => {
             .then(response => {
                 const updatedEntity = response.body.data;
                 setEntity(updatedEntity);
-                showNotificationParam(`${entityDesc} ${updatedEntity[entityCodeProperty]} has been successfully updated.`);
+                showNotificationConst(`${entityDesc} ${updatedEntity[entityCodeProperty]} has been successfully updated.`);
                 
                 // Render as read-only depending on screen rights, department security or custom handler
                 setReadOnly(!screenPermissions.updateAllowed || 
@@ -141,7 +141,7 @@ const useEntity = (params) => {
             })
             .catch(error => {
                 setErrors(error?.response?.body?.errors);
-                handleErrorParam(error)
+                handleErrorConst(error)
             })
             .finally( () => setLoading(false))
     }
@@ -151,13 +151,13 @@ const useEntity = (params) => {
         
         WS.delete(entity[entityCodeProperty])
             .then(response => {
-                showNotificationParam(`${entityDesc} ${entity[entityCodeProperty]} has been successfully deleted.`);
+                showNotificationConst(`${entityDesc} ${entity[entityCodeProperty]} has been successfully deleted.`);
                 window.history.pushState({}, '', process.env.PUBLIC_URL + entityURL);
                 initNewEntity();
             })
             .catch(error => {
                 setErrors(error?.response?.body?.errors);
-                handleErrorParam(error)
+                handleErrorConst(error)
             })
             .finally( () => setLoading(false))
     }
@@ -177,7 +177,7 @@ const useEntity = (params) => {
                 postActions.new(newEntity);
             })
             .catch(error => {
-                handleErrorParam(error)
+                handleErrorConst(error)
             })
             .finally( () => setLoading(false))
     }
@@ -288,15 +288,15 @@ const useEntity = (params) => {
     return {screenCode, screenLayout, screenPermissions, 
         entity, newEntity, setEntity, loading, readOnly, isModified,
         userData, applicationData, 
-        isHiddenRegion: isHiddenRegionParam, 
-        getHiddenRegionState: getHiddenRegionStateParam, 
-        getUniqueRegionID: getUniqueRegionIDParam, 
+        isHiddenRegion: isHiddenRegionConst, 
+        getHiddenRegionState: getHiddenRegionStateConst, 
+        getUniqueRegionID: getUniqueRegionIDConst, 
         commentsComponent,
-        setLayoutProperty: setLayoutPropertyParam,
+        setLayoutProperty: setLayoutPropertyConst,
         showEqpTree, 
         // Dispatchers
-        showError: showErrorParam, showNotification: showNotificationParam, handleError: handleErrorParam, showWarning: showWarningParam,
-        toggleHiddenRegion: toggleHiddenRegionParam, setRegionVisibility: setRegionVisibilityParam,
+        showError: showErrorConst, showNotification: showNotificationConst, handleError: handleErrorConst, showWarning: showWarningConst,
+        toggleHiddenRegion: toggleHiddenRegionConst, setRegionVisibility: setRegionVisibilityConst,
         // 
         newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty, register};
 
