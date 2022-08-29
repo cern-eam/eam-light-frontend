@@ -42,8 +42,6 @@ const ReplaceEqpGeneral = (props) => {
 
     const idPrefix = "EAMID_ReplaceEqpGeneral_";
 
-    // const children = {}; // TODO: is this logic required?
-
     const closeDialog = () => {
         setDialogOpen(false);
     };
@@ -68,17 +66,9 @@ const ReplaceEqpGeneral = (props) => {
         setDialogOpen(false);
     };
 
-    // TODO: implement validation
     const validateFields = () => {
-        console.log("Field validation being skipped at the moment");
-        return true;
-        // let validationPassed = true;
-        // Object.keys(children).forEach(key => { // TODO: was `this.children`
-        //     if (!children[key].validate()) {
-        //         validationPassed = false;
-        //     }
-        // });
-        // return validationPassed;
+        const {oldEquipment, oldEquipmentStatus, oldEquipmentState, newEquipment} = replaceEquipment;
+        return oldEquipment && oldEquipmentStatus && oldEquipmentState && newEquipment;
     };
 
     const renderImageMode = () => {
@@ -145,8 +135,6 @@ const ReplaceEqpGeneral = (props) => {
                 />
                 
                 <EAMSelect
-                    // TODO: no 'assetstate' coming from the response, do we need this?
-                    // {...processElementInfo(equipmentLayout.fields['assetstate'])}
                     required
                     label={"Old Equipment State after replacement"}
                     disabled={!stateList || stateList.length === 0}
