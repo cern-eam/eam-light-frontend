@@ -1,77 +1,53 @@
 import React, {Component} from 'react';
-import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect'
-import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
+import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WSEquipment from "../../../../tools/WSEquipment";
 import StatusRow from "../../../components/statusrow/StatusRow"
 import EquipmentTools from '../EquipmentTools';
+import { isDepartmentReadOnly } from 'ui/pages/EntityTools';
 
-class PositionGeneral extends Component {
+const PositionGeneral = (props) => {
 
-    updateEquipmentStatus = EquipmentTools.getUpdateStatus(this.props.updateEquipmentProperty, this.props.showNotification);
+    const {
+        equipment,
+        newEntity,
+        register,
+        statuses,
+        userData,
+        screenPermissions
+    } = props;
 
-    render() {
-        let {equipment, children, positionLayout, updateEquipmentProperty, layout} = this.props
-        
-        return (
-            <div style={{width: "100%", marginTop: 0}}>
+    return (
+        <React.Fragment>
+            {newEntity && <EAMTextField {...register('equipmentno', 'code')} />}
 
-                {layout.newEntity &&
-                <EAMInput
-                    children = {children}
-                    elementInfo={positionLayout.fields['equipmentno']}
-                    value={equipment.code}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="code"/>}
+            <EAMTextField {...register('alias', 'alias')} />
 
-                <EAMInput
-                    children = {children}
-                    elementInfo={positionLayout.fields['alias']}
-                    value={equipment.alias}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="alias"/>
+            <EAMTextField {...register('udfchar45', 'userDefinedFields.udfchar45')} />
 
-                <EAMInput
-                    children = {children}
-                    elementInfo={positionLayout.fields['udfchar45']}
-                    value={equipment.userDefinedFields.udfchar45}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="userDefinedFields.udfchar45"
-                />
+            <EAMTextField {...register('equipmentdesc', 'description')} />
 
-                <EAMInput
-                    children = {children}
-                    elementInfo={positionLayout.fields['equipmentdesc']}
-                    value={equipment.description}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="description"/>
+            <EAMAutocomplete
+                {...register('department', 'departmentCode', 'departmentDesc')}
+                autocompleteHandler={
+                    WSEquipment.autocompleteEquipmentDepartment
+                }
+            />
 
-                <EAMAutocomplete
-                    children = {children}
-                    elementInfo={positionLayout.fields['department']}
-                    value={equipment.departmentCode}
-                    valueDesc={equipment.departmentDesc}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="departmentCode"
-                    descKey="departmentDesc"
-                    autocompleteHandler={WSEquipment.autocompleteEquipmentDepartment}/>
+            <EAMSelect
+                {...register('assetstatus', 'statusCode')}
+                disabled={isDepartmentReadOnly(equipment.departmentCode, userData) || !screenPermissions.updateAllowed}
+                options = {statuses}
+            />
 
-                <EAMSelect
-                    children = {children}
-                    elementInfo={positionLayout.fields['assetstatus']}
-                    value={equipment.statusCode}
-                    values={layout.statusValues}
-                    updateProperty={this.updateEquipmentStatus}
-                    valueKey="statusCode"/>
-
-                <StatusRow
-                    entity={equipment}
-                    entityType={"equipment"}
-                    style={{marginTop: "10px", marginBottom: "-10px"}}
-                />
-            </div>
-        )
-    }
+            <StatusRow
+                entity={equipment}
+                entityType={"equipment"}
+                style={{ marginTop: "10px", marginBottom: "-10px" }}
+            />
+        </React.Fragment>
+    );
 }
 
-export default PositionGeneral
+export default PositionGeneral;

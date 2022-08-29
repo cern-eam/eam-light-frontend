@@ -1,95 +1,61 @@
-import React, {Component} from 'react';
-import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect';
-import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete';
+import React from 'react';
+import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WSParts from "../../../tools/WSParts";
-import EAMCheckbox from "eam-components/dist/ui/components/muiinputs/EAMCheckbox";
+import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox'
 import WS from "../../../tools/WS";
 import StatusRow from "../../components/statusrow/StatusRow"
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 
-class PartGeneral extends Component {
-    render() {
-        let {children, partLayout, part, updatePartProperty, layout} = this.props;
+const PartGeneral = (props) => {
 
-        return (
-            <div style={{width: "100%", marginTop: 0}}>
+    const { part, newEntity, register } = props;
 
-                {layout.newEntity && <EAMInput
-                    elementInfo={partLayout.fields['partcode']}
-                    value={part.code}
-                    updateProperty={updatePartProperty}
-                    valueKey="code" children={children}/>
-                }
+    return (
+        <React.Fragment>
 
-                <EAMInput
-                    elementInfo={partLayout.fields['description']}
-                    value={part.description}
-                    updateProperty={updatePartProperty}
-                    valueKey="description" children={children}/>
+            {newEntity && <EAMTextField {...register('partcode', 'code')} />}
 
-                <EAMAutocomplete elementInfo={partLayout.fields['class']}
-                                    value={part.classCode}
-                                    updateProperty={updatePartProperty}
-                                    valueKey="classCode"
-                                    valueDesc={part.classDesc}
-                                    descKey="classDesc"
-                                    autocompleteHandler={(filter, config) => WS.autocompleteClass('PART', filter, config)}
-                                    children={children}/>
+            <EAMTextField {...register('description', 'description')} />
 
-                <EAMAutocomplete elementInfo={partLayout.fields['category']}
-                                    value={part.categoryCode}
-                                    updateProperty={updatePartProperty}
-                                    valueKey="categoryCode"
-                                    valueDesc={part.categoryDesc}
-                                    descKey="categoryDesc"
-                                    autocompleteHandler={WSParts.autocompletePartCategory}
-                                    children={children}/>
+            <EAMAutocomplete
+                {...register('class', 'classCode', 'classDesc')}
+                autocompleteHandler={WS.autocompleteClass}
+                autocompleteHandlerParams={['PART']}
+            />
 
-                <EAMAutocomplete elementInfo={partLayout.fields['uom']}
-                                    value={part.uom}
-                                    updateProperty={updatePartProperty}
-                                    valueKey="uom"
-                                    valueDesc={part.uomdesc}
-                                    descKey="uomdesc"
-                                    autocompleteHandler={WSParts.autocompletePartUOM}
-                                    children={children}/>
+            <EAMAutocomplete
+                {...register('category', 'categoryCode', 'categoryDesc')}
+                autocompleteHandler={WSParts.autocompletePartCategory}
+            />
 
-                <EAMSelect
-                    elementInfo={partLayout.fields['trackingtype']}
-                    valueKey="trackingMethod"
-                    values={layout.trackingMethods}
-                    value={part.trackingMethod}
-                    updateProperty={updatePartProperty} children={children}/>
+            <EAMAutocomplete
+                {...register('uom', 'uom', 'uomdesc')}
+                autocompleteHandler={WSParts.autocompletePartUOM}
+            />
 
-                <EAMAutocomplete elementInfo={partLayout.fields['commoditycode']}
-                                    value={part.commodityCode}
-                                    updateProperty={updatePartProperty}
-                                    valueKey="commodityCode"
-                                    valueDesc={part.commodityDesc}
-                                    descKey="commodityDesc"
-                                    autocompleteHandler={WSParts.autocompletePartCommodity} children={children}/>
+            <EAMSelect
+                {...register('trackingtype', 'trackingMethod')}
+                autocompleteHandler={WSParts.getPartTrackingMethods}
+            />
 
-                <EAMCheckbox
-                    elementInfo={partLayout.fields['trackbyasset']}
-                    value={part.trackByAsset}
-                    updateProperty={updatePartProperty}
-                    valueKey="trackByAsset" children={children}/>
+            <EAMAutocomplete
+                {...register('commoditycode', 'commodityCode', 'commodityDesc')}
+                autocompleteHandler={WSParts.autocompletePartCommodity}
+            />
 
-                <EAMCheckbox
-                    elementInfo={partLayout.fields['repairablespare']}
-                    value={part.trackCores}
-                    updateProperty={updatePartProperty}
-                    valueKey="trackCores" children={children}/>
+            <EAMCheckbox {...register('trackbyasset', 'trackByAsset')} />
 
-                <StatusRow
-                    entity={part}
-                    entityType={"part"}
-                    style={{marginTop: "10px", marginBottom: "-10px"}}
-                />
-                
-            </div>
-        );
-    }
+            <EAMCheckbox {...register('repairablespare', 'trackCores')} />
+
+            <StatusRow
+                entity={part}
+                entityType={"part"}
+                style={{marginTop: "10px", marginBottom: "-10px"}}
+            />
+            
+        </React.Fragment>
+    );
 }
 
 export default PartGeneral;

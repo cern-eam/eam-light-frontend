@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const useLocalStorage = (key, defaultValue, initialOverride) => {
     const [overriden, setOverriden] = useState(initialOverride !== undefined);

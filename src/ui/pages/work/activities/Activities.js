@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import WSWorkorders from "../../../../tools/WSWorkorders";
 import Activity from "./Activity";
 import './Activities.css';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import AddActivityDialogContainer from "./dialogs/AddActivityDialogContainer";
 import AddBookLabourDialogContainer from "./dialogs/AddBookLabourDialogContainer";
 

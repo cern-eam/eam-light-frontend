@@ -1,7 +1,7 @@
 import React from 'react';
-import FontIcon from '@material-ui/core/Icon';
-import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
-import EAMCheckbox from "eam-components/dist/ui/components/muiinputs/EAMCheckbox";
+import FontIcon from '@mui/material/Icon';
+import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox';
+import EAMBarcodeScanner from 'eam-components/dist/ui/components/inputs-ng/components/EAMBarcodeScanner';
 
 const SEARCH_TYPES = {
     PART: {
@@ -56,17 +56,28 @@ export default class SearchHeader extends React.Component {
         const { searchOn, setState } = this.state;
         return <EAMCheckbox
                 key={searchType.code}
-                elementInfo={{text: searchType.text}}
+                label={searchType.text}
                 value={searchOn.includes(searchType.value).toString()}
                 updateProperty={() => {
                     this.setState(
-                        {
-                            searchOn: searchOn.includes(searchType.value) ?
-                            searchOn.filter(val => val !== searchType.value)
-                            : [...searchOn, searchType.value]
-                        }
-                        , () => this.handleSearchInput({target: {value: this.props.keyword}})
-                    )
+                        (prevState) => {
+                            const prevSearchOn = prevState.searchOn;
+
+                            return {
+                                searchOn: prevSearchOn.includes(
+                                    searchType.value
+                                )
+                                    ? prevSearchOn.filter(
+                                          (val) => val !== searchType.value
+                                      )
+                                    : [...prevSearchOn, searchType.value],
+                            };
+                        },
+                        () =>
+                            this.handleSearchInput({
+                                target: { value: this.props.keyword },
+                            })
+                    );
                 }}
             />
     }
@@ -84,7 +95,7 @@ export default class SearchHeader extends React.Component {
     renderInput = () => {
         const entityTypes = this.state.searchOn.join(',');
         return (
-            <EAMBarcodeInput updateProperty={val => this.props.fetchDataHandler(val, entityTypes)} top={3} right={-7}>
+            <div style={{display: "flex", alignItems: "center"}}>
                 <input
                     onInput={this.handleSearchInput.bind(this)}
                     id="searchInputText"
@@ -92,7 +103,8 @@ export default class SearchHeader extends React.Component {
                     value={this.props.keyword}
                     style={{textTransform: "uppercase"}}
                     ref={(input) => { this.searchInput = input; }} />
-            </EAMBarcodeInput>
+                    <EAMBarcodeScanner updateProperty={(valKey, val) => this.props.fetchDataHandler(val, entityTypes)}/>
+            </div>
         );
     };
 

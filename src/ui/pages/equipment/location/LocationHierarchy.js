@@ -1,39 +1,21 @@
+import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import React from "react";
-import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
-import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
+import EAMUDF from "ui/components/userdefinedfields/EAMUDF";
 import WS from '../../../../tools/WS';
 
-const LocationHierarchy = props => {
-    const {
-        location,
-        children,
-        locationLayout,
-        updateEquipmentProperty
-    } = props;
+const LocationHierarchy = (props) => {
+    const { location, locationLayout, updateEquipmentProperty, register } = props;
+
     return (
-        <div style={{ width: "100%", marginTop: 0 }}>
+        <React.Fragment>
             <EAMAutocomplete
-                children={children}
-                elementInfo={locationLayout.fields["parentlocation"]}
-                value={location.hierarchyLocationCode}
-                updateProperty={updateEquipmentProperty}
-                valueKey="hierarchyLocationCode"
-                valueDesc={location.hierarchyLocationDesc}
-                descKey="hierarchyLocationDesc"
+                {...register('parentlocation', 'hierarchyLocationCode', 'hierarchyLocationDesc')}
                 autocompleteHandler={WS.autocompleteLocation}
             />
 
-            <EAMInput
-                children={children}
-                elementInfo={{
-                    ...locationLayout.fields["udfchar11"],
-                    readonly: true
-                }}
-                value={location.userDefinedFields.udfchar11}
-                updateProperty={updateEquipmentProperty}
-                valueKey="userDefinedFields.udfchar11"
-            />
-        </div>
+            <EAMUDF
+                {...register('udfchar11','userDefinedFields.udfchar11')}/>
+        </React.Fragment>
     );
 };
 

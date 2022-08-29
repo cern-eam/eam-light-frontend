@@ -1,13 +1,12 @@
 import React from 'react';
-import EAMDateTimePicker from 'eam-components/dist/ui/components/muiinputs/EAMDateTimePicker';
-import EAMDatePicker from 'eam-components/dist/ui/components/muiinputs/EAMDatePicker';
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete';
+import EAMDateTimePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDateTimePicker';
+import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WS from '../../../tools/WS';
-import UDFChar from '../../components/userdefinedfields/UDFChar';
-import { Grid } from '@material-ui/core';
+import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
 
 const WorkorderScheduling = (props) => {
-    const { children, workOrderLayout, workorder, updateWorkorderProperty } = props;
+    const { workOrderLayout, register } = props;
 
     if (
         'H' === workOrderLayout.fields.reqstartdate.attribute &&
@@ -24,130 +23,51 @@ const WorkorderScheduling = (props) => {
     }
 
     return (
-        <div style={{ width: '100%', marginTop: 0 }}>
-            <Grid container justify="space-between" spacing={2}>
-                <Grid item xs={6}>
-                    <EAMAutocomplete
-                        children={children}
-                        elementInfo={workOrderLayout.fields['createdby']}
-                        value={workorder.createdBy}
-                        updateProperty={updateWorkorderProperty}
-                        valueKey="createdBy"
-                        valueDesc={workorder.createdByDesc}
-                        descKey="createdByDesc"
-                        autocompleteHandler={WS.autocompleteEmployee}
-                    />
-                </Grid>
-
-                <Grid item xs={6}>
-                    <EAMDatePicker
-                        children={children}
-                        elementInfo={workOrderLayout.fields['datecreated']}
-                        valueKey="createdDate"
-                        value={workorder.createdDate || ''}
-                        updateProperty={updateWorkorderProperty}
-                    />
-                </Grid>
-            </Grid>
+        <React.Fragment>
+            
+            <div style={{display: "flex", flex: "1 1 auto"}}>
+                <EAMAutocomplete {...register('createdby','createdBy','createdByDesc')}/>
+                <EAMDatePicker {...register('datecreated','createdDate')}/>
+            </div>
 
             <EAMAutocomplete
-                children={children}
-                elementInfo={workOrderLayout.fields['reportedby']}
-                value={workorder.reportedBy}
-                updateProperty={updateWorkorderProperty}
-                valueKey="reportedBy"
-                valueDesc={workorder.reportedByDesc}
-                descKey="reportedByDesc"
+                {...register('reportedby','reportedBy','reportedByDesc')}
                 autocompleteHandler={WS.autocompleteEmployee}
             />
 
             <EAMAutocomplete
-                children={children}
-                elementInfo={workOrderLayout.fields['assignedto']}
-                value={workorder.assignedTo}
-                updateProperty={updateWorkorderProperty}
-                valueKey="assignedTo"
-                valueDesc={workorder.assignedToDesc}
-                descKey="assignedToDesc"
+                {...register('assignedto','assignedTo','assignedToDesc')}
+                barcodeScanner
                 autocompleteHandler={WS.autocompleteEmployee}
             />
 
             <EAMDatePicker
-                children={children}
-                elementInfo={workOrderLayout.fields['reqstartdate']}
-                valueKey="requestedStartDate"
-                value={workorder.requestedStartDate || ''}
-                updateProperty={updateWorkorderProperty}
-            />
+                {...register('reqstartdate','requestedStartDate')}/>
 
             <EAMDatePicker
-                children={children}
-                elementInfo={workOrderLayout.fields['reqenddate']}
-                valueKey="requestedEndDate"
-                value={workorder.requestedEndDate || ''}
-                updateProperty={updateWorkorderProperty}
-            />
+                {...register('reqenddate','requestedEndDate')}/>
 
             <EAMDatePicker
-                children={children}
-                elementInfo={workOrderLayout.fields['schedstartdate']}
-                valueKey="scheduledStartDate"
-                value={workorder.scheduledStartDate || ''}
-                updateProperty={updateWorkorderProperty}
-            />
+                {...register('schedstartdate','scheduledStartDate')}/>
 
             <EAMDatePicker
-                children={children}
-                elementInfo={workOrderLayout.fields['schedenddate']}
-                valueKey="scheduledEndDate"
-                value={workorder.scheduledEndDate || ''}
-                updateProperty={updateWorkorderProperty}
-            />
+                {...register('schedenddate','scheduledEndDate')}/>
 
             <EAMDateTimePicker
-                children={children}
-                elementInfo={workOrderLayout.fields['startdate']}
-                valueKey="startDate"
-                value={workorder.startDate || ''}
-                updateProperty={updateWorkorderProperty}
-            />
+                {...register('startdate','startDate')}/>
 
             <EAMDateTimePicker
-                children={children}
-                elementInfo={workOrderLayout.fields['datecompleted']}
-                valueKey="completedDate"
-                value={workorder.completedDate || ''}
-                updateProperty={updateWorkorderProperty}
-            />
+                {...register('datecompleted','completedDate')}/>
 
             <EAMDateTimePicker
-                children={children}
-                elementInfo={workOrderLayout.fields['datereported']}
-                valueKey="reportedDate"
-                value={workorder.reportedDate || ''}
-                updateProperty={updateWorkorderProperty}
-            />
+                {...register('datereported','reportedDate')}/>
 
-            <UDFChar
-                fieldInfo={workOrderLayout.fields['udfchar17']}
-                fieldValue={workorder.userDefinedFields.udfchar17}
-                fieldValueDesc={workorder.userDefinedFields.udfchar17Desc}
-                fieldKey={`userDefinedFields.udfchar17`}
-                descKey={`userDefinedFields.udfchar17Desc`}
-                updateUDFProperty={updateWorkorderProperty}
-                children={children}
-            />
+            <EAMUDF
+                {...register('udfchar17', `userDefinedFields.udfchar17`, `userDefinedFields.udfchar17Desc`)}/>
 
-            <UDFChar
-                fieldInfo={workOrderLayout.fields['udfchar19']}
-                fieldValue={workorder.userDefinedFields.udfchar19}
-                fieldValueDesc={workorder.userDefinedFields.udfchar19Desc}
-                fieldKey={`userDefinedFields.udfchar19`}
-                descKey={`userDefinedFields.udfchar19Desc`}
-                updateUDFProperty={updateWorkorderProperty}
-                children={children}
-            />
-        </div>
+            <EAMUDF
+                {...register('udfchar19', `userDefinedFields.udfchar19`, `userDefinedFields.udfchar19Desc`)}/>
+        </React.Fragment>
     );
 };
 

@@ -1,53 +1,68 @@
-import React, {Component} from 'react';
-import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import React from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
+import Dependency from '../components/Dependency';
+import { onChangeDependentInput, isDependencySet } from '../EquipmentTools';
 
-class SystemHierarchy extends Component {
+const DEPENDENCY_KEYS = {
+    primarySystem: 'hierarchyPrimarySystemDependent'
+}
 
-    render() {
-        let {equipment, children, systemLayout, updateEquipmentProperty} = this.props;
+const SystemHierarchy = (props) => {
 
-        return (
-            <div style={{width: "100%", marginTop: 0}}>
+    const { equipment, updateEquipmentProperty, register, readOnly, showWarning } = props;
 
-                <EAMInput
-                    children={children}
-                    elementInfo={{...systemLayout.fields['udfchar13'], readonly: true}}
-                    value={equipment.userDefinedFields.udfchar13}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="userDefinedFields.udfchar13"/>
+    const renderDependenciesForDependencyInputs = [
+        equipment[DEPENDENCY_KEYS.primarySystem],
+    ];
 
-                <EAMInput
-                    children={children}
-                    elementInfo={{...systemLayout.fields['udfchar11'], readonly: true}}
-                    value={equipment.userDefinedFields.udfchar11}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="userDefinedFields.udfchar11"/>
+    return (
+        <React.Fragment>
 
-                <EAMAutocomplete
-                    children={children}
-                    elementInfo={systemLayout.fields['primarysystem']}
-                    value={equipment.hierarchyPrimarySystemCode}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="hierarchyPrimarySystemCode"
-                    valueDesc={equipment.hierarchyPrimarySystemDesc}
-                    descKey="hierarchyPrimarySystemDesc"
-                    autocompleteHandler={WSEquipment.autocompletePrimarySystem}/>
+            <EAMTextField
+                {...register('udfchar13', 'userDefinedFields.udfchar13')}
+                readonly={true}
+            />
 
-                <EAMAutocomplete
-                    children={children}
-                    elementInfo={systemLayout.fields['location']}
-                    value={equipment.hierarchyLocationCode}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="hierarchyLocationCode"
-                    valueDesc={equipment.hierarchyLocationDesc}
-                    descKey="hierarchyLocationDesc"
-                    autocompleteHandler={WSEquipment.autocompleteLocation}/>
+            <EAMTextField
+                {...register('udfchar11', 'userDefinedFields.udfchar11')}
+                readonly={true}
+            />
 
-            </div>
-        )
-    }
+            <EAMAutocomplete
+                {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc')}
+                onChangeValue={(value) => {
+                    onChangeDependentInput(
+                        value,
+                        DEPENDENCY_KEYS.primarySystem,
+                        DEPENDENCY_KEYS,
+                        equipment,
+                        updateEquipmentProperty,
+                        showWarning
+                    );
+                }}
+                autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}
+                renderDependencies={renderDependenciesForDependencyInputs}
+                endAdornment={
+                    <Dependency
+                        updateProperty={updateEquipmentProperty}
+                        value={equipment[DEPENDENCY_KEYS.primarySystem]}
+                        valueKey={DEPENDENCY_KEYS.primarySystem}
+                        disabled={!equipment.hierarchyPrimarySystemCode}
+                    />
+                }
+                barcodeScanner
+            />
+
+            <EAMAutocomplete
+                {...register('location', 'hierarchyLocationCode', 'hierarchyLocationDesc')}
+                autocompleteHandler={WSEquipment.autocompleteLocation}
+                disabled={readOnly || isDependencySet(equipment, DEPENDENCY_KEYS)}
+            />
+
+        </React.Fragment>
+    )
 }
 
 export default SystemHierarchy;
