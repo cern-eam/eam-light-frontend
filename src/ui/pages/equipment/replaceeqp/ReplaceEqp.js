@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect } from 'react';
 import BlockUi from 'react-block-ui';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import ReplaceEqpHierarchy from "./ReplaceEqpHierarchy";
 import ReplaceEqpGeneral from "./ReplaceEqpGeneral";
 import WSEquipment from "../../../../tools/WSEquipment";
@@ -20,52 +20,62 @@ const initEqpReplacement = {
     replacementMode: MODE_STANDARD
 };
 
-class ReplaceEqp extends Component {
+const ReplaceEqp = (props) => {
+    const {
+        cryoClasses,
+        equipmentLayout,
+        handleError,
+        showError,
+        showNotification,
+        showWarning,
+        userData,
+    } = props;
 
-    state = {
-        replaceEquipment: initEqpReplacement,
-        blocking: false,
-        statusList: [],
-        newEquipment: undefined,
-        oldEquipment: undefined
-    };
+    const [blocking, setBlocking] = useState(false);
+    const [newEquipment, setNewEquipment] = useState(undefined);
+    const [oldEquipment, setOldEquipment] = useState(undefined);
+    const [replaceEquipment, setReplaceEquipment] = useState(initEqpReplacement);
+    const [stateList, setStateList] = useState([]);
+    const [statusList, setStatusList] = useState([]);
 
-    componentDidMount() {
+    useEffect(() => {
         //Check URL parameters
         const values = queryString.parse(window.location.search)
         const oldEquipment = values.oldEquipment;
         const newEquipment = values.newEquipment;
         //Get all the properties
         if (oldEquipment) {
-            this.updateEqpReplacementProp('oldEquipment', oldEquipment);
+            updateEqpReplacementProp('oldEquipment', oldEquipment);
         }
         if (newEquipment) {
-            this.updateEqpReplacementProp('newEquipment', newEquipment);
+            updateEqpReplacementProp('newEquipment', newEquipment);
         }
         WSEquipment.getEquipmentStateValues()
-            .then(resp => this.setState({stateList: resp.body.data}))
-            .catch(this.props.handleError)
-    }
+            .then(resp => setStateList(resp.body.data))
+            .catch(handleError)
+    }, [])
 
-    loadStatuses = () => {
-        if(!this.state.replaceEquipment.oldEquipment) {
-            this.setState(prevState => ({
-                statusList: [],
-                replaceEquipment: {
-                    ...prevState.replaceEquipment,
-                    oldEquipmentStatus: '',
-                }
-            }));
+    useEffect(() => {
+        loadStatuses();
+    }, [oldEquipment, replaceEquipment.oldEquipmentStatus, userData.eamAccount.userGroup]);
+
+    const loadStatuses = () => {
+        if(!replaceEquipment.oldEquipment) {
+            setStatusList([]);
+            setReplaceEquipment((prevState) => ({
+                ...prevState,
+                oldEquipmentStatus: '',
+            }))
             return;
         }
 
-        let oldEquipmentStatus = this.state.replaceEquipment.oldEquipmentStatus;
-        const userGroup = this.props.userData.eamAccount.userGroup;
+        let oldEquipmentStatus = replaceEquipment.oldEquipmentStatus;
+        const userGroup = userData.eamAccount.userGroup;
 
         if (oldEquipmentStatus === 'C') {
-            this.props.showWarning('The equipment selected is in store. If you have access, and the new equipment is not in a different store, an issue/return transaction will be performed before/after the structure update.', 'Equipmen in store!');
+            showWarning('The equipment selected is in store. If you have access, and the new equipment is not in a different store, an issue/return transaction will be performed before/after the structure update.', 'Equipment in store!');
             oldEquipmentStatus = 'I'; //Interceptor will issue the part.
-            this.updateEqpReplacementProp('oldEquipmentStatus', 'I');
+            updateEqpReplacementProp('oldEquipmentStatus', 'I');
         }
 
         //Load list of statuses
@@ -73,30 +83,31 @@ class ReplaceEqp extends Component {
             .then(response => {
                 const data = response.body.data;
                 data.sort(({desc: a}, {desc: b}) => a < b ? -1 : a > b ? 1 : 0);
-                this.setState({statusList: data});
-        }).catch(error => this.props.handleError(error));
+                setStatusList(data);
+        }).catch(error => handleError(error));
     }
 
-    updateEqpReplacementProp = (key, value) => {
-        this.setState((prevState) => ({
-            replaceEquipment: {...prevState.replaceEquipment, [key]: value}
-        }));
+    const updateEqpReplacementProp = (key, value) => {
+        setReplaceEquipment((prevState) => ({
+            ...prevState,
+            [key]: value
+        }))
     };
 
-    onChangeOldEquipment = (value) => {
+    const onChangeOldEquipment = (value) => {
         if (value) {
-            this.loadEquipmentData(value, 'oldEquipment');
+            loadEquipmentData(value, 'oldEquipment');
         } else {
-            this.setState({oldEquipment: undefined});
-            this.loadStatuses();
+            setOldEquipment(undefined);
+            loadStatuses();
         }
     };
 
-    onChangeNewEquipment = (value) => {
+    const onChangeNewEquipment = (value) => {
         if (value) {
-            this.loadEquipmentData(value, 'newEquipment');
+            loadEquipmentData(value, 'newEquipment');
         } else {
-            this.setState({newEquipment: undefined});
+            setNewEquipment(undefined);
         }
     };
 
@@ -105,88 +116,85 @@ class ReplaceEqp extends Component {
      * @param code the equipment code
      * @param destination The property destination
      */
-    loadEquipmentData = (code, destination) => {
-        this.setState({blocking: true});
+    const loadEquipmentData = async (code, destination) => {
+        setBlocking(true);
+        try {
+            const response = await WSEquipment.getEquipment(code);
 
-        //Read equipment
-        WSEquipment.getEquipment(code).then(response => {
-            const setStateCallback = destination === 'oldEquipment' ?
-                this.loadStatuses : undefined;
+            if (destination === 'oldEquipment') {
+                setOldEquipment(response.body.data);
 
-            this.setState(prevState => {
-                const newState = {
-                    [destination]: response.body.data, //Set equipment data
-                    blocking: false
-                };
+                // Set status/state for old equipment
+                let oldEquipmentStatus;
+                let oldEquipmentState;
 
-                //Set status for old equipment
-                if(destination === 'oldEquipment') {
-                    if ((this.props.cryoClasses || []).includes(response.body.data.classCode)) {
-                        newState.replaceEquipment = {
-                            ...prevState.replaceEquipment,
-                            oldEquipmentStatus: 'IRP',
-                            oldEquipmentState: 'DEF',
-                        }
-                    } else {
-                        newState.replaceEquipment = {
-                            ...prevState.replaceEquipment,
-                            oldEquipmentStatus: response.body.data.statusCode,
-                            oldEquipmentState: response.body.data.stateCode,
-                        }
-                    }
+                if ((cryoClasses || []).includes(response.body.data.classCode)) {
+                    oldEquipmentStatus = 'IRP';
+                    oldEquipmentState = 'DEF';
+                } else {
+                    oldEquipmentStatus = response.body.data.statusCode;
+                    oldEquipmentState = response.body.data.stateCode;
                 }
-                return newState;
-            }, setStateCallback);
-        }).catch(error => this.setState({blocking: false}));
+                setReplaceEquipment((prevState) => ({
+                    ...prevState,
+                    oldEquipmentStatus,
+                    oldEquipmentState,
+                }));
+            } else if (destination === 'newEquipment') {
+                setNewEquipment(response.body.data);
+            }
+            setBlocking(false);
+        } catch (error) {
+            setBlocking(false);
+            // TODO: no handleError here?
+        }
     };
 
-    replaceEquipmentHandler = () => {
-        this.setState({blocking: true});
+    const replaceEquipmentHandler = () => {
+        setBlocking(true);
         //Remove desc properties
-        let replaceEquipment = {...this.state.replaceEquipment};
-        delete replaceEquipment.oldEquipmentDesc;
-        delete replaceEquipment.newEquipmentDesc;
-        WSEquipment.replaceEquipment(replaceEquipment)
+        let replaceEquipmentSubmit = {...replaceEquipment};
+        delete replaceEquipmentSubmit.oldEquipmentDesc;
+        delete replaceEquipmentSubmit.newEquipmentDesc;
+        WSEquipment.replaceEquipment(replaceEquipmentSubmit)
             .then(response => {
                 //Load the new data from old and new equipment
-                this.loadEquipmentData(this.state.replaceEquipment.oldEquipment, 'oldEquipment');
-                this.loadEquipmentData(this.state.replaceEquipment.newEquipment, 'newEquipment');
-                this.props.showNotification(response.body.data);
+                loadEquipmentData(replaceEquipmentSubmit.oldEquipment, 'oldEquipment');
+                loadEquipmentData(replaceEquipmentSubmit.newEquipment, 'newEquipment');
+                showNotification(response.body.data);
             })
-            .catch(error => this.props.handleError(error))
-            .finally(() => this.setState({blocking: false}));
+            .catch(error => handleError(error))
+            .finally(() => setBlocking(false));
     };
 
-    render() {
-        return (
-            <div className="entityContainer" >
-                <BlockUi tag="div" blocking={this.state.blocking} style={{height: "100%", width: "100%"}}>
-                    <div id="entityContent" style={{height: "calc(100% - 70px)"}}>
-                        <Grid container spacing={1}>
-                            <Grid item sm={6} xs={12}>
-                                <ReplaceEqpGeneral replaceEquipment={this.state.replaceEquipment}
-                                                   updateProperty={this.updateEqpReplacementProp}
-                                                   onChangeOldEquipment={this.onChangeOldEquipment}
-                                                   onChangeNewEquipment={this.onChangeNewEquipment}
-                                                   equipmentLayout={this.props.equipmentLayout}
-                                                   statusList={this.state.statusList}
-                                                   stateList={this.state.stateList}
-                                                   replaceEquipmentHandler={this.replaceEquipmentHandler}
-                                                   showError={this.props.showError}/>
-                            </Grid>
-                            <Grid item sm={6} xs={12}>
-                                <ReplaceEqpHierarchy equipment={this.state.oldEquipment} title="CURRENT HIERARCHY OF THE OLD EQUIPMENT"
-                                                     equipmentLayout={this.props.equipmentLayout}/>
-                                <ReplaceEqpHierarchy equipment={this.state.newEquipment} title="CURRENT HIERARCHY OF THE NEW EQUIPMENT"
-                                                     equipmentLayout={this.props.equipmentLayout}/>
-                            </Grid>
+    return (
+        <div className="entityContainer" >
+            <BlockUi tag="div" blocking={blocking} style={{height: "100%", width: "100%"}}>
+                <div id="entityContent" style={{height: "calc(100% - 70px)"}}>
+                    <Grid container spacing={1}>
+                        <Grid item sm={6} xs={12}>
+                            <ReplaceEqpGeneral replaceEquipment={replaceEquipment}
+                                                updateProperty={updateEqpReplacementProp}
+                                                onChangeOldEquipment={onChangeOldEquipment}
+                                                onChangeNewEquipment={onChangeNewEquipment}
+                                                equipmentLayout={equipmentLayout}
+                                                statusList={statusList}
+                                                stateList={stateList}
+                                                replaceEquipmentHandler={replaceEquipmentHandler}
+                                                showError={showError}/>
                         </Grid>
-                    </div>
-                </BlockUi>
-            </div>
+                        <Grid item sm={6} xs={12}>
+                            <ReplaceEqpHierarchy equipment={oldEquipment} title="CURRENT HIERARCHY OF THE OLD EQUIPMENT"
+                                                    equipmentLayout={equipmentLayout}/>
+                            <ReplaceEqpHierarchy equipment={newEquipment} title="CURRENT HIERARCHY OF THE NEW EQUIPMENT"
+                                                    equipmentLayout={equipmentLayout}/>
+                        </Grid>
+                    </Grid>
+                </div>
+            </BlockUi>
+        </div>
 
-        );
-    }
+    );
 }
 
 export default ReplaceEqp;

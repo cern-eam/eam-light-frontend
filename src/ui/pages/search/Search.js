@@ -6,9 +6,9 @@ import WS from '../../../tools/WS'
 import SearchHeader from "./SearchHeader";
 import {Redirect} from "react-router-dom";
 import {getLink} from "./SearchLinkUtils";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import KeyCode from '../../../enums/KeyCode'
-import ErrorTypes from "../../../enums/ErrorTypes";
+import LinearProgress from "@mui/material/LinearProgress";
+import KeyCode from 'eam-components/dist/enums/KeyCode'
+import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import Ajax from 'eam-components/dist/tools/ajax'
 
 const INITIAL_STATE = {

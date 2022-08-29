@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns1:MP7997_PerformWorkOrderActivityCheckList_001 verb="Perform" noun="WorkOrderActivityCheckList" version="001"
+                                                  xmlns:ns1="http://schemas.datastream.net/MP_functions/MP7997_001">
+    <ns2:ESIGNATURE xmlns:ns2="http://schemas.datastream.net/MP_fields">
+        <ns2:USERID>
+            <ns2:USERCODE>LPATER</ns2:USERCODE>
+        </ns2:USERID>
+        <ns2:PASSWORD>123456789</ns2:PASSWORD>
+        <ns2:SIGNATURETYPE>PB01</ns2:SIGNATURETYPE>
+    </ns2:ESIGNATURE>
+    <ns3:ACTIVITYID xmlns:ns3="http://schemas.datastream.net/MP_fields">
+        <ns3:WORKORDERID auto_generated="true">
+            <ns3:JOBNUM>30914426</ns3:JOBNUM>
+            <ns3:ORGANIZATIONID>
+                <ns3:ORGANIZATIONCODE>*</ns3:ORGANIZATIONCODE>
+            </ns3:ORGANIZATIONID>
+        </ns3:WORKORDERID>
+        <ns3:ACTIVITYCODE auto_generated="false">5</ns3:ACTIVITYCODE>
+    </ns3:ACTIVITYID>
+    <ns4:JOBSEQUENCE xmlns:ns4="http://schemas.datastream.net/MP_fields">0</ns4:JOBSEQUENCE>
+    <ns5:SEQUENCENUMBER xmlns:ns5="http://schemas.datastream.net/MP_fields">1</ns5:SEQUENCENUMBER>
+</ns1:MP7997_PerformWorkOrderActivityCheckList_001>

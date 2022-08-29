@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import EISPanel from 'eam-components/dist/ui/components/panel';
-import IconButton from '@material-ui/core/IconButton';
-import Fullscreen from '@material-ui/icons/Fullscreen';
-import FullscreenExit from '@material-ui/icons/FullscreenExit';
+import IconButton from '@mui/material/IconButton';
+import Fullscreen from '@mui/icons-material/Fullscreen';
+import FullscreenExit from '@mui/icons-material/FullscreenExit';
+import Panel from 'ui/components/panel/Panel';
 
 const RegionPanel = (props) => {
     const { children, isMaximized, unMaximize, maximize, showMaximizeControls, style, initiallyExpanded } = props;
@@ -10,21 +10,21 @@ const RegionPanel = (props) => {
     const [panelExpanded, setPanelExpanded] = useState(initiallyExpanded);
 
     return (
-        <EISPanel
+        <Panel
             ExpansionPanelProps={{ style }}
             headingBar={
                 !showMaximizeControls
                 ? null
                 : isMaximized
-                ? <IconButton onClick={(e) => { e.stopPropagation(); unMaximize(); }}><FullscreenExit /></IconButton>
-                : <IconButton onClick={(e) => { e.stopPropagation(); maximize() }}><Fullscreen /></IconButton>
+                ? <IconButton style={{marginLeft: 'auto'}} onClick={(e) => { e.stopPropagation(); unMaximize(); }} size="large"><FullscreenExit /></IconButton>
+                : <IconButton style={{marginLeft: 'auto'}} onClick={(e) => { e.stopPropagation(); maximize() }} size="large"><Fullscreen /></IconButton>
             }
             panelExpanded={panelExpanded}
             onPanelChange={expanded => setPanelExpanded(expanded)}
             {...props}>
             {children}
-        </EISPanel>
-    )
+        </Panel>
+    );
 }
 
 export default RegionPanel;

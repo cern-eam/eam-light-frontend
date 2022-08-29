@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import FontIcon from '@material-ui/core/Icon';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import FontIcon from '@mui/material/Icon';
 
 export default class InfoPage extends Component
 {

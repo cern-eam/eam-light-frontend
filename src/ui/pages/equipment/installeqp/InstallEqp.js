@@ -1,18 +1,19 @@
 import React, {useState} from 'react';
 import EISPanel from 'eam-components/dist/ui/components/panel';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid'
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid'
 import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
-import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import BlockUi from 'react-block-ui';
 
-export default function NameForm(props) {
+export default function InstallEqp(props) {
 
     const [parentEq, setParentEq] = useState("");
     const [childEq, setChildEq] = useState("");
     const [blocking, setBlocking] = useState(false);
+
+    const idPrefix = "EAMID_InstallEqp_";
 
     const createEquipmentStructure = (newParent, child) => {
         return {
@@ -49,21 +50,29 @@ export default function NameForm(props) {
                         <Grid item xs={12}>
                             <EISPanel heading="INSTALL EQUIPMENT">
                                 <div style={{width: "100%", marginTop: 0}}>
-                                    <EAMBarcodeInput updateProperty={setParentEq} right={0} top={16}>
-                                        <EAMAutocomplete elementInfo={{attribute: "R", text: "Parent"}}
-                                                         value={parentEq}
-                                                         valueKey="parent"
-                                                         updateProperty={(key, value) => (key === 'parent') && setParentEq(value)}
-                                                         autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}/>
-                                    </EAMBarcodeInput>
+                                        <EAMAutocomplete
+                                            required
+                                            label={"Parent"}
+                                            value={parentEq}
+                                            valueKey="parent"
+                                            updateProperty={(key, value) => (key === 'parent') && setParentEq(value)}
+                                            autocompleteHandler={WS.autocompleteEquipment}
+                                            autocompleteHandlerParams={[true]}
+                                            barcodeScanner
+                                            id={`${idPrefix}PARENT`}
+                                        />
 
-                                    <EAMBarcodeInput updateProperty={setChildEq} right={0} top={16}>
-                                        <EAMAutocomplete elementInfo={{attribute: "R", text: "Child"}}
-                                                         value={childEq}
-                                                         valueKey="child"
-                                                         updateProperty={(key, value) => (key === 'child') && setChildEq(value)}
-                                                         autocompleteHandler={(val, conf) => WS.autocompleteEquipment(val, conf, true)}/>
-                                    </EAMBarcodeInput>
+                                        <EAMAutocomplete 
+                                            required
+                                            label={"Child"}
+                                            value={childEq}
+                                            valueKey="child"
+                                            updateProperty={(key, value) => (key === 'child') && setChildEq(value)}
+                                            autocompleteHandler={WS.autocompleteEquipment}
+                                            autocompleteHandlerParams={[true]}
+                                            barcodeScanner
+                                            id={`${idPrefix}CHILD`}
+                                        />
 
                                     <Button
                                         style={{marginTop: 10}}
@@ -78,5 +87,5 @@ export default function NameForm(props) {
                 </div>
             </BlockUi>
         </div>
-);
+    );
 }

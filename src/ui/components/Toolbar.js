@@ -1,8 +1,8 @@
 import React from 'react';
-import MenuItem from "@material-ui/core/MenuItem";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
-import Divider from '@material-ui/core/Divider';
+import MenuItem from "@mui/material/MenuItem";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import Divider from '@mui/material/Divider';
 import { WorkorderIcon } from "eam-components/dist/ui/components/icons";
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
 import {Barcode, ContentCopy, EmailOutline, Map, Printer, Domain, Camera, Eye} from 'mdi-material-ui';
@@ -73,7 +73,7 @@ class Toolbar extends React.Component {
     state = { watchlistOpen: false };
 
     getButtonDefinitions = () => {
-        const {copyHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity, departmentalSecurity, screens, workorderScreencode, userCode} = this.props;
+        const {copyHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity, readOnly, screens, workorderScreencode, userCode} = this.props;
 
         return {
             [BUTTON_KEYS.COPY] : {
@@ -261,7 +261,7 @@ class Toolbar extends React.Component {
 
                 },
                 isDisabled: () => newEntity
-                    || departmentalSecurity.readOnly
+                    || readOnly
                     || (screens[workorderScreencode] && !screens[workorderScreencode].creationAllowed),
                 values: {
                     icon: <WorkorderIcon/>,
@@ -377,10 +377,7 @@ class Toolbar extends React.Component {
                 case VIEW_MODES.TOOLBAR_ICONS: 
                     content = 
                         <Tooltip title={values.text}>
-                            <IconButton
-                                onClick={onClick}
-                                disabled={disabled}
-                            >
+                            <IconButton onClick={onClick} disabled={disabled} size="large">
                                 {React.cloneElement(values.icon, {style: this.iconStyle})}
                             </IconButton>
                         </Tooltip>
@@ -421,7 +418,6 @@ class Toolbar extends React.Component {
 }
 
 Toolbar.defaultProps = {
-    departmentalSecurity: {},
     screens: {},
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import TableCell from '@material-ui/core/TableCell';
+import TableCell from '@mui/material/TableCell';
 import SearchHighlighter from "./SearchHighlighter";
 import EntityCode from '../../../enums/EntityCode'
 

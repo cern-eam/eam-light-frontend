@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { CircularProgress, IconButton, Paper, TextField, Typography } from '@material-ui/core';
+import { CircularProgress, IconButton, Paper, TextField, Typography } from '@mui/material';
 import EAMFormLabel from 'eam-components/dist/ui/components/inputs/EAMFormLabel';
 import { Account, Delete } from 'mdi-material-ui';
 import WS from '../../../tools/WS';
-import { Autocomplete } from '@material-ui/lab';
+import { Autocomplete } from '@mui/material';
 import WSWorkorders from '../../../tools/WSWorkorders';
 
 const Watchlist = (props) => {

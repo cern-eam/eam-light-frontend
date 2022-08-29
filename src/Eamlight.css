@@ -34,11 +34,6 @@ a {
     color: #2196F3;
 }
 
-.gutter.gutter-horizontal {
-    background-image: url("/images/vertical.png");
-    cursor: ew-resize;
-}
-
 .gutter {
     height: 100%;
     float: left;

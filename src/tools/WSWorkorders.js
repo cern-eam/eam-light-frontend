@@ -8,8 +8,8 @@ class WSWorkorders {
     //
     // WORK ORDERS
     //
-    initWorkOrder(entity, params, config = {}) {
-        return WS._get(`/workorders/init/${entity}${params}`, config);
+    initWorkOrder(config = {}) {
+        return WS._get(`/workorders/init`, config);
     }
 
     getWorkOrder(number, config = {}) {
@@ -150,16 +150,12 @@ class WSWorkorders {
         return WS._get(`/autocomplete/partusage/part/${workorder}/${store}/${code}`, config);
     }
 
-    getPartUsageAsset(transaction, store, code, config = {}) {
-        return WS._get(`/autocomplete/partusage/asset/${transaction}/${store}/${code}`, config);
+    getPartUsageAsset(transaction, store, part, code, config = {}) {
+        return WS._get(`/autocomplete/partusage/asset?transaction=${transaction}&store=${store}&part=${part}&code=${code}`, config);
     }
 
     getPartUsageBin(transaction, bin, part, store, config = {}) {
         return WS._get(`/partusage/bins?transaction=${transaction}&bin=${bin}&part=${part}&store=${store}`, config);
-    }
-
-    getPartUsageSelectedAsset(workorder, transaction, store, code, config = {}) {
-        return WS._get(`/autocomplete/partusage/asset/complete/${workorder}/${transaction}/${store}/${code}`, config);
     }
 
     //

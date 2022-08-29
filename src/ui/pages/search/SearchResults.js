@@ -1,8 +1,8 @@
 import React from 'react';
 import SearchResult from "./SearchResult";
-import Table from '@material-ui/core/Table';
-import TableRow from '@material-ui/core/TableRow';
-import TableBody from '@material-ui/core/TableBody';
+import Table from '@mui/material/Table';
+import TableRow from '@mui/material/TableRow';
+import TableBody from '@mui/material/TableBody';
 
 export default class SearchResults extends React.Component {
 

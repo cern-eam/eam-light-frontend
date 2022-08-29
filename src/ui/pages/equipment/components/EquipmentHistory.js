@@ -5,6 +5,7 @@ import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/Simp
 import BlockUi from 'react-block-ui';
 import { withCernMode } from '../../../components/CERNMode';
 import Constants from 'eam-components/dist/enums/Constants';
+import { formatDate } from 'ui/pages/EntityTools';
 
 function EquipmentHistory(props)  {
     const headers = ['Date', 'Type', 'Related Value', 'Done By'];
@@ -25,6 +26,7 @@ function EquipmentHistory(props)  {
                 .then(response => {
                     setHistoryData(response.body.data.map(line => ({
                         ...line,
+                        completedDate: formatDate(line.completedDate),
                         relatedObject: (line.jobType === 'EDH')
                         ? (
                             <a

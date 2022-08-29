@@ -1,6 +1,6 @@
 import React from "react";
 import Comments from "eam-components/dist/ui/components/comments/Comments";
-import LocationIcon from "@material-ui/icons/Room";
+import LocationIcon from "@mui/icons-material/Room";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import WSLocation from "../../../../tools/WSLocation";
@@ -8,7 +8,6 @@ import {ENTITY_TYPE} from "../../../components/Toolbar";
 import CustomFields from "../../../components/customfields/CustomFields";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
-import Entity from "../../Entity";
 import EquipmentHistory from "../components/EquipmentHistory.js";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EamlightToolbarContainer from "./../../../components/EamlightToolbarContainer";
@@ -16,71 +15,72 @@ import LocationDetails from "./LocationDetails";
 import LocationGeneral from "./LocationGeneral";
 import LocationHierarchy from "./LocationHierarchy";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
-import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
+import useEntity from "hooks/useEntity";
 
-export default class Location extends Entity {
-    settings = {
-        entity: "location",
-        entityDesc: "Location",
-        entityURL: "/location/",
-        entityCodeProperty: "code",
-        entityScreen: this.props.userData.screens[this.props.userData.locationScreen],
-        renderEntity: this.renderLocation.bind(this),
-        readEntity: WSLocation.get,
-        updateEntity: WSLocation.update,
-        createEntity: WSLocation.create,
-        deleteEntity: WSLocation.remove,
-        initNewEntity: () => WSLocation.init(),
-        handlerFunctions: {
-            classCode: this.onChangeClass,
-        }
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import DescriptionIcon from '@mui/icons-material/Description';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded'; 
+import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+
+export default Location = (props) => {
+
+    const {screenLayout: locationLayout, entity: location, loading, readOnly, isModified,
+        screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
+        isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree, 
+        toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
+        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, register} = useEntity({
+            WS: {
+                create: WSLocation.create,
+                read: WSLocation.get,
+                update: WSLocation.update,
+                delete: WSLocation.remove,
+                new:  WSLocation.init
+            },
+            postActions: {
+                create: postCreate,
+                read: postRead,
+                new: postInit
+            },
+            entityCode: "LOC",
+            entityDesc: "Location",
+            entityURL: "/location/",
+            entityCodeProperty: "code",
+            screenProperty: "locationScreen",
+            layoutProperty: "locationLayout"
+        });
+
+
+    function postRead() {
+        setLayoutProperty("showEqpTreeButton", true);
+        setLayoutProperty("location", this.state.location);
     }
 
-    postInit() {
-        this.props.setLayoutProperty('showEqpTreeButton', false)
-        this.enableChildren();
+    function postInit() {
+        setLayoutProperty('showEqpTreeButton', false)
     }
 
-    postCreate(equipment) {
-        this.comments.createCommentForNewEntity();
-        this.props.setLayoutProperty("showEqpTreeButton", true)
+    function postCreate(location) {
+        commentsComponent.current?.createCommentForNewEntity(location.code);
+        setLayoutProperty("showEqpTreeButton", true)
     }
 
-    postUpdate(equipment) {
-        this.comments.createCommentForNewEntity();
-
-        if (this.departmentalSecurity.readOnly) {
-            this.disableChildren();
-        } else {
-            this.enableChildren();
-        }
-    }
-
-    postRead() {
-        this.props.setLayoutProperty("showEqpTreeButton", true)
-        this.props.setLayoutProperty("location", this.state.location)
-
-        if (this.departmentalSecurity.readOnly) {
-            this.disableChildren();
-        } else {
-            this.enableChildren();
-        }
-    }
-
-    getRegions = () => {
-        const { locationLayout, userData, applicationData } = this.props;
-        const { location, layout } = this.state;
+    const getRegions = () => {
         const tabs = locationLayout.tabs; 
 
         const commonProps = {
             location,
-            layout,
+            newEntity,
             locationLayout,
-            updateEquipmentProperty: this.updateEntityProperty.bind(this),
-            children: this.children
+            updateEquipmentProperty,
+            register
         }
 
         return [
@@ -95,6 +95,7 @@ export default class Location extends Entity {
                 ,
                 column: 1,
                 order: 1,
+                summaryIcon: DescriptionIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -109,6 +110,7 @@ export default class Location extends Entity {
                 ,
                 column: 1,
                 order: 2,
+                summaryIcon: AssignmentIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -123,6 +125,7 @@ export default class Location extends Entity {
                 ,
                 column: 1,
                 order: 3,
+                summaryIcon: AccountTreeRoundedIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -139,6 +142,7 @@ export default class Location extends Entity {
                 ,
                 column: 1,
                 order: 4,
+                summaryIcon: ContentPasteIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
@@ -153,6 +157,7 @@ export default class Location extends Entity {
                 ,
                 column: 1,
                 order: 5,
+                summaryIcon: ManageHistoryIcon,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
@@ -171,6 +176,7 @@ export default class Location extends Entity {
                 },
                 column: 2,
                 order: 6,
+                summaryIcon: FunctionsRoundedIcon,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_LOCATIONS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_LOCATIONS)
             },
@@ -191,24 +197,25 @@ export default class Location extends Entity {
             //     column: 2,
             //     order: 7
             // },
-            {
+             {
                 id: 'COMMENTS',
                 label: 'Comments',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
                 render: () => 
-                    <Comments ref={comments => this.comments = comments}
+                    <Comments ref={comments => commentsComponent.current = comments}
                         entityCode="LOC"
-                        entityKeyCode={!layout.newEntity ? location.code : undefined}
+                        entityKeyCode={!newEntity ? location.code : undefined}
                         userCode={userData.eamAccount.userCode}
                         allowHtml={true}
-                        disabled={this.departmentalSecurity.readOnly}/>
+                        disabled={readOnly}/>
                 ,
                 RegionPanelProps: {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
                 order: 8,
+                summaryIcon: DriveFileRenameOutlineIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
@@ -219,13 +226,12 @@ export default class Location extends Entity {
                 maximizable: false,
                 render: () => 
                     <UserDefinedFields
-                        fields={location.userDefinedFields}
                         entityLayout={locationLayout.fields}
-                        updateUDFProperty={this.updateEntityProperty}
-                        children={this.children} />
+                        {...commonProps} />
                 ,
                 column: 2,
                 order: 9,
+                summaryIcon: AssignmentIndIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -236,15 +242,16 @@ export default class Location extends Entity {
                 maximizable: false,
                 render: () => 
                     <CustomFields
-                        children={this.children}
                         entityCode='LOC'
                         entityKeyCode={location.code}
                         classCode={location.classCode}
                         customFields={location.customField}
-                        updateEntityProperty={this.updateEntityProperty.bind(this)} />
+                        updateEntityProperty={updateEquipmentProperty}
+                        readonly={readOnly} />
                 ,
                 column: 2,
                 order: 10,
+                summaryIcon: ListAltIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -271,66 +278,52 @@ export default class Location extends Entity {
 
     }
 
-    renderLocation() {
-        const {
-            applicationData,
-            history,
-            showEqpTree,
-            toggleHiddenRegion,
-            setRegionVisibility,
-            userData,
-            isHiddenRegion,
-            getHiddenRegionState,
-            getUniqueRegionID
-        } = this.props;
-        const { location, layout } = this.state
-        const regions = this.getRegions();        
-
+    if (!location) {
+        return React.Fragment;
+    }
 
         return (
-            <BlockUi tag="div" blocking={layout.blocking} style={{height: "100%", width: "100%"}}>
-                <EamlightToolbarContainer isModified={layout.isModified}
-                                 newEntity={layout.newEntity}
-                                 entityScreen={userData.screens[userData.locationScreen]}
+            <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}}>
+                <EamlightToolbarContainer 
+                                isModified={isModified} 
+                                 newEntity={newEntity}
+                                 entityScreen={screenPermissions}
                                  entityName="Location"
                                  entityKeyCode={location.code}
-                                 saveHandler={this.saveHandler.bind(this)}
-                                 newHandler={() => history.push("/location")}
-                                 deleteHandler={this.deleteEntity.bind(this, location.code)}
+                                 saveHandler={saveHandler}
+                                 newHandler={newHandler}
+                                 deleteHandler={deleteHandler}
                                  toolbarProps={{
-                                    entityDesc: this.settings.entityDesc,
+                                    entityDesc: "Location",
                                     entity: location,
-                                    postInit: this.postInit.bind(this),
-                                    setLayout: this.setLayout.bind(this),
-                                    newEntity: layout.newEntity,
+                                    //postInit: this.postInit.bind(this),
+                                    //setLayout: this.setLayout.bind(this),
+                                    newEntity: newEntity,
                                     applicationData: applicationData,
                                     extendedLink: applicationData.EL_LOCLI,
-                                    screencode: userData.screens[userData.locationScreen].screenCode,
-                                    copyHandler: this.copyEntity.bind(this),
+                                    screencode: screenCode,
+                                    //copyHandler: this.copyEntity.bind(this),
                                     entityType: ENTITY_TYPE.LOCATION,
-                                    departmentalSecurity: this.departmentalSecurity,
                                     screens: userData.screens,
-                                    workorderScreencode: userData.workorderScreen
+                                    workorderScreencode: userData.workOrderScreen
                                  }}
                                  width={730}
                                  entityIcon={<LocationIcon style={{height: 18}}/>}
                                  toggleHiddenRegion={toggleHiddenRegion}
                                  getUniqueRegionID={getUniqueRegionID}
-                                 regions={regions}
+                                 regions={getRegions()}
                                  isHiddenRegion={isHiddenRegion}
                                  getHiddenRegionState={getHiddenRegionState}
-                                 departmentalSecurity={this.departmentalSecurity} />
+                                 />
                 <EntityRegions
                     showEqpTree={showEqpTree}
-                    regions={regions}
-                    isNewEntity={layout.newEntity} 
+                    regions={getRegions()}
+                    isNewEntity={newEntity} 
                     isHiddenRegion={isHiddenRegion}
                     setRegionVisibility={setRegionVisibility}
                     getUniqueRegionID={getUniqueRegionID}
                     getHiddenRegionState={getHiddenRegionState}/>
             </BlockUi>
         )
-    }
+    
 }
-
-

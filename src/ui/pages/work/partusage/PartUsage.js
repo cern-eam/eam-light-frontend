@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import WSWorkorders from "../../../../tools/WSWorkorders";
 import EISTable from 'eam-components/dist/ui/components/table';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import PartUsageDialog from "./PartUsageDialog";
 import BlockUi from 'react-block-ui';
 
@@ -73,6 +73,7 @@ function PartUsage(props) {
             </div>
             <PartUsageDialog
                 showNotification={props.showNotification}
+                showError={props.showError}
                 handleError={props.handleError}
                 handleCancel={() => setIsDialogOpen(false)}
                 tabLayout={props.tabLayout.fields}
