@@ -52,7 +52,11 @@ const useEntity = (params) => {
     const getHiddenRegionStateConst = useSelector(state => getHiddenRegionState(state)(screenCode))
     const getUniqueRegionIDConst =  useSelector(state => getUniqueRegionID(state)(screenCode))
 
-    useEffect( () => code ? readEntity(code) : initNewEntity(), [code])
+    useEffect( () => {
+        code ? readEntity(code) : initNewEntity();
+        // Reset window title when unmounting 
+        return () => document.title = "EAM Light";
+    }, [code])
 
     //
     // CRUD
@@ -192,6 +196,8 @@ const useEntity = (params) => {
                 layoutPropertiesMap),
             copyFrom: code
         }))
+        window.history.pushState({}, '', process.env.PUBLIC_URL + entityURL);
+        document.title = 'New ' + entityDesc;
         postActions?.copy?.();
     }
 
@@ -238,7 +244,7 @@ const useEntity = (params) => {
     };
 
     const register = (layoutKey, valueKey, descKey) => {
-        let data = processElementInfo(screenLayout.fields[layoutKey])
+        let data = processElementInfo(screenLayout.fields[layoutKey] ?? test(layoutKey))
         
         data.updateProperty = updateEntityProperty;
         data.disabled = data.disabled || readOnly; // It should remain disabled 
@@ -282,6 +288,15 @@ const useEntity = (params) => {
 
     const getHandlers = () => ({...handlers, "classCode": onChangeClass});
     
+    const test = (layoutKey) => {
+        let customField = entity.customField?.find(cf => cf.code === layoutKey) 
+
+        return {
+            text: customField.label,
+            xpath: 'EAMID_' + layoutKey,
+            fieldType: customField.type === 'NUM' ? 'number' : 'text'
+        }
+    }
     //
     //
     //

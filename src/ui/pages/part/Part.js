@@ -214,7 +214,7 @@ const Part = () => {
                         classCode={part.classCode}
                         customFields={part.customField}
                         updateEntityProperty={updateEquipmentProperty}
-                        readonly={readOnly}/>
+                        register={register}/>
                 ,
                 column: 2,
                 order: 7,

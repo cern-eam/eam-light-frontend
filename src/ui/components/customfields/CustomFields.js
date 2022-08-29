@@ -6,7 +6,7 @@ import { isCernMode } from "../CERNMode"
 
 function CustomFields(props) {
     let [lookupValues, setLookupValues] = useState(null);
-    let {updateEntityProperty, customFields, readonly, classCode, entityCode} = props;
+    let {updateEntityProperty, customFields, classCode, entityCode, register} = props;
 
     useEffect(() => {
         if (customFields) {
@@ -24,6 +24,10 @@ function CustomFields(props) {
         updateEntityProperty(`customField.${index}.${valueKey}`, value)
     }
 
+    if (!register) {
+        return React.Fragment;
+    }
+
     const isEmptyState = !customFields || customFields.length === 0;
     return (
         isEmptyState
@@ -36,12 +40,12 @@ function CustomFields(props) {
                     if (isCernMode && customField.code.startsWith('MTFX')) return null;
                     return (
                         <CustomFieldInput
+                            register={register}
                             key={index}
                             updateCustomFieldValue={updateCustomFieldValue.bind(null, index)}
                             customField={customField}
                             index={index}
                             lookupValues={lookupValues}
-                            readonly={readonly}
                         />
                     )
                 })}
@@ -52,8 +56,7 @@ function CustomFields(props) {
 }
 
 CustomFields.defaultProps = {
-    title: 'CUSTOM FIELDS',
-    readonly: false,
+    title: 'CUSTOM FIELDS'
 };
 
 export default React.memo(CustomFields);

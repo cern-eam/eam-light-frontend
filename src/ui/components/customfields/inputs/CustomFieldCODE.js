@@ -2,29 +2,15 @@ import React from 'react';
 import tools from '../CustomFieldTools'
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
-import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
-function CustomFieldCODE(props) {
-
-    let {customField, updateCustomFieldValue, elementInfo, lookupValues} = props;
-    elementInfo = {...elementInfo, readonly: props.readonly};
+function CustomFieldCODE({customField, lookupValues, register, index}) {
 
     if (tools.isLookupCustomField(customField)) {
-        return <EAMSelect
-            {...processElementInfo(elementInfo)}
-            value={customField.value}
-            valueKey="value"
-            desc={customField.valueDesc}
-            descKey="valueDesc"
-            options={lookupValues && lookupValues[customField.code]}
-            updateProperty={updateCustomFieldValue}/>
+        return <EAMSelect {...register(customField.code, `customField.${index}.value`)}
+                          options={lookupValues && lookupValues[customField.code]}/>
     } else {
         return (
-            <EAMTextField
-                {...processElementInfo(elementInfo)}
-                value={customField.value}
-                updateProperty={updateCustomFieldValue}
-                valueKey="value"/>
+            <EAMTextField {...register(customField.code, `customField.${index}.value`)}/>
         )
     }
 

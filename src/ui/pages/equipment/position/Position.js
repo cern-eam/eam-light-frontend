@@ -297,7 +297,7 @@ const Position = () => {
                         classCode={equipment.classCode}
                         customFields={equipment.customField}
                         updateEntityProperty={updateEquipmentProperty}
-                        readonly={readOnly}
+                        register={register}
                     />
                 ,
                 column: 2,
