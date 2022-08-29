@@ -17,35 +17,24 @@ const groupLabelStyle = {
 }
 function CustomFieldInput(props) {
 
-    let {customField, children, updateCustomFieldValue, updateCustomFieldDesc, index, lookupValues, readonly} = props
-
-    let generateFieldInfo = () => {
-        return {
-            text: customField.label,
-            elementId: customField.code,
-            xpath: 'EAMID_' + customField.code,
-            fieldType: customField.type === 'NUM' ? 'number' : 'text'
-        }
-    }
+    let {customField, updateCustomFieldValue, updateCustomFieldDesc, index, lookupValues, register} = props
 
     let renderCustomFieldSpecificInput = () => {
         let props = {
-            children: children,
+            register: register,
             customField: customField,
             updateCustomFieldValue: updateCustomFieldValue,
             updateCustomFieldDesc: updateCustomFieldDesc,
             index: index,
             lookupValues: lookupValues,
-            elementInfo: generateFieldInfo(),
-            readonly: readonly,
             UoM: customField.uom
         };
 
         let customFieldRender;
         switch (customField.type) {
             case "RENT":
-                customFieldRender = <CustomFieldRENT {...props}/>;
-                break;
+                 customFieldRender = <CustomFieldRENT {...props} register={register}/>;
+                 break;
             case "CHAR":
                 customFieldRender = <CustomFieldCHAR {...props}/>;
                 break;

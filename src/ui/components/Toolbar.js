@@ -171,7 +171,7 @@ class Toolbar extends React.Component {
                 isDisabled: () => newEntity,
                 values: {
                     icon: <OpenInNewIcon/>,
-                    text: "Show in Infor EAM"
+                    text: "Show in EAM"
                 }
             },
             [BUTTON_KEYS.BARCODING] : {

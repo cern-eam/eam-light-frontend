@@ -424,7 +424,7 @@ const Workorder = () => {
                         classCode={workorder.classCode}
                         customFields={workorder.customField}
                         updateEntityProperty={updateWorkorderProperty}
-                        readonly={readOnly} />
+                        register={register} />
                 ,
                 column: 2,
                 order: 10,

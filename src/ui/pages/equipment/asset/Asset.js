@@ -312,7 +312,7 @@ const Asset = () => {
                         classCode={equipment.classCode}
                         customFields={equipment.customField}
                         updateEntityProperty={updateEquipmentProperty}
-                        readonly={readOnly} />
+                        register={register} />
                 ,
                 column: 2,
                 order: 11,
