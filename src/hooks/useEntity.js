@@ -66,13 +66,18 @@ const useEntity = (params) => {
             return;
         }
 
-        setLoading(true); setErrors(null); 
+        setLoading(true); 
 
         WS.create(entity)
             .then(response => {
+                validators.current = {};
+                setNewEntity(false); 
+                setErrors(null);
+                setIsModified(false);
+                
                 const createdEntity = response.body.data;
-                setEntity(createdEntity)
-                setNewEntity(false); setIsModified(false);
+                setEntity(createdEntity); 
+
                 window.history.pushState({}, '', process.env.PUBLIC_URL + entityURL + encodeURIComponent(createdEntity[entityCodeProperty]));
                 showNotificationConst(entityDesc + ' ' + createdEntity[entityCodeProperty] + ' has been successfully created.');
                 document.title = entityDesc + ' ' + createdEntity[entityCodeProperty];
@@ -93,7 +98,7 @@ const useEntity = (params) => {
     }
 
     const readEntity = (code) => {
-        setLoading(true); setErrors(null); setIsModified(false);
+        setLoading(true); setErrors(null); 
         
         // Cancel the old request in the case it was still active
         abortController.current?.abort();
@@ -101,9 +106,13 @@ const useEntity = (params) => {
         //
         WS.read(code, { signal: abortController.current.signal })
             .then(response => {
+                validators.current = {};
                 setNewEntity(false);
+                setIsModified(false);
+                
                 const readEntity = response.body.data;
                 setEntity(readEntity);
+                
                 document.title = entityDesc + ' ' + readEntity[entityCodeProperty];
                 
                 // Render as read-only depending on screen rights, department security or custom handler
@@ -127,10 +136,14 @@ const useEntity = (params) => {
             return;
         }
 
-        setLoading(true); setErrors(null); setIsModified(false);
+        setLoading(true); 
 
         WS.update(entity)
             .then(response => {
+                validators.current = {};
+                setIsModified(false);
+                setErrors(null); 
+
                 const updatedEntity = response.body.data;
                 setEntity(updatedEntity);
                 showNotificationConst(`${entityDesc} ${updatedEntity[entityCodeProperty]} has been successfully updated.`);
@@ -151,10 +164,15 @@ const useEntity = (params) => {
     }
 
     const deleteEntity = () => {        
-        setLoading(true); setErrors(null); setIsModified(false);
+        setLoading(true); 
         
         WS.delete(entity[entityCodeProperty])
             .then(response => {
+                validators.current = {};
+                setErrors(null); 
+                setIsModified(false);
+                setNewEntity(true);
+
                 showNotificationConst(`${entityDesc} ${entity[entityCodeProperty]} has been successfully deleted.`);
                 window.history.pushState({}, '', process.env.PUBLIC_URL + entityURL);
                 initNewEntity();
@@ -167,11 +185,16 @@ const useEntity = (params) => {
     }
 
     const initNewEntity = () => {
-        setLoading(true); setErrors(null); setReadOnly(false); setIsModified(false);
+        setLoading(true); 
         
         WS.new()
             .then(response => {
+                validators.current = {};
+                setErrors(null);
                 setNewEntity(true);
+                setIsModified(false);
+                setReadOnly(!screenPermissions.createAllowed); 
+
                 let newEntity = response.body.data;
                 newEntity = assignDefaultValues(newEntity, screenLayout, layoutPropertiesMap);
                 newEntity = assignQueryParamValues(newEntity);
@@ -188,8 +211,13 @@ const useEntity = (params) => {
 
     const copyEntity = () => {
         let code = entity[entityCodeProperty];
+        
+        validators.current = {};
         setErrors(null);
         setNewEntity(true);
+        setIsModified(false);
+        setReadOnly(!screenPermissions.createAllowed); 
+
         setEntity( oldEntity => ({
             ...assignDefaultValues(oldEntity,
                 screenLayout,
@@ -219,6 +247,7 @@ const useEntity = (params) => {
         return WSCustomFields.getCustomFields(entityCode, newClass)
         .then(response => {
             setEntity(prevEntity => {
+                validators.current = {};
                 const newCustomFields = response.body.data;
                 let entity = assignCustomFieldFromCustomField(prevEntity, newCustomFields, AssignmentType.SOURCE_NOT_EMPTY);
     

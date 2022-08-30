@@ -20,10 +20,6 @@ function CustomFields(props) {
             .catch(console.error)
     }
 
-    let updateCustomFieldValue = (index, valueKey, value) => {
-        updateEntityProperty(`customField.${index}.${valueKey}`, value)
-    }
-
     if (!register) {
         return React.Fragment;
     }
@@ -41,8 +37,6 @@ function CustomFields(props) {
                     return (
                         <CustomFieldInput
                             register={register}
-                            key={index}
-                            updateCustomFieldValue={updateCustomFieldValue.bind(null, index)}
                             customField={customField}
                             index={index}
                             lookupValues={lookupValues}
