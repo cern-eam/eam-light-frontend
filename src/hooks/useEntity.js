@@ -193,7 +193,7 @@ const useEntity = (params) => {
                 setErrors(null);
                 setNewEntity(true);
                 setIsModified(false);
-                setReadOnly(!screenPermissions.createAllowed); 
+                setReadOnly(!screenPermissions.creationAllowed); 
 
                 let newEntity = response.body.data;
                 newEntity = assignDefaultValues(newEntity, screenLayout, layoutPropertiesMap);
