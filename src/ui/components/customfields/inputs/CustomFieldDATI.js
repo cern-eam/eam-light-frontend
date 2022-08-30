@@ -3,7 +3,7 @@ import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect'
 import EAMDateTimePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDateTimePicker'
 import tools from '../CustomFieldTools'
 
-function CustomFieldDATI({customField, lookupValues, UoM, register, index}) {
+function CustomFieldDATI({customField, lookupValues, register, index}) {
 
     if (tools.isLookupCustomField(customField)) {
         return <EAMSelect {...register(customField.code, `customField.${index}.value`)}     
