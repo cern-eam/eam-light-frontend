@@ -1,5 +1,6 @@
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox';
+import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
 import EAMDateTimePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDateTimePicker';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
@@ -22,6 +23,12 @@ const EAMUDF = (props) => {
     }
 
     if (fieldType === 'date') {
+        return (
+            <EAMDatePicker {...props}/>
+        )
+    }
+
+    if (fieldType === 'datetime') {
         return (
             <EAMDateTimePicker {...props}/>
         )
