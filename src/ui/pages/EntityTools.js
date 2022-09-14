@@ -1,8 +1,9 @@
 import set from "set-value";
 import queryString from "query-string";
-import { constant } from "lodash";
 import formatfns from "date-fns/format";
 import { parseISO } from "date-fns";
+import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
+import { get } from "lodash";
 
 // clones an entity deeply
 export const cloneEntity = entity => ({
@@ -237,4 +238,14 @@ export const getElementInfoForCustomField = (layoutKey, customFields) => {
         xpath: 'EAMID_' + layoutKey,
         fieldType: customField?.type === 'NUM' ? 'number' : 'text'
     }
+}
+
+export const registerCustomField = entity => (layoutKey, valueKey, descKey) => {
+    let data = processElementInfo(getElementInfoForCustomField(layoutKey, entity.customField))
+    data.value = get(entity, valueKey);
+    if (descKey) {
+        data.desc = get(entity, descKey);
+    }
+    data.disabled = true;
+    return data;
 }

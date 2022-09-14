@@ -19,7 +19,7 @@ import WSParts from '../../../../tools/WSParts';
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
+import { getTabAvailability, getTabInitialVisibility, registerCustomField } from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, assetLayoutPropertiesMap } from '../EquipmentTools';
@@ -311,7 +311,6 @@ const Asset = () => {
                         entityKeyCode={equipment.code}
                         classCode={equipment.classCode}
                         customFields={equipment.customField}
-                        updateEntityProperty={updateEquipmentProperty}
                         register={register} />
                 ,
                 column: 2,
@@ -332,8 +331,7 @@ const Asset = () => {
                         entityKeyCode={part?.code}
                         classCode={part?.classCode}
                         customFields={part?.customField}
-                        updateEntityProperty={updateEquipmentProperty}
-                        readonly={true}/>
+                        register={registerCustomField(part)}/>
                 },
                 column: 2,
                 order: 12,
