@@ -5,7 +5,7 @@ import {useParams, useHistory} from "react-router-dom"
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
-import { assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType, fireHandlers, isDepartmentReadOnly } from "ui/pages/EntityTools";
+import { assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType, fireHandlers, isDepartmentReadOnly, getElementInfoForCustomField } from "ui/pages/EntityTools";
 import { setLayoutProperty, showError, showNotification, handleError, toggleHiddenRegion,
     setRegionVisibility, 
     showWarning} from "actions/uiActions";
@@ -273,7 +273,7 @@ const useEntity = (params) => {
     };
 
     const register = (layoutKey, valueKey, descKey) => {
-        let data = processElementInfo(screenLayout.fields[layoutKey] ?? test(layoutKey))
+        let data = processElementInfo(screenLayout.fields[layoutKey] ?? getElementInfoForCustomField(layoutKey, entity.customField))
         
         data.updateProperty = updateEntityProperty;
         data.disabled = data.disabled || readOnly; // It should remain disabled 
@@ -317,15 +317,6 @@ const useEntity = (params) => {
 
     const getHandlers = () => ({...handlers, "classCode": onChangeClass});
     
-    const test = (layoutKey) => {
-        let customField = entity.customField?.find(cf => cf.code === layoutKey) 
-
-        return {
-            text: customField.label,
-            xpath: 'EAMID_' + layoutKey,
-            fieldType: customField.type === 'NUM' ? 'number' : 'text'
-        }
-    }
     //
     //
     //
