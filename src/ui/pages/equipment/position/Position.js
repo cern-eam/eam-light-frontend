@@ -296,7 +296,6 @@ const Position = () => {
                         entityKeyCode={equipment.code}
                         classCode={equipment.classCode}
                         customFields={equipment.customField}
-                        updateEntityProperty={updateEquipmentProperty}
                         register={register}
                     />
                 ,

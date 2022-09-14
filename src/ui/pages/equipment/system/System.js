@@ -288,7 +288,6 @@ const System = () => {
                         entityKeyCode={equipment.code}
                         classCode={equipment.classCode}
                         customFields={equipment.customField}
-                        updateEntityProperty={updateEquipmentProperty}
                         register={register} />
                 ,
                 column: 2,
