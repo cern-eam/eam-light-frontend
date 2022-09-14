@@ -18,13 +18,13 @@ import PartUsageContainer from "./partusage/PartUsageContainer";
 import WorkorderClosingCodes from './WorkorderClosingCodes';
 import WorkorderDetails from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
-import { assignStandardWorkOrderValues, isClosedWorkOrder, isRegionAvailable, layoutPropertiesMap } from "./WorkorderTools";
+import { assignStandardWorkOrderValues, isClosedWorkOrder, isRegionAvailable, layoutPropertiesMap, registerCustomField } from "./WorkorderTools";
 import EntityRegions from '../../components/entityregions/EntityRegions';
 import IconButton from '@mui/material/IconButton';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
 import { isCernMode } from '../../components/CERNMode';
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
+import { getElementInfoForCustomField, getTabAvailability, getTabInitialVisibility } from '../EntityTools';
 import WSParts from '../../../tools/WSParts';
 import WSWorkorders from '../../../tools/WSWorkorders';
 import useEntity from "hooks/useEntity";
@@ -49,6 +49,7 @@ import { PartIcon } from 'eam-components/dist/ui/components/icons';
 import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const Workorder = () => {
     const [equipmentMEC, setEquipmentMEC] = useState();
@@ -423,7 +424,6 @@ const Workorder = () => {
                         entityKeyCode={workorder.number}
                         classCode={workorder.classCode}
                         customFields={workorder.customField}
-                        updateEntityProperty={updateWorkorderProperty}
                         register={register} />
                 ,
                 column: 2,
@@ -444,8 +444,7 @@ const Workorder = () => {
                         entityKeyCode={equipment?.code}
                         classCode={equipment?.classCode}
                         customFields={equipment?.customField}
-                        updateEntityProperty={updateWorkorderProperty}
-                        readonly={true} />
+                        register={registerCustomField(equipment)}/>
                 ,
                 column: 2,
                 order: 11,
@@ -466,9 +465,7 @@ const Workorder = () => {
                         entityKeyCode={equipmentPart?.Code}
                         classCode={equipmentPart?.classCode}
                         customFields={equipmentPart?.customField}
-                        updateEntityProperty={updateWorkorderProperty}
-                        readonly={true}
-                    />
+                        register={registerCustomField(equipmentPart)}/>
                 ),
                 column: 2,
                 order: 12,

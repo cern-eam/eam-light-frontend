@@ -6,7 +6,7 @@ import { isCernMode } from "../CERNMode"
 
 function CustomFields(props) {
     let [lookupValues, setLookupValues] = useState(null);
-    let {updateEntityProperty, customFields, classCode, entityCode, register} = props;
+    let {customFields, classCode, entityCode, register} = props;
 
     useEffect(() => {
         if (customFields) {
@@ -18,10 +18,6 @@ function CustomFields(props) {
         WSCustomFields.getCustomFieldsLookupValues(entityCode, classCode)
             .then(response => setLookupValues(response.body.data))
             .catch(console.error)
-    }
-
-    if (!register) {
-        return React.Fragment;
     }
 
     const isEmptyState = !customFields || customFields.length === 0;

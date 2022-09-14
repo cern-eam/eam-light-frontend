@@ -229,3 +229,12 @@ const format = (date, dateFormat) => {
     return null;
 }
 
+export const getElementInfoForCustomField = (layoutKey, customFields) => {
+    let customField = customFields.find(cf => cf.code === layoutKey) 
+
+    return {
+        text: customField?.label,
+        xpath: 'EAMID_' + layoutKey,
+        fieldType: customField?.type === 'NUM' ? 'number' : 'text'
+    }
+}

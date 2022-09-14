@@ -17,8 +17,7 @@ function WorkorderDetails(props) {
     return (
         <React.Fragment>
 
-            <EAMTextField 
-                {...register('description', 'description')}/>
+            <EAMTextField {...register('description', 'description')}/>
 
             <EAMAutocomplete {...register('equipment', 'equipmentCode', 'equipmentDesc')}
                              barcodeScanner
@@ -32,13 +31,11 @@ function WorkorderDetails(props) {
             <EAMAutocomplete {...register('department', 'departmentCode', 'departmentDesc')}
                              autocompleteHandler={WS.autocompleteDepartment}/>
 
-            <EAMSelect
-                {...register('workordertype', 'typeCode', 'typeDesc')}
-                renderSuggestion={suggestion => suggestion.desc}
-                renderValue={value => value.desc || value.code}
-                autocompleteHandler={WSWorkorders.getWorkOrderTypeValues}
-                autocompleteHandlerParams = {[userGroup]}
-                />
+            <EAMSelect {...register('workordertype', 'typeCode', 'typeDesc')}
+                    renderSuggestion={suggestion => suggestion.desc}
+                    renderValue={value => value.desc || value.code}
+                    autocompleteHandler={WSWorkorders.getWorkOrderTypeValues}
+                    autocompleteHandlerParams = {[userGroup]}/>
 
             <EAMSelect
                 {...register('workorderstatus', 'statusCode', 'statusDesc')}

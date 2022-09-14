@@ -1,4 +1,6 @@
-import { assignCustomFieldFromCustomField, AssignmentType, assignUserDefinedFields, assignValues } from "../EntityTools";
+import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
+import { assignCustomFieldFromCustomField, AssignmentType, assignUserDefinedFields, assignValues, getElementInfoForCustomField } from "../EntityTools";
+import { get } from "lodash";
 
 // MAPPING BETWEEN ENTITY KEYS AND LAYOUT ID
 export const layoutPropertiesMap =  {
@@ -94,3 +96,13 @@ export const assignStandardWorkOrderValues = (workOrder, standardWorkOrder) => {
 
     return workOrder;
 };
+
+export const registerCustomField = entity => (layoutKey, valueKey, descKey) => {
+    let data = processElementInfo(getElementInfoForCustomField(layoutKey, entity.customField))
+    data.value = get(entity, valueKey);
+    if (descKey) {
+        data.desc = get(entity, descKey);
+    }
+    data.disabled = true;
+    return data;
+}
