@@ -35,6 +35,7 @@ function CustomFields(props) {
                             register={register}
                             customField={customField}
                             index={index}
+                            key={index}
                             lookupValues={lookupValues}
                         />
                     )
