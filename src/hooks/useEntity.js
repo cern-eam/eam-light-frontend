@@ -58,6 +58,7 @@ const useEntity = (params) => {
         return () => document.title = "EAM Light";
     }, [code])
 
+    
     //
     // CRUD
     //
@@ -70,25 +71,9 @@ const useEntity = (params) => {
 
         WS.create(entity)
             .then(response => {
-                validators.current = {};
-                setNewEntity(false); 
-                setErrors(null);
-                setIsModified(false);
-                
-                const createdEntity = response.body.data;
-                setEntity(createdEntity); 
-
-                window.history.pushState({}, '', process.env.PUBLIC_URL + entityURL + encodeURIComponent(createdEntity[entityCodeProperty]));
-                showNotificationConst(entityDesc + ' ' + createdEntity[entityCodeProperty] + ' has been successfully created.');
-                document.title = entityDesc + ' ' + createdEntity[entityCodeProperty];
-
-                // Render as read-only depending on screen rights, department security or custom handler
-                setReadOnly(!screenPermissions.updateAllowed || 
-                            isDepartmentReadOnly(createdEntity.departmentCode, userData) || 
-                            isReadOnlyCustomHandler?.(createdEntity))
-
-                // Invoke entity specific logic 
-                postActions.create(createdEntity);
+                const entityCode = response.body.data;
+                showNotificationConst(entityDesc + ' ' + entityCode + ' has been successfully created.');
+                history.push(process.env.PUBLIC_URL + entityURL + encodeURIComponent(entityCode));
             })
             .catch(error => {
                 setErrors(error?.response?.body?.errors);
@@ -296,7 +281,7 @@ const useEntity = (params) => {
         }
         
         // Validators 
-        // TODO: array of possible validators for each element 
+        // TODO: array of possible validators for each element and add validation for date(time)
         if (data.required) {
             validators.current[valueKey] = value => value ? '' : `${data.label} field cannot be blank.`;
         }
