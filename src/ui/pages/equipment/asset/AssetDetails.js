@@ -70,12 +70,14 @@ const AssetDetails = (props) => {
             <EAMAutocomplete
                 {...register('store', 'storeCode', 'storeDesc')}
                 autocompleteHandler={WSEquipment.autocompleteEquipmentStore}
+                disabled={true}
             />
 
             <EAMAutocomplete
                 {...register('bin', 'bin', 'binDesc')}
                 autocompleteHandler={WSEquipment.autocompleteEquipmentBin}
                 autocompleteHandlerParams={[equipment.storeCode]}
+                disabled={true}
             />
 
         </React.Fragment>
