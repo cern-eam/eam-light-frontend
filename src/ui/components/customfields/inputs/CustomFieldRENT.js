@@ -7,7 +7,7 @@ function CustomFieldRENT({customField, register, index}) {
     return (
         <EAMAutocomplete {...register(customField.code, `customField.${index}.value`, `customField.${index}.valueDesc`)}
                          autocompleteHandler={WSCustomFields.autocompleteCustomFieldRENT}
-                         autocompleteHandlerParams={[customField.rentCodeValue]}
+                         autocompleteHandlerParams={[customField.rentCodeValue, customField.code]}
         />
     )
 }

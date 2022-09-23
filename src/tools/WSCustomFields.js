@@ -13,8 +13,8 @@ class WSCustomFields {
         return WS._get('/customfields/lookupvalues?entity=' + entity + '&inforClass=' + inforClass, config);
     }
 
-    autocompleteCustomFieldRENT = (rentity, filter, config = {}) => {
-        return WS._get('/customfields/autocomplete/' + rentity + '/' + filter, config);
+    autocompleteCustomFieldRENT = (rentity, cfcode, filter, config = {}) => {
+        return WS._get('/customfields/autocomplete/' + rentity + '/' + cfcode + '/' + filter, config);
     };
 
     getCustomFields(entity, classCode, config = {}) {
