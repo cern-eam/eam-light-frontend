@@ -58,7 +58,7 @@ const useEntity = (params) => {
         return () => document.title = "EAM Light";
     }, [code])
 
-    
+
     //
     // CRUD
     //
@@ -153,14 +153,8 @@ const useEntity = (params) => {
         
         WS.delete(entity[entityCodeProperty])
             .then(response => {
-                validators.current = {};
-                setErrors(null); 
-                setIsModified(false);
-                setNewEntity(true);
-
                 showNotificationConst(`${entityDesc} ${entity[entityCodeProperty]} has been successfully deleted.`);
-                window.history.pushState({}, '', process.env.PUBLIC_URL + entityURL);
-                initNewEntity();
+                history.push(process.env.PUBLIC_URL + entityURL);
             })
             .catch(error => {
                 setErrors(error?.response?.body?.errors);
