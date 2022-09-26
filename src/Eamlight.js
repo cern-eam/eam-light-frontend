@@ -44,12 +44,10 @@ class Eamlight extends Component {
     };
 
     render() {
-       const selectedTheme = Themes[config.theme.DEFAULT] || Themes.DANGER;
-
         // Display login screen
         if (!this.props.inforContext && process.env.REACT_APP_LOGIN_METHOD === 'STD') {
             return (
-              <ThemeProvider theme={selectedTheme}>
+              <ThemeProvider theme={Themes[config.theme.DEFAULT]}>
                 <LoginContainer/>
               </ThemeProvider>
             )
@@ -71,6 +69,9 @@ class Eamlight extends Component {
         }
 
         const eqpRegex = ["/asset", "/position", "/system", "/location"].map(e => `${e}/:code(.+)?`)
+
+        const selectedTheme = Themes[config.theme[this.props.applicationData.EL_ENVIR] || config.theme.DEFAULT] || Themes.DANGER;
+
 
         // Render real application once user data is there and user has an EAM account
         return (
