@@ -31,6 +31,7 @@ export default (props) => {
             );
         case "CERNSSO":
         case "LOCAL":
+        case "STD":
             return props.children;
         default:
             return <div>No authentication flow declared.</div>;

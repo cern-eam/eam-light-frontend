@@ -39,6 +39,7 @@ function EquipmentHistory(props)  {
                         : line.relatedObject
                     })))
                 })
+                .catch(error => console.error("Couldn't fetch the history for this equipment", error))
                 .finally(() => setBlocking(false));
     }
 

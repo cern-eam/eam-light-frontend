@@ -47,7 +47,7 @@ const Asset = () => {
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register, 
-        handleError, showError, showNotification, showWarning} = useEntity({
+        showNotification, showWarning} = useEntity({
             WS: {
                 create: WSEquipment.createEquipment,
                 read: WSEquipment.getEquipment,

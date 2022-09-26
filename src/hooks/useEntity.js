@@ -73,6 +73,7 @@ const useEntity = (params) => {
             .then(response => {
                 const entityCode = response.body.data;
                 showNotificationConst(entityDesc + ' ' + entityCode + ' has been successfully created.');
+                // Read after the creation
                 history.push(process.env.PUBLIC_URL + entityURL + encodeURIComponent(entityCode));
             })
             .catch(error => {
@@ -91,9 +92,7 @@ const useEntity = (params) => {
         //
         WS.read(code, { signal: abortController.current.signal })
             .then(response => {
-                validators.current = {};
-                setNewEntity(false);
-                setIsModified(false);
+                validators.current = {}; setIsModified(false); setNewEntity(false); 
                 
                 const readEntity = response.body.data;
                 setEntity(readEntity);
@@ -125,21 +124,10 @@ const useEntity = (params) => {
 
         WS.update(entity)
             .then(response => {
-                validators.current = {};
-                setIsModified(false);
-                setErrors(null); 
+                validators.current = {}; setIsModified(false); setErrors(null); 
 
-                const updatedEntity = response.body.data;
-                setEntity(updatedEntity);
-                showNotificationConst(`${entityDesc} ${updatedEntity[entityCodeProperty]} has been successfully updated.`);
-                
-                // Render as read-only depending on screen rights, department security or custom handler
-                setReadOnly(!screenPermissions.updateAllowed || 
-                            isDepartmentReadOnly(updatedEntity.departmentCode, userData) || 
-                            isReadOnlyCustomHandler?.(updatedEntity))
-                
-                // Invoke entity specific logic 
-                postActions.update(updatedEntity)
+                showNotificationConst(`${entityDesc} ${entity[entityCodeProperty]} has been successfully updated.`);
+                readEntity(code);
             })
             .catch(error => {
                 setErrors(error?.response?.body?.errors);
@@ -151,7 +139,7 @@ const useEntity = (params) => {
     const deleteEntity = () => {        
         setLoading(true); 
         
-        WS.delete(entity[entityCodeProperty])
+        WS.delete(code)
             .then(response => {
                 showNotificationConst(`${entityDesc} ${entity[entityCodeProperty]} has been successfully deleted.`);
                 history.push(process.env.PUBLIC_URL + entityURL);
@@ -195,7 +183,7 @@ const useEntity = (params) => {
         setErrors(null);
         setNewEntity(true);
         setIsModified(false);
-        setReadOnly(!screenPermissions.createAllowed); 
+        setReadOnly(!screenPermissions.creationAllowed); 
 
         setEntity( oldEntity => ({
             ...assignDefaultValues(oldEntity,
