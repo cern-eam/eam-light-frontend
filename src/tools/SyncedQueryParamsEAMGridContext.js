@@ -10,12 +10,13 @@ const SyncedQueryParamsEAMGridContext = (props) => {
     const filters = GridTools.parseGridFilters(GridTools.getURLParameterByName('gridFilters'));
     const initialDataspyID = GridTools.getURLParameterByName('gridDataspyID');
 
-    const cellRenderer = ({ column, value }) => {
+    const cellRenderer = (cellRendererProps) => {
+        const { column, value } = cellRendererProps;
         if (column.id === 'statusicon' || column.id === 'priorityicon') {
             return <StatusIcon column={column} value={value} />
         }
     
-        return props.cellRenderer({ column, value });
+        return props.cellRenderer(cellRendererProps);
     }
 
     return (
