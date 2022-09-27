@@ -42,7 +42,7 @@ export default class SearchResult extends React.Component {
                                 style={{color: "#1a0dab", fontWeight: "bold"}}
                                 data={this.props.data.code}
                                 keyword={this.props.keyword}
-                                link={this.props.data.code}
+                                link={this.props.data.link}
                                 type={this.props.data.type}
                             /></td>
                         </tr>

@@ -72,7 +72,6 @@ class Eamlight extends Component {
 
         const selectedTheme = Themes[config.theme[this.props.applicationData.EL_ENVIR] || config.theme.DEFAULT] || Themes.DANGER;
 
-
         // Render real application once user data is there and user has an EAM account
         return (
                <StyledEngineProvider injectFirst>

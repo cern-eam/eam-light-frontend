@@ -5,7 +5,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import WS from '../../../tools/WS'
 import SearchHeader from "./SearchHeader";
 import {Redirect} from "react-router-dom";
-import {getLink} from "./SearchLinkUtils";
 import LinearProgress from "@mui/material/LinearProgress";
 import KeyCode from 'eam-components/dist/enums/KeyCode'
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
@@ -96,7 +95,7 @@ class Search extends Component {
         // if only one result, enter sends you to the result
         if (this.state.results.length === 1) {
             this.setState({
-                redirectRoute: getLink(this.state.results[0].type, this.state.results[0].code)
+                redirectRoute: this.state.results[0].link
             });
 
             return;
@@ -105,7 +104,7 @@ class Search extends Component {
         // redirects to the record selected with arrows
         if (this.state.selectedItemIndex >= 0 && this.state.selectedItemIndex < this.state.results.length) {
             this.setState({
-                redirectRoute: getLink(this.state.results[this.state.selectedItemIndex].type, this.state.results[this.state.selectedItemIndex].code)
+                redirectRoute: this.state.results[this.state.selectedItemIndex].link
             });
 
             return;
@@ -118,7 +117,7 @@ class Search extends Component {
             this.state.results.forEach(result => {
                 if (result.code === this.state.keyword) {
                     this.setState({
-                        redirectRoute: getLink(result.type, result.code)
+                        redirectRoute: result.link
                     });
 
                     return;
@@ -132,7 +131,7 @@ class Search extends Component {
                 .then(response => {
                     if (response.body && response.body.data) {
                         this.setState({
-                            redirectRoute: getLink(response.body.data.type, response.body.data.code)
+                            redirectRoute: response.body.data.link
                         });
                     }
                 })
