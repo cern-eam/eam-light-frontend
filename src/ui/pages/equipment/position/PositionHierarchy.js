@@ -34,7 +34,7 @@ const PositionHierarchy = (props) => {
             />
 
             <EAMAutocomplete
-                {...register('asset', 'hierarchyAssetCode', 'hierarchyAssetDesc',
+                {...register('asset', 'hierarchyAssetCode', 'hierarchyAssetDesc', null,
                 value => {
                     onChangeDependentInput(
                         value,
@@ -60,7 +60,7 @@ const PositionHierarchy = (props) => {
             />
 
             <EAMAutocomplete
-                {...register('parentasset', 'hierarchyPositionCode', 'hierarchyPositionDesc',
+                {...register('parentasset', 'hierarchyPositionCode', 'hierarchyPositionDesc', null,
                 value => {
                     onChangeDependentInput(
                         value,
@@ -86,7 +86,7 @@ const PositionHierarchy = (props) => {
             />
 
             <EAMAutocomplete
-                {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc',
+                {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc', null,
                 value => {
                     onChangeDependentInput(
                         value,
