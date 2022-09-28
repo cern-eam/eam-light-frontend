@@ -249,12 +249,10 @@ const useEntity = (params) => {
         
         // Value
         data.value = get(entity, valueKey);
-        data.valueKey = valueKey;
         
         // Description 
         if (descKey) {
             data.desc = get(entity, descKey);
-            data.descKey = descKey;
         }
         
         // Errors
