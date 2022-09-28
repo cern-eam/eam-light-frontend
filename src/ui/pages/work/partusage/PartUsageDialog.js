@@ -383,14 +383,14 @@ function PartUsageDialog(props) {
                                 {...processElementInfo(tabLayout['transactiontype'])}
                                 values={transactionTypes}
                                 value={formData.transactionType}
-                                onChange={createOnChangeHandler(FORM.TRANSACTION_TYPE, null, updateFormDataProperty, handleTransactionChange)}
+                                onChange={createOnChangeHandler(FORM.TRANSACTION_TYPE, null, null, updateFormDataProperty, handleTransactionChange)}
                             />
 
                             <EAMSelect
                                 {...processElementInfo(tabLayout['storecode'])}
                                 required
                                 value={formData.storeCode}
-                                onChange={createOnChangeHandler(FORM.STORE, null, updateFormDataProperty, handleStoreChange)}
+                                onChange={createOnChangeHandler(FORM.STORE, null, null, updateFormDataProperty, handleStoreChange)}
                                 autocompleteHandler={
                                     WSWorkorders.getPartUsageStores
                                 }
@@ -402,7 +402,7 @@ function PartUsageDialog(props) {
                                 disabled={!formData.storeCode}
                                 options={activityList}
                                 value={formData.activityCode}
-                                onChange={createOnChangeHandler(FORM.ACTIVITY, null, updateFormDataProperty, null)}
+                                onChange={createOnChangeHandler(FORM.ACTIVITY, null, null, updateFormDataProperty, null)}
                             />
 
                             <EAMAutocomplete
@@ -417,7 +417,7 @@ function PartUsageDialog(props) {
                                     workorder.number,
                                     formData.storeCode,
                                 ]}
-                                onChange={createOnChangeHandler(FORM.PART, FORM.PART_DESC, updateFormDataProperty, handlePartChange)}
+                                onChange={createOnChangeHandler(FORM.PART, FORM.PART_DESC, null, updateFormDataProperty, handlePartChange)}
                                 barcodeScanner
                             />
 
@@ -438,7 +438,7 @@ function PartUsageDialog(props) {
                                     formData.storeCode,
                                     formData.partCode
                                 ]}
-                                onChange={createOnChangeHandler(FORM.ASSET, FORM.ASSET_DESC, updateFormDataProperty, handleAssetChange)}
+                                onChange={createOnChangeHandler(FORM.ASSET, FORM.ASSET_DESC, null, updateFormDataProperty, handleAssetChange)}
                                 barcodeScanner
                                 renderDependencies={[formData.partCode]}
                             />
@@ -449,7 +449,7 @@ function PartUsageDialog(props) {
                                 valueKey={FORM.BIN}
                                 options={binList}
                                 value={formData.bin}
-                                onChange={createOnChangeHandler(FORM.BIN, null, updateFormDataProperty)}
+                                onChange={createOnChangeHandler(FORM.BIN, null, null, updateFormDataProperty)}
                                 suggestionsPixelHeight={200}
                             />
 
@@ -462,7 +462,7 @@ function PartUsageDialog(props) {
                                 }
                                 endTextAdornment={uom}
                                 value={formData.transactionQty}
-                                onChange={createOnChangeHandler(FORM.TRANSACTION_QTY, null, updateFormDataProperty)}
+                                onChange={createOnChangeHandler(FORM.TRANSACTION_QTY, null, null, updateFormDataProperty)}
                                 renderDependencies={uom}
                             />
                         </BlockUi>

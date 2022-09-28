@@ -239,11 +239,10 @@ const useEntity = (params) => {
         }
     };
 
-    const register = (layoutKey, valueKey, descKey, onChange) => {
+    const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
         let data = processElementInfo(screenLayout.fields[layoutKey] ?? getElementInfoForCustomField(layoutKey, entity.customField))
         
-        //data.updateProperty = updateEntityProperty;
-        data.onChange = createOnChangeHandler(valueKey, descKey, updateEntityProperty, onChange);
+        data.onChange = createOnChangeHandler(valueKey, descKey, orgKey, updateEntityProperty, onChange);
 
         data.disabled = data.disabled || readOnly; // It should remain disabled 
         data.elementInfo = screenLayout.fields[layoutKey]; // Return elementInfo as it is still needed in some cases (for example for UDFs)
