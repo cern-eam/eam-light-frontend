@@ -249,3 +249,5 @@ export const registerCustomField = entity => (layoutKey, valueKey, descKey) => {
     data.disabled = true;
     return data;
 }
+
+export const isMonoOrg = process.env.REACT_APP_MONO_ORG === 'TRUE';

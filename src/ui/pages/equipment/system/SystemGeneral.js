@@ -4,7 +4,7 @@ import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WSEquipment from "../../../../tools/WSEquipment";
 import StatusRow from "../../../components/statusrow/StatusRow";
-import { isDepartmentReadOnly } from 'ui/pages/EntityTools';
+import { isDepartmentReadOnly, isMonoOrg } from 'ui/pages/EntityTools';
 
 const SystemGeneral = (props) => {
 
@@ -20,6 +20,8 @@ const SystemGeneral = (props) => {
 
     return (
         <React.Fragment>
+
+            {!isMonoOrg && newEntity && <EAMTextField {...register('organization', 'organization')} uppercase/>}
 
             {newEntity && <EAMTextField {...register('equipmentno', 'code')} />}
 

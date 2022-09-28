@@ -238,6 +238,7 @@ const Part = () => {
                     entityScreen={screenPermissions}
                     entityName="Part" // TODO: hardcoded (following Location example)
                     entityKeyCode={part.code}
+                    organization={part.organization}
                     saveHandler={saveHandler}
                     newHandler={newHandler}
                     deleteHandler={deleteHandler}
