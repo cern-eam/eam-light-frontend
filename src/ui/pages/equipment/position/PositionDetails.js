@@ -21,8 +21,7 @@ const PositionDetails = (props) => {
             />
 
             <EAMAutocomplete
-                {...register('category', 'categoryCode', 'categoryDesc',
-                categoryCode => onCategoryChange(categoryCode, updateEquipmentProperty))}
+                {...register('category', 'categoryCode', 'categoryDesc', null, categoryCode => onCategoryChange(categoryCode, updateEquipmentProperty))}
                 autocompleteHandler={WSEquipment.autocompleteEquipmentCategory}
                 autocompleteHandlerParams={[equipment.classCode]}
             />
