@@ -55,7 +55,7 @@ export default function InstallEqp(props) {
                                             required
                                             label={"Parent"}
                                             value={parentEq}
-                                            onChange={createOnChangeHandler(null, null, null, setParentEq)}
+                                            onChange={createOnChangeHandler(null, null, null, null, setParentEq)}
                                             autocompleteHandler={WS.autocompleteEquipment}
                                             autocompleteHandlerParams={[true]}
                                             barcodeScanner
@@ -66,7 +66,7 @@ export default function InstallEqp(props) {
                                             required
                                             label={"Child"}
                                             value={childEq}
-                                            onChange={createOnChangeHandler(null, null, null, setChildEq)}
+                                            onChange={createOnChangeHandler(null, null, null, null, setChildEq)}
                                             autocompleteHandler={WS.autocompleteEquipment}
                                             autocompleteHandlerParams={[true]}
                                             barcodeScanner

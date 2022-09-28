@@ -117,7 +117,7 @@ const ReplaceEqpGeneral = (props) => {
                     desc={replaceEquipment.oldEquipmentDesc}
                     autocompleteHandler={WS.autocompleteEquipment}
                     autocompleteHandlerParams={[true]}
-                    onChange={createOnChangeHandler("oldEquipment", "oldEquipmentDesc", updateProperty, onChangeOldEquipment)}
+                    onChange={createOnChangeHandler("oldEquipment", "oldEquipmentDesc", null, updateProperty, onChangeOldEquipment)}
                     barcodeScanner/>
 
                 <EAMSelect
@@ -127,7 +127,7 @@ const ReplaceEqpGeneral = (props) => {
                     disabled={statusList.length === 0}
                     options={statusList}
                     value={replaceEquipment.oldEquipmentStatus}
-                    onChange={createOnChangeHandler("oldEquipmentStatus", null, updateProperty)}
+                    onChange={createOnChangeHandler("oldEquipmentStatus", null, null, updateProperty)}
                 />
                 
                 <EAMSelect
@@ -136,7 +136,7 @@ const ReplaceEqpGeneral = (props) => {
                     disabled={!stateList || stateList.length === 0}
                     options={stateList}
                     value={replaceEquipment.oldEquipmentState}
-                    onChange={createOnChangeHandler("oldEquipmentState", null, updateProperty)}
+                    onChange={createOnChangeHandler("oldEquipmentState", null, null, updateProperty)}
                 />
 
                 <EAMAutocomplete
@@ -148,7 +148,7 @@ const ReplaceEqpGeneral = (props) => {
                     desc={replaceEquipment.newEquipmentDesc}
                     autocompleteHandler={WS.autocompleteEquipment}
                     autocompleteHandlerParams={[true]}
-                    onChange={createOnChangeHandler("newEquipment", "newEquipmentDesc", updateProperty, onChangeNewEquipment)}
+                    onChange={createOnChangeHandler("newEquipment", "newEquipmentDesc", null, updateProperty, onChangeNewEquipment)}
                     barcodeScanner/>
 
                 {renderImageMode()}

@@ -122,7 +122,7 @@ function AddActivityDialog(props) {
                                         desc: activity.tradeCode
                                     }
                                 })}
-                                onChange={createOnChangeHandler("activityCode", null, updateFormValues)}
+                                onChange={createOnChangeHandler("activityCode", null, null, updateFormValues)}
                             />
 
                             <EAMAutocomplete
@@ -130,7 +130,7 @@ function AddActivityDialog(props) {
                                 {...processElementInfo(props.layout.employee)}
                                 value={formValues['employeeCode'] || ''}
                                 desc={formValues['employeeDesc']}
-                                onChange={createOnChangeHandler("employeeCode", "employeeDesc", updateFormValues)}
+                                onChange={createOnChangeHandler("employeeCode", "employeeDesc", null, updateFormValues)}
                             />
 
                             <EAMAutocomplete
@@ -138,26 +138,26 @@ function AddActivityDialog(props) {
                                 {...processElementInfo(props.layout.department)}
                                 value={formValues['departmentCode'] || ''}
                                 desc={formValues['departmentDesc']}
-                                onChange={createOnChangeHandler("departmentCode", "departmentDesc", updateFormValues)}
+                                onChange={createOnChangeHandler("departmentCode", "departmentDesc", null, updateFormValues)}
                             />
 
                             <EAMDatePicker
                                 {...processElementInfo(props.layout.datework)}
                                 value={formValues['dateWorked']}
-                                onChange={createOnChangeHandler("dateWorked", null, updateFormValues)}
+                                onChange={createOnChangeHandler("dateWorked", null, null, updateFormValues)}
                             />
 
                             <EAMSelect
                                 {...processElementInfo(props.layout.octype)}
                                 value={formValues['typeOfHours'] || ''}
                                 autocompleteHandler={WSWorkorders.getTypesOfHours}
-                                onChange={createOnChangeHandler("typeOfHours", null, updateFormValues)}
+                                onChange={createOnChangeHandler("typeOfHours", null, null, updateFormValues)}
                             />
 
                             <EAMTextField
                                 {...processElementInfo(props.layout.hrswork)}
                                 value={formValues['hoursWorked']}
-                                onChange={createOnChangeHandler("hoursWorked", null, updateFormValues)}
+                                onChange={createOnChangeHandler("hoursWorked", null, null, updateFormValues)}
                             />
                         </BlockUi>
                     </div>

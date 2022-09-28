@@ -70,32 +70,32 @@ const AdditionalCostDialog = (props) => {
                         {...processElementInfo(props.tabLayout['activitytrade'])}
                         options={activityList}
                         value={additionalCost.activityCode}
-                        onChange={createOnChangeHandler("activityCode", null, updateAdditionalCostProperty)}
+                        onChange={createOnChangeHandler("activityCode", null, null, updateAdditionalCostProperty)}
                     />
 
                     <EAMTextField 
                         {...processElementInfo(props.tabLayout['costdescription'])}
                         value={additionalCost.costDescription}
-                        onChange={createOnChangeHandler("costDescription", null, updateAdditionalCostProperty)}
+                        onChange={createOnChangeHandler("costDescription", null, null, updateAdditionalCostProperty)}
                     />
 
                     <EAMTextField 
                         {...processElementInfo(props.tabLayout['costtype'])}
                         disabled
                         value="Parts/Services"
-                        onChange={createOnChangeHandler("costType", null, updateAdditionalCostProperty)}
+                        onChange={createOnChangeHandler("costType", null, null, updateAdditionalCostProperty)}
                     />
 
                     <EAMTextField 
                         {...processElementInfo(props.tabLayout['cost'])}
                         value={additionalCost.cost}
-                        onChange={createOnChangeHandler("cost", null, updateAdditionalCostProperty)}
+                        onChange={createOnChangeHandler("cost", null, null, updateAdditionalCostProperty)}
                     />
 
                     <EAMDatePicker 
                         {...processElementInfo(props.tabLayout['additionalcostsdate'])}
                         value={additionalCost.date}
-                        onChange={createOnChangeHandler("date", null, updateAdditionalCostProperty)}
+                        onChange={createOnChangeHandler("date", null, null, updateAdditionalCostProperty)}
                     />
                 </BlockUi>
             </DialogContent>

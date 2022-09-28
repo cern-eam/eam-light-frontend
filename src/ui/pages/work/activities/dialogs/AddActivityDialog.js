@@ -107,13 +107,13 @@ function AddActivityDialog(props) {
                             <EAMTextField
                                 {...processElementInfo(props.layout.activity)}
                                 value={formValues['activityCode']}
-                                onChange={createOnChangeHandler("activityCode", null, updateFormValues)}
+                                onChange={createOnChangeHandler("activityCode", null, null, updateFormValues)}
                             />
 
                             <EAMTextField
                                 {...processElementInfo(props.layout.activitynote)}
                                 value={formValues['activityNote']}
-                                onChange={createOnChangeHandler("activityNote", null, updateFormValues)}
+                                onChange={createOnChangeHandler("activityNote", null, null, updateFormValues)}
                             />
 
                             <EAMAutocomplete
@@ -121,7 +121,7 @@ function AddActivityDialog(props) {
                                 {...processElementInfo(props.layout.task)}
                                 value={formValues['taskCode']}
                                 desc={formValues['taskDesc']}
-                                onChange={createOnChangeHandler("taskCode", "taskDesc", updateFormValues)}
+                                onChange={createOnChangeHandler("taskCode", "taskDesc", null, updateFormValues)}
                             />
 
                             <EAMAutocomplete
@@ -129,7 +129,7 @@ function AddActivityDialog(props) {
                                 {...processElementInfo(props.layout.matlcode)}
                                 value={formValues['materialList']}
                                 desc={formValues['materialListDesc']}
-                                onChange={createOnChangeHandler("materialList", "materialListDesc", updateFormValues)}
+                                onChange={createOnChangeHandler("materialList", "materialListDesc", null, updateFormValues)}
                                 maxHeight={200}
                             />
 
@@ -138,14 +138,14 @@ function AddActivityDialog(props) {
                                 {...processElementInfo(props.layout.trade)}
                                 value={formValues['tradeCode']}
                                 desc={formValues['tradeDesc']}
-                                onChange={createOnChangeHandler("tradeCode", "tradeDesc", updateFormValues)}
+                                onChange={createOnChangeHandler("tradeCode", "tradeDesc", null, updateFormValues)}
                             />
 
                             <EAMTextField
                                 required={true}
                                 {...processElementInfo(props.layout.personsreq)}
                                 value={formValues['peopleRequired']}
-                                onChange={createOnChangeHandler("peopleRequired", null, updateFormValues)}
+                                onChange={createOnChangeHandler("peopleRequired", null, null, updateFormValues)}
                             />
 
                             <EAMTextField
@@ -153,21 +153,21 @@ function AddActivityDialog(props) {
                                 {...processElementInfo(props.layout.esthrs)}
                                 valueKey="estimatedHours"
                                 value={formValues['estimatedHours']}
-                                onChange={createOnChangeHandler("estimatedHours", null, updateFormValues)}
+                                onChange={createOnChangeHandler("estimatedHours", null, null, updateFormValues)}
                             />
 
                             <EAMDatePicker
                                 {...processElementInfo(props.layout.actstartdate)}
                                 valueKey="startDate"
                                 value={formValues['startDate']}
-                                onChange={createOnChangeHandler("startDate", null, updateFormValues)}
+                                onChange={createOnChangeHandler("startDate", null, null, updateFormValues)}
                             />
 
                             <EAMDatePicker
                                 {...processElementInfo(props.layout.actenddate)}
                                 valueKey="endDate"
                                 value={formValues['endDate']}
-                                onChange={createOnChangeHandler("endDate", null, updateFormValues)}
+                                onChange={createOnChangeHandler("endDate", null, null, updateFormValues)}
                             />
                         </BlockUi>
                     </div>
