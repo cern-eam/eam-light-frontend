@@ -272,7 +272,7 @@ class Toolbar extends React.Component {
                 }
             },
             [BUTTON_KEYS.WATCHLIST]: {
-                isVisible: () => true,
+                isVisible: () => true && isCernMode,
                 getOnClick: (entityType, entity) => () => this.setState({watchlistOpen: true}),
                 isDisabled: () => newEntity,
                 values: {
