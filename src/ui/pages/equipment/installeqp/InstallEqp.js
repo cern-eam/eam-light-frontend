@@ -6,6 +6,7 @@ import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import BlockUi from 'react-block-ui';
+import { createOnChangeHandler } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 export default function InstallEqp(props) {
 
@@ -54,8 +55,7 @@ export default function InstallEqp(props) {
                                             required
                                             label={"Parent"}
                                             value={parentEq}
-                                            valueKey="parent"
-                                            updateProperty={(key, value) => (key === 'parent') && setParentEq(value)}
+                                            onChange={createOnChangeHandler(null, null, null, setParentEq)}
                                             autocompleteHandler={WS.autocompleteEquipment}
                                             autocompleteHandlerParams={[true]}
                                             barcodeScanner
@@ -66,8 +66,7 @@ export default function InstallEqp(props) {
                                             required
                                             label={"Child"}
                                             value={childEq}
-                                            valueKey="child"
-                                            updateProperty={(key, value) => (key === 'child') && setChildEq(value)}
+                                            onChange={createOnChangeHandler(null, null, null, setChildEq)}
                                             autocompleteHandler={WS.autocompleteEquipment}
                                             autocompleteHandlerParams={[true]}
                                             barcodeScanner

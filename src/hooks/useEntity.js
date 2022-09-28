@@ -10,7 +10,7 @@ import { setLayoutProperty, showError, showNotification, handleError, toggleHidd
     setRegionVisibility, 
     showWarning} from "actions/uiActions";
 import WSCustomFields from "tools/WSCustomFields";
-import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
+import { createOnChangeHandler, processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { get } from "lodash";
 
 const useEntity = (params) => {
@@ -239,10 +239,12 @@ const useEntity = (params) => {
         }
     };
 
-    const register = (layoutKey, valueKey, descKey) => {
+    const register = (layoutKey, valueKey, descKey, onChange) => {
         let data = processElementInfo(screenLayout.fields[layoutKey] ?? getElementInfoForCustomField(layoutKey, entity.customField))
         
-        data.updateProperty = updateEntityProperty;
+        //data.updateProperty = updateEntityProperty;
+        data.onChange = createOnChangeHandler(valueKey, descKey, updateEntityProperty, onChange);
+
         data.disabled = data.disabled || readOnly; // It should remain disabled 
         data.elementInfo = screenLayout.fields[layoutKey]; // Return elementInfo as it is still needed in some cases (for example for UDFs)
         

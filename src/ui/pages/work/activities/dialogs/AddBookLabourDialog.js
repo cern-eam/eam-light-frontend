@@ -12,7 +12,7 @@ import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
-import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import { createOnChangeHandler, processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 /**
  * Display detail of an activity
@@ -115,7 +115,6 @@ function AddActivityDialog(props) {
                         <BlockUi tag="div" blocking={loading}>
                             <EAMSelect
                                 {...processElementInfo(props.layout.booactivity)}
-                                valueKey="activityCode"
                                 value={formValues['activityCode'] || ''}
                                 options={props.activities.map(activity => {
                                     return {
@@ -123,49 +122,42 @@ function AddActivityDialog(props) {
                                         desc: activity.tradeCode
                                     }
                                 })}
-                                updateProperty={updateFormValues}
+                                onChange={createOnChangeHandler("activityCode", null, updateFormValues)}
                             />
 
                             <EAMAutocomplete
                                 autocompleteHandler={WSWorkorders.autocompleteBOOEmployee}
                                 {...processElementInfo(props.layout.employee)}
-                                valueKey="employeeCode"
                                 value={formValues['employeeCode'] || ''}
                                 desc={formValues['employeeDesc']}
-                                descKey="employeeDesc"
-                                updateProperty={updateFormValues}
+                                onChange={createOnChangeHandler("employeeCode", "employeeDesc", updateFormValues)}
                             />
 
                             <EAMAutocomplete
                                 autocompleteHandler={WSWorkorders.autocompleteBOODepartment}
                                 {...processElementInfo(props.layout.department)}
-                                valueKey="departmentCode"
                                 value={formValues['departmentCode'] || ''}
                                 desc={formValues['departmentDesc']}
-                                descKey="departmentDesc"
-                                updateProperty={updateFormValues}
+                                onChange={createOnChangeHandler("departmentCode", "departmentDesc", updateFormValues)}
                             />
 
                             <EAMDatePicker
                                 {...processElementInfo(props.layout.datework)}
-                                valueKey="dateWorked"
                                 value={formValues['dateWorked']}
-                                updateProperty={updateFormValues}
+                                onChange={createOnChangeHandler("dateWorked", null, updateFormValues)}
                             />
 
                             <EAMSelect
                                 {...processElementInfo(props.layout.octype)}
-                                valueKey="typeOfHours"
                                 value={formValues['typeOfHours'] || ''}
                                 autocompleteHandler={WSWorkorders.getTypesOfHours}
-                                updateProperty={updateFormValues}
+                                onChange={createOnChangeHandler("typeOfHours", null, updateFormValues)}
                             />
 
                             <EAMTextField
                                 {...processElementInfo(props.layout.hrswork)}
-                                valueKey="hoursWorked"
                                 value={formValues['hoursWorked']}
-                                updateProperty={updateFormValues}
+                                onChange={createOnChangeHandler("hoursWorked", null, updateFormValues)}
                             />
                         </BlockUi>
                     </div>

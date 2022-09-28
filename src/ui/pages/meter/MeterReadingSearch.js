@@ -20,7 +20,7 @@ class MeterReadingSearch extends React.Component {
                         updateProperty={parentProps.updateSearchProperty}
                         valueKey="meterCode"
                         autocompleteHandler={WSMeters.autocompleteMeterCode}
-                        onChangeValue={parentProps.onChangeMeterCode}
+                        onChange={parentProps.onChangeMeterCode}
                         desc={searchCriteria.meterDesc}
                         descKey="meterDesc"
                         barcodeScanner
@@ -32,7 +32,7 @@ class MeterReadingSearch extends React.Component {
                         updateProperty={parentProps.updateSearchProperty}
                         valueKey="equipmentCode"
                         autocompleteHandler={WSMeters.autocompleteMeterEquipment}
-                        onChangeValue={parentProps.onChangeEquipmentCode}
+                        onChange={parentProps.onChangeEquipmentCode}
                         desc={searchCriteria.equipmentDesc}
                         descKey="equipmentDesc"
                         barcodeScanner

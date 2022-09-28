@@ -12,7 +12,7 @@ import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import WSParts from '../../../../tools/WSParts';
 import makeStyles from '@mui/styles/makeStyles';
 import EAMRadio from 'eam-components/dist/ui/components/inputs-ng/EAMRadio';
-import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import { createOnChangeHandler, processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 import WSEquipment from "tools/WSEquipment";
 
 const overflowStyle = {
@@ -381,20 +381,16 @@ function PartUsageDialog(props) {
                         >
                             <EAMRadio
                                 {...processElementInfo(tabLayout['transactiontype'])}
-                                valueKey={FORM.TRANSACTION_TYPE}
                                 values={transactionTypes}
                                 value={formData.transactionType}
-                                updateProperty={updateFormDataProperty}
-                                onChangeValue={handleTransactionChange}
+                                onChange={createOnChangeHandler(FORM.TRANSACTION_TYPE, null, updateFormDataProperty, handleTransactionChange)}
                             />
 
                             <EAMSelect
                                 {...processElementInfo(tabLayout['storecode'])}
                                 required
-                                valueKey={FORM.STORE}
                                 value={formData.storeCode}
-                                updateProperty={updateFormDataProperty}
-                                onChangeValue={handleStoreChange}
+                                onChange={createOnChangeHandler(FORM.STORE, null, updateFormDataProperty, handleStoreChange)}
                                 autocompleteHandler={
                                     WSWorkorders.getPartUsageStores
                                 }
@@ -404,20 +400,16 @@ function PartUsageDialog(props) {
                                 {...processElementInfo(tabLayout['activity'])}
                                 required
                                 disabled={!formData.storeCode}
-                                valueKey={FORM.ACTIVITY}
                                 options={activityList}
                                 value={formData.activityCode}
-                                updateProperty={updateFormDataProperty}
+                                onChange={createOnChangeHandler(FORM.ACTIVITY, null, updateFormDataProperty, null)}
                             />
 
                             <EAMAutocomplete
                                 {...processElementInfo(tabLayout['partcode'])}
                                 disabled={!formData.storeCode}
                                 value={formData.partCode}
-                                updateProperty={updateFormDataProperty}
-                                valueKey={FORM.PART}
                                 desc={formData.partDesc}
-                                descKey={FORM.PART_DESC}
                                 autocompleteHandler={
                                     WSWorkorders.getPartUsagePart
                                 }
@@ -425,7 +417,7 @@ function PartUsageDialog(props) {
                                     workorder.number,
                                     formData.storeCode,
                                 ]}
-                                onChangeValue={handlePartChange}
+                                onChange={createOnChangeHandler(FORM.PART, FORM.PART_DESC, updateFormDataProperty, handlePartChange)}
                                 barcodeScanner
                             />
 
@@ -437,10 +429,7 @@ function PartUsageDialog(props) {
                                     (formData.partCode && !isTrackedByAsset)
                                 }
                                 value={formData.assetIDCode}
-                                updateProperty={updateFormDataProperty}
-                                valueKey={FORM.ASSET}
                                 desc={formData.assetIDDesc}
-                                descKey={FORM.ASSET_DESC}
                                 autocompleteHandler={
                                     WSWorkorders.getPartUsageAsset
                                 }
@@ -449,7 +438,7 @@ function PartUsageDialog(props) {
                                     formData.storeCode,
                                     formData.partCode
                                 ]}
-                                onChangeValue={handleAssetChange}
+                                onChange={createOnChangeHandler(FORM.ASSET, FORM.ASSET_DESC, updateFormDataProperty, handleAssetChange)}
                                 barcodeScanner
                                 renderDependencies={[formData.partCode]}
                             />
@@ -460,7 +449,7 @@ function PartUsageDialog(props) {
                                 valueKey={FORM.BIN}
                                 options={binList}
                                 value={formData.bin}
-                                updateProperty={updateFormDataProperty}
+                                onChange={createOnChangeHandler(FORM.BIN, null, updateFormDataProperty)}
                                 suggestionsPixelHeight={200}
                             />
 
@@ -471,10 +460,9 @@ function PartUsageDialog(props) {
                                     !formData.partCode ||
                                     isTrackedByAsset
                                 }
-                                valueKey={FORM.TRANSACTION_QTY}
                                 endTextAdornment={uom}
                                 value={formData.transactionQty}
-                                updateProperty={updateFormDataProperty}
+                                onChange={createOnChangeHandler(FORM.TRANSACTION_QTY, null, updateFormDataProperty)}
                                 renderDependencies={uom}
                             />
                         </BlockUi>
