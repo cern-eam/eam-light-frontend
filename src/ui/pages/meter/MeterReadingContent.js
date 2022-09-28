@@ -75,7 +75,7 @@ function MeterReadingContent(props) {
                     <EAMTextField
                         value={readingValue}
                         disabled={disabled}
-                        onChangeValue={setReadingValue}
+                        onChange={setReadingValue}
                         onChangeInput={setReadingValue}
                         endTextAdornment={reading.uomDesc}
                         endAdornment={

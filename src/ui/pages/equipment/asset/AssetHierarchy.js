@@ -30,9 +30,8 @@ const AssetHierarchy = (props) => {
                 {...register('udfchar11','userDefinedFields.udfchar11')}/>
 
             <EAMAutocomplete
-                {...register('parentasset', 'hierarchyAssetCode', 'hierarchyAssetDesc')}
-                barcodeScanner
-                onChangeValue={(value) => {
+                {...register('parentasset', 'hierarchyAssetCode', 'hierarchyAssetDesc',
+                value => {
                     onChangeDependentInput(
                         value,
                         DEPENDENCY_KEYS.asset,
@@ -41,7 +40,8 @@ const AssetHierarchy = (props) => {
                         updateEquipmentProperty,
                         showWarning
                     );
-                }}
+                })}
+                barcodeScanner
                 autocompleteHandler={WSEquipment.autocompleteAssetParent}
                 renderDependencies={renderDependenciesForDependencyInputs}
                 endAdornment={
@@ -56,8 +56,8 @@ const AssetHierarchy = (props) => {
             />
             
             <EAMAutocomplete
-                {...register('position', 'hierarchyPositionCode', 'hierarchyPositionDesc')}
-                onChangeValue={(value) => {
+                {...register('position', 'hierarchyPositionCode', 'hierarchyPositionDesc', 
+                value => {
                     onChangeDependentInput(
                         value,
                         DEPENDENCY_KEYS.position,
@@ -66,7 +66,7 @@ const AssetHierarchy = (props) => {
                         updateEquipmentProperty,
                         showWarning
                     );
-                }}
+                })}
                 barcodeScanner
                 autocompleteHandler={WSEquipment.autocompletePositionParent}
                 renderDependencies={renderDependenciesForDependencyInputs}
@@ -82,8 +82,8 @@ const AssetHierarchy = (props) => {
             />
             
             <EAMAutocomplete
-                {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc')}
-                onChangeValue={(value) => {
+                {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc',
+                value => {
                     onChangeDependentInput(
                         value,
                         DEPENDENCY_KEYS.primarySystem,
@@ -92,7 +92,7 @@ const AssetHierarchy = (props) => {
                         updateEquipmentProperty,
                         showWarning
                     );
-                }}
+                })}
                 barcodeScanner
                 autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}
                 renderDependencies={renderDependenciesForDependencyInputs}

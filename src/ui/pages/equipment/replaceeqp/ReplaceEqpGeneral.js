@@ -15,7 +15,7 @@ import swapping from './modes/mode_swapping.svg';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import { createOnChangeHandler, processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const buttonStyle = {
     bottom: '-10px',
@@ -114,13 +114,10 @@ const ReplaceEqpGeneral = (props) => {
                     label={"Old Equipment"}
                     id={`${idPrefix}OLDEQUIPMENT`}
                     value={replaceEquipment.oldEquipment}
-                    updateProperty={updateProperty}
-                    valueKey="oldEquipment"
+                    desc={replaceEquipment.oldEquipmentDesc}
                     autocompleteHandler={WS.autocompleteEquipment}
                     autocompleteHandlerParams={[true]}
-                    onChangeValue={onChangeOldEquipment}
-                    desc={replaceEquipment.oldEquipmentDesc}
-                    descKey="oldEquipmentDesc"
+                    onChange={createOnChangeHandler("oldEquipment", "oldEquipmentDesc", updateProperty, onChangeOldEquipment)}
                     barcodeScanner/>
 
                 <EAMSelect
@@ -128,20 +125,18 @@ const ReplaceEqpGeneral = (props) => {
                     required
                     label={"Old Equipment Status after replacement"}
                     disabled={statusList.length === 0}
-                    valueKey="oldEquipmentStatus"
                     options={statusList}
                     value={replaceEquipment.oldEquipmentStatus}
-                    updateProperty={updateProperty}
+                    onChange={createOnChangeHandler("oldEquipmentStatus", null, updateProperty)}
                 />
                 
                 <EAMSelect
                     required
                     label={"Old Equipment State after replacement"}
                     disabled={!stateList || stateList.length === 0}
-                    valueKey="oldEquipmentState"
                     options={stateList}
                     value={replaceEquipment.oldEquipmentState}
-                    updateProperty={updateProperty}
+                    onChange={createOnChangeHandler("oldEquipmentState", null, updateProperty)}
                 />
 
                 <EAMAutocomplete
@@ -150,13 +145,10 @@ const ReplaceEqpGeneral = (props) => {
                     label={"New Equipment"}
                     id={`${idPrefix}NEWEQUIPMENT`}
                     value={replaceEquipment.newEquipment}
-                    updateProperty={updateProperty}
-                    valueKey="newEquipment"
+                    desc={replaceEquipment.newEquipmentDesc}
                     autocompleteHandler={WS.autocompleteEquipment}
                     autocompleteHandlerParams={[true]}
-                    onChangeValue={onChangeNewEquipment}
-                    desc={replaceEquipment.newEquipmentDesc}
-                    descKey="newEquipmentDesc"
+                    onChange={createOnChangeHandler("newEquipment", "newEquipmentDesc", updateProperty, onChangeNewEquipment)}
                     barcodeScanner/>
 
                 {renderImageMode()}

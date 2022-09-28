@@ -9,7 +9,7 @@ import WSWorkorders from "../../../../tools/WSWorkorders";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
-import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import { createOnChangeHandler, processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const AdditionalCostDialog = (props) => {
     const [additionalCost, setAdditionalCost] = useState({ 
@@ -68,40 +68,34 @@ const AdditionalCostDialog = (props) => {
                 <BlockUi tag="div" blocking={loading || props.isLoading}>
                     <EAMSelect 
                         {...processElementInfo(props.tabLayout['activitytrade'])}
-                        valueKey="activityCode"
                         options={activityList}
                         value={additionalCost.activityCode}
-                        updateProperty={updateAdditionalCostProperty}
+                        onChange={createOnChangeHandler("activityCode", null, updateAdditionalCostProperty)}
                     />
 
                     <EAMTextField 
                         {...processElementInfo(props.tabLayout['costdescription'])}
-                        valueKey="costDescription"
                         value={additionalCost.costDescription}
-                        updateProperty={updateAdditionalCostProperty}
+                        onChange={createOnChangeHandler("costDescription", null, updateAdditionalCostProperty)}
                     />
 
                     <EAMTextField 
                         {...processElementInfo(props.tabLayout['costtype'])}
                         disabled
-                        valueKey="costType"
                         value="Parts/Services"
-                        updateProperty={updateAdditionalCostProperty}
+                        onChange={createOnChangeHandler("costType", null, updateAdditionalCostProperty)}
                     />
 
                     <EAMTextField 
                         {...processElementInfo(props.tabLayout['cost'])}
-                        valueKey="cost"
                         value={additionalCost.cost}
-                        updateProperty={updateAdditionalCostProperty}
+                        onChange={createOnChangeHandler("cost", null, updateAdditionalCostProperty)}
                     />
 
                     <EAMDatePicker 
                         {...processElementInfo(props.tabLayout['additionalcostsdate'])}
-                        valueKey="date"
                         value={additionalCost.date}
-                        updateProperty={updateAdditionalCostProperty}
-                    
+                        onChange={createOnChangeHandler("date", null, updateAdditionalCostProperty)}
                     />
                 </BlockUi>
             </DialogContent>

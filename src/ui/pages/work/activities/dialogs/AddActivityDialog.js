@@ -11,7 +11,7 @@ import KeyCode from 'eam-components/dist/enums/KeyCode';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
-import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import { createOnChangeHandler, processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 /**
  * Display detail of an activity
@@ -106,55 +106,46 @@ function AddActivityDialog(props) {
                         <BlockUi tag="div" blocking={loading}>
                             <EAMTextField
                                 {...processElementInfo(props.layout.activity)}
-                                valueKey="activityCode"
                                 value={formValues['activityCode']}
-                                updateProperty={updateFormValues}
+                                onChange={createOnChangeHandler("activityCode", null, updateFormValues)}
                             />
 
                             <EAMTextField
                                 {...processElementInfo(props.layout.activitynote)}
-                                valueKey="activityNote"
                                 value={formValues['activityNote']}
-                                updateProperty={updateFormValues}
+                                onChange={createOnChangeHandler("activityNote", null, updateFormValues)}
                             />
 
                             <EAMAutocomplete
                                 autocompleteHandler={WSWorkorders.autocompleteACTTask}
                                 {...processElementInfo(props.layout.task)}
-                                valueKey="taskCode"
                                 value={formValues['taskCode']}
                                 desc={formValues['taskDesc']}
-                                descKey="taskDesc"
-                                updateProperty={updateFormValues}
+                                onChange={createOnChangeHandler("taskCode", "taskDesc", updateFormValues)}
                             />
 
                             <EAMAutocomplete
                                 autocompleteHandler={WSWorkorders.autocompleteACTMatList}
                                 {...processElementInfo(props.layout.matlcode)}
-                                valueKey="materialList"
                                 value={formValues['materialList']}
                                 desc={formValues['materialListDesc']}
-                                descKey="materialListDesc"
-                                updateProperty={updateFormValues}
+                                onChange={createOnChangeHandler("materialList", "materialListDesc", updateFormValues)}
                                 maxHeight={200}
                             />
 
                             <EAMAutocomplete
                                 autocompleteHandler={WSWorkorders.autocompleteACTTrade}
                                 {...processElementInfo(props.layout.trade)}
-                                valueKey="tradeCode"
                                 value={formValues['tradeCode']}
                                 desc={formValues['tradeDesc']}
-                                descKey="tradeDesc"
-                                updateProperty={updateFormValues}
+                                onChange={createOnChangeHandler("tradeCode", "tradeDesc", updateFormValues)}
                             />
 
                             <EAMTextField
                                 required={true}
                                 {...processElementInfo(props.layout.personsreq)}
-                                valueKey="peopleRequired"
                                 value={formValues['peopleRequired']}
-                                updateProperty={updateFormValues}
+                                onChange={createOnChangeHandler("peopleRequired", null, updateFormValues)}
                             />
 
                             <EAMTextField
@@ -162,21 +153,21 @@ function AddActivityDialog(props) {
                                 {...processElementInfo(props.layout.esthrs)}
                                 valueKey="estimatedHours"
                                 value={formValues['estimatedHours']}
-                                updateProperty={updateFormValues}
+                                onChange={createOnChangeHandler("estimatedHours", null, updateFormValues)}
                             />
 
                             <EAMDatePicker
                                 {...processElementInfo(props.layout.actstartdate)}
                                 valueKey="startDate"
                                 value={formValues['startDate']}
-                                updateProperty={updateFormValues}
+                                onChange={createOnChangeHandler("startDate", null, updateFormValues)}
                             />
 
                             <EAMDatePicker
                                 {...processElementInfo(props.layout.actenddate)}
                                 valueKey="endDate"
                                 value={formValues['endDate']}
-                                updateProperty={updateFormValues}
+                                onChange={createOnChangeHandler("endDate", null, updateFormValues)}
                             />
                         </BlockUi>
                     </div>

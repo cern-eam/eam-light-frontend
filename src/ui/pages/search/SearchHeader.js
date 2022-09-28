@@ -58,7 +58,7 @@ export default class SearchHeader extends React.Component {
                 key={searchType.code}
                 label={searchType.text}
                 value={searchOn.includes(searchType.value).toString()}
-                updateProperty={() => {
+                onChange={() => {
                     this.setState(
                         (prevState) => {
                             const prevSearchOn = prevState.searchOn;
@@ -103,7 +103,7 @@ export default class SearchHeader extends React.Component {
                     value={this.props.keyword}
                     style={{textTransform: "uppercase"}}
                     ref={(input) => { this.searchInput = input; }} />
-                    <EAMBarcodeScanner updateProperty={(valKey, val) => this.props.fetchDataHandler(val, entityTypes)}/>
+                    <EAMBarcodeScanner onChange={value => this.props.fetchDataHandler(value, entityTypes)}/>
             </div>
         );
     };

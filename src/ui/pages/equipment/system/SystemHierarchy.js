@@ -31,8 +31,8 @@ const SystemHierarchy = (props) => {
             />
 
             <EAMAutocomplete
-                {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc')}
-                onChangeValue={(value) => {
+                {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc',
+                value => {
                     onChangeDependentInput(
                         value,
                         DEPENDENCY_KEYS.primarySystem,
@@ -41,7 +41,7 @@ const SystemHierarchy = (props) => {
                         updateEquipmentProperty,
                         showWarning
                     );
-                }}
+                })}
                 autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}
                 renderDependencies={renderDependenciesForDependencyInputs}
                 endAdornment={
