@@ -31,7 +31,7 @@ const SystemHierarchy = (props) => {
             />
 
             <EAMAutocomplete
-                {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc',
+                {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc', null,
                 value => {
                     onChangeDependentInput(
                         value,
