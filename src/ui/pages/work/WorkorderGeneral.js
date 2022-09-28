@@ -5,21 +5,23 @@ import WSWorkorders from "../../../tools/WSWorkorders"
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
-import { isDepartmentReadOnly } from '../EntityTools';
+import { isDepartmentReadOnly, isMonoOrg } from '../EntityTools';
 import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
 
 function WorkorderDetails(props) {
 
-    const {workorder, register, applicationData, statuses, userGroup, userData, screenPermissions } = props; 
+    const {workorder, register, applicationData, statuses, userGroup, userData, screenPermissions, newEntity } = props; 
     const rpawClassesList = (applicationData && applicationData.EL_TRPAC && applicationData.EL_TRPAC.split(',')) || [];
     const rpawLink = applicationData && applicationData.EL_TRPAW;
 
     return (
         <React.Fragment>
 
+            {!isMonoOrg && newEntity && <EAMTextField {...register('organization', 'organization')} uppercase/>}
+
             <EAMTextField {...register('description', 'description')}/>
 
-            <EAMAutocomplete {...register('equipment', 'equipmentCode', 'equipmentDesc')}
+            <EAMAutocomplete {...register('equipment', 'equipmentCode', 'equipmentDesc', 'equipmentOrganization')}
                              barcodeScanner
                              autocompleteHandler={WS.autocompleteEquipment}
                              autocompleteHandlerParams={[false]}

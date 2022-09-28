@@ -4,7 +4,7 @@ import StatusRow from "../../../components/statusrow/StatusRow"
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
-import { isDepartmentReadOnly } from 'ui/pages/EntityTools';
+import { isDepartmentReadOnly, isMonoOrg } from 'ui/pages/EntityTools';
 import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
 
 const AssetGeneral = (props) => {
@@ -20,6 +20,8 @@ const AssetGeneral = (props) => {
 
     return (
         <React.Fragment>
+
+            {!isMonoOrg && newEntity && <EAMTextField {...register('organization', 'organization')} uppercase/>}
 
             {newEntity && <EAMTextField {...register('equipmentno', 'code')} />}
 

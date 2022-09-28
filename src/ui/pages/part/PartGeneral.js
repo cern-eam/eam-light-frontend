@@ -6,6 +6,7 @@ import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox
 import WS from "../../../tools/WS";
 import StatusRow from "../../components/statusrow/StatusRow"
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import { isMonoOrg } from '../EntityTools';
 
 const PartGeneral = (props) => {
 
@@ -13,6 +14,8 @@ const PartGeneral = (props) => {
 
     return (
         <React.Fragment>
+
+{           !isMonoOrg && newEntity && <EAMTextField {...register('organization', 'organization')} uppercase/>}
 
             {newEntity && <EAMTextField {...register('partcode', 'code')} />}
 

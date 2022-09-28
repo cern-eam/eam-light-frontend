@@ -39,7 +39,6 @@ import SportsScoreIcon from '@mui/icons-material/SportsScore';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import SpeedIcon from '@mui/icons-material/Speed';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
-import PeopleIcon from '@mui/icons-material/People';
 import MonetizationOnRoundedIcon from '@mui/icons-material/MonetizationOnRounded'; 
 import SegmentRoundedIcon from '@mui/icons-material/SegmentRounded';
 import { PendingActions } from '@mui/icons-material';
@@ -190,6 +189,7 @@ const Workorder = () => {
                         applicationData={applicationData}
                         userData={userData} 
                         statuses={statuses}
+                        newEntity={newEntity}
                         screenPermissions={screenPermissions}/>
                 ,
                 column: 1,
@@ -571,6 +571,7 @@ const Workorder = () => {
                     entityScreen={screenPermissions}
                     entityName="Work Order"
                     entityKeyCode={workorder.number}
+                    organization={workorder.organization}
                     saveHandler={saveHandler}
                     newHandler={newHandler}
                     deleteHandler={deleteHandler}

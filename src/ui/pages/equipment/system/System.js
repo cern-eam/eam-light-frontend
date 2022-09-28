@@ -329,8 +329,9 @@ const System = () => {
                 isModified={isModified} 
                 newEntity={newEntity}
                 entityScreen={screenPermissions}
-                entityName="System" // TODO:
+                entityName="System" 
                 entityKeyCode={equipment.code}
+                organization={equipment.organization}
                 saveHandler={saveHandler}
                 newHandler={newHandler}
                 deleteHandler={deleteHandler}

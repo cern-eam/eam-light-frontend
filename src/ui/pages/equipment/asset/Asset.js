@@ -374,6 +374,7 @@ const Asset = () => {
                 entityScreen={screenPermissions}
                 entityName="Asset" // TODO:
                 entityKeyCode={equipment.code}
+                organization={equipment.organization}
                 saveHandler={saveHandler}
                 newHandler={newHandler}
                 deleteHandler={deleteHandler}

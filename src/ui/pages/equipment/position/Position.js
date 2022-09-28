@@ -340,6 +340,7 @@ const Position = () => {
                 entityScreen={screenPermissions}
                 entityName="Position"
                 entityKeyCode={equipment.code}
+                organization={equipment.organization}
                 saveHandler={saveHandler}
                 newHandler={newHandler}
                 deleteHandler={deleteHandler}
