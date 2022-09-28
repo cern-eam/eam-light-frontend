@@ -21,7 +21,7 @@ const AssetDetails = (props) => {
             />
 
             <EAMAutocomplete
-                {...register('category', 'categoryCode', 'categoryDesc', 
+                {...register('category', 'categoryCode', 'categoryDesc', null,
                              categoryCode => onCategoryChange(categoryCode, updateEquipmentProperty))
                 }
                 autocompleteHandler={WSEquipment.autocompleteEquipmentCategory}
@@ -57,7 +57,6 @@ const AssetDetails = (props) => {
 
             <EAMTextField
                 {...register('model', 'model')}
-                inputProps={{maxLength: 30}}
             />
 
             <EAMAutocomplete
