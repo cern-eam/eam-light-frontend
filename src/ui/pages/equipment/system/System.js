@@ -51,10 +51,8 @@ const System = () => {
                 new:  WSEquipment.initEquipment.bind(null, "S"), // TODO: again we have extra arguments, does it perform basic functions without them?
             },
             postActions: {
-                create: postCreate,
                 read: postRead,
-                new: postInit,
-                update: postUpdate
+                new: postInit
             },
             isReadOnlyCustomHandler: isClosedEquipment,
             entityCode: "OBJ",
@@ -70,17 +68,6 @@ const System = () => {
     function postInit() {
         readStatuses(true); 
         setLayoutProperty('showEqpTreeButton', false)
-    }
-
-    function postCreate() {
-        readStatuses(false, equipment.statusCode); 
-        commentsComponent.current?.createCommentForNewEntity();
-        setLayoutProperty('showEqpTreeButton', true)
-    }
-
-    function postUpdate() {
-        readStatuses(false, equipment.statusCode) 
-        commentsComponent.current?.createCommentForNewEntity();
     }
 
     function postRead(equipment) {
