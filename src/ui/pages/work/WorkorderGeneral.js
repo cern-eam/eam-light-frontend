@@ -10,14 +10,17 @@ import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
 
 function WorkorderDetails(props) {
 
-    const {workorder, register, applicationData, statuses, userGroup, userData, screenPermissions, newEntity } = props; 
+    const {workorder, register, applicationData, statuses, userGroup, userData, screenPermissions, newEntity, screenCode } = props; 
     const rpawClassesList = (applicationData && applicationData.EL_TRPAC && applicationData.EL_TRPAC.split(',')) || [];
     const rpawLink = applicationData && applicationData.EL_TRPAW;
 
     return (
         <React.Fragment>
 
-            {isMultiOrg && newEntity && <EAMTextField {...register('organization', 'organization')} uppercase/>}
+            <EAMSelect {...register('organization', 'organization')}
+            hidden={!isMultiOrg || !newEntity}
+            autocompleteHandler={WS.getOrganizations}
+            autocompleteHandlerParams={[screenCode]}/>
 
             <EAMTextField {...register('description', 'description')}/>
 

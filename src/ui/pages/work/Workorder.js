@@ -188,6 +188,7 @@ const Workorder = () => {
                         userData={userData} 
                         statuses={statuses}
                         newEntity={newEntity}
+                        screenCode={screenCode}
                         screenPermissions={screenPermissions}/>
                 ,
                 column: 1,
