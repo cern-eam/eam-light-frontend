@@ -13,7 +13,7 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from './Toolbar';
 import Divider from '@mui/material/Divider';
-import { isMonoOrg } from 'ui/pages/EntityTools';
+import { isMultiOrg } from 'ui/pages/EntityTools';
 
 const verticalLineStyle = {
     height: 25,
@@ -275,7 +275,7 @@ class EamlightToolbar extends Component {
                         </div>
                         <div>
                             {!this.props.newEntity && (<span style={{fontWeight: 900}}> {this.props.entityKeyCode}</span>)}
-                            {!this.props.newEntity && !isMonoOrg && this.props.organization && (<span style={{color: "#737373"}}> {this.props.organization}</span>)}
+                            {!this.props.newEntity && isMultiOrg && this.props.organization && (<span style={{color: "#737373"}}> {this.props.organization}</span>)}
                         </div>
                     </div>
 

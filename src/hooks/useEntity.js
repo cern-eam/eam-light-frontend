@@ -5,7 +5,7 @@ import {useParams, useHistory} from "react-router-dom"
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
-import { assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType, fireHandlers, isDepartmentReadOnly, getElementInfoForCustomField } from "ui/pages/EntityTools";
+import { assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType, fireHandlers, isDepartmentReadOnly, getElementInfoForCustomField, isMultiOrg } from "ui/pages/EntityTools";
 import { setLayoutProperty, showError, showNotification, handleError, toggleHiddenRegion,
     setRegionVisibility, 
     showWarning} from "actions/uiActions";
@@ -73,8 +73,8 @@ const useEntity = (params) => {
             .then(response => {
                 const entityCode = response.body.data;
                 showNotificationConst(entityDesc + ' ' + entityCode + ' has been successfully created.');
-                // Read after the creation
-                history.push(process.env.PUBLIC_URL + entityURL + encodeURIComponent(entityCode));
+                // Read after the creation (and append the organization in multi-org mode)
+                history.push(process.env.PUBLIC_URL + entityURL + encodeURIComponent(entityCode + (isMultiOrg && entity.organization ? '#' + entity.organization : '')));
             })
             .catch(error => {
                 setErrors(error?.response?.body?.errors);

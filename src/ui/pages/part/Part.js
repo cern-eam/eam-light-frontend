@@ -89,7 +89,8 @@ const Part = () => {
                 maximizable: false,
                 render: () => 
                     <PartGeneral
-                        {...commonProps} />
+                        {...commonProps}
+                        screenCode={screenCode} />
                 ,
                 column: 1,
                 order: 1,

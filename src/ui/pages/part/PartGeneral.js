@@ -6,18 +6,21 @@ import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox
 import WS from "../../../tools/WS";
 import StatusRow from "../../components/statusrow/StatusRow"
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
-import { isMonoOrg } from '../EntityTools';
+import { isMultiOrg } from '../EntityTools';
 
 const PartGeneral = (props) => {
 
-    const { part, newEntity, register } = props;
+    const { part, newEntity, register, screenCode } = props;
 
     return (
         <React.Fragment>
 
-{           !isMonoOrg && newEntity && <EAMTextField {...register('organization', 'organization')} uppercase/>}
+            <EAMSelect {...register('organization', 'organization')}
+            hidden={!isMultiOrg || !newEntity}
+            autocompleteHandler={WS.getOrganizations}
+            autocompleteHandlerParams={[screenCode]}/>
 
-            {newEntity && <EAMTextField {...register('partcode', 'code')} />}
+            <EAMTextField {...register('partcode', 'code')} hidden={!newEntity}/>
 
             <EAMTextField {...register('description', 'description')} />
 

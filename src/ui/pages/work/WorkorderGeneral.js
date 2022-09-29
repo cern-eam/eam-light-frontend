@@ -5,7 +5,7 @@ import WSWorkorders from "../../../tools/WSWorkorders"
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
-import { isDepartmentReadOnly, isMonoOrg } from '../EntityTools';
+import { isDepartmentReadOnly, isMultiOrg } from '../EntityTools';
 import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
 
 function WorkorderDetails(props) {
@@ -17,7 +17,7 @@ function WorkorderDetails(props) {
     return (
         <React.Fragment>
 
-            {!isMonoOrg && newEntity && <EAMTextField {...register('organization', 'organization')} uppercase/>}
+            {isMultiOrg && newEntity && <EAMTextField {...register('organization', 'organization')} uppercase/>}
 
             <EAMTextField {...register('description', 'description')}/>
 
