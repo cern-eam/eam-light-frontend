@@ -75,10 +75,8 @@ const Workorder = () => {
                 new:  WSWorkorder.initWorkOrder, 
             },
             postActions: {
-                create: postCreate,
                 read: postRead,
                 new: postInit,
-                update: postUpdate,
                 copy: postCopy
             },
             handlers: {
@@ -511,17 +509,6 @@ const Workorder = () => {
     //
     function postInit() {
         readStatuses('', '', true);
-    }
-
-    function postCreate(workorder) {
-        readStatuses(workorder.statusCode, workorder.typeCode, false); 
-        commentsComponent.current?.createCommentForNewEntity();
-    }
-
-    function postUpdate(workorder) {
-        updateMyWorkOrdersConst(workorder); 
-        readStatuses(workorder.statusCode, workorder.typeCode, false);      
-        commentsComponent.current?.createCommentForNewEntity();
     }
 
     function postRead(workorder) {
