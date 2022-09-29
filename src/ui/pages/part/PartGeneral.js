@@ -15,12 +15,11 @@ const PartGeneral = (props) => {
     return (
         <React.Fragment>
 
-            <EAMSelect {...register('organization', 'organization')}
-            hidden={!isMultiOrg || !newEntity}
+            {isMultiOrg && newEntity && <EAMSelect {...register('organization', 'organization')}
             autocompleteHandler={WS.getOrganizations}
-            autocompleteHandlerParams={[screenCode]}/>
+            autocompleteHandlerParams={[screenCode]}/>}
 
-            <EAMTextField {...register('partcode', 'code')} hidden={!newEntity}/>
+            {newEntity && <EAMTextField {...register('partcode', 'code')}/> }
 
             <EAMTextField {...register('description', 'description')} />
 
