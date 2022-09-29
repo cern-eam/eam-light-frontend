@@ -3,9 +3,9 @@ import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WSEquipment from "../../../../tools/WSEquipment";
+import WS from "../../../../tools/WS";
 import StatusRow from "../../../components/statusrow/StatusRow"
-import EquipmentTools from '../EquipmentTools';
-import { isDepartmentReadOnly, isMonoOrg } from 'ui/pages/EntityTools';
+import { isDepartmentReadOnly, isMultiOrg } from 'ui/pages/EntityTools';
 
 const PositionGeneral = (props) => {
 
@@ -15,15 +15,19 @@ const PositionGeneral = (props) => {
         register,
         statuses,
         userData,
+        screenCode,
         screenPermissions
     } = props;
 
     return (
         <React.Fragment>
 
-            {!isMonoOrg && newEntity && <EAMTextField {...register('organization', 'organization')} uppercase/>}
+            <EAMSelect {...register('organization', 'organization')}
+            hidden={!isMultiOrg || !newEntity}
+            autocompleteHandler={WS.getOrganizations}
+            autocompleteHandlerParams={[screenCode]}/>
 
-            {newEntity && <EAMTextField {...register('equipmentno', 'code')} />}
+            <EAMTextField {...register('equipmentno', 'code')} hidden={!newEntity}/>
 
             <EAMTextField {...register('alias', 'alias')} />
 

@@ -250,4 +250,4 @@ export const registerCustomField = entity => (layoutKey, valueKey, descKey) => {
     return data;
 }
 
-export const isMonoOrg = process.env.REACT_APP_MONO_ORG === 'TRUE';
+export const isMultiOrg = process.env.REACT_APP_MULTI_ORG === 'TRUE';

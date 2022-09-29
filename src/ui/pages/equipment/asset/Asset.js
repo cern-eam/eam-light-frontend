@@ -141,6 +141,7 @@ const Asset = () => {
                         {...commonProps}
                         statuses={statuses}
                         userData={userData}
+                        screenCode={screenCode}
                         screenPermissions={screenPermissions}/>
                 ,
                 column: 1,

@@ -1,10 +1,11 @@
 import React from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
+import WS from "../../../../tools/WS";
 import StatusRow from "../../../components/statusrow/StatusRow"
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
-import { isDepartmentReadOnly, isMonoOrg } from 'ui/pages/EntityTools';
+import { isDepartmentReadOnly, isMultiOrg } from 'ui/pages/EntityTools';
 import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
 
 const AssetGeneral = (props) => {
@@ -15,15 +16,19 @@ const AssetGeneral = (props) => {
         statuses,
         register,
         userData,
+        screenCode,
         screenPermissions
     } = props;
 
     return (
         <React.Fragment>
 
-            {!isMonoOrg && newEntity && <EAMTextField {...register('organization', 'organization')} uppercase/>}
+            <EAMSelect {...register('organization', 'organization')}
+            hidden={!isMultiOrg || !newEntity}
+            autocompleteHandler={WS.getOrganizations}
+            autocompleteHandlerParams={[screenCode]}/>
 
-            {newEntity && <EAMTextField {...register('equipmentno', 'code')} />}
+            <EAMTextField {...register('equipmentno', 'code')} hidden={!newEntity}/>
 
             <EAMTextField {...register('alias', 'alias')} barcodeScanner/>
 
