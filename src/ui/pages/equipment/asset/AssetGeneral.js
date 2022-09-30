@@ -23,11 +23,12 @@ const AssetGeneral = (props) => {
     return (
         <React.Fragment>
 
-            {isMultiOrg && newEntity && <EAMSelect {...register('organization', 'organization')}
+            <EAMSelect {...register('organization', 'organization')}
+            hidden={!isMultiOrg || !newEntity}
             autocompleteHandler={WS.getOrganizations}
-            autocompleteHandlerParams={[screenCode]}/>}
+            autocompleteHandlerParams={[screenCode]}/>
 
-            {newEntity && <EAMTextField {...register('equipmentno', 'code')}/>}
+            <EAMTextField {...register('equipmentno', 'code')} hidden={!newEntity}/>
 
             <EAMTextField {...register('alias', 'alias')} barcodeScanner/>
 
