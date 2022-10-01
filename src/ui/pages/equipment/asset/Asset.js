@@ -37,6 +37,7 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import HardwareIcon from '@mui/icons-material/Hardware';
+import { handleError } from 'actions/uiActions';
 
 const Asset = () => {
     const [part, setPart] = useState(part);
@@ -258,6 +259,8 @@ const Asset = () => {
                         ref={comments => commentsComponent.current = comments}
                         entityCode='OBJ'
                         entityKeyCode={!newEntity ? equipment.code : undefined}
+                        entityOrganization={equipment.organization}
+                        handleError={handleError}
                         userCode={userData.eamAccount.userCode}
                         allowHtml={true}
                         disabled={readOnly} />

@@ -191,6 +191,7 @@ const Part = () => {
                         entityKeyCode={!partLayout.newEntity ? part.code : undefined}
                         userCode={userData.eamAccount.userCode}
                         handleError={handleError}
+                        entityOrganization={part.organization}
                         allowHtml={true} />
                 ,
                 RegionPanelProps: {
