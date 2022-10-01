@@ -22,12 +22,11 @@ const PositionGeneral = (props) => {
     return (
         <React.Fragment>
 
-            <EAMSelect {...register('organization', 'organization')}
-            hidden={!isMultiOrg || !newEntity}
+            {isMultiOrg && newEntity && <EAMSelect {...register('organization', 'organization')}
             autocompleteHandler={WS.getOrganizations}
-            autocompleteHandlerParams={[screenCode]}/>
+            autocompleteHandlerParams={[screenCode]}/>}
 
-            <EAMTextField {...register('equipmentno', 'code')} hidden={!newEntity}/>
+            {newEntity && <EAMTextField {...register('equipmentno', 'code')}/>}
 
             <EAMTextField {...register('alias', 'alias')} />
 

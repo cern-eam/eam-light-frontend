@@ -233,6 +233,7 @@ const System = () => {
                         userCode={userData.eamAccount.userCode}
                         handleError={handleError}
                         allowHtml={true}
+                        entityOrganization={equipment.organization}
                         disabled={readOnly} />
                 ,
                 RegionPanelProps: {

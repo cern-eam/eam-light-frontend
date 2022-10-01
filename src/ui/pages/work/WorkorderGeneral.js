@@ -17,10 +17,9 @@ function WorkorderDetails(props) {
     return (
         <React.Fragment>
 
-            <EAMSelect {...register('organization', 'organization')}
-            hidden={!isMultiOrg || !newEntity}
+            {isMultiOrg && newEntity && <EAMSelect {...register('organization', 'organization')}
             autocompleteHandler={WS.getOrganizations}
-            autocompleteHandlerParams={[screenCode]}/>
+            autocompleteHandlerParams={[screenCode]}/>}
 
             <EAMTextField {...register('description', 'description')}/>
 

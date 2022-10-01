@@ -245,6 +245,7 @@ const Position = () => {
                         entityKeyCode={!newEntity ? equipment.code : undefined}
                         userCode={userData.eamAccount.userCode}
                         allowHtml={true}
+                        entityOrganization={equipment.organization}
                         disabled={readOnly} />
                 ,
                 RegionPanelProps: {

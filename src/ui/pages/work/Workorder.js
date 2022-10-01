@@ -331,6 +331,7 @@ const Workorder = () => {
                         userCode={userData.eamAccount.userCode}
                         handleError={handleError}
                         allowHtml={true}
+                        //entityOrganization={workorder.organization}
                         disabled={readOnly} />
                 ,
                 RegionPanelProps: {

@@ -66,7 +66,6 @@ const useEntity = (params) => {
         if (!validate()) {
             return;
         }
-
         setLoading(true); 
 
         WS.create(entity)
@@ -261,14 +260,7 @@ const useEntity = (params) => {
             data.errorText = error.message;
         }
         
-        // Validators 
-        // TODO: array of possible validators for each element and add validation for date(time)
-        if (data.required) {
-            validators.current[valueKey] = value => value ? '' : `${data.label} field cannot be blank.`;
-        }
-        if (data.type === 'number') {
-            validators.current[valueKey] = value => !isNaN(value ?? 0) ? '' : `${data.label} must be a valid number.`;
-        }
+        createValidator(data, valueKey)
 
         return data;
     }
@@ -280,6 +272,20 @@ const useEntity = (params) => {
         setErrors(errors);
         return errors?.length === 0;
     };
+
+    const createValidator = (data, valueKey) => {
+        // Do not validate if the element is hidden
+        if (data.hidden) { 
+            return;
+        }
+
+        if (data.required) {
+            validators.current[valueKey] = value => value ? '' : `${data.label} field cannot be blank.`;
+        }
+        if (data.type === 'number') {
+            validators.current[valueKey] = value => !isNaN(value ?? 0) ? '' : `${data.label} must be a valid number.`;
+        }
+    }
 
     const getHandlers = () => ({...handlers, "classCode": onChangeClass});
     
