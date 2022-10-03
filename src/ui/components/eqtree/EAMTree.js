@@ -21,7 +21,7 @@ class EAMTree extends Component {
   }
 
   componentDidMount() {
-    this._loadTreeData(this.props.code);
+    this._loadTreeData(this.props.code, this.props.org, this.props.type);
   }
 
   componentWillUnmount() {
@@ -54,13 +54,13 @@ class EAMTree extends Component {
     return false;
   }
 
-  _loadTreeData(code) {
+  _loadTreeData(code, org, type) {
 
     this.setState(() => ({
        loading: true
     }));
 
-    TreeWS.getEquipmentStructure(code)
+    TreeWS.getEquipmentStructure(code, org, type)
       .then(data => {
 
         // get tree data

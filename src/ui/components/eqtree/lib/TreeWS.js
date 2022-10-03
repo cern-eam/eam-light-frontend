@@ -7,8 +7,8 @@ class TreeWS {
 
     // Methods used in Tree
 
-    getEquipmentStructure(eqid, config = {timeout: 40000}) {
-        return this._get(`/eqstructure/tree?eqid=${eqid}`, config);
+    getEquipmentStructure(eqid, org, type, config = {timeout: 40000}) {
+        return this._get(`/eqstructure/tree?eqid=${eqid}&org=${org}&type=${type}`, config);
     }
 
     _get(url, config = {}) {
