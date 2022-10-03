@@ -30,7 +30,7 @@ const AssetHierarchy = (props) => {
                 {...register('udfchar11','userDefinedFields.udfchar11')}/>
 
             <EAMAutocomplete
-                {...register('parentasset', 'hierarchyAssetCode', 'hierarchyAssetDesc', null,
+                {...register('parentasset', 'hierarchyAssetCode', 'hierarchyAssetDesc', 'hierarchyAssetOrg',
                 value => {
                     onChangeDependentInput(
                         value,
@@ -56,7 +56,7 @@ const AssetHierarchy = (props) => {
             />
             
             <EAMAutocomplete
-                {...register('position', 'hierarchyPositionCode', 'hierarchyPositionDesc', null,
+                {...register('position', 'hierarchyPositionCode', 'hierarchyPositionDesc', 'hierarchyPositionOrg',
                 value => {
                     onChangeDependentInput(
                         value,
@@ -82,7 +82,7 @@ const AssetHierarchy = (props) => {
             />
             
             <EAMAutocomplete
-                {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc', null,
+                {...register('primarysystem', 'hierarchyPrimarySystemCode', 'hierarchyPrimarySystemDesc', 'hierarchyPrimarySystemOrg',
                 value => {
                     onChangeDependentInput(
                         value,

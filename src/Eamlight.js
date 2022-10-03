@@ -95,8 +95,8 @@ class Eamlight extends Component {
                                                  <Route path="/part/:code?"
                                                         component={Part}/>
 
-                                                        <Route path="/partsearch"
-                                                        component={PartSearchContainer}/>
+                                                 <Route path="/partsearch"
+                                                 component={PartSearchContainer}/>
 
                                                  <Route path="/assetsearch"
                                                         component={AssetSearchContainer}/>

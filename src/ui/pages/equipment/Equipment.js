@@ -16,6 +16,7 @@ class Equipment extends Component {
 
     render() {
         const equipmentCode = (this.props.eqp && this.props.eqp.code) || this.props.match.params.code;
+        
         return (
             <div className="entityContainer">
 
@@ -29,7 +30,9 @@ class Equipment extends Component {
 
                     <div style={{height: "100%", flexDirection: "column"}}>
                         {equipmentCode && this.props.showEqpTree &&
-                            <EquipmentTree equipmentCode={equipmentCode}
+                            <EquipmentTree code={equipmentCode}
+                                           org={this.props.eqp.organization}
+                                           type={this.props.eqp.systemTypeCode}
                                            history={this.props.history}
                             />
                         }
