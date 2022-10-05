@@ -15,9 +15,13 @@ const Watchlist = (props) => {
         candidates.filter((candidate) => !watchers?.some((watcherCode) => watcherCode.userCode === candidate.usercode));
 
     const getAutocompleteOptions = async (hint) => {
-        if (hint) {
-            const result = await WSWorkorders.autocompleteUsersWithAccess(woCode, hint);
-            setOptions(result.body.data);
+        try {
+            if (hint) {
+                const result = await WSWorkorders.autocompleteUsersWithAccess(woCode, hint);
+                setOptions(result.body.data);
+            }
+        } catch (e) {
+            console.error(e);
         }
     };
 

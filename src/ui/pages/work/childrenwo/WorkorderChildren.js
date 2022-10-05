@@ -33,7 +33,8 @@ export default class WorkorderChildren extends Component {
             .then(response => {
                 //Assign data
                 this.setState(() => ({data: response.body.data}));
-            });
+            })
+            .catch(console.error);
     };
 
     render() {

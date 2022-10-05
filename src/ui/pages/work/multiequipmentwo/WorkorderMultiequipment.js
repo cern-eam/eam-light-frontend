@@ -44,6 +44,7 @@ export default class WorkorderMultiequipment extends Component {
                     props.setEquipmentMEC(data);
                 }
             })
+            .catch(console.error)
             .finally(() => {
                 this.setState({ blocking: false })
             });

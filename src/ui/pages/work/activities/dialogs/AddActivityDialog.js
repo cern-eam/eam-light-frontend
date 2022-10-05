@@ -31,6 +31,9 @@ function AddActivityDialog(props) {
         WSWorkorders.initWorkOrderActivity(props.workorderNumber).then((response) => {
             setFormValues(response.body.data);
             setLoading(false);
+        }).catch((error) => {
+            setLoading(false);
+            props.handleError(error);
         });
     };
 
@@ -81,6 +84,7 @@ function AddActivityDialog(props) {
                 updateFormValues('materialList', taskPlan.materialList === null ? '' : taskPlan.materialList);
                 updateFormValues('tradeCode', taskPlan.tradeCode === null ? '' : taskPlan.tradeCode);
             })
+            .catch(console.error)
             .finally(() => setLoading(false));
     };
 

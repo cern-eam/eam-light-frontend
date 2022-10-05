@@ -134,7 +134,7 @@ class Search extends Component {
                             redirectRoute: response.body.data.link
                         });
                     }
-                })
+                }).catch(console.error);
         }
     }
 

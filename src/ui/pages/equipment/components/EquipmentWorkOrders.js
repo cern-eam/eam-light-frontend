@@ -113,6 +113,7 @@ function EquipmentWorkOrders(props) {
                 setWorkorders(workorders);
                 setEvents(events);
             })
+            .catch(console.error)
             .finally(() => setLoadingData(false));
     }
 

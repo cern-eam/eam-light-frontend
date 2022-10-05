@@ -36,6 +36,7 @@ export default class EquipmentPartsAssociated extends Component {
                     data: response.body.data
                 }))
             })
+            .catch(console.error)
             .finally(() => {
                 this.setState({ blocking: false })
             });

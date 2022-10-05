@@ -31,6 +31,10 @@ function Activities(props) {
             .then(result => {
                 setActivities(result.body.data);
                 setLoading(false);
+            })
+            .catch(error => {
+                setLoading(false);
+                console.error(error);
             });
     }
 
@@ -52,7 +56,8 @@ function Activities(props) {
                 });
 
                 setBookLaboursByActivity(bookLaboursByActivity);
-            });
+            })
+            .catch(console.error);
     }
 
     if (loading || !props.workorder) {

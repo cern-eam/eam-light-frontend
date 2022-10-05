@@ -115,10 +115,10 @@ const Workorder = () => {
             if (equipmentResponse.partCode) {
                 WSParts.getPart(equipmentResponse.partCode)
                 .then(response => setEquipmentPart(response.body.data))
-                .catch(error => {})
+                .catch(console.error);
             }
         })
-        .catch(error => {})
+        .catch(console.error);
            
     }, [workorder?.equipmentCode])
 
@@ -152,7 +152,7 @@ const Workorder = () => {
                 showWarning('This equipment is currently under warranty.');
             }
         })
-        .catch(error => {});
+        .catch(console.error);
 
     };
 
@@ -160,6 +160,7 @@ const Workorder = () => {
         if (standardWorkOrderCode) {
             WSWorkorder.getStandardWorkOrder(standardWorkOrderCode)
             .then(response => setWorkOrder( oldWorkOrder => assignStandardWorkOrderValues(oldWorkOrder, response.body.data)))
+            .catch(console.error);
         }
     }
 
@@ -533,6 +534,7 @@ const Workorder = () => {
     const readStatuses = (status, type, newwo) => {
         WSWorkorder.getWorkOrderStatusValues(userData.eamAccount.userGroup, status, type, newwo)
             .then(response => setStatuses(response.body.data))
+            .catch(console.error);
     }
 
     // TODO: check if working
