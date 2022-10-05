@@ -58,6 +58,7 @@ export default class SearchHeader extends React.Component {
                 key={searchType.code}
                 label={searchType.text}
                 value={searchOn.includes(searchType.value).toString()}
+                rootStyle={{flex: "0 1 auto"}}
                 onChange={() => {
                     this.setState(
                         (prevState) => {
