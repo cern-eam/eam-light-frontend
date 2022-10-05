@@ -2,11 +2,11 @@ import React from 'react';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import {ArrowUpBoldBox} from 'mdi-material-ui';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import withStyles from '@mui/styles/withStyles';
 import TreeIcon from './TreeIcon';
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 
 const ITEM_HEIGHT = 48;
 
