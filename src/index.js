@@ -91,8 +91,5 @@ ReactDOMClient.createRoot(document.getElementById('root')).render(
                 </LocalizationProvider>
             </Provider>
         </StylesProvider>
-    </AuthWrapper>,
-
-    document.getElementById("root")
-
+    </AuthWrapper>
 );
