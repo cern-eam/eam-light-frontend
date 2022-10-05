@@ -1,6 +1,7 @@
 import React from "react";
 import { useTheme } from '@mui/material/styles';
 import { isCernMode } from "ui/components/CERNMode";
+import {version} from '../../../package.json'
 
 const Footer = props => {
 
@@ -18,7 +19,7 @@ const Footer = props => {
     return (
         <div style={style}>
             <span style={{fontWeight: 900}}>EAM Light</span>
-            <span style={{marginLeft: 5, marginRight: 5}}>(v3.0.1)</span>
+            <span style={{marginLeft: 5, marginRight: 5}}>(v{version})</span>
             {isCernMode && <a style={{color: "white", marginRight: 10}} href="mailto:EAM.Support@cern.ch">EAM.Support@cern.ch</a>}
         </div>
     )
