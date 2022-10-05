@@ -82,7 +82,7 @@ class Eamlight extends Component {
 
                                    <ApplicationLayoutContainer>
                                           <EamlightMenuContainer/>
-                                          <div style={{height: "100%"}}>
+                                          <div style={{height: "calc(100% - 30px)"}}>
                                                  <Route exact path="/"
                                                         component={SearchContainer}/>
 

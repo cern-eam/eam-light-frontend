@@ -12,6 +12,7 @@ import { useTheme } from '@mui/material/styles';
 import withStyles from '@mui/styles/withStyles';
 import clsx from 'clsx';
 import ScanUser from '../../ui/components/servicelogin/ScanUser';
+import Footer from './Footer';
 
 const styles = {
     topBarLink: {
@@ -106,6 +107,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
                 </div>}
                 <div id="layout-portlets-cover">
                     {props.children[1]}
+                    <Footer/>
                 </div>
             </div>
             {showScan}
