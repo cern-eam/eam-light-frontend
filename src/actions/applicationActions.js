@@ -72,7 +72,7 @@ export function updateScreenLayout(entity, entityDesc, systemFunction, userFunct
                         [entityDesc + 'Screen']: userFunction
                     }
                 }))
-            })
+            }).catch(console.error);
     }
 }
 

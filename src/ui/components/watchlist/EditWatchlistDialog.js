@@ -23,7 +23,7 @@ const EditWatchlistDialog = ({ open, woCode, userCode, handleClose, handleError 
             setWatchers(response.body.data);
             const isWatcher = response.body.data.some((watcher) => watcher.userCode === userCode);
             setIsWatching(isWatcher);
-        }).catch(error => console.log)
+        }).catch(console.error)
         .finally( () => setIsLoading(false))
     };
 
