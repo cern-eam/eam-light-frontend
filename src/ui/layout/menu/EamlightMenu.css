@@ -139,11 +139,11 @@
   }
 
   #menuscrollable {
-    overflow-y: auto;
     height: 100%;
+    /* overflow-y: auto;
     margin-right: -17px;
     overflow: scroll;
-    overflow-x: hidden;
+    overflow-x: hidden; */
     top: 0;
     right: 0;
     bottom: 0;
