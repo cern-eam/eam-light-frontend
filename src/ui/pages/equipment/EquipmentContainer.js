@@ -6,7 +6,7 @@ import {setLayoutProperty} from "../../../actions/uiActions";
 function mapStateToProps(state) {
     return {
         showEqpTree: state.ui.layout.showEqpTree,
-        eqp: state.ui.layout.equipment
+        equipment: state.ui.layout.equipment
     }
 }
 
