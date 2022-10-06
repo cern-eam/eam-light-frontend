@@ -11,12 +11,11 @@ class Equipment extends Component {
 
     componentWillUnmount() {
         // Removing this property from the store will force the eqp. tree to reinitialize when valid eqp. will be set
-        this.props.setLayoutProperty('equipment', null)
+        this.props.setLayoutProperty('equipment', null);
+        this.props.setLayoutProperty('showEqpTreeButton', false)
     }
 
     render() {
-        const equipmentCode = (this.props.eqp && this.props.eqp.code) || this.props.match.params.code;
-        
         return (
             <div className="entityContainer">
 
@@ -29,10 +28,10 @@ class Equipment extends Component {
                 >
 
                     <div style={{height: "100%", flexDirection: "column"}}>
-                        {equipmentCode && this.props.showEqpTree &&
-                            <EquipmentTree code={equipmentCode}
-                                           org={this.props.eqp.organization}
-                                           type={this.props.eqp.systemTypeCode}
+                        {this.props.equipment && this.props.showEqpTree &&
+                            <EquipmentTree code={this.props.equipment.code}
+                                           org={this.props.equipment.organization}
+                                           type={this.props.equipment.systemTypeCode}
                                            history={this.props.history}
                             />
                         }
