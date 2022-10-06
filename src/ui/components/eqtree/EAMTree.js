@@ -8,6 +8,7 @@ import TreeTheme from './theme/TreeTheme';
 import TreeIcon from './components/TreeIcon';
 import TreeSelectParent from "./components/TreeSelectParent";
 import BlockUi from 'react-block-ui';
+import { isMultiOrg } from 'ui/pages/EntityTools';
 
 class EAMTree extends Component {
   constructor(props) {
@@ -136,9 +137,10 @@ class EAMTree extends Component {
                 return {
                   isNodeSelected: this._isNodeSelected,
                   onClick: (event) => {
+                    
                     if (event.target.className === `rowTitle` && ["A", "P", "S", "L"].includes(rowInfo.node.type)) {
                       if (this.props.history) {
-                          this.props.history.push("/" + this._getURLForType(rowInfo.node.type) + `/${rowInfo.node.id}`);
+                          this.props.history.push("/" + this._getURLForType(rowInfo.node.type) + `/${rowInfo.node.id}${isMultiOrg ? '%23' + rowInfo.node.idOrg : ''}`);
                       }
                       window.parent.postMessage(JSON.stringify({
                         type: 'EQUIPMENT_TREE_NODE_CLICK',
