@@ -24,7 +24,7 @@ class WS {
         return this._get('/application/refreshCache', config);
     }
 
-    getScreenLayout(userGroup, entity, systemFunction, userFunction, tabs, config = {timeout: 20000}) {
+    getScreenLayout(userGroup, entity, systemFunction, userFunction, tabs, config = {timeout: 60000}) {
         if (tabs)
             tabs = 'tabname=' + tabs.join('&tabname=');
         return this._get(`/users/screenlayout/${userGroup}/${entity}/${systemFunction}/${userFunction}?${tabs}`, config)
