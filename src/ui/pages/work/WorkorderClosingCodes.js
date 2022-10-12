@@ -5,7 +5,7 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAuto
 
 const WorkorderClosingCodes = props => {
 
-    let {workOrderLayout, workorder, register} = props;
+    let {workOrderLayout, workorder, equipment, register} = props;
     
     if ("H" === workOrderLayout.fields.problemcode.attribute
         && "H" === workOrderLayout.fields.failurecode.attribute
@@ -20,22 +20,22 @@ const WorkorderClosingCodes = props => {
             <EAMSelect 
                 {...register('problemcode', 'problemCode')}
                 autocompleteHandler={WSWorkorders.getWorkOrderProblemCodeValues}
-                autocompleteHandlerParams={[workorder.classCode, null, workorder.equipmentCode]}/>
+                autocompleteHandlerParams={[workorder.classCode, equipment?.classCode, workorder.equipmentCode]}/>
 
             <EAMSelect 
                 {...register('failurecode', 'failureCode')}
                 autocompleteHandler={WSWorkorders.getWorkOrderFailureCodeValues}
-                autocompleteHandlerParams={[null, workorder.problemCode, workorder.equipmentCode]}/>
+                autocompleteHandlerParams={[equipment?.classCode, workorder.problemCode, workorder.equipmentCode]}/>
 
             <EAMSelect 
                 {...register('causecode', 'causeCode')}
                 autocompleteHandler={WSWorkorders.getWorkOrderCauseCodeValues}
-                autocompleteHandlerParams={[null, workorder.failureCode, workorder.problemCode, workorder.equipmentCode]}/>
+                autocompleteHandlerParams={[equipment?.classCode, workorder.failureCode, workorder.problemCode, workorder.equipmentCode]}/>
 
             <EAMSelect 
                 {...register('actioncode', 'actionCode')}
                 autocompleteHandler={WSWorkorders.getWorkOrderActionCodeValues}
-                autocompleteHandlerParams={[null,  workorder.failureCode, workorder.problemCode, workorder.causeCode, workorder.equipmentCode]}/>
+                autocompleteHandlerParams={[equipment?.classCode,  workorder.failureCode, workorder.problemCode, workorder.causeCode, workorder.equipmentCode]}/>
 
             <EAMAutocomplete 
                 {...register('costcode', 'costCode', 'costCodeDesc')}

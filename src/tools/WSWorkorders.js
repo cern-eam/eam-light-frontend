@@ -57,7 +57,7 @@ class WSWorkorders {
         return WS._get(`/wolists/typecodes?userGroup=${encodeURIComponent(userGroup)}`, config)
     }
 
-    getWorkOrderProblemCodeValues(woclass, objclass, equipment, config = {}) {
+     getWorkOrderProblemCodeValues(woclass, objclass, equipment, config = {}) {
         return WS._get('/wolists/problemcodes', {
             ...config,
             params: {

@@ -220,7 +220,7 @@ const Workorder = () => {
                 maximizable: false,
                 customVisibility: () => isRegionAvailable('CLOSING_CODES', commonProps.workOrderLayout),
                 render: () =>
-                    <WorkorderClosingCodes {...commonProps} />
+                    <WorkorderClosingCodes {...commonProps} equipment={equipment} />
                 ,
                 column: 1,
                 order: 3,
