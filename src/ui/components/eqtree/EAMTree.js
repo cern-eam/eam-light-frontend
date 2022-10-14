@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {useHistory} from "react-router-dom"
 import TreeWS from './lib/TreeWS';
 import ErrorTypes from 'eam-components/dist/ui/components/eamgrid/lib/GridErrorTypes';
 import SortableTree from 'react-sortable-tree';
@@ -7,6 +8,7 @@ import TreeIcon from './components/TreeIcon';
 import TreeSelectParent from './components/TreeSelectParent';
 import BlockUi from 'react-block-ui';
 import { isMultiOrg } from 'ui/pages/EntityTools';
+import { useSelector } from 'react-redux';
 
 const urlTypeMap = {
     A: 'asset',
@@ -29,8 +31,10 @@ const _getColorForType = (type) => {
 export default function EAMTree(props) {
     const [loading, setLoading] = useState(false);
     const [treeData, setTreeData] = useState(null);
+    const equipment = useSelector(state =>  state.ui.layout.equipment);
+    const history = useHistory();
 
-    const { code, org, type, layout, handleError } = props;
+    const { layout, handleError } = props;
     //const { eqpTreeNewChild, eqpTreeNewRoot} = layout;
 
     const _loadTreeData = async (code, org, type) => {
@@ -56,8 +60,10 @@ export default function EAMTree(props) {
 
 
     useEffect(() => {
-        _loadTreeData(code, org, type);
-    }, []);
+        if (!treeData && equipment) {
+            _loadTreeData(equipment.code, equipment.org, equipment.type);
+        }
+    }, [equipment]);
 
     const _reExpandNodes = async (newData) => {
         if (newData && newData.length > 0) {
@@ -100,7 +106,7 @@ export default function EAMTree(props) {
         // if (props.layout.eqpTreeCurrentNode) {
         //     return node.id === props.layout.eqpTreeCurrentNode.id;
         // }
-        return node.id === props.code;
+        return node.id === equipment.code;
     };
 
 
@@ -112,9 +118,9 @@ export default function EAMTree(props) {
             //     return;
             // }
 
-            if (props.history) {
-                props.history.push('/' + urlTypeMap[rowInfo.node.type] + `/${rowInfo.node.id}${isMultiOrg ? '%23' + rowInfo.node.idOrg : ''}`);
-            }
+
+            history.push('/' + urlTypeMap[rowInfo.node.type] + `/${rowInfo.node.id}${isMultiOrg ? '%23' + rowInfo.node.idOrg : ''}`);
+            
             window.parent.postMessage(
                 JSON.stringify({
                     type: 'EQUIPMENT_TREE_NODE_CLICK',
@@ -124,6 +130,11 @@ export default function EAMTree(props) {
             );
         }
     };
+
+
+    if (!equipment) {
+        return React.Fragment
+    }
 
     return (
         <>
