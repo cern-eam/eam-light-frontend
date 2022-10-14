@@ -28,13 +28,7 @@ class Equipment extends Component {
                 >
 
                     <div style={{height: "100%", flexDirection: "column"}}>
-                        {this.props.equipment && this.props.showEqpTree &&
-                            <EquipmentTree code={this.props.equipment.code}
-                                           org={this.props.equipment.organization}
-                                           type={this.props.equipment.systemTypeCode}
-                                           history={this.props.history}
-                            />
-                        }
+                        {this.props.showEqpTree && <EquipmentTree />}
                     </div>
 
                     <div style={{backgroundColor: "white", height: "100%", width: "100%"}}>
