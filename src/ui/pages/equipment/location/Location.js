@@ -65,6 +65,7 @@ export default Location = (props) => {
 
     function postInit() {
         setLayoutProperty('showEqpTreeButton', false)
+        setLayoutProperty('showEqpTree', false)
     }
 
     function postCreate(location) {
@@ -282,48 +283,48 @@ export default Location = (props) => {
         return React.Fragment;
     }
 
-        return (
-            <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}}>
-                <EamlightToolbarContainer 
-                                isModified={isModified} 
-                                 newEntity={newEntity}
-                                 entityScreen={screenPermissions}
-                                 entityName="Location"
-                                 entityKeyCode={location.code}
-                                 saveHandler={saveHandler}
-                                 newHandler={newHandler}
-                                 deleteHandler={deleteHandler}
-                                 toolbarProps={{
-                                    entityDesc: "Location",
-                                    entity: location,
-                                    //postInit: this.postInit.bind(this),
-                                    //setLayout: this.setLayout.bind(this),
-                                    newEntity: newEntity,
-                                    applicationData: applicationData,
-                                    extendedLink: applicationData.EL_LOCLI,
-                                    screencode: screenCode,
-                                    //copyHandler: this.copyEntity.bind(this),
-                                    entityType: ENTITY_TYPE.LOCATION,
-                                    screens: userData.screens,
-                                    workorderScreencode: userData.workOrderScreen
-                                 }}
-                                 width={730}
-                                 entityIcon={<LocationIcon style={{height: 18}}/>}
-                                 toggleHiddenRegion={toggleHiddenRegion}
-                                 getUniqueRegionID={getUniqueRegionID}
-                                 regions={getRegions()}
-                                 isHiddenRegion={isHiddenRegion}
-                                 getHiddenRegionState={getHiddenRegionState}
-                                 />
-                <EntityRegions
-                    showEqpTree={showEqpTree}
-                    regions={getRegions()}
-                    isNewEntity={newEntity} 
-                    isHiddenRegion={isHiddenRegion}
-                    setRegionVisibility={setRegionVisibility}
-                    getUniqueRegionID={getUniqueRegionID}
-                    getHiddenRegionState={getHiddenRegionState}/>
-            </BlockUi>
-        )
+    return (
+        <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}}>
+            <EamlightToolbarContainer 
+                            isModified={isModified} 
+                                newEntity={newEntity}
+                                entityScreen={screenPermissions}
+                                entityName="Location"
+                                entityKeyCode={location.code}
+                                saveHandler={saveHandler}
+                                newHandler={newHandler}
+                                deleteHandler={deleteHandler}
+                                toolbarProps={{
+                                entityDesc: "Location",
+                                entity: location,
+                                //postInit: this.postInit.bind(this),
+                                //setLayout: this.setLayout.bind(this),
+                                newEntity: newEntity,
+                                applicationData: applicationData,
+                                extendedLink: applicationData.EL_LOCLI,
+                                screencode: screenCode,
+                                //copyHandler: this.copyEntity.bind(this),
+                                entityType: ENTITY_TYPE.LOCATION,
+                                screens: userData.screens,
+                                workorderScreencode: userData.workOrderScreen
+                                }}
+                                width={730}
+                                entityIcon={<LocationIcon style={{height: 18}}/>}
+                                toggleHiddenRegion={toggleHiddenRegion}
+                                getUniqueRegionID={getUniqueRegionID}
+                                regions={getRegions()}
+                                isHiddenRegion={isHiddenRegion}
+                                getHiddenRegionState={getHiddenRegionState}
+                                />
+            <EntityRegions
+                showEqpTree={showEqpTree}
+                regions={getRegions()}
+                isNewEntity={newEntity} 
+                isHiddenRegion={isHiddenRegion}
+                setRegionVisibility={setRegionVisibility}
+                getUniqueRegionID={getUniqueRegionID}
+                getHiddenRegionState={getHiddenRegionState}/>
+        </BlockUi>
+    )
     
 }

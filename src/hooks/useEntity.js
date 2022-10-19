@@ -72,6 +72,7 @@ const useEntity = (params) => {
             .then(response => {
                 const entityCode = response.body.data;
                 showNotificationConst(entityDesc + ' ' + entityCode + ' has been successfully created.');
+                commentsComponent.current?.createCommentForNewEntity(entityCode);
                 // Read after the creation (and append the organization in multi-org mode)
                 history.push(process.env.PUBLIC_URL + entityURL + encodeURIComponent(entityCode + (isMultiOrg && entity.organization ? '#' + entity.organization : '')));
             })
@@ -125,6 +126,7 @@ const useEntity = (params) => {
             .then(response => {
                 validators.current = {}; setIsModified(false); setErrors(null); 
 
+                commentsComponent.current?.createCommentForNewEntity(entityCode);
                 showNotificationConst(`${entityDesc} ${entity[entityCodeProperty]} has been successfully updated.`);
                 readEntity(code);
             })
