@@ -68,6 +68,7 @@ const System = () => {
     function postInit() {
         readStatuses(true); 
         setLayoutProperty('showEqpTreeButton', false)
+        setLayoutProperty('showEqpTree', false)
     }
 
     function postRead(equipment) {
