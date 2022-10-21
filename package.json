@@ -73,7 +73,7 @@
     "not dead",
     "not op_mini all"
   ],
-  "proxy": "http://ubuntu:10880",
+  "proxy": "http://localhost:10880",
   "devDependencies": {
     "react-error-overlay": "6.0.9"
   }
