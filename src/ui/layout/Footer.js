@@ -13,7 +13,8 @@ const Footer = props => {
         color: "white",
         display: "flex",
         justifyContent: "end",
-        alignItems: "center"
+        alignItems: "center",
+        zIndex: 9999
     }
 
     return (
