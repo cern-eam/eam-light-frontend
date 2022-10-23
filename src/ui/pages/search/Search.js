@@ -38,30 +38,28 @@ class Search extends Component {
         }
 
         return (
-            <div>
-                <div id="searchContainer"
-                     className={this.state.searchBoxUp ? "searchContainer searchContainerSearch" : "searchContainer searchContainerHome"}>
-                    <SearchHeader keyword={this.state.keyword} searchBoxUp={this.state.searchBoxUp}
-                                  fetchDataHandler={this.fetchNewData.bind(this)}
-                                  onKeyDown={this.onKeyDown.bind(this)}
-                                  tryToGoToResult={this.tryToGoToResult.bind(this)}
-                                  showTypes={this.state.searchBoxUp}
-                    />
-                    <div id="searchResults"
-                         className={this.state.searchBoxUp ? "searchResultsSearch" : "searchResultsHome"}>
-                        <div className="linearProgressBox">
-                            {this.state.isFetching && <LinearProgress className="linearProgress"/>}
-                        </div>
-                        <div className="searchScrollBox">
-                            {(!this.state.isFetching && this.state.results.length === 0 && this.state.keyword) ?
-                                <div className="searchNoResults">No results found.</div> :
-                                <InfiniteScroll height="calc(100vh - 150px)">
-                                    <SearchResults data={this.state.results} keyword={this.state.keyword}
-                                                   selectedItemCode={!!this.state.results[this.state.selectedItemIndex] ? this.state.results[this.state.selectedItemIndex].code : null}/>
-                                </InfiniteScroll>
-                            }
+            <div id="searchContainer"
+                    className={this.state.searchBoxUp ? "searchContainer searchContainerSearch" : "searchContainer searchContainerHome"}>
+                <SearchHeader keyword={this.state.keyword} searchBoxUp={this.state.searchBoxUp}
+                                fetchDataHandler={this.fetchNewData.bind(this)}
+                                onKeyDown={this.onKeyDown.bind(this)}
+                                tryToGoToResult={this.tryToGoToResult.bind(this)}
+                                showTypes={this.state.searchBoxUp}
+                />
+                <div id="searchResults"
+                        className={this.state.searchBoxUp ? "searchResultsSearch" : "searchResultsHome"}>
+                    <div className="linearProgressBox">
+                        {this.state.isFetching && <LinearProgress className="linearProgress"/>}
+                    </div>
+                    <div className="searchScrollBox">
+                        {(!this.state.isFetching && this.state.results.length === 0 && this.state.keyword) ?
+                            <div className="searchNoResults">No results found.</div> :
+                            <InfiniteScroll height="calc(100vh - 180px)">
+                                <SearchResults data={this.state.results} keyword={this.state.keyword}
+                                                selectedItemCode={!!this.state.results[this.state.selectedItemIndex] ? this.state.results[this.state.selectedItemIndex].code : null}/>
+                            </InfiniteScroll>
+                        }
 
-                        </div>
                     </div>
                 </div>
             </div>

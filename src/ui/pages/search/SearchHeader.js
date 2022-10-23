@@ -29,8 +29,6 @@ const searchIconStyle = {
     top: 5
 };
 
-const PHONE_SCREEN_WIDTH = 455;
-
 export default class SearchHeader extends React.Component {
 
     state = {
@@ -38,18 +36,8 @@ export default class SearchHeader extends React.Component {
         isPhoneScreen: false,
     };
 
-    updateWidth = () => {
-        this.setState({ isPhoneScreen: this.searchBoxDiv?.clientWidth < PHONE_SCREEN_WIDTH });
-    };
-
     componentDidMount() {
         this.searchInput.focus();
-        this.updateWidth();
-        window.addEventListener('resize', this.updateWidth);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateWidth);
     }
 
     renderTypeCheckbox(searchType) {
@@ -86,7 +74,6 @@ export default class SearchHeader extends React.Component {
     renderIcon = () => (
         <>
             <img src="images/eamlight_logo.png" alt="EAM Light Logo" style={{paddingLeft: 20}}/>
-            <div style={{width: 10}}></div>
             <div id="searchBoxLabelGreeting" className={this.props.searchBoxUp ? "searchBoxLabelGreetingSearch" : "searchBoxLabelGreetingHome" }>
                 <span className="FontLatoBlack Fleft Fs30 DispBlock" style={{color: "#02a2f2"}}>Welcome to EAM Light</span>
             </div>

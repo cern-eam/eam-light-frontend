@@ -10,7 +10,7 @@ const groupLabelStyle = {
     "marginTop": 17,
     "marginBottom": 5,
     "fontWeight": "900",
-    "color": "rgb(52 111 151)",
+    "color": "#1a237e",
     "fontSize": "0.90rem",
     "flex": "1 1 auto",
     "textAlign": "center"
