@@ -14,7 +14,7 @@ const Footer = props => {
         display: "flex",
         justifyContent: "end",
         alignItems: "center",
-        zIndex: 9999
+        zIndex: 1350 // snackbar has 1400
     }
 
     return (
