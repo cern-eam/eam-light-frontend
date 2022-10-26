@@ -100,7 +100,6 @@ export default class SearchHeader extends React.Component {
         const { showTypes } = this.props;
         return (
             <>
-                <FontIcon style={searchIconStyle} className="fa fa-search"/>
                 {   
                     showTypes &&
                         <div className='searchTypes' style={this.state.isPhoneScreen ? { flexDirection: 'column', height: 'auto' } : {}}>
