@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -13,6 +12,7 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAuto
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import { createOnChangeHandler, processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import LightDialog from 'ui/components/LightDialog';
 
 /**
  * Display detail of an activity
@@ -102,7 +102,7 @@ function AddActivityDialog(props) {
     
     return (
         <div onKeyDown={onKeyDown}>
-            <Dialog
+            <LightDialog
                 fullWidth
                 id="addBookLabourDialog"
                 open={props.open}
@@ -174,7 +174,7 @@ function AddActivityDialog(props) {
                     </div>
                 </DialogActions>
 
-            </Dialog>
+            </LightDialog>
         </div>
     );
 }
