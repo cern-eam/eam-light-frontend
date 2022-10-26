@@ -20,7 +20,7 @@ import WorkorderDetails from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
 import { assignStandardWorkOrderValues, isClosedWorkOrder, isRegionAvailable, layoutPropertiesMap } from "./WorkorderTools";
 import EntityRegions from '../../components/entityregions/EntityRegions';
-import IconButton from '@mui/material/IconButton';
+import { IconButton, Typography } from '@mui/material';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
 import { isCernMode } from '../../components/CERNMode';
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
@@ -397,7 +397,8 @@ const Workorder = () => {
                                         onClick={() => window.open(applicationData.EL_PRTCL + workorder.number, '_blank', 'noopener noreferrer')}
                                         style={{ color: "#00aaff" }}
                                         size="large">
-                                        <OpenInNewIcon />
+                                        <OpenInNewIcon style={{ padding: "9px" }} />
+                                        <Typography>Results</Typography>
                                     </IconButton>
                                 </div>
                         }/>
