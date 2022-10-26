@@ -48,6 +48,7 @@ import { PartIcon } from 'eam-components/dist/ui/components/icons';
 import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
+import { Typography } from '@mui/material';
 
 const Workorder = () => {
     const [equipmentMEC, setEquipmentMEC] = useState();
@@ -400,7 +401,8 @@ const Workorder = () => {
                                         onClick={() => window.open(applicationData.EL_PRTCL + workorder.number, '_blank', 'noopener noreferrer')}
                                         style={{ color: "#00aaff" }}
                                         size="large">
-                                        <OpenInNewIcon />
+                                        <OpenInNewIcon style={{ padding: "9px" }} />
+                                         <Typography>Results</Typography>
                                     </IconButton>
                                 </div>
                         }/>
