@@ -71,6 +71,9 @@ export function isRegionAvailable(regionCode, workOrderLayout) {
         case 'CUSTOM_FIELDS_EQP':
             //Is button viewequipcustomfields
             return fields.viewequipcustomfields && fields.viewequipcustomfields.attribute === 'O';
+        case 'CUSTOM_FIELDS_PART':
+            //Is button viewequipcustomfields
+            return fields.viewequipcustomfields && fields.viewequipcustomfields.attribute === 'O';
         default:
             return true;
     }

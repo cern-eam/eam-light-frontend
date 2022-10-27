@@ -308,7 +308,7 @@ const Asset = () => {
                 column: 2,
                 order: 11,
                 summaryIcon: ListAltIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                ignore: assetLayout.fields.block_6.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
@@ -328,7 +328,7 @@ const Asset = () => {
                 column: 2,
                 order: 12,
                 summaryIcon: HardwareIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
+                ignore: assetLayout.fields.block_6.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
             },
             {
