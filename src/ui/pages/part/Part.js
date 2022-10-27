@@ -207,7 +207,6 @@ const Part = () => {
                 id: 'CUSTOMFIELDS',
                 label: 'Custom Fields',
                 isVisibleWhenNewEntity: true,
-                customVisibility: () => PartTools.isRegionAvailable('CUSTOM_FIELDS', partLayout),
                 maximizable: false,
                 render: () => 
                     <CustomFields
@@ -221,7 +220,7 @@ const Part = () => {
                 column: 2,
                 order: 7,
                 summaryIcon: ListAltIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                ignore: partLayout.fields.block_6.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
         ]

@@ -292,7 +292,7 @@ const Position = () => {
                 column: 2,
                 order: 11,
                 summaryIcon: ListAltIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                ignore: positionLayout.fields.block_4.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {

@@ -418,7 +418,6 @@ const Workorder = () => {
                 id: 'CUSTOMFIELDS',
                 label: 'Custom Fields',
                 isVisibleWhenNewEntity: true,
-                customVisibility: () => workOrderLayout.fields.block_5.attribute !== 'H',
                 maximizable: false,
                 render: () =>
                     <CustomFields
@@ -431,14 +430,13 @@ const Workorder = () => {
                 column: 2,
                 order: 10,
                 summaryIcon: ListAltIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                ignore: workOrderLayout.fields.block_5.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'CUSTOMFIELDSEQP',
                 label: 'Custom Fields Equipment',
                 isVisibleWhenNewEntity: true,
-                customVisibility: () => isRegionAvailable('CUSTOM_FIELDS_EQP', commonProps.workOrderLayout),
                 maximizable: false,
                 render: () =>
                     <CustomFields
@@ -451,15 +449,13 @@ const Workorder = () => {
                 column: 2,
                 order: 11,
                 summaryIcon: ConstructionIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                ignore: !isRegionAvailable('CUSTOM_FIELDS_EQP', commonProps.workOrderLayout),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'CUSTOMFIELDSPART',
                 label: 'Custom Fields Part',
                 isVisibleWhenNewEntity: true,
-                customVisibility: () =>
-                    isRegionAvailable('CUSTOM_FIELDS_PART', commonProps.workOrderLayout),
                 maximizable: false,
                 render: () => (
                     <CustomFields
@@ -472,7 +468,7 @@ const Workorder = () => {
                 column: 2,
                 order: 12,
                 summaryIcon: HardwareIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
+                ignore: !isRegionAvailable('CUSTOM_FIELDS_PART', commonProps.workOrderLayout),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
             },
             {
