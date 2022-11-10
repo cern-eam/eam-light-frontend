@@ -388,7 +388,7 @@ const Workorder = () => {
                         handleError={handleError}
                         userCode={userData.eamAccount.userCode}
                         disabled={readOnly}
-                        hideFilledItems={panelQueryParams.hideFilledItems === 'true'}
+                        hideFilledItems={panelQueryParams.CHECKLISTShideFilledItems === 'true'}
                         activity={panelQueryParams.CHECKLISTSactivity}
                         topSlot={
                             applicationData.EL_PRTCL &&
