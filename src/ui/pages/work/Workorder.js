@@ -97,9 +97,6 @@ const Workorder = () => {
     //
     //
     //
-    useEffect(() => {
-        setLayoutProperty('showEqpTreeButton', false);
-    }, [])
 
     useEffect( () => {
         setEquipment(null);

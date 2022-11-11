@@ -57,9 +57,6 @@ const Part = () => {
     //
     //
     //
-    useEffect(() => {
-        setLayoutProperty('showEqpTreeButton', false);
-    }, [])
 
     function postCreate() {
         commentsComponent.current.createCommentForNewEntity();

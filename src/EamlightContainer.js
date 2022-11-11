@@ -7,6 +7,7 @@ const mapStateToProps = (state) => {
         inforContext: state.inforContext,
         userData: state.application.userData,
         applicationData: state.application.applicationData,
+        showEqpTree: state.ui.layout.showEqpTree
     }
 };
 

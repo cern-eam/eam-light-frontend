@@ -36,7 +36,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
     const theme = useTheme();
     const dispatch = useDispatch();
     const showEqpTree = useSelector(state => state.ui.layout.showEqpTree)
-    const showEqpTreeButton = useSelector(state => state.ui.layout.showEqpTreeButton)
+    const equipment = useSelector(state => state.ui.layout.equipment)
     const location = useLocation()
 
     const menuIconStyle = {
@@ -72,7 +72,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
                     </IconButton>
                 </div>
 
-                {showEqpTreeButton &&
+                {equipment &&
                 <div id="eqp-tree-btn">
                     <div style={{borderLeft: "1px solid rgba(255, 255, 255, 0.8)", height: 22}}/>
                     <IconButton

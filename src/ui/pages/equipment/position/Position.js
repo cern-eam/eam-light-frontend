@@ -68,13 +68,10 @@ const Position = () => {
 
         function postInit() {
             readStatuses(true); 
-            setLayoutProperty('showEqpTreeButton', false)
-            setLayoutProperty('showEqpTree', false)
         }
     
         function postRead(equipment) {
             readStatuses(false, equipment.statusCode) 
-            setLayoutProperty('showEqpTreeButton', true)
             setLayoutProperty('equipment', equipment);
         }
     

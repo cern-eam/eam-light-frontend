@@ -46,8 +46,7 @@ export default Location = (props) => {
             },
             postActions: {
                 create: postCreate,
-                read: postRead,
-                new: postInit
+                read: postRead
             },
             entityCode: "LOC",
             entityDesc: "Location",
@@ -59,18 +58,11 @@ export default Location = (props) => {
 
 
     function postRead() {
-        setLayoutProperty("showEqpTreeButton", true);
         setLayoutProperty("location", this.state.location);
-    }
-
-    function postInit() {
-        setLayoutProperty('showEqpTreeButton', false)
-        setLayoutProperty('showEqpTree', false)
     }
 
     function postCreate(location) {
         commentsComponent.current?.createCommentForNewEntity(location.code);
-        setLayoutProperty("showEqpTreeButton", true)
     }
 
     const getRegions = () => {

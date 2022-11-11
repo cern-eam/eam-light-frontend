@@ -48,7 +48,7 @@ function buildDefaultUiObject() {
 
     return {
         snackbar: {message: "", type: "", open: false},
-        layout: {showEqpTreeButton: false, showEqpTree: false},
+        layout: {showEqpTree: false},
         hiddenRegions: JSON.parse(localStorage.getItem("hiddenRegions")) || {}
     }
 }
