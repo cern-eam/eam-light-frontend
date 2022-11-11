@@ -43,6 +43,7 @@ export default function InstallEqp(props) {
         }
     }
 
+    
     return (
         <div id="entityContainer" style={{height: "100%"}}>
             <BlockUi tag="div" blocking={blocking} style={{height: "100%", width: "100%"}}>
@@ -55,7 +56,10 @@ export default function InstallEqp(props) {
                                             required
                                             label={"Parent"}
                                             value={parentEq}
-                                            onChange={createOnChangeHandler(null, null, null, null, setParentEq)}
+                                            onChange={createOnChangeHandler(null, null, null, null, parentEquipment => {
+                                                props.setLayoutProperty('equipment', {code: parentEquipment});
+                                                setParentEq(parentEquipment)
+                                            })}
                                             autocompleteHandler={WS.autocompleteEquipment}
                                             autocompleteHandlerParams={[true]}
                                             barcodeScanner
