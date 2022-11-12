@@ -67,11 +67,14 @@ const System = () => {
 
     function postInit() {
         readStatuses(true); 
+        setLayoutProperty('equipment', null)
     }
 
     function postRead(equipment) {
-        readStatuses(false, equipment.statusCode) 
-        setLayoutProperty('equipment', equipment);
+        readStatuses(false, equipment.statusCode);
+        if (!showEqpTree) {
+            setLayoutProperty('equipment', equipment);
+        }
     }
 
     const readStatuses = (neweqp, statusCode) => {

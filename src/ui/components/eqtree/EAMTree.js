@@ -7,16 +7,17 @@ import TreeTheme from './theme/TreeTheme';
 import TreeIcon from './components/TreeIcon';
 import TreeSelectParent from './components/TreeSelectParent';
 import BlockUi from 'react-block-ui';
-import { isMultiOrg } from 'ui/pages/EntityTools';
 import { useSelector } from 'react-redux';
+import NodeSelectMenu from './components/NodeSelectMenu';
+import { isMultiOrg } from 'ui/pages/EntityTools';
 
 const urlTypeMap = {
     A: 'asset',
     P: 'position',
     S: 'system',
     L: 'location',
-};
-
+  };
+  
 const _getColorForType = (type) => {
     switch (type) {
         case 'A':
@@ -31,11 +32,15 @@ const _getColorForType = (type) => {
 export default function EAMTree(props) {
     const [loading, setLoading] = useState(false);
     const [treeData, setTreeData] = useState(null);
+    
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [currentRow, setCurrentRow] = React.useState(null);
+    
     const equipment = useSelector(state =>  state.ui.layout.equipment);
+    const eqpTreeMenu = useSelector(state =>  state.ui.layout.eqpTreeMenu);
     const history = useHistory();
 
-    const { layout, handleError } = props;
-    //const { eqpTreeNewChild, eqpTreeNewRoot} = layout;
+    const { handleError } = props;
 
     const _loadTreeData = async (code, org, type) => {
         setLoading(true);
@@ -54,13 +59,8 @@ export default function EAMTree(props) {
         }
     };
 
-    // useEffect(() => {
-    //     _loadTreeData(code);
-    // }, [eqpTreeNewChild, eqpTreeNewRoot]);
-
-
     useEffect(() => {
-        if (!treeData && equipment) {
+        if (equipment) {
             _loadTreeData(equipment.code, equipment.org, equipment.type);
         }
     }, [equipment]);
@@ -103,34 +103,45 @@ export default function EAMTree(props) {
     };
 
     const _isNodeSelected = (node) => {
-        // if (props.layout.eqpTreeCurrentNode) {
-        //     return node.id === props.layout.eqpTreeCurrentNode.id;
-        // }
+        if (currentRow) {
+            return node.id === currentRow.node.id;
+        }
         return node.id === equipment.code;
     };
 
 
+    const _navigate = (rowInfo) => {
+
+        history.push('/' + urlTypeMap[rowInfo.node.type] + `/${rowInfo.node.id}${isMultiOrg ? '%23' + rowInfo.node.idOrg : ''}`);
+        
+        window.parent.postMessage(
+            JSON.stringify({
+                type: 'EQUIPMENT_TREE_NODE_CLICK',
+                node: rowInfo.node,
+            }),
+            '*'
+        );
+      }
+
+
     const nodeClickHandler = (rowInfo) => (event) => {
+        
         if (event.target.className === `rowTitle` && ['A', 'P', 'S', 'L'].includes(rowInfo.node.type)) {
-            
-            // if (window.location.pathname.includes('installeqp')) {
-            //     props.setLayoutProperty('eqpTreeCurrentNode', rowInfo.node);
-            //     return;
-            // }
+            setCurrentRow(rowInfo);
 
+            if (eqpTreeMenu) {
+                setAnchorEl(event.currentTarget)
+                return;
+            }
 
-            history.push('/' + urlTypeMap[rowInfo.node.type] + `/${rowInfo.node.id}${isMultiOrg ? '%23' + rowInfo.node.idOrg : ''}`);
+           _navigate(rowInfo);
             
-            window.parent.postMessage(
-                JSON.stringify({
-                    type: 'EQUIPMENT_TREE_NODE_CLICK',
-                    node: rowInfo.node,
-                }),
-                '*'
-            );
         }
     };
 
+    const handleClose = () => {
+        setAnchorEl(null);
+      };
 
     if (!equipment) {
         return React.Fragment
@@ -191,6 +202,7 @@ export default function EAMTree(props) {
                         })}
                 />}
             </div>
+            <NodeSelectMenu anchorEl={anchorEl} handleClose={handleClose} currentRow={currentRow} _navigate={_navigate} eqpTreeMenu={eqpTreeMenu}/>
         </>
     );
 }

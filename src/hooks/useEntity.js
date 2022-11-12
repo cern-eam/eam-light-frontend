@@ -15,7 +15,8 @@ import { get } from "lodash";
 
 const useEntity = (params) => {
 
-    const {WS, postActions, handlers, entityCode, entityDesc, entityURL, entityCodeProperty, screenProperty, layoutProperty, layoutPropertiesMap, isReadOnlyCustomHandler} = params;
+    const {WS, postActions, handlers, entityCode, entityDesc, entityURL, entityCodeProperty, screenProperty, layoutProperty, layoutPropertiesMap, 
+        isReadOnlyCustomHandler, onMountHandler, onUnmountHandler} = params;
 
     const [loading, setLoading] = useState(false);
     const [entity, setEntity] = useState(null);
@@ -58,6 +59,10 @@ const useEntity = (params) => {
         return () => document.title = "EAM Light";
     }, [code])
 
+    useEffect( () => {
+        onMountHandler?.();
+        return () => onUnmountHandler?.();
+    }, [])
 
     //
     // CRUD
