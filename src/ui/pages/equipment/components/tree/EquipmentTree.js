@@ -32,10 +32,7 @@ class EquipmentTree extends Component {
                     </div>
                 }
                 <div style={this.treeDivStyle}>
-                    <EAMTree code={this.props.code}
-                             org={this.props.org}
-                             type={this.props.type}
-                             history={this.props.history}/>
+                    <EAMTree history={this.props.history}/>
                 </div>
             </div>
 

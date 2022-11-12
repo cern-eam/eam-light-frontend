@@ -91,7 +91,9 @@ const Workorder = () => {
             entityCodeProperty: "number",
             screenProperty: "workOrderScreen",
             layoutProperty: "workOrderLayout",
-            layoutPropertiesMap
+            layoutPropertiesMap,
+            onMountHandler: mountHandler,
+            onUnmountHandler: unmountHandler
     });
 
     //
@@ -103,6 +105,8 @@ const Workorder = () => {
         setEquipmentPart(null);
         
         if (!workorder?.equipmentCode) {
+            setLayoutProperty('equipment', null);
+            setLayoutProperty('showEqpTree', null);
             return;
         }
 
@@ -115,6 +119,11 @@ const Workorder = () => {
                 .then(response => setEquipmentPart(response.body.data))
                 .catch(console.error);
             }
+
+            setLayoutProperty('equipment', {code: equipmentResponse.code, 
+                                            org: equipmentResponse.organization, 
+                                            type: equipmentResponse.systemTypeCode});
+
         })
         .catch(console.error);
            
@@ -498,8 +507,6 @@ const Workorder = () => {
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_TAB_WO_SCREEN)
             },
         ];
-
-
     }
 
     //
@@ -532,7 +539,6 @@ const Workorder = () => {
             .catch(console.error);
     }
 
-    // TODO: check if working
     const postAddActivityHandler = () => {
         //Refresh the activities in the checklist
         checklists.current && checklists.current.readActivities(workorder.number);
@@ -542,6 +548,20 @@ const Workorder = () => {
         WSWorkorder.getWOEquipToOtherIdMapping(number)
             .then(response => setOtherIdMapping(response.body.data))
             .catch(error => console.error('readOtherIdMapping', error))
+    }
+
+    function mountHandler() {
+        setLayoutProperty('eqpTreeMenu', {
+            desc: "Use for this Work Order",
+            handler: (rowInfo) => {
+                updateWorkorderProperty('equipmentCode', rowInfo.node.id)
+                updateWorkorderProperty('equipmentDesc', rowInfo.node.name)
+            }
+        })
+    }
+
+    function unmountHandler() {
+        setLayoutProperty('eqpTreeMenu', null);
     }
 
     if (!workorder) {

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import EISPanel from 'eam-components/dist/ui/components/panel';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid'
@@ -15,6 +15,20 @@ export default function InstallEqp(props) {
     const [blocking, setBlocking] = useState(false);
 
     const idPrefix = "EAMID_InstallEqp_";
+
+    useEffect( () => {
+        props.setLayoutProperty('eqpTreeMenu', {
+            desc: "Use as Child Equipment",
+            handler: rowInfo => {
+                setChildEq(rowInfo.node.id)
+            }
+        });
+        props.setLayoutProperty('equipment', null);
+        props.setLayoutProperty('showEqpTree', false);
+        return () => {
+            props.setLayoutProperty('eqpTreeMenu', null);
+        }
+    }, [])
 
     const createEquipmentStructure = (newParent, child) => {
         return {
