@@ -41,6 +41,7 @@ class TreeSelectParent extends React.Component {
   handleClose = (option) => {
     this.setState({ anchorEl: null });
     if(option && option.parentCode && option.parentType !== 'L') {
+        //this.props.setLayoutProperty('equipment', {code: option.parentCode, organization: option.parentOrg, systemTypeCode: option.parentType})
         this.props.reloadData(option.parentCode, option.parentOrg, option.parentType);
     }
   };

@@ -7,12 +7,19 @@ import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import { isDepartmentReadOnly, isMultiOrg } from '../EntityTools';
 import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
+import { IconButton } from '@mui/material';
+import { FileTree } from 'mdi-material-ui';
 
 function WorkorderDetails(props) {
 
-    const {workorder, register, applicationData, statuses, userGroup, userData, screenPermissions, newEntity, screenCode } = props; 
+    const {workorder, register, applicationData, statuses, userGroup, userData, screenPermissions, newEntity, screenCode, setLayoutProperty } = props; 
     const rpawClassesList = (applicationData && applicationData.EL_TRPAC && applicationData.EL_TRPAC.split(',')) || [];
     const rpawLink = applicationData && applicationData.EL_TRPAW;
+
+    const treeButtonClickHandler = (code) => {
+        setLayoutProperty('equipment', {code: workorder.equipmentCode, organization: workorder.equipmentOrganization});
+        setLayoutProperty('showEqpTree', true);
+    }
 
     return (
         <React.Fragment>
@@ -27,7 +34,15 @@ function WorkorderDetails(props) {
                              barcodeScanner
                              autocompleteHandler={WS.autocompleteEquipment}
                              autocompleteHandlerParams={[false]}
-                             link={() => workorder.equipmentCode ? "/equipment/" + workorder.equipmentCode : null}/>
+                             link={() => workorder.equipmentCode ? "/equipment/" + workorder.equipmentCode : null}
+                             endAdornment={
+                                <IconButton size="small" 
+                                            onClick={treeButtonClickHandler} 
+                                            disabled={!workorder.equipmentCode}>
+                                    <FileTree/>
+                                </IconButton>
+                            }
+                            />
   
             <EAMAutocomplete {...register('location', 'locationCode', 'locationDesc')}
                              autocompleteHandler={WS.autocompleteLocation}/>

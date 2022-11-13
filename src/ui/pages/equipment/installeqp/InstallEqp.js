@@ -7,6 +7,9 @@ import WS from "../../../../tools/WS";
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import BlockUi from 'react-block-ui';
 import { createOnChangeHandler } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import { IconButton } from '@mui/material';
+import { FileTree } from 'mdi-material-ui';
+
 
 export default function InstallEqp(props) {
 
@@ -17,14 +20,20 @@ export default function InstallEqp(props) {
     const idPrefix = "EAMID_InstallEqp_";
 
     useEffect( () => {
-        props.setLayoutProperty('eqpTreeMenu', {
-            desc: "Use as Child Equipment",
-            handler: rowInfo => {
-                setChildEq(rowInfo.node.id)
-            }
-        });
-        props.setLayoutProperty('equipment', null);
-        props.setLayoutProperty('showEqpTree', false);
+        props.setLayoutProperty('eqpTreeMenu', [
+            {
+                desc: "Use as Child Equipment",
+                handler: rowInfo => {
+                    setChildEq(rowInfo.node.id)
+                }
+            },
+            {
+                desc: "Use as Parent Equipment",
+                handler: rowInfo => {
+                    setParentEq(rowInfo.node.id)
+                }
+            },
+        ]);
         return () => {
             props.setLayoutProperty('eqpTreeMenu', null);
         }
@@ -48,7 +57,8 @@ export default function InstallEqp(props) {
             WSEquipment.installEquipment(code).then(response => {
                 props.showNotification(`${childEq} was successfully attached to ${parentEq}`);
                 setChildEq("");
-                setParentEq("");
+                //setParentEq("");
+                props.setLayoutProperty('equipment', {code: parentEq});
                 setBlocking(false);
             }).catch(error => {
                 props.handleError(error);
@@ -57,7 +67,11 @@ export default function InstallEqp(props) {
         }
     }
 
-    
+    const treeButtonClickHandler = (code) => {
+        props.setLayoutProperty('equipment', {code});
+        props.setLayoutProperty('showEqpTree', true);
+    }
+
     return (
         <div id="entityContainer" style={{height: "100%"}}>
             <BlockUi tag="div" blocking={blocking} style={{height: "100%", width: "100%"}}>
@@ -70,14 +84,18 @@ export default function InstallEqp(props) {
                                             required
                                             label={"Parent"}
                                             value={parentEq}
-                                            onChange={createOnChangeHandler(null, null, null, null, parentEquipment => {
-                                                props.setLayoutProperty('equipment', {code: parentEquipment});
-                                                setParentEq(parentEquipment)
-                                            })}
+                                            onChange={createOnChangeHandler(null, null, null, null, setParentEq)}
                                             autocompleteHandler={WS.autocompleteEquipment}
                                             autocompleteHandlerParams={[true]}
                                             barcodeScanner
                                             id={`${idPrefix}PARENT`}
+                                            endAdornment={
+                                                <IconButton size="small" 
+                                                            onClick={() => treeButtonClickHandler(parentEq)} 
+                                                            disabled={!parentEq}>
+                                                    <FileTree/>
+                                                </IconButton>
+                                            }
                                         />
 
                                         <EAMAutocomplete 
@@ -89,6 +107,13 @@ export default function InstallEqp(props) {
                                             autocompleteHandlerParams={[true]}
                                             barcodeScanner
                                             id={`${idPrefix}CHILD`}
+                                            endAdornment={
+                                                <IconButton size="small" 
+                                                            onClick={() => treeButtonClickHandler(childEq)}
+                                                            disabled={!childEq}>
+                                                    <FileTree/>
+                                                </IconButton>
+                                            }
                                         />
 
                                     <Button

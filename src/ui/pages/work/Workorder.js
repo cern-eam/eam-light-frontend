@@ -105,8 +105,6 @@ const Workorder = () => {
         setEquipmentPart(null);
         
         if (!workorder?.equipmentCode) {
-            setLayoutProperty('equipment', null);
-            setLayoutProperty('showEqpTree', null);
             return;
         }
 
@@ -119,11 +117,6 @@ const Workorder = () => {
                 .then(response => setEquipmentPart(response.body.data))
                 .catch(console.error);
             }
-
-            setLayoutProperty('equipment', {code: equipmentResponse.code, 
-                                            org: equipmentResponse.organization, 
-                                            type: equipmentResponse.systemTypeCode});
-
         })
         .catch(console.error);
            
@@ -197,7 +190,8 @@ const Workorder = () => {
                         statuses={statuses}
                         newEntity={newEntity}
                         screenCode={screenCode}
-                        screenPermissions={screenPermissions}/>
+                        screenPermissions={screenPermissions}
+                        setLayoutProperty={setLayoutProperty}/>
                 ,
                 column: 1,
                 order: 1,
@@ -551,13 +545,13 @@ const Workorder = () => {
     }
 
     function mountHandler() {
-        setLayoutProperty('eqpTreeMenu', {
+        setLayoutProperty('eqpTreeMenu', [{
             desc: "Use for this Work Order",
             handler: (rowInfo) => {
                 updateWorkorderProperty('equipmentCode', rowInfo.node.id)
                 updateWorkorderProperty('equipmentDesc', rowInfo.node.name)
             }
-        })
+        }])
     }
 
     function unmountHandler() {
