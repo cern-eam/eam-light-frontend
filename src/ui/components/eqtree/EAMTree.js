@@ -7,9 +7,10 @@ import TreeTheme from './theme/TreeTheme';
 import TreeIcon from './components/TreeIcon';
 import TreeSelectParent from './components/TreeSelectParent';
 import BlockUi from 'react-block-ui';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import NodeSelectMenu from './components/NodeSelectMenu';
 import { isMultiOrg } from 'ui/pages/EntityTools';
+import { handleError, setLayoutProperty } from 'actions/uiActions';
 
 const urlTypeMap = {
     A: 'asset',
@@ -40,7 +41,9 @@ export default function EAMTree(props) {
     const eqpTreeMenu = useSelector(state =>  state.ui.layout.eqpTreeMenu);
     const history = useHistory();
 
-    const { handleError } = props;
+    const dispatch = useDispatch();
+    const setLayoutPropertyConst = (...args) => dispatch(setLayoutProperty(...args));
+    const handleErrorConst = (...args) => dispatch(handleError(...args));
 
     const _loadTreeData = async (code, org, type) => {
         setLoading(true);
@@ -51,17 +54,18 @@ export default function EAMTree(props) {
                 await _reExpandNodes(data);
             }
             setTreeData(data);
-            setLoading(false);
         } catch (error) {
             if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
-                handleError(error);
+                handleErrorConst(error);
             }
+        } finally {
+            setLoading(false);
         }
     };
 
     useEffect(() => {
         if (equipment) {
-            _loadTreeData(equipment.code, equipment.org, equipment.type);
+            _loadTreeData(equipment.code, equipment.organization, equipment.systemTypeCode);
         }
     }, [equipment]);
 
@@ -184,6 +188,7 @@ export default function EAMTree(props) {
                                             rowInfo.node.parents.length > 0 && (
                                                 <TreeSelectParent
                                                     parents={rowInfo.node.parents}
+                                                    setLayoutProperty={setLayoutPropertyConst}
                                                     reloadData={_loadTreeData}
                                                 />
                                             )}

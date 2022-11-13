@@ -1,4 +1,5 @@
 import { React } from "mdi-material-ui";
+import Divider from '@mui/material/Divider';
 
 const { Menu, MenuItem } = require("@mui/material")
 
@@ -11,11 +12,6 @@ const NodeSelectMenu = props => {
         _navigate(currentRow);
     }
 
-    const otherHandler = () => {
-        handleClose();
-        eqpTreeMenu.handler(currentRow);
-    }
-
     if (!currentRow || !eqpTreeMenu) {
         return React.Fragment;
     }
@@ -26,8 +22,14 @@ const NodeSelectMenu = props => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
         >
+        {eqpTreeMenu.map(menu => 
+            <MenuItem onClick={() => {
+                handleClose();
+                menu.handler(currentRow);
+            }}>{menu.desc}</MenuItem>
+        )}
+        <Divider/>
         <MenuItem onClick={openHandler}>Open {currentRow.node.id}</MenuItem>
-        <MenuItem onClick={otherHandler}>{eqpTreeMenu.desc}</MenuItem>
       </Menu>
     )
 
