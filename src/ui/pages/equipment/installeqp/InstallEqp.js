@@ -9,30 +9,34 @@ import BlockUi from 'react-block-ui';
 import { createOnChangeHandler } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 import { IconButton } from '@mui/material';
 import { FileTree } from 'mdi-material-ui';
-
+import { useSelector } from 'react-redux';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 export default function InstallEqp(props) {
 
     const [parentEq, setParentEq] = useState("");
     const [childEq, setChildEq] = useState("");
     const [blocking, setBlocking] = useState(false);
-
+    const currentRoot = useSelector(state =>  state.ui.layout.currentRoot);
     const idPrefix = "EAMID_InstallEqp_";
 
     useEffect( () => {
         props.setLayoutProperty('eqpTreeMenu', [
             {
-                desc: "Use as Child Equipment",
-                handler: rowInfo => {
-                    setChildEq(rowInfo.node.id)
-                }
-            },
-            {
-                desc: "Use as Parent Equipment",
+                desc: "Use as Parent",
+                icon: <KeyboardArrowUpIcon/>,
                 handler: rowInfo => {
                     setParentEq(rowInfo.node.id)
                 }
             },
+            {
+                desc: "Use as Child",
+                icon: <KeyboardArrowDownIcon/>,
+                handler: rowInfo => {
+                    setChildEq(rowInfo.node.id)
+                }
+            }
         ]);
         return () => {
             props.setLayoutProperty('eqpTreeMenu', null);
@@ -57,8 +61,7 @@ export default function InstallEqp(props) {
             WSEquipment.installEquipment(code).then(response => {
                 props.showNotification(`${childEq} was successfully attached to ${parentEq}`);
                 setChildEq("");
-                //setParentEq("");
-                props.setLayoutProperty('equipment', {code: parentEq});
+                props.setLayoutProperty('equipment', currentRoot);
                 setBlocking(false);
             }).catch(error => {
                 props.handleError(error);
