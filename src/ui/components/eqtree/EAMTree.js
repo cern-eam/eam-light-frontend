@@ -45,15 +45,16 @@ export default function EAMTree(props) {
     const setLayoutPropertyConst = (...args) => dispatch(setLayoutProperty(...args));
     const handleErrorConst = (...args) => dispatch(handleError(...args));
 
-    const _loadTreeData = async (code, org, type) => {
+    const _loadTreeData = async (code, organization, type) => {
         setLoading(true);
         try {
-            const { body } = await TreeWS.getEquipmentStructure(code, org, type);
+            const { body } = await TreeWS.getEquipmentStructure(code, organization, type);
             const { data } = body;
             if (treeData) {
                 await _reExpandNodes(data);
             }
             setTreeData(data);
+            setLayoutPropertyConst('currentRoot', {code, organization, type})
         } catch (error) {
             if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
                 handleErrorConst(error);
@@ -153,8 +154,7 @@ export default function EAMTree(props) {
 
     return (
         <>
-            <BlockUi tag="div" blocking={loading} />
-            <div style={{ height: '100%', margin: 5 }}>
+            <BlockUi tag="div" blocking={loading} style={{ height: '100%', margin: 5 }}>
                 {treeData &&
                     <SortableTree
                         className="sortableTree"
@@ -206,7 +206,7 @@ export default function EAMTree(props) {
                                 ],
                         })}
                 />}
-            </div>
+            </BlockUi>
             <NodeSelectMenu anchorEl={anchorEl} handleClose={handleClose} currentRow={currentRow} _navigate={_navigate} eqpTreeMenu={eqpTreeMenu}/>
         </>
     );

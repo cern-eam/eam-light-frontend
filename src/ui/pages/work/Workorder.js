@@ -547,6 +547,7 @@ const Workorder = () => {
     function mountHandler() {
         setLayoutProperty('eqpTreeMenu', [{
             desc: "Use for this Work Order",
+            icon: <ContentPasteIcon/>,
             handler: (rowInfo) => {
                 updateWorkorderProperty('equipmentCode', rowInfo.node.id)
                 updateWorkorderProperty('equipmentDesc', rowInfo.node.name)
