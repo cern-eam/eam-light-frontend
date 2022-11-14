@@ -511,6 +511,7 @@ const Workorder = () => {
     }
 
     function postRead(workorder) {
+        setLayoutProperty('equipment', {code: workorder.equipmentCode, organization: workorder.equipmentOrganization});
         updateMyWorkOrdersConst(workorder); 
         readStatuses(workorder.statusCode, workorder.typeCode, false); 
         readOtherIdMapping(workorder.number);
