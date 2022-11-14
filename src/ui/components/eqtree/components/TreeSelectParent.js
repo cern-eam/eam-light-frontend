@@ -64,7 +64,7 @@ class TreeSelectParent extends React.Component {
           aria-owns={anchorEl ? 'long-menu' : null}
           aria-haspopup="true"
           onClick={this.handleClick}
-          size="large">
+          size="small">
           {/* <ArrowUpBoldBox /> */}
           <ArrowCircleUpIcon />
         </IconButton>
