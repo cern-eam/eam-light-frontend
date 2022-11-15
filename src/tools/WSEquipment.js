@@ -151,10 +151,14 @@ class WSEquipment {
     }
 
     //
-    //INSTALL EQUIPMENT
+    //EQUIPMENT STRUCTURE
     //
     installEquipment(equipmentStructure, config = {}) {
         return WS._post('/eqstructure/attach', equipmentStructure, config);
+    }
+
+    detachEquipment(equipmentStructure, config = {}) {
+        return WS._post('/eqstructure/detach', equipmentStructure, config);
     }
 }
 

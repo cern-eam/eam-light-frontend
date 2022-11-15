@@ -43,10 +43,17 @@ export default function InstallEqp(props) {
         }
     }, [])
 
-    const createEquipmentStructure = (newParent, child) => {
+    const createInstallEquipmentStructure = (newParent, child) => {
         return {
             newParentCode: newParent,
             childCode: child
+        };
+    }
+
+    const createDetachEquipmentStructure = (parentCode, childCode) => {
+        return {
+            parentCode,
+            childCode
         };
     }
 
@@ -60,6 +67,26 @@ export default function InstallEqp(props) {
         if (code) {
             WSEquipment.installEquipment(code).then(response => {
                 props.showNotification(`${childEq} was successfully attached to ${parentEq}`);
+                setChildEq("");
+                props.setLayoutProperty('equipment', currentRoot);
+                setBlocking(false);
+            }).catch(error => {
+                props.handleError(error);
+                setBlocking(false);
+            });
+        }
+    }
+
+    const detachEqpHandler = (code) => {
+        if (!parentEq || !childEq) {
+            props.showError("Please provide the Child and Parent Equipment.");
+            return;
+        }
+
+        setBlocking(true);
+        if (code) {
+            WSEquipment.detachEquipment(code).then(response => {
+                props.showNotification(`${childEq} was successfully detached from ${parentEq}`);
                 setChildEq("");
                 props.setLayoutProperty('equipment', currentRoot);
                 setBlocking(false);
@@ -121,9 +148,16 @@ export default function InstallEqp(props) {
 
                                     <Button
                                         style={{marginTop: 10}}
-                                        onClick={() => installEqpHandler(createEquipmentStructure(parentEq, childEq))}
-                                        color="primary">
-                                        LINK EQUIPMENT
+                                        onClick={() => installEqpHandler(createInstallEquipmentStructure(parentEq, childEq))}
+                                        variant="outlined">
+                                        INSTALL EQUIPMENT
+                                    </Button>
+
+                                    <Button
+                                        style={{marginTop: 10, marginLeft: 20}}
+                                        onClick={() => detachEqpHandler(createDetachEquipmentStructure(parentEq, childEq))}
+                                        variant="outlined">
+                                        DETACH EQUIPMENT
                                     </Button>
                                 </div>
                             </EISPanel>

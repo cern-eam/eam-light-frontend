@@ -265,7 +265,7 @@ class EamlightMenu extends Component {
                                   icon={<SpeedometerIcon style={menuIconStyle}/>}
                                   link="meterreading"/>  
                         
-                        <MenuItem label="Install Equipment"
+                        <MenuItem label="Install/Detach Equipment"
                                   icon={<BuildIcon style={menuIconStyle}/>}
                                   link="installeqp"/>         
                     </EamlightSubmenu>
