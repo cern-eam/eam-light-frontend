@@ -108,7 +108,7 @@ export default function InstallEqp(props) {
                 <div id="entityContent" style={{height: "100%"}}>
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
-                            <EISPanel heading="INSTALL EQUIPMENT">
+                            <EISPanel heading="INSTALL / DETACH EQUIPMENT">
                                 <div style={{width: "100%", marginTop: 0}}>
                                         <EAMAutocomplete
                                             required
