@@ -5,11 +5,11 @@ import EAMGrid from 'eam-components/dist/ui/components/grids/eam/EAMGrid';
 import { EAMCellField } from 'eam-components/dist/ui/components/grids/eam/utils';
 import SyncedQueryParamsEAMGridContext from "../../../../tools/SyncedQueryParamsEAMGridContext";
 
-const cellRenderer = ({ column, value }) => {
+const cellRenderer = ({ column, value, row }) => {
     if (column.id === 'partcode') {
         return (
             <Typography>
-                <Link to={"/part/" + value}>
+                <Link to={"/part/" + value + (row.values.organization ? '%23' + row.values.organization : '')}>
                     {value}
                 </Link>
             </Typography>
