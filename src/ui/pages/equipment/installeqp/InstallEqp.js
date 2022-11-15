@@ -12,6 +12,7 @@ import { FileTree } from 'mdi-material-ui';
 import { useSelector } from 'react-redux';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import Stack from '@mui/material/Stack';
 
 export default function InstallEqp(props) {
 
@@ -110,55 +111,57 @@ export default function InstallEqp(props) {
                         <Grid item xs={12}>
                             <EISPanel heading="INSTALL / DETACH EQUIPMENT">
                                 <div style={{width: "100%", marginTop: 0}}>
-                                        <EAMAutocomplete
-                                            required
-                                            label={"Parent"}
-                                            value={parentEq}
-                                            onChange={createOnChangeHandler(null, null, null, null, setParentEq)}
-                                            autocompleteHandler={WS.autocompleteEquipment}
-                                            autocompleteHandlerParams={[true]}
-                                            barcodeScanner
-                                            id={`${idPrefix}PARENT`}
-                                            endAdornment={
-                                                <IconButton size="small" 
-                                                            onClick={() => treeButtonClickHandler(parentEq)} 
-                                                            disabled={!parentEq}>
-                                                    <FileTree/>
-                                                </IconButton>
-                                            }
-                                        />
+                                    <EAMAutocomplete
+                                        required
+                                        label={"Parent"}
+                                        value={parentEq}
+                                        onChange={createOnChangeHandler(null, null, null, null, setParentEq)}
+                                        autocompleteHandler={WS.autocompleteEquipment}
+                                        autocompleteHandlerParams={[true]}
+                                        barcodeScanner
+                                        id={`${idPrefix}PARENT`}
+                                        endAdornment={
+                                            <IconButton size="small" 
+                                                        onClick={() => treeButtonClickHandler(parentEq)} 
+                                                        disabled={!parentEq}>
+                                                <FileTree/>
+                                            </IconButton>
+                                        }
+                                    />
 
-                                        <EAMAutocomplete 
-                                            required
-                                            label={"Child"}
-                                            value={childEq}
-                                            onChange={createOnChangeHandler(null, null, null, null, setChildEq)}
-                                            autocompleteHandler={WS.autocompleteEquipment}
-                                            autocompleteHandlerParams={[true]}
-                                            barcodeScanner
-                                            id={`${idPrefix}CHILD`}
-                                            endAdornment={
-                                                <IconButton size="small" 
-                                                            onClick={() => treeButtonClickHandler(childEq)}
-                                                            disabled={!childEq}>
-                                                    <FileTree/>
-                                                </IconButton>
-                                            }
-                                        />
+                                    <EAMAutocomplete 
+                                        required
+                                        label={"Child"}
+                                        value={childEq}
+                                        onChange={createOnChangeHandler(null, null, null, null, setChildEq)}
+                                        autocompleteHandler={WS.autocompleteEquipment}
+                                        autocompleteHandlerParams={[true]}
+                                        barcodeScanner
+                                        id={`${idPrefix}CHILD`}
+                                        endAdornment={
+                                            <IconButton size="small" 
+                                                        onClick={() => treeButtonClickHandler(childEq)}
+                                                        disabled={!childEq}>
+                                                <FileTree/>
+                                            </IconButton>
+                                        }
+                                    />
 
-                                    <Button
-                                        style={{marginTop: 10}}
-                                        onClick={() => installEqpHandler(createInstallEquipmentStructure(parentEq, childEq))}
-                                        variant="outlined">
-                                        INSTALL EQUIPMENT
-                                    </Button>
+                                    <Stack direction="row" spacing={2}>
+                                        <Button
+                                            style={{marginTop: 10}}
+                                            onClick={() => installEqpHandler(createInstallEquipmentStructure(parentEq, childEq))}
+                                            variant="outlined">
+                                            INSTALL EQUIPMENT
+                                        </Button>
 
-                                    <Button
-                                        style={{marginTop: 10, marginLeft: 20}}
-                                        onClick={() => detachEqpHandler(createDetachEquipmentStructure(parentEq, childEq))}
-                                        variant="outlined">
-                                        DETACH EQUIPMENT
-                                    </Button>
+                                        <Button
+                                            style={{marginTop: 10}}
+                                            onClick={() => detachEqpHandler(createDetachEquipmentStructure(parentEq, childEq))}
+                                            variant="outlined">
+                                            DETACH EQUIPMENT
+                                        </Button>
+                                    </Stack>
                                 </div>
                             </EISPanel>
                         </Grid>
