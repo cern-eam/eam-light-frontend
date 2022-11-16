@@ -379,8 +379,9 @@ class EamlightMenu extends Component {
 
                     {reports &&
                     <EamlightSubmenu id="customgrids" header={<span>CUSTOM GRIDS</span>}>
-                        {reports.map( report => (
-                            <MenuGridLink grid={report}/>
+                        {
+                        reports.map( report => (
+                            <MenuGridLink grid={report} key={report?.code} />
                             ))
                         }
                     </EamlightSubmenu>
