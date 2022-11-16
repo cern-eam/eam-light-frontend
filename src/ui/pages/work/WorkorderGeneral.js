@@ -10,9 +10,9 @@ import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
 import { IconButton } from '@mui/material';
 import { FileTree } from 'mdi-material-ui';
 
-function WorkorderDetails(props) {
+function WorkorderGeneral(props) {
 
-    const {workorder, register, applicationData, statuses, userGroup, userData, screenPermissions, newEntity, screenCode, setLayoutProperty } = props; 
+    const {workorder, register, applicationData, statuses, userGroup, equipment, userData, screenPermissions, newEntity, screenCode, setLayoutProperty } = props; 
     const rpawClassesList = (applicationData && applicationData.EL_TRPAC && applicationData.EL_TRPAC.split(',')) || [];
     const rpawLink = applicationData && applicationData.EL_TRPAW;
 
@@ -75,7 +75,8 @@ function WorkorderDetails(props) {
             />
 
             <EAMAutocomplete {...register('standardwo', 'standardWO', 'standardWODesc')}
-                             autocompleteHandler={WSWorkorders.autocompleteStandardWorkOrder.bind(null, userGroup)}/>
+                             autocompleteHandler={WSWorkorders.autocompleteStandardWorkOrder}
+                             autocompleteHandlerParams = {[userGroup, equipment?.classCode, equipment?.categoryCode]}/>
 
             <EAMTextField {...register('targetvalue', 'targetValue')}/>
 
@@ -109,4 +110,4 @@ function WorkorderDetails(props) {
 
 }
 
-export default WorkorderDetails
+export default WorkorderGeneral

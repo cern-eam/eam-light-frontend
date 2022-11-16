@@ -16,7 +16,7 @@ import MeterReadingContainerWO from './meter/MeterReadingContainerWO';
 import WorkorderMultiequipment from "./multiequipmentwo/WorkorderMultiequipment";
 import PartUsageContainer from "./partusage/PartUsageContainer";
 import WorkorderClosingCodes from './WorkorderClosingCodes';
-import WorkorderDetails from './WorkorderGeneral';
+import WorkorderGeneral from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
 import { assignStandardWorkOrderValues, isClosedWorkOrder, isRegionAvailable, layoutPropertiesMap } from "./WorkorderTools";
 import EntityRegions from '../../components/entityregions/EntityRegions';
@@ -183,10 +183,11 @@ const Workorder = () => {
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
                 render: () =>
-                    <WorkorderDetails
+                    <WorkorderGeneral
                         {...commonProps}
                         applicationData={applicationData}
                         userData={userData} 
+                        equipment={equipment}
                         statuses={statuses}
                         newEntity={newEntity}
                         screenCode={screenCode}
