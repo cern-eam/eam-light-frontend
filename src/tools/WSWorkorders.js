@@ -37,9 +37,18 @@ class WSWorkorders {
         return WS._get('/autocomplete/wo/costcode/' + filter, config);
     };
 
-    autocompleteStandardWorkOrder = (userGroup, filter, config = {}) => {
+    autocompleteStandardWorkOrder = (userGroup, equipmentClass, equipmentCategory, filter, config = {}) => {
         filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/standardworkorder?userGroup=${encodeURIComponent(userGroup)}&s=${filter}`, config);
+        return WS._get(`/autocomplete/standardworkorder?s=${filter}`, {
+            ...config,
+            params: {
+                ...config.params,
+                userGroup,
+                equipmentClass,
+                equipmentCategory
+            }
+        }
+        );
     };
 
     autocompleteUsersWithAccess = (wo, hint = null, config = {}) => {
