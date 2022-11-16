@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import NodeSelectMenu from './components/NodeSelectMenu';
 import { isMultiOrg } from 'ui/pages/EntityTools';
 import { handleError, setLayoutProperty } from 'actions/uiActions';
+import { isEmpty } from 'lodash';
 
 const urlTypeMap = {
     A: 'asset',
@@ -73,7 +74,7 @@ export default function EAMTree(props) {
     const _reExpandNodes = async (newData) => {
         if (newData && newData.length > 0) {
             const expanded = await _getExpanded(treeData[0], []);
-            expanded.forEach((ex) => _expandTreeToCode(newData, ex));
+            _expandTreeToCode(newData[0], expanded);
         }
     };
 
@@ -85,26 +86,18 @@ export default function EAMTree(props) {
         return already;
     };
 
-    const _expandTreeToCode = (treeData, code) => {
-        if (!code || !treeData?.length) {
-            return false;
-        }
-        let nodes = treeData.filter((f) => code == f.id);
-
-        if (nodes.length > 0) {
-            nodes[0].expanded = true;
-            return true;
+    const _expandTreeToCode = (node, expandedNodes) => {
+        if (isEmpty(node) || !expandedNodes?.length) {
+            return;
         }
 
-        return treeData.some((item) => {
-            const res = _expandTreeToCode(item.children, code);
-            if (res) {
-                item.expanded = true;
-                return true;
-            } else {
-                return false;
-            }
-        });
+        if (expandedNodes.includes(node.id)) {
+            node.expanded = true;
+        }
+
+        if (node.children.length) {
+            node.children.forEach((childNode) => _expandTreeToCode(childNode, expandedNodes));
+        }
     };
 
     const _isNodeSelected = (node) => {
