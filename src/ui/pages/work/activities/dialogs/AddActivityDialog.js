@@ -20,9 +20,16 @@ function AddActivityDialog(props) {
     let [loading, setLoading] = useState(false);
     let [formValues, setFormValues] = useState({});
 
+    // Passing activity object indicates that we are editing an existing activity
+    const { activityToEdit } = props;
+
     useEffect(() => {
         if (props.open) {
-            init();
+            if (activityToEdit) {
+                setFormValues(activityToEdit);
+            } else {
+                init();
+            }
         }
     }, [props.open]);
 
@@ -48,15 +55,17 @@ function AddActivityDialog(props) {
         delete activity.materialListDesc;
 
         setLoading(true);
-        WSWorkorders.createWorkOrderActivity(activity)
-            .then((result) => {
-                //Post add handler
-                props.postAddActivityHandler();
-                setLoading(false);
-                props.showNotification('Activity successfully created');
-                handleClose();
-                props.onChange();
-            })
+        (
+            activityToEdit
+                ? WSWorkorders.updateWorkOrderActivity(activity)
+                : WSWorkorders.createWorkOrderActivity(activity)
+        ).then(() => {
+            props.postAddActivityHandler();
+            setLoading(false);
+            props.showNotification(`Activity successfully ${activityToEdit ? 'updated' : 'created'}`);
+            handleClose();
+            props.onChange();
+        })
             .catch((error) => {
                 setLoading(false);
                 props.handleError(error);
@@ -146,14 +155,12 @@ function AddActivityDialog(props) {
                             />
 
                             <EAMTextField
-                                required={true}
                                 {...processElementInfo(props.layout.personsreq)}
                                 value={formValues['peopleRequired']}
                                 onChange={createOnChangeHandler("peopleRequired", null, null, updateFormValues)}
                             />
 
                             <EAMTextField
-                                required={true}
                                 {...processElementInfo(props.layout.esthrs)}
                                 valueKey="estimatedHours"
                                 value={formValues['estimatedHours']}

@@ -73,7 +73,9 @@ function Activities(props) {
                     key={activity.activityCode}
                     activity={activity}
                     bookLabours={bookLaboursByActivity[activity.activityCode]}
-                    layout={props.layout}/>
+                    layout={props.layout}
+                    postAddActivityHandler={props.postAddActivityHandler}
+                    readActivities={() => readActivities(props.workorder)}/>
             })}
 
             <div id="actions">
