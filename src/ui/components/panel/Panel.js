@@ -10,7 +10,9 @@ const detailsStyle = {
 const Panel = (props) => {
 
     return (
-        <EISPanel {...props} detailsStyle={detailsStyle} ExpansionPanelProps={{elevation: 0, ...props.ExpansionPanelProps }}/>
+        <EISPanel {...props} 
+        detailsStyle={detailsStyle} 
+        ExpansionPanelProps={{elevation: 0, ...props.ExpansionPanelProps }}/>
     )
 }
 
