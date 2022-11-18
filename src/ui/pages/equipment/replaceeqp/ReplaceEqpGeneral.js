@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import EISPanel from 'eam-components/dist/ui/components/panel';
 import WS from "../../../../tools/WS";
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
@@ -16,6 +15,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { createOnChangeHandler, processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import Panel from 'ui/components/panel/Panel';
 
 const buttonStyle = {
     bottom: '-10px',
@@ -105,7 +105,7 @@ const ReplaceEqpGeneral = (props) => {
     };
 
     return (
-        <EISPanel heading="REPLACE EQUIPMENT" alwaysExpanded={true}>
+        <Panel heading="REPLACE EQUIPMENT" alwaysExpanded={true}>
             <div style={{width: "100%", marginTop: 0}}>
 
                 <EAMAutocomplete
@@ -178,7 +178,7 @@ const ReplaceEqpGeneral = (props) => {
                     </DialogActions>
                 </Dialog>
             </div>
-        </EISPanel>
+        </Panel>
     );
 }
 

@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import EISPanel from 'eam-components/dist/ui/components/panel';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid'
 import WSEquipment from "../../../../tools/WSEquipment";
@@ -13,6 +12,7 @@ import { useSelector } from 'react-redux';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Stack from '@mui/material/Stack';
+import Panel from 'ui/components/panel/Panel';
 
 export default function InstallEqp(props) {
 
@@ -109,7 +109,7 @@ export default function InstallEqp(props) {
                 <div id="entityContent" style={{height: "100%"}}>
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
-                            <EISPanel heading="INSTALL / DETACH EQUIPMENT">
+                            <Panel heading="INSTALL / DETACH EQUIPMENT">
                                 <div style={{width: "100%", marginTop: 0}}>
                                     <EAMAutocomplete
                                         required
@@ -163,7 +163,7 @@ export default function InstallEqp(props) {
                                         </Button>
                                     </Stack>
                                 </div>
-                            </EISPanel>
+                            </Panel>
                         </Grid>
                     </Grid>
                 </div>
