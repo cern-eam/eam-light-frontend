@@ -51,6 +51,8 @@ export default function EAMTree(props) {
         try {
             const { body } = await TreeWS.getEquipmentStructure(code, organization, type);
             const { data } = body;
+
+            data[0].expanded = true; // expand root node
             if (treeData) {
                 await _reExpandNodes(data);
             }
