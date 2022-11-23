@@ -36,7 +36,15 @@ function AddActivityDialog(props) {
     let init = () => {
         setLoading(true);
         WSWorkorders.initWorkOrderActivity(props.workorderNumber).then((response) => {
-            setFormValues(response.body.data);
+            setFormValues({
+                ...response.body.data,
+                "workOrderNumber": props.workorderNumber,
+                "activityCode": props.newActivityCode,
+                "peopleRequired": 1,
+                "estimatedHours": 1,
+                "startDate": new Date(),
+                "endDate": new Date(),
+            });
             setLoading(false);
         }).catch((error) => {
             setLoading(false);
