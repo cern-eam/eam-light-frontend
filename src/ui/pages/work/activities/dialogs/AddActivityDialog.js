@@ -95,11 +95,24 @@ function AddActivityDialog(props) {
         WSWorkorders.getTaskPlan(taskcode)
             .then((response) => {
                 const taskPlan = response.body.data;
-                updateFormValues('peopleRequired', taskPlan.peopleRequired === null ? '' : taskPlan.peopleRequired);
-                updateFormValues('estimatedHours', taskPlan.estimatedHours === null ? '' : taskPlan.estimatedHours);
-                updateFormValues('taskDesc', taskPlan.description === null ? '' : taskPlan.description);
-                updateFormValues('materialList', taskPlan.materialList === null ? '' : taskPlan.materialList);
-                updateFormValues('tradeCode', taskPlan.tradeCode === null ? '' : taskPlan.tradeCode);
+                updateFormValues('taskDesc', taskPlan.description);
+                updateFormValues('activityNote', taskPlan.description);
+
+                if (taskPlan.peopleRequired) {
+                    updateFormValues('peopleRequired', taskPlan.peopleRequired);
+                }
+                
+                if (taskPlan.estimatedHours) {
+                    updateFormValues('estimatedHours', taskPlan.estimatedHours);
+                }
+
+                if (taskPlan.materialList) {
+                    updateFormValues('materialList', taskPlan.materialList);
+                }
+
+                if (taskPlan.tradeCode) {
+                    updateFormValues('tradeCode', taskPlan.tradeCode);
+                }
             })
             .catch(console.error)
             .finally(() => setLoading(false));
