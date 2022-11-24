@@ -2,23 +2,19 @@
     width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
+    background-color: #fafafa;
 }
 
 .activity .label {
     font-weight: bold;
 }
 
-.activity .content {
-    margin-left: 15px;
-    margin-right: 15px;
+.activity .activityHeader, .activity .activityDetails {
+    padding: 10px;
 }
 
-.activity .activityDetails {
-    margin-bottom: 20px;
-}
-
-.activity h3 {
-    margin-top: 0px;
+.activity .activityTitle {
+    padding-left: 10px;
 }
 
 .activity h4 {
@@ -26,7 +22,16 @@
     margin-bottom: 0px;
 }
 
-.activity .divider {
-    margin-top: 20px;
-    background-color: rgba(0, 0, 0, 0.42);
+.activity .estmtd {
+    font-style: italic;
+}
+
+.activity .activityDetailsTile {
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.5rem;
+    width: 100%;
 }
