@@ -184,6 +184,11 @@ class WSWorkorders {
         return WS._post('/activities', activity, config);
     }
 
+    // Update an activity
+    updateWorkOrderActivity(activity, config = {}) {
+        return WS._put('/activities', activity, config);
+    }
+
     // Get default values for next activity for one work order
     initBookingLabour(workorderNumber, department, config = {}) {
         return WS._get('/bookinglabour/init/' + workorderNumber + '/' + department, config);
