@@ -1,12 +1,24 @@
 import React, { useState } from 'react';
 import BookLabours from "./BookLabours";
-import { Grid, Typography, IconButton, Divider } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import './Activity.css'
+import { Grid, IconButton, Divider, Avatar, Typography, Card, Stack } from '@mui/material';
 import { formatDate } from 'ui/pages/EntityTools';
 import AddActivityDialogContainer from './dialogs/AddActivityDialogContainer';
+import { CalendarStart } from 'mdi-material-ui';
+import { Edit, Groups } from '@mui/icons-material';
+import './Activity.css'
 
 const add = (a, b) => a + b
+
+const activityNumStyle = {
+    backgroundColor: '#fff',
+    border: '3px solid',
+    borderRadius: '100%',
+    borderColor: 'primary.main',
+    color: '#000',
+    width: 24,
+    height: 24,
+    fontSize: '0.9rem',
+};
 
 /**
  * Display detail of an activity
@@ -21,58 +33,104 @@ function Activity(props) {
         .map(Number)
         .reduce(add, 0) ?? 0
 
-    const tradeString = activity.tradeCode === '*' ? '' : ` - Trade ${activity.tradeCode}`
+    const tradeString = activity.tradeCode === '*' ? '' : `Trade ${activity.tradeCode}`
 
 
     return (
         <>
-            <div className="activity">
-                <div className="content">
-                    <Grid direction="row" container width="100%" justifyContent="space-between">
-                        <Typography variant="h6">Activity {activity.activityCode}{tradeString}</Typography>
-                        <IconButton variant="contained" color="primary" onClick={() => setIsEditModalOpen(true)}>
-                            <EditIcon />
-                        </IconButton>
+            <Card className="activity" // variant="outlined" to remove the shadow
+            >
+                <Grid className="content" container direction="column">
+                    <Grid className="activityHeader" item container spacing={1}>
+                        <Grid item direction="row" container justifyContent="space-between" flexWrap="nowrap">
+                            <Grid item container direction="row" alignItems='center'>
+                                <Avatar sx={activityNumStyle}>{activity.activityCode}</Avatar>
+                                <Typography variant="subtitle1" className="activityTitle">
+                                    {tradeString}
+                                </Typography>
+                            </Grid>
+                            <IconButton variant="contained" color='primary' onClick={() => setIsEditModalOpen(true)}>
+                                <Edit />
+                            </IconButton>
+                        </Grid>
+                        {activity.activityNote &&
+                            <Grid item>
+                                <Typography variant="subtitle2" color="gray" sx={{
+                                    wordBreak: 'break-all',
+                                }}>
+                                    {activity.activityNote}
+                                </Typography>
+                            </Grid>}
                     </Grid>
+                    <Grid item xs={12}><Divider /></Grid>
+                    <Stack
+                        className="activityDetails"
+                        item
+                        container
+                        spacing={1}
+                        direction="row"
+                        justifyContent="space-between"
+                        flexWrap="wrap"
+                    >
+                        <Grid item xs={5} md={5} lg={2} container className='activityDetailsTile'>
+                            <Typography variant='caption' color='gray'>
+                                {layout.ACT.fields.task.text}
+                            </Typography>
+                            <Typography>
+                                {activity.taskCode ? activity.taskCode : '—'}
+                            </Typography>
+                        </Grid>
 
-                    <Grid container spacing={1} className="activityDetails">
+                        <Grid item xs={5} md={5} lg={2} container className='activityDetailsTile'>
+                            <Typography variant='caption' color='gray'>
+                                {layout.ACT.fields.matlcode.text}
+                            </Typography>
+                            <Typography>
+                                {activity.materialList ? activity.materialList : '—'}
+                            </Typography>
+                        </Grid>
 
-                        <Grid item xs={6} md={6} lg={2}>{layout.ACT.fields.activitynote.text}</Grid>
-                        <Grid item xs={6} md={6} lg={4}>{activity.activityNote}</Grid>
+                        <Grid item xs={5} md={5} lg={2} container className='activityDetailsTile'>
+                            <Typography variant='caption' color='gray'>
+                                {/* {layout.ACT.fields.personsreq.text} */}
+                                {<Groups />}
+                            </Typography>
+                            <Typography>
+                                {activity.peopleRequired}
+                            </Typography>
+                        </Grid>
 
-                        <Grid item xs={6} md={6} lg={2}>{layout.ACT.fields.task.text}</Grid>
-                        <Grid item xs={6} md={6} lg={4}>{activity.taskCode}</Grid>
+                        <Grid item xs={5} md={5} lg={2} container className='activityDetailsTile'>
+                            <Typography variant='caption' color='gray' sx={{ textAlign: 'center' }}>
+                                {layout.BOO.fields.hrswork.text}<br />
+                                <span className='estmtd'>
+                                    (Estimated)
+                                </span>
+                            </Typography>
+                            <Typography>
+                                {totalHours} <span className='estmtd'>({activity.estimatedHours})</span>
+                            </Typography>
+                        </Grid>
 
-                        <Grid item xs={6} md={6} lg={2}>{layout.ACT.fields.matlcode.text}</Grid>
-                        <Grid item xs={6} md={6} lg={4}>{activity.materialList}</Grid>
+                        <Grid item xs={5} md={5} lg={2} container className='activityDetailsTile'>
+                            <Typography variant='caption' color='gray'>
+                                {/* {layout.ACT.fields.actstartdate.text} */}
+                                {<CalendarStart />}
+                            </Typography>
+                            <Typography>
+                                {formatDate(activity.startDate)}
+                            </Typography>
+                        </Grid>
 
-                        <Grid item xs={6} md={6} lg={2}>{layout.ACT.fields.esthrs.text}</Grid>
-                        <Grid item xs={6} md={6} lg={4}>{activity.estimatedHours}</Grid>
-
-                        <Grid item xs={6} md={6} lg={2}>{layout.ACT.fields.personsreq.text}</Grid>
-                        <Grid item xs={6} md={6} lg={4}>{activity.peopleRequired}</Grid>
-
-                        <Grid item xs={6} md={6} lg={2}>{layout.BOO.fields.hrswork.text}</Grid>
-                        <Grid item xs={6} md={6} lg={4}>{totalHours}</Grid>
-
-                        <Grid item xs={6} md={6} lg={2}></Grid>
-                        <Grid item xs={6} md={6} lg={4}></Grid>
-
-                        <Grid item xs={6} md={6} lg={2}>{layout.ACT.fields.actstartdate.text}</Grid>
-                        <Grid item xs={6} md={6} lg={4}>{formatDate(activity.startDate)}</Grid>
-
-                    </Grid>
+                    </Stack>
 
                     {bookLabours && bookLabours.length > 0 &&
                         <BookLabours
                             bookLabours={bookLabours}
                             layout={layout.BOO.fields} />}
 
-                </div>
-
-                <Divider className="divider" />
-
-            </div>
+                </Grid>
+            </Card>
 
             <AddActivityDialogContainer
                 open={isEditModalOpen}
