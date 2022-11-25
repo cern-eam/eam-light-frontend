@@ -37,10 +37,6 @@ const WorkorderClosingCodes = props => {
                 autocompleteHandler={WSWorkorders.getWorkOrderActionCodeValues}
                 autocompleteHandlerParams={[equipment?.classCode,  workorder.failureCode, workorder.problemCode, workorder.causeCode, workorder.equipmentCode]}/>
 
-            <EAMAutocomplete 
-                {...register('costcode', 'costCode', 'costCodeDesc')}
-                autocompleteHandler={WSWorkorders.autocompleteCostCode}/>
-
         </React.Fragment>
     )
     
