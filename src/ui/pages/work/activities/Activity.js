@@ -7,19 +7,6 @@ import { CalendarStart } from 'mdi-material-ui';
 import { Edit, Groups } from '@mui/icons-material';
 import './Activity.css'
 
-const add = (a, b) => a + b
-
-const activityNumStyle = {
-    backgroundColor: '#fff',
-    border: '3px solid',
-    borderRadius: '100%',
-    borderColor: 'primary.main',
-    color: '#000',
-    width: 24,
-    height: 24,
-    fontSize: '0.9rem',
-};
-
 /**
  * Display detail of an activity
  */
@@ -31,22 +18,21 @@ function Activity(props) {
 
     const totalHours = bookLabours?.map(({ hoursWorked }) => hoursWorked)
         .map(Number)
-        .reduce(add, 0) ?? 0
+        .reduce((a, b) => a + b, 0) ?? 0
 
-    const tradeString = activity.tradeCode === '*' ? '' : `Trade ${activity.tradeCode}`
+    const tradeString = activity.tradeCode === '*' ? '' : ` - ${activity.tradeCode}`
 
 
     return (
         <>
-            <Card className="activity" // variant="outlined" to remove the shadow
+            <Card className="activity" variant="outlined" // variant="outlined" to remove the shadow
             >
                 <Grid className="content" container direction="column">
                     <Grid className="activityHeader" item container spacing={1}>
                         <Grid item direction="row" container justifyContent="space-between" flexWrap="nowrap">
                             <Grid item container direction="row" alignItems='center'>
-                                <Avatar sx={activityNumStyle}>{activity.activityCode}</Avatar>
                                 <Typography variant="subtitle1" className="activityTitle">
-                                    {tradeString}
+                                {activity.activityCode}{tradeString}
                                 </Typography>
                             </Grid>
                             <IconButton variant="contained" color='primary' onClick={() => setIsEditModalOpen(true)}>
@@ -62,7 +48,6 @@ function Activity(props) {
                                 </Typography>
                             </Grid>}
                     </Grid>
-                    <Grid item xs={12}><Divider /></Grid>
                     <Stack
                         className="activityDetails"
                         item
@@ -131,6 +116,8 @@ function Activity(props) {
 
                 </Grid>
             </Card>
+
+            <Divider />
 
             <AddActivityDialogContainer
                 open={isEditModalOpen}

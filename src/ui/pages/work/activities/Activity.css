@@ -1,8 +1,9 @@
 .activity {
     width: 100%;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     background-color: #fafafa;
+    border: none;
 }
 
 .activity .label {
@@ -10,11 +11,7 @@
 }
 
 .activity .activityHeader, .activity .activityDetails {
-    padding: 10px;
-}
-
-.activity .activityTitle {
-    padding-left: 10px;
+    padding: 0 10px;
 }
 
 .activity h4 {
