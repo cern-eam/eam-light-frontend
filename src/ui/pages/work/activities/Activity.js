@@ -72,7 +72,7 @@ function Activity(props) {
                         justifyContent="space-between"
                         flexWrap="wrap"
                     >
-                        <Grid item xs={5} md={5} lg={2} container className='activityDetailsTile'>
+                        <Grid item xs={5} sm={2} md={5} lg={2} container className='activityDetailsTile'>
                             <Typography variant='caption' color='gray'>
                                 {layout.ACT.fields.task.text}
                             </Typography>
@@ -81,7 +81,7 @@ function Activity(props) {
                             </Typography>
                         </Grid>
 
-                        <Grid item xs={5} md={5} lg={2} container className='activityDetailsTile'>
+                        <Grid item xs={5} sm={2} md={5} lg={2} container className='activityDetailsTile'>
                             <Typography variant='caption' color='gray'>
                                 {layout.ACT.fields.matlcode.text}
                             </Typography>
@@ -90,7 +90,7 @@ function Activity(props) {
                             </Typography>
                         </Grid>
 
-                        <Grid item xs={5} md={5} lg={2} container className='activityDetailsTile'>
+                        <Grid item xs={5} sm={2} md={5} lg={2} container className='activityDetailsTile'>
                             <Typography variant='caption' color='gray'>
                                 {/* {layout.ACT.fields.personsreq.text} */}
                                 {<Groups />}
@@ -100,7 +100,7 @@ function Activity(props) {
                             </Typography>
                         </Grid>
 
-                        <Grid item xs={5} md={5} lg={2} container className='activityDetailsTile'>
+                        <Grid item xs={5} sm={2} md={5} lg={2} container className='activityDetailsTile'>
                             <Typography variant='caption' color='gray' sx={{ textAlign: 'center' }}>
                                 {layout.BOO.fields.hrswork.text}<br />
                                 <span className='estmtd'>
@@ -112,7 +112,7 @@ function Activity(props) {
                             </Typography>
                         </Grid>
 
-                        <Grid item xs={5} md={5} lg={2} container className='activityDetailsTile'>
+                        <Grid item xs={5} sm={2} md={5} lg={2} container className='activityDetailsTile'>
                             <Typography variant='caption' color='gray'>
                                 {/* {layout.ACT.fields.actstartdate.text} */}
                                 {<CalendarStart />}
