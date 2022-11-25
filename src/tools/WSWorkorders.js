@@ -189,6 +189,11 @@ class WSWorkorders {
         return WS._put('/activities', activity, config);
     }
 
+    // Delete an activity
+    deleteWorkOrderActivity(workOrderNumber, activityCode, config = {}) {
+        return WS._delete(`/activities/${workOrderNumber}/${activityCode}`, config);
+    }
+
     // Get default values for next activity for one work order
     initBookingLabour(workorderNumber, department, config = {}) {
         return WS._get('/bookinglabour/init/' + workorderNumber + '/' + department, config);
