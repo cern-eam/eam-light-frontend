@@ -78,6 +78,11 @@ function WorkorderGeneral(props) {
                              autocompleteHandler={WSWorkorders.autocompleteStandardWorkOrder}
                              autocompleteHandlerParams = {[userGroup, equipment?.classCode, equipment?.categoryCode]}/>
 
+            <EAMAutocomplete
+                {...register('costcode', 'costCode', 'costCodeDesc')}
+                autocompleteHandler={WSWorkorders.autocompleteCostCode}
+            />
+
             <EAMTextField {...register('targetvalue', 'targetValue')}/>
 
             <EAMTextField {...register('parentwo', 'parentWO')}
