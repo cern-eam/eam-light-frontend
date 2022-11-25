@@ -15,7 +15,6 @@ function BookLabours(props) {
     if (props.bookLabours && props.bookLabours.length > 0) {
         return (
             <div className="booklabours">
-                <h4>Booked labor</h4>
                 <EISTable data={props.bookLabours.map(bl => ({...bl, dateWorked: formatDate(bl.dateWorked)}))} 
                           headers={headers} propCodes={propCodes}/>
             </div>

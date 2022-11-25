@@ -87,10 +87,8 @@ function Activity(props) {
 
                         <Grid item xs={5} sm={2} md={5} lg={2} container className='activityDetailsTile'>
                             <Typography variant='caption' color='gray' sx={{ textAlign: 'center' }}>
-                                {layout.BOO.fields.hrswork.text}<br />
-                                <span className='estmtd'>
-                                    (Estimated)
-                                </span>
+                                {/* {layout.BOO.fields.hrswork.text}<br /> */}
+                                    Hrs. Worked (Estimated)
                             </Typography>
                             <Typography>
                                 {totalHours} <span className='estmtd'>({activity.estimatedHours})</span>
