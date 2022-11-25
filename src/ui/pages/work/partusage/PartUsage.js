@@ -55,6 +55,20 @@ function PartUsage(props) {
         fetchData(props.workorder.number);
     }
 
+    const addPartUsageHandler = async () => {
+        try {
+            const response = await WSWorkorders.getWorkOrderActivities(props.workorder.number);
+            const activities = response.body.data;
+            if (activities.length === 0) {
+                props.showError('No activities found for this work order');
+            } else {
+                setIsDialogOpen(true);
+            }
+        } catch (error) {
+            props.handleError(error);
+        }
+    }
+
     return (
         isLoading
         ?
@@ -67,7 +81,7 @@ function PartUsage(props) {
                     headers={headers}
                     propCodes={propCodes}
                     linksMap={linksMap} />
-                <Button onClick={() => setIsDialogOpen(true)} color="primary" style={buttonStyle} disabled={props.disabled}>
+                <Button onClick={addPartUsageHandler} color="primary" style={buttonStyle} disabled={props.disabled}>
                     Add Part Usage
                 </Button>
             </div>
