@@ -299,7 +299,17 @@ function PartUsageDialog(props) {
         }
     };
 
+    const validateFields = () => {
+        const { transactionType, storeCode, activityCode, partCode } = formData;
+        return transactionType && storeCode && activityCode && partCode;
+    };
+
     const handleSave = () => {
+        if (!validateFields()) {
+            showError('Please fill the required fields');
+            return;
+        }
+
         setLoading(true);
 
         const relatedWorkOrder =
