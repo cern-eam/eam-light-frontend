@@ -94,7 +94,9 @@ function Activities(props) {
                 onChange={() => readActivities(props.workorder)}
                 onClose={() => setIsActivityModalOpen(false)}
                 postAddActivityHandler={props.postAddActivityHandler}
-                newActivityCode={activities[activities.length - 1] ? parseInt(activities[activities.length - 1].activityCode) + 5 : 5} />
+                newActivityCode={activities[activities.length - 1] ? parseInt(activities[activities.length - 1].activityCode) + 5 : 5}
+                showError={props.showError}
+            />
 
             <AddBookLabourDialogContainer
                 open={isBookLaborModalOpen}

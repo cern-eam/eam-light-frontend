@@ -21,7 +21,7 @@ function AddActivityDialog(props) {
     let [formValues, setFormValues] = useState({});
 
     // Passing activity object indicates that we are editing an existing activity
-    const { activityToEdit } = props;
+    const { activityToEdit, showError } = props;
 
     useEffect(() => {
         if (props.open) {
@@ -56,7 +56,17 @@ function AddActivityDialog(props) {
         props.onClose();
     };
 
+    const validateFields = () => {
+        const { activityCode, tradeCode, peopleRequired, estimatedHours, startDate, endDate } = formValues;
+        return activityCode && tradeCode && peopleRequired && estimatedHours && startDate && endDate;
+    };
+
     let handleSave = () => {
+        if (!validateFields()) {
+            showError('Please fill the required fields');
+            return;
+        }
+
         let activity = { ...formValues };
         delete activity.taskDesc;
         delete activity.tradeDesc;
