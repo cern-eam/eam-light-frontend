@@ -142,6 +142,7 @@ function AddActivityDialog(props) {
                                 {...processElementInfo(props.layout.activity)}
                                 value={formValues['activityCode']}
                                 onChange={createOnChangeHandler("activityCode", null, null, updateFormValues)}
+                                disabled={activityToEdit}
                             />
 
                             <EAMTextField
