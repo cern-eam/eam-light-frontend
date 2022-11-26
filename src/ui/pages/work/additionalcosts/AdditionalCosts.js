@@ -6,10 +6,11 @@ import AdditionalCostDialog from "./AdditionalCostDialog";
 import BlockUi from 'react-block-ui';
 
 const buttonStyle = {
-    position: 'relative',
-    float: 'left',
-    bottom: '-13px',
-    left: '5px',
+    //position: 'relative',
+    //float: 'left',
+    //bottom: '-13px',
+   // left: '5px',
+   padding: 10
 };
 
 const AdditionalCosts = (props) => {
@@ -63,7 +64,9 @@ const AdditionalCosts = (props) => {
                     data={data}
                     headers={headers}
                     propCodes={propCodes} />
-                <Button onClick={() => setIsDialogOpen(true)} color="primary" style={buttonStyle} disabled={props.disabled}>
+                <div style={{height: 15}} />
+                <Button onClick={() => setIsDialogOpen(true)} color="primary" 
+                        disabled={props.disabled} variant="outlined">
                     Add Additional Cost
                 </Button>
             </div>

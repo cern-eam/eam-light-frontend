@@ -35,13 +35,14 @@ function Activity(props) {
                                 {activity.activityCode}{tradeString}
                                 </Typography>
                             </Grid>
-                            <IconButton variant="contained" color='primary' onClick={() => setIsEditModalOpen(true)}>
+                            <IconButton variant="contained" color='primary' 
+                                        onClick={() => setIsEditModalOpen(true)} disabled={!layout.ACT.updateAllowed}>
                                 <Edit />
                             </IconButton>
                         </Grid>
                         {activity.activityNote &&
                             <Grid item>
-                                <Typography variant="subtitle2" color="gray" sx={{
+                                <Typography variant="subtitle2" color="black" sx={{
                                     wordBreak: 'break-all',
                                 }}>
                                     {activity.activityNote}
