@@ -5,14 +5,6 @@ import Button from '@mui/material/Button';
 import PartUsageDialog from "./PartUsageDialog";
 import BlockUi from 'react-block-ui';
 
-
-const buttonStyle = {
-    position: 'relative',
-    float: 'left',
-    bottom: '-13px',
-    left: '5px',
-};
-
 function PartUsage(props) {
 
     let headers = ['Transaction', 'Part', 'Activity', 'Store', 'Quantity'];
@@ -67,7 +59,9 @@ function PartUsage(props) {
                     headers={headers}
                     propCodes={propCodes}
                     linksMap={linksMap} />
-                <Button onClick={() => setIsDialogOpen(true)} color="primary" style={buttonStyle} disabled={props.disabled}>
+                <div style={{height: 15}} />
+                <Button onClick={() => setIsDialogOpen(true)} color="primary" 
+                        disabled={props.disabled} variant="outlined">
                     Add Part Usage
                 </Button>
             </div>
