@@ -60,10 +60,12 @@ const AdditionalCosts = (props) => {
         :
         <>
             <div style={{ width: '100%', height: '100%' }}>
-                <EISTable
-                    data={data}
-                    headers={headers}
-                    propCodes={propCodes} />
+                {data?.length > 0 &&
+                    <EISTable
+                        data={data}
+                        headers={headers}
+                        propCodes={propCodes} />
+                }
                 <div style={{height: 15}} />
                 <Button onClick={() => setIsDialogOpen(true)} color="primary" 
                         disabled={props.disabled} variant="outlined">
