@@ -5,7 +5,7 @@ import { Grid, IconButton, Divider, Typography, Card, Stack, Menu, MenuItem, Lis
 import { formatDate } from 'ui/pages/EntityTools';
 import AddActivityDialogContainer from './dialogs/AddActivityDialogContainer';
 import { CalendarStart } from 'mdi-material-ui';
-import { MoreVert, Edit, DeleteForever, Groups } from '@mui/icons-material';
+import { MoreVert, EditOutlined, DeleteOutline, Groups } from '@mui/icons-material';
 import './Activity.css'
 
 /**
@@ -43,7 +43,7 @@ function Activity(props) {
         handleOptionsClose();
         try {
             setLoading(true);
-            await WSWorkorders.deleteWorkOrderActivity({ data: activity});
+            await WSWorkorders.deleteWorkOrderActivity({ data: activity });
             readActivities();
         } catch (error) {
             handleError(error);
@@ -80,7 +80,7 @@ function Activity(props) {
                         disabled={!layout.ACT.updateAllowed || loading}
                     >
                         <ListItemIcon>
-                            <Edit fontSize="small" />
+                            <EditOutlined fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>Edit</ListItemText>
                     </MenuItem>
@@ -90,9 +90,8 @@ function Activity(props) {
                         disabled={!layout.ACT.deleteAllowed || loading}
                     >
                         <ListItemIcon>
-                            <DeleteForever
+                            <DeleteOutline
                                 fontSize="small"
-                                sx={{ color: 'red' }}
                             />
                         </ListItemIcon>
                         <ListItemText>Delete</ListItemText>
@@ -110,7 +109,7 @@ function Activity(props) {
                         <Grid item direction="row" container justifyContent="space-between" flexWrap="nowrap">
                             <Grid item container direction="row" alignItems='center'>
                                 <Typography variant="subtitle1" className="activityTitle">
-                                {activity.activityCode}{tradeString}
+                                    {activity.activityCode}{tradeString}
                                 </Typography>
                             </Grid>
                             {renderOptionsMenu()}
@@ -164,7 +163,7 @@ function Activity(props) {
                         <Grid item xs={5} sm={2} md={5} lg={2} container className='activityDetailsTile'>
                             <Typography variant='caption' color='gray'>
                                 {/* {layout.BOO.fields.hrswork.text} */}
-                                    Hrs. Worked<br/>(Estimated)
+                                Hrs. Worked<br />(Estimated)
                             </Typography>
                             <Typography>
                                 {totalHours} <span className='estmtd'>({activity.estimatedHours})</span>
