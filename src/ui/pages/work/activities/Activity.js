@@ -137,7 +137,7 @@ function Activity(props) {
                             <Typography variant='caption' color='gray'>
                                 {layout.ACT.fields.task.text}
                             </Typography>
-                            <Typography>
+                            <Typography noWrap>
                                 {activity.taskCode ? activity.taskCode : '—'}
                             </Typography>
                         </Grid>
@@ -146,7 +146,7 @@ function Activity(props) {
                             <Typography variant='caption' color='gray'>
                                 {layout.ACT.fields.matlcode.text}
                             </Typography>
-                            <Typography>
+                            <Typography noWrap>
                                 {activity.materialList ? activity.materialList : '—'}
                             </Typography>
                         </Grid>
@@ -162,21 +162,21 @@ function Activity(props) {
                         </Grid>
 
                         <Grid item xs={5} sm={2} md={5} lg={2} container className='activityDetailsTile'>
-                            <Typography variant='caption' color='gray' sx={{ textAlign: 'center' }}>
+                            <Typography variant='caption' color='gray'>
                                 {/* {layout.BOO.fields.hrswork.text} */}
-                                    Hrs. Worked (Estimated)
+                                    Hrs. Worked<br/>(Estimated)
                             </Typography>
                             <Typography>
                                 {totalHours} <span className='estmtd'>({activity.estimatedHours})</span>
                             </Typography>
                         </Grid>
 
-                        <Grid item xs={5} sm={2} md={5} lg={2} container className='activityDetailsTile'>
+                        <Grid item xs={5} sm={2} md={5} lg={3} xl={2} container className='activityDetailsTile'>
                             <Typography variant='caption' color='gray'>
                                 {/* {layout.ACT.fields.actstartdate.text} */}
                                 {<CalendarStart />}
                             </Typography>
-                            <Typography>
+                            <Typography noWrap>
                                 {formatDate(activity.startDate)}
                             </Typography>
                         </Grid>
