@@ -119,7 +119,8 @@ const Part = () => {
                 maximizable: true,
                 render: () => 
                     <PartStock
-                        {...commonProps} />
+                        {...commonProps}
+                        applicationData={applicationData}  />
                 ,
                 column: 1,
                 order: 3,
