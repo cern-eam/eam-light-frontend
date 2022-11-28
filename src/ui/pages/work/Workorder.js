@@ -363,7 +363,9 @@ const Workorder = () => {
                         updateEntityProperty={updateWorkorderProperty}
                         updateCount={workorder.updateCount}
                         startDate={workorder.startDate}
-                        disabled={readOnly} />
+                        disabled={readOnly}
+                        handleError={handleError}
+                    />
                 ,
                 column: 2,
                 order: 8,

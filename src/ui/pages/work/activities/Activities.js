@@ -17,7 +17,7 @@ function Activities(props) {
     let [isBookLaborModalOpen, setIsBookLaborModalOpen] = useState(false);
     let [loading, setLoading] = useState(false);
 
-    let {workorder, layout, disabled} = props;
+    let {workorder, layout, disabled, handleError} = props;
 
     useEffect(() => {
         readActivities(workorder);
@@ -78,7 +78,9 @@ function Activities(props) {
                     bookLabours={bookLaboursByActivity[activity.activityCode]}
                     layout={layout}
                     postAddActivityHandler={props.postAddActivityHandler}
-                    readActivities={() => readActivities(workorder)}/>
+                    readActivities={() => readActivities(workorder)}
+                    handleError={handleError}
+                    />
             })}
 
             <Stack direction="row" spacing={2} style={{marginTop: 15}}>
