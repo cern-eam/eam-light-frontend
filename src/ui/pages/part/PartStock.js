@@ -3,6 +3,7 @@ import WSParts from '../../../tools/WSParts'
 import EISTable from 'eam-components/dist/ui/components/table';
 import {Link} from 'react-router-dom';
 import { isCernMode } from '../../components/CERNMode';
+import queryString from 'query-string';
 
 function PartStock(props) {
 
@@ -16,7 +17,7 @@ function PartStock(props) {
             WSParts.getPartStock(partCode).then(response => {
                 let stockData = response.body.data.map(line => {
                     let linkValueAsset = '/asset/';
-                    const linkValueStore = `/SSO/kiosk/${line.storeCode}/issue/employee?employee=${userID}&partCode=${partCode}`;
+                    const linkValueStore = `${props.applicationData.EL_TEKLI}/${line.storeCode}/issue/employee?${queryString.stringify({employee: userID, partCode: partCode,})}`;
 
                     const storeCodeCell = line.storeCode ?
                         isCernMode ? <a href={linkValueStore} rel="noopener noreferrer" target="_blank">{line.storeCode}</a> : line.storeCode
