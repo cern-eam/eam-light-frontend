@@ -31,6 +31,7 @@ import useEntity from "hooks/useEntity";
 import { updateMyWorkOrders } from '../../../actions/workorderActions' 
 import { useDispatch } from 'react-redux';
 import UserDefinedFields from 'ui/components/userdefinedfields/UserDefinedFields';
+import { isHidden } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -394,6 +395,9 @@ const Workorder = () => {
                         handleError={handleError}
                         userCode={userData.eamAccount.userCode}
                         disabled={readOnly}
+                        disableCreateFollowUp={isHidden(
+                            commonProps.workOrderLayout.tabs.ACK.fields.createfollowupwo
+                        )}
                         hideFilledItems={panelQueryParams.CHECKLISTShideFilledItems === 'true'}
                         activity={panelQueryParams.CHECKLISTSactivity}
                         topSlot={
