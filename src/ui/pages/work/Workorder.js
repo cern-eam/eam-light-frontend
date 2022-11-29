@@ -30,8 +30,11 @@ import WSWorkorders from '../../../tools/WSWorkorders';
 import useEntity from "hooks/useEntity";
 import { updateMyWorkOrders } from '../../../actions/workorderActions' 
 import { useDispatch } from 'react-redux';
+import UserDefinedFields from 'ui/components/userdefinedfields/UserDefinedFields';
+
 
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import ListAltIcon from '@mui/icons-material/ListAlt';
@@ -502,6 +505,23 @@ const Workorder = () => {
                 summaryIcon: PrecisionManufacturingIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_TAB_WO_SCREEN),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_TAB_WO_SCREEN)
+            },
+            {
+                id: 'USERDEFINEDFIELDS',
+                label: 'User Defined Fields',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => 
+                    <UserDefinedFields
+                        {...commonProps}
+                        entityLayout={workOrderLayout.fields}
+                    />
+                ,
+                column: 2,
+                order: 10,
+                summaryIcon: AssignmentIndIcon,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
         ];
     }
