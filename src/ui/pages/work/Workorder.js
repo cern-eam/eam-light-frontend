@@ -395,7 +395,7 @@ const Workorder = () => {
                         handleError={handleError}
                         userCode={userData.eamAccount.userCode}
                         disabled={readOnly}
-                        disableCreateFollowUp={isHidden(
+                        hideFollowUpProp={isHidden(
                             commonProps.workOrderLayout.tabs.ACK.fields.createfollowupwo
                         )}
                         hideFilledItems={panelQueryParams.CHECKLISTShideFilledItems === 'true'}
