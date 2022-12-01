@@ -18,7 +18,7 @@ import PartUsageContainer from "./partusage/PartUsageContainer";
 import WorkorderClosingCodes from './WorkorderClosingCodes';
 import WorkorderGeneral from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
-import { assignStandardWorkOrderValues, isClosedWorkOrder, isRegionAvailable, layoutPropertiesMap } from "./WorkorderTools";
+import { assignStandardWorkOrderValues, isReadOnlyCustomHandler, isRegionAvailable, layoutPropertiesMap } from "./WorkorderTools";
 import EntityRegions from '../../components/entityregions/EntityRegions';
 import IconButton from '@mui/material/IconButton';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
@@ -88,7 +88,7 @@ const Workorder = () => {
                 standardWO: onChangeStandardWorkOrder,
                 equipmentCode: onChangeEquipment
             },
-            isReadOnlyCustomHandler: isClosedWorkOrder,
+            isReadOnlyCustomHandler: isReadOnlyCustomHandler,
             entityCode: "EVNT",
             entityDesc: "Work Order",
             entityURL: "/workorder/",

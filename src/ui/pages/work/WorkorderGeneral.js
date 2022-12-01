@@ -58,7 +58,9 @@ function WorkorderGeneral(props) {
 
             <EAMSelect
                 {...register('workorderstatus', 'statusCode', 'statusDesc')}
-                disabled={isDepartmentReadOnly(workorder.departmentCode, userData) || !screenPermissions.updateAllowed}
+                disabled={isDepartmentReadOnly(workorder.departmentCode, userData) || 
+                                               !screenPermissions.updateAllowed || 
+                                               !workorder.jtAuthCanUpdate}
                 renderSuggestion={suggestion => suggestion.desc}
                 renderValue={value => value.desc || value.code}
                 options={statuses} 
