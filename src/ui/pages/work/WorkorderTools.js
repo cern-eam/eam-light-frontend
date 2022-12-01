@@ -59,8 +59,8 @@ export const layoutPropertiesMap =  {
         udfchar40:	"userDefinedFields.udfchar40",
     }
 
-export function isClosedWorkOrder(workOrder) {
-    return workOrder.systemStatusCode === 'C';
+export function isReadOnlyCustomHandler(workOrder) {
+    return workOrder.systemStatusCode === 'C' || !workOrder.jtAuthCanUpdate;
 }
 
 export function isRegionAvailable(regionCode, workOrderLayout) {
