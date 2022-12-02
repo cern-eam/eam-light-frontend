@@ -24,17 +24,20 @@ function AddActivityDialog(props) {
     // Passing an 'activityToEdit' object indicates that we are editing an existing activity
     const { activityToEdit, layout } = props;
 
-    const requiredFieldsData = {
-        activityCode: layout.activity.text,
-        tradeCode: layout.trade.text,
-        peopleRequired: layout.personsreq.text,
-        estimatedHours: layout.esthrs.text,
-        startDate: layout.actstartdate.text,
-        endDate: layout.actenddate.text,
+    const fieldsData = {
+        activityCode: layout.activity,
+        activityNote: layout.activitynote,
+        taskCode: layout.task,
+        materialList: layout.matlcode,
+        tradeCode: layout.trade,
+        peopleRequired: layout.personsreq,
+        estimatedHours: layout.esthrs,
+        startDate: layout.actstartdate,
+        endDate: layout.actenddate,
     };
 
     const { errorMessages, validateFields } = useFieldsValidator(
-        requiredFieldsData,
+        fieldsData,
         formValues
     );
 
@@ -169,6 +172,7 @@ function AddActivityDialog(props) {
                                 {...processElementInfo(layout.activitynote)}
                                 value={formValues['activityNote']}
                                 onChange={createOnChangeHandler("activityNote", null, null, updateFormValues)}
+                                errorText={errorMessages?.activityNote}
                             />
 
                             <EAMAutocomplete
@@ -177,6 +181,7 @@ function AddActivityDialog(props) {
                                 value={formValues['taskCode']}
                                 desc={formValues['taskDesc']}
                                 onChange={createOnChangeHandler("taskCode", "taskDesc", null, updateFormValues)}
+                                errorText={errorMessages?.taskCode}
                             />
 
                             <EAMAutocomplete
@@ -186,6 +191,7 @@ function AddActivityDialog(props) {
                                 desc={formValues['materialListDesc']}
                                 onChange={createOnChangeHandler("materialList", "materialListDesc", null, updateFormValues)}
                                 maxHeight={200}
+                                errorText={errorMessages?.materialList}
                             />
 
                             <EAMAutocomplete

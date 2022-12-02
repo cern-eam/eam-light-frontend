@@ -60,17 +60,18 @@ function PartUsageDialog(props) {
     const [formData, setFormData] = useState({}); // stores user changes (direct and indirect) for updating the part usage object
     const [initPartUsageWSData, setInitPartUsageWSData] = useState({});
 
-    const requiredFieldsData = {
-        storeCode: tabLayout.storecode.text,
-        activityCode: tabLayout.activity.text,
-        partCode: tabLayout.partcode.text,
-        // NOTE: transaction type is required but EAMRadio does not take an errorText prop
-        // and in this case it comes pre-filled so it will never be blank.
-        // transactionType: tabLayout.transactiontype.text,
+    const fieldsData = {
+        transactionType: tabLayout.transactiontype,
+        storeCode: tabLayout.storecode,
+        activityCode: tabLayout.activity,
+        partCode: tabLayout.partcode,
+        assetIDCode: tabLayout.assetid,
+        bin: tabLayout.bincode,
+        transactionQty: tabLayout.transactionquantity,
     };
 
     const { errorMessages, validateFields } = useFieldsValidator(
-        requiredFieldsData,
+        fieldsData,
         formData
     );
 
@@ -418,7 +419,6 @@ function PartUsageDialog(props) {
 
                             <EAMSelect
                                 {...processElementInfo(tabLayout['activity'])}
-                                required
                                 disabled={!formData.storeCode}
                                 options={activityList}
                                 value={formData.activityCode}
@@ -463,6 +463,7 @@ function PartUsageDialog(props) {
                                 onChange={createOnChangeHandler(FORM.ASSET, FORM.ASSET_DESC, null, updateFormDataProperty, handleAssetChange)}
                                 barcodeScanner
                                 renderDependencies={[formData.partCode]}
+                                errorText={errorMessages?.assetIDCode}
                             />
 
                             <EAMSelect
@@ -473,6 +474,7 @@ function PartUsageDialog(props) {
                                 value={formData.bin}
                                 onChange={createOnChangeHandler(FORM.BIN, null, null, updateFormDataProperty)}
                                 suggestionsPixelHeight={200}
+                                errorText={errorMessages?.bin}
                             />
 
                             <EAMTextField
@@ -486,6 +488,7 @@ function PartUsageDialog(props) {
                                 value={formData.transactionQty}
                                 onChange={createOnChangeHandler(FORM.TRANSACTION_QTY, null, null, updateFormDataProperty)}
                                 renderDependencies={uom}
+                                errorText={errorMessages?.transactionQty}
                             />
                         </BlockUi>
                     </div>
