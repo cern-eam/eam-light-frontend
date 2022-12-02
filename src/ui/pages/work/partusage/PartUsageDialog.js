@@ -9,6 +9,7 @@ import WSWorkorders from '../../../../tools/WSWorkorders';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import useFieldsValidator from 'eam-components/dist/ui/components/inputs-ng/hooks/useFieldsValidator';
 import WSParts from '../../../../tools/WSParts';
 import makeStyles from '@mui/styles/makeStyles';
 import EAMRadio from 'eam-components/dist/ui/components/inputs-ng/EAMRadio';
@@ -58,6 +59,20 @@ function PartUsageDialog(props) {
     const [isTrackedByAsset, setIsTrackedByAsset] = useState();
     const [formData, setFormData] = useState({}); // stores user changes (direct and indirect) for updating the part usage object
     const [initPartUsageWSData, setInitPartUsageWSData] = useState({});
+
+    const requiredFieldsData = {
+        storeCode: tabLayout.storecode.text,
+        activityCode: tabLayout.activity.text,
+        partCode: tabLayout.partcode.text,
+        // NOTE: transaction type is required but EAMRadio does not take an errorText prop
+        // and in this case it comes pre-filled so it will never be blank.
+        // transactionType: tabLayout.transactiontype.text,
+    };
+
+    const { errorMessages, validateFields } = useFieldsValidator(
+        requiredFieldsData,
+        formData
+    );
 
     const updateFormDataProperty = (key, value) => {
         setFormData((oldFormData) => ({
@@ -300,6 +315,10 @@ function PartUsageDialog(props) {
     };
 
     const handleSave = () => {
+        if (!validateFields()) {
+            return;
+        }
+
         setLoading(true);
 
         const relatedWorkOrder =
@@ -394,6 +413,7 @@ function PartUsageDialog(props) {
                                 autocompleteHandler={
                                     WSWorkorders.getPartUsageStores
                                 }
+                                errorText={errorMessages?.storeCode}
                             />
 
                             <EAMSelect
@@ -403,6 +423,7 @@ function PartUsageDialog(props) {
                                 options={activityList}
                                 value={formData.activityCode}
                                 onChange={createOnChangeHandler(FORM.ACTIVITY, null, null, updateFormDataProperty, null)}
+                                errorText={errorMessages?.activityCode}
                             />
 
                             <EAMAutocomplete
@@ -418,6 +439,7 @@ function PartUsageDialog(props) {
                                     formData.storeCode,
                                 ]}
                                 onChange={createOnChangeHandler(FORM.PART, FORM.PART_DESC, null, updateFormDataProperty, handlePartChange)}
+                                errorText={errorMessages?.partCode}
                                 barcodeScanner
                             />
 
