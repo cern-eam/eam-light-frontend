@@ -9,6 +9,7 @@ import WSWorkorders from '../../../../tools/WSWorkorders';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import useFieldsValidator from 'eam-components/dist/ui/components/inputs-ng/hooks/useFieldsValidator';
 import WSParts from '../../../../tools/WSParts';
 import makeStyles from '@mui/styles/makeStyles';
 import EAMRadio from 'eam-components/dist/ui/components/inputs-ng/EAMRadio';
@@ -58,6 +59,21 @@ function PartUsageDialog(props) {
     const [isTrackedByAsset, setIsTrackedByAsset] = useState();
     const [formData, setFormData] = useState({}); // stores user changes (direct and indirect) for updating the part usage object
     const [initPartUsageWSData, setInitPartUsageWSData] = useState({});
+
+    const fieldsData = {
+        transactionType: tabLayout.transactiontype,
+        storeCode: tabLayout.storecode,
+        activityCode: tabLayout.activity,
+        partCode: tabLayout.partcode,
+        assetIDCode: tabLayout.assetid,
+        bin: tabLayout.bincode,
+        transactionQty: tabLayout.transactionquantity,
+    };
+
+    const { errorMessages, validateFields } = useFieldsValidator(
+        fieldsData,
+        formData
+    );
 
     const updateFormDataProperty = (key, value) => {
         setFormData((oldFormData) => ({
@@ -300,6 +316,10 @@ function PartUsageDialog(props) {
     };
 
     const handleSave = () => {
+        if (!validateFields()) {
+            return;
+        }
+
         setLoading(true);
 
         const relatedWorkOrder =
@@ -394,15 +414,16 @@ function PartUsageDialog(props) {
                                 autocompleteHandler={
                                     WSWorkorders.getPartUsageStores
                                 }
+                                errorText={errorMessages?.storeCode}
                             />
 
                             <EAMSelect
                                 {...processElementInfo(tabLayout['activity'])}
-                                required
                                 disabled={!formData.storeCode}
                                 options={activityList}
                                 value={formData.activityCode}
                                 onChange={createOnChangeHandler(FORM.ACTIVITY, null, null, updateFormDataProperty, null)}
+                                errorText={errorMessages?.activityCode}
                             />
 
                             <EAMAutocomplete
@@ -418,6 +439,7 @@ function PartUsageDialog(props) {
                                     formData.storeCode,
                                 ]}
                                 onChange={createOnChangeHandler(FORM.PART, FORM.PART_DESC, null, updateFormDataProperty, handlePartChange)}
+                                errorText={errorMessages?.partCode}
                                 barcodeScanner
                             />
 
@@ -441,6 +463,7 @@ function PartUsageDialog(props) {
                                 onChange={createOnChangeHandler(FORM.ASSET, FORM.ASSET_DESC, null, updateFormDataProperty, handleAssetChange)}
                                 barcodeScanner
                                 renderDependencies={[formData.partCode]}
+                                errorText={errorMessages?.assetIDCode}
                             />
 
                             <EAMSelect
@@ -451,6 +474,7 @@ function PartUsageDialog(props) {
                                 value={formData.bin}
                                 onChange={createOnChangeHandler(FORM.BIN, null, null, updateFormDataProperty)}
                                 suggestionsPixelHeight={200}
+                                errorText={errorMessages?.bin}
                             />
 
                             <EAMTextField
@@ -464,6 +488,7 @@ function PartUsageDialog(props) {
                                 value={formData.transactionQty}
                                 onChange={createOnChangeHandler(FORM.TRANSACTION_QTY, null, null, updateFormDataProperty)}
                                 renderDependencies={uom}
+                                errorText={errorMessages?.transactionQty}
                             />
                         </BlockUi>
                     </div>
