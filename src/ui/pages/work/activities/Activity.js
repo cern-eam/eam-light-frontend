@@ -15,7 +15,7 @@ function Activity(props) {
 
     const { activity, bookLabours, layout, readActivities, postAddActivityHandler, handleError } = props;
 
-    const [isEditModalOpen, setIsEditModalOpen] = useState();
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -125,8 +125,6 @@ function Activity(props) {
                     </Grid>
                     <Stack
                         className="activityDetails"
-                        item
-                        container
                         spacing={1}
                         direction="row"
                         justifyContent="space-between"
