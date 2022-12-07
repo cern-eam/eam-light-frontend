@@ -36,10 +36,8 @@ function AddActivityDialog(props) {
         endDate: layout.actenddate,
     };
 
-    const { errorMessages, validateFields } = useFieldsValidator(
-        fieldsData,
-        formValues
-    );
+    const { errorMessages, validateFields, resetErrorMessages } =
+        useFieldsValidator(fieldsData, formValues);
 
     useEffect(() => {
         if (props.open) {
@@ -48,6 +46,8 @@ function AddActivityDialog(props) {
             } else {
                 init();
             }
+        } else {
+            resetErrorMessages();
         }
     }, [props.open]);
 

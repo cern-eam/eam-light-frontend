@@ -70,10 +70,8 @@ function PartUsageDialog(props) {
         transactionQty: tabLayout.transactionquantity,
     };
 
-    const { errorMessages, validateFields } = useFieldsValidator(
-        fieldsData,
-        formData
-    );
+    const { errorMessages, validateFields, resetErrorMessages } =
+        useFieldsValidator(fieldsData, formData);
 
     const updateFormDataProperty = (key, value) => {
         setFormData((oldFormData) => ({
@@ -99,10 +97,10 @@ function PartUsageDialog(props) {
     useEffect(() => {
         if (isDialogOpen) {
             initNewPartUsage();
-        }
-        return () => {
+        } else {
             setUoM('');
             resetFormTransactionLinesAndBinListStates();
+            resetErrorMessages();
         }
     }, [isDialogOpen]);
 
