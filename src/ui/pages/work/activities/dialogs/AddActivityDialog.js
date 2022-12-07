@@ -46,10 +46,9 @@ function AddActivityDialog(props) {
             } else {
                 init();
             }
-        }
-        return () => {
+        } else {
             resetErrorMessages();
-        };
+        }
     }, [props.open]);
 
     let init = () => {

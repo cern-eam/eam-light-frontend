@@ -97,8 +97,7 @@ function PartUsageDialog(props) {
     useEffect(() => {
         if (isDialogOpen) {
             initNewPartUsage();
-        }
-        return () => {
+        } else {
             setUoM('');
             resetFormTransactionLinesAndBinListStates();
             resetErrorMessages();
