@@ -57,6 +57,16 @@ export const layoutPropertiesMap =  {
         udfchar29:	"userDefinedFields.udfchar29",
         udfchar30:	"userDefinedFields.udfchar30",
         udfchar40:	"userDefinedFields.udfchar40",
+        udfnum01:	"userDefinedFields.udfnum01",
+        udfnum02:	"userDefinedFields.udfnum02",
+        udfnum03:	"userDefinedFields.udfnum03",
+        udfnum04:	"userDefinedFields.udfnum04",
+        udfnum05:	"userDefinedFields.udfnum05",
+        udfnum06:	"userDefinedFields.udfnum06",
+        udfnum07:	"userDefinedFields.udfnum07",
+        udfnum08:	"userDefinedFields.udfnum08",
+        udfnum09:	"userDefinedFields.udfnum09",
+        udfnum10:	"userDefinedFields.udfnum10"
     }
 
 export function isReadOnlyCustomHandler(workOrder) {

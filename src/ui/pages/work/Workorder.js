@@ -32,8 +32,6 @@ import { updateMyWorkOrders } from '../../../actions/workorderActions'
 import { useDispatch } from 'react-redux';
 import UserDefinedFields from 'ui/components/userdefinedfields/UserDefinedFields';
 import { isHidden } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
-
-
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';

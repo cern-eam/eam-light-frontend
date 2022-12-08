@@ -230,12 +230,16 @@ const format = (date, dateFormat) => {
     return null;
 }
 
-export const getElementInfoForCustomField = (layoutKey, customFields) => {
+export const getElementInfoFromCustomFields = (layoutKey, customFields) => {
     let customField = customFields.find(cf => cf.code === layoutKey) 
 
+    return getElementInfoForCustomField(customField);
+}
+
+export const getElementInfoForCustomField = (customField) => {
     return {
         text: customField?.label,
-        xpath: 'EAMID_' + layoutKey,
+        xpath: 'EAMID_' + customField?.code,
         fieldType: customField?.type === 'NUM' ? 'number' : 'text'
     }
 }
@@ -248,6 +252,26 @@ export const registerCustomField = entity => (layoutKey, valueKey, descKey) => {
     }
     data.disabled = true;
     return data;
+}
+
+export const prepareDataForFieldsValidator = (entity, screenLayout, layoutPropertiesMap) => {
+    if (!entity) {
+        return {}
+    }
+    
+    const temp = Object.entries(layoutPropertiesMap).reduce(
+        (acc, [layoutKey, fieldKey]) => {
+            acc[fieldKey] = screenLayout.fields[layoutKey];
+            return acc;
+        }, {})
+
+    entity.customField.reduce(
+        (acc, customField, index) => {
+            acc[`customField.${index}.value`] = getElementInfoForCustomField(customField)
+            return acc;
+        }, temp)
+
+    return temp;
 }
 
 export const isMultiOrg = process.env.REACT_APP_MULTI_ORG === 'TRUE';

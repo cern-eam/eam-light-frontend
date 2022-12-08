@@ -1,17 +1,18 @@
-import {useState, useEffect, useRef} from "react"
+import {useState, useEffect, useRef, useMemo} from "react"
 import { useSelector, useDispatch } from "react-redux";
 import { isHiddenRegion, getHiddenRegionState, getUniqueRegionID } from '../selectors/uiSelectors'
 import {useParams, useHistory} from "react-router-dom"
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
-import { assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType, fireHandlers, isDepartmentReadOnly, getElementInfoForCustomField, isMultiOrg } from "ui/pages/EntityTools";
+import { assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType, fireHandlers, isDepartmentReadOnly, isMultiOrg, getElementInfoFromCustomFields, prepareDataForFieldsValidator } from "ui/pages/EntityTools";
 import { setLayoutProperty, showError, showNotification, handleError, toggleHiddenRegion,
     setRegionVisibility, 
     showWarning} from "actions/uiActions";
 import WSCustomFields from "tools/WSCustomFields";
 import { createOnChangeHandler, processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { get } from "lodash";
+import useFieldsValidator from "eam-components/dist/ui/components/inputs-ng/hooks/useFieldsValidator";
 
 const useEntity = (params) => {
 
@@ -28,7 +29,6 @@ const useEntity = (params) => {
     const history = useHistory();
     const abortController = useRef(null);
     const commentsComponent = useRef(null);
-    const validators = useRef({})
 
     // Init dispatchers
     const dispatch = useDispatch();
@@ -47,6 +47,8 @@ const useEntity = (params) => {
     const userData = useSelector(state =>  state.application.userData);
     const applicationData = useSelector(state =>  state.application.applicationData);
     const showEqpTree = useSelector(state =>  state.ui.layout.showEqpTree);
+
+    const { errorMessages, validateFields, resetErrorMessages } = useFieldsValidator(useMemo(() => prepareDataForFieldsValidator(entity, screenLayout, layoutPropertiesMap), [screenCode, entity?.customField]), entity);
 
     // HIDDEN REGIONS
     const isHiddenRegionConst = useSelector(state => isHiddenRegion(state)(screenCode))
@@ -68,7 +70,7 @@ const useEntity = (params) => {
     // CRUD
     //
     const createEntity = () => {
-        if (!validate()) {
+        if (!validateFields()) {
             return;
         }
         setLoading(true); 
@@ -97,7 +99,7 @@ const useEntity = (params) => {
         //
         WS.read(code, { signal: abortController.current.signal })
             .then(response => {
-                validators.current = {}; setIsModified(false); setNewEntity(false); 
+                resetErrorMessages(); setIsModified(false); setNewEntity(false); 
                 
                 const readEntity = response.body.data;
                 setEntity(readEntity);
@@ -121,7 +123,7 @@ const useEntity = (params) => {
     }
 
     const updateEntity = () => {
-        if (!validate()) {
+        if (!validateFields()) {
             return;
         }
 
@@ -129,7 +131,7 @@ const useEntity = (params) => {
 
         WS.update(entity)
             .then(response => {
-                validators.current = {}; setIsModified(false); setErrors(null); 
+                resetErrorMessages(); setIsModified(false); setErrors(null); 
 
                 commentsComponent.current?.createCommentForNewEntity(entityCode);
                 showNotificationConst(`${entityDesc} ${entity[entityCodeProperty]} has been successfully updated.`);
@@ -162,7 +164,7 @@ const useEntity = (params) => {
         
         WS.new()
             .then(response => {
-                validators.current = {};
+                resetErrorMessages();
                 setErrors(null);
                 setNewEntity(true);
                 setIsModified(false);
@@ -185,7 +187,7 @@ const useEntity = (params) => {
     const copyEntity = () => {
         let code = entity[entityCodeProperty];
         
-        validators.current = {};
+        resetErrorMessages();
         setErrors(null);
         setNewEntity(true);
         setIsModified(false);
@@ -220,7 +222,7 @@ const useEntity = (params) => {
         return WSCustomFields.getCustomFields(entityCode, newClass)
         .then(response => {
             setEntity(prevEntity => {
-                validators.current = {};
+                //validators.current = {};
                 const newCustomFields = response.body.data;
                 let entity = assignCustomFieldFromCustomField(prevEntity, newCustomFields, AssignmentType.SOURCE_NOT_EMPTY);
     
@@ -246,7 +248,7 @@ const useEntity = (params) => {
     };
 
     const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
-        let data = processElementInfo(screenLayout.fields[layoutKey] ?? getElementInfoForCustomField(layoutKey, entity.customField))
+        let data = processElementInfo(screenLayout.fields[layoutKey] ?? getElementInfoFromCustomFields(layoutKey, entity.customField))
         
         data.onChange = createOnChangeHandler(valueKey, descKey, orgKey, updateEntityProperty, onChange);
 
@@ -262,36 +264,14 @@ const useEntity = (params) => {
         }
         
         // Errors
-        let error = errors?.find?.(e => e.location === data.id || e.location === valueKey);
+        data.errorText = errorMessages[valueKey]
+        
+        let error = errors?.find?.(e => e.location === data.id);
         if (error) {
             data.errorText = error.message;
         }
         
-        createValidator(data, valueKey)
-
         return data;
-    }
-
-    const validate = () => {
-        let errors = Object.entries(validators.current ?? {})
-                           .map(([valueKey, validator]) => ({location: valueKey, message: validator(get(entity, valueKey))}))
-                           .filter(e => e.message)
-        setErrors(errors);
-        return errors?.length === 0;
-    };
-
-    const createValidator = (data, valueKey) => {
-        // Do not validate if the element is hidden
-        if (data.hidden) { 
-            return;
-        }
-
-        if (data.required) {
-            validators.current[valueKey] = value => value ? '' : `${data.label} field cannot be blank.`;
-        }
-        if (data.type === 'number') {
-            validators.current[valueKey] = value => !isNaN(value ?? 0) ? '' : `${data.label} must be a valid number.`;
-        }
     }
 
     const getHandlers = () => ({...handlers, "classCode": onChangeClass});
