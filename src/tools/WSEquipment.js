@@ -21,7 +21,6 @@ class WSEquipment {
     }
 
     getEquipment(equipmentCode, config = {}) {
-        equipmentCode = encodeURIComponent(equipmentCode.replace('%23', '#'));
         return WS._get('/equipment?c=' + equipmentCode, config);
     }
 

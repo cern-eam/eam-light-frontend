@@ -14,7 +14,6 @@ class WSParts {
     }
 
     getPart(code, config = {}) {
-        code = encodeURIComponent(code.replace('%23', '#'));
         return WS._get('/parts/' + code, config);
     }
 
