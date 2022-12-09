@@ -98,6 +98,7 @@ export function isClosedEquipment(equipment) {
 
 // MAPPING BETWEEN ENTITY KEYS AND LAYOUT ID
 const equipmentLayoutPropertiesMap =  {
+    equipmentno: "code",
     alias: "alias",
     assetstatus: "statusCode",
     assignedto: "assignedTo",

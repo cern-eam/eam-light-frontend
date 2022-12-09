@@ -1,5 +1,6 @@
 // MAPPING BETWEEN ENTITY KEYS AND LAYOUT ID
 export const layoutPropertiesMap =  {
+    partcode: "code",
     category: "categoryCode",
     class: "classCode",
     commoditycode: "commodityCode",
