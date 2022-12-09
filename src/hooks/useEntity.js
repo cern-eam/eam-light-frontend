@@ -86,6 +86,7 @@ const useEntity = (params) => {
             .catch(error => {
                 setErrors(error?.response?.body?.errors);
                 handleErrorConst(error)
+
             })
             .finally( () => setLoading(false))
     }
@@ -222,7 +223,6 @@ const useEntity = (params) => {
         return WSCustomFields.getCustomFields(entityCode, newClass)
         .then(response => {
             setEntity(prevEntity => {
-                //validators.current = {};
                 const newCustomFields = response.body.data;
                 let entity = assignCustomFieldFromCustomField(prevEntity, newCustomFields, AssignmentType.SOURCE_NOT_EMPTY);
     
