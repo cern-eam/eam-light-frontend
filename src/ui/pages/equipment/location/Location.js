@@ -29,6 +29,7 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded'; 
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import { locationLayoutPropertiesMap } from "../EquipmentTools";
 
 export default Location = (props) => {
 
@@ -53,7 +54,8 @@ export default Location = (props) => {
             entityURL: "/location/",
             entityCodeProperty: "code",
             screenProperty: "locationScreen",
-            layoutProperty: "locationLayout"
+            layoutProperty: "locationLayout",
+            layoutPropertiesMap: locationLayoutPropertiesMap
         });
 
 

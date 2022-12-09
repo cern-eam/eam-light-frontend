@@ -221,3 +221,13 @@ export const positionLayoutPropertiesMap =  {
 export const systemLayoutPropertiesMap =  {
     ...equipmentLayoutPropertiesMap,
 }
+
+export const locationLayoutPropertiesMap =  {
+    equipmentno: "code",
+    equipmentdesc: "description",
+    department: "departmentCode",
+    class: "classCode",
+    costcode: "costCode",
+    safety: "safety",
+    outofservice: "outOfService"
+}
