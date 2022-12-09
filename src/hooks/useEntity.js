@@ -21,7 +21,6 @@ const useEntity = (params) => {
 
     const [loading, setLoading] = useState(false);
     const [entity, setEntity] = useState(null);
-    const [errors, setErrors] = useState(null);
     const [newEntity, setNewEntity] = useState(true);
     const [readOnly, setReadOnly] = useState(false);
     const [isModified, setIsModified] = useState(false);
@@ -48,7 +47,7 @@ const useEntity = (params) => {
     const applicationData = useSelector(state =>  state.application.applicationData);
     const showEqpTree = useSelector(state =>  state.ui.layout.showEqpTree);
 
-    const { errorMessages, validateFields, resetErrorMessages } = useFieldsValidator(useMemo(() => prepareDataForFieldsValidator(entity, screenLayout, layoutPropertiesMap), [screenCode, entity?.customField]), entity);
+    const { errorMessages, validateFields, generateErrorMessagesFromException, resetErrorMessages } = useFieldsValidator(useMemo(() => prepareDataForFieldsValidator(entity, screenLayout, layoutPropertiesMap), [screenCode, entity?.customField]), entity);
 
     // HIDDEN REGIONS
     const isHiddenRegionConst = useSelector(state => isHiddenRegion(state)(screenCode))
@@ -84,7 +83,7 @@ const useEntity = (params) => {
                 history.push(process.env.PUBLIC_URL + entityURL + encodeURIComponent(entityCode + (isMultiOrg && entity.organization ? '#' + entity.organization : '')));
             })
             .catch(error => {
-                setErrors(error?.response?.body?.errors);
+                generateErrorMessagesFromException(error?.response?.body?.errors);
                 handleErrorConst(error)
 
             })
@@ -92,7 +91,7 @@ const useEntity = (params) => {
     }
 
     const readEntity = (code) => {
-        setLoading(true); setErrors(null); 
+        setLoading(true); 
         
         // Cancel the old request in the case it was still active
         abortController.current?.abort();
@@ -132,14 +131,14 @@ const useEntity = (params) => {
 
         WS.update(entity)
             .then(response => {
-                resetErrorMessages(); setIsModified(false); setErrors(null); 
+                resetErrorMessages(); setIsModified(false); 
 
                 commentsComponent.current?.createCommentForNewEntity(entityCode);
                 showNotificationConst(`${entityDesc} ${entity[entityCodeProperty]} has been successfully updated.`);
                 readEntity(code);
             })
             .catch(error => {
-                setErrors(error?.response?.body?.errors);
+                generateErrorMessagesFromException(error?.response?.body?.errors);
                 handleErrorConst(error)
             })
             .finally( () => setLoading(false))
@@ -154,7 +153,7 @@ const useEntity = (params) => {
                 history.push(process.env.PUBLIC_URL + entityURL);
             })
             .catch(error => {
-                setErrors(error?.response?.body?.errors);
+                generateErrorMessagesFromException(error?.response?.body?.errors);
                 handleErrorConst(error)
             })
             .finally( () => setLoading(false))
@@ -166,7 +165,6 @@ const useEntity = (params) => {
         WS.new()
             .then(response => {
                 resetErrorMessages();
-                setErrors(null);
                 setNewEntity(true);
                 setIsModified(false);
                 setReadOnly(!screenPermissions.creationAllowed); 
@@ -189,7 +187,6 @@ const useEntity = (params) => {
         let code = entity[entityCodeProperty];
         
         resetErrorMessages();
-        setErrors(null);
         setNewEntity(true);
         setIsModified(false);
         setReadOnly(!screenPermissions.creationAllowed); 
@@ -265,12 +262,7 @@ const useEntity = (params) => {
         
         // Errors
         data.errorText = errorMessages[valueKey]
-        
-        let error = errors?.find?.(e => e.location === data.id);
-        if (error) {
-            data.errorText = error.message;
-        }
-        
+                
         return data;
     }
 
