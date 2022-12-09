@@ -13,7 +13,7 @@ import useFieldsValidator from 'eam-components/dist/ui/components/inputs-ng/hook
 import WSParts from '../../../../tools/WSParts';
 import makeStyles from '@mui/styles/makeStyles';
 import EAMRadio from 'eam-components/dist/ui/components/inputs-ng/EAMRadio';
-import { createOnChangeHandler, processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import { createOnChangeHandler, processElementInfo, isHidden } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 import WSEquipment from "tools/WSEquipment";
 
 const overflowStyle = {
@@ -25,6 +25,8 @@ const useStyles = makeStyles({
 });
 
 const transactionTypes = [{code: 'ISSUE', desc: 'Issue'}, {code: 'RETURN', desc: 'Return'}];
+const returnType = transactionTypes[1].code;
+const issueType = transactionTypes[0].code;
 
 // Contains some (inner) fields from the Part Usage object
 const FORM = {
@@ -36,14 +38,17 @@ const FORM = {
     BIN: 'bin',
     PART: 'partCode',
     PART_DESC: 'partDesc',
-    TRANSACTION_QTY: 'transactionQty'
-}
+    TRANSACTION_QTY: 'transactionQty',
+    LOT: 'lot',
+};
 
 function PartUsageDialog(props) {
     const {
         isDialogOpen,
         handleError,
         showError,
+        showNotification,
+        showWarning,
         equipmentMEC,
         successHandler,
         handleCancel,
@@ -53,6 +58,7 @@ function PartUsageDialog(props) {
     } = props;
 
     const [binList, setBinList] = useState([]);
+    const [lotList, setLotList] = useState([]);
     const [activityList, setActivityList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [uom, setUoM] = useState('');
@@ -67,6 +73,7 @@ function PartUsageDialog(props) {
         partCode: tabLayout.partcode,
         assetIDCode: tabLayout.assetid,
         bin: tabLayout.bincode,
+        lot: tabLayout.lotcode,
         transactionQty: tabLayout.transactionquantity,
     };
 
@@ -80,6 +87,12 @@ function PartUsageDialog(props) {
         }));
     };
 
+    const runUiBlockingFunction = async (blockingFunction) => {
+        setLoading(true);
+        await blockingFunction();
+        setLoading(false);
+    }
+
     // We set every state key used even if they come null in the 'response'
     const assignInitialFormState = (response) => {
         const transactionLines = response.transactionlines[0];
@@ -92,28 +105,29 @@ function PartUsageDialog(props) {
         updateFormDataProperty(FORM.PART, transactionLines.partCode);
         updateFormDataProperty(FORM.PART_DESC, transactionLines.partDesc);
         updateFormDataProperty(FORM.TRANSACTION_QTY, transactionLines.transactionQty);
+        updateFormDataProperty(FORM.LOT, transactionLines.lot);
     };
 
     useEffect(() => {
         if (isDialogOpen) {
-            initNewPartUsage();
+            runUiBlockingFunction(initNewPartUsage);
         } else {
-            setUoM('');
-            resetFormTransactionLinesAndBinListStates();
+            resetFormTransactionLinesAndRelatedStates();
+            updateFormDataProperty(FORM.ACTIVITY, null);
+            updateFormDataProperty(FORM.STORE, null);
             resetErrorMessages();
         }
     }, [isDialogOpen]);
 
     const initNewPartUsage = async () => {
-        setLoading(true);
         try {
             // Fetch the part usage object
             const response = await WSWorkorders.getInitNewPartUsage(workorder);
-            setLoading(false);
-            setInitPartUsageWSData(response.body.data);
-            assignInitialFormState(response.body.data);
+            const data = response.body.data;
+            setInitPartUsageWSData(data);
+            assignInitialFormState(data);
             // Load lists
-            loadLists();
+            await loadLists();
         } catch (error) {
             handleError(error);
         }
@@ -129,71 +143,94 @@ function PartUsageDialog(props) {
             handleError(error);
         }
         setBinList([]);
+        setLotList([]);
     };
 
-    const resetFormTransactionLinesAndBinListStates = () => {
-        // Reset 'transactionlines' proprieties
-        updateFormDataProperty(FORM.ASSET, '');
-        updateFormDataProperty(FORM.ASSET_DESC, '');
-        updateFormDataProperty(FORM.BIN, '');
-        updateFormDataProperty(FORM.PART, '');
-        updateFormDataProperty(FORM.PART_DESC, '');
-        // Reset bin list
-        setBinList([]);
+    const resetFieldWithDesc = (fieldValueKey, fieldDescKey) => {
+        updateFormDataProperty(fieldValueKey, '');
+        updateFormDataProperty(fieldDescKey, '');
+    }
+
+    const resetFieldWithList = (fieldValueKey, listSetterFunction) => {
+        updateFormDataProperty(fieldValueKey, '');
+        listSetterFunction([]);
+    }
+
+    const resetFormTransactionLinesAndRelatedStates = () => {
+        // Reset 'transactionlines' proprieties (including associated options lists)
+        resetFieldWithDesc(FORM.ASSET, FORM.ASSET_DESC);
+        resetFieldWithDesc(FORM.PART, FORM.PART_DESC);
+        resetFieldWithList(FORM.BIN, setBinList);
+        resetFieldWithList(FORM.LOT, setLotList);
+
+        // Reset other
+        setUoM('');
+        setIsTrackedByAsset(false);
     };
 
     const handleTransactionChange = () => {
-        resetFormTransactionLinesAndBinListStates();
+        resetFormTransactionLinesAndRelatedStates();
     };
 
     const handleStoreChange = () => {
-        resetFormTransactionLinesAndBinListStates();
+        resetFormTransactionLinesAndRelatedStates();
     };
 
     /* This function handles at least 3 cases:
-     * 1) The asset ID input is cleared.
-     * 2) The user searches for an asset ID directly (without having selected a part),
-     *    so we have to update the remaining state concerning part and bin.
-     * 3) There was already a part selected so we only need to update the bin state.
+     * 1) The asset ID field is cleared, is solely whitespace or is falsy.
+     * 2) The user searches for an asset ID without having selected a part or by selecting it from the history
+     *    (so we need to update the related state: part, bin and lot).
+     * 3) There was already a part selected (so we only need to update the bin and lot states).
      */
     const handleAssetChange = async (assetIDCode) => {
-        // Asset input cleared
-        if (assetIDCode?.trim() === '') {
-            updateFormDataProperty(FORM.ASSET, '');
-            updateFormDataProperty(FORM.ASSET_DESC, '');
-            updateFormDataProperty(FORM.BIN, '');
-            setBinList([]);
+        const { transactionType, partCode } = formData;
+
+        // Reset related fields
+        updateFormDataProperty(FORM.BIN, '');
+        if (transactionType === issueType) {
+            // In a return transaction the bin list is loaded when a part is selected so no need to reset
+            resetFieldWithList(FORM.BIN, setBinList);
+        }
+        resetFieldWithList(FORM.LOT, setLotList);
+
+        // Asset field is definitely not an asset code
+        if (!assetIDCode || assetIDCode?.trim() === '') {
+            // Reset state that may not reflect the value shown in the field
+            resetFieldWithDesc(FORM.ASSET, FORM.ASSET_DESC);
             return;
         }
+
         try {
-            setLoading(true);
             const assetData = await getAssetData(assetIDCode);
+
+            // Explicitly reset asset field since the selected asset was not valid
             if (!assetData) {
-                updateFormDataProperty(FORM.ASSET, '');
-                updateFormDataProperty(FORM.ASSET_DESC, '');
+                resetFieldWithDesc(FORM.ASSET, FORM.ASSET_DESC);
                 return;
             }
-            // Asset selected without a part selected
-            if (!formData.partCode || formData.partCode && formData.partCode !== assetData.partCode) {
-                return handleAssetUnspecifiedPart(assetData);
-            }
+
+            // Asset selected without a part selected or with a different part associated (if selected from history)
+            if (!partCode || partCode && partCode !== assetData.partCode) {
+                await handleAssetDifferentOrNoPart(assetData);
             // Asset selected having already selected a part
-            return handleAssetSelectedWithPart(assetData);
+            } else {
+                await handleAssetSelectedWithPart(assetData);
+            }
         } catch (error) {
             handleError(error);
-        } finally {
-            setLoading(false);
         }
     };
 
     const getAssetData = async (assetIDCode) => {
         try {
             const response = await WSEquipment.getEquipment(assetIDCode);
+            const data = response.body.data;
 
-            const responseStoreCode = response.body.data.storeCode;
+            const responseStoreCode = data.storeCode;
             const assetData = {
-                bin: response.body.data.bin,
-                partCode: response.body.data.partCode
+                bin: data.bin,
+                partCode: data.partCode,
+                lot: data.lot,
             }
 
             // Can happen if user un-focuses the input with an unexpected equipment selected (e.g. "A")
@@ -202,25 +239,25 @@ function PartUsageDialog(props) {
                 return undefined;
             }
 
-            // "ISSUE" transaction type
-            if (formData.transactionType === transactionTypes[0].code) {
+            const { transactionType, storeCode } = formData;
+
+            if (transactionType === issueType) {
                 if (!responseStoreCode) {
-                    showError('Asset is not in any store.');
+                    showError(`Asset "${assetIDCode}" is not available in any store.`);
                     return undefined;
                 }
 
                 // Asset is in a store other than the selected (can happen by selecting asset from input history)
-                if (responseStoreCode !== formData.storeCode) {
-                    showError(`Asset is in a different store (${responseStoreCode}) than the selected.`);
+                if (responseStoreCode !== storeCode) {
+                    showError(`Asset "${assetIDCode}" is in a different store (${responseStoreCode}) than the selected.`);
                     return undefined;
                 }
 
                 return assetData;
 
-            // "RETURN" transaction type
-            } else if (formData.transactionType === transactionTypes[1].code) {
+            } else if (transactionType === returnType) {
                 if (responseStoreCode) {
-                    showError(`Asset is already in a store (${responseStoreCode}).`);
+                    showError(`Asset "${assetIDCode}" is already in a store (${responseStoreCode}).`);
                     return undefined;
                 }
 
@@ -228,7 +265,7 @@ function PartUsageDialog(props) {
             }
 
             // Something is wrong if we get here (user input or code-related)
-            showError('Asset does not follow business rules.');
+            showError(`Asset "${assetIDCode}" does not follow business rules.`);
             return undefined;
 
         } catch (error){
@@ -236,89 +273,196 @@ function PartUsageDialog(props) {
         }
     };
 
-    const handleAssetSelectedWithPart = (assetData) => {
-        const { bin, partCode } = assetData;
+    const handleAssetSelectedWithPart = async (assetData) => {
+        const { bin, partCode, lot } = assetData;
+        const { transactionType, storeCode } = formData;
 
-        updateFormDataProperty(FORM.BIN, '');
-        if (assetData) {
-            updateFormDataProperty(FORM.BIN, bin);
-            loadBinList(bin, partCode);
+        // When in an issue transaction, bin loading will also load the lot list
+        // since assets have a single bin (which triggers lot loading).
+        await Promise.all([
+            loadBinList(bin, partCode),
+            transactionType === returnType
+                ? loadLotList(transactionType, lot, bin, partCode, storeCode)
+                : null,
+        ]);
+    };
+
+    const handleAssetDifferentOrNoPart = async (assetData) => {
+        const { partCode } = assetData;
+
+        // Clear the part field so the user is aware that the selected asset is associated with a different part
+        resetFieldWithDesc(FORM.PART, FORM.PART_DESC);
+
+        const results = await Promise.all([
+            loadPartData(partCode),
+            handleAssetSelectedWithPart(assetData),
+        ]);
+
+        const partData = results[0];
+        updateFormDataProperty(FORM.PART_DESC, partData?.description);
+        updateFormDataProperty(FORM.PART, partCode);
+    };
+
+    const handleBinChange = async (bin) => {
+        const { transactionType, partCode, storeCode, assetIDCode, lot } = formData;
+
+        // On a Return transaction, the lot can be filled before the bin (we expect there to be a lot list already),
+        // as such we must not clear the lot field and we can avoid re-loading the lot list.
+        if (transactionType === returnType) {
+            return;
+        }
+
+        // If a part is tracked by asset, the lot should have already been automatically filled,
+        // as such we must not clear the lot field nor do we need to load the lot list.
+        if (isTrackedByAsset && assetIDCode && lot) {
+            return;
+        }
+
+        if (transactionType === issueType) {
+            resetFieldWithList(FORM.LOT, setLotList);
+            await loadLotList(transactionType, '', bin, partCode, storeCode);
+        }
+    }
+
+    const handlePartChange = async (partCode) => {
+        // We should in principle clear related state because of data loads/field changes that come as side effects (such as the automatic selection of
+        // a bin when there is only one possible) and because the user might have already filled related fields and afterwards change the selected part.
+        resetFieldWithDesc(FORM.ASSET, FORM.ASSET_DESC);
+        resetFieldWithList(FORM.BIN, setBinList);
+        resetFieldWithList(FORM.LOT, setLotList);
+        setIsTrackedByAsset(false);
+
+        if (!partCode || partCode?.trim() === '') {
+            resetFieldWithDesc(FORM.PART, FORM.PART_DESC); // clear state that may not reflect the value shown in the field
+            return;
+        }
+
+        const { transactionType, storeCode } = formData;
+
+        // Validate that the part is in the selected store (needed when a part is selected from history).
+        // This is only needed in the issue transaction since parts can be returned to any store when doing a return transaction.
+        if (transactionType === issueType) {
+            try {
+                const partStockResponse = await WSParts.getPartStock(partCode);
+                const partStock = partStockResponse.body.data;
+
+                // If not in the selected store, explicitly reset the part field since the part code will not be valid in that case.
+                if (
+                    !partStock.some(
+                        (stockEntry) => stockEntry.storeCode === storeCode
+                    )
+                ) {
+                    resetFieldWithDesc(FORM.PART, FORM.PART_DESC);
+                    showError(
+                        `Part "${partCode}" is not in the selected store.`
+                    );
+                    return;
+                }
+            } catch (error) {
+                handleError(error);
+            }
+        }
+
+        const partData = await loadPartData(partCode);
+
+        if (partData?.trackByAsset === 'true') {
+            showNotification(`Selected part "${partCode}" is tracked by asset.`);
+            // Bin loading is done later when the user selects an asset.
+
+        } else if (partData?.trackByAsset === 'false') {
+
+            await Promise.all([
+                loadBinList('', partCode),
+                transactionType === returnType
+                    ? loadLotList(transactionType, '', '', partCode, '')
+                    : null,
+            ]);
         }
     };
 
-    const handleAssetUnspecifiedPart = async (assetData) => {
-        const { bin, partCode } = assetData;
-
-        updateFormDataProperty(FORM.PART, '');
-        updateFormDataProperty(FORM.PART_DESC, '');
-        updateFormDataProperty(FORM.BIN, '');
-        if (assetData) {
-            updateFormDataProperty(FORM.BIN, bin);
-            loadBinList(bin, partCode);
-            updateFormDataProperty(FORM.PART, partCode);
-        }
-        // Set details of respective part
+    const loadLotList = async (transactionType, lot, bin, partCode, storeCode) => {
         try {
-            const partData = await loadPartData(partCode);
-            updateFormDataProperty(FORM.PART_DESC, partData.description);
+            const response = await WSWorkorders.getPartUsageLot(
+                transactionType,
+                lot,
+                bin,
+                partCode,
+                storeCode
+            );
+            const lots = response.body.data;
+
+            if (lots.length === 0) {
+                showWarning('No lots found (likely no available quantity).');
+            }
+
+            if (lots.length === 1) {
+                updateFormDataProperty(FORM.LOT, lots[0].code);
+            }
+
+            if (isHidden(tabLayout['lotcode']) && lots.length >= 1) {
+                updateFormDataProperty(FORM.LOT, '*');
+            }
+
+            setLotList(lots);
         } catch (error) {
             handleError(error);
+            setLotList([]);
         }
-    };
-
-    const handlePartChange = (value) => {
-        // Clear asset and bin selection
-        updateFormDataProperty(FORM.ASSET, '');
-        updateFormDataProperty(FORM.ASSET_DESC, '');
-        updateFormDataProperty(FORM.BIN, '');
-        setIsTrackedByAsset(false);
-        // Load the bin list and part data
-        loadBinList('', value);
-        loadPartData(value);
     };
 
     const loadBinList = async (binCode, partCode) => {
-        if (!partCode) return;
+        if (!partCode) {
+            return;
+        }
+
+        const { transactionType, storeCode } = formData;
 
         try {
             const response = await WSWorkorders.getPartUsageBin(
-                formData.transactionType,
+                transactionType,
                 binCode,
                 partCode,
-                formData.storeCode
+                storeCode
             );
             const binList = response.body.data;
+
             setBinList(binList);
+
             if (binList.length === 1) {
-                updateFormDataProperty(FORM.BIN, binList[0].code);
+                const availableBin = binList[0].code;
+                updateFormDataProperty(FORM.BIN, availableBin);
+
+                await loadLotList(transactionType, '', availableBin, partCode, storeCode);
             }
+
         } catch (error) {
             handleError(error);
+            setBinList([]);
         }
     };
 
     const loadPartData = async (partCode) => {
-        if (!partCode) return;
-
-        try {
-            setLoading(true);
-            const response = await WSParts.getPart(partCode);
-            setIsTrackedByAsset(response.body.data.trackByAsset === 'true');
-            setUoM(response.body.data.uom);
-            return response.body.data;
-        } catch (error) {
-            handleError(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleSave = () => {
-        if (!validateFields()) {
+        if (!partCode || partCode?.trim() === '') {
             return;
         }
 
-        setLoading(true);
+        try {
+            const response = await WSParts.getPart(partCode);
+            const partData = response.body.data;
+
+            setIsTrackedByAsset(partData?.trackByAsset === 'true');
+            setUoM(partData?.uom);
+
+            return partData;
+        } catch (error) {
+            handleError(error);
+        }
+    };
+
+    const handleSave = async () => {
+        if (!validateFields()) {
+            return;
+        }
 
         const relatedWorkOrder =
             equipmentMEC?.length > 0 ? workorder.number : null;
@@ -334,6 +478,7 @@ function PartUsageDialog(props) {
             partCode,
             partDesc,
             transactionQty,
+            lot,
         } = formData;
 
         // Update upper level properties of part usage object
@@ -352,6 +497,7 @@ function PartUsageDialog(props) {
                 assetIDCode,
                 assetIDDesc,
                 bin,
+                lot,
                 partCode,
                 partDesc,
                 transactionQty,
@@ -362,10 +508,9 @@ function PartUsageDialog(props) {
         delete partUsageSubmitData.transactionInfo;
 
         // Submit the new part usage
-        WSWorkorders.createPartUsage(partUsageSubmitData)
+        await WSWorkorders.createPartUsage(partUsageSubmitData)
             .then(successHandler)
-            .catch(handleError)
-            .finally(() => setLoading(false));
+            .catch(handleError);
     };
 
     const transformActivities = (activities) => {
@@ -426,7 +571,10 @@ function PartUsageDialog(props) {
 
                             <EAMAutocomplete
                                 {...processElementInfo(tabLayout['partcode'])}
-                                disabled={!formData.storeCode}
+                                disabled={
+                                    !formData.storeCode ||
+                                    !formData.activityCode
+                                }
                                 value={formData.partCode}
                                 desc={formData.partDesc}
                                 autocompleteHandler={
@@ -436,7 +584,13 @@ function PartUsageDialog(props) {
                                     workorder.number,
                                     formData.storeCode,
                                 ]}
-                                onChange={createOnChangeHandler(FORM.PART, FORM.PART_DESC, null, updateFormDataProperty, handlePartChange)}
+                                onChange={createOnChangeHandler(FORM.PART, FORM.PART_DESC, null, updateFormDataProperty,
+                                    (part) =>
+                                        runUiBlockingFunction(
+                                            handlePartChange.bind(null, part)
+                                        )
+                                )}
+                                renderDependencies={[formData.transactionType]}
                                 errorText={errorMessages?.partCode}
                                 barcodeScanner
                             />
@@ -446,7 +600,7 @@ function PartUsageDialog(props) {
                                 disabled={
                                     !formData.storeCode ||
                                     !formData.activityCode ||
-                                    (formData.partCode && !isTrackedByAsset)
+                                    (formData.partCode?.trim() !== '' && !isTrackedByAsset)
                                 }
                                 value={formData.assetIDCode}
                                 desc={formData.assetIDDesc}
@@ -458,7 +612,12 @@ function PartUsageDialog(props) {
                                     formData.storeCode,
                                     formData.partCode
                                 ]}
-                                onChange={createOnChangeHandler(FORM.ASSET, FORM.ASSET_DESC, null, updateFormDataProperty, handleAssetChange)}
+                                onChange={createOnChangeHandler(FORM.ASSET, FORM.ASSET_DESC, null, updateFormDataProperty,
+                                    (asset) =>
+                                        runUiBlockingFunction(
+                                            handleAssetChange.bind(null, asset)
+                                        )
+                                )}
                                 barcodeScanner
                                 renderDependencies={[formData.partCode]}
                                 errorText={errorMessages?.assetIDCode}
@@ -466,13 +625,47 @@ function PartUsageDialog(props) {
 
                             <EAMSelect
                                 {...processElementInfo(tabLayout['bincode'])}
-                                disabled={!formData.storeCode}
+                                disabled={
+                                    !formData.storeCode ||
+                                    !formData.activityCode ||
+                                    (isTrackedByAsset && (
+                                        formData.transactionType === issueType ||
+                                        (formData.transactionType === returnType && !formData.assetIDCode))
+                                    )
+                                }
                                 valueKey={FORM.BIN}
                                 options={binList}
                                 value={formData.bin}
-                                onChange={createOnChangeHandler(FORM.BIN, null, null, updateFormDataProperty)}
+                                onChange={createOnChangeHandler(FORM.BIN, null, null, updateFormDataProperty,
+                                    (bin) =>
+                                        runUiBlockingFunction(
+                                            handleBinChange.bind(null, bin)
+                                        )
+                                )}
                                 suggestionsPixelHeight={200}
+                                renderDependencies={[
+                                    formData.transactionType,
+                                    formData.partCode,
+                                    formData.storeCode,
+                                    formData.assetIDCode,
+                                    formData.lot,
+                                    isTrackedByAsset,
+                                ]}
                                 errorText={errorMessages?.bin}
+                            />
+
+                            <EAMSelect
+                                {...processElementInfo(tabLayout['lotcode'])}
+                                disabled={
+                                    !formData.storeCode ||
+                                    !formData.activityCode ||
+                                    isTrackedByAsset
+                                }
+                                valueKey={FORM.LOT}
+                                options={lotList}
+                                value={formData.lot}
+                                onChange={createOnChangeHandler(FORM.LOT, null, null, updateFormDataProperty)}
+                                errorText={errorMessages?.lot}
                             />
 
                             <EAMTextField
@@ -502,7 +695,7 @@ function PartUsageDialog(props) {
                             Cancel
                         </Button>
                         <Button
-                            onClick={handleSave}
+                            onClick={() => runUiBlockingFunction(handleSave)}
                             color="primary"
                             disabled={loading || isLoading}
                         >
