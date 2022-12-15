@@ -1,20 +1,35 @@
+<<<<<<< Updated upstream
 import React from "react";
 import Comments from "eam-components/dist/ui/components/comments/Comments";
 import LocationIcon from "@material-ui/icons/Room";
+=======
+import LocationIcon from "@mui/icons-material/Room";
+import Comments from "eam-components/dist/ui/components/comments/Comments";
+import useEntity from "hooks/useEntity";
+import React from "react";
+>>>>>>> Stashed changes
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import WSLocation from "../../../../tools/WSLocation";
-import {ENTITY_TYPE} from "../../../components/Toolbar";
+import { isCernMode } from '../../../components/CERNMode';
 import CustomFields from "../../../components/customfields/CustomFields";
+import EntityRegions from "../../../components/entityregions/EntityRegions";
+import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
+import { ENTITY_TYPE } from "../../../components/Toolbar";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
+<<<<<<< Updated upstream
 import Entity from "../../Entity";
+=======
+import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
+>>>>>>> Stashed changes
 import EquipmentHistory from "../components/EquipmentHistory.js";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EamlightToolbarContainer from "./../../../components/EamlightToolbarContainer";
 import LocationDetails from "./LocationDetails";
 import LocationGeneral from "./LocationGeneral";
 import LocationHierarchy from "./LocationHierarchy";
+<<<<<<< Updated upstream
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
@@ -38,16 +53,58 @@ export default class Location extends Entity {
             classCode: this.onChangeClass,
         }
     }
+=======
+
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import DescriptionIcon from '@mui/icons-material/Description';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
+import NCRIframeContainer from "ui/components/iframes/NCRIframeContainer";
+import { locationLayoutPropertiesMap } from "../EquipmentTools";
+import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
+>>>>>>> Stashed changes
 
     postInit() {
         this.props.setLayoutProperty('showEqpTreeButton', false)
         this.enableChildren();
     }
 
+<<<<<<< Updated upstream
     postCreate(equipment) {
         this.comments.createCommentForNewEntity();
         this.props.setLayoutProperty("showEqpTreeButton", true)
     }
+=======
+    const {screenLayout: locationLayout, entity: location, loading, readOnly, isModified,
+        screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
+        isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
+        toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
+        newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, register} = useEntity({
+            WS: {
+                create: WSLocation.create,
+                read: WSLocation.get,
+                update: WSLocation.update,
+                delete: WSLocation.remove,
+                new:  WSLocation.init
+            },
+            postActions: {
+                create: postCreate,
+                read: postRead
+            },
+            entityCode: "LOC",
+            entityDesc: "Location",
+            entityURL: "/location/",
+            entityCodeProperty: "code",
+            screenProperty: "locationScreen",
+            layoutProperty: "locationLayout",
+            layoutPropertiesMap: locationLayoutPropertiesMap
+        });
+>>>>>>> Stashed changes
 
     postUpdate(equipment) {
         this.comments.createCommentForNewEntity();
@@ -70,10 +127,15 @@ export default class Location extends Entity {
         }
     }
 
+<<<<<<< Updated upstream
     getRegions = () => {
         const { locationLayout, userData, applicationData } = this.props;
         const { location, layout } = this.state;
         const tabs = locationLayout.tabs; 
+=======
+    const getRegions = () => {
+        const tabs = locationLayout.tabs;
+>>>>>>> Stashed changes
 
         const commonProps = {
             location,
@@ -89,7 +151,7 @@ export default class Location extends Entity {
                 label: 'General',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <LocationGeneral
                         {...commonProps}/>
                 ,
@@ -103,7 +165,7 @@ export default class Location extends Entity {
                 label: 'Details',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <LocationDetails
                         {...commonProps} />
                 ,
@@ -117,7 +179,7 @@ export default class Location extends Entity {
                 label: 'Hierarchy',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <LocationHierarchy
                         {...commonProps} />
                 ,
@@ -131,7 +193,7 @@ export default class Location extends Entity {
                 label: 'Work Orders',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: ({ panelQueryParams }) => 
+                render: ({ panelQueryParams }) =>
                     <EquipmentWorkOrders
                         equipmentcode={location.code}
                         defaultFilter={panelQueryParams.defaultFilter}
@@ -147,7 +209,7 @@ export default class Location extends Entity {
                 label: 'History',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
+                render: () =>
                     <EquipmentHistory
                         equipmentcode={location.code} />
                 ,
@@ -161,7 +223,7 @@ export default class Location extends Entity {
                 label: 'EDMS Documents',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
+                render: () =>
                     <EDMSDoclightIframeContainer
                         objectType="L"
                         objectID={location.code} />
@@ -179,7 +241,7 @@ export default class Location extends Entity {
             //     label: 'NCRs',
             //     isVisibleWhenNewEntity: false,
             //     maximizable: false,
-            //     render: () => 
+            //     render: () =>
             //         <EDMSWidget
             //             objectID={location.code}
             //             objectType="L"
@@ -192,12 +254,38 @@ export default class Location extends Entity {
             //     order: 7
             // },
             {
+<<<<<<< Updated upstream
+=======
+                id: 'NCRS',
+                label: 'NCRs',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () => <NCRIframeContainer
+                    objectType="L"
+                    objectID={location.code}
+                />,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0, minHeight: 150 }
+                },
+                column: 2,
+                order: 8,
+                summaryIcon: BookmarkBorderRoundedIcon,
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS)
+            },
+            {
+>>>>>>> Stashed changes
                 id: 'COMMENTS',
                 label: 'Comments',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
+<<<<<<< Updated upstream
                 render: () => 
                     <Comments ref={comments => this.comments = comments}
+=======
+                render: () =>
+                    <Comments ref={comments => commentsComponent.current = comments}
+>>>>>>> Stashed changes
                         entityCode="LOC"
                         entityKeyCode={!layout.newEntity ? location.code : undefined}
                         userCode={userData.eamAccount.userCode}
@@ -217,7 +305,7 @@ export default class Location extends Entity {
                 label: 'User Defined Fields',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <UserDefinedFields
                         fields={location.userDefinedFields}
                         entityLayout={locationLayout.fields}
@@ -234,7 +322,7 @@ export default class Location extends Entity {
                 label: 'Custom Fields',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <CustomFields
                         children={this.children}
                         entityCode='LOC'
@@ -253,9 +341,9 @@ export default class Location extends Entity {
             //     label: 'Equipment Graph',
             //     isVisibleWhenNewEntity: false,
             //     maximizable: true,
-            //     render: () => 
+            //     render: () =>
             //         <EquipmentGraphIframe
-            //             equipmentCode={location.code} 
+            //             equipmentCode={location.code}
             //             equipmentGraphURL={applicationData.EL_EQGRH}
             //         />
             //     ,
@@ -286,6 +374,7 @@ export default class Location extends Entity {
         const { location, layout } = this.state
         const regions = this.getRegions();        
 
+<<<<<<< Updated upstream
 
         return (
             <BlockUi tag="div" blocking={layout.blocking} style={{height: "100%", width: "100%"}}>
@@ -331,6 +420,52 @@ export default class Location extends Entity {
             </BlockUi>
         )
     }
+=======
+    return (
+        <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}}>
+            <EamlightToolbarContainer
+                            isModified={isModified}
+                                newEntity={newEntity}
+                                entityScreen={screenPermissions}
+                                entityName="Location"
+                                entityKeyCode={location.code}
+                                saveHandler={saveHandler}
+                                newHandler={newHandler}
+                                deleteHandler={deleteHandler}
+                                toolbarProps={{
+                                entityDesc: "Location",
+                                entity: location,
+                                //postInit: this.postInit.bind(this),
+                                //setLayout: this.setLayout.bind(this),
+                                newEntity: newEntity,
+                                applicationData: applicationData,
+                                extendedLink: applicationData.EL_LOCLI,
+                                screencode: screenCode,
+                                //copyHandler: this.copyEntity.bind(this),
+                                entityType: ENTITY_TYPE.LOCATION,
+                                screens: userData.screens,
+                                workorderScreencode: userData.workOrderScreen
+                                }}
+                                width={730}
+                                entityIcon={<LocationIcon style={{height: 18}}/>}
+                                toggleHiddenRegion={toggleHiddenRegion}
+                                getUniqueRegionID={getUniqueRegionID}
+                                regions={getRegions()}
+                                isHiddenRegion={isHiddenRegion}
+                                getHiddenRegionState={getHiddenRegionState}
+                                />
+            <EntityRegions
+                showEqpTree={showEqpTree}
+                regions={getRegions()}
+                isNewEntity={newEntity}
+                isHiddenRegion={isHiddenRegion}
+                setRegionVisibility={setRegionVisibility}
+                getUniqueRegionID={getUniqueRegionID}
+                getHiddenRegionState={getHiddenRegionState}/>
+        </BlockUi>
+    )
+
+>>>>>>> Stashed changes
 }
 
 
