@@ -1,41 +1,43 @@
-import React from "react";
-import Comments from "eam-components/dist/ui/components/comments/Comments";
 import LocationIcon from "@mui/icons-material/Room";
+import Comments from "eam-components/dist/ui/components/comments/Comments";
+import useEntity from "hooks/useEntity";
+import React from "react";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import WSLocation from "../../../../tools/WSLocation";
-import {ENTITY_TYPE} from "../../../components/Toolbar";
+import { isCernMode } from '../../../components/CERNMode';
 import CustomFields from "../../../components/customfields/CustomFields";
+import EntityRegions from "../../../components/entityregions/EntityRegions";
+import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
+import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
+import { ENTITY_TYPE } from "../../../components/Toolbar";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
+import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import EquipmentHistory from "../components/EquipmentHistory.js";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EamlightToolbarContainer from "./../../../components/EamlightToolbarContainer";
 import LocationDetails from "./LocationDetails";
 import LocationGeneral from "./LocationGeneral";
 import LocationHierarchy from "./LocationHierarchy";
-import EntityRegions from "../../../components/entityregions/EntityRegions";
-import { isCernMode } from '../../../components/CERNMode';
-import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
-import useEntity from "hooks/useEntity";
 
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import DescriptionIcon from '@mui/icons-material/Description';
-import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
-import ListAltIcon from '@mui/icons-material/ListAlt';
-import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded'; 
-import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import DescriptionIcon from '@mui/icons-material/Description';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import { locationLayoutPropertiesMap } from "../EquipmentTools";
 
 export default Location = (props) => {
 
     const {screenLayout: locationLayout, entity: location, loading, readOnly, isModified,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
-        isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree, 
+        isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, updateEntityProperty: updateEquipmentProperty, register} = useEntity({
             WS: {
@@ -68,7 +70,7 @@ export default Location = (props) => {
     }
 
     const getRegions = () => {
-        const tabs = locationLayout.tabs; 
+        const tabs = locationLayout.tabs;
 
         const commonProps = {
             location,
@@ -84,7 +86,7 @@ export default Location = (props) => {
                 label: 'General',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <LocationGeneral
                         {...commonProps}/>
                 ,
@@ -99,7 +101,7 @@ export default Location = (props) => {
                 label: 'Details',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <LocationDetails
                         {...commonProps} />
                 ,
@@ -114,7 +116,7 @@ export default Location = (props) => {
                 label: 'Hierarchy',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <LocationHierarchy
                         {...commonProps} />
                 ,
@@ -129,7 +131,7 @@ export default Location = (props) => {
                 label: 'Work Orders',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: ({ panelQueryParams }) => 
+                render: ({ panelQueryParams }) =>
                     <EquipmentWorkOrders
                         equipmentcode={location.code}
                         defaultFilter={panelQueryParams.defaultFilter}
@@ -146,7 +148,7 @@ export default Location = (props) => {
                 label: 'History',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
+                render: () =>
                     <EquipmentHistory
                         equipmentcode={location.code} />
                 ,
@@ -161,7 +163,7 @@ export default Location = (props) => {
                 label: 'EDMS Documents',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
+                render: () =>
                     <EDMSDoclightIframeContainer
                         objectType="L"
                         objectID={location.code} />
@@ -180,7 +182,7 @@ export default Location = (props) => {
             //     label: 'NCRs',
             //     isVisibleWhenNewEntity: false,
             //     maximizable: false,
-            //     render: () => 
+            //     render: () =>
             //         <EDMSWidget
             //             objectID={location.code}
             //             objectType="L"
@@ -192,12 +194,30 @@ export default Location = (props) => {
             //     column: 2,
             //     order: 7
             // },
-             {
+            {
+                id: 'NCRS',
+                label: 'NCRs',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () => <NCRIframeContainer
+                    objectType="L"
+                    objectID={location.code}
+                />,
+                RegionPanelProps: {
+                    detailsStyle: { padding: 0, minHeight: 150 }
+                },
+                column: 2,
+                order: 7,
+                summaryIcon: BookmarkBorderRoundedIcon,
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS)
+            },
+            {
                 id: 'COMMENTS',
                 label: 'Comments',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <Comments ref={comments => commentsComponent.current = comments}
                         entityCode="LOC"
                         entityKeyCode={!newEntity ? location.code : undefined}
@@ -219,7 +239,7 @@ export default Location = (props) => {
                 label: 'User Defined Fields',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <UserDefinedFields
                         entityLayout={locationLayout.fields}
                         {...commonProps} />
@@ -235,7 +255,7 @@ export default Location = (props) => {
                 label: 'Custom Fields',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <CustomFields
                         entityCode='LOC'
                         entityKeyCode={location.code}
@@ -255,9 +275,9 @@ export default Location = (props) => {
             //     label: 'Equipment Graph',
             //     isVisibleWhenNewEntity: false,
             //     maximizable: true,
-            //     render: () => 
+            //     render: () =>
             //         <EquipmentGraphIframe
-            //             equipmentCode={location.code} 
+            //             equipmentCode={location.code}
             //             equipmentGraphURL={applicationData.EL_EQGRH}
             //         />
             //     ,
@@ -279,8 +299,8 @@ export default Location = (props) => {
 
     return (
         <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}}>
-            <EamlightToolbarContainer 
-                            isModified={isModified} 
+            <EamlightToolbarContainer
+                            isModified={isModified}
                                 newEntity={newEntity}
                                 entityScreen={screenPermissions}
                                 entityName="Location"
@@ -313,12 +333,12 @@ export default Location = (props) => {
             <EntityRegions
                 showEqpTree={showEqpTree}
                 regions={getRegions()}
-                isNewEntity={newEntity} 
+                isNewEntity={newEntity}
                 isHiddenRegion={isHiddenRegion}
                 setRegionVisibility={setRegionVisibility}
                 getUniqueRegionID={getUniqueRegionID}
                 getHiddenRegionState={getHiddenRegionState}/>
         </BlockUi>
     )
-    
+
 }
