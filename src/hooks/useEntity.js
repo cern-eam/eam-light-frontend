@@ -7,7 +7,7 @@ import queryString from "query-string";
 import set from "set-value";
 import { assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCustomField, assignCustomFieldFromObject, AssignmentType, fireHandlers, isDepartmentReadOnly, isMultiOrg, getElementInfoFromCustomFields, prepareDataForFieldsValidator } from "ui/pages/EntityTools";
 import { setLayoutProperty, showError, showNotification, handleError, toggleHiddenRegion,
-    setRegionVisibility, 
+    setRegionVisibility,
     showWarning} from "actions/uiActions";
 import WSCustomFields from "tools/WSCustomFields";
 import { createOnChangeHandler, processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
@@ -16,7 +16,7 @@ import useFieldsValidator from "eam-components/dist/ui/components/inputs-ng/hook
 
 const useEntity = (params) => {
 
-    const {WS, postActions, handlers, entityCode, entityDesc, entityURL, entityCodeProperty, screenProperty, layoutProperty, layoutPropertiesMap, 
+    const {WS, postActions, handlers, entityCode, entityDesc, entityURL, entityCodeProperty, screenProperty, layoutProperty, layoutPropertiesMap,
         isReadOnlyCustomHandler, onMountHandler, onUnmountHandler} = params;
 
     const [loading, setLoading] = useState(false);
@@ -56,7 +56,7 @@ const useEntity = (params) => {
 
     useEffect( () => {
         code ? readEntity(code) : initNewEntity();
-        // Reset window title when unmounting 
+        // Reset window title when unmounting
         return () => document.title = "EAM Light";
     }, [code])
 
@@ -72,7 +72,7 @@ const useEntity = (params) => {
         if (!validateFields()) {
             return;
         }
-        setLoading(true); 
+        setLoading(true);
 
         WS.create(entity)
             .then(response => {
@@ -91,27 +91,27 @@ const useEntity = (params) => {
     }
 
     const readEntity = (code) => {
-        setLoading(true); 
-        
+        setLoading(true);
+
         // Cancel the old request in the case it was still active
         abortController.current?.abort();
         abortController.current = new AbortController();
         //
         WS.read(code, { signal: abortController.current.signal })
             .then(response => {
-                resetErrorMessages(); setIsModified(false); setNewEntity(false); 
-                
+                resetErrorMessages(); setIsModified(false); setNewEntity(false);
+
                 const readEntity = response.body.data;
                 setEntity(readEntity);
-                
+
                 document.title = entityDesc + ' ' + readEntity[entityCodeProperty];
-                
+
                 // Render as read-only depending on screen rights, department security or custom handler
-                setReadOnly(!screenPermissions.updateAllowed || 
-                            isDepartmentReadOnly(readEntity.departmentCode, userData) || 
+                setReadOnly(!screenPermissions.updateAllowed ||
+                            isDepartmentReadOnly(readEntity.departmentCode, userData) ||
                             isReadOnlyCustomHandler?.(readEntity))
 
-                // Invoke entity specific logic 
+                // Invoke entity specific logic
                 postActions.read(readEntity)
             })
             .catch(error => {
@@ -127,11 +127,11 @@ const useEntity = (params) => {
             return;
         }
 
-        setLoading(true); 
+        setLoading(true);
 
         WS.update(entity)
             .then(response => {
-                resetErrorMessages(); setIsModified(false); 
+                resetErrorMessages(); setIsModified(false);
 
                 commentsComponent.current?.createCommentForNewEntity(entityCode);
                 showNotificationConst(`${entityDesc} ${entity[entityCodeProperty]} has been successfully updated.`);
@@ -144,9 +144,9 @@ const useEntity = (params) => {
             .finally( () => setLoading(false))
     }
 
-    const deleteEntity = () => {        
-        setLoading(true); 
-        
+    const deleteEntity = () => {
+        setLoading(true);
+
         WS.delete(code)
             .then(response => {
                 showNotificationConst(`${entityDesc} ${entity[entityCodeProperty]} has been successfully deleted.`);
@@ -160,14 +160,14 @@ const useEntity = (params) => {
     }
 
     const initNewEntity = () => {
-        setLoading(true); 
-        
+        setLoading(true);
+
         WS.new()
             .then(response => {
                 resetErrorMessages();
                 setNewEntity(true);
                 setIsModified(false);
-                setReadOnly(!screenPermissions.creationAllowed); 
+                setReadOnly(!screenPermissions.creationAllowed);
 
                 let newEntity = response.body.data;
                 newEntity = assignDefaultValues(newEntity, screenLayout, layoutPropertiesMap);
@@ -185,11 +185,11 @@ const useEntity = (params) => {
 
     const copyEntity = () => {
         let code = entity[entityCodeProperty];
-        
+
         resetErrorMessages();
         setNewEntity(true);
         setIsModified(false);
-        setReadOnly(!screenPermissions.creationAllowed); 
+        setReadOnly(!screenPermissions.creationAllowed);
 
         setEntity( oldEntity => ({
             ...assignDefaultValues(oldEntity,
@@ -206,7 +206,7 @@ const useEntity = (params) => {
     // BUTTON HANDLERS
     //
     const saveHandler = () => newEntity ? createEntity() : updateEntity();
-        
+
     const newHandler = () => history.push(entityURL);
 
     const deleteHandler = () => deleteEntity();
@@ -222,7 +222,7 @@ const useEntity = (params) => {
             setEntity(prevEntity => {
                 const newCustomFields = response.body.data;
                 let entity = assignCustomFieldFromCustomField(prevEntity, newCustomFields, AssignmentType.SOURCE_NOT_EMPTY);
-    
+
                 // replace custom fields with ones in query parameters if we have just created the entity
                 if(newEntity) {
                     const queryParams = queryString.parse(window.location.search);
@@ -238,7 +238,7 @@ const useEntity = (params) => {
         setEntity(prevEntity => set({...prevEntity}, key, value));
         // Fire handler for the 'key'
         getHandlers()[key]?.(value);
-        // 
+        //
         if (!key.endsWith("Desc")) {
             setIsModified(true);
         }
@@ -246,45 +246,47 @@ const useEntity = (params) => {
 
     const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
         let data = processElementInfo(screenLayout.fields[layoutKey] ?? getElementInfoFromCustomFields(layoutKey, entity.customField))
-        
+
         data.onChange = createOnChangeHandler(valueKey, descKey, orgKey, updateEntityProperty, onChange);
 
-        data.disabled = data.disabled || readOnly; // It should remain disabled 
+        data.disabled = data.disabled || readOnly; // It should remain disabled
         data.elementInfo = screenLayout.fields[layoutKey]; // Return elementInfo as it is still needed in some cases (for example for UDFs)
-        
+
         // Value
         data.value = get(entity, valueKey);
-        
-        // Description 
+
+        // Description
         if (descKey) {
             data.desc = get(entity, descKey);
         }
-        
+
         // Errors
         data.errorText = errorMessages[valueKey]
-                
+
         return data;
     }
 
     const getHandlers = () => ({...handlers, "classCode": onChangeClass});
-    
+
     //
     //
     //
-    return {screenCode, screenLayout, screenPermissions, 
+    return {screenCode, screenLayout, screenPermissions,
         entity, newEntity, setEntity, loading, readOnly, isModified,
-        userData, applicationData, 
-        isHiddenRegion: isHiddenRegionConst, 
-        getHiddenRegionState: getHiddenRegionStateConst, 
-        getUniqueRegionID: getUniqueRegionIDConst, 
+        userData, applicationData,
+        isHiddenRegion: isHiddenRegionConst,
+        getHiddenRegionState: getHiddenRegionStateConst,
+        getUniqueRegionID: getUniqueRegionIDConst,
         commentsComponent,
         setLayoutProperty: setLayoutPropertyConst,
-        showEqpTree, 
+        showEqpTree,
         // Dispatchers
         showError: showErrorConst, showNotification: showNotificationConst, handleError: handleErrorConst, showWarning: showWarningConst,
         toggleHiddenRegion: toggleHiddenRegionConst, setRegionVisibility: setRegionVisibilityConst,
-        // 
-        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty, register};
+        //
+        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty, register,
+        setNewEntity, setLoading, setReadOnly,
+    };
 
 }
 
