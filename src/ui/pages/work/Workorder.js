@@ -1,5 +1,6 @@
 import Checklists from 'eam-components/dist/ui/components/checklists/Checklists';
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
+import { useHistory } from 'react-router-dom';
 import React, { useEffect, useState, useRef } from 'react';
 import BlockUi from 'react-block-ui';
 import WSEquipment from "../../../tools/WSEquipment";
@@ -28,7 +29,7 @@ import { getTabAvailability, getTabInitialVisibility, registerCustomField } from
 import WSParts from '../../../tools/WSParts';
 import WSWorkorders from '../../../tools/WSWorkorders';
 import useEntity from "hooks/useEntity";
-import { updateMyWorkOrders } from '../../../actions/workorderActions' 
+import { updateMyWorkOrders } from '../../../actions/workorderActions'
 import { useDispatch } from 'react-redux';
 import UserDefinedFields from 'ui/components/userdefinedfields/UserDefinedFields';
 import { isHidden } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
@@ -41,7 +42,7 @@ import SportsScoreIcon from '@mui/icons-material/SportsScore';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import SpeedIcon from '@mui/icons-material/Speed';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
-import MonetizationOnRoundedIcon from '@mui/icons-material/MonetizationOnRounded'; 
+import MonetizationOnRoundedIcon from '@mui/icons-material/MonetizationOnRounded';
 import SegmentRoundedIcon from '@mui/icons-material/SegmentRounded';
 import { PendingActions } from '@mui/icons-material';
 import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
@@ -52,7 +53,16 @@ import HardwareIcon from '@mui/icons-material/Hardware';
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
 import { Typography } from '@mui/material';
 
+const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
+    if (!eqCode || !swoCode) {
+        return;
+    }
+    const response = await WSWorkorder.getEquipmentStandardWOMaxStep(eqCode, swoCode);
+    return response.body.data;
+}
+
 const Workorder = () => {
+    const history = useHistory();
     const [equipmentMEC, setEquipmentMEC] = useState();
     const [equipment, setEquipment] = useState();
     const [equipmentPart, setEquipmentPart] = useState();
@@ -69,13 +79,13 @@ const Workorder = () => {
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID,
         toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateWorkorderProperty, register,
-        handleError, showError, showNotification, showWarning} = useEntity({
+        handleError, showError, showNotification, showWarning, setNewEntity, setLoading, setReadOnly} = useEntity({
             WS: {
                 create: WSWorkorder.createWorkOrder,
                 read: WSWorkorder.getWorkOrder,
                 update: WSWorkorder.updateWorkOrder,
                 delete: WSWorkorder.deleteWorkOrder,
-                new:  WSWorkorder.initWorkOrder, 
+                new:  WSWorkorder.initWorkOrder,
             },
             postActions: {
                 read: postRead,
@@ -105,7 +115,7 @@ const Workorder = () => {
     useEffect( () => {
         setEquipment(null);
         setEquipmentPart(null);
-        
+
         if (!workorder?.equipmentCode) {
             return;
         }
@@ -121,7 +131,7 @@ const Workorder = () => {
             }
         })
         .catch(console.error);
-           
+
     }, [workorder?.equipmentCode])
 
     //
@@ -188,7 +198,7 @@ const Workorder = () => {
                     <WorkorderGeneral
                         {...commonProps}
                         applicationData={applicationData}
-                        userData={userData} 
+                        userData={userData}
                         equipment={equipment}
                         statuses={statuses}
                         newEntity={newEntity}
@@ -311,7 +321,7 @@ const Workorder = () => {
                     <NCRIframeContainer
                         objectType="J"
                         objectID={workorder.number}
-                        mode='NCR'                        
+                        mode='NCR'
                     />
                 ,
                 RegionPanelProps: {
@@ -513,7 +523,7 @@ const Workorder = () => {
                 label: 'User Defined Fields',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <UserDefinedFields
                         {...commonProps}
                         entityLayout={workOrderLayout.fields}
@@ -528,6 +538,45 @@ const Workorder = () => {
         ];
     }
 
+    const repeatStepHandler = async () => {
+        setNewEntity(true);
+        setLoading(true);
+        const fields = workOrderLayout.fields;
+        const { customField, number, equipmentCode, standardWO } = workorder;
+        try {
+            const maxSWO = await getEquipmentStandardWOMaxStep(equipmentCode, standardWO);
+            const maxSWOStep = maxSWO.step;
+            let value;
+
+            const fpIndex = maxSWOStep.indexOf('.')
+            if (fpIndex === -1) {
+                value = maxSWOStep + '.1';
+            } else {
+                const prefloat = maxSWOStep.substring(0, fpIndex)
+                const postfloat = maxSWOStep.substring(fpIndex + 1)
+                value = `${prefloat}.${parseInt(postfloat) + 1}`
+            }
+
+            const newCustomFields = customField.map(
+                (cf) => cf.code === "MTFEVP1" ? {...cf, value} : cf
+            )
+
+            updateWorkorderProperty("classCode", 'MTF2');
+            updateWorkorderProperty("customField", newCustomFields,);
+            updateWorkorderProperty("copyFrom", number);
+            updateWorkorderProperty("assignedTo", workorder.assignedTo || userData.eamAccount.employeeCode);
+            updateWorkorderProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
+            updateWorkorderProperty("systemStatusCode", "R")
+            updateWorkorderProperty("completedDate", "");
+
+            window.history.pushState({}, '', process.env.PUBLIC_URL + '/workorder');
+            postInit();
+            setReadOnly(!screenPermissions.creationAllowed);
+            setLoading(false);
+        } catch (err) {
+            showError(JSON.stringify(err), "Could not repeat step.");
+        }
+    }
     //
     // CALLBACKS FOR ENTITY CLASS
     //
@@ -537,8 +586,8 @@ const Workorder = () => {
 
     function postRead(workorder) {
         setLayoutProperty('equipment', {code: workorder.equipmentCode, organization: workorder.equipmentOrganization});
-        updateMyWorkOrdersConst(workorder); 
-        readStatuses(workorder.statusCode, workorder.typeCode, false); 
+        updateMyWorkOrdersConst(workorder);
+        readStatuses(workorder.statusCode, workorder.typeCode, false);
         readOtherIdMapping(workorder.number);
     }
 
@@ -546,6 +595,7 @@ const Workorder = () => {
         readStatuses('', '', true);
         let fields = workOrderLayout.fields;
         isCernMode && updateWorkorderProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
+        isCernMode && updateWorkorderProperty("systemStatusCode", "R")
         isCernMode && updateWorkorderProperty("typeCode", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD")
         isCernMode && updateWorkorderProperty("completedDate", "");
     }
@@ -612,10 +662,12 @@ const Workorder = () => {
                         userGroup: userData.eamAccount.userGroup,
                         screencode: screenCode,
                         copyHandler: copyHandler,
+                        repeatStepHandler: repeatStepHandler,
                         entityDesc: "Work Order",
                         entityType: ENTITY_TYPE.WORKORDER,
                         screens: userData.screens,
-                        workorderScreencode: userData.workOrderScreen
+                        workorderScreencode: userData.workOrderScreen,
+                        departmentalSecurity: userData.eamAccount.departmentalSecurity,
                     }}
                     entityIcon={<ContentPasteIcon style={{height: 18}}/>}
                     toggleHiddenRegion={toggleHiddenRegion}
