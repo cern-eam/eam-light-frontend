@@ -1,6 +1,7 @@
 import React from 'react';
 import './BookLabours.css';
 import EISTable from 'eam-components/dist/ui/components/table';
+import { formatDate } from 'ui/pages/EntityTools';
 
 const propCodes = ['employeeDesc', 'dateWorked', 'hoursWorked'];
 
@@ -14,8 +15,8 @@ function BookLabours(props) {
     if (props.bookLabours && props.bookLabours.length > 0) {
         return (
             <div className="booklabours">
-                <h4>Booked labor</h4>
-                <EISTable data={props.bookLabours} headers={headers} propCodes={propCodes}/>
+                <EISTable data={props.bookLabours.map(bl => ({...bl, dateWorked: formatDate(bl.dateWorked)}))} 
+                          headers={headers} propCodes={propCodes}/>
             </div>
         );
     }

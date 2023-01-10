@@ -21,7 +21,6 @@ class WSEquipment {
     }
 
     getEquipment(equipmentCode, config = {}) {
-        equipmentCode = encodeURIComponent(equipmentCode);
         return WS._get('/equipment?c=' + equipmentCode, config);
     }
 
@@ -41,8 +40,8 @@ class WSEquipment {
         return WS._get('/equipment/type', { ...config, params: { c: equipmentCode }});
     }
 
-    initEquipment(entity, eqpType, params, config = {}) {
-        return WS._get(`/equipment/init/${entity}/${eqpType}${params}`, config);
+    initEquipment(eqpType, config = {}) {
+        return WS._get(`/equipment/init/${eqpType}`, config);
     }
 
     getEquipmentStatusValues(userGroup, neweqp, oldStatusCode, config = {}) {
@@ -76,7 +75,7 @@ class WSEquipment {
         return WS._get(`/autocomplete/eqp/bin?code=${filter}&store=${store}`, config);
     }
 
-    autocompleteEquipmentCategory(filter, eqpClass, config = {}) {
+    autocompleteEquipmentCategory(eqpClass, filter, config = {}) {
         filter = encodeURIComponent(filter);
         eqpClass = eqpClass === null ? '' : eqpClass;
         return WS._get(`/autocomplete/eqp/category/${filter}`, {
@@ -129,7 +128,7 @@ class WSEquipment {
         return WS._get(`/equipment/partsassociated/${parentScreen}/${equipment}`, config);
     }
 
-    getCategoryData(categoryCode, config = {}) {
+    getCategory(categoryCode, config = {}) {
         return WS._get(`/autocomplete/eqp/categorydata/${categoryCode}`, config);
     }
 
@@ -151,10 +150,14 @@ class WSEquipment {
     }
 
     //
-    //INSTALL EQUIPMENT
+    //EQUIPMENT STRUCTURE
     //
     installEquipment(equipmentStructure, config = {}) {
         return WS._post('/eqstructure/attach', equipmentStructure, config);
+    }
+
+    detachEquipment(equipmentStructure, config = {}) {
+        return WS._post('/eqstructure/detach', equipmentStructure, config);
     }
 }
 

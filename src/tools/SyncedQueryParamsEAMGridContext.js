@@ -1,8 +1,8 @@
 import React from 'react'
 import { useHistory } from "react-router";
 import GridTools from "./GridTools";
-import { EAMGridContextProvider } from "eam-components/dist/ui/components/grids/eam/EAMGridContext";
 import StatusIcon from '../ui/layout/StatusIcon';
+import { EAMGridContextProvider } from "eam-components/dist/ui/components/grids/eam/EAMGridContext";
 
 const SyncedQueryParamsEAMGridContext = (props) => {
     const { children, ...otherProps } = props;
@@ -10,12 +10,13 @@ const SyncedQueryParamsEAMGridContext = (props) => {
     const filters = GridTools.parseGridFilters(GridTools.getURLParameterByName('gridFilters'));
     const initialDataspyID = GridTools.getURLParameterByName('gridDataspyID');
 
-    const cellRenderer = ({ column, value }) => {
+    const cellRenderer = (cellRendererProps) => {
+        const { column, value } = cellRendererProps;
         if (column.id === 'statusicon' || column.id === 'priorityicon') {
             return <StatusIcon column={column} value={value} />
         }
     
-        return props.cellRenderer({ column, value });
+        return props.cellRenderer(cellRendererProps);
     }
 
     return (

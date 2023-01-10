@@ -1,4 +1,9 @@
 import set from "set-value";
+import queryString from "query-string";
+import formatfns from "date-fns/format";
+import { parseISO } from "date-fns";
+import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
+import { get } from "lodash";
 
 // clones an entity deeply
 export const cloneEntity = entity => ({
@@ -135,19 +140,9 @@ export const assignValues = (entity, values = {}, assignmentType) => {
     return newEntity;
 };
 
-export const assignQueryParamValues = (entity, queryParams = {}, assignmentType = AssignmentType.FORCED) => {
+export const assignQueryParamValues = (entity, assignmentType = AssignmentType.FORCED) => {
     throwIfInvalidAssignmentType(assignmentType);
-
-    // this function converts an object with case insensitive keys to an object with
-    // case sensitive keys, based on a target object
-    const toSensitive = (target, insensitive) => {
-        const mapping = Object.fromEntries(Object.entries(target)
-            .map(([k]) => [k.toLowerCase(), k]));
-
-        return Object.fromEntries(Object.entries(insensitive)
-            .map(([key, value]) => [mapping[key.toLowerCase()], value])
-            .filter(([key]) => key !== undefined));
-    }
+    let queryParams = queryString.parse(window.location.search);
 
     const caseSensitiveQueryParams = toSensitive(entity, queryParams);
 
@@ -165,6 +160,25 @@ export const assignQueryParamValues = (entity, queryParams = {}, assignmentType 
     return assignUserDefinedFields(entity, userDefinedFields, assignmentType);
 }
 
+export const fireHandlers = (entity, handlers) => {
+    let queryParams = queryString.parse(window.location.search);
+    const caseSensitiveQueryParams = toSensitive(entity, queryParams);
+    for (const param in caseSensitiveQueryParams) {
+        handlers?.[param]?.(caseSensitiveQueryParams[param])
+    }
+}
+
+// this function converts an object with case insensitive keys to an object with
+// case sensitive keys, based on a target object
+export const toSensitive = (target, insensitive) => {
+    const mapping = Object.fromEntries(Object.entries(target)
+        .map(([k]) => [k.toLowerCase(), k]));
+
+    return Object.fromEntries(Object.entries(insensitive)
+        .map(([key, value]) => [mapping[key.toLowerCase()], value])
+        .filter(([key]) => key !== undefined));
+}
+
 export const assignDefaultValues = (entity, layout, layoutPropertiesMap, assignmentType = AssignmentType.FORCED) => {
     throwIfInvalidAssignmentType(assignmentType);
 
@@ -177,9 +191,14 @@ export const assignDefaultValues = (entity, layout, layoutPropertiesMap, assignm
             .reduce((result, field) => set(result, layoutPropertiesMap[field.elementId], 
                     field.defaultValue === 'NULL' ? '' : field.defaultValue), {});
     }
+    
+    const userDefinedFields = defaultValues.userDefinedFields;
+    delete defaultValues.userDefinedFields;
 
     entity = assignValues(entity, defaultValues, assignmentType);
-    return assignUserDefinedFields(entity, defaultValues.userDefinedFields, assignmentType);
+    entity = assignUserDefinedFields(entity, userDefinedFields, assignmentType);
+
+    return entity;
 }
 
 export const getTabAvailability = (tabs, tabCode) => {
@@ -191,3 +210,68 @@ export const getTabInitialVisibility = (tabs, tabCode) => {
     if (!tabs[tabCode]) return true;
     return tabs[tabCode].alwaysDisplayed;
 }
+
+
+export const isDepartmentReadOnly = (departmentCode, userData) => {
+    return userData.eamAccount.departmentalSecurity[departmentCode]?.readOnly;
+}
+
+export const formatDate = date => format(date, 'dd-MMM-yyyy');
+
+export const formatDateTime = date => format(date, 'dd-MMM-yyyy HH:mm');
+
+const format = (date, dateFormat) => {
+    try {
+        return formatfns(parseISO(date), dateFormat)
+    } catch(error) {
+        console.error("formatDate error" + error);
+    }
+
+    return null;
+}
+
+export const getElementInfoFromCustomFields = (layoutKey, customFields) => {
+    let customField = customFields.find(cf => cf.code === layoutKey) 
+
+    return getElementInfoForCustomField(customField);
+}
+
+export const getElementInfoForCustomField = (customField) => {
+    return {
+        text: customField?.label,
+        xpath: 'EAMID_' + customField?.code,
+        fieldType: customField?.type === 'NUM' ? 'number' : 'text'
+    }
+}
+
+export const registerCustomField = entity => (layoutKey, valueKey, descKey) => {
+    let data = processElementInfo(getElementInfoForCustomField(layoutKey, entity.customField))
+    data.value = get(entity, valueKey);
+    if (descKey) {
+        data.desc = get(entity, descKey);
+    }
+    data.disabled = true;
+    return data;
+}
+
+export const prepareDataForFieldsValidator = (entity, screenLayout, layoutPropertiesMap) => {
+    if (!entity) {
+        return {}
+    }
+    
+    const temp = Object.entries(layoutPropertiesMap).reduce(
+        (acc, [layoutKey, fieldKey]) => {
+            acc[fieldKey] = screenLayout.fields[layoutKey];
+            return acc;
+        }, {})
+
+    entity.customField.reduce(
+        (acc, customField, index) => {
+            acc[`customField.${index}.value`] = getElementInfoForCustomField(customField)
+            return acc;
+        }, temp)
+
+    return temp;
+}
+
+export const isMultiOrg = process.env.REACT_APP_MULTI_ORG === 'TRUE';

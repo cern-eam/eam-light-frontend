@@ -1,46 +1,13 @@
 import React, {Component} from 'react'
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField'
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import WS from "../../../tools/WS";
-import {withStyles} from "@material-ui/core";
-
-
-const styles = theme => ({
-    main: {
-        width: 'auto',
-        display: 'block', // Fix IE 11 issue.
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-            width: 400,
-            marginLeft: 'auto',
-            marginRight: 'auto',
-        },
-    },
-    paper: {
-        marginTop: theme.spacing.unit * 8,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
-    },
-    avatar: {
-        margin: theme.spacing.unit,
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing.unit,
-    },
-    button: {
-        marginTop: theme.spacing.unit * 3,
-    },
-});
+import { Box, Container } from '@mui/material';
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 
 
 class Login extends Component {
@@ -89,65 +56,63 @@ class Login extends Component {
         })
     }
 
-    onKeyUpHandler = (event) => {
-        // Login when enter pressed
-        if (event.keyCode === 13) {
-            this.loginHandler()
-        }
-    }
-
     render() {
-        const { classes } = this.props;
 
         return (
-            <main className={classes.main}>
-                <CssBaseline />
-                <Paper className={classes.paper}>
-                    <Avatar className={classes.avatar}>
+                <Container component="main" maxWidth="xs">
+                    <CssBaseline/>
+                    <Box
+                        sx={{
+                            marginTop: 8,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            boxShadow: 1
+                        }}>
+                    <Avatar sx={{ m: 1, bgcolor: '#42a5f5' }}>
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         EAM Light Login
                     </Typography>
-                    <div className={classes.form} onKeyUp={this.onKeyUpHandler}>
-                            <TextField autoFocus fullWidth required margin="normal"
+                    <div>
+                            <EAMTextField fullWidth required 
                                    value={this.state.INFOR_USER} label="User ID"
-                                   onChange = {event => {this.setState({infor_user: event.target.value})}}
+                                   onChange = {value => {this.setState({infor_user: value})}}
                                    disabled={this.state.loginInProgress}
                             />
 
-                            <TextField fullWidth required type="password" autoComplete="current-password" margin="normal"
+                            <EAMTextField fullWidth required type="password" autoComplete="current-password" 
                                    value={this.state.INFOR_PASSWORD} label="Password"
-                                   onChange ={event => {this.setState({infor_password: event.target.value})}}
+                                   onChange ={value => {this.setState({infor_password: value})}}
                                    disabled={this.state.loginInProgress}
                             />
 
-                            <TextField fullWidth required label="Organization" margin="normal"
+                            <EAMTextField fullWidth required label="Organization" uppercase
                                    value={this.state.INFOR_ORGANIZATION}
-                                   onChange ={event => {this.setState({infor_organization: event.target.value})}}
+                                   onChange ={value => {this.setState({infor_organization: value})}}
                                    disabled={this.state.loginInProgress}
                             />
 
-                            <TextField fullWidth required label="Tenant" margin="normal"
+                            <EAMTextField fullWidth required label="Tenant" 
                                        value={this.state.INFOR_TENANT}
-                                       onChange ={event => {this.setState({infor_tenant: event.target.value})}}
+                                       onChange ={value => {this.setState({infor_tenant: value})}}
                                        disabled={this.state.loginInProgress}
                             />
                         <Button
                             fullWidth
                             variant="contained"
-                            color="primary"
-                            className={classes.button}
                             onClick={this.loginHandler}
                             disabled={this.state.loginInProgress}
+                            sx={{ color: "white", m: "5px", mt: "15px", mb: "20px" }}
                         >
                            LOG IN
                         </Button>
                     </div>
-                </Paper>
-            </main>
+                    </Box>
+                </Container>
         )
     }
 }
 
-export default withStyles(styles)(Login);
+export default Login;

@@ -1,5 +1,5 @@
 import React from 'react';
-import TableCell from '@material-ui/core/TableCell';
+import TableCell from '@mui/material/TableCell';
 import SearchHighlighter from "./SearchHighlighter";
 import EntityCode from '../../../enums/EntityCode'
 
@@ -42,7 +42,7 @@ export default class SearchResult extends React.Component {
                                 style={{color: "#1a0dab", fontWeight: "bold"}}
                                 data={this.props.data.code}
                                 keyword={this.props.keyword}
-                                link={this.props.data.code}
+                                link={this.props.data.link}
                                 type={this.props.data.type}
                             /></td>
                         </tr>

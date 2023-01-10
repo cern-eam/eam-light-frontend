@@ -3,12 +3,3 @@
     flex-direction: column;
     width: 100%;
 }
-
-#activities #actions {
-    display: flex;
-    flex-direction: row;
-}
-
-#activities #actions button {
-    flex: 1 0;
-}

@@ -1,8 +1,7 @@
 import React from 'react';
 import EISPanel from 'eam-components/dist/ui/components/panel';
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WSMeters from "../../../tools/WSMeters";
-import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
 
 class MeterReadingSearch extends React.Component {
 
@@ -10,30 +9,35 @@ class MeterReadingSearch extends React.Component {
         const {parentProps} = this.props;
         const {searchCriteria} = parentProps;    
 
+        const idPrefix = "EAMID_MeterReadingSearch_";
+
         return (
             <EISPanel heading="SEARCH PANEL" alwaysExpanded={true}>
                 <div style={{width: "100%", marginTop: 0}}>
-                    <EAMBarcodeInput updateProperty={value => parentProps.updateSearchProperty('meterCode', value)} right={0} top={20}>
-                        <EAMAutocomplete elementInfo={{attribute: "O", text: "Meter Code"}}
-                                     value={searchCriteria.meterCode}
-                                     updateProperty={parentProps.updateSearchProperty}
-                                     valueKey="meterCode"
-                                     autocompleteHandler={WSMeters.autocompleteMeterCode}
-                                     onChangeValue={parentProps.onChangeMeterCode}
-                                     valueDesc={searchCriteria.meterDesc}
-                                     descKey="meterDesc"/>
-                    </EAMBarcodeInput>
-                    <EAMBarcodeInput updateProperty={value => parentProps.updateSearchProperty('equipmentCode', value)} right={0} top={20}>
-                        <EAMAutocomplete elementInfo={{attribute: "O", text: "Equipment Code"}}
-                                     value={searchCriteria.equipmentCode}
-                                     updateProperty={parentProps.updateSearchProperty}
-                                     valueKey="equipmentCode"
-                                     autocompleteHandler={WSMeters.autocompleteMeterEquipment}
-                                     onChangeValue={parentProps.onChangeEquipmentCode}
-                                     valueDesc={searchCriteria.equipmentDesc}
-                                     descKey="equipmentDesc"/>
-                    </EAMBarcodeInput>                   
-
+                    <EAMAutocomplete
+                        label={"Meter Code"}
+                        value={searchCriteria.meterCode}
+                        updateProperty={parentProps.updateSearchProperty}
+                        valueKey="meterCode"
+                        autocompleteHandler={WSMeters.autocompleteMeterCode}
+                        onChange={parentProps.onChangeMeterCode}
+                        desc={searchCriteria.meterDesc}
+                        descKey="meterDesc"
+                        barcodeScanner
+                        id={`${idPrefix}METERCODE`}
+                    />
+                    <EAMAutocomplete
+                        label={"Equipment Code"}
+                        value={searchCriteria.equipmentCode}
+                        updateProperty={parentProps.updateSearchProperty}
+                        valueKey="equipmentCode"
+                        autocompleteHandler={WSMeters.autocompleteMeterEquipment}
+                        onChange={parentProps.onChangeEquipmentCode}
+                        desc={searchCriteria.equipmentDesc}
+                        descKey="equipmentDesc"
+                        barcodeScanner
+                        id={`${idPrefix}EQUIPMENTCODE`}
+                    />
                 </div>
             </EISPanel>
         );

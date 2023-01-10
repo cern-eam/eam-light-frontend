@@ -1,57 +1,28 @@
 import React from "react";
-import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
-import EAMCheckbox from "eam-components/dist/ui/components/muiinputs/EAMCheckbox";
-import EAMAutocomplete from "eam-components/dist/ui/components/muiinputs/EAMAutocomplete";
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox'
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import WS from "../../../../tools/WS";
 
-const LocationDetails = props => {
-    const {
-        location,
-        children,
-        locationLayout,
-        updateEquipmentProperty
-    } = props;
+const LocationDetails = (props) => {
+    const { register } = props;
 
     return (
-        <div style={{ width: "100%", marginTop: 0 }}>
+        <React.Fragment>
+
             <EAMAutocomplete
-                children={children}
-                elementInfo={locationLayout.fields["class"]}
-                value={location.classCode}
-                valueDesc={location.classDesc}
-                valueKey="classCode"
-                descKey="classDesc"
-                updateProperty={updateEquipmentProperty}
-                autocompleteHandler={filter =>
-                    WS.autocompleteClass("LOC", filter)
-                }
+                {...register('class', 'classCode', 'classDesc')}
+                autocompleteHandler={WS.autocompleteClass}
+                autocompleteHandlerParams={['LOC']}
             />
 
-            <EAMInput
-                children={children}
-                elementInfo={locationLayout.fields["costcode"]}
-                value={location.costCode}
-                updatePropert
-                valueKey="costCode"
-                updateProperty={updateEquipmentProperty}
-            />
+            <EAMTextField {...register('costcode', 'costCode')} />
 
-            <EAMCheckbox
-                children={children}
-                elementInfo={locationLayout.fields["safety"]}
-                value={`${location.safety}`}
-                updateProperty={updateEquipmentProperty}
-                valueKey="safety"
-            />
+            <EAMCheckbox {...register('safety', 'safety')} />
 
-            <EAMCheckbox
-                children={children}
-                elementInfo={locationLayout.fields["outofservice"]}
-                value={`${location.outOfService}`}
-                updateProperty={updateEquipmentProperty}
-                valueKey="outOfService"
-            />
-        </div>
+            <EAMCheckbox {...register('outofservice', 'outOfService')} />
+
+        </React.Fragment>
     );
 };
 

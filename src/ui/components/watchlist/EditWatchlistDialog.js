@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import IconButton from "@material-ui/core/IconButton";
-import Typography from '@material-ui/core/Typography';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import IconButton from "@mui/material/IconButton";
+import Typography from '@mui/material/Typography';
 import { Close } from 'mdi-material-ui';
 import WSWatchers from '../../../tools/WSWatchers';
 import WS from '../../../tools/WS';
@@ -19,13 +19,12 @@ const EditWatchlistDialog = ({ open, woCode, userCode, handleClose, handleError 
     const getWatchers = async () => {
         setIsLoading(true);
 
-        const response = await WSWatchers.getWatchersForWorkOrder(woCode);
-        setWatchers(response.body.data);
-        
-        const isWatcher = response.body.data.some((watcher) => watcher.userCode === userCode);
-        setIsWatching(isWatcher);
-
-        setIsLoading(false);
+        WSWatchers.getWatchersForWorkOrder(woCode).then( response => {
+            setWatchers(response.body.data);
+            const isWatcher = response.body.data.some((watcher) => watcher.userCode === userCode);
+            setIsWatching(isWatcher);
+        }).catch(console.error)
+        .finally( () => setIsLoading(false))
     };
 
     useEffect(() => {
@@ -55,9 +54,11 @@ const EditWatchlistDialog = ({ open, woCode, userCode, handleClose, handleError 
 
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-            <DialogTitle disableTypography id="alert-dialog-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <DialogTitle
+                id="alert-dialog-title"
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography variant="h6" color="textPrimary">Watchlist</Typography>
-                <IconButton onClick={handleClose}>
+                <IconButton onClick={handleClose} size="large">
                     <Close />
                 </IconButton>
             </DialogTitle>

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Account, Logout} from "mdi-material-ui"
-import {IconButton} from "@material-ui/core";
+import {IconButton} from "@mui/material";
 import { logout } from "../../AuthWrapper";
 
 export default class UserInfo extends Component {
@@ -56,10 +56,13 @@ export default class UserInfo extends Component {
                 <Account style={this.accountIcon}/>
                 <span className='user-name'>{usernameDisplay}</span>
                 <span style={this.separatorStyle}/>
-                <IconButton onClick={this.logoutHandler.bind(this)} style={this.logoutIcon}>
+                <IconButton
+                    onClick={this.logoutHandler.bind(this)}
+                    style={this.logoutIcon}
+                    size="large">
                     <Logout style={{fontSize: 20}}/>
                 </IconButton>
             </div>
-        )
+        );
     }
 }

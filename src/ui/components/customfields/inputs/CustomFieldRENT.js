@@ -1,20 +1,13 @@
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import React from 'react';
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
 import WSCustomFields from "../../../../tools/WSCustomFields";
 
-function CustomFieldRENT(props) {
+function CustomFieldRENT({customField, register, index}) {
 
-    let {customField, updateCustomFieldValue, elementInfo, children} = props;
-    elementInfo = {...elementInfo, readonly: props.readonly};
     return (
-        <EAMAutocomplete children={children}
-                         elementInfo={elementInfo}
-                         value={customField.value}
-                         valueDesc={customField.valueDesc}
-                         updateProperty={updateCustomFieldValue}
-                         valueKey="value"
-                         descKey="valueDesc"
-                         autocompleteHandler={(filter, config) => WSCustomFields.autocompleteCustomFieldRENT(customField.rentCodeValue, filter, config)}
+        <EAMAutocomplete {...register(customField.code, `customField.${index}.value`, `customField.${index}.valueDesc`)}
+                         autocompleteHandler={WSCustomFields.autocompleteCustomFieldRENT}
+                         autocompleteHandlerParams={[customField.rentCodeValue, customField.code]}
         />
     )
 }

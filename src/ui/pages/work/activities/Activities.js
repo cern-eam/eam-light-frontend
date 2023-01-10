@@ -2,9 +2,10 @@ import React, {useEffect, useState} from 'react';
 import WSWorkorders from "../../../../tools/WSWorkorders";
 import Activity from "./Activity";
 import './Activities.css';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import AddActivityDialogContainer from "./dialogs/AddActivityDialogContainer";
 import AddBookLabourDialogContainer from "./dialogs/AddBookLabourDialogContainer";
+import { Stack } from '@mui/material';
 
 /**
  * Panel Activities and Book labor
@@ -16,10 +17,12 @@ function Activities(props) {
     let [isBookLaborModalOpen, setIsBookLaborModalOpen] = useState(false);
     let [loading, setLoading] = useState(false);
 
+    let {workorder, layout, disabled, handleError} = props;
+
     useEffect(() => {
-        readActivities(props.workorder);
-        readBookLabours(props.workorder);
-    }, [props.workorder])
+        readActivities(workorder);
+        readBookLabours(workorder);
+    }, [workorder])
 
     /**
      * Load all activities
@@ -31,6 +34,10 @@ function Activities(props) {
             .then(result => {
                 setActivities(result.body.data);
                 setLoading(false);
+            })
+            .catch(error => {
+                setLoading(false);
+                console.error(error);
             });
     }
 
@@ -52,10 +59,11 @@ function Activities(props) {
                 });
 
                 setBookLaboursByActivity(bookLaboursByActivity);
-            });
+            })
+            .catch(console.error);
     }
 
-    if (loading || !props.workorder) {
+    if (loading || !workorder) {
         return (
             <div></div>
         );
@@ -68,30 +76,37 @@ function Activities(props) {
                     key={activity.activityCode}
                     activity={activity}
                     bookLabours={bookLaboursByActivity[activity.activityCode]}
-                    layout={props.layout}/>
+                    layout={layout}
+                    postAddActivityHandler={props.postAddActivityHandler}
+                    readActivities={() => readActivities(workorder)}
+                    handleError={handleError}
+                    />
             })}
 
-            <div id="actions">
-                <Button onClick={() => setIsActivityModalOpen(true)} color="primary" disabled={props.disabled}>
+            <Stack direction="row" spacing={2} style={{marginTop: 15}}>
+                <Button onClick={() => setIsActivityModalOpen(true)} color="primary" 
+                        disabled={disabled || !layout.ACT.insertAllowed} variant="outlined">
                     Add activity
                 </Button>
 
-                <Button onClick={() => setIsBookLaborModalOpen(true)} color="primary" disabled={props.disabled}>
+                <Button onClick={() => setIsBookLaborModalOpen(true)} color="primary" 
+                        disabled={disabled || !layout.BOO.insertAllowed} variant="outlined">
                     Book Labor
                 </Button>
-            </div>
+            </Stack>
 
             <AddActivityDialogContainer
                 open={isActivityModalOpen}
-                workorderNumber={props.workorder}
-                onChange={() => readActivities(props.workorder)}
+                workorderNumber={workorder}
+                onChange={() => readActivities(workorder)}
                 onClose={() => setIsActivityModalOpen(false)}
-                postAddActivityHandler={props.postAddActivityHandler}/>
+                postAddActivityHandler={props.postAddActivityHandler}
+                newActivityCode={activities[activities.length - 1] ? parseInt(activities[activities.length - 1].activityCode) + 5 : 5} />
 
             <AddBookLabourDialogContainer
                 open={isBookLaborModalOpen}
                 activities={activities}
-                workorderNumber={props.workorder}
+                workorderNumber={workorder}
                 department={props.department}
                 departmentDesc={props.departmentDesc}
                 defaultEmployee={props.defaultEmployee}
@@ -99,7 +114,7 @@ function Activities(props) {
                 updateCount={props.updateCount}
                 updateEntityProperty={props.updateEntityProperty}
                 startDate={props.startDate}
-                onChange={() => readBookLabours(props.workorder)}
+                onChange={() => readBookLabours(workorder)}
                 onClose={() => setIsBookLaborModalOpen(false)}/>
         </div>
     )

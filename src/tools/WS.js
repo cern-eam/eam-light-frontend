@@ -24,7 +24,7 @@ class WS {
         return this._get('/application/refreshCache', config);
     }
 
-    getScreenLayout(userGroup, entity, systemFunction, userFunction, tabs, config = {timeout: 20000}) {
+    getScreenLayout(userGroup, entity, systemFunction, userFunction, tabs, config = {timeout: 60000}) {
         if (tabs)
             tabs = 'tabname=' + tabs.join('&tabname=');
         return this._get(`/users/screenlayout/${userGroup}/${entity}/${systemFunction}/${userFunction}?${tabs}`, config)
@@ -43,6 +43,10 @@ class WS {
                 INFOR_TENANT: tenant
             }
         });
+    }
+
+    getOrganizations = (userFunctionName, config = {}) => {
+        return this._get(`/users/organizations/${userFunctionName}`, config)
     }
 
     //
@@ -91,7 +95,7 @@ class WS {
         return this._get(`/autocomplete/location?s=${filter}`, config);
     };
 
-    autocompleteEquipment = (filter, config = {timeout: 0}, hideLocations = false) => {
+    autocompleteEquipment = (hideLocations = false, filter, config = {timeout: 0}) => {
         filter = encodeURIComponent(filter);
         return this._get(`/autocomplete/eqp?s=${filter.toUpperCase()}&filterL=${hideLocations}`, config);
     };

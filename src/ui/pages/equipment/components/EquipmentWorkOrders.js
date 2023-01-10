@@ -29,14 +29,14 @@ const WO_FILTERS = {
             return data.filter((workOrder) => workOrder.status && ['T', 'C'].every(statusCode => !workOrder.status.startsWith(statusCode)));
         }
     },
-    ...isCernMode ? {[WO_FILTER_TYPES.MTF]: {
+    ...(isCernMode ? {[WO_FILTER_TYPES.MTF]: {
         text: WO_FILTER_TYPES.MTF,
         process: (data) => {
             return data.filter((workOrder) => {
                 return workOrder.mrc && (workOrder.mrc.startsWith("ICF") || workOrder.mrc.startsWith("MTF"));
             })
         }
-    }} : {},
+    }} : {}),
     [WO_FILTER_TYPES.THIS]: {
         text: WO_FILTER_TYPES.THIS,
         process: data => [...data]
@@ -100,30 +100,20 @@ function EquipmentWorkOrders(props) {
         }
     }, [equipmentcode, equipmenttype])
 
-    const getUrl = (equipmentType, objectCode) => {
-        const linkPrefix = {
-            A: 'asset',
-            P: 'position',
-            S: 'system',
-            L: 'location',
-        }[equipmentType];
-
-        return linkPrefix ? `${linkPrefix}/${objectCode}` : '';
-    }
-
     const fetchData = (equipmentCode, equipmentType) => {
         Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode, equipmentType)])
             .then(responses => {
                 const formatResponse = response => response.body.data.map(element => ({
                     ...element,
                     createdDate: element.createdDate && format(new Date(element.createdDate),'dd-MMM-yyyy'),
-                    objectUrl: getUrl(element.equipmentType, element.object)
+                    objectUrl: `equipment/${encodeURIComponent(element?.object || '')}`
                 }));
 
                 const [workorders, events] = responses.map(formatResponse);
                 setWorkorders(workorders);
                 setEvents(events);
             })
+            .catch(console.error)
             .finally(() => setLoadingData(false));
     }
 

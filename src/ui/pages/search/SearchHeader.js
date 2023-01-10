@@ -1,7 +1,7 @@
 import React from 'react';
-import FontIcon from '@material-ui/core/Icon';
-import EAMBarcodeInput from "eam-components/dist/ui/components/muiinputs/EAMBarcodeInput";
-import EAMCheckbox from "eam-components/dist/ui/components/muiinputs/EAMCheckbox";
+import FontIcon from '@mui/material/Icon';
+import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox';
+import EAMBarcodeScanner from 'eam-components/dist/ui/components/inputs-ng/components/EAMBarcodeScanner';
 
 const SEARCH_TYPES = {
     PART: {
@@ -29,8 +29,6 @@ const searchIconStyle = {
     top: 5
 };
 
-const PHONE_SCREEN_WIDTH = 455;
-
 export default class SearchHeader extends React.Component {
 
     state = {
@@ -38,43 +36,44 @@ export default class SearchHeader extends React.Component {
         isPhoneScreen: false,
     };
 
-    updateWidth = () => {
-        this.setState({ isPhoneScreen: this.searchBoxDiv?.clientWidth < PHONE_SCREEN_WIDTH });
-    };
-
     componentDidMount() {
         this.searchInput.focus();
-        this.updateWidth();
-        window.addEventListener('resize', this.updateWidth);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateWidth);
     }
 
     renderTypeCheckbox(searchType) {
         const { searchOn, setState } = this.state;
         return <EAMCheckbox
                 key={searchType.code}
-                elementInfo={{text: searchType.text}}
+                label={searchType.text}
                 value={searchOn.includes(searchType.value).toString()}
-                updateProperty={() => {
+                rootStyle={{flex: "0 1 auto"}}
+                onChange={() => {
                     this.setState(
-                        {
-                            searchOn: searchOn.includes(searchType.value) ?
-                            searchOn.filter(val => val !== searchType.value)
-                            : [...searchOn, searchType.value]
-                        }
-                        , () => this.handleSearchInput({target: {value: this.props.keyword}})
-                    )
+                        (prevState) => {
+                            const prevSearchOn = prevState.searchOn;
+
+                            return {
+                                searchOn: prevSearchOn.includes(
+                                    searchType.value
+                                )
+                                    ? prevSearchOn.filter(
+                                          (val) => val !== searchType.value
+                                      )
+                                    : [...prevSearchOn, searchType.value],
+                            };
+                        },
+                        () =>
+                            this.handleSearchInput({
+                                target: { value: this.props.keyword },
+                            })
+                    );
                 }}
             />
     }
 
     renderIcon = () => (
         <>
-            <img src="images/eamlight_logo.png" alt="EAM Light Logo" style={{paddingLeft: 20}}/>
-            <div style={{width: 10}}></div>
+            <img src="images/eamlight_logo.png" alt="EAM Light Logo" style={{paddingLeft: 20, paddingRight: 10}}/>
             <div id="searchBoxLabelGreeting" className={this.props.searchBoxUp ? "searchBoxLabelGreetingSearch" : "searchBoxLabelGreetingHome" }>
                 <span className="FontLatoBlack Fleft Fs30 DispBlock" style={{color: "#02a2f2"}}>Welcome to EAM Light</span>
             </div>
@@ -84,7 +83,7 @@ export default class SearchHeader extends React.Component {
     renderInput = () => {
         const entityTypes = this.state.searchOn.join(',');
         return (
-            <EAMBarcodeInput updateProperty={val => this.props.fetchDataHandler(val, entityTypes)} top={3} right={-7}>
+            <div style={{display: "flex", alignItems: "center"}}>
                 <input
                     onInput={this.handleSearchInput.bind(this)}
                     id="searchInputText"
@@ -92,7 +91,8 @@ export default class SearchHeader extends React.Component {
                     value={this.props.keyword}
                     style={{textTransform: "uppercase"}}
                     ref={(input) => { this.searchInput = input; }} />
-            </EAMBarcodeInput>
+                    <EAMBarcodeScanner onChange={value => this.props.fetchDataHandler(value, entityTypes)}/>
+            </div>
         );
     };
 
@@ -100,7 +100,6 @@ export default class SearchHeader extends React.Component {
         const { showTypes } = this.props;
         return (
             <>
-                <FontIcon style={searchIconStyle} className="fa fa-search"/>
                 {   
                     showTypes &&
                         <div className='searchTypes' style={this.state.isPhoneScreen ? { flexDirection: 'column', height: 'auto' } : {}}>

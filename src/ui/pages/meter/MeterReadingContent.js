@@ -1,22 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import Input from '@material-ui/core/Input';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Divider from '@material-ui/core/Divider';
-import Button from '@material-ui/core/Button';
-import Save from '@material-ui/icons/Save';
+import Accordion from '@mui/material/Accordion';
+import AccordionActions from '@mui/material/AccordionActions';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import Save from '@mui/icons-material/Save';
 import './MeterReading.css';
-import KeyCode from "../../../enums/KeyCode";;
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import { formatDateTime } from '../EntityTools';
 
 function MeterReadingContent(props) {
 
-    const {reading} = props;
-    let [readingValue, setReadingValue] = useState('');
+    const { reading, disabled, parentProps } = props;
+    const [readingValue, setReadingValue] = useState('');
 
     // Clean the input field
     useEffect(() => {
@@ -25,7 +22,7 @@ function MeterReadingContent(props) {
         }
     },[reading.lastValue])
 
-    let createNewReading = () => {
+    const createNewReading = () => {
         const isRollover = reading.rolloverValue && reading.rolloverValue < readingValue;
         //Initialize meter reading object
         const newReading = {
@@ -34,25 +31,18 @@ function MeterReadingContent(props) {
             actualValue: readingValue
         };
         //Execute parent save handler
-        props.parentProps.saveHandler(newReading, isRollover);
-    };
-
-    let handleKeyDown = (event) => {
-        if (event.keyCode === KeyCode.ENTER) {
-            createNewReading();
-        }
+        parentProps.saveHandler(newReading, isRollover);
     };
 
     //Check that there is a meter reading to render
-    if (!props.reading) {
+    if (!reading) {
         return null;
     }
 
-
     return (
         <div style={{width: '100%', height: '100%'}}>
-            <ExpansionPanel defaultExpanded>
-                <ExpansionPanelSummary>
+            <Accordion defaultExpanded>
+                <AccordionSummary>
                     <div className={`meterContentDetails`}>
                         <div className={`meterContentDetail`}>
                             <div className={`meterContentTitleContentH`}>Equipment:</div>
@@ -66,12 +56,12 @@ function MeterReadingContent(props) {
                         }
                         
                     </div>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                </AccordionSummary>
+                <AccordionDetails>
                     <div className={`meterContentDetails`}>
                         <div className={`meterContentDetail`}>
                             <div className={`meterContentTitleContentH`}>Last Reading Date:</div>
-                            <div className={`meterContentTitleContentC`}>{reading.lastUpdateDate}</div>
+                            <div className={`meterContentTitleContentC`}>{formatDateTime(reading.lastUpdateDate)}</div>
                         </div>
                         <div className={`meterContentDetail`}>
                             <div className={`meterContentTitleContentH`}>Last Value:</div>
@@ -79,33 +69,27 @@ function MeterReadingContent(props) {
                             </div>
                         </div>
                     </div>
-                </ExpansionPanelDetails>
+                </AccordionDetails>
                 <Divider/>
-                <ExpansionPanelActions>
-
-                    <FormControl style={{width: '100%', marginLeft: '15px', marginRight: '15px'}}>
-                        <InputLabel htmlFor="readingValue">{props.disabled ? 'Recording meter readings is disabled' : 'New Value'}</InputLabel>
-                        <Input
-                            id="readingValue"
-                            type="number"
-                            value={readingValue}
-                            onChange={event => setReadingValue(event.target.value)}
-                            onKeyDown={handleKeyDown}
-                            disabled={props.disabled}
-                            endAdornment={<InputAdornment position="end"
-                                                          className="readingValueUOM">[{reading.uomDesc}]</InputAdornment>}
-                        />
-                    </FormControl>
-
-                    {readingValue &&
-                    <Button style={{top: '8px'}} size="small" color="primary"
-                            onClick={createNewReading}>
-                        <Save/>
-                        Save
-                    </Button>
-                    }
-                </ExpansionPanelActions>
-            </ExpansionPanel>
+                <AccordionActions>
+                    <EAMTextField
+                        value={readingValue}
+                        disabled={disabled}
+                        onChange={setReadingValue}
+                        onChangeInput={setReadingValue}
+                        endTextAdornment={reading.uomDesc}
+                        endAdornment={
+                            <Button
+                                size="small"
+                                onClick={createNewReading}
+                                disabled={!readingValue}
+                            >
+                                <Save /> Save
+                            </Button>
+                        }
+                    />
+                </AccordionActions>
+            </Accordion>
         </div>
     );
 }

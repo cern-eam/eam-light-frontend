@@ -1,5 +1,6 @@
 import React from "react";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
+import { LinearProgress } from '@mui/material';
 import Keycloak from "keycloak-js";
 
 const keycloak = new Keycloak({
@@ -23,13 +24,14 @@ export default (props) => {
                     authClient={keycloak}
                     onTokens={handleTokens}
                     initOptions={{ onLoad: "login-required" }}
-                    LoadingComponent={React.Fragment}
+                    LoadingComponent={<LinearProgress/>}
                 >
                     {props.children}
                 </ReactKeycloakProvider>
             );
         case "CERNSSO":
         case "LOCAL":
+        case "STD":
             return props.children;
         default:
             return <div>No authentication flow declared.</div>;
@@ -53,4 +55,4 @@ const logout = () => {
     }
 };
 
-export { tokens, logout };
+export { tokens, keycloak, logout };

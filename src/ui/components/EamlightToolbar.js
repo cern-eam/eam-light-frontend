@@ -1,18 +1,19 @@
 import './EamlightToolbar.css'
 import React, {Component} from 'react';
-import Button from '@material-ui/core/Button';
-import SaveIcon from 'mdi-material-ui/ContentSaveOutline'
-import AddIcon from '@material-ui/icons/Add';
+import Button from '@mui/material/Button';
+import SaveIcon from '@mui/icons-material/Save';
+import AddIcon from '@mui/icons-material/Add';
 import TelevisionGuide from 'mdi-material-ui/TelevisionGuide'
-import DeleteIcon from 'mdi-material-ui/DeleteVariant'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ConfirmationDialog from './ConfirmationDialog'
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import SvgIcon from '@mui/material/SvgIcon';
+import Checkbox from '@mui/material/Checkbox';
+import IconButton from '@mui/material/IconButton';
 import Toolbar from './Toolbar';
-import Divider from '@material-ui/core/Divider';
+import Divider from '@mui/material/Divider';
+import { isMultiOrg } from 'ui/pages/EntityTools';
 
 const verticalLineStyle = {
     height: 25,
@@ -73,7 +74,7 @@ class EamlightToolbar extends Component {
     };
 
     isSaveButtonDisabled() {
-        const { newEntity, entityScreen, departmentalSecurity } = this.props;
+        const { newEntity, entityScreen, readOnly } = this.props;
 
         if (!entityScreen) {
             return true;
@@ -81,7 +82,7 @@ class EamlightToolbar extends Component {
 
         return (!newEntity && !entityScreen.updateAllowed)
             || (newEntity && !entityScreen.creationAllowed)
-            || departmentalSecurity.readOnly;
+            || readOnly;
     }
 
     isNewButtonDisabled() {
@@ -95,7 +96,7 @@ class EamlightToolbar extends Component {
     }
 
     isDeleteButtonDisabled() {
-        const { newEntity, entityScreen, departmentalSecurity } = this.props;
+        const { newEntity, entityScreen, readOnly } = this.props;
 
         if (!entityScreen) {
             return true;
@@ -103,7 +104,7 @@ class EamlightToolbar extends Component {
 
         return newEntity
             || !entityScreen.deleteAllowed
-            || departmentalSecurity.readOnly;
+            || readOnly;
     }
 
     //
@@ -159,7 +160,7 @@ class EamlightToolbar extends Component {
                     aria-label="More"
                     aria-owns={this.state.visibilityMenu ? 'simple-menu' : null}
                     onClick={this.handleVisibilityMenuClick.bind(this)}
-                >
+                    size="large">
                     <TelevisionGuide style={isInsideAMenu ? {width: 18, marginRight: -5, marginLeft: 5} : {}}/> 
                 </IconButton>
                 {isInsideAMenu && <span>Panel Selector</span>}
@@ -220,7 +221,7 @@ class EamlightToolbar extends Component {
                         <div style={this.menuLabelStyle}> New</div>
                     </MenuItem>
                     <MenuItem onClick={() => this.deleteConfirmation.show()} disabled={this.isDeleteButtonDisabled()}>
-                        <DeleteIcon className="iconButton" style={this.iconMenuStyle}/>
+                        <DeleteOutlineIcon className="iconButton" style={this.iconMenuStyle}/>
                         <div style={this.menuLabelStyle}> Delete</div>
                     </MenuItem>
                     {this.getToolbar('MENUITEMS')}
@@ -244,7 +245,7 @@ class EamlightToolbar extends Component {
                 </Button>
                 <Button onClick={() => this.deleteConfirmation.show()}
                         disabled={this.isDeleteButtonDisabled()}
-                        startIcon={<DeleteIcon/>}
+                        startIcon={<DeleteOutlineIcon/>}
                 >
                     Delete
                 </Button>
@@ -273,8 +274,8 @@ class EamlightToolbar extends Component {
                             <span style={{marginLeft: 5}}>{this.props.entityName}</span>
                         </div>
                         <div>
-                            {!this.props.newEntity && (<span
-                                style={{fontWeight: 500}}> {this.props.entityKeyCode}</span>)}
+                            {!this.props.newEntity && (<span style={{fontWeight: 900}}> {this.props.entityKeyCode}</span>)}
+                            {!this.props.newEntity && isMultiOrg && this.props.organization && (<span style={{color: "#737373"}}> {this.props.organization}</span>)}
                         </div>
                     </div>
 
@@ -282,9 +283,9 @@ class EamlightToolbar extends Component {
 
                     <Button onClick={this.props.saveHandler}
                             disabled={this.isSaveButtonDisabled()}
-                            startIcon={<SaveIcon className="iconButton"/>}
+                            startIcon={<SaveIcon/>}
                     >
-                        <span className='save-label'>Save</span>
+                        Save
                     </Button>
 
                     {this.state.compactMenu ? this.renderCompactMenu() : this.renderDesktopMenu()}
@@ -314,10 +315,6 @@ class EamlightToolbar extends Component {
             </div>
         )
     }
-}
-
-EamlightToolbar.defaultProps = {
-    departmentalSecurity: {},
 }
 
 export default EamlightToolbar

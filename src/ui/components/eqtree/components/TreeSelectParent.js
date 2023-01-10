@@ -1,12 +1,12 @@
 import React from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import {ArrowUpBoldBox} from 'mdi-material-ui';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import {withStyles} from '@material-ui/core/styles';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import withStyles from '@mui/styles/withStyles';
 import TreeIcon from './TreeIcon';
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 
 const ITEM_HEIGHT = 48;
 
@@ -41,7 +41,8 @@ class TreeSelectParent extends React.Component {
   handleClose = (option) => {
     this.setState({ anchorEl: null });
     if(option && option.parentCode && option.parentType !== 'L') {
-        this.props.reloadData(option.parentCode);
+        //this.props.setLayoutProperty('equipment', {code: option.parentCode, organization: option.parentOrg, systemTypeCode: option.parentType})
+        this.props.reloadData(option.parentCode, option.parentOrg, option.parentType);
     }
   };
 
@@ -63,8 +64,9 @@ class TreeSelectParent extends React.Component {
           aria-owns={anchorEl ? 'long-menu' : null}
           aria-haspopup="true"
           onClick={this.handleClick}
-        >
-          <ArrowUpBoldBox />
+          size="small">
+          {/* <ArrowUpBoldBox /> */}
+          <ArrowCircleUpIcon />
         </IconButton>
         <Menu
           id="long-menu"

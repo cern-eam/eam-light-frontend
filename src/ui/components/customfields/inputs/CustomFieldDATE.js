@@ -1,30 +1,18 @@
 import React from 'react';
-import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect'
-import EAMDatePicker from 'eam-components/dist/ui/components/muiinputs/EAMDatePicker'
+import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect'
+import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker'
 import tools from '../CustomFieldTools'
 
-function CustomFieldDATE(props) {
-
-    let {customField, updateCustomFieldValue, elementInfo, children, lookupValues, UoM} =props;
-    elementInfo = {...elementInfo, readonly: props.readonly};
+function CustomFieldDATE({customField, lookupValues, register, index}) {
 
     if (tools.isLookupCustomField(customField)) {
-        return <EAMSelect
-            children={children}
-            elementInfo={elementInfo}
-            valueKey="value"
-            values={lookupValues && lookupValues[customField.code]}
-            value={customField.value}
-            updateProperty={updateCustomFieldValue}/>
+        return <EAMSelect {...register(customField.code, `customField.${index}.value`)}
+                          options={lookupValues && lookupValues[customField.code]}
+                          endTextAdornment={customField.uom}/>
     } else {
         return (
-            <EAMDatePicker
-                children={children}
-                elementInfo={elementInfo}
-                value={customField.value}
-                updateProperty={updateCustomFieldValue}
-                valueKey="value"
-                endAdornment={UoM}/>
+            <EAMDatePicker {...register(customField.code, `customField.${index}.value`)} 
+                        endTextAdornment={customField.uom}/>
         )
     }
 

@@ -8,8 +8,8 @@ class WSWorkorders {
     //
     // WORK ORDERS
     //
-    initWorkOrder(entity, params, config = {}) {
-        return WS._get(`/workorders/init/${entity}${params}`, config);
+    initWorkOrder(config = {}) {
+        return WS._get(`/workorders/init`, config);
     }
 
     getWorkOrder(number, config = {}) {
@@ -37,9 +37,18 @@ class WSWorkorders {
         return WS._get('/autocomplete/wo/costcode/' + filter, config);
     };
 
-    autocompleteStandardWorkOrder = (userGroup, filter, config = {}) => {
+    autocompleteStandardWorkOrder = (userGroup, equipmentClass, equipmentCategory, filter, config = {}) => {
         filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/standardworkorder?userGroup=${encodeURIComponent(userGroup)}&s=${filter}`, config);
+        return WS._get(`/autocomplete/standardworkorder?s=${filter}`, {
+            ...config,
+            params: {
+                ...config.params,
+                userGroup,
+                equipmentClass,
+                equipmentCategory
+            }
+        }
+        );
     };
 
     autocompleteUsersWithAccess = (wo, hint = null, config = {}) => {
@@ -57,7 +66,7 @@ class WSWorkorders {
         return WS._get(`/wolists/typecodes?userGroup=${encodeURIComponent(userGroup)}`, config)
     }
 
-    getWorkOrderProblemCodeValues(woclass, objclass, equipment, config = {}) {
+     getWorkOrderProblemCodeValues(woclass, objclass, equipment, config = {}) {
         return WS._get('/wolists/problemcodes', {
             ...config,
             params: {
@@ -154,16 +163,12 @@ class WSWorkorders {
         return WS._get(`/autocomplete/partusage/part/${workorder}/${store}/${code}`, config);
     }
 
-    getPartUsageAsset(transaction, store, code, config = {}) {
-        return WS._get(`/autocomplete/partusage/asset/${transaction}/${store}/${code}`, config);
+    getPartUsageAsset(transaction, store, part, code, config = {}) {
+        return WS._get(`/autocomplete/partusage/asset?transaction=${transaction}&store=${store}&part=${part}&code=${code}`, config);
     }
 
     getPartUsageBin(transaction, bin, part, store, config = {}) {
         return WS._get(`/partusage/bins?transaction=${transaction}&bin=${bin}&part=${part}&store=${store}`, config);
-    }
-
-    getPartUsageSelectedAsset(workorder, transaction, store, code, config = {}) {
-        return WS._get(`/autocomplete/partusage/asset/complete/${workorder}/${transaction}/${store}/${code}`, config);
     }
 
     //
@@ -181,6 +186,16 @@ class WSWorkorders {
     // Create a new activity for one workorder
     createWorkOrderActivity(activity, config = {}) {
         return WS._post('/activities', activity, config);
+    }
+
+    // Update an activity
+    updateWorkOrderActivity(activity, config = {}) {
+        return WS._put('/activities', activity, config);
+    }
+
+    // Delete an activity
+    deleteWorkOrderActivity(config = {}) {
+        return WS._delete(`/activities`, config);
     }
 
     // Get default values for next activity for one work order
@@ -254,6 +269,13 @@ class WSWorkorders {
 
     getAdditionalCostsList(workorder, config = {}) {
         return WS._get('/workorders/' + workorder + '/additionalcosts', config);
+    }
+
+    //
+    // WO Equipment to OtherId Mapping
+    //
+    getWOEquipToOtherIdMapping(workorder, config={}) {
+        return WS._get(`/workordersmisc/otherid/${workorder}`, config);
     }
 }
 

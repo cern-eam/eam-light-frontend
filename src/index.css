@@ -1,5 +1,14 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@font-face {
+    font-family: "Roboto";
+    src: url("./fonts/Roboto.ttf");
+    font-weight: 300 500 600 700;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("./fonts/Roboto-Medium.ttf");
+    font-weight: 900;
+}
 
 html {
   height: 100%;

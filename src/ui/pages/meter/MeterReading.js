@@ -1,6 +1,6 @@
 import React from 'react';
 import BlockUi from 'react-block-ui';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import MeterReadingSearch from "./MeterReadingSearch";
 import MeterReadingList from "./MeterReadingList";
 import WSMeters from "../../../tools/WSMeters";

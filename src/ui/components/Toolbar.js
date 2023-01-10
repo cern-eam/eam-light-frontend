@@ -1,8 +1,8 @@
 import React from 'react';
-import MenuItem from "@material-ui/core/MenuItem";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
-import Divider from '@material-ui/core/Divider';
+import MenuItem from "@mui/material/MenuItem";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import Divider from '@mui/material/Divider';
 import { WorkorderIcon } from "eam-components/dist/ui/components/icons";
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
 import {Barcode, ContentCopy, EmailOutline, Map, Printer, Domain, Camera, Eye, Repeat} from 'mdi-material-ui';
@@ -10,7 +10,6 @@ import { RadiationIcon } from "eam-components/dist/ui/components/icons";
 import { Link } from "react-router-dom";
 import { isCernMode } from "./CERNMode";
 import EditWatchlistDialog from './watchlist/EditWatchlistDialog';
-import WorkorderTools from '../pages/work/WorkorderTools'
 
 export const ENTITY_TYPE = {
     WORKORDER: 'WORKORDER',
@@ -58,7 +57,7 @@ class Toolbar extends React.Component {
         alignItems: "center",
         display: "flex"
     }
-    
+
     verticalLineStyle = {
         height: 25,
         borderRight: "1px solid gray",
@@ -75,7 +74,7 @@ class Toolbar extends React.Component {
     state = { watchlistOpen: false };
 
     getButtonDefinitions = () => {
-        const {copyHandler, repeatStepHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity, departmentalSecurity, screens, workorderScreencode, userCode} = this.props;
+        const { copyHandler, repeatStepHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity, departmentalSecurity, screens, workorderScreencode, readOnly } = this.props;
 
         return {
             [BUTTON_KEYS.COPY] : {
@@ -139,13 +138,13 @@ class Toolbar extends React.Component {
                 isDisabled: () => newEntity,
                 values: {
                     icon: <Map/>,
-                    text: "Show on Map" 
+                    text: "Show on Map"
                 }
             },
             [BUTTON_KEYS.SHOW_IN_INFOR] : {
                 isVisible: () => applicationData.EL_WOLIN && applicationData.EL_LOCLI && applicationData.EL_PARTL,
                 getOnClick: (entityType, entity) => {
-                    let extendedLink; 
+                    let extendedLink;
                     switch (entityType){
                         case ENTITY_TYPE.WORKORDER:
                             extendedLink = applicationData.EL_WOLIN
@@ -173,7 +172,7 @@ class Toolbar extends React.Component {
                 isDisabled: () => newEntity,
                 values: {
                     icon: <OpenInNewIcon/>,
-                    text: "Show in Infor EAM"
+                    text: "Show in EAM"
                 }
             },
             [BUTTON_KEYS.BARCODING] : {
@@ -205,7 +204,7 @@ class Toolbar extends React.Component {
                     text: "Print Barcode"
                 }
             },
-            [BUTTON_KEYS.OSVC] : {   
+            [BUTTON_KEYS.OSVC] : {
                 isVisible: () => applicationData.EL_OSVCU && isCernMode,
                 getOnClick: (entityType, entity) => {
                     const osvcLink = applicationData.EL_OSVCU
@@ -230,9 +229,9 @@ class Toolbar extends React.Component {
                 values: {
                     icon: <Camera/>,
                     text: "DISMAC"
-                } 
+                }
             },
-            [BUTTON_KEYS.TREC] : { 
+            [BUTTON_KEYS.TREC] : {
                 isVisible: () => {
                     const { EL_TRWOC } = applicationData;
                     return (
@@ -263,7 +262,7 @@ class Toolbar extends React.Component {
 
                 },
                 isDisabled: () => newEntity
-                    || departmentalSecurity.readOnly
+                    || readOnly
                     || (screens[workorderScreencode] && !screens[workorderScreencode].creationAllowed),
                 values: {
                     icon: <WorkorderIcon/>,
@@ -274,7 +273,7 @@ class Toolbar extends React.Component {
                 }
             },
             [BUTTON_KEYS.WATCHLIST]: {
-                isVisible: () => true,
+                isVisible: () => true && isCernMode,
                 getOnClick: (entityType, entity) => () => this.setState({watchlistOpen: true}),
                 isDisabled: () => newEntity,
                 values: {
@@ -283,9 +282,9 @@ class Toolbar extends React.Component {
                 },
             },
             [BUTTON_KEYS.REPEAT_STEP]: {
-                isVisible: () => isCernMode && entity.standardWO && WorkorderTools.isClosedWorkOrder(entity.statusCode) && entity.classCode.startsWith('MTF'),
+                isVisible: () => isCernMode && entity.standardWO && entity.systemStatusCode === 'C' && entity.classCode.startsWith('MTF'),
                 onClick: repeatStepHandler,
-                isDisabled: () => newEntity || departmentalSecurity.readOnly,
+                isDisabled: () => newEntity || departmentalSecurity?.readOnly,
                 values: {
                     icon: <Repeat />,
                     text: "Repeat Step"
@@ -295,20 +294,20 @@ class Toolbar extends React.Component {
     }
 
     getButtons() {
-        const {entityType, renderOption, entity} = this.props; 
+        const {entityType, renderOption, entity} = this.props;
         let buttonKeys = [];
         switch (entityType) {
             case ENTITY_TYPE.WORKORDER:
                 buttonKeys = [
-                    BUTTON_KEYS.COPY, 
+                    BUTTON_KEYS.COPY,
                     BUTTON_KEYS.EMAIL,
-                    BUTTON_KEYS.PRINT, 
+                    BUTTON_KEYS.PRINT,
                     BUTTON_KEYS.SHOW_ON_MAP,
                     BUTTON_KEYS.SHOW_IN_INFOR,
                     BUTTON_KEYS.OSVC,
                     BUTTON_KEYS.DISMAC,
                     BUTTON_KEYS.TREC,
-                    BUTTON_KEYS.WATCHLIST, 
+                    BUTTON_KEYS.WATCHLIST,
                     BUTTON_KEYS.REPEAT_STEP,
                 ]
                 break;
@@ -338,13 +337,13 @@ class Toolbar extends React.Component {
                     BUTTON_KEYS.CREATE_WORKORDER,
                     BUTTON_KEYS.SHOW_IN_INFOR,
                 ]
-                break;    
+                break;
         }
         const buttonDefinitions = this.getButtonDefinitions();
         const buttonsRender = buttonKeys.map(buttonKey => buttonDefinitions[buttonKey])
             .map(buttonDefinition => this.generateContent({
-                renderOption: renderOption, 
-                buttonDefinition: buttonDefinition, 
+                renderOption: renderOption,
+                buttonDefinition: buttonDefinition,
                 entityType: entityType,
                 entity: entity
             }));
@@ -354,10 +353,10 @@ class Toolbar extends React.Component {
                 open={this.state.watchlistOpen}
                 woCode={this.props.entity.number}
                 userCode={this.props.userCode}
-                handleError={console.log} 
+                handleError={console.log}
                 handleClose={() => this.setState({ watchlistOpen: false })}
             />
-        </>);   
+        </>);
     }
 
     generateContent = ({renderOption, buttonDefinition, entityType, entity}) => {
@@ -376,8 +375,8 @@ class Toolbar extends React.Component {
             }
 
             switch (renderOption) {
-                case VIEW_MODES.MENU_ITEMS: 
-                    content = 
+                case VIEW_MODES.MENU_ITEMS:
+                    content =
                         <MenuItem
                             onClick={onClick}
                             disabled={disabled}
@@ -386,13 +385,10 @@ class Toolbar extends React.Component {
                             {values.text && <div>{values.text}</div>}
                         </MenuItem>
                     break;
-                case VIEW_MODES.TOOLBAR_ICONS: 
-                    content = 
+                case VIEW_MODES.TOOLBAR_ICONS:
+                    content =
                         <Tooltip title={values.text}>
-                            <IconButton
-                                onClick={onClick}
-                                disabled={disabled}
-                            >
+                            <IconButton onClick={onClick} disabled={disabled} size="large">
                                 {React.cloneElement(values.icon, {style: this.iconStyle})}
                             </IconButton>
                         </Tooltip>
@@ -401,17 +397,17 @@ class Toolbar extends React.Component {
             }
 
             if (getLinkTo && !disabled) {
-                content = <Link to={getLinkTo(entity, entityType)} 
+                content = <Link to={getLinkTo(entity, entityType)}
                                 style={this.linkStyle}>
                             {content}
                         </Link>
-            } 
+            }
             return content;
-        }    
+        }
     }
 
     getToolbar = () => {
-        const buttons = this.getButtons(); 
+        const buttons = this.getButtons();
         switch (this.props.renderOption) {
             case VIEW_MODES.MENU_ITEMS:
                 return  <div>
@@ -433,7 +429,6 @@ class Toolbar extends React.Component {
 }
 
 Toolbar.defaultProps = {
-    departmentalSecurity: {},
     screens: {},
 };
 

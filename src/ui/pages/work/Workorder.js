@@ -1,16 +1,14 @@
 import Checklists from 'eam-components/dist/ui/components/checklists/Checklists';
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
-import {WorkorderIcon} from 'eam-components/dist/ui/components/icons';
-import React from 'react';
+import { useHistory } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
 import BlockUi from 'react-block-ui';
 import WSEquipment from "../../../tools/WSEquipment";
 import WSWorkorder from "../../../tools/WSWorkorders";
-import WS from '../../../tools/WS'
 import {ENTITY_TYPE} from "../../components/Toolbar";
 import CustomFields from '../../components/customfields/CustomFields';
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import NCRIframeContainer from "../../components/iframes/NCRIframeContainer";
-import Entity from '../Entity';
 import EamlightToolbarContainer from './../../components/EamlightToolbarContainer';
 import Activities from './activities/Activities';
 import AdditionalCostsContainer from "./additionalcosts/AdditionalCostsContainer";
@@ -19,152 +17,175 @@ import MeterReadingContainerWO from './meter/MeterReadingContainerWO';
 import WorkorderMultiequipment from "./multiequipmentwo/WorkorderMultiequipment";
 import PartUsageContainer from "./partusage/PartUsageContainer";
 import WorkorderClosingCodes from './WorkorderClosingCodes';
-import WorkorderDetails from './WorkorderGeneral';
+import WorkorderGeneral from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
-import WorkorderTools from "./WorkorderTools";
+import { assignStandardWorkOrderValues, isReadOnlyCustomHandler, isRegionAvailable, layoutPropertiesMap } from "./WorkorderTools";
 import EntityRegions from '../../components/entityregions/EntityRegions';
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@mui/material/IconButton';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
-import {assignValues, assignUserDefinedFields, assignCustomFieldFromCustomField, AssignmentType} from '../EntityTools';
 import { isCernMode } from '../../components/CERNMode';
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
+import { getTabAvailability, getTabInitialVisibility, registerCustomField } from '../EntityTools';
 import WSParts from '../../../tools/WSParts';
 import WSWorkorders from '../../../tools/WSWorkorders';
+import useEntity from "hooks/useEntity";
+import { updateMyWorkOrders } from '../../../actions/workorderActions'
+import { useDispatch } from 'react-redux';
+import UserDefinedFields from 'ui/components/userdefinedfields/UserDefinedFields';
+import { isHidden } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import SportsScoreIcon from '@mui/icons-material/SportsScore';
+import ConstructionIcon from '@mui/icons-material/Construction';
+import SpeedIcon from '@mui/icons-material/Speed';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import MonetizationOnRoundedIcon from '@mui/icons-material/MonetizationOnRounded';
+import SegmentRoundedIcon from '@mui/icons-material/SegmentRounded';
+import { PendingActions } from '@mui/icons-material';
+import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import { PartIcon } from 'eam-components/dist/ui/components/icons';
+import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
+import HardwareIcon from '@mui/icons-material/Hardware';
+import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
+import { Typography } from '@mui/material';
 
-
-
-const assignStandardWorkOrderValues = (workOrder, standardWorkOrder) => {
-    const swoToWoMap = ([k, v]) => [k, standardWorkOrder[v]];
-
-    workOrder = assignValues(workOrder, Object.fromEntries([
-        ['classCode', 'woClassCode'],
-        ['typeCode', 'workOrderTypeCode'],
-        ['problemCode', 'problemCode'],
-        ['priorityCode', 'priorityCode']
-    ].map(swoToWoMap)), AssignmentType.SOURCE_NOT_EMPTY);
-
-    workOrder = assignValues(workOrder, Object.fromEntries([
-        ['description', 'desc'],
-    ].map(swoToWoMap)), AssignmentType.DESTINATION_EMPTY);
-
-    workOrder = assignUserDefinedFields(workOrder, standardWorkOrder.userDefinedFields, AssignmentType.DESTINATION_EMPTY);
-    workOrder = assignCustomFieldFromCustomField(workOrder, standardWorkOrder.customField, AssignmentType.DESTINATION_EMPTY);
-
-    return workOrder;
-};
-
-class Workorder extends Entity {
-
-    constructor(props) {
-        super(props);
-        this.setPriorityValues();
-        this.props.setLayoutProperty('showEqpTreeButton', false);
+const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
+    if (!eqCode || !swoCode) {
+        return;
     }
+    const response = await WSWorkorder.getEquipmentStandardWOMaxStep(eqCode, swoCode);
+    return response.body.data;
+}
 
-    componentDidMount() {
-        super.componentDidMount();
-    }
+const Workorder = () => {
+    const history = useHistory();
+    const [equipmentMEC, setEquipmentMEC] = useState();
+    const [equipment, setEquipment] = useState();
+    const [equipmentPart, setEquipmentPart] = useState();
+    const [statuses, setStatuses] = useState([]);
+    const [otherIdMapping, setOtherIdMapping] = useState({})
+    const checklists = useRef(null);
+    const dispatch = useDispatch();
+    const updateMyWorkOrdersConst = (...args) => dispatch(updateMyWorkOrders(...args));
+    //
+    //
+    //
+    const {screenLayout: workOrderLayout, entity: workorder, setEntity: setWorkOrder, loading, readOnly, isModified,
+        screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
+        isHiddenRegion, getHiddenRegionState, getUniqueRegionID,
+        toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
+        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateWorkorderProperty, register,
+        handleError, showError, showNotification, showWarning, setNewEntity, setLoading, setReadOnly} = useEntity({
+            WS: {
+                create: WSWorkorder.createWorkOrder,
+                read: WSWorkorder.getWorkOrder,
+                update: WSWorkorder.updateWorkOrder,
+                delete: WSWorkorder.deleteWorkOrder,
+                new:  WSWorkorder.initWorkOrder,
+            },
+            postActions: {
+                read: postRead,
+                new: postInit,
+                copy: postCopy
+            },
+            handlers: {
+                standardWO: onChangeStandardWorkOrder,
+                equipmentCode: onChangeEquipment
+            },
+            isReadOnlyCustomHandler: isReadOnlyCustomHandler,
+            entityCode: "EVNT",
+            entityDesc: "Work Order",
+            entityURL: "/workorder/",
+            entityCodeProperty: "number",
+            screenProperty: "workOrderScreen",
+            layoutProperty: "workOrderLayout",
+            layoutPropertiesMap,
+            onMountHandler: mountHandler,
+            onUnmountHandler: unmountHandler
+    });
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        super.componentDidUpdate(prevProps, prevState, snapshot);
-        this.setClosingCodes(prevState);
-    }
+    //
+    //
+    //
 
-    onChangeStandardWorkOrder = standardWorkOrderCode => {
-        if (!standardWorkOrderCode) {
+    useEffect( () => {
+        setEquipment(null);
+        setEquipmentPart(null);
+
+        if (!workorder?.equipmentCode) {
             return;
         }
 
-        return WSWorkorder.getStandardWorkOrder(standardWorkOrderCode).then(response => {
-            const standardWorkOrder = response.body.data;
-
-            this.setState(state => ({
-                workorder: assignStandardWorkOrderValues({...state.workorder}, standardWorkOrder)
-            }));
+        WSEquipment.getEquipment(workorder.equipmentCode)
+        .then(response => {
+            const equipmentResponse = response.body.data;
+            setEquipment(equipmentResponse);
+            if (equipmentResponse.partCode) {
+                WSParts.getPart(equipmentResponse.partCode)
+                .then(response => setEquipmentPart(response.body.data))
+                .catch(console.error);
+            }
         })
-    }
+        .catch(console.error);
 
-    onChangeEquipment = value => {
-        if(!value) {
+    }, [workorder?.equipmentCode])
+
+    //
+    //
+    //
+    function onChangeEquipment(equipmentCode) {
+        if(!equipmentCode) {
             return;
         }
 
-        //If there is a value, fetch location, department, cost code
-        //and custom fields
-        return Promise.all([
-            WS.autocompleteEquipmentSelected(value).then(response => {
-                const data = response.body.data[0];
+        Promise.all([
+            WSEquipment.getEquipment(equipmentCode),
+            WSWorkorders.getWOEquipLinearDetails(equipmentCode),
+        ]).then( response => {
+            const equipment = response[0].body.data;
+            const linearDetails = response[1].body.data;
 
-                if(!data) {
-                    return;
-                }
+            setWorkOrder(oldWorkOrder => ({
+                ...oldWorkOrder,
+                departmentCode: equipment.departmentCode,
+                departmentDesc: equipment.departmentDesc,
+                locationCode: equipment.hierarchyLocationCode,
+                locationDesc: equipment.hierarchyLocationDesc,
+                costCode: equipment.costCode,
+                costCodeDesc: equipment.costCodeDesc,
+                warranty: linearDetails.ISWARRANTYACTIVE
+            }))
 
-                //Assign values
-                this.setState(prevState => ({
-                    workorder: {
-                        ...prevState.workorder,
-                        departmentCode: data.department,
-                        departmentDesc: data.departmentdisc, // 'disc' is not a typo (well, it is in Infor's response ;-) )
-                        locationCode: data.parentlocation,
-                        locationDesc: data.locationdesc,
-                        costCode: data.equipcostcode,
-                        costCodeDesc: ''
-                    }
-                }));
-            }),
-            this.setWOEquipment(value) //Set the equipment work order
-        ]).catch(error => {
-            //Simply don't assign values
-        });
+            if (linearDetails.ISWARRANTYACTIVE === 'true') {
+                showWarning('This equipment is currently under warranty.');
+            }
+        })
+        .catch(console.error);
+
     };
 
-    //
-    // SETTINGS OBJECT USED BY ENTITY CLASS
-    //
-    settings = {
-        userData: this.props.userData,
-        entity: 'workorder',
-        entityDesc: 'Work Order',
-        entityURL: '/workorder/',
-        entityCodeProperty: 'number',
-        entityScreen: this.props.userData && this.props.userData.screens[this.props.userData.workOrderScreen],
-        renderEntity: this.renderWorkOrder.bind(this),
-        readEntity: WSWorkorder.getWorkOrder.bind(WSWorkorder),
-        updateEntity: WSWorkorder.updateWorkOrder.bind(WSWorkorder),
-        createEntity: WSWorkorder.createWorkOrder.bind(WSWorkorder),
-        deleteEntity: WSWorkorder.deleteWorkOrder.bind(WSWorkorder),
-        initNewEntity: WSWorkorder.initWorkOrder.bind(WSWorkorder, "EVNT"),
-        layout: this.props.workOrderLayout,
-        layoutPropertiesMap: WorkorderTools.layoutPropertiesMap,
-        handlerFunctions: {
-            equipmentCode: this.onChangeEquipment,
-            standardWO: this.onChangeStandardWorkOrder,
-            classCode: this.onChangeClass,
+    function onChangeStandardWorkOrder(standardWorkOrderCode) {
+        if (standardWorkOrderCode) {
+            WSWorkorder.getStandardWorkOrder(standardWorkOrderCode)
+            .then(response => setWorkOrder( oldWorkOrder => assignStandardWorkOrderValues(oldWorkOrder, response.body.data)))
+            .catch(console.error);
         }
     }
 
-
-    getRegions = () => {
-        const {
-            applicationData,
-            handleError,
-            showError,
-            showNotification,
-            userData,
-            workOrderLayout
-        } = this.props;
-        const { layout, workorder, equipmentMEC } = this.state;
-        const {tabs} = workOrderLayout;
+    const getRegions = () => {
+        const { tabs } = workOrderLayout;
 
         const commonProps = {
             workorder,
-            layout,
+            newEntity,
             workOrderLayout,
-            userData,
-            updateWorkorderProperty: this.updateEntityProperty.bind(this),
-            children: this.children,
-            setWOEquipment: this.setWOEquipment
+            userGroup: userData.eamAccount.userGroup,
+            updateWorkorderProperty,
+            register
         };
 
         return [
@@ -174,13 +195,20 @@ class Workorder extends Entity {
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
                 render: () =>
-                    <WorkorderDetails
+                    <WorkorderGeneral
                         {...commonProps}
                         applicationData={applicationData}
-                        userData={userData} />
+                        userData={userData}
+                        equipment={equipment}
+                        statuses={statuses}
+                        newEntity={newEntity}
+                        screenCode={screenCode}
+                        screenPermissions={screenPermissions}
+                        setLayoutProperty={setLayoutProperty}/>
                 ,
                 column: 1,
                 order: 1,
+                summaryIcon: AssignmentIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -189,12 +217,13 @@ class Workorder extends Entity {
                 label: 'Scheduling',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                customVisibility: () => WorkorderTools.isRegionAvailable('SCHEDULING', commonProps.workOrderLayout),
+                customVisibility: () => isRegionAvailable('SCHEDULING', commonProps.workOrderLayout),
                 render: () =>
                     <WorkorderScheduling {...commonProps} />
                 ,
                 column: 1,
                 order: 2,
+                summaryIcon: CalendarMonthIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -203,12 +232,13 @@ class Workorder extends Entity {
                 label: 'Closing Codes',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                customVisibility: () => WorkorderTools.isRegionAvailable('CLOSING_CODES', commonProps.workOrderLayout),
+                customVisibility: () => isRegionAvailable('CLOSING_CODES', commonProps.workOrderLayout),
                 render: () =>
-                    <WorkorderClosingCodes {...commonProps} />
+                    <WorkorderClosingCodes {...commonProps} equipment={equipment} />
                 ,
                 column: 1,
                 order: 3,
+                summaryIcon: SportsScoreIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.CLOSING_CODES),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CLOSING_CODES)
             },
@@ -217,16 +247,17 @@ class Workorder extends Entity {
                 label: 'Part Usage',
                 isVisibleWhenNewEntity: false,
                 maximizable: false,
-                customVisibility: () => WorkorderTools.isRegionAvailable('PAR', commonProps.workOrderLayout),
+                customVisibility: () => isRegionAvailable('PAR', commonProps.workOrderLayout),
                 render: () =>
                     <PartUsageContainer
                         workorder={workorder}
-                        tabLayout={commonProps.workOrderLayout.tabs.PAR}
+                        tabLayout={tabs.PAR}
                         equipmentMEC={equipmentMEC}
-                        disabled={this.departmentalSecurity.readOnly} />
+                        disabled={readOnly} />
                 ,
                 column: 1,
                 order: 4,
+                summaryIcon: PartIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.PART_USAGE),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PART_USAGE)
             },
@@ -235,16 +266,17 @@ class Workorder extends Entity {
                 label: 'Additional Costs',
                 isVisibleWhenNewEntity: false,
                 maximizable: false,
-                customVisibility: () => WorkorderTools.isRegionAvailable('ACO', commonProps.workOrderLayout),
+                customVisibility: () => isRegionAvailable('ACO', commonProps.workOrderLayout),
                 render: () =>
                     <AdditionalCostsContainer
                         workorder={workorder}
-                        tabLayout={commonProps.workOrderLayout.tabs.ACO}
+                        tabLayout={tabs.ACO}
                         equipmentMEC={equipmentMEC}
-                        disabled={this.departmentalSecurity.readOnly} />
+                        disabled={readOnly} />
                 ,
                 column: 1,
                 order: 4,
+                summaryIcon: MonetizationOnRoundedIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.ADDITIONAL_COSTS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.ADDITIONAL_COSTS)
             },
@@ -253,12 +285,11 @@ class Workorder extends Entity {
                 label: 'Child Work Orders',
                 isVisibleWhenNewEntity: false,
                 maximizable: false,
-                customVisibility: () => WorkorderTools.isRegionAvailable('CWO', commonProps.workOrderLayout),
-                render: () =>
-                    <WorkorderChildren workorder={workorder.number} />
-                ,
+                customVisibility: () => isRegionAvailable('CWO', commonProps.workOrderLayout),
+                render: () => <WorkorderChildren workorder={workorder.number} />,
                 column: 1,
                 order: 4,
+                summaryIcon: SegmentRoundedIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.CHILD_WO),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CHILD_WO)
             },
@@ -277,6 +308,7 @@ class Workorder extends Entity {
                 },
                 column: 2,
                 order: 5,
+                summaryIcon: FunctionsRoundedIcon,
                 ignore: !isCernMode && !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS)
             },
@@ -289,7 +321,7 @@ class Workorder extends Entity {
                     <NCRIframeContainer
                         objectType="J"
                         objectID={workorder.number}
-                        mode='NCR'                        
+                        mode='NCR'
                     />
                 ,
                 RegionPanelProps: {
@@ -297,7 +329,7 @@ class Workorder extends Entity {
                 },
                 column: 2,
                 order: 6,
-                
+                summaryIcon: BookmarkBorderRoundedIcon,
                 ignore: !isCernMode && !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS)
             },
@@ -308,19 +340,21 @@ class Workorder extends Entity {
                 maximizable: false,
                 render: () =>
                     <Comments
-                        ref={comments => this.comments = comments}
+                        ref={comments => commentsComponent.current = comments}
                         entityCode='EVNT'
-                        entityKeyCode={!layout.newEntity ? workorder.number : undefined}
+                        entityKeyCode={!newEntity ? workorder.number : undefined}
                         userCode={userData.eamAccount.userCode}
                         handleError={handleError}
                         allowHtml={true}
-                        disabled={this.departmentalSecurity.readOnly} />
+                        //entityOrganization={workorder.organization}
+                        disabled={readOnly} />
                 ,
                 RegionPanelProps: {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
                 order: 7,
+                summaryIcon: DriveFileRenameOutlineIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
@@ -334,17 +368,20 @@ class Workorder extends Entity {
                         workorder={workorder.number}
                         department={workorder.departmentCode}
                         departmentDesc={workorder.departmentDesc}
-                        layout={workOrderLayout.tabs}
+                        layout={tabs}
                         defaultEmployee={userData.eamAccount.employeeCode}
                         defaultEmployeeDesc={userData.eamAccount.employeeDesc}
-                        postAddActivityHandler={this.postAddActivityHandler}
-                        updateEntityProperty={this.updateEntityProperty.bind(this)}
+                        postAddActivityHandler={postAddActivityHandler}
+                        updateEntityProperty={updateWorkorderProperty}
                         updateCount={workorder.updateCount}
                         startDate={workorder.startDate}
-                        disabled={this.departmentalSecurity.readOnly} />
+                        disabled={readOnly}
+                        handleError={handleError}
+                    />
                 ,
                 column: 2,
                 order: 8,
+                summaryIcon: PendingActions,
                 ignore: !getTabAvailability(tabs, TAB_CODES.ACTIVITIES) && !getTabAvailability(tabs, TAB_CODES.BOOK_LABOR),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.ACTIVITIES) || getTabInitialVisibility(tabs, TAB_CODES.BOOK_LABOR)
             },
@@ -356,16 +393,20 @@ class Workorder extends Entity {
                 render: ({panelQueryParams}) =>  (
                     <Checklists
                         workorder={workorder.number}
+                        eqpToOtherId={otherIdMapping}
                         printingChecklistLinkToAIS={applicationData.EL_PRTCL}
                         maxExpandedChecklistItems={Math.abs(parseInt(applicationData.EL_MCHLS)) || 50}
                         getWoLink={wo => '/workorder/' + wo}
-                        ref={checklists => this.checklists = checklists}
+                        ref={checklists}
                         showSuccess={showNotification}
                         showError={showError}
                         handleError={handleError}
                         userCode={userData.eamAccount.userCode}
-                        disabled={this.departmentalSecurity.readOnly}
-                        hideFilledItems={panelQueryParams.hideFilledItems === 'true'}
+                        disabled={readOnly}
+                        hideFollowUpProp={isHidden(
+                            commonProps.workOrderLayout.tabs.ACK.fields.createfollowupwo
+                        )}
+                        hideFilledItems={panelQueryParams.CHECKLISTShideFilledItems === 'true'}
                         activity={panelQueryParams.CHECKLISTSactivity}
                         topSlot={
                             applicationData.EL_PRTCL &&
@@ -376,8 +417,10 @@ class Workorder extends Entity {
                                 }}>
                                     <IconButton
                                         onClick={() => window.open(applicationData.EL_PRTCL + workorder.number, '_blank', 'noopener noreferrer')}
-                                        style={{ color: "#00aaff" }}>
-                                        <OpenInNewIcon />
+                                        style={{ color: "#00aaff" }}
+                                        size="large">
+                                        <OpenInNewIcon style={{ padding: "9px" }} />
+                                         <Typography>Results</Typography>
                                     </IconButton>
                                 </div>
                         }/>
@@ -385,6 +428,7 @@ class Workorder extends Entity {
                 ,
                 column: 2,
                 order: 9,
+                summaryIcon: PlaylistAddCheckIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.CHECKLIST),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CHECKLIST)
             },
@@ -392,63 +436,57 @@ class Workorder extends Entity {
                 id: 'CUSTOMFIELDS',
                 label: 'Custom Fields',
                 isVisibleWhenNewEntity: true,
-                customVisibility: () => workOrderLayout.fields.block_5.attribute !== 'H',
                 maximizable: false,
                 render: () =>
                     <CustomFields
-                        children={this.children}
                         entityCode='EVNT'
                         entityKeyCode={workorder.number}
                         classCode={workorder.classCode}
                         customFields={workorder.customField}
-                        updateEntityProperty={this.updateEntityProperty.bind(this)} />
+                        register={register} />
                 ,
                 column: 2,
                 order: 10,
-                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                summaryIcon: ListAltIcon,
+                ignore: workOrderLayout.fields.block_5.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'CUSTOMFIELDSEQP',
                 label: 'Custom Fields Equipment',
                 isVisibleWhenNewEntity: true,
-                customVisibility: () => WorkorderTools.isRegionAvailable('CUSTOM_FIELDS_EQP', commonProps.workOrderLayout),
                 maximizable: false,
                 render: () =>
-                    <CustomFields children={this.children}
+                    <CustomFields
                         entityCode='OBJ'
-                        entityKeyCode={layout.woEquipment && layout.woEquipment.code}
-                        classCode={layout.woEquipment && layout.woEquipment.classCode}
-                        customFields={layout.woEquipment && layout.woEquipment.customField}
-                        updateEntityProperty={this.updateEntityProperty.bind(this)}
-                        readonly={true} />
+                        entityKeyCode={equipment?.code}
+                        classCode={equipment?.classCode}
+                        customFields={equipment?.customField}
+                        register={registerCustomField(equipment)}/>
                 ,
                 column: 2,
                 order: 11,
-                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                summaryIcon: ConstructionIcon,
+                ignore: !isRegionAvailable('CUSTOM_FIELDS_EQP', commonProps.workOrderLayout),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
                 id: 'CUSTOMFIELDSPART',
                 label: 'Custom Fields Part',
                 isVisibleWhenNewEntity: true,
-                customVisibility: () =>
-                    WorkorderTools.isRegionAvailable('CUSTOM_FIELDS_PART', commonProps.workOrderLayout),
                 maximizable: false,
                 render: () => (
                     <CustomFields
-                        children={this.children}
-                        entityCode="OBJ"
-                        entityKeyCode={layout.woEquipment && layout.woEquipment.partCode}
-                        classCode={layout.woEquipment && layout.woEquipment.classCode}
-                        customFields={layout.woEquipment && layout.woEquipment.partCustomFields}
-                        updateEntityProperty={this.updateEntityProperty.bind(this)}
-                        readonly={true}
-                    />
+                        entityCode="PART"
+                        entityKeyCode={equipmentPart?.Code}
+                        classCode={equipmentPart?.classCode}
+                        customFields={equipmentPart?.customField}
+                        register={registerCustomField(equipmentPart)}/>
                 ),
                 column: 2,
                 order: 12,
-                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
+                summaryIcon: HardwareIcon,
+                ignore: !isRegionAvailable('CUSTOM_FIELDS_PART', commonProps.workOrderLayout),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
             },
             {
@@ -457,10 +495,11 @@ class Workorder extends Entity {
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
                 render: () =>
-                    <MeterReadingContainerWO equipment={workorder.equipmentCode} disabled={this.departmentalSecurity.readOnly} />
+                    <MeterReadingContainerWO equipment={workorder.equipmentCode} disabled={readOnly} />
                 ,
                 column: 2,
                 order: 12,
+                summaryIcon: SpeedIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.METER_READINGS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.METER_READINGS)
             },
@@ -468,41 +507,44 @@ class Workorder extends Entity {
                 id: 'MULTIPLEEQUIPMENT',
                 label: 'Equipment',
                 isVisibleWhenNewEntity: false,
-                customVisibility: () => WorkorderTools.isRegionAvailable('MEC', commonProps.workOrderLayout),
+                customVisibility: () => isRegionAvailable('MEC', commonProps.workOrderLayout),
                 maximizable: false,
                 render: () =>
-                    <WorkorderMultiequipment workorder={workorder.number} setEquipmentMEC={this.setEquipmentMEC.bind(this)}/>
+                    <WorkorderMultiequipment workorder={workorder.number} setEquipmentMEC={setEquipmentMEC}/>
                 ,
                 column: 2,
                 order: 13,
+                summaryIcon: PrecisionManufacturingIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_TAB_WO_SCREEN),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_TAB_WO_SCREEN)
             },
-        ]
-
-
+            {
+                id: 'USERDEFINEDFIELDS',
+                label: 'User Defined Fields',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () =>
+                    <UserDefinedFields
+                        {...commonProps}
+                        entityLayout={workOrderLayout.fields}
+                    />
+                ,
+                column: 2,
+                order: 10,
+                summaryIcon: AssignmentIndIcon,
+                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
+            },
+        ];
     }
 
-    setEquipmentMEC(data) {
-        this.setState({equipmentMEC: data})
-    }
-
-    getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
-        if (!eqCode || !swoCode) {
-            return;
-        }
-        const response = await WSWorkorder.getEquipmentStandardWOMaxStep(eqCode, swoCode);
-        return response.body.data;
-    }
-
-    async repeatStepHandler() {
-        this.setLayout({newEntity: true, reading: true, assignUrlParams: false});
-
-        const { workorder } = this.state;
+    const repeatStepHandler = async () => {
+        setNewEntity(true);
+        setLoading(true);
+        const fields = workOrderLayout.fields;
         const { customField, number, equipmentCode, standardWO } = workorder;
-
         try {
-            const maxSWO = await this.getEquipmentStandardWOMaxStep(equipmentCode, standardWO);
+            const maxSWO = await getEquipmentStandardWOMaxStep(equipmentCode, standardWO);
             const maxSWOStep = maxSWO.step;
             let value;
 
@@ -519,256 +561,130 @@ class Workorder extends Entity {
                 (cf) => cf.code === "MTFEVP1" ? {...cf, value} : cf
             )
 
-            this.setState({
-                workorder: {
-                    ...workorder,
-                    classCode: 'MTF2',
-                    customField: newCustomFields,
-                    copyFrom: number,
-                    assignedTo: workorder.assignedTo || this.props.userData.eamAccount.employeeCode
-                }
-            });
+            updateWorkorderProperty("classCode", 'MTF2');
+            updateWorkorderProperty("customField", newCustomFields,);
+            updateWorkorderProperty("copyFrom", number);
+            updateWorkorderProperty("assignedTo", workorder.assignedTo || userData.eamAccount.employeeCode);
+            updateWorkorderProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
+            updateWorkorderProperty("systemStatusCode", "R")
+            updateWorkorderProperty("completedDate", "");
 
-            this.postInit();
-            this.postCopy();
-            this.setLayout({reading: false});
-            this.saveHandler();
+            window.history.pushState({}, '', process.env.PUBLIC_URL + '/workorder');
+            postInit();
+            setReadOnly(!screenPermissions.creationAllowed);
+            setLoading(false);
         } catch (err) {
-            this.props.showError(JSON.stringify(err), "Could not repeat step.");
+            showError(JSON.stringify(err), "Could not repeat step.");
         }
     }
     //
     // CALLBACKS FOR ENTITY CLASS
     //
-    postInit() {
-        this.setStatuses('', '', true)
-        this.setTypes('', '', true, false)
-        this.enableChildren()
+    function postInit() {
+        readStatuses('', '', true);
     }
 
-    postCreate() {
-        this.setStatuses(this.state.workorder.statusCode, this.state.workorder.typeCode, false);
-        this.setTypes(this.state.workorder.statusCode, this.state.workorder.typeCode, false);
-        // Comments panel might be hidden
-        if (this.comments) {
-            this.comments.createCommentForNewEntity();
-        }
+    function postRead(workorder) {
+        setLayoutProperty('equipment', {code: workorder.equipmentCode, organization: workorder.equipmentOrganization});
+        updateMyWorkOrdersConst(workorder);
+        readStatuses(workorder.statusCode, workorder.typeCode, false);
+        readOtherIdMapping(workorder.number);
     }
 
-    postUpdate(workorder) {
-        this.props.updateMyWorkOrders(workorder)
-        this.setStatuses(workorder.statusCode, workorder.typeCode, false)
-        this.setTypes(workorder.statusCode, workorder.typeCode, false)
-
-        if (this.departmentalSecurity.readOnly) {
-            this.disableChildren();
-        } else if (WorkorderTools.isClosedWorkOrder(workorder.statusCode)) {
-            // If opening a terminated work order
-            this.disableChildren()
-            this.children['EAMID_WorkOrder_STATUS_STATUSCODE'].enable()
-        } else {
-            this.enableChildren()
-        }
-        // Comments panel might be hidden
-        if (this.comments) {
-            this.comments.createCommentForNewEntity();
-        }
-    }
-
-    postRead(workorder) {
-        this.props.updateMyWorkOrders(workorder)
-        this.setStatuses(workorder.statusCode, workorder.typeCode, false)
-        this.setTypes(workorder.statusCode, workorder.typeCode, false)
-
-        if (this.departmentalSecurity.readOnly) {
-            this.disableChildren();
-        } else if (WorkorderTools.isClosedWorkOrder(workorder.statusCode)) {
-            // If opening a terminated work order
-            this.disableChildren()
-            this.children['EAMID_WorkOrder_STATUS_STATUSCODE'].enable()
-        } else {
-            this.enableChildren()
-        }
-        //Set work order equipment
-        this.setWOEquipment(workorder.equipmentCode, true);
-    }
-
-    postCopy = () => {
-        let fields = this.props.workOrderLayout.fields;
-        isCernMode && this.updateEntityProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
-        isCernMode && this.updateEntityProperty("typeCode", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD")
-        isCernMode && this.updateEntityProperty("completedDate", "");
+    function postCopy() {
+        readStatuses('', '', true);
+        let fields = workOrderLayout.fields;
+        isCernMode && updateWorkorderProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
+        isCernMode && updateWorkorderProperty("systemStatusCode", "R")
+        isCernMode && updateWorkorderProperty("typeCode", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD")
+        isCernMode && updateWorkorderProperty("completedDate", "");
     }
 
     //
     // DROP DOWN VALUES
     //
-    setStatuses(status, type, newwo) {
-        WSWorkorder.getWorkOrderStatusValues(this.props.userData.eamAccount.userGroup, status, type, newwo)
-            .then(response => {
-                this.setLayout({statusValues: response.body.data})
-            })
+    const readStatuses = (status, type, newwo) => {
+        WSWorkorder.getWorkOrderStatusValues(userData.eamAccount.userGroup, status, type, newwo)
+            .then(response => setStatuses(response.body.data))
+            .catch(console.error);
     }
 
-    setTypes(status, type, newwo, ppmwo) {
-        WSWorkorder.getWorkOrderTypeValues(this.props.userData.eamAccount.userGroup)
-            .then(response => {
-                this.setLayout({typeValues: response.body.data})
-            })
-    }
-
-    setPriorityValues() {
-        WSWorkorder.getWorkOrderPriorities()
-            .then(response => {
-                this.setLayout({priorityValues: response.body.data})
-            });
-    }
-
-    setWOEquipment = (code, initialLoad = false) => {
-        const {
-            showWarning,
-        } = this.props;
-        return Promise.all([
-            WSEquipment.getEquipment(code),
-            WSWorkorders.getWOEquipLinearDetails(code),
-        ])
-            .then((response) => {
-                const isWarrantyActive = response[1].body.data?.ISWARRANTYACTIVE === 'true';
-                //this.setLayout({ woEquipment: response[0].body.data });
-                if (!initialLoad) {
-                    if (isWarrantyActive) {
-                        showWarning('This equipment is currently under warranty.');
-                    }
-                    this.setState(state => ({
-                        workorder: {
-                            ...state.workorder,
-                            warranty: isWarrantyActive,
-                        }
-                    }));
-                }
-                return response[0].body.data.partCode ? WSParts.getPart(response[0].body.data.partCode) : null;
-            })
-            .then((part) => {
-                if (part && part.body.data) {
-                    this.setLayout({
-                        woEquipment: {
-                            ...this.state.layout.woEquipment,
-                            partCustomFields: part.body.data.customField,
-                        },
-                    });
-                }
-            })
-            .catch(() => {
-                this.setLayout({ woEquipment: undefined });
-            });
-    }
-
-    setClosingCodes = prevState => {
-        const { workorder = {}, layout } = this.state;
-        const { classCode, problemCode, failureCode, causeCode, equipmentCode } = workorder || {};
-        const objClass = layout.woEquipment && layout.woEquipment.classCode;
-
-        const { workorder: prevWorkorder = {}, layout: prevLayout } = prevState || {};
-        const prevObjClass = prevLayout && prevLayout.woEquipment && prevLayout.woEquipment.classCode;
-
-        if (layout.reading) {
-            return;
-        }
-
-        const equalObjectProps = (a, b, propNames) => propNames.every(field => a[field] === b[field]);
-        if (!equalObjectProps(prevWorkorder, workorder,
-                ['problemCode', 'failureCode', 'causeCode', 'classCode', 'equipmentCode'])
-                || prevObjClass !== objClass) {
-
-            Promise.all([
-                WSWorkorder.getWorkOrderProblemCodeValues(classCode, objClass, equipmentCode),
-                WSWorkorder.getWorkOrderActionCodeValues(objClass, failureCode, problemCode, causeCode, equipmentCode),
-                WSWorkorder.getWorkOrderCauseCodeValues(objClass, failureCode, problemCode, equipmentCode),
-                WSWorkorder.getWorkOrderFailureCodeValues(objClass, problemCode, equipmentCode)
-            ]).then(responses => {
-                const [
-                    problemCodeValues,
-                    actionCodeValues,
-                    causeCodeValues,
-                    failureCodeValues
-                ] = responses.map(response => response.body.data);
-
-                this.setLayout({
-                    problemCodeValues,
-                    actionCodeValues,
-                    causeCodeValues,
-                    failureCodeValues
-                });
-            });
-        }
-
-    }
-
-    postAddActivityHandler = () => {
+    const postAddActivityHandler = () => {
         //Refresh the activities in the checklist
-        this.checklists && this.checklists.readActivities(this.state.workorder.number);
+        checklists.current && checklists.current.readActivities(workorder.number);
     };
 
-    renderWorkOrder() {
-        const { layout, workorder } = this.state;
-        const {
-            applicationData,
-            getUniqueRegionID,
-            history,
-            isHiddenRegion,
-            setRegionVisibility,
-            getHiddenRegionState,
-            toggleHiddenRegion,
-            userData
-        } = this.props;
-        const regions = this.getRegions();
-        return (
-            <div className="entityContainer">
-                <BlockUi tag="div" blocking={layout.blocking} style={{height: "100%", width: "100%"}}>
-
-                    <EamlightToolbarContainer isModified={layout.isModified}
-                                     newEntity={layout.newEntity}
-                                     entityScreen={userData.screens[userData.workOrderScreen]}
-                                     entityName="Work Order"
-                                     entityKeyCode={workorder.number}
-                                     saveHandler={this.saveHandler.bind(this)}
-                                     newHandler={() => history.push('/workorder')}
-                                     deleteHandler={this.deleteEntity.bind(this, workorder.number)}
-                                     width={790}
-                                     toolbarProps={{
-                                        entity: workorder,
-                                        postInit: this.postInit.bind(this),
-                                        setLayout: this.setLayout.bind(this),
-                                        newEntity: layout.newEntity,
-                                        applicationData: applicationData,
-                                        userGroup: userData.eamAccount.userGroup,
-                                        screencode: userData.screens[userData.workOrderScreen].screenCode,
-                                        copyHandler: this.copyEntity.bind(this),
-                                        repeatStepHandler: this.repeatStepHandler.bind(this),
-                                        entityDesc: this.settings.entityDesc,
-                                        entityType: ENTITY_TYPE.WORKORDER,
-                                        departmentalSecurity: this.departmentalSecurity,
-                                        screens: userData.screens,
-                                        workorderScreencode: userData.workorderScreen
-                                     }}
-                                     entityIcon={<WorkorderIcon style={{height: 18}}/>}
-                                     toggleHiddenRegion={toggleHiddenRegion}
-                                     regions={regions}
-                                     getUniqueRegionID={getUniqueRegionID}
-                                     getHiddenRegionState={getHiddenRegionState}
-                                     isHiddenRegion={isHiddenRegion}
-                                     departmentalSecurity={this.departmentalSecurity} />
-                    <EntityRegions
-                        regions={regions}
-                        isNewEntity={layout.newEntity}
-                        getUniqueRegionID={getUniqueRegionID}
-                        getHiddenRegionState={getHiddenRegionState}
-                        setRegionVisibility={setRegionVisibility}
-                        isHiddenRegion={this.props.isHiddenRegion} />
-                </BlockUi>
-            </div>
-        )
+    const readOtherIdMapping = (number) => {
+        WSWorkorder.getWOEquipToOtherIdMapping(number)
+            .then(response => setOtherIdMapping(response.body.data))
+            .catch(error => console.error('readOtherIdMapping', error))
     }
+
+    function mountHandler() {
+        setLayoutProperty('eqpTreeMenu', [{
+            desc: "Use for this Work Order",
+            icon: <ContentPasteIcon/>,
+            handler: (rowInfo) => {
+                updateWorkorderProperty('equipmentCode', rowInfo.node.id)
+                updateWorkorderProperty('equipmentDesc', rowInfo.node.name)
+            }
+        }])
+    }
+
+    function unmountHandler() {
+        setLayoutProperty('eqpTreeMenu', null);
+    }
+
+    if (!workorder) {
+        return React.Fragment;
+    }
+
+    return (
+        <div className="entityContainer">
+            <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}}>
+                <EamlightToolbarContainer
+                    isModified={isModified}
+                    newEntity={newEntity}
+                    entityScreen={screenPermissions}
+                    entityName="Work Order"
+                    entityKeyCode={workorder.number}
+                    organization={workorder.organization}
+                    saveHandler={saveHandler}
+                    newHandler={newHandler}
+                    deleteHandler={deleteHandler}
+                    width={790}
+                    toolbarProps={{
+                        entity: workorder,
+                        // postInit: this.postInit.bind(this),
+                        // setLayout: this.setLayout.bind(this),
+                        newEntity,
+                        applicationData: applicationData,
+                        userGroup: userData.eamAccount.userGroup,
+                        screencode: screenCode,
+                        copyHandler: copyHandler,
+                        repeatStepHandler: repeatStepHandler,
+                        entityDesc: "Work Order",
+                        entityType: ENTITY_TYPE.WORKORDER,
+                        screens: userData.screens,
+                        workorderScreencode: userData.workOrderScreen,
+                        departmentalSecurity: userData.eamAccount.departmentalSecurity,
+                    }}
+                    entityIcon={<ContentPasteIcon style={{height: 18}}/>}
+                    toggleHiddenRegion={toggleHiddenRegion}
+                    regions={getRegions()}
+                    getUniqueRegionID={getUniqueRegionID}
+                    getHiddenRegionState={getHiddenRegionState}
+                    isHiddenRegion={isHiddenRegion} />
+                <EntityRegions
+                    regions={getRegions()}
+                    isNewEntity={newEntity}
+                    getUniqueRegionID={getUniqueRegionID}
+                    getHiddenRegionState={getHiddenRegionState}
+                    setRegionVisibility={setRegionVisibility}
+                    isHiddenRegion={isHiddenRegion} />
+            </BlockUi>
+        </div>
+    )
 }
 
 export default Workorder;

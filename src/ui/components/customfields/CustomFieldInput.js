@@ -7,43 +7,31 @@ import CustomFieldNUM from './inputs/CustomFieldNUM'
 import CustomFieldCODE from './inputs/CustomFieldCODE'
 
 const groupLabelStyle = {
-    "margin": "15px 0 0 0",
+    "marginTop": 17,
+    "marginBottom": 5,
     "fontWeight": "900",
-    "color": "rgb(52 111 151)",
+    "color": "#1a237e",
     "fontSize": "0.90rem",
+    "flex": "1 1 auto",
     "textAlign": "center"
 }
 function CustomFieldInput(props) {
 
-    let {customField, children, updateCustomFieldValue, updateCustomFieldDesc, index, lookupValues, readonly} = props
-
-    let generateFieldInfo = () => {
-        return {
-            text: customField.label,
-            elementId: customField.code,
-            xpath: 'EAMID_' + customField.code,
-            fieldType: customField.type === 'NUM' ? 'number' : 'text'
-        }
-    }
+    let {customField, index, lookupValues, register} = props
 
     let renderCustomFieldSpecificInput = () => {
         let props = {
-            children: children,
+            register: register,
             customField: customField,
-            updateCustomFieldValue: updateCustomFieldValue,
-            updateCustomFieldDesc: updateCustomFieldDesc,
             index: index,
-            lookupValues: lookupValues,
-            elementInfo: generateFieldInfo(),
-            readonly: readonly,
-            UoM: customField.uom
+            lookupValues: lookupValues
         };
 
         let customFieldRender;
         switch (customField.type) {
             case "RENT":
-                customFieldRender = <CustomFieldRENT {...props}/>;
-                break;
+                 customFieldRender = <CustomFieldRENT {...props} register={register}/>;
+                 break;
             case "CHAR":
                 customFieldRender = <CustomFieldCHAR {...props}/>;
                 break;

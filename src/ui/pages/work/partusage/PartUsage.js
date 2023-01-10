@@ -1,17 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import WSWorkorders from "../../../../tools/WSWorkorders";
 import EISTable from 'eam-components/dist/ui/components/table';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import PartUsageDialog from "./PartUsageDialog";
 import BlockUi from 'react-block-ui';
-
-
-const buttonStyle = {
-    position: 'relative',
-    float: 'left',
-    bottom: '-13px',
-    left: '5px',
-};
 
 function PartUsage(props) {
 
@@ -62,17 +54,22 @@ function PartUsage(props) {
         :
         <>
             <div style={{ width: '100%', height: '100%' }}>
-                <EISTable
-                    data={data}
-                    headers={headers}
-                    propCodes={propCodes}
-                    linksMap={linksMap} />
-                <Button onClick={() => setIsDialogOpen(true)} color="primary" style={buttonStyle} disabled={props.disabled}>
+                {data?.length > 0 &&
+                    <EISTable
+                        data={data}
+                        headers={headers}
+                        propCodes={propCodes}
+                        linksMap={linksMap} />
+                }
+                <div style={{height: 15}} />
+                <Button onClick={() => setIsDialogOpen(true)} color="primary" 
+                        disabled={props.disabled} variant="outlined">
                     Add Part Usage
                 </Button>
             </div>
             <PartUsageDialog
                 showNotification={props.showNotification}
+                showError={props.showError}
                 handleError={props.handleError}
                 handleCancel={() => setIsDialogOpen(false)}
                 tabLayout={props.tabLayout.fields}

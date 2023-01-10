@@ -1,58 +1,74 @@
-import React, {Component} from 'react';
+import React from 'react';
+import {useEffect} from "react"
+import { useSelector, useDispatch } from "react-redux";
 import {Route, Switch} from 'react-router-dom';
 import EquipmentTree from './components/tree/EquipmentTree'
-import PositionContainer from "./position/PositionContainer";
-import AssetContainer from "./asset/AssetContainer";
-import SystemContainer from "./system/SystemContainer";
-import LocationContainer from "./location/LocationContainer";
+import Position from "./position/Position";
+import Asset from "./asset/Asset";
+import System from "./system/System";
 import Split from 'react-split'
+import Location from './location/Location';
+import Workorder from '../work/Workorder';
+import { setLayoutProperty } from 'actions/uiActions';
+import InstallEqpContainer from './installeqp/InstallEqpContainer';
 
-class Equipment extends Component {
+const Equipment = props => {
 
-    componentWillUnmount() {
-        // Removing this property from the store will force the eqp. tree to reinitialize when valid eqp. will be set
-        this.props.setLayoutProperty('equipment', null)
-    }
+    const showEqpTree = useSelector(state =>  state.ui.layout.showEqpTree);
+    const equipment = useSelector(state =>  state.ui.layout.equipment);
+    const renderEqpTree = equipment && showEqpTree
+    const dispatch = useDispatch();
+    const setLayoutPropertyConst = (...args) => dispatch(setLayoutProperty(...args));
 
-    render() {
-        const equipmentCode = (this.props.eqp && this.props.eqp.code) || this.props.match.params.code;
-        return (
-            <div className="entityContainer">
+    useEffect(() => {
+        return () => {
+                    setLayoutPropertyConst('equipment', null);
+                    setLayoutPropertyConst('showEqpTree', false);
+                    setLayoutPropertyConst('eqpTreeMenu', null);}
+    }, [])
 
-                <Split sizes={this.props.showEqpTree ? [25, 75] : [0, 100]}
-                       minSize={this.props.showEqpTree ? [120, 200] : [0, 300]}
-                       gutterSize={this.props.showEqpTree ? 5 : 0}
-                       gutterAlign="center"
-                       snapOffset={0}
-                       style={{display: "flex", width: "100%"}}
-                >
+    return (
+        <div className="entityContainer">
 
-                    <div style={{height: "100%", flexDirection: "column"}}>
-                        {equipmentCode && this.props.showEqpTree &&
-                            <EquipmentTree equipmentCode={equipmentCode}
-                                           history={this.props.history}
-                            />
-                        }
-                    </div>
+            <Split sizes={renderEqpTree ? [25, 75] : [0, 100]}
+                    minSize={renderEqpTree ? [120, 200] : [0, 300]}
+                    gutterSize={renderEqpTree ? 5 : 0}
+                    gutterAlign="center"
+                    snapOffset={0}
+                    style={{display: "flex", width: "100%"}}
+            >
 
-                    <div style={{backgroundColor: "white", height: "100%", width: "100%"}}>
-                        <Switch>
-                            <Route path={"/asset/:code(.+)?"}
-                                   component={AssetContainer}/>
-                            <Route path={"/position/:code(.+)?"}
-                                   component={PositionContainer}/>
-                            <Route path={"/system/:code(.+)?"}
-                                   component={SystemContainer}/>
-                            <Route path={"/location/:code(.+)?"}
-                                   component={LocationContainer}/>
-                        </Switch>
-                    </div>
+                <div style={{height: "100%", flexDirection: "column"}}>
+                    {renderEqpTree && <EquipmentTree />}
+                </div>
 
-                </Split>
+                <div style={{backgroundColor: "white", height: "100%", width: "100%"}}>
+                    <Switch>
+                        <Route path={"/asset/:code(.+)?"}
+                                component={Asset}/>
 
-            </div>
-        )
-    }
+                        <Route path={"/position/:code(.+)?"}
+                                component={Position}/>
+
+                        <Route path={"/system/:code(.+)?"}
+                                component={System}/>
+
+                        <Route path={"/location/:code(.+)?"}
+                                component={Location}/>
+
+                        <Route path="/workorder/:code(.+)?"
+                                component={Workorder}/>
+
+                        <Route path="/installeqp"
+                                component={InstallEqpContainer}/>
+                    </Switch>
+                </div>
+
+            </Split>
+
+        </div>
+    )
+    
 
 }
 

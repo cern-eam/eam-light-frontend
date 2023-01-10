@@ -1,25 +1,39 @@
 import React, {Component} from 'react';
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from '@mui/material/Tooltip';
 import '../ApplicationLayout.css'
 import './EamlightMenu.css'
 import MenuMyWorkorders from './MenuMyWorkorders'
 import MenuMyTeamWorkorders from './MenuMyTeamWorkorders'
 import MenuItem from './MenuItem'
-import AddIcon from '@material-ui/icons/Add';
-import SearchIcon from '@material-ui/icons/Search';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FormatListBulletedTriangle from 'mdi-material-ui/FormatListBulletedTriangle'
 import EamlightSubmenu from "./EamlightSubmenu";
 import SpeedometerIcon from 'mdi-material-ui/Speedometer'
 import AutorenewIcon from 'mdi-material-ui/Autorenew'
 import {AssetIcon, PartIcon, PositionIcon, SystemIcon, WorkorderIcon} from 'eam-components/dist/ui/components/icons'
-import {Account, AccountMultiple, Settings, Tune, DatabaseRefresh} from "mdi-material-ui"
+import { Account, AccountMultiple, Tune, DatabaseRefresh, Cog } from "mdi-material-ui"
 import ScreenChange from "./ScreenChange";
 import MenuTools from './MenuTools'
-import RoomIcon from '@material-ui/icons/Room';
-import BuildIcon from '@material-ui/icons/Build';
+import RoomIcon from '@mui/icons-material/Room';
+import BuildIcon from '@mui/icons-material/Build';
 import CERNMode from '../../components/CERNMode';
 import MenuGridLink from "./MenuGridLink";
+import MenuItemInputHistory from './MenuItemInputHistory';
+
+export const menuIconStyle = {
+    display: "inline-block",
+    marginRight: 5,
+    color: "#f7ce03",
+    width: "100%",
+    height: 36
+}
+
+export const menuIconStyleDisabled = {
+    ...menuIconStyle,
+    color: "#8b8c8b",
+}
 
 const getScreenHeaderFunction = (screens = {}) => ({ screenName, screen, updateScreenLayout }) =>
     <ScreenChange
@@ -74,15 +88,6 @@ class EamlightMenu extends Component {
             color: "white"
         };
 
-        const menuIconStyle = {
-            display: "inline-block",
-            marginRight: 5,
-            color: "#f7ce03",
-            width: "100%",
-            height: 36
-        }
-
-  
         const { myOpenWorkOrders, myTeamWorkOrders, userData, applicationData, showNotification, showError, updateWorkOrderScreenLayout, 
             updateAssetScreenLayout, updatePositionScreenLayout, updateSystemScreenLayout, updatePartScreenLayout, updateLocationScreenLayout } = this.props;
         const { workOrderScreen, assetScreen, positionScreen, systemScreen, partScreen, locationScreen, eamAccount, screens, reports } = userData;
@@ -166,7 +171,7 @@ class EamlightMenu extends Component {
                         <li>
                             <div rel="equipment" onClick={this.mainMenuClickHandler}>
                                 <Tooltip title="EQUIPMENT" placement="right">
-                                    <Settings style={iconStyles} />
+                                    <Cog style={iconStyles} />
                                 </Tooltip>
                             </div>
                         </li>
@@ -182,15 +187,13 @@ class EamlightMenu extends Component {
                         </li>
                         }
 
-                        {applicationData.EL_ADMUG && applicationData.EL_ADMUG.split(',').includes(eamAccount.userGroup) &&
                         <li>
                             <div rel="settings" onClick={this.mainMenuClickHandler}>
-                                <Tooltip title="ADMIN SETTINGS" placement="right">
+                                <Tooltip title="SETTINGS" placement="right">
                                     <Tune style={iconStyles} />
                                 </Tooltip>
                             </div>
                         </li>
-                        }
 
                         {reports &&
                         <li>
@@ -262,7 +265,7 @@ class EamlightMenu extends Component {
                                   icon={<SpeedometerIcon style={menuIconStyle}/>}
                                   link="meterreading"/>  
                         
-                        <MenuItem label="Install Equipment"
+                        <MenuItem label="Install / Detach Equipment"
                                   icon={<BuildIcon style={menuIconStyle}/>}
                                   link="installeqp"/>         
                     </EamlightSubmenu>
@@ -365,18 +368,20 @@ class EamlightMenu extends Component {
                     </EamlightSubmenu>
                     }
 
-                    {applicationData.EL_ADMUG && applicationData.EL_ADMUG.split(',').includes(eamAccount.userGroup) &&
-                    <EamlightSubmenu id="settings" header={<span>ADMIN SETTINGS</span>}>
+                    <EamlightSubmenu id="settings" header={<span>SETTINGS</span>}>
+                        {applicationData.EL_ADMUG && applicationData.EL_ADMUG.split(',').includes(eamAccount.userGroup) &&
                         <MenuItem label="Refresh EAM Light Cache"
                                   icon={<DatabaseRefresh style={menuIconStyle}/>}
                                   onClick={MenuTools.refreshCache.bind(null, showNotification, showError)}/>
+                        }
+                        <MenuItemInputHistory />
                     </EamlightSubmenu>
-                    }
 
                     {reports &&
                     <EamlightSubmenu id="customgrids" header={<span>CUSTOM GRIDS</span>}>
-                        {reports.map( report => (
-                            <MenuGridLink grid={report}/>
+                        {
+                        reports.map( report => (
+                            <MenuGridLink grid={report} key={report?.code} />
                             ))
                         }
                     </EamlightSubmenu>

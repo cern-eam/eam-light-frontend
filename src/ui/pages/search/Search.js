@@ -5,10 +5,9 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import WS from '../../../tools/WS'
 import SearchHeader from "./SearchHeader";
 import {Redirect} from "react-router-dom";
-import {getLink} from "./SearchLinkUtils";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import KeyCode from '../../../enums/KeyCode'
-import ErrorTypes from "../../../enums/ErrorTypes";
+import LinearProgress from "@mui/material/LinearProgress";
+import KeyCode from 'eam-components/dist/enums/KeyCode'
+import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import Ajax from 'eam-components/dist/tools/ajax'
 
 const INITIAL_STATE = {
@@ -39,30 +38,28 @@ class Search extends Component {
         }
 
         return (
-            <div>
-                <div id="searchContainer"
-                     className={this.state.searchBoxUp ? "searchContainer searchContainerSearch" : "searchContainer searchContainerHome"}>
-                    <SearchHeader keyword={this.state.keyword} searchBoxUp={this.state.searchBoxUp}
-                                  fetchDataHandler={this.fetchNewData.bind(this)}
-                                  onKeyDown={this.onKeyDown.bind(this)}
-                                  tryToGoToResult={this.tryToGoToResult.bind(this)}
-                                  showTypes={this.state.searchBoxUp}
-                    />
-                    <div id="searchResults"
-                         className={this.state.searchBoxUp ? "searchResultsSearch" : "searchResultsHome"}>
-                        <div className="linearProgressBox">
-                            {this.state.isFetching && <LinearProgress className="linearProgress"/>}
-                        </div>
-                        <div className="searchScrollBox">
-                            {(!this.state.isFetching && this.state.results.length === 0 && this.state.keyword) ?
-                                <div className="searchNoResults">No results found.</div> :
-                                <InfiniteScroll height="calc(100vh - 150px)">
-                                    <SearchResults data={this.state.results} keyword={this.state.keyword}
-                                                   selectedItemCode={!!this.state.results[this.state.selectedItemIndex] ? this.state.results[this.state.selectedItemIndex].code : null}/>
-                                </InfiniteScroll>
-                            }
+            <div id="searchContainer"
+                    className={this.state.searchBoxUp ? "searchContainer searchContainerSearch" : "searchContainer searchContainerHome"}>
+                <SearchHeader keyword={this.state.keyword} searchBoxUp={this.state.searchBoxUp}
+                                fetchDataHandler={this.fetchNewData.bind(this)}
+                                onKeyDown={this.onKeyDown.bind(this)}
+                                tryToGoToResult={this.tryToGoToResult.bind(this)}
+                                showTypes={this.state.searchBoxUp}
+                />
+                <div id="searchResults"
+                        className={this.state.searchBoxUp ? "searchResultsSearch" : "searchResultsHome"}>
+                    <div className="linearProgressBox">
+                        {this.state.isFetching && <LinearProgress className="linearProgress"/>}
+                    </div>
+                    <div className="searchScrollBox">
+                        {(!this.state.isFetching && this.state.results.length === 0 && this.state.keyword) ?
+                            <div className="searchNoResults">No results found.</div> :
+                            <InfiniteScroll height="calc(100vh - 180px)">
+                                <SearchResults data={this.state.results} keyword={this.state.keyword}
+                                                selectedItemCode={!!this.state.results[this.state.selectedItemIndex] ? this.state.results[this.state.selectedItemIndex].code : null}/>
+                            </InfiniteScroll>
+                        }
 
-                        </div>
                     </div>
                 </div>
             </div>
@@ -96,7 +93,7 @@ class Search extends Component {
         // if only one result, enter sends you to the result
         if (this.state.results.length === 1) {
             this.setState({
-                redirectRoute: getLink(this.state.results[0].type, this.state.results[0].code)
+                redirectRoute: this.state.results[0].link
             });
 
             return;
@@ -105,7 +102,7 @@ class Search extends Component {
         // redirects to the record selected with arrows
         if (this.state.selectedItemIndex >= 0 && this.state.selectedItemIndex < this.state.results.length) {
             this.setState({
-                redirectRoute: getLink(this.state.results[this.state.selectedItemIndex].type, this.state.results[this.state.selectedItemIndex].code)
+                redirectRoute: this.state.results[this.state.selectedItemIndex].link
             });
 
             return;
@@ -118,7 +115,7 @@ class Search extends Component {
             this.state.results.forEach(result => {
                 if (result.code === this.state.keyword) {
                     this.setState({
-                        redirectRoute: getLink(result.type, result.code)
+                        redirectRoute: result.link
                     });
 
                     return;
@@ -132,10 +129,10 @@ class Search extends Component {
                 .then(response => {
                     if (response.body && response.body.data) {
                         this.setState({
-                            redirectRoute: getLink(response.body.data.type, response.body.data.code)
+                            redirectRoute: response.body.data.link
                         });
                     }
-                })
+                }).catch(console.error);
         }
     }
 

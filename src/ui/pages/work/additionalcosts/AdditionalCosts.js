@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import WSWorkorders from "../../../../tools/WSWorkorders";
 import EISTable from 'eam-components/dist/ui/components/table';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import AdditionalCostDialog from "./AdditionalCostDialog";
 import BlockUi from 'react-block-ui';
 
 const buttonStyle = {
-    position: 'relative',
-    float: 'left',
-    bottom: '-13px',
-    left: '5px',
+    //position: 'relative',
+    //float: 'left',
+    //bottom: '-13px',
+   // left: '5px',
+   padding: 10
 };
 
 const AdditionalCosts = (props) => {
@@ -59,11 +60,15 @@ const AdditionalCosts = (props) => {
         :
         <>
             <div style={{ width: '100%', height: '100%' }}>
-                <EISTable
-                    data={data}
-                    headers={headers}
-                    propCodes={propCodes} />
-                <Button onClick={() => setIsDialogOpen(true)} color="primary" style={buttonStyle} disabled={props.disabled}>
+                {data?.length > 0 &&
+                    <EISTable
+                        data={data}
+                        headers={headers}
+                        propCodes={propCodes} />
+                }
+                <div style={{height: 15}} />
+                <Button onClick={() => setIsDialogOpen(true)} color="primary" 
+                        disabled={props.disabled} variant="outlined">
                     Add Additional Cost
                 </Button>
             </div>

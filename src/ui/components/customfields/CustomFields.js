@@ -6,7 +6,7 @@ import { isCernMode } from "../CERNMode"
 
 function CustomFields(props) {
     let [lookupValues, setLookupValues] = useState(null);
-    let {updateEntityProperty, customFields, readonly, children, classCode, entityCode} = props;
+    let {customFields, classCode, entityCode, register} = props;
 
     useEffect(() => {
         if (customFields) {
@@ -17,10 +17,7 @@ function CustomFields(props) {
     let fetchLookupValues = (entityCode, classCode) => {
         WSCustomFields.getCustomFieldsLookupValues(entityCode, classCode)
             .then(response => setLookupValues(response.body.data))
-    }
-
-    let updateCustomFieldValue = (index, valueKey, value) => {
-        updateEntityProperty(`customField.${index}.${valueKey}`, value)
+            .catch(console.error)
     }
 
     const isEmptyState = !customFields || customFields.length === 0;
@@ -28,32 +25,29 @@ function CustomFields(props) {
         isEmptyState
         ? <SimpleEmptyState message="No Custom Fields to show." />
         : (
-            <div style={{width: "100%", marginTop: 0}}>
+            <React.Fragment>
                 {customFields.map((customField, index) => {
                     {/* The custom fields starting with MTFX were temporarily used to have a similar functionality to
                         the Line Title in the Associate Custom Fields screen of Infor EAM. They may now be hidden. */}
                     if (isCernMode && customField.code.startsWith('MTFX')) return null;
                     return (
                         <CustomFieldInput
-                            children={children}
-                            key={index}
-                            updateCustomFieldValue={updateCustomFieldValue.bind(null, index)}
+                            register={register}
                             customField={customField}
                             index={index}
+                            key={index}
                             lookupValues={lookupValues}
-                            readonly={readonly}
                         />
                     )
                 })}
-            </div>
+            </React.Fragment>
         )
     )
 
 }
 
 CustomFields.defaultProps = {
-    title: 'CUSTOM FIELDS',
-    readonly: false,
+    title: 'CUSTOM FIELDS'
 };
 
 export default React.memo(CustomFields);

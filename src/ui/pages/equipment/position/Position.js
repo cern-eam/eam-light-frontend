@@ -1,5 +1,4 @@
-import React from 'react';
-import Entity from '../../Entity'
+import React, { useState } from 'react';
 import EquipmentHistory from '../components/EquipmentHistory.js'
 import EamlightToolbarContainer from './../../../components/EamlightToolbarContainer'
 import CustomFields from '../../../components/customfields/CustomFields'
@@ -11,7 +10,6 @@ import PositionDetails from './PositionDetails'
 import PositionHierarchy from './PositionHierarchy'
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
-import {PositionIcon} from 'eam-components/dist/ui/components/icons'
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import {ENTITY_TYPE} from "../../../components/Toolbar";
@@ -22,125 +20,82 @@ import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
+import useEntity from "hooks/useEntity";
+import { isClosedEquipment, positionLayoutPropertiesMap } from '../EquipmentTools.js';
 
-export default class Position extends Entity {
+import {PositionIcon, PartIcon} from 'eam-components/dist/ui/components/icons'
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import DescriptionIcon from '@mui/icons-material/Description';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
+import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import ShareIcon from '@mui/icons-material/Share';
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded'; 
+import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 
-    constructor(props) {
-        super(props)
-        this.setCriticalities()
-    }
-    
-    onChangeCategoryCode = code => {
-        if(!code) {
-            return;
-        }
+const Position = () => {
+    const [statuses, setStatuses] = useState([]);
 
-        //Fetch the category data
-        return WSEquipment.getCategoryData(code).then(response => {
-            const categoryData = response.body.data[0];
-
-            if(!categoryData) {
-                return;
-            }
-
-            this.setState(prevState => {
-                const equipment = {...prevState.equipment};
-
-                if(categoryData.categoryclass) {
-                    equipment.classCode = categoryData.categoryclass;
-                    equipment.classDesc = categoryData.categoryclassdesc;
-                }
-
-                if(categoryData.manufacturer) {
-                    equipment.manufacturerCode = categoryData.manufacturer;
-                }
-
-                return {equipment};
-            });
-        }).catch(error => {
-            console.log(error);
+    const {screenLayout: positionLayout, entity: equipment, loading, readOnly, isModified,
+        screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
+        isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
+        toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
+        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register,
+        handleError, showError, showNotification, showWarning} = useEntity({
+            WS: {
+                create: WSEquipment.createEquipment,
+                read: WSEquipment.getEquipment,
+                update: WSEquipment.updateEquipment,
+                delete: WSEquipment.deleteEquipment,
+                new:  WSEquipment.initEquipment.bind(null, "P"), // TODO: again we have extra arguments. What to do?
+            },
+            postActions: {
+                read: postRead,
+                new: postInit
+            },
+            isReadOnlyCustomHandler: isClosedEquipment,
+            entityCode: "OBJ",
+            entityDesc: "Position",
+            entityURL: "/position/",
+            entityCodeProperty: "code",
+            screenProperty: "positionScreen",
+            layoutProperty: "positionLayout",
+            layoutPropertiesMap: positionLayoutPropertiesMap
         });
-    };
 
-    settings = {
-        entity: 'equipment',
-        entityDesc: 'Position',
-        entityURL: '/position/',
-        entityCodeProperty: 'code',
-        entityScreen: this.props.userData.screens[this.props.userData.positionScreen],
-        renderEntity: this.renderPosition.bind(this),
-        readEntity: WSEquipment.getEquipment.bind(WSEquipment),
-        updateEntity: WSEquipment.updateEquipment.bind(WSEquipment),
-        createEntity: WSEquipment.createEquipment.bind(WSEquipment),
-        deleteEntity: WSEquipment.deleteEquipment.bind(WSEquipment),
-        initNewEntity: () => WSEquipment.initEquipment("OBJ", "P", this.props.location.search),
-        handlerFunctions: {
-            categoryCode: this.onChangeCategoryCode,
-            classCode: this.onChangeClass,
+        function postInit() {
+            readStatuses(true); 
+            setLayoutProperty('equipment', null)
         }
-    }
-
-    postInit() {
-        this.setStatuses(true)
-        this.props.setLayoutProperty('showEqpTreeButton', false)
-        this.enableChildren();
-    }
-
-    postCreate() {
-        this.setStatuses(false);
-        this.comments.createCommentForNewEntity();
-        this.props.setLayoutProperty('showEqpTreeButton', true)
-    }
-
-    postUpdate(equipment) {
-        this.comments.createCommentForNewEntity();
-
-        if (this.departmentalSecurity.readOnly) {
-            this.disableChildren();
-        } else {
-            this.enableChildren();
+    
+        function postRead(equipment) {
+            readStatuses(false, equipment.statusCode);
+            if (!showEqpTree) {
+                setLayoutProperty('equipment', equipment);
+            }
         }
-    }
-
-    postRead(equipment) {
-        this.setStatuses(false)
-        this.props.setLayoutProperty('showEqpTreeButton', true)
-        this.props.setLayoutProperty('equipment', equipment)
-
-        if (this.departmentalSecurity.readOnly) {
-            this.disableChildren();
-        } else {
-            this.enableChildren();
+    
+        const readStatuses = (neweqp, statusCode) => {
+            WSEquipment.getEquipmentStatusValues(userData.eamAccount.userGroup, neweqp, statusCode)
+                .then(response => setStatuses(response.body.data))
+                .catch(console.error)
         }
-    }
 
-    setStatuses(neweqp) {
-        const oldStatusCode = this.state.equipment && this.state.equipment.statusCode;
-        WSEquipment.getEquipmentStatusValues(this.props.userData.eamAccount.userGroup, neweqp, oldStatusCode)
-            .then(response => {
-                this.setLayout({statusValues: response.body.data})
-            })
-    }
-
-    setCriticalities() {
-        WSEquipment.getEquipmentCriticalityValues()
-            .then(response => {
-                this.setLayout({criticalityValues: response.body.data})
-            })
-    }
-
-    getRegions = () => {
-        const { positionLayout, userData, applicationData, showError, showNotification } = this.props;
-        const { equipment, layout } = this.state;
+    const getRegions = () => {
         const tabs = positionLayout.tabs;
-
 
         const commonProps = {
             equipment,
-            layout,
+            newEntity,
             positionLayout,
-            updateEquipmentProperty: this.updateEntityProperty.bind(this),
-            children: this.children,
+            userGroup: userData.eamAccount.userGroup,
+            updateEquipmentProperty,
+            register,
+            readOnly,
+            showWarning,
         }
         
         return [
@@ -152,10 +107,15 @@ export default class Position extends Entity {
                 render: () => 
                     <PositionGeneral
                         showNotification={showNotification}
-                        {...commonProps}/>
+                        {...commonProps}
+                        statuses={statuses}
+                        userData={userData}
+                        screenCode={screenCode}
+                        screenPermissions={screenPermissions}/>
                 ,
                 column: 1,
                 order: 1,
+                summaryIcon: DescriptionIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -170,6 +130,7 @@ export default class Position extends Entity {
                 ,
                 column: 1,
                 order: 2,
+                summaryIcon: AssignmentIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -184,6 +145,7 @@ export default class Position extends Entity {
                 ,
                 column: 1,
                 order: 3,
+                summaryIcon: AccountTreeRoundedIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -200,6 +162,7 @@ export default class Position extends Entity {
                 ,
                 column: 1,
                 order: 4,
+                summaryIcon: ContentPasteIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
@@ -214,6 +177,7 @@ export default class Position extends Entity {
                 ,
                 column: 1,
                 order: 5,
+                summaryIcon: ManageHistoryIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
@@ -229,6 +193,7 @@ export default class Position extends Entity {
                 ,
                 column: 1,
                 order: 6,
+                summaryIcon: PartIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
             },
@@ -247,6 +212,7 @@ export default class Position extends Entity {
                 },
                 column: 2,
                 order: 7,
+                summaryIcon: FunctionsRoundedIcon,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS)
             },
@@ -264,6 +230,7 @@ export default class Position extends Entity {
                 },
                 column: 2,
                 order: 8,
+                summaryIcon: BookmarkBorderRoundedIcon,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS)
             },
@@ -274,18 +241,20 @@ export default class Position extends Entity {
                 maximizable: false,
                 render: () => 
                     <Comments
-                        ref={comments => this.comments = comments}
+                        ref={comments => commentsComponent.current = comments}
                         entityCode='OBJ'
-                        entityKeyCode={!layout.newEntity ? equipment.code : undefined}
+                        entityKeyCode={!newEntity ? equipment.code : undefined}
                         userCode={userData.eamAccount.userCode}
                         allowHtml={true}
-                        disabled={this.departmentalSecurity.readOnly} />
+                        entityOrganization={equipment.organization}
+                        disabled={readOnly} />
                 ,
                 RegionPanelProps: {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
                 order: 9,
+                summaryIcon: DriveFileRenameOutlineIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS)
             },
@@ -296,13 +265,13 @@ export default class Position extends Entity {
                 maximizable: false,
                 render: () => 
                     <UserDefinedFields
-                        fields={equipment.userDefinedFields}
                         entityLayout={positionLayout.fields}
-                        updateUDFProperty={this.updateEntityProperty}
-                        children={this.children} />
+                        {...commonProps}
+                    />
                 ,
                 column: 2,
                 order: 10,
+                summaryIcon: AssignmentIndIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
@@ -313,16 +282,17 @@ export default class Position extends Entity {
                 maximizable: false,
                 render: () => 
                     <CustomFields
-                        children={this.children}
                         entityCode='OBJ'
                         entityKeyCode={equipment.code}
                         classCode={equipment.classCode}
                         customFields={equipment.customField}
-                        updateEntityProperty={this.updateEntityProperty.bind(this)} />
+                        register={register}
+                    />
                 ,
                 column: 2,
                 order: 11,
-                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                summaryIcon: ListAltIcon,
+                ignore: positionLayout.fields.block_4.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
@@ -341,72 +311,60 @@ export default class Position extends Entity {
                 },
                 column: 2,
                 order: 12,
+                summaryIcon: ShareIcon,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_POSITIONS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_POSITIONS)
             },
         ]
     }
 
-    renderPosition() {
-        const {
-            applicationData,
-            history,
-            showEqpTree,
-            toggleHiddenRegion,
-            setRegionVisibility,
-            userData,
-            isHiddenRegion,
-            getHiddenRegionState,
-            getUniqueRegionID
-        } = this.props;
-        const { equipment, layout } = this.state;
-        const regions = this.getRegions();        
-
-        return (
-            <BlockUi tag="div" blocking={layout.blocking} style={{width: '100%', height: "100%"}}>
-                <EamlightToolbarContainer
-                    isModified={layout.isModified}
-                    newEntity={layout.newEntity}
-                    entityScreen={userData.screens[userData.positionScreen]}
-                    entityName={this.settings.entityDesc}
-                    entityKeyCode={equipment.code}
-                    saveHandler={this.saveHandler.bind(this)}
-                    newHandler={() => history.push('/position')}
-                    deleteHandler={this.deleteEntity.bind(this, equipment.code)}
-                    toolbarProps={{
-                        entityDesc: this.settings.entityDesc,
-                        entity: equipment,
-                        postInit: this.postInit.bind(this),
-                        setLayout: this.setLayout.bind(this),
-                        newEntity: layout.newEntity,
-                        applicationData: applicationData,
-                        extendedLink: applicationData.EL_POSLI,
-                        screencode: userData.positionScreen,
-                        copyHandler: this.copyEntity.bind(this),
-                        entityType: ENTITY_TYPE.EQUIPMENT,
-                        departmentalSecurity: this.departmentalSecurity,
-                        screens: userData.screens,
-                        workorderScreencode: userData.workorderScreen
-                    }}
-                    width={730}
-                    entityIcon={<PositionIcon style={{height: 18}}/>}
-                    toggleHiddenRegion={toggleHiddenRegion}
-                    getUniqueRegionID={getUniqueRegionID}
-                    regions={regions}
-                    getHiddenRegionState={getHiddenRegionState}
-                    isHiddenRegion={isHiddenRegion}
-                    departmentalSecurity={this.departmentalSecurity} />
-                <EntityRegions
-                    showEqpTree={showEqpTree}
-                    regions={regions}
-                    isNewEntity={layout.newEntity} 
-                    getUniqueRegionID={getUniqueRegionID}
-                    getHiddenRegionState={getHiddenRegionState}
-                    setRegionVisibility={setRegionVisibility}
-                    isHiddenRegion={isHiddenRegion}/>
-            </BlockUi>
-        )
+    if (!equipment) {
+        return React.Fragment;
     }
+
+    return (
+        <BlockUi tag="div" blocking={loading} style={{width: '100%', height: "100%"}}>
+            <EamlightToolbarContainer
+                isModified={isModified} 
+                newEntity={newEntity}
+                entityScreen={screenPermissions}
+                entityName="Position"
+                entityKeyCode={equipment.code}
+                organization={equipment.organization}
+                saveHandler={saveHandler}
+                newHandler={newHandler}
+                deleteHandler={deleteHandler}
+                toolbarProps={{
+                    entityDesc: "Position",
+                    entity: equipment,
+                    // postInit: this.postInit.bind(this),
+                    // setLayout: this.setLayout.bind(this),
+                    newEntity,
+                    applicationData: applicationData,
+                    extendedLink: applicationData.EL_POSLI,
+                    screencode: screenCode,
+                    copyHandler,
+                    entityType: ENTITY_TYPE.EQUIPMENT,
+                    screens: userData.screens,
+                    workorderScreencode: userData.workOrderScreen
+                }}
+                width={730}
+                entityIcon={<PositionIcon style={{height: 18}}/>}
+                toggleHiddenRegion={toggleHiddenRegion}
+                getUniqueRegionID={getUniqueRegionID}
+                regions={getRegions()}
+                getHiddenRegionState={getHiddenRegionState}
+                isHiddenRegion={isHiddenRegion} />
+            <EntityRegions
+                showEqpTree={showEqpTree}
+                regions={getRegions()}
+                isNewEntity={newEntity} 
+                getUniqueRegionID={getUniqueRegionID}
+                getHiddenRegionState={getHiddenRegionState}
+                setRegionVisibility={setRegionVisibility}
+                isHiddenRegion={isHiddenRegion}/>
+        </BlockUi>
+    )
 }
 
-
+export default Position;

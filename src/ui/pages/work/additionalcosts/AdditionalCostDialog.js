@@ -1,17 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import BlockUi from 'react-block-ui';
 import WSWorkorders from "../../../../tools/WSWorkorders";
-import EAMSelect from "eam-components/dist/ui/components/muiinputs/EAMSelect";
-import EAMInput from "eam-components/dist/ui/components/muiinputs/EAMInput";
-import EAMDatePicker from 'eam-components/dist/ui/components/muiinputs/EAMDatePicker';
+import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
+import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import { createOnChangeHandler, processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 
 const AdditionalCostDialog = (props) => {
-    const [additionalCost, setAdditionalCost] = useState({ costType: "MISC" });
+    const [additionalCost, setAdditionalCost] = useState({ 
+        costType: "MISC" , 
+        date: new Date()});
     const [activityList, setActivityList] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -57,43 +60,42 @@ const AdditionalCostDialog = (props) => {
             id="addAdditionalCostDialog"
             open={props.isDialogOpen}
             onClose={props.handleCancel}
-            aria-labelledby="form-dialog-title"
-            disableBackdropClick={true}>
+            aria-labelledby="form-dialog-title">
 
             <DialogTitle id="form-dialog-title">Add Additional Cost</DialogTitle>
 
             <DialogContent id="content" style={{ overflowY: 'visible' }}>
                 <BlockUi tag="div" blocking={loading || props.isLoading}>
-                    <EAMSelect elementInfo={props.tabLayout['activitytrade']}
-                        valueKey="activityCode"
-                        values={activityList}
+                    <EAMSelect 
+                        {...processElementInfo(props.tabLayout['activitytrade'])}
+                        options={activityList}
                         value={additionalCost.activityCode}
-                        updateProperty={updateAdditionalCostProperty}
-                        children={props.children}/>
+                        onChange={createOnChangeHandler("activityCode", null, null, updateAdditionalCostProperty)}
+                    />
 
-                    <EAMInput elementInfo={props.tabLayout['costdescription']}
-                        valueKey="costDescription"
+                    <EAMTextField 
+                        {...processElementInfo(props.tabLayout['costdescription'])}
                         value={additionalCost.costDescription}
-                        updateProperty={updateAdditionalCostProperty}
-                        children={props.children}/>
+                        onChange={createOnChangeHandler("costDescription", null, null, updateAdditionalCostProperty)}
+                    />
 
-                    <EAMInput elementInfo={{...props.tabLayout['costtype'], readonly: true }}
-                        valueKey="costType"
+                    <EAMTextField 
+                        {...processElementInfo(props.tabLayout['costtype'])}
+                        disabled
                         value="Parts/Services"
-                        updateProperty={updateAdditionalCostProperty}
-                        children={props.children}/>
+                        onChange={createOnChangeHandler("costType", null, null, updateAdditionalCostProperty)}
+                    />
 
-                    <EAMInput elementInfo={props.tabLayout['cost']}
-                        valueKey="cost"
+                    <EAMTextField 
+                        {...processElementInfo(props.tabLayout['cost'])}
                         value={additionalCost.cost}
-                        updateProperty={updateAdditionalCostProperty}
-                        children={props.children}/>
+                        onChange={createOnChangeHandler("cost", null, null, updateAdditionalCostProperty)}
+                    />
 
-                    <EAMDatePicker elementInfo={props.tabLayout['additionalcostsdate']}
-                        valueKey="date"
+                    <EAMDatePicker 
+                        {...processElementInfo(props.tabLayout['additionalcostsdate'])}
                         value={additionalCost.date}
-                        updateProperty={updateAdditionalCostProperty}
-                        children={props.children}
+                        onChange={createOnChangeHandler("date", null, null, updateAdditionalCostProperty)}
                     />
                 </BlockUi>
             </DialogContent>
@@ -106,7 +108,7 @@ const AdditionalCostDialog = (props) => {
                 </Button>
             </DialogActions>
         </Dialog>
-    )
+    );
 
 }
 

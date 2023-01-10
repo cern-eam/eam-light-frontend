@@ -9,12 +9,11 @@ class WSParts {
     // PARTS
     //
 
-    initPart(entity, params, config = {}) {
-        return WS._get(`/parts/init/${entity}${params}`, config);
+    initPart(config = {}) {
+        return WS._get(`/parts/init`, config);
     }
 
     getPart(code, config = {}) {
-        code = encodeURIComponent(code);
         return WS._get('/parts/' + code, config);
     }
 

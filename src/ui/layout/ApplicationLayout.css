@@ -40,13 +40,14 @@
 }
 
 #layout-portlets-cover {
-    display: block;
+    display: flex;
     height: 100%;
     font-size: 14px;
     color: #282828;
     margin-left: 280px;
     vertical-align: top;
     box-sizing: border-box;
+    flex-direction: column;
 }
 
 .SlimMenu #layout-portlets-cover {

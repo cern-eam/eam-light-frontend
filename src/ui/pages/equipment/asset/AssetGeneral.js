@@ -1,87 +1,66 @@
-import React, {Component} from 'react';
-import EAMSelect from 'eam-components/dist/ui/components/muiinputs/EAMSelect'
-import EAMInput from 'eam-components/dist/ui/components/muiinputs/EAMInput'
-import EAMAutocomplete from 'eam-components/dist/ui/components/muiinputs/EAMAutocomplete'
+import React from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
+import WS from "../../../../tools/WS";
 import StatusRow from "../../../components/statusrow/StatusRow"
-import CERNMode from "../../../components/CERNMode"
-import EquipmentTools from "../EquipmentTools"
+import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
+import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
+import { isDepartmentReadOnly, isMultiOrg } from 'ui/pages/EntityTools';
+import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
 
-class AssetGeneral extends Component {
+const AssetGeneral = (props) => {
 
-    updateEquipmentStatus = EquipmentTools.getUpdateStatus(this.props.updateEquipmentProperty, this.props.showNotification);
+    const {
+        equipment,
+        newEntity,
+        statuses,
+        register,
+        userData,
+        screenCode,
+        screenPermissions
+    } = props;
 
-    render() {
-        let { equipment, children, assetLayout, updateEquipmentProperty, layout } = this.props
+    return (
+        <React.Fragment>
 
-        return (
-            <div style={{width: "100%", marginTop: 0}}>
+            {isMultiOrg && newEntity && <EAMSelect {...register('organization', 'organization')}
+            autocompleteHandler={WS.getOrganizations}
+            autocompleteHandlerParams={[screenCode]}/>}
 
-                {layout.newEntity &&
-                <EAMInput
-                    children = {children}
-                    elementInfo={assetLayout.fields['equipmentno']}
-                    value={equipment.code}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="code"/>}
+            {newEntity && <EAMTextField {...register('equipmentno', 'code')}/>}
 
-                <EAMInput
-                    children = {children}
-                    elementInfo={assetLayout.fields['alias']}
-                    value={equipment.alias}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="alias"
-                />
+            <EAMTextField {...register('alias', 'alias')} barcodeScanner/>
 
-                <EAMInput
-                    children = {children}
-                    elementInfo={assetLayout.fields['udfchar45']}
-                    value={equipment.userDefinedFields.udfchar45}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="userDefinedFields.udfchar45"
-                />
+            <EAMUDF
+                {...register('udfchar45','userDefinedFields.udfchar45')}/>
 
-                <EAMInput
-                    children = {children}
-                    elementInfo={assetLayout.fields['equipmentdesc']}
-                    value={equipment.description}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="description"/>
+            <EAMTextField {...register('equipmentdesc', 'description')} />
 
-                <EAMAutocomplete
-                    children = {children}
-                    elementInfo={assetLayout.fields['department']}
-                    value={equipment.departmentCode}
-                    valueDesc={equipment.departmentDesc}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="departmentCode"
-                    descKey="departmentDesc"
-                    autocompleteHandler={WSEquipment.autocompleteEquipmentDepartment}/>
+            <EAMAutocomplete
+                {...register('department', 'departmentCode', 'departmentDesc')}
+                autocompleteHandler={
+                    WSEquipment.autocompleteEquipmentDepartment
+                }
+            />
 
-                <EAMSelect
-                    children = {children}
-                    elementInfo={assetLayout.fields['assetstatus']}
-                    value={equipment.statusCode}
-                    values={layout.statusValues}
-                    updateProperty={this.updateEquipmentStatus}
-                    valueKey="statusCode"/>
-                
-                <EAMSelect
-                    children={children}
-                    elementInfo={assetLayout.fields['state']}
-                    value={equipment.stateCode}
-                    values={layout.stateValues}
-                    updateProperty={updateEquipmentProperty}
-                    valueKey="stateCode"/>
+            <EAMSelect
+                {...register('assetstatus', 'statusCode')}
+                disabled={isDepartmentReadOnly(equipment.departmentCode, userData) || !screenPermissions.updateAllowed}
+                options={statuses}
+            />
+            
+            <EAMSelect
+                {...register('state', 'stateCode')}
+                autocompleteHandler={WSEquipment.getEquipmentStateValues}
+            />
 
-                <StatusRow
-                    entity={equipment}
-                    entityType={"equipment"}
-                    style={{marginTop: "10px", marginBottom: "-10px"}}
-                />
-            </div>
-        )
-    }
+            <StatusRow
+                entity={equipment}
+                entityType={"equipment"}
+                style={{marginTop: "10px", marginBottom: "-10px"}}
+            />
+        </React.Fragment>
+    )
 }
 
-export default AssetGeneral
+export default AssetGeneral;
