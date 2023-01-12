@@ -199,7 +199,7 @@ function PartUsageDialog(props) {
         resetFieldWithList(FORM.LOT, setLotList);
 
         // Asset field is definitely not an asset code
-        if (!assetIDCode || assetIDCode?.trim() === '') {
+        if (!assetIDCode || assetIDCode.trim() === '') {
             // Reset state that may not reflect the value shown in the field
             resetFieldWithDesc(FORM.ASSET, FORM.ASSET_DESC);
             return;
@@ -215,7 +215,7 @@ function PartUsageDialog(props) {
             }
 
             // Asset selected without a part selected or with a different part associated (if selected from history)
-            if (!partCode || partCode && partCode !== assetData.partCode) {
+            if (!partCode || partCode !== assetData.partCode) {
                 await handleAssetDifferentOrNoPart(assetData);
             // Asset selected having already selected a part
             } else {
@@ -229,13 +229,13 @@ function PartUsageDialog(props) {
     const getAssetData = async (assetIDCode) => {
         try {
             const response = await WSEquipment.getEquipment(assetIDCode);
-            const data = response.body.data;
+            const equipmentData = response.body.data;
 
-            const responseStoreCode = data.storeCode;
+            const responseStoreCode = equipmentData.storeCode;
             const assetData = {
-                bin: data.bin,
-                partCode: data.partCode,
-                lot: data.lot,
+                bin: equipmentData.bin,
+                partCode: equipmentData.partCode,
+                lot: equipmentData.lot,
             }
 
             // Can happen if user un-focuses the input with an unexpected equipment selected (e.g. "A")
@@ -298,12 +298,11 @@ function PartUsageDialog(props) {
         // Clear the part field so the user is aware that the selected asset is associated with a different part
         resetFieldWithDesc(FORM.PART, FORM.PART_DESC);
 
-        const results = await Promise.all([
+        const [ partData ] = await Promise.all([
             loadPartData(partCode),
             handleAssetSelectedWithPart(assetData),
         ]);
 
-        const partData = results[0];
         updateFormDataProperty(FORM.PART_DESC, partData?.description);
         updateFormDataProperty(FORM.PART, partCode);
     };
@@ -313,9 +312,6 @@ function PartUsageDialog(props) {
 
         // On a Return transaction, the lot can be filled before the bin (we expect there to be a lot list already),
         // as such we must not clear the lot field and we can avoid re-loading the lot list.
-        if (transactionType === RETURN) {
-            return;
-        }
 
         // If a part is tracked by asset, the lot should have already been automatically filled,
         // as such we must not clear the lot field nor do we need to load the lot list.
@@ -398,9 +394,7 @@ function PartUsageDialog(props) {
 
             if (lots.length === 0) {
                 showWarning('No lots found (likely no available quantity).');
-            }
-
-            if (lots.length === 1) {
+            } else if (lots.length === 1) {
                 updateFormDataProperty(FORM.LOT, lots[0].code);
             }
 
@@ -445,7 +439,7 @@ function PartUsageDialog(props) {
     };
 
     const loadPartData = async (partCode) => {
-        if (!partCode || partCode?.trim() === '') {
+        if (!partCode || partCode.trim() === '') {
             return;
         }
 
