@@ -24,9 +24,9 @@ const useStyles = makeStyles({
     paper: overflowStyle
 });
 
-const transactionTypes = [{code: 'ISSUE', desc: 'Issue'}, {code: 'RETURN', desc: 'Return'}];
-const returnType = transactionTypes[1].code;
-const issueType = transactionTypes[0].code;
+const ISSUE = 'ISSUE';
+const RETURN = 'RETURN';
+const transactionTypes = [{code: ISSUE, desc: 'Issue'}, {code: RETURN, desc: 'Return'}];
 
 // Contains some (inner) fields from the Part Usage object
 const FORM = {
@@ -88,9 +88,14 @@ function PartUsageDialog(props) {
     };
 
     const runUiBlockingFunction = async (blockingFunction) => {
-        setLoading(true);
-        await blockingFunction();
-        setLoading(false);
+        try {
+            setLoading(true);
+            await blockingFunction();
+        } catch (error) {
+            handleError(error);
+        } finally {
+            setLoading(false);
+        }
     }
 
     // We set every state key used even if they come null in the 'response'
@@ -123,9 +128,9 @@ function PartUsageDialog(props) {
         try {
             // Fetch the part usage object
             const response = await WSWorkorders.getInitNewPartUsage(workorder);
-            const data = response.body.data;
-            setInitPartUsageWSData(data);
-            assignInitialFormState(data);
+            const defaultTransactionData = response.body.data;
+            setInitPartUsageWSData(defaultTransactionData);
+            assignInitialFormState(defaultTransactionData);
             // Load lists
             await loadLists();
         } catch (error) {
@@ -187,7 +192,7 @@ function PartUsageDialog(props) {
 
         // Reset related fields
         updateFormDataProperty(FORM.BIN, '');
-        if (transactionType === issueType) {
+        if (transactionType === ISSUE) {
             // In a return transaction the bin list is loaded when a part is selected so no need to reset
             resetFieldWithList(FORM.BIN, setBinList);
         }
@@ -241,7 +246,7 @@ function PartUsageDialog(props) {
 
             const { transactionType, storeCode } = formData;
 
-            if (transactionType === issueType) {
+            if (transactionType === ISSUE) {
                 if (!responseStoreCode) {
                     showError(`Asset "${assetIDCode}" is not available in any store.`);
                     return undefined;
@@ -255,7 +260,7 @@ function PartUsageDialog(props) {
 
                 return assetData;
 
-            } else if (transactionType === returnType) {
+            } else if (transactionType === RETURN) {
                 if (responseStoreCode) {
                     showError(`Asset "${assetIDCode}" is already in a store (${responseStoreCode}).`);
                     return undefined;
@@ -281,7 +286,7 @@ function PartUsageDialog(props) {
         // since assets have a single bin (which triggers lot loading).
         await Promise.all([
             loadBinList(bin, partCode),
-            transactionType === returnType
+            transactionType === RETURN
                 ? loadLotList(transactionType, lot, bin, partCode, storeCode)
                 : null,
         ]);
@@ -308,7 +313,7 @@ function PartUsageDialog(props) {
 
         // On a Return transaction, the lot can be filled before the bin (we expect there to be a lot list already),
         // as such we must not clear the lot field and we can avoid re-loading the lot list.
-        if (transactionType === returnType) {
+        if (transactionType === RETURN) {
             return;
         }
 
@@ -318,7 +323,7 @@ function PartUsageDialog(props) {
             return;
         }
 
-        if (transactionType === issueType) {
+        if (transactionType === ISSUE) {
             resetFieldWithList(FORM.LOT, setLotList);
             await loadLotList(transactionType, '', bin, partCode, storeCode);
         }
@@ -341,7 +346,7 @@ function PartUsageDialog(props) {
 
         // Validate that the part is in the selected store (needed when a part is selected from history).
         // This is only needed in the issue transaction since parts can be returned to any store when doing a return transaction.
-        if (transactionType === issueType) {
+        if (transactionType === ISSUE) {
             try {
                 const partStockResponse = await WSParts.getPartStock(partCode);
                 const partStock = partStockResponse.body.data;
@@ -373,7 +378,7 @@ function PartUsageDialog(props) {
 
             await Promise.all([
                 loadBinList('', partCode),
-                transactionType === returnType
+                transactionType === RETURN
                     ? loadLotList(transactionType, '', '', partCode, '')
                     : null,
             ]);
@@ -411,9 +416,7 @@ function PartUsageDialog(props) {
     };
 
     const loadBinList = async (binCode, partCode) => {
-        if (!partCode) {
-            return;
-        }
+        if (!partCode) return;
 
         const { transactionType, storeCode } = formData;
 
@@ -508,9 +511,12 @@ function PartUsageDialog(props) {
         delete partUsageSubmitData.transactionInfo;
 
         // Submit the new part usage
-        await WSWorkorders.createPartUsage(partUsageSubmitData)
-            .then(successHandler)
-            .catch(handleError);
+        try {
+            await WSWorkorders.createPartUsage(partUsageSubmitData);
+            successHandler();
+        } catch (error) {
+            handleError(error);
+        }
     };
 
     const transformActivities = (activities) => {
@@ -587,7 +593,7 @@ function PartUsageDialog(props) {
                                 onChange={createOnChangeHandler(FORM.PART, FORM.PART_DESC, null, updateFormDataProperty,
                                     (part) =>
                                         runUiBlockingFunction(
-                                            handlePartChange.bind(null, part)
+                                            () => handlePartChange(part)
                                         )
                                 )}
                                 renderDependencies={[formData.transactionType]}
@@ -615,7 +621,7 @@ function PartUsageDialog(props) {
                                 onChange={createOnChangeHandler(FORM.ASSET, FORM.ASSET_DESC, null, updateFormDataProperty,
                                     (asset) =>
                                         runUiBlockingFunction(
-                                            handleAssetChange.bind(null, asset)
+                                            () => handleAssetChange(asset)
                                         )
                                 )}
                                 barcodeScanner
@@ -629,8 +635,8 @@ function PartUsageDialog(props) {
                                     !formData.storeCode ||
                                     !formData.activityCode ||
                                     (isTrackedByAsset && (
-                                        formData.transactionType === issueType ||
-                                        (formData.transactionType === returnType && !formData.assetIDCode))
+                                        formData.transactionType === ISSUE ||
+                                        (formData.transactionType === RETURN && !formData.assetIDCode))
                                     )
                                 }
                                 valueKey={FORM.BIN}
@@ -639,7 +645,7 @@ function PartUsageDialog(props) {
                                 onChange={createOnChangeHandler(FORM.BIN, null, null, updateFormDataProperty,
                                     (bin) =>
                                         runUiBlockingFunction(
-                                            handleBinChange.bind(null, bin)
+                                            () => handleBinChange(bin)
                                         )
                                 )}
                                 suggestionsPixelHeight={200}
