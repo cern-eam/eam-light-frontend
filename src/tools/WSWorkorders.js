@@ -167,8 +167,7 @@ class WSWorkorders {
         return WS._get(`/partusage/bins?transaction=${transaction}&bin=${bin}&part=${part}&store=${store}`, config);
     }
 
-    getPartUsageLot(
-        transaction,
+    getPartUsageLotIssue(
         lot,
         bin,
         part,
@@ -176,16 +175,26 @@ class WSWorkorders {
         requireAvailableQty = true,
         config = {}
     ) {
-        return WS._get(`/partusage/lots`, {
+        return WS._get(`/partusage/lots/issue`, {
             ...config,
             params: {
                 ...config.params,
-                transaction,
                 lot,
                 bin,
                 part,
                 store,
                 requireAvailableQty,
+            },
+        });
+    }
+
+    getPartUsageLotReturn(lot, part, config = {}) {
+        return WS._get(`/partusage/lots/return`, {
+            ...config,
+            params: {
+                ...config.params,
+                lot,
+                part,
             },
         });
     }

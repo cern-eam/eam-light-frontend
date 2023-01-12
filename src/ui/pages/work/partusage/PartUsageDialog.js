@@ -280,14 +280,14 @@ function PartUsageDialog(props) {
 
     const handleAssetSelectedWithPart = async (assetData) => {
         const { bin, partCode, lot } = assetData;
-        const { transactionType, storeCode } = formData;
+        const { transactionType } = formData;
 
         // When in an issue transaction, bin loading will also load the lot list
         // since assets have a single bin (which triggers lot loading).
         await Promise.all([
             loadBinList(bin, partCode),
             transactionType === RETURN
-                ? loadLotList(transactionType, lot, bin, partCode, storeCode)
+                ? loadLotList(transactionType, lot, '', partCode, '')
                 : null,
         ]);
     };
@@ -383,13 +383,20 @@ function PartUsageDialog(props) {
 
     const loadLotList = async (transactionType, lot, bin, partCode, storeCode) => {
         try {
-            const response = await WSWorkorders.getPartUsageLot(
-                transactionType,
-                lot,
-                bin,
-                partCode,
-                storeCode
-            );
+            let response;
+            if (transactionType === ISSUE) {
+                response = await WSWorkorders.getPartUsageLotIssue(
+                    lot,
+                    bin,
+                    partCode,
+                    storeCode
+                );
+            } else { // RETURN
+                response = await WSWorkorders.getPartUsageLotReturn(
+                    lot,
+                    partCode,
+                );
+            }
             const lots = response.body.data;
 
             if (lots.length === 0) {
