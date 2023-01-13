@@ -282,7 +282,7 @@ class Toolbar extends React.Component {
                 },
             },
             [BUTTON_KEYS.REPEAT_STEP]: {
-                isVisible: () => isCernMode && entity.standardWO && entity.systemStatusCode === 'C' && entity.classCode.startsWith('MTF'),
+                isVisible: () => isCernMode && entity.standardWO && entity.systemStatusCode === 'C' && entity.classCode?.startsWith('MTF'),
                 onClick: repeatStepHandler,
                 isDisabled: () => newEntity || departmentalSecurity?.readOnly,
                 values: {
