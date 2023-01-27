@@ -68,19 +68,19 @@ const useEntity = (params) => {
     //
     // CRUD
     //
-    const createEntity = () => {
+    const createEntity = (entityToCreate = entity) => {
         if (!validateFields()) {
             return;
         }
         setLoading(true);
 
-        WS.create(entity)
+        WS.create(entityToCreate)
             .then(response => {
                 const entityCode = response.body.data;
                 showNotificationConst(entityDesc + ' ' + entityCode + ' has been successfully created.');
                 commentsComponent.current?.createCommentForNewEntity(entityCode);
                 // Read after the creation (and append the organization in multi-org mode)
-                history.push(process.env.PUBLIC_URL + entityURL + encodeURIComponent(entityCode + (isMultiOrg && entity.organization ? '#' + entity.organization : '')));
+                history.push(process.env.PUBLIC_URL + entityURL + encodeURIComponent(entityCode + (isMultiOrg && entityToCreate.organization ? '#' + entityToCreate.organization : '')));
             })
             .catch(error => {
                 generateErrorMessagesFromException(error?.response?.body?.errors);
@@ -285,7 +285,7 @@ const useEntity = (params) => {
         toggleHiddenRegion: toggleHiddenRegionConst, setRegionVisibility: setRegionVisibilityConst,
         //
         newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty, register,
-        setNewEntity, setLoading, setReadOnly,
+        setNewEntity, setLoading, setReadOnly, createEntity,
     };
 
 }

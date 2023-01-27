@@ -79,7 +79,7 @@ const Workorder = () => {
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID,
         toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateWorkorderProperty, register,
-        handleError, showError, showNotification, showWarning, setNewEntity, setLoading, setReadOnly} = useEntity({
+        handleError, showError, showNotification, showWarning, createEntity, setLoading, setReadOnly} = useEntity({
             WS: {
                 create: WSWorkorder.createWorkOrder,
                 read: WSWorkorder.getWorkOrder,
@@ -538,41 +538,37 @@ const Workorder = () => {
         ];
     }
 
+    const getNextStep = (n) => n ? (([integ, deci]) => +(integ + "." + (+(deci || 0) + 1)))(n.split(".")) : "";
+
     const repeatStepHandler = async () => {
-        setNewEntity(true);
         setLoading(true);
         const fields = workOrderLayout.fields;
-        const { customField, number, equipmentCode, standardWO } = workorder;
+        const { customField, number, equipmentCode, standardWO, parentWO, departmentCode, locationCode } = workorder;
         try {
-            const maxSWO = await getEquipmentStandardWOMaxStep(equipmentCode, standardWO);
-            const maxSWOStep = maxSWO.step;
             let value;
 
-            const fpIndex = maxSWOStep.indexOf('.')
-            if (fpIndex === -1) {
-                value = maxSWOStep + '.1';
-            } else {
-                const prefloat = maxSWOStep.substring(0, fpIndex)
-                const postfloat = maxSWOStep.substring(fpIndex + 1)
-                value = `${prefloat}.${parseInt(postfloat) + 1}`
+            try {
+                const maxSWO = await getEquipmentStandardWOMaxStep(equipmentCode, standardWO);
+                value = getNextStep(maxSWO.step);
+            } catch (err) {
+                value = "";
             }
 
-            const newCustomFields = customField.map(
-                (cf) => cf.code === "MTFEVP1" ? {...cf, value} : cf
-            )
+            const newCustomFields = [{code: 'MTFEVP1', value }];
+            const newWorkOrder = {
+                standardWO,
+                equipmentCode,
+                customField: newCustomFields,
+                statusCode: "R",
+                systemStatusCode: "R",
+                parentWO,
+                departmentCode,
+                locationCode,
+                classCode: 'MTF2',
+            }
 
-            updateWorkorderProperty("classCode", 'MTF2');
-            updateWorkorderProperty("customField", newCustomFields,);
-            updateWorkorderProperty("copyFrom", number);
-            updateWorkorderProperty("assignedTo", workorder.assignedTo || userData.eamAccount.employeeCode);
-            updateWorkorderProperty("statusCode", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R")
-            updateWorkorderProperty("systemStatusCode", "R")
-            updateWorkorderProperty("completedDate", "");
+            createEntity(newWorkOrder);
 
-            window.history.pushState({}, '', process.env.PUBLIC_URL + '/workorder');
-            postInit();
-            setReadOnly(!screenPermissions.creationAllowed);
-            setLoading(false);
         } catch (err) {
             showError(JSON.stringify(err), "Could not repeat step.");
         }
