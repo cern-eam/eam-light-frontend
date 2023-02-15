@@ -5,7 +5,7 @@ import { withCernMode } from '../CERNMode'
 function mapStateToProps(state) {
     return {
         url: `${state.application.applicationData.EL_TBURL}/ncr`,
-        edmsDocListLink: state.application.applicationData.EL_EDMSL
+        edmsDocListLink: state.application.applicationData.EL_EDMSL,
     }
 }
 
@@ -13,7 +13,7 @@ const NCRIframeContainer = connect(
     mapStateToProps,
     {},
     (state, dispatch, own) => ({
-        ...state, 
+        ...state,
         ...dispatch,
         ...own,
         mode: 'write',

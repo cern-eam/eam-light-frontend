@@ -325,7 +325,7 @@ const Workorder = () => {
                     />
                 ,
                 RegionPanelProps: {
-                    detailsStyle: { padding: 0, minHeight: 150 }
+                    detailsStyle: { padding: 0 }
                 },
                 column: 2,
                 order: 6,
