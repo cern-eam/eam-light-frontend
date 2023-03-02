@@ -32,7 +32,7 @@ import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import ShareIcon from '@mui/icons-material/Share';
-import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded'; 
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 
@@ -67,17 +67,17 @@ const Position = () => {
         });
 
         function postInit() {
-            readStatuses(true); 
+            readStatuses(true);
             setLayoutProperty('equipment', null)
         }
-    
+
         function postRead(equipment) {
             readStatuses(false, equipment.statusCode);
             if (!showEqpTree) {
                 setLayoutProperty('equipment', equipment);
             }
         }
-    
+
         const readStatuses = (neweqp, statusCode) => {
             WSEquipment.getEquipmentStatusValues(userData.eamAccount.userGroup, neweqp, statusCode)
                 .then(response => setStatuses(response.body.data))
@@ -97,14 +97,14 @@ const Position = () => {
             readOnly,
             showWarning,
         }
-        
+
         return [
             {
                 id: 'GENERAL',
                 label: 'General',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <PositionGeneral
                         showNotification={showNotification}
                         {...commonProps}
@@ -124,7 +124,7 @@ const Position = () => {
                 label: 'Details',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <PositionDetails
                         {...commonProps} />
                 ,
@@ -139,7 +139,7 @@ const Position = () => {
                 label: 'Hierarchy',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <PositionHierarchy
                         {...commonProps} />
                 ,
@@ -154,7 +154,7 @@ const Position = () => {
                 label: 'Work Orders',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: ({ panelQueryParams }) => 
+                render: ({ panelQueryParams }) =>
                     <EquipmentWorkOrders
                         equipmentcode={equipment.code}
                         defaultFilter={panelQueryParams.defaultFilter}
@@ -171,7 +171,7 @@ const Position = () => {
                 label: 'History',
                 isVisibleWhenNewEntity: false,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <EquipmentHistory
                         equipmentcode={equipment.code} />
                 ,
@@ -186,7 +186,7 @@ const Position = () => {
                 label: 'Parts',
                 isVisibleWhenNewEntity: false,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <EquipmentPartsAssociated
                         equipmentcode={equipment.code}
                         parentScreen={userData.screens[userData.positionScreen].parentScreen} />
@@ -202,7 +202,7 @@ const Position = () => {
                 label: 'EDMS Documents',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
+                render: () =>
                     <EDMSDoclightIframeContainer
                         objectType="S"
                         objectID={equipment.code} />
@@ -221,12 +221,12 @@ const Position = () => {
                 label: 'NCRs',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => <NCRIframeContainer 
-                    objectType="S"
-                    objectID={equipment.code}  
+                render: () => <NCRIframeContainer
+                    objectType="P"
+                    objectID={equipment.code}
                 />,
                 RegionPanelProps: {
-                    detailsStyle: { padding: 0, minHeight: 150 }
+                    detailsStyle: { padding: 0 }
                 },
                 column: 2,
                 order: 8,
@@ -239,7 +239,7 @@ const Position = () => {
                 label: 'Comments',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <Comments
                         ref={comments => commentsComponent.current = comments}
                         entityCode='OBJ'
@@ -263,7 +263,7 @@ const Position = () => {
                 label: 'User Defined Fields',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <UserDefinedFields
                         entityLayout={positionLayout.fields}
                         {...commonProps}
@@ -280,7 +280,7 @@ const Position = () => {
                 label: 'Custom Fields',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <CustomFields
                         entityCode='OBJ'
                         entityKeyCode={equipment.code}
@@ -300,9 +300,9 @@ const Position = () => {
                 label: 'Equipment Graph',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
+                render: () =>
                     <EquipmentGraphIframe
-                        equipmentCode={equipment.code} 
+                        equipmentCode={equipment.code}
                         equipmentGraphURL={applicationData.EL_EQGRH}
                     />
                 ,
@@ -325,7 +325,7 @@ const Position = () => {
     return (
         <BlockUi tag="div" blocking={loading} style={{width: '100%', height: "100%"}}>
             <EamlightToolbarContainer
-                isModified={isModified} 
+                isModified={isModified}
                 newEntity={newEntity}
                 entityScreen={screenPermissions}
                 entityName="Position"
@@ -358,7 +358,7 @@ const Position = () => {
             <EntityRegions
                 showEqpTree={showEqpTree}
                 regions={getRegions()}
-                isNewEntity={newEntity} 
+                isNewEntity={newEntity}
                 getUniqueRegionID={getUniqueRegionID}
                 getHiddenRegionState={getHiddenRegionState}
                 setRegionVisibility={setRegionVisibility}

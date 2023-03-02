@@ -212,7 +212,7 @@ export default Location = (props) => {
                     objectID={location.code}
                 />,
                 RegionPanelProps: {
-                    detailsStyle: { padding: 0, minHeight: 150 }
+                    detailsStyle: { padding: 0 }
                 },
                 column: 2,
                 order: 7,

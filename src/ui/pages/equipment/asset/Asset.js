@@ -27,7 +27,7 @@ import { isClosedEquipment, assetLayoutPropertiesMap } from '../EquipmentTools';
 import { AssetIcon, PartIcon } from 'eam-components/dist/ui/components/icons';
 import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded'; 
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import ShareIcon from '@mui/icons-material/Share';
 import DescriptionIcon from '@mui/icons-material/Description';
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -47,7 +47,7 @@ const Asset = () => {
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID, showEqpTree,
         toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
-        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register, 
+        newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateEquipmentProperty, register,
         showNotification, showWarning} = useEntity({
             WS: {
                 create: WSEquipment.createEquipment,
@@ -86,12 +86,12 @@ const Asset = () => {
     }, [equipment?.partCode]);
 
     function postInit() {
-        readStatuses(true); 
+        readStatuses(true);
         setLayoutProperty('equipment', null)
     }
 
     function postRead(equipment) {
-        readStatuses(false, equipment.statusCode) 
+        readStatuses(false, equipment.statusCode)
         if (!showEqpTree) {
             setLayoutProperty('equipment', equipment);
         }
@@ -124,7 +124,7 @@ const Asset = () => {
                 label: 'General',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <AssetGeneral
                         showNotification={showNotification}
                         {...commonProps}
@@ -144,7 +144,7 @@ const Asset = () => {
                 label: 'Details',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <AssetDetails
                         {...commonProps} />
                 ,
@@ -159,7 +159,7 @@ const Asset = () => {
                 label: 'Hierarchy',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <AssetHierarchy
                         {...commonProps} />
                 ,
@@ -174,7 +174,7 @@ const Asset = () => {
                 label: 'Work Orders',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: ({ panelQueryParams }) => 
+                render: ({ panelQueryParams }) =>
                     <EquipmentWorkOrders
                         equipmentcode={equipment.code}
                         defaultFilter={panelQueryParams.defaultFilter}
@@ -191,7 +191,7 @@ const Asset = () => {
                 label: 'History',
                 isVisibleWhenNewEntity: false,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <EquipmentHistory
                         equipmentcode={equipment.code} />
                 ,
@@ -218,7 +218,7 @@ const Asset = () => {
                 label: 'EDMS Documents',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
+                render: () =>
                     <EDMSDoclightIframeContainer
                         objectType="A"
                         objectID={equipment.code} />
@@ -237,12 +237,12 @@ const Asset = () => {
                 label: 'NCRs',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => <NCRIframeContainer 
+                render: () => <NCRIframeContainer
                     objectType="A"
-                    objectID={equipment.code}  
+                    objectID={equipment.code}
                 />,
                 RegionPanelProps: {
-                    detailsStyle: { padding: 0, minHeight: 150 }
+                    detailsStyle: { padding: 0 }
                 },
                 column: 2,
                 order: 8,
@@ -255,7 +255,7 @@ const Asset = () => {
                 label: 'Comments',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <Comments
                         ref={comments => commentsComponent.current = comments}
                         entityCode='OBJ'
@@ -280,7 +280,7 @@ const Asset = () => {
                 label: 'User Defined Fields',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <UserDefinedFields
                         {...commonProps}
                         entityLayout={assetLayout.fields}
@@ -297,7 +297,7 @@ const Asset = () => {
                 label: 'Custom Fields',
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
-                render: () => 
+                render: () =>
                     <CustomFields
                         entityCode='OBJ'
                         entityKeyCode={equipment.code}
@@ -318,7 +318,7 @@ const Asset = () => {
                 maximizable: false,
                 customVisibility: () => part,
                 render: () => {
-                    return <CustomFields 
+                    return <CustomFields
                         entityCode='PART'
                         entityKeyCode={part?.code}
                         classCode={part?.classCode}
@@ -336,9 +336,9 @@ const Asset = () => {
                 label: 'Equipment Graph',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: () => 
+                render: () =>
                     <EquipmentGraphIframe
-                        equipmentCode={equipment.code} 
+                        equipmentCode={equipment.code}
                         equipmentGraphURL={applicationData.EL_EQGRH}
                     />
                 ,
@@ -361,7 +361,7 @@ const Asset = () => {
     return (
         <BlockUi tag="div" blocking={loading} style={{ height: "100%", width: "100%" }}>
             <EamlightToolbarContainer
-                isModified={isModified} 
+                isModified={isModified}
                 newEntity={newEntity}
                 entityScreen={screenPermissions}
                 entityName="Asset" // TODO:
@@ -394,7 +394,7 @@ const Asset = () => {
             <EntityRegions
                 showEqpTree={showEqpTree}
                 regions={getRegions()}
-                isNewEntity={newEntity} 
+                isNewEntity={newEntity}
                 isHiddenRegion={isHiddenRegion}
                 getUniqueRegionID={getUniqueRegionID}
                 setRegionVisibility={setRegionVisibility}
