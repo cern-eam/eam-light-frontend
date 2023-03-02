@@ -22,24 +22,12 @@ function WorkorderGeneral(props) {
         setLayoutProperty('showEqpTree', true);
     }
 
-
-    const [state, setstate] = useState(5)
-
     return (
         <React.Fragment>
 
             {isMultiOrg && newEntity && <EAMSelect {...register('organization', 'organization')}
             autocompleteHandler={WS.getOrganizations}
             autocompleteHandlerParams={[screenCode]}/>}
-
-            <EAMTextField value={state} 
-
-             validator = {value => value < 10}
-             onChange={value => {
-                 setstate(value);
-
-         }} 
-        label="KURA"/>
 
             <EAMTextField {...register('description', 'description')}/>
 
