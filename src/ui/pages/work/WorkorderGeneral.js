@@ -9,6 +9,7 @@ import { isDepartmentReadOnly, isMultiOrg } from '../EntityTools';
 import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
 import { IconButton } from '@mui/material';
 import { FileTree } from 'mdi-material-ui';
+import {useState} from "react"
 
 function WorkorderGeneral(props) {
 
@@ -21,12 +22,24 @@ function WorkorderGeneral(props) {
         setLayoutProperty('showEqpTree', true);
     }
 
+
+    const [state, setstate] = useState(5)
+
     return (
         <React.Fragment>
 
             {isMultiOrg && newEntity && <EAMSelect {...register('organization', 'organization')}
             autocompleteHandler={WS.getOrganizations}
             autocompleteHandlerParams={[screenCode]}/>}
+
+            <EAMTextField value={state} 
+
+             validator = {value => value < 10}
+             onChange={value => {
+                 setstate(value);
+
+         }} 
+        label="KURA"/>
 
             <EAMTextField {...register('description', 'description')}/>
 
@@ -48,7 +61,7 @@ function WorkorderGeneral(props) {
                              autocompleteHandler={WS.autocompleteLocation}/>
 
             <EAMAutocomplete {...register('department', 'departmentCode', 'departmentDesc')}
-                             autocompleteHandler={WS.autocompleteDepartment}/>
+                             autocompleteHandler={WS.autocompleteDepartment} validate/>
 
             <EAMSelect {...register('workordertype', 'typeCode', 'typeDesc')}
                     renderSuggestion={suggestion => suggestion.desc}
