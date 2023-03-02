@@ -40,7 +40,7 @@ class TreeSelectParent extends React.Component {
 
   handleClose = (option) => {
     this.setState({ anchorEl: null });
-    if(option && option.parentCode && option.parentType !== 'L') {
+    if(option && option.parentCode) {
         //this.props.setLayoutProperty('equipment', {code: option.parentCode, organization: option.parentOrg, systemTypeCode: option.parentType})
         this.props.reloadData(option.parentCode, option.parentOrg, option.parentType);
     }
@@ -80,8 +80,7 @@ class TreeSelectParent extends React.Component {
           }}
         >
           {this.state.options.map(option => (
-            <MenuItem key={option.parentCode} onClick={() => this.handleClose(option)}
-                      disabled={option.parentType === 'L'}>
+            <MenuItem key={option.parentCode} onClick={() => this.handleClose(option)}>
                 <ListItemIcon className={classes.icon}>
                     <TreeIcon
                         eqtype={option.parentType}

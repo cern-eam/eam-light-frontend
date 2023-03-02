@@ -49,7 +49,8 @@ export default Location = (props) => {
             },
             postActions: {
                 create: postCreate,
-                read: postRead
+                read: postRead,
+                new: postInit
             },
             entityCode: "LOC",
             entityDesc: "Location",
@@ -61,8 +62,15 @@ export default Location = (props) => {
         });
 
 
-    function postRead() {
-        setLayoutProperty("location", this.state.location);
+    function postInit() {
+        setLayoutProperty('equipment', null)
+    }
+
+
+    function postRead(location) {
+        if (!showEqpTree) {
+            setLayoutProperty('equipment', location);
+        }
     }
 
     function postCreate(location) {
