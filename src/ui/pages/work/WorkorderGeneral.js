@@ -9,7 +9,6 @@ import { isDepartmentReadOnly, isMultiOrg } from '../EntityTools';
 import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
 import { IconButton } from '@mui/material';
 import { FileTree } from 'mdi-material-ui';
-import {useState} from "react"
 
 function WorkorderGeneral(props) {
 
