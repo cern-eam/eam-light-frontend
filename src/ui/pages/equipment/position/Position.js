@@ -222,7 +222,7 @@ const Position = () => {
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
                 render: () => <NCRIframeContainer
-                    objectType="P"
+                    objectType="S"
                     objectID={equipment.code}
                 />,
                 RegionPanelProps: {
