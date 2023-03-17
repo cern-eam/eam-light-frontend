@@ -1,16 +1,15 @@
-import { Barcode, Camera, ContentCopy, Domain, EmailOutline, Eye, Map, Printer, Repeat } from 'mdi-material-ui';
-
-import Divider from '@mui/material/Divider';
-import EditWatchlistDialog from './watchlist/EditWatchlistDialog';
-import IconButton from "@mui/material/IconButton";
-import { Link } from "react-router-dom";
-import MenuItem from "@mui/material/MenuItem";
-import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
-import { RadiationIcon } from "eam-components/dist/ui/components/icons";
 import React from 'react';
+import MenuItem from "@mui/material/MenuItem";
 import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import Divider from '@mui/material/Divider';
 import { WorkorderIcon } from "eam-components/dist/ui/components/icons";
+import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
+import {Barcode, ContentCopy, EmailOutline, Map, Printer, Domain, Camera, Eye, Repeat} from 'mdi-material-ui';
+import { RadiationIcon } from "eam-components/dist/ui/components/icons";
+import { Link } from "react-router-dom";
 import { isCernMode } from "./CERNMode";
+import EditWatchlistDialog from './watchlist/EditWatchlistDialog';
 
 export const ENTITY_TYPE = {
     WORKORDER: 'WORKORDER',
@@ -76,34 +75,34 @@ class Toolbar extends React.Component {
 
     getButtonDefinitions = () => {
         const { copyHandler, repeatStepHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity, departmentalSecurity, screens, workorderScreencode, readOnly } = this.props;
-        console.log('entity', entity);
+
         return {
-            [BUTTON_KEYS.COPY]: {
+            [BUTTON_KEYS.COPY] : {
                 isVisible: () => true,
                 onClick: copyHandler,
                 isDisabled: () => newEntity,
                 values: {
-                    icon: <ContentCopy />,
+                    icon: <ContentCopy/>,
                     text: "Copy"
                 }
             },
-            [BUTTON_KEYS.EMAIL]: {
+            [BUTTON_KEYS.EMAIL] : {
                 isVisible: () => true,
                 getOnClick: (entityType, entity) => {
-                    const url = window.location.href.split("?")[0];
-                    const id = entityType === ENTITY_TYPE.WORKORDER ? entity.number : entity.code;
-                    return () => window.open(
-                        `mailto:?Subject=${entityDesc} ${id}`
-                        + `&body=${url}`
-                    )
+                   const url = window.location.href.split("?")[0];
+                   const id = entityType === ENTITY_TYPE.WORKORDER ? entity.number : entity.code;
+                   return () => window.open(
+                       `mailto:?Subject=${entityDesc} ${id}`
+                       + `&body=${url}`
+                   )
                 },
                 isDisabled: () => newEntity,
                 values: {
-                    icon: <EmailOutline />,
+                    icon: <EmailOutline/>,
                     text: "Email"
                 }
             },
-            [BUTTON_KEYS.PRINT]: {
+            [BUTTON_KEYS.PRINT] : {
                 isVisible: () => isCernMode && applicationData.EL_PRTWO,
                 isDisabled: () => newEntity,
                 getOnClick: (entityType, entity) => {
@@ -117,11 +116,11 @@ class Toolbar extends React.Component {
                     }
                 },
                 values: {
-                    icon: <Printer />,
+                    icon: <Printer/>,
                     text: "Print"
                 }
             },
-            [BUTTON_KEYS.SHOW_ON_MAP]: {
+            [BUTTON_KEYS.SHOW_ON_MAP] : {
                 isVisible: () => isCernMode && applicationData.EL_GISEQ && applicationData.EL_GISWO,
                 getOnClick: (entityType, entity) => {
                     const LOCATION_URLS = {
@@ -138,101 +137,101 @@ class Toolbar extends React.Component {
                 },
                 isDisabled: () => newEntity,
                 values: {
-                    icon: <Map />,
+                    icon: <Map/>,
                     text: "Show on Map"
                 }
             },
-            [BUTTON_KEYS.SHOW_IN_INFOR]: {
+            [BUTTON_KEYS.SHOW_IN_INFOR] : {
                 isVisible: () => applicationData.EL_WOLIN && applicationData.EL_LOCLI && applicationData.EL_PARTL,
                 getOnClick: (entityType, entity) => {
                     let extendedLink;
-                    switch (entityType) {
+                    switch (entityType){
                         case ENTITY_TYPE.WORKORDER:
                             extendedLink = applicationData.EL_WOLIN
-                                .replace("&1", screencode)
-                                .replace("&2", entity.number);
+                                            .replace("&1", screencode)
+                                            .replace("&2", entity.number);
                             break;
                         case ENTITY_TYPE.EQUIPMENT:
                             extendedLink = this.props.extendedLink
-                                .replace("&1", screencode)
-                                .replace("&2", entity.code);
+                                            .replace("&1", screencode)
+                                            .replace("&2", entity.code);
                             break;
                         case ENTITY_TYPE.LOCATION:
                             extendedLink = applicationData.EL_LOCLI
-                                .replace("&1", screencode)
-                                .replace("&2", entity.code);
+                                            .replace("&1", screencode)
+                                            .replace("&2", entity.code);
                             break;
                         case ENTITY_TYPE.PART:
                             extendedLink = applicationData.EL_PARTL
-                                .replace("&1", screencode)
-                                .replace("&2", entity.code);
+                                            .replace("&1", screencode)
+                                            .replace("&2", entity.code);
                             break;
                     }
                     return () => window.open(extendedLink, "_blank");
                 },
                 isDisabled: () => newEntity,
                 values: {
-                    icon: <OpenInNewIcon />,
+                    icon: <OpenInNewIcon/>,
                     text: "Show in EAM"
                 }
             },
-            [BUTTON_KEYS.BARCODING]: {
+            [BUTTON_KEYS.BARCODING] : {
                 isVisible: () => isCernMode && applicationData.EL_BCUR,
                 getOnClick: (entityType, entity) => {
                     let barcodingLink;
                     switch (entityType) {
                         case ENTITY_TYPE.PART:
                             barcodingLink = applicationData.EL_BCUR
-                                .replace("&1", screencode)
-                                .replace("&2", 'partcode')
-                                .replace("&3", entity.code);
+                                            .replace("&1", screencode)
+                                            .replace("&2", 'partcode')
+                                            .replace("&3", entity.code);
                             break;
                         case ENTITY_TYPE.WORKORDER:
                             barcodingLink = applicationData.EL_PRTWO + entity.number;
                             break;
                         case ENTITY_TYPE.EQUIPMENT:
                             barcodingLink = applicationData.EL_BCUR
-                                .replace("&1", screencode)
-                                .replace("&2", 'equipmentno')
-                                .replace("&3", entity.code);
+                                            .replace("&1", screencode)
+                                            .replace("&2", 'equipmentno')
+                                            .replace("&3", entity.code);
                             break;
                     }
                     return () => window.open(barcodingLink, '_blank')
                 },
                 isDisabled: () => newEntity,
                 values: {
-                    icon: <Barcode />,
+                    icon: <Barcode/>,
                     text: "Print Barcode"
                 }
             },
-            [BUTTON_KEYS.OSVC]: {
+            [BUTTON_KEYS.OSVC] : {
                 isVisible: () => applicationData.EL_OSVCU && isCernMode,
                 getOnClick: (entityType, entity) => {
                     const osvcLink = applicationData.EL_OSVCU
-                        .replace("{{workOrderId}}", entity.number);
+                                    .replace("{{workOrderId}}", entity.number);
                     return () => window.open(osvcLink, "_blank");
                 },
                 isDisabled: () => newEntity,
                 values: {
-                    icon: <Domain />,
+                    icon: <Domain/>,
                     text: "OSVC"
                 }
             },
-            [BUTTON_KEYS.DISMAC]: {
-                isVisible: () => applicationData.EL_DMUSG &&
-                    applicationData.EL_DMUSG.includes(userGroup),
+            [BUTTON_KEYS.DISMAC] : {
+                isVisible: () =>  applicationData.EL_DMUSG &&
+                                  applicationData.EL_DMUSG.includes(userGroup),
                 getOnClick: (entityType, entity) => {
                     const dismacLink = applicationData.EL_DMURL
-                        .replace("{{workOrderId}}", entity.number);
+                                                        .replace("{{workOrderId}}", entity.number);
                     return () => window.open(dismacLink, "_blank");
                 },
                 isDisabled: () => newEntity,
                 values: {
-                    icon: <Camera />,
+                    icon: <Camera/>,
                     text: "DISMAC"
                 }
             },
-            [BUTTON_KEYS.TREC]: {
+            [BUTTON_KEYS.TREC] : {
                 isVisible: () => {
                     const { EL_TRWOC } = applicationData;
                     return (
@@ -253,11 +252,11 @@ class Toolbar extends React.Component {
                 },
                 isDisabled: () => newEntity,
                 values: {
-                    icon: <RadiationIcon />,
+                    icon: <RadiationIcon/>,
                     text: "TREC"
                 }
             },
-            [BUTTON_KEYS.CREATE_WORKORDER]: {
+            [BUTTON_KEYS.CREATE_WORKORDER] : {
                 isVisible: () => true,
                 getOnClick: () => {
 
@@ -266,7 +265,7 @@ class Toolbar extends React.Component {
                     || readOnly
                     || (screens[workorderScreencode] && !screens[workorderScreencode].creationAllowed),
                 values: {
-                    icon: <WorkorderIcon />,
+                    icon: <WorkorderIcon/>,
                     text: "Create New Work Order"
                 },
                 getLinkTo: (entity, entityCode) => {
@@ -275,7 +274,7 @@ class Toolbar extends React.Component {
             },
             [BUTTON_KEYS.WATCHLIST]: {
                 isVisible: () => true && isCernMode,
-                getOnClick: (entityType, entity) => () => this.setState({ watchlistOpen: true }),
+                getOnClick: (entityType, entity) => () => this.setState({watchlistOpen: true}),
                 isDisabled: () => newEntity,
                 values: {
                     icon: <Eye />,
@@ -283,7 +282,7 @@ class Toolbar extends React.Component {
                 },
             },
             [BUTTON_KEYS.REPEAT_STEP]: {
-                isVisible: () => isCernMode && entity.standardWO && entity.systemStatusCode === 'C' && entity.classCode?.startsWith('MTF') && !readOnly && !entity.outOfService,
+                isVisible: () => isCernMode && entity.standardWO && entity.systemStatusCode === 'C' && entity.classCode?.startsWith('MTF'),
                 onClick: repeatStepHandler,
                 isDisabled: () => newEntity || departmentalSecurity?.readOnly,
                 values: {
@@ -295,7 +294,7 @@ class Toolbar extends React.Component {
     }
 
     getButtons() {
-        const { entityType, renderOption, entity } = this.props;
+        const {entityType, renderOption, entity} = this.props;
         let buttonKeys = [];
         switch (entityType) {
             case ENTITY_TYPE.WORKORDER:
@@ -360,8 +359,8 @@ class Toolbar extends React.Component {
         </>);
     }
 
-    generateContent = ({ renderOption, buttonDefinition, entityType, entity }) => {
-        let { isVisible, onClick, isDisabled, values, getOnClick, getLinkTo } = buttonDefinition;
+    generateContent = ({renderOption, buttonDefinition, entityType, entity}) => {
+        let {isVisible, onClick, isDisabled, values, getOnClick, getLinkTo} = buttonDefinition;
         let content = null;
 
         const disabled = isDisabled();
@@ -382,7 +381,7 @@ class Toolbar extends React.Component {
                             onClick={onClick}
                             disabled={disabled}
                         >
-                            {React.cloneElement(values.icon, { style: this.iconMenuStyle })}
+                            {React.cloneElement(values.icon, {style: this.iconMenuStyle})}
                             {values.text && <div>{values.text}</div>}
                         </MenuItem>
                     break;
@@ -390,7 +389,7 @@ class Toolbar extends React.Component {
                     content =
                         <Tooltip title={values.text}>
                             <IconButton onClick={onClick} disabled={disabled} size="large">
-                                {React.cloneElement(values.icon, { style: this.iconStyle })}
+                                {React.cloneElement(values.icon, {style: this.iconStyle})}
                             </IconButton>
                         </Tooltip>
                     break;
@@ -399,9 +398,9 @@ class Toolbar extends React.Component {
 
             if (getLinkTo && !disabled) {
                 content = <Link to={getLinkTo(entity, entityType)}
-                    style={this.linkStyle}>
-                    {content}
-                </Link>
+                                style={this.linkStyle}>
+                            {content}
+                        </Link>
             }
             return content;
         }
@@ -411,15 +410,15 @@ class Toolbar extends React.Component {
         const buttons = this.getButtons();
         switch (this.props.renderOption) {
             case VIEW_MODES.MENU_ITEMS:
-                return <div>
-                    <Divider />
-                    {buttons}
-                </div>
+                return  <div>
+                            <Divider/>
+                            {buttons}
+                        </div>
             case VIEW_MODES.TOOLBAR_ICONS:
                 return <div style={this.toolbarIconsStyle}>
-                    <div style={this.verticalLineStyle} />
-                    {buttons}
-                </div>
+                            <div style={this.verticalLineStyle}/>
+                            {buttons}
+                        </div>
         }
     }
 
