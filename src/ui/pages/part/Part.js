@@ -7,7 +7,7 @@ import PartGeneral from "./PartGeneral";
 import UserDefinedFields from "../../components/userdefinedfields/UserDefinedFields";
 import PartStock from "./PartStock";
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
-import CustomFields from '../../components/customfields/CustomFields';
+import CustomFields from 'eam-components/dist/ui/components/customfields/CustomFields';
 import PartWhereUsed from "./PartWhereUsed";
 import PartAssets from "./PartAssets";
 import PartTools, { layoutPropertiesMap } from "./PartTools";

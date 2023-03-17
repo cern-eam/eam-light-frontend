@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import EquipmentHistory from '../components/EquipmentHistory.js'
 import EamlightToolbarContainer from './../../../components/EamlightToolbarContainer'
-import CustomFields from '../../../components/customfields/CustomFields'
+import CustomFields from 'eam-components/dist/ui/components/customfields/CustomFields';
 import WSEquipment from "../../../../tools/WSEquipment"
 import BlockUi from 'react-block-ui'
 import 'react-block-ui/style.css'

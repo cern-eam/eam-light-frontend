@@ -9,7 +9,7 @@ import { assignDefaultValues, assignQueryParamValues, assignCustomFieldFromCusto
 import { setLayoutProperty, showError, showNotification, handleError, toggleHiddenRegion,
     setRegionVisibility,
     showWarning} from "actions/uiActions";
-import WSCustomFields from "tools/WSCustomFields";
+import WSCustomFields from "eam-components/dist/tools/WSChecklists"
 import { createOnChangeHandler, processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { get } from "lodash";
 import useFieldsValidator from "eam-components/dist/ui/components/inputs-ng/hooks/useFieldsValidator";
