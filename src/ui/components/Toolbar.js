@@ -75,7 +75,8 @@ class Toolbar extends React.Component {
     state = { watchlistOpen: false };
 
     getButtonDefinitions = () => {
-        const { copyHandler, repeatStepHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity, equipment, departmentalSecurity, screens, workorderScreencode, readOnly } = this.props;
+        const { copyHandler, repeatStepHandler, newEntity, entityDesc, applicationData, screencode, userGroup, entity, departmentalSecurity, screens, workorderScreencode, readOnly } = this.props;
+        console.log('entity', entity);
         return {
             [BUTTON_KEYS.COPY]: {
                 isVisible: () => true,
@@ -282,7 +283,7 @@ class Toolbar extends React.Component {
                 },
             },
             [BUTTON_KEYS.REPEAT_STEP]: {
-                isVisible: () => isCernMode && entity.standardWO && entity.systemStatusCode === 'C' && entity.classCode?.startsWith('MTF') && !readOnly && !equipment?.outOfService && !equipment?.systemStatusCode !== 'D',
+                isVisible: () => isCernMode && entity.standardWO && entity.systemStatusCode === 'C' && entity.classCode?.startsWith('MTF') && !readOnly && !entity.outOfService,
                 onClick: repeatStepHandler,
                 isDisabled: () => newEntity || departmentalSecurity?.readOnly,
                 values: {

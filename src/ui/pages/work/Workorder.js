@@ -1,58 +1,57 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { assignStandardWorkOrderValues, isReadOnlyCustomHandler, isRegionAvailable, layoutPropertiesMap } from "./WorkorderTools";
-import { getTabAvailability, getTabInitialVisibility, registerCustomField } from '../EntityTools';
-
-import Activities from './activities/Activities';
-import AdditionalCostsContainer from "./additionalcosts/AdditionalCostsContainer";
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import BlockUi from 'react-block-ui';
-import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Checklists from 'eam-components/dist/ui/components/checklists/Checklists';
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
-import ConstructionIcon from '@mui/icons-material/Construction';
-import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-import CustomFields from '../../components/customfields/CustomFields';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
-import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
-import { ENTITY_TYPE } from "../../components/Toolbar";
-import EamlightToolbarContainer from './../../components/EamlightToolbarContainer';
-import EntityRegions from '../../components/entityregions/EntityRegions';
-import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
-import HardwareIcon from '@mui/icons-material/Hardware';
-import IconButton from '@mui/material/IconButton';
-import ListAltIcon from '@mui/icons-material/ListAlt';
-import MeterReadingContainerWO from './meter/MeterReadingContainerWO';
-import MonetizationOnRoundedIcon from '@mui/icons-material/MonetizationOnRounded';
-import NCRIframeContainer from "../../components/iframes/NCRIframeContainer";
-import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
-import { PartIcon } from 'eam-components/dist/ui/components/icons';
-import PartUsageContainer from "./partusage/PartUsageContainer";
-import { PendingActions } from '@mui/icons-material';
-import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
-import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
-import SegmentRoundedIcon from '@mui/icons-material/SegmentRounded';
-import SpeedIcon from '@mui/icons-material/Speed';
-import SportsScoreIcon from '@mui/icons-material/SportsScore';
-import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
-import { Typography } from '@mui/material';
-import UserDefinedFields from 'ui/components/userdefinedfields/UserDefinedFields';
+import { useHistory } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
+import BlockUi from 'react-block-ui';
 import WSEquipment from "../../../tools/WSEquipment";
-import WSParts from '../../../tools/WSParts';
 import WSWorkorder from "../../../tools/WSWorkorders";
-import WSWorkorders from '../../../tools/WSWorkorders';
+import {ENTITY_TYPE} from "../../components/Toolbar";
+import CustomFields from '../../components/customfields/CustomFields';
+import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
+import NCRIframeContainer from "../../components/iframes/NCRIframeContainer";
+import EamlightToolbarContainer from './../../components/EamlightToolbarContainer';
+import Activities from './activities/Activities';
+import AdditionalCostsContainer from "./additionalcosts/AdditionalCostsContainer";
 import WorkorderChildren from "./childrenwo/WorkorderChildren";
+import MeterReadingContainerWO from './meter/MeterReadingContainerWO';
+import WorkorderMultiequipment from "./multiequipmentwo/WorkorderMultiequipment";
+import PartUsageContainer from "./partusage/PartUsageContainer";
 import WorkorderClosingCodes from './WorkorderClosingCodes';
 import WorkorderGeneral from './WorkorderGeneral';
-import WorkorderMultiequipment from "./multiequipmentwo/WorkorderMultiequipment";
 import WorkorderScheduling from './WorkorderScheduling';
+import { assignStandardWorkOrderValues, isReadOnlyCustomHandler, isRegionAvailable, layoutPropertiesMap } from "./WorkorderTools";
+import EntityRegions from '../../components/entityregions/EntityRegions';
+import IconButton from '@mui/material/IconButton';
+import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
 import { isCernMode } from '../../components/CERNMode';
-import { isHidden } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
+import { getTabAvailability, getTabInitialVisibility, registerCustomField } from '../EntityTools';
+import WSParts from '../../../tools/WSParts';
+import WSWorkorders from '../../../tools/WSWorkorders';
+import useEntity from "hooks/useEntity";
 import { updateMyWorkOrders } from '../../../actions/workorderActions'
 import { useDispatch } from 'react-redux';
-import useEntity from "hooks/useEntity";
-import { useHistory } from 'react-router-dom';
+import UserDefinedFields from 'ui/components/userdefinedfields/UserDefinedFields';
+import { isHidden } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import SportsScoreIcon from '@mui/icons-material/SportsScore';
+import ConstructionIcon from '@mui/icons-material/Construction';
+import SpeedIcon from '@mui/icons-material/Speed';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import MonetizationOnRoundedIcon from '@mui/icons-material/MonetizationOnRounded';
+import SegmentRoundedIcon from '@mui/icons-material/SegmentRounded';
+import { PendingActions } from '@mui/icons-material';
+import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import { PartIcon } from 'eam-components/dist/ui/components/icons';
+import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
+import HardwareIcon from '@mui/icons-material/Hardware';
+import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
+import { Typography } from '@mui/material';
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
     if (!eqCode || !swoCode) {
@@ -75,18 +74,18 @@ const Workorder = () => {
     //
     //
     //
-    const { screenLayout: workOrderLayout, entity: workorder, setEntity: setWorkOrder, loading, readOnly, isModified,
+    const {screenLayout: workOrderLayout, entity: workorder, setEntity: setWorkOrder, loading, readOnly, isModified,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID,
         toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateWorkorderProperty, register,
-        handleError, showError, showNotification, showWarning, createEntity, setLoading, setReadOnly } = useEntity({
+        handleError, showError, showNotification, showWarning, createEntity, setLoading, setReadOnly} = useEntity({
             WS: {
                 create: WSWorkorder.createWorkOrder,
                 read: WSWorkorder.getWorkOrder,
                 update: WSWorkorder.updateWorkOrder,
                 delete: WSWorkorder.deleteWorkOrder,
-                new: WSWorkorder.initWorkOrder,
+                new:  WSWorkorder.initWorkOrder,
             },
             postActions: {
                 read: postRead,
@@ -107,13 +106,13 @@ const Workorder = () => {
             layoutPropertiesMap,
             onMountHandler: mountHandler,
             onUnmountHandler: unmountHandler
-        });
+    });
 
     //
     //
     //
 
-    useEffect(() => {
+    useEffect( () => {
         setEquipment(null);
         setEquipmentPart(null);
 
@@ -122,16 +121,16 @@ const Workorder = () => {
         }
 
         WSEquipment.getEquipment(workorder.equipmentCode)
-            .then(response => {
-                const equipmentResponse = response.body.data;
-                setEquipment(equipmentResponse);
-                if (equipmentResponse.partCode) {
-                    WSParts.getPart(equipmentResponse.partCode)
-                        .then(response => setEquipmentPart(response.body.data))
-                        .catch(console.error);
-                }
-            })
-            .catch(console.error);
+        .then(response => {
+            const equipmentResponse = response.body.data;
+            setEquipment(equipmentResponse);
+            if (equipmentResponse.partCode) {
+                WSParts.getPart(equipmentResponse.partCode)
+                .then(response => setEquipmentPart(response.body.data))
+                .catch(console.error);
+            }
+        })
+        .catch(console.error);
 
     }, [workorder?.equipmentCode])
 
@@ -139,14 +138,14 @@ const Workorder = () => {
     //
     //
     function onChangeEquipment(equipmentCode) {
-        if (!equipmentCode) {
+        if(!equipmentCode) {
             return;
         }
 
         Promise.all([
             WSEquipment.getEquipment(equipmentCode),
             WSWorkorders.getWOEquipLinearDetails(equipmentCode),
-        ]).then(response => {
+        ]).then( response => {
             const equipment = response[0].body.data;
             const linearDetails = response[1].body.data;
 
@@ -165,15 +164,15 @@ const Workorder = () => {
                 showWarning('This equipment is currently under warranty.');
             }
         })
-            .catch(console.error);
+        .catch(console.error);
 
     };
 
     function onChangeStandardWorkOrder(standardWorkOrderCode) {
         if (standardWorkOrderCode) {
             WSWorkorder.getStandardWorkOrder(standardWorkOrderCode)
-                .then(response => setWorkOrder(oldWorkOrder => assignStandardWorkOrderValues(oldWorkOrder, response.body.data)))
-                .catch(console.error);
+            .then(response => setWorkOrder( oldWorkOrder => assignStandardWorkOrderValues(oldWorkOrder, response.body.data)))
+            .catch(console.error);
         }
     }
 
@@ -205,7 +204,7 @@ const Workorder = () => {
                         newEntity={newEntity}
                         screenCode={screenCode}
                         screenPermissions={screenPermissions}
-                        setLayoutProperty={setLayoutProperty} />
+                        setLayoutProperty={setLayoutProperty}/>
                 ,
                 column: 1,
                 order: 1,
@@ -391,7 +390,7 @@ const Workorder = () => {
                 label: 'Checklists',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: ({ panelQueryParams }) => (
+                render: ({panelQueryParams}) =>  (
                     <Checklists
                         workorder={workorder.number}
                         eqpToOtherId={otherIdMapping}
@@ -411,20 +410,20 @@ const Workorder = () => {
                         activity={panelQueryParams.CHECKLISTSactivity}
                         topSlot={
                             applicationData.EL_PRTCL &&
-                            <div style={{
-                                width: "100%",
-                                display: "flex",
-                                flexDirection: "row",
-                            }}>
-                                <IconButton
-                                    onClick={() => window.open(applicationData.EL_PRTCL + workorder.number, '_blank', 'noopener noreferrer')}
-                                    style={{ color: "#00aaff" }}
-                                    size="large">
-                                    <OpenInNewIcon style={{ padding: "9px" }} />
-                                    <Typography>Results</Typography>
-                                </IconButton>
-                            </div>
-                        } />
+                                <div style={{
+                                    width: "100%",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                }}>
+                                    <IconButton
+                                        onClick={() => window.open(applicationData.EL_PRTCL + workorder.number, '_blank', 'noopener noreferrer')}
+                                        style={{ color: "#00aaff" }}
+                                        size="large">
+                                        <OpenInNewIcon style={{ padding: "9px" }} />
+                                         <Typography>Results</Typography>
+                                    </IconButton>
+                                </div>
+                        }/>
                 )
                 ,
                 column: 2,
@@ -463,7 +462,7 @@ const Workorder = () => {
                         entityKeyCode={equipment?.code}
                         classCode={equipment?.classCode}
                         customFields={equipment?.customField}
-                        register={registerCustomField(equipment)} />
+                        register={registerCustomField(equipment)}/>
                 ,
                 column: 2,
                 order: 11,
@@ -482,7 +481,7 @@ const Workorder = () => {
                         entityKeyCode={equipmentPart?.Code}
                         classCode={equipmentPart?.classCode}
                         customFields={equipmentPart?.customField}
-                        register={registerCustomField(equipmentPart)} />
+                        register={registerCustomField(equipmentPart)}/>
                 ),
                 column: 2,
                 order: 12,
@@ -511,7 +510,7 @@ const Workorder = () => {
                 customVisibility: () => isRegionAvailable('MEC', commonProps.workOrderLayout),
                 maximizable: false,
                 render: () =>
-                    <WorkorderMultiequipment workorder={workorder.number} setEquipmentMEC={setEquipmentMEC} />
+                    <WorkorderMultiequipment workorder={workorder.number} setEquipmentMEC={setEquipmentMEC}/>
                 ,
                 column: 2,
                 order: 13,
@@ -555,7 +554,7 @@ const Workorder = () => {
                 value = "";
             }
 
-            const newCustomFields = [{ code: 'MTFEVP1', value }];
+            const newCustomFields = [{code: 'MTFEVP1', value }];
             const newWorkOrder = {
                 standardWO,
                 equipmentCode,
@@ -582,7 +581,7 @@ const Workorder = () => {
     }
 
     function postRead(workorder) {
-        setLayoutProperty('equipment', { code: workorder.equipmentCode, organization: workorder.equipmentOrganization });
+        setLayoutProperty('equipment', {code: workorder.equipmentCode, organization: workorder.equipmentOrganization});
         updateMyWorkOrdersConst(workorder);
         readStatuses(workorder.statusCode, workorder.typeCode, false);
         readOtherIdMapping(workorder.number);
@@ -620,7 +619,7 @@ const Workorder = () => {
     function mountHandler() {
         setLayoutProperty('eqpTreeMenu', [{
             desc: "Use for this Work Order",
-            icon: <ContentPasteIcon />,
+            icon: <ContentPasteIcon/>,
             handler: (rowInfo) => {
                 updateWorkorderProperty('equipmentCode', rowInfo.node.id)
                 updateWorkorderProperty('equipmentDesc', rowInfo.node.name)
@@ -638,7 +637,7 @@ const Workorder = () => {
 
     return (
         <div className="entityContainer">
-            <BlockUi tag="div" blocking={loading} style={{ height: "100%", width: "100%" }}>
+            <BlockUi tag="div" blocking={loading} style={{height: "100%", width: "100%"}}>
                 <EamlightToolbarContainer
                     isModified={isModified}
                     newEntity={newEntity}
@@ -652,7 +651,6 @@ const Workorder = () => {
                     width={790}
                     toolbarProps={{
                         entity: workorder,
-                        equipment: equipment,
                         // postInit: this.postInit.bind(this),
                         // setLayout: this.setLayout.bind(this),
                         newEntity,
@@ -667,7 +665,7 @@ const Workorder = () => {
                         workorderScreencode: userData.workOrderScreen,
                         departmentalSecurity: userData.eamAccount.departmentalSecurity,
                     }}
-                    entityIcon={<ContentPasteIcon style={{ height: 18 }} />}
+                    entityIcon={<ContentPasteIcon style={{height: 18}}/>}
                     toggleHiddenRegion={toggleHiddenRegion}
                     regions={getRegions()}
                     getUniqueRegionID={getUniqueRegionID}
