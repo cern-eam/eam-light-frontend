@@ -6,7 +6,7 @@ import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import WSLocation from "../../../../tools/WSLocation";
 import { isCernMode } from '../../../components/CERNMode';
-import CustomFields from "../../../components/customfields/CustomFields";
+import CustomFields from 'eam-components/dist/ui/components/customfields/CustomFields';
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";

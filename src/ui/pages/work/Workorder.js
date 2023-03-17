@@ -6,7 +6,7 @@ import BlockUi from 'react-block-ui';
 import WSEquipment from "../../../tools/WSEquipment";
 import WSWorkorder from "../../../tools/WSWorkorders";
 import {ENTITY_TYPE} from "../../components/Toolbar";
-import CustomFields from '../../components/customfields/CustomFields';
+import CustomFields from 'eam-components/dist/ui/components/customfields/CustomFields';
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import NCRIframeContainer from "../../components/iframes/NCRIframeContainer";
 import EamlightToolbarContainer from './../../components/EamlightToolbarContainer';
