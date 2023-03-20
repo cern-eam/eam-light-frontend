@@ -257,7 +257,7 @@ class WSWorkorders {
     //WO Equipment Details
     //
     getWOEquipLinearDetails(eqCode, config={}) {
-        return WS._get(`/workordersmisc/equipment/${eqCode}/details`, config);
+        return WS._get(`/workordersmisc/equipment?eqCode=${encodeURIComponent(eqCode)}`, config);
     }
 
     //
