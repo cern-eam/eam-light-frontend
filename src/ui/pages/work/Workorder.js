@@ -651,6 +651,7 @@ const Workorder = () => {
                     width={790}
                     toolbarProps={{
                         entity: workorder,
+                        equipment: equipment,
                         // postInit: this.postInit.bind(this),
                         // setLayout: this.setLayout.bind(this),
                         newEntity,
