@@ -13,6 +13,7 @@ import withStyles from '@mui/styles/withStyles';
 import clsx from 'clsx';
 import ScanUser from '../../ui/components/servicelogin/ScanUser';
 import Footer from './Footer';
+import GridTools from 'tools/GridTools';
 
 const styles = {
     topBarLink: {
@@ -91,6 +92,8 @@ export default withStyles(styles)(function ApplicationLayout(props) {
     const isInsideIframe = window.self !== window.top;
     const showTopBar = !(document.referrer.startsWith(startsWithString) && isInsideIframe);
 
+    const loadAfterLogin = GridTools.getURLParameterByName("loadAfterLogin") === 'true';
+
     const showScan = applicationData.serviceAccounts && applicationData.serviceAccounts.includes( userData.eamAccount.userCode) && (!scannedUser || !scannedUser.userCode)
         && <ScanUser
                 updateScannedUser={updateScannedUser}
@@ -101,15 +104,17 @@ export default withStyles(styles)(function ApplicationLayout(props) {
     return (
         <div id="maindiv" className={(menuCompacted) ? 'SlimMenu' : ''} onClick={() => !menuCompacted && mobileMenuActive && setMobileMenuActive(false)}>
             {showTopBar && topbar}
-            <div id="layout-container" >
-                {props.children[0] && <div id="layout-menu-cover" className={(mobileMenuActive) ? 'active' : ''} onClick={(event) => event.stopPropagation()}>
-                    {props.children[0]}
-                </div>}
-                <div id="layout-portlets-cover">
-                    {props.children[1]}
-                    <Footer/>
+            {showScan && loadAfterLogin ? null
+                : <div id="layout-container" >
+                    {props.children[0] && <div id="layout-menu-cover" className={(mobileMenuActive) ? 'active' : ''} onClick={(event) => event.stopPropagation()}>
+                        {props.children[0]}
+                    </div>}
+                    <div id="layout-portlets-cover">
+                        {props.children[1]}
+                        <Footer/>
+                    </div>
                 </div>
-            </div>
+            }
             {showScan}
         </div>
 
