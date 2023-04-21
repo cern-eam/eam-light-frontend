@@ -146,7 +146,7 @@ const System = () => {
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
                 render: () => <Variables {...commonProps}/>,
-                column: 2,
+                column: 1,
                 order: 10,
                 summaryIcon: ClearAllIcon,
                 ignore: systemLayout.fields.block_9.attribute === 'H',
