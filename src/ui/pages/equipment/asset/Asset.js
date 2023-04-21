@@ -23,7 +23,7 @@ import { getTabAvailability, getTabInitialVisibility, registerCustomField } from
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, assetLayoutPropertiesMap } from '../EquipmentTools';
-
+import ClearAllIcon from '@mui/icons-material/ClearAll';
 import { AssetIcon, PartIcon } from 'eam-components/dist/ui/components/icons';
 import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
@@ -301,7 +301,7 @@ const Asset = () => {
                 render: () => <Variables {...commonProps}/>,
                 column: 2,
                 order: 15,
-                summaryIcon: AssignmentIndIcon,
+                summaryIcon: ClearAllIcon,
                 ignore: assetLayout.fields.block_7.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },

@@ -22,7 +22,7 @@ import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, positionLayoutPropertiesMap } from '../EquipmentTools.js';
-
+import ClearAllIcon from '@mui/icons-material/ClearAll';
 import {PositionIcon, PartIcon} from 'eam-components/dist/ui/components/icons'
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -284,7 +284,7 @@ const Position = () => {
                 render: () => <Variables {...commonProps}/>,
                 column: 2,
                 order: 15,
-                summaryIcon: AssignmentIndIcon,
+                summaryIcon: ClearAllIcon,
                 ignore: positionLayout.fields.block_8.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
