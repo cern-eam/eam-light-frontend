@@ -21,7 +21,7 @@ import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, systemLayoutPropertiesMap } from '../EquipmentTools.js';
-
+import ClearAllIcon from '@mui/icons-material/ClearAll';
 import {SystemIcon, PartIcon} from 'eam-components/dist/ui/components/icons'
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -276,7 +276,7 @@ const System = () => {
                 render: () => <Variables {...commonProps}/>,
                 column: 2,
                 order: 15,
-                summaryIcon: AssignmentIndIcon,
+                summaryIcon: ClearAllIcon,
                 ignore: systemLayout.fields.block_9.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
