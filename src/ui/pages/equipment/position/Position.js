@@ -35,6 +35,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import Variables from '../components/Variables.js';
 
 const Position = () => {
     const [statuses, setStatuses] = useState([]);
@@ -276,6 +277,18 @@ const Position = () => {
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
+                id: 'VARIABLES',
+                label: 'Variables',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => <Variables {...commonProps}/>,
+                column: 2,
+                order: 15,
+                summaryIcon: AssignmentIndIcon,
+                ignore: positionLayout.fields.block_8.attribute === 'H',
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
+            },
+            {
                 id: 'CUSTOMFIELDS',
                 label: 'Custom Fields',
                 isVisibleWhenNewEntity: true,
@@ -290,7 +303,7 @@ const Position = () => {
                     />
                 ,
                 column: 2,
-                order: 11,
+                order: 20,
                 summaryIcon: ListAltIcon,
                 ignore: positionLayout.fields.block_4.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
@@ -310,7 +323,7 @@ const Position = () => {
                     detailsStyle: { padding: 0 }
                 },
                 column: 2,
-                order: 12,
+                order: 25,
                 summaryIcon: ShareIcon,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_POSITIONS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_POSITIONS)
