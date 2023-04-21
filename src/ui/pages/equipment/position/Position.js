@@ -136,6 +136,18 @@ const Position = () => {
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
+                id: 'VARIABLES',
+                label: 'Variables',
+                isVisibleWhenNewEntity: true,
+                maximizable: false,
+                render: () => <Variables {...commonProps}/>,
+                column: 1,
+                order: 10,
+                summaryIcon: ClearAllIcon,
+                ignore: positionLayout.fields.block_8.attribute === 'H',
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
+            },
+            {
                 id: 'HIERARCHY',
                 label: 'Hierarchy',
                 isVisibleWhenNewEntity: true,
@@ -145,7 +157,7 @@ const Position = () => {
                         {...commonProps} />
                 ,
                 column: 1,
-                order: 3,
+                order: 15,
                 summaryIcon: AccountTreeRoundedIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
@@ -162,7 +174,7 @@ const Position = () => {
                         equipmenttype='P' />
                 ,
                 column: 1,
-                order: 4,
+                order: 20,
                 summaryIcon: ContentPasteIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
@@ -177,7 +189,7 @@ const Position = () => {
                         equipmentcode={equipment.code} />
                 ,
                 column: 1,
-                order: 5,
+                order: 25,
                 summaryIcon: ManageHistoryIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
@@ -193,7 +205,7 @@ const Position = () => {
                         parentScreen={userData.screens[userData.positionScreen].parentScreen} />
                 ,
                 column: 1,
-                order: 6,
+                order: 30,
                 summaryIcon: PartIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
@@ -274,18 +286,6 @@ const Position = () => {
                 order: 10,
                 summaryIcon: AssignmentIndIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
-                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
-            },
-            {
-                id: 'VARIABLES',
-                label: 'Variables',
-                isVisibleWhenNewEntity: true,
-                maximizable: false,
-                render: () => <Variables {...commonProps}/>,
-                column: 2,
-                order: 15,
-                summaryIcon: ClearAllIcon,
-                ignore: positionLayout.fields.block_8.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
