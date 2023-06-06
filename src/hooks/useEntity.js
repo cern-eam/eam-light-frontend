@@ -1,7 +1,7 @@
 import {useState, useEffect, useRef, useMemo} from "react"
 import { useSelector, useDispatch } from "react-redux";
 import { isHiddenRegion, getHiddenRegionState, getUniqueRegionID } from '../selectors/uiSelectors'
-import {useParams, useHistory} from "react-router-dom"
+import {useParams, useHistory, useLocation} from "react-router-dom"
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
@@ -25,6 +25,7 @@ const useEntity = (params) => {
     const [readOnly, setReadOnly] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const {code} = useParams();
+    const codeQueryParam = queryString.parse(window.location.search).id;
     const history = useHistory();
     const abortController = useRef(null);
     const commentsComponent = useRef(null);
@@ -55,7 +56,7 @@ const useEntity = (params) => {
     const getUniqueRegionIDConst =  useSelector(state => getUniqueRegionID(state)(screenCode))
 
     useEffect( () => {
-        code ? readEntity(code) : initNewEntity();
+        (code || codeQueryParam) ? readEntity(code ?? codeQueryParam) : initNewEntity();
         // Reset window title when unmounting
         return () => document.title = "EAM Light";
     }, [code])
