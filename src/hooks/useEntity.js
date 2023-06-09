@@ -25,7 +25,7 @@ const useEntity = (params) => {
     const [readOnly, setReadOnly] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const {code} = useParams();
-    const codeQueryParam = queryString.parse(window.location.search).id;
+    const {workordernum} = queryString.parse(window.location.search); //TODO add equipment and part identifiers
     const history = useHistory();
     const abortController = useRef(null);
     const commentsComponent = useRef(null);
@@ -56,7 +56,7 @@ const useEntity = (params) => {
     const getUniqueRegionIDConst =  useSelector(state => getUniqueRegionID(state)(screenCode))
 
     useEffect( () => {
-        (code || codeQueryParam) ? readEntity(code ?? codeQueryParam) : initNewEntity();
+        (code || workordernum) ? readEntity(code ?? workordernum) : initNewEntity();
         // Reset window title when unmounting
         return () => document.title = "EAM Light";
     }, [code])
