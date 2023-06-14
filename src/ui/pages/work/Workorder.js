@@ -105,7 +105,8 @@ const Workorder = () => {
             layoutProperty: "workOrderLayout",
             layoutPropertiesMap,
             onMountHandler: mountHandler,
-            onUnmountHandler: unmountHandler
+            onUnmountHandler: unmountHandler,
+            codeQueryParamName: "workordernum"
     });
 
     //
