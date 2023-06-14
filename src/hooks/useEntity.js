@@ -17,7 +17,7 @@ import useFieldsValidator from "eam-components/dist/ui/components/inputs-ng/hook
 const useEntity = (params) => {
 
     const {WS, postActions, handlers, entityCode, entityDesc, entityURL, entityCodeProperty, screenProperty, layoutProperty, layoutPropertiesMap,
-        isReadOnlyCustomHandler, onMountHandler, onUnmountHandler} = params;
+        isReadOnlyCustomHandler, onMountHandler, onUnmountHandler, codeQueryParamName} = params;
 
     const [loading, setLoading] = useState(false);
     const [entity, setEntity] = useState(null);
@@ -25,7 +25,7 @@ const useEntity = (params) => {
     const [readOnly, setReadOnly] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const {code} = useParams();
-    const {workordernum} = queryString.parse(window.location.search); //TODO add equipment and part identifiers
+    const codeQueryParam = queryString.parse(window.location.search)[codeQueryParamName]; //TODO add equipment and part identifiers
     const history = useHistory();
     const abortController = useRef(null);
     const commentsComponent = useRef(null);
@@ -56,7 +56,11 @@ const useEntity = (params) => {
     const getUniqueRegionIDConst =  useSelector(state => getUniqueRegionID(state)(screenCode))
 
     useEffect( () => {
-        (code || workordernum) ? readEntity(code ?? workordernum) : initNewEntity();
+        if (codeQueryParam) {
+            history.push(process.env.PUBLIC_URL + entityURL + codeQueryParam);
+            return;
+        }
+        code ? readEntity(code) : initNewEntity();
         // Reset window title when unmounting
         return () => document.title = "EAM Light";
     }, [code])
