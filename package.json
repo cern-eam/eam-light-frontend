@@ -1,6 +1,6 @@
 {
   "name": "eamlight",
-  "version": "3.4.20",
+  "version": "3.4.21",
   "private": true,
   "sideEffects": false,
   "dependencies": {
@@ -78,6 +78,7 @@
     "react-error-overlay": "6.0.9"
   },
   "devDependencies": {
-    "react-error-overlay": "6.0.9"
+    "react-error-overlay": "6.0.9",
+    "standard-version": "^9.5.0"
   }
 }
