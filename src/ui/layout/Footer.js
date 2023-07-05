@@ -2,10 +2,12 @@ import React from "react";
 import { useTheme } from '@mui/material/styles';
 import { isCernMode } from "ui/components/CERNMode";
 import {version} from '../../../package.json'
+import { useHistory } from "react-router";
 
 const Footer = props => {
 
     const theme = useTheme();
+    const history = useHistory();
 
     const style = {
         backgroundColor: theme.palette.primary.main,
@@ -20,7 +22,7 @@ const Footer = props => {
     return (
         <div style={style}>
             <span style={{fontWeight: 900}}>EAM Light</span>
-            <span style={{marginLeft: 5, marginRight: 5}}>(v{version})</span>
+            <span style={{marginLeft: 5, marginRight: 5}}  onClick={() => history.push(process.env.PUBLIC_URL + "releaseNotes")}>(v{version})</span>
             {isCernMode && <a style={{color: "white", marginRight: 10}} href="mailto:eam.support@cern.ch">eam.support@cern.ch</a>}
         </div>
     )
