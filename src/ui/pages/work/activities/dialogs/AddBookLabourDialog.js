@@ -13,6 +13,7 @@ import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePi
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import { createOnChangeHandler, processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 import LightDialog from 'ui/components/LightDialog';
+import Stack from "@mui/material/Stack";
 
 /**
  * Display detail of an activity
@@ -27,6 +28,10 @@ function AddActivityDialog(props) {
             init()
         }
     }, [props.open])
+
+    useEffect(() => {
+        // computeHoursWorked()
+    }, [formValues])
 
     let init = () => {
         setFormValues({
@@ -99,7 +104,24 @@ function AddActivityDialog(props) {
             handleSave();
         }
     }
-    
+
+    let computeHoursWorked = () => {
+        const startHour = formValues["startHour"] || "00"
+        const startMinutes = formValues["startMinutes"] || "00"
+        const endHour = formValues["endHour"] || "00"
+        const endMinutes = formValues["endMinutes"] || "00"
+        const startTime = new Date("01/01/2007 " + startHour + ":" + startMinutes).getHours();
+        const endTime = new Date("01/01/2007 " + endHour + ":" + endMinutes).getHours();
+        updateFormValues("hoursWorked", endTime - startTime)
+    }
+
+    let updateActivityHours = (key, value) => {
+        setFormValues(prevFormValues => ({
+            ...prevFormValues,
+            [key]: value || "00",
+        }))
+    }
+
     return (
         <div onKeyDown={onKeyDown}>
             <LightDialog
@@ -159,6 +181,40 @@ function AddActivityDialog(props) {
                                 value={formValues['hoursWorked']}
                                 onChange={createOnChangeHandler("hoursWorked", null, null, updateFormValues)}
                             />
+
+                            <Stack direction="row" spacing={2} style={{display: 'inline-flex', alignItems: 'center'}}>
+                                    <EAMTextField
+                                        {...processElementInfo(props.layout.hrswork)}
+                                        type="number"
+                                        value={formValues['startHour']}
+                                        onChange={val => updateActivityHours("startHour", val)}
+                                    />
+                                <div style={{marginTop: '20px'}}>:</div>
+                                    <EAMTextField
+                                        {...processElementInfo(props.layout.hrswork)}
+                                        type="number"
+                                        value={formValues['startMinutes']}
+                                        onChange={val => updateActivityHours("startMinutes", val)}
+                                    />
+                            </Stack>
+
+                            <Stack direction="row" spacing={2} style={{display: 'inline-flex', alignItems: 'center'}}>
+                                <EAMTextField
+                                    {...processElementInfo(props.layout.hrswork)}
+                                    type="number"
+                                    style={{width: "100%"}}
+                                    value={formValues['endHour']}
+                                    onChange={val => updateActivityHours("endHour", val)}
+                                />
+                                <div style={{marginTop: '20px'}}>:</div>
+                                <EAMTextField
+                                    {...processElementInfo(props.layout.hrswork)}
+                                    type="number"
+                                    style={{width: "100%"}}
+                                    value={formValues['endMinutes']}
+                                    onChange={val => updateActivityHours("endMinutes", val)}
+                                />
+                            </Stack>
                         </BlockUi>
                     </div>
                 </DialogContent>
