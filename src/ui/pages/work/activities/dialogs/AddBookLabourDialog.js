@@ -11,7 +11,7 @@ import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
-import { createOnChangeHandler, processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import {createOnChangeHandler, processElementInfo} from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 import LightDialog from 'ui/components/LightDialog';
 import Stack from "@mui/material/Stack";
 
@@ -30,8 +30,12 @@ function AddActivityDialog(props) {
     }, [props.open])
 
     useEffect(() => {
-        // computeHoursWorked()
-    }, [formValues])
+        computeHoursWorked()
+    }, [formValues["startHour"], formValues["startMinutes"], formValues["endHour"], formValues["endMinutes"]])
+
+    useEffect(() => {
+        computeEndTime()
+    }, [formValues['hoursWorked']])
 
     let init = () => {
         setFormValues({
@@ -72,11 +76,11 @@ function AddActivityDialog(props) {
 
                 const workorder = result.body.data;
                 if (props.updateCount + 1 === workorder.updateCount
-                        && props.startDate === null) {
+                    && props.startDate === null) {
                     props.updateEntityProperty('startDate', workorder.startDate);
                     props.updateEntityProperty('updateCount', props.updateCount + 1);
                 } else if (props.updateCount !== workorder.updateCount
-                        || props.startDate !== workorder.startDate) {
+                    || props.startDate !== workorder.startDate) {
                     // an unexpected situation has happened, reload the page
                     window.location.reload();
                 }
@@ -106,21 +110,29 @@ function AddActivityDialog(props) {
     }
 
     let computeHoursWorked = () => {
-        const startHour = formValues["startHour"] || "00"
-        const startMinutes = formValues["startMinutes"] || "00"
-        const endHour = formValues["endHour"] || "00"
-        const endMinutes = formValues["endMinutes"] || "00"
-        const startTime = new Date("01/01/2007 " + startHour + ":" + startMinutes).getHours();
-        const endTime = new Date("01/01/2007 " + endHour + ":" + endMinutes).getHours();
-        updateFormValues("hoursWorked", endTime - startTime)
+        const startHour = parseInt(formValues["startHour"] || "00");
+        const startMinutes = parseInt(formValues["startMinutes"] || "00");
+        const endHour = parseInt(formValues["endHour"] || "00");
+        const endMinutes = parseInt(formValues["endMinutes"] || "00");
+        const timeWorked = (endHour * 60 + endMinutes) - (startHour * 60 + startMinutes)
+
+        if(timeWorked < 0) {
+            updateFormValues("endHour", startHour)
+            updateFormValues("endMinutes", startMinutes)
+        }
+        updateFormValues("hoursWorked", timeWorked / 60 || 0)
     }
 
-    let updateActivityHours = (key, value) => {
-        setFormValues(prevFormValues => ({
-            ...prevFormValues,
-            [key]: value || "00",
-        }))
+    let computeEndTime = () => {
+        const endHour = parseInt(formValues["endHour"] || "00");
+        const endMinutes = parseInt(formValues["endMinutes"] || "00");
+        const [hoursWorked, minutesWorked] = (formValues["hoursWorked"] || "0").split(".")
+        updateFormValues("endHour", endHour + parseInt(hoursWorked || "0"))
+        updateFormValues("endMinutes", endMinutes + parseInt(minutesWorked || "0"))
     }
+
+    let validateHourInput = (input) => parseInt(input) > 23 ? "00" : input;
+    let validateMinuteInput = (input) => parseInt(input) > 59 ? "00" : input;
 
     return (
         <div onKeyDown={onKeyDown}>
@@ -183,36 +195,38 @@ function AddActivityDialog(props) {
                             />
 
                             <Stack direction="row" spacing={2} style={{display: 'inline-flex', alignItems: 'center'}}>
-                                    <EAMTextField
-                                        {...processElementInfo(props.layout.hrswork)}
-                                        type="number"
-                                        value={formValues['startHour']}
-                                        onChange={val => updateActivityHours("startHour", val)}
-                                    />
+                                <EAMTextField
+                                    {...processElementInfo(props.layout.actstarttime)}
+                                    type="number"
+                                    value={formValues['startHour']}
+                                    maxLength={2}
+                                    onChange={val => updateFormValues("startHour", validateHourInput(val))}
+                                />
                                 <div style={{marginTop: '20px'}}>:</div>
-                                    <EAMTextField
-                                        {...processElementInfo(props.layout.hrswork)}
-                                        type="number"
-                                        value={formValues['startMinutes']}
-                                        onChange={val => updateActivityHours("startMinutes", val)}
-                                    />
+                                <EAMTextField
+                                    {...processElementInfo(props.layout.actstarttime)}
+                                    type="number"
+                                    value={formValues['startMinutes']}
+                                    maxLength={2}
+                                    onChange={val => updateFormValues("startMinutes", validateMinuteInput(val))}
+                                />
                             </Stack>
 
                             <Stack direction="row" spacing={2} style={{display: 'inline-flex', alignItems: 'center'}}>
                                 <EAMTextField
-                                    {...processElementInfo(props.layout.hrswork)}
+                                    {...processElementInfo(props.layout.actendtime)}
                                     type="number"
-                                    style={{width: "100%"}}
                                     value={formValues['endHour']}
-                                    onChange={val => updateActivityHours("endHour", val)}
+                                    maxLength={2}
+                                    onChange={val => updateFormValues("endHour", validateHourInput(val))}
                                 />
                                 <div style={{marginTop: '20px'}}>:</div>
                                 <EAMTextField
-                                    {...processElementInfo(props.layout.hrswork)}
+                                    {...processElementInfo(props.layout.actendtime)}
                                     type="number"
-                                    style={{width: "100%"}}
                                     value={formValues['endMinutes']}
-                                    onChange={val => updateActivityHours("endMinutes", val)}
+                                    maxLength={2}
+                                    onChange={val => updateFormValues("endMinutes", validateMinuteInput(val))}
                                 />
                             </Stack>
                         </BlockUi>
