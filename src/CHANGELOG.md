@@ -1,48 +1,35 @@
-# Version (2023-07-10)
+# Version (2023-07-11)
 
 ## Features
-### 3.14.19 
-* Revert to SNAPSHOT ([f7794d](https://github.com/cern-eam/eam-light-backend/commit/f7794da85a403947b38c991e04182115784c8ed7))
 ### 3.14.8 
-* Revert to SNAPSHOT ([deb3bd](https://github.com/cern-eam/eam-light-backend/commit/deb3bd14c666d5aef976bd4f4995bd42cf20af7c))
 * Use queryParam for getWOEquipLinearDetails ([cefdd8](https://github.com/cern-eam/eam-light-backend/commit/cefdd83081858d8dfc5e0a4b37c946b47b739d03))
 ### 3.14.7 
-* Revert to SNAPSHOT ([f62590](https://github.com/cern-eam/eam-light-backend/commit/f62590505752ce7d8a5d2b9a6bd5bd696c1bab56))
 * Allow impersonation of configured service accounts when authenticated by Keycloak ([4cb74f](https://github.com/cern-eam/eam-light-backend/commit/4cb74f91539adfc726abd83a861b6dbc1d8452fa))
 ### 3.14.6 
 * [EAM-2569] New ScanUser mode: Load entity only after login ([75dbce](https://github.com/cern-eam/eam-light-frontend/commit/75dbcef408dd0430601e27bb0ebf874916615229))
-* Revert to SNAPSHOT ([eae2ad](https://github.com/cern-eam/eam-light-backend/commit/eae2ad63ac6e95aa5e692b4779ea125b9a4e94f0))
 ### 3.14.5 
 * Use new URL to fetch eqp linear details ([6b97b2](https://github.com/cern-eam/eam-light-frontend/commit/6b97b20891a329c504ee4d58c139f981e53b7ccb))
 ### 3.14.3 
 * Move Custom Fields to eam-components ([be1ead](https://github.com/cern-eam/eam-light-frontend/commit/be1ead4d21483114af7dda3d9cbbd351bd2206e0))
 * Correct the WSCustomFields import in useEntity ([690b20](https://github.com/cern-eam/eam-light-frontend/commit/690b208807b7ac2c494369a72baa361c83f5387e))
-* Revert to SNAPSHOT ([2fbdd7](https://github.com/cern-eam/eam-light-backend/commit/2fbdd7c151ef4b304493caa9f5006c7cc324a5dc))
 ### 3.14.2 
 * Add Equipment Tree for Locations ([233c3e](https://github.com/cern-eam/eam-light-frontend/commit/233c3eb2a3587ba09184f82cb00ecd86a5d3e62e))
 * Merge branch 'master' of github.com:cern-eam/eam-light-frontend ([dfd3cd](https://github.com/cern-eam/eam-light-frontend/commit/dfd3cd0f59fcff227fd00a23756a011eeb2a3aba))
 * Remove an input added by mistake to WorkorderGeneral ([a89334](https://github.com/cern-eam/eam-light-frontend/commit/a89334e475d20b27a15b5e737a451b4316c969f7))
 * Remove uncessery import from WorkorderGeneral ([0f7c37](https://github.com/cern-eam/eam-light-frontend/commit/0f7c37c3ce5796d96b88e5649776e3dec5707b67))
 * [EAM-2430] Changed entity type of NCR panel for position since the translation is done on the backend ([17fc23](https://github.com/cern-eam/eam-light-frontend/commit/17fc2387d62d8535ae343dd05ad6af1bf26ba848))
-* Revert to SNAPSHOT ([514b44](https://github.com/cern-eam/eam-light-backend/commit/514b44e2693607fd8667b88d8dd135ceb3573bf3))
 * Move the ScreenLayoutService to wshub-core ([414e8a](https://github.com/cern-eam/eam-light-backend/commit/414e8a08510023efdcb3ccd060d158e8305617e2))
 * Merge branch 'master' of github.com:cern-eam/eam-light-backend ([06dd03](https://github.com/cern-eam/eam-light-backend/commit/06dd0341c643d4a2b45a1607b64c1b16123cf2b8))
 ### 3.14.1 
 * Fixed styles definition on panel not being respected (0 padding) ([21d350](https://github.com/cern-eam/eam-light-frontend/commit/21d350ed1309217843401d66408ab916aecb6cca))
 * [EAM-2430] Changed entity type of positions for NCR creation ([cdecb6](https://github.com/cern-eam/eam-light-frontend/commit/cdecb68e39dc32d0f1bba422ab7c310329d2f47d))
-* Revert to SNAPSHOT ([3700b7](https://github.com/cern-eam/eam-light-backend/commit/3700b7c490aebaab449b86e58636253a861845df))
 ### 3.14.0 
 * Show missing labels for Equipment and Part custom fields regions on the Work Order screen ([b313f5](https://github.com/cern-eam/eam-light-frontend/commit/b313f585b8e1ed28ce1058c6c55ed393f4356ff4))
 * Fixed issue presenting work orders without class ([0b0b2b](https://github.com/cern-eam/eam-light-frontend/commit/0b0b2b4ec650027c5b753ce1b90357e28d1bb7f7))
 * [EAM-1823] Repeat MTF Step: rework after spec changes ([551796](https://github.com/cern-eam/eam-light-frontend/commit/551796048263ebaba571b1bc9c17bd07fc0a8df7))
-* Revert to SNAPSHOT ([ea01a4](https://github.com/cern-eam/eam-light-backend/commit/ea01a46c23f4c4160c2c000012804b04821ad8da))
 * Provide an option to trust all certificates ([79761b](https://github.com/cern-eam/eam-light-backend/commit/79761b19d118c3044b043dcbc8d8f6688b954ff3))
 * [EAM-1823] Updated query for max mtf step ([e5b88a](https://github.com/cern-eam/eam-light-backend/commit/e5b88a16e21518a7e3058a613c1daf9946ab6a98))
 * [EAM-1097] Computing access to sched/req dates: Do not consider fields markes as not available ([c72c0a](https://github.com/cern-eam/eam-light-backend/commit/c72c0a2eb29bc10a6996aa3d1759b3c1d3b42c77))
-### 3.13.4 
-* Revert to SNAPSHOT ([f3e85e](https://github.com/cern-eam/eam-light-backend/commit/f3e85ef499be214a09da5be361abdd5fdc8ace11))
-### 3.13.3 
-* Revert to SNAPSHOT ([cd4633](https://github.com/cern-eam/eam-light-backend/commit/cd46330b5409fc770ed7544e138b0c31df8239b5))
 ### 3.13.2 
 * Use the register function for custom fields ([802d43](https://github.com/cern-eam/eam-light-frontend/commit/802d430e8b47e1d8125ded6602f70369385643c3))
 * Fix the validation of custom fields ([6a2cbe](https://github.com/cern-eam/eam-light-frontend/commit/6a2cbe711396d8ae096633e5031bccc8d282e6d6))
@@ -130,14 +117,8 @@
 * Use generateErrorMessagesFromException inside the useEntity hook ([2065d9](https://github.com/cern-eam/eam-light-frontend/commit/2065d9dd1871707b03eaa409e269fd00a0826a95))
 * Merge branch 'master' of github.com:cern-eam/eam-light-frontend ([61a44d](https://github.com/cern-eam/eam-light-frontend/commit/61a44dfd950ea310471f21c5008bbbb554792234))
 * Added .envsso file for old environment ([09d881](https://github.com/cern-eam/eam-light-frontend/commit/09d8817302f6fae9cf575ded9511fc915c08e012))
-* Revert to SNAPSHOT ([bb4bb6](https://github.com/cern-eam/eam-light-backend/commit/bb4bb6d984570d053278b17e467b97ef69c729cc))
 * [EAM-1987] Do not consider hidden menu entries as access to date fields ([cca25d](https://github.com/cern-eam/eam-light-backend/commit/cca25d446da63743d0a29af742e8a9f053376c26))
-### 3.13.1 
-* Revert to SNAPSHOT ([12afef](https://github.com/cern-eam/eam-light-backend/commit/12afef5adff394f660fb9ad28efd68419963eef7))
-### 3.13.0 
-* Revert to SNAPSHOT ([10b166](https://github.com/cern-eam/eam-light-backend/commit/10b1662caeac9611c0c3d068cc683bc44550b87f))
 ### 3.12.1 
-* Revert to SNAPSHOT ([27e162](https://github.com/cern-eam/eam-light-backend/commit/27e162bad22306f7d3ce19ee230ef4f0cad2fa2e))
 * Fix bin autocomplete from store code ([c87be6](https://github.com/cern-eam/eam-light-backend/commit/c87be62dc1c225bac8a12187f87a091d30682a32))
 * Remove unused grid call ([a0d0fd](https://github.com/cern-eam/eam-light-backend/commit/a0d0fdc9410d9e768eebd6cb39004efcaf54854d))
 * Clean-up init methods ([9764b9](https://github.com/cern-eam/eam-light-backend/commit/9764b99f228eedba02064ad55c7b94270dddb962))
@@ -181,14 +162,12 @@
 * Merge branch 'master' of github.com:cern-eam/eam-light-backend ([8dcd41](https://github.com/cern-eam/eam-light-backend/commit/8dcd41d99fb134d246ce9205248a2227d78e4fc0))
 ### 3.11.1 
 * Updated eam-components ([d9aa94](https://github.com/cern-eam/eam-light-frontend/commit/d9aa9472f0e75e5cd5bd2c6c77eedd7cdd60cc21))
-* Revert to SNAPSHOT ([e6ff1c](https://github.com/cern-eam/eam-light-backend/commit/e6ff1c343518ff98041b7f2df5c1779817ea8fb1))
 * Updated eam-wshub-core ([e79511](https://github.com/cern-eam/eam-light-backend/commit/e795111f0ceca6dfaf9617b674a1baf0ff36c86d))
 * Updated eam-wshub-core ([d3f521](https://github.com/cern-eam/eam-light-backend/commit/d3f521025599c7cf0b2f730e5b270fd2340aeb1f))
 * Updated eamtools ([495717](https://github.com/cern-eam/eam-light-backend/commit/495717af5b8a885a3c94cd3f784954c5cb1215c2))
 ### 3.11.0 
 * [HOTFIX] Redirect equipment links on the work orders panel ([dfafb3](https://github.com/cern-eam/eam-light-frontend/commit/dfafb34053a6d744bd572525619ef8eedd9f03df))
 * Renew token before request if it expires soon ([8331c4](https://github.com/cern-eam/eam-light-frontend/commit/8331c4ccc1207b8e24f263ab9882383208aadd52))
-* Revert to SNAPSHOT ([68aa8d](https://github.com/cern-eam/eam-light-backend/commit/68aa8d8ec757369f795206cac806cfb5a0f623ff))
 * [HOTFIX] Default dataspy for equipment autocomplete ([a14e58](https://github.com/cern-eam/eam-light-backend/commit/a14e5881e5250af55ba6626ce8c1e2426b5509a1))
 * Remove hardcoded dataspy IDs ([74f41e](https://github.com/cern-eam/eam-light-backend/commit/74f41e1afc32793c8fda6422497c3e43e4f30601))
 ### 3.10.0 
@@ -203,14 +182,12 @@
 * [EAM-2048] Add Additional Cost panel missing date field ([142b22](https://github.com/cern-eam/eam-light-frontend/commit/142b223dfdb2aa6fc3445550a0e9e11520c5a731))
 * [EAM-2061] Add Target Value field to workorders ([7e92a2](https://github.com/cern-eam/eam-light-frontend/commit/7e92a2ba9bf05b204ea259a7bb334288a4d5e146))
 * Update eam-components to v1.12.0 ([924480](https://github.com/cern-eam/eam-light-frontend/commit/924480786752335e1c9aa309a5f64f1d9a2f9f81))
-* Revert to SNAPSHOT ([26275a](https://github.com/cern-eam/eam-light-backend/commit/26275a35cf9c6f349a30b7c4b5ac0b14eada7bd4))
 * [EAM-1978] Edited desc. field for autocomplete ([5833bc](https://github.com/cern-eam/eam-light-backend/commit/5833bca517798ffcfca0eaea13456f12d2f048dc))
 * Update eam-wshub-core to 11.6-28 ([ffe5aa](https://github.com/cern-eam/eam-light-backend/commit/ffe5aac9b397fa5fc04b5891159e051bb3b9ab0d))
 ### 3.9.0 
 * Fixed autocomplete hint to be uppercased ([6517e7](https://github.com/cern-eam/eam-light-frontend/commit/6517e74128a3603d57bf5e3ebea30205f97163f2))
 * Upgrade eam-components to v1.11.0 ([584f73](https://github.com/cern-eam/eam-light-frontend/commit/584f7338036542d60768db5646bc3048dcf98438))
 * Added no locations flag for equipment autocomplete ([56513b](https://github.com/cern-eam/eam-light-frontend/commit/56513be4bc8d421ef8d9a9ced7da0640ee1d4cf9))
-* Revert to SNAPSHOT ([918857](https://github.com/cern-eam/eam-light-backend/commit/9188575133445c1ff10b8e363cd7b2a54191630e))
 * Keycloak only used for CERN maven profile ([206815](https://github.com/cern-eam/eam-light-backend/commit/206815f59718351121f1831791b1eca090029986))
 * Use property substitution for web.xml path ([1c561b](https://github.com/cern-eam/eam-light-backend/commit/1c561bc0b70bbcc60b57303f8aaf966bfc865d05))
 * Fixed issue with equipment autocomplete grid filters ([5d4c3c](https://github.com/cern-eam/eam-light-backend/commit/5d4c3c074abcd27585f61b4920ee89596aa02e8b))
@@ -226,33 +203,28 @@
 * Frontend Keycloak token retrieval ([5894dc](https://github.com/cern-eam/eam-light-frontend/commit/5894dca97e56ad1147cdb361559eb291a33c4aaf))
 * [Testing] Adapt keycloak configuration ([66c652](https://github.com/cern-eam/eam-light-frontend/commit/66c652d6865b13c744420b389074572165240f5e))
 * Remove sass processor. Inject Bearer token when it exists. Setup proxy for dev env. ([f44466](https://github.com/cern-eam/eam-light-frontend/commit/f444666914eb29bada9cb964853d56f94e156fc0))
-* Revert to SNAPSHOT ([f4c20f](https://github.com/cern-eam/eam-light-backend/commit/f4c20f2e3370e49b081ca9e2365bf6356c5d690d))
 * [EAM-1823] Added MTF Step retrieval (for max step for now) ([43f867](https://github.com/cern-eam/eam-light-backend/commit/43f867aac8e13eba1a7813b02a42a5f28b6f8b10))
 * Explicitly set localizeResults on /history ([d372a7](https://github.com/cern-eam/eam-light-backend/commit/d372a7b168078c2b7052a1313bcf64afb1f4cfe0))
 * Token-derived username to upper case for Infor ([b2ceab](https://github.com/cern-eam/eam-light-backend/commit/b2ceab054ada94d1e184afc1c3bef4950847d853))
 * Use keycloak config for authentication ([1c74c0](https://github.com/cern-eam/eam-light-backend/commit/1c74c031eaf8f9162c637fe750fe684dc8b69392))
 ### 3.7.19 
 * Updated node-sass-chokidar dependency ([578402](https://github.com/cern-eam/eam-light-frontend/commit/578402f584ecc86b379ca99a000616f4f7369110))
-* Revert to SNAPSHOT ([ffebcd](https://github.com/cern-eam/eam-light-backend/commit/ffebcd7726c830be02e63b0ba7aa14893de672c8))
 * [EAM-1882] Watchers Service, autocomplete users ([533694](https://github.com/cern-eam/eam-light-backend/commit/5336943b6ea8290a1a65e9a032fdb7da5a9b43ed))
 * [EAM-1882] Refactored Watchers service. Fixed queries for users. Updated Watchers APIs ([124fc4](https://github.com/cern-eam/eam-light-backend/commit/124fc40c6383352a5cbeacd04199590b4da0409d))
 * [EAM-1882] Search users by description using a constructed regex ([9c3c35](https://github.com/cern-eam/eam-light-backend/commit/9c3c354e06a5e54d1f6864698b3ce82b32d7006a))
 * [EAM-1913] Allow creation of additional cost on workorders ([3dc911](https://github.com/cern-eam/eam-light-backend/commit/3dc911936039cf420fff5b2a075361574d75f83e))
 ### 3.7.18 
-* Revert to SNAPSHOT ([0d9695](https://github.com/cern-eam/eam-light-backend/commit/0d96958b7adea5959aecbecb05ccc351e00b9fa4))
 * Updated dependencies ([5f9faf](https://github.com/cern-eam/eam-light-backend/commit/5f9faf347c4de115820fc0d001f3901443288c96))
 * [EAM-1229] Custom Grids in EAM Light ([bb3dc8](https://github.com/cern-eam/eam-light-backend/commit/bb3dc85f8601fe279c78d91fe0f309d3955073d3))
 * [EAM-1299] Split params for each filter in eqp autocomplete ([18d74a](https://github.com/cern-eam/eam-light-backend/commit/18d74ab42a486490f9ceda734048b7f195861ac3))
 ### 3.7.17 
 * Removed default sorting on Equipment History ([229119](https://github.com/cern-eam/eam-light-frontend/commit/229119e7517334b493f154f44aa2e74851d5647d))
-* Revert to SNAPSHOT ([fffef8](https://github.com/cern-eam/eam-light-backend/commit/fffef86d67be0d65e9e076a7a695f71794193267))
 * [EAM-1299] Added handling for alias and serial no. on eqp pages ([6414e7](https://github.com/cern-eam/eam-light-backend/commit/6414e78d432fa901862b8e26290b32330b5f3f90))
 * Updated eam-wshub-core dependency ([3f0628](https://github.com/cern-eam/eam-light-backend/commit/3f062864c28953f76acc4fd7384390726d43cded))
 ### 3.7.16 
 * [EAM-1692] Link for checklist of an activity ([922b5a](https://github.com/cern-eam/eam-light-frontend/commit/922b5ad70c6115b9718fc09b16fd23736328c82b))
 * [EAM-1692] Make expanded region always visible ([1ae9cf](https://github.com/cern-eam/eam-light-frontend/commit/1ae9cfd496ed2b5e70c17a8b0ebccb966cbc9513))
 * [EAM-1667] Added warranty to WorkOrder General. Update it when changing equipment. Show warning if warranty is active ([d9d90d](https://github.com/cern-eam/eam-light-frontend/commit/d9d90dafbeb07d634dff1d8a94edeb366a8dd0c7))
-* Revert to SNAPSHOT ([09e702](https://github.com/cern-eam/eam-light-backend/commit/09e702f885cda6f312af55964eade9c5f9e0696a))
 * Autocomplete size defined to speed up task plan insertion ([1d0547](https://github.com/cern-eam/eam-light-backend/commit/1d054754ff748a9d991fdd559cc2eed0b60458b1))
 * [EAM-1377] Stop displaying jobtype IS work orders ([c3d0cf](https://github.com/cern-eam/eam-light-backend/commit/c3d0cf81033c2899f89a76823de5bf9aece55cbb))
 * [EAM-219] Support UoM in UDF fields ([4e6911](https://github.com/cern-eam/eam-light-backend/commit/4e6911a1f37e7aa72d2fbd06b01a5dd0cd531208))
@@ -270,11 +242,9 @@
 * [EAM-1123] Part usage dialog - grey out unneeded ([6b6580](https://github.com/cern-eam/eam-light-frontend/commit/6b658073b583b8e959c61a4a798f8939399ceb7b))
 * Fix tab indicator for my/team open work orders ([c89fa8](https://github.com/cern-eam/eam-light-frontend/commit/c89fa859187bbeac9474841013e936d07f12b398))
 * [EAM-219] Support UoM in UDF fields ([6f2364](https://github.com/cern-eam/eam-light-frontend/commit/6f236476c370af030bbe476f637f74d36c49b262))
-* Revert to SNAPSHOT ([dfff26](https://github.com/cern-eam/eam-light-backend/commit/dfff265a4815a61dcc4c22ddfc8357065a687c41))
 * [EAM-1678] Separate planned and issue/return rows in part usage ([8f424a](https://github.com/cern-eam/eam-light-backend/commit/8f424a20018265111ba2850e3d35b4ee638788ea))
 ### 3.7.14 
 * Fix my team work orders appearing after another tab is selected ([991495](https://github.com/cern-eam/eam-light-frontend/commit/9914956e3c2482729949e6c07405c556a3571516))
-* Revert to SNAPSHOT ([baf5ad](https://github.com/cern-eam/eam-light-backend/commit/baf5ad4afcc8b3913b57503eade65e335560469e))
 ### 3.7.13 
 * added date reported field, better field population ([86c8db](https://github.com/cern-eam/eam-light-frontend/commit/86c8db7174e9b2aea25b2405dfd39cedb4e7ad03))
 * [EAM-1571] Add safety conformity icons in the safety bar ([3c41c9](https://github.com/cern-eam/eam-light-frontend/commit/3c41c99997215523ce3f43d43da40484fd10e9a1))
@@ -285,79 +255,58 @@
 * Pinned jss-plugin-nested dependency to 10.8.0 ([7e5714](https://github.com/cern-eam/eam-light-frontend/commit/7e571424fc1b2d00011d593dcefbfa621e915e09))
 * [EAM-1571] Change texts for icons according to feedback ([c92f8c](https://github.com/cern-eam/eam-light-frontend/commit/c92f8cc74fce3f12ab3b372b25c42ce66ce8634a))
 * [EAM-1378] Fix late tab on my open work orders ([579dfb](https://github.com/cern-eam/eam-light-frontend/commit/579dfb2578b074366b745554ec2e6555afd33185))
-* Revert to SNAPSHOT ([ad4526](https://github.com/cern-eam/eam-light-backend/commit/ad45269b9cbebe1f575a7b1012684d526c46e4d4))
 ### 3.7.12 
 * Update eam-components to v1.8.8 ([4c9fd4](https://github.com/cern-eam/eam-light-frontend/commit/4c9fd41f47c4657a07328a87b617fb053b3bfca8))
-* Revert to SNAPSHOT ([8e2f8a](https://github.com/cern-eam/eam-light-backend/commit/8e2f8a13aa32dd68e6fb5a2db062e8b8bd97783b))
 ### 3.7.11 
 * Update eam-components to v1.8.7 ([2cbe3f](https://github.com/cern-eam/eam-light-frontend/commit/2cbe3fa8669eb49f6439772c0d7b29da5096652c))
-* Revert to SNAPSHOT ([68e724](https://github.com/cern-eam/eam-light-backend/commit/68e7244af92a6cac1318785aafbfde3b0c6f3595))
 * Upgrade to eam-wshub-core v11.6-12 ([3ff2b1](https://github.com/cern-eam/eam-light-backend/commit/3ff2b194df1d844f4579f3d307d17fba4cfb0666))
 ### 3.7.10 
 * Update apache configuration in order to avoid caching index.html ([6e621e](https://github.com/cern-eam/eam-light-frontend/commit/6e621eaf645b70755a49476c61d7455edb79e52a))
-* Revert to SNAPSHOT ([836a4d](https://github.com/cern-eam/eam-light-backend/commit/836a4dce3e852c7c036afe76df5cc6307e84942c))
 ### 3.7.9 
 * Update eam-components to 1.8.6 ([62a332](https://github.com/cern-eam/eam-light-frontend/commit/62a33204cc1da62904407b022beb2e6002e5be96))
-* Revert to SNAPSHOT ([27fa9a](https://github.com/cern-eam/eam-light-backend/commit/27fa9a9e9df6b524c6493cbe90947577525ce81c))
 ### 3.7.8 
 * Update eam-components to v1.8.5 ([995b2d](https://github.com/cern-eam/eam-light-frontend/commit/995b2dd876a5092c7927db05f5d8decf826fb066))
-* Revert to SNAPSHOT ([0d2493](https://github.com/cern-eam/eam-light-backend/commit/0d2493e78cf5b05e20efd76bcc94d612470171ff))
 ### 3.7.7 
 * Allow extra settings on ScanUserr based on url parameters ([496e10](https://github.com/cern-eam/eam-light-frontend/commit/496e10b7b9e722d63f3f7a93ae49264dc3bc3410))
 * [EAM-1284] Fix UOM for CHAR custom fields ([162cd4](https://github.com/cern-eam/eam-light-frontend/commit/162cd4cf0dffa78f9db6dedb2ecdebbe6916cc5f))
 * [EAM-1284] Fix UoM for DATE and DATI custom fields ([5bca95](https://github.com/cern-eam/eam-light-frontend/commit/5bca95bcaa8068596fdfc08ada26001b66fe4d2a))
 * Added helperText on ScanUser component when input is not selected ([baa9c6](https://github.com/cern-eam/eam-light-frontend/commit/baa9c61b29a6e38d7ba5c67276fd55055d82ae89))
 * [RQF1856868] Hotfix for unsynced custom field indexes when a Line Title exists ([3b77d9](https://github.com/cern-eam/eam-light-frontend/commit/3b77d9c7960017ccb5439475f10c749e96ad57da))
-* Revert to SNAPSHOT ([515888](https://github.com/cern-eam/eam-light-backend/commit/5158888105e6ef496c0a7faab66d25da0a6a3af3))
 * Return empty list for my workorders if no employee defined for user ([80827d](https://github.com/cern-eam/eam-light-backend/commit/80827d042a04a864c4694b75b1551ad9915a9f34))
-### 3.7.6 
-* Revert to SNAPSHOT ([b042cd](https://github.com/cern-eam/eam-light-backend/commit/b042cdddd06f233e2a18c9999b3b46ab4e764bbd))
 ### 3.7.5 
 * [EAM-1305] Respect initial visibility for activities and booked labor region ([ac3508](https://github.com/cern-eam/eam-light-frontend/commit/ac3508e29005a6e722853abbde7c97269bfe2f78))
 * [EAM-1309] Change equipment parent asset autocomplete code from PathParam to QueryParam ([f06628](https://github.com/cern-eam/eam-light-frontend/commit/f06628c30f833ff8acf6f57f982fd2878a670ab3))
-* Revert to SNAPSHOT ([9456ac](https://github.com/cern-eam/eam-light-backend/commit/9456ac9f7ae7441e06c487156a90d286398675be))
 * [EAM-1309] Change equipment parent asset autocomplete code from PathParam to QueryParam ([b3231d](https://github.com/cern-eam/eam-light-backend/commit/b3231ddfbce078800140e71e693de31bd433d9b7))
 ### 3.7.4 
 * [EAM-1132] Filter out "MTF title" custom fields ([e493ea](https://github.com/cern-eam/eam-light-frontend/commit/e493eafa5b65c77b15b822ff9f33168dc6f6b8f2))
 * Update eam-components to 1.8.1 ([fe7e16](https://github.com/cern-eam/eam-light-frontend/commit/fe7e163deef09cdc56486db995c8cc159b8f6ac3))
-* Revert to SNAPSHOT ([423ba6](https://github.com/cern-eam/eam-light-backend/commit/423ba69115e830009d59e859b333c7b5d9dacfe0))
 ### 3.7.3 
 * [HOTFIX] Fix equipment not being loaded if custom fields for equipment button is not shown in clone; stop blocking closing codes during the Promise ([45b415](https://github.com/cern-eam/eam-light-frontend/commit/45b415a417687002da720e5942573e19491f8200))
-* Revert to SNAPSHOT ([cfeca4](https://github.com/cern-eam/eam-light-backend/commit/cfeca48f6f5204899cb67c510a70a6ab9388e1b7))
 ### 3.7.2 
 * [EAM-1257] Make closing codes take into account the same params as Infor ([97ae39](https://github.com/cern-eam/eam-light-frontend/commit/97ae39775f6be4e75f781376bbb197e1c41ed525))
-* Revert to SNAPSHOT ([fe5683](https://github.com/cern-eam/eam-light-backend/commit/fe56836508528245a018f30c39cb3fe394962a2e))
 * [EAM-1257] Make closing codes take into account the same params as Infor ([c3e779](https://github.com/cern-eam/eam-light-backend/commit/c3e779cf914bacb276c2bf5d10734e5506584df9))
 ### 3.7.1 
-* Revert to SNAPSHOT ([05bc29](https://github.com/cern-eam/eam-light-backend/commit/05bc2989e327b53bc22dcd0c0194e0e43eed7abe))
 * Update eam-wshub-core to 11.6-9 ([77bda5](https://github.com/cern-eam/eam-light-backend/commit/77bda53d3795b9a9b7edf0c118d6ceeb119ddcc4))
 ### 3.7.0 
 * [EAM-1196] Make categories for objects dependent on their class ([823f78](https://github.com/cern-eam/eam-light-frontend/commit/823f78a00f10a5825f45d05780e12a0c8e9582b3))
 * Update eam-components to 1.8.0 ([bfdbe3](https://github.com/cern-eam/eam-light-frontend/commit/bfdbe38fa49d096f2f0490c5fa6d18e5b8024e86))
-* Revert to SNAPSHOT ([664bf7](https://github.com/cern-eam/eam-light-backend/commit/664bf7d908a6a50531041e0bb929bc672d391a43))
 * [EAM-1196] Make categories for objects dependent on their class ([7029fe](https://github.com/cern-eam/eam-light-backend/commit/7029fe9a9503505a4a92c6e4d7169d2268b49fbd))
 ### 3.6.5 
 * Update eam-components to 1.7.5 ([f7f40b](https://github.com/cern-eam/eam-light-frontend/commit/f7f40b74eaf000665ca5026c1338ca1f66442f7a))
-* Revert to SNAPSHOT ([b46cf6](https://github.com/cern-eam/eam-light-backend/commit/b46cf6b71fa81dd046967725385382e0440d4315))
-### 3.6.4 
-* Revert to SNAPSHOT ([8fe300](https://github.com/cern-eam/eam-light-backend/commit/8fe3007ad09a0567414f5a553f9abdf40fea6375))
 ### 3.6.3 
 * [EAM-1135] Add trade code to the activity header ([7b2951](https://github.com/cern-eam/eam-light-frontend/commit/7b295114435997789c5f87124dc72bb71b669d3b))
 * [RQF-1780845] Enable reassigning query params for parameterized urls after performing all the requests ([f529f3](https://github.com/cern-eam/eam-light-frontend/commit/f529f3d6a5522b98586c8fdce2588e0ffc4ca26a))
 * [EAM-1116] Respect read only mode based on departmental security ([d3b1fa](https://github.com/cern-eam/eam-light-frontend/commit/d3b1fa6114774ed28c54258d5a7fc34eea2ad5f3))
 * Update eam-components to v1.7.4 ([160f68](https://github.com/cern-eam/eam-light-frontend/commit/160f684e5084b881eb71dea47c1edc5fc15b7a41))
-* Revert to SNAPSHOT ([a370c0](https://github.com/cern-eam/eam-light-backend/commit/a370c0372a46e9ed5a92c4088da80a4e131393c1))
 ### 3.6.2 
 * [EAM-1127] Change parent position to parent asset in position hierarchy component ([f6f7c4](https://github.com/cern-eam/eam-light-frontend/commit/f6f7c4de2cc3e31495371e23abbc1b75c0ac0bbc))
 * [EAM-1127] Add Parent asset field to Position Hierarchy (with dependent checkbox) ([39ff80](https://github.com/cern-eam/eam-light-frontend/commit/39ff80be57667010abfa9e3ac039ef800bfcc96c))
 * [EAM-1128] Render inputs and dependent values only if the field is not hidden ([a1e555](https://github.com/cern-eam/eam-light-frontend/commit/a1e55551847308eb6c81cba488d61031900f3213))
 * Update eam-components to v1.7.3 ([faf586](https://github.com/cern-eam/eam-light-frontend/commit/faf58699c5bbc6448a5718f7edaa9962dd8c3f15))
-* Revert to SNAPSHOT ([dd6791](https://github.com/cern-eam/eam-light-backend/commit/dd679164c2b3fb1c1fd212b6512186fde4446ed9))
 * Update eam-wshub-core to 11.6-8 ([db4ef0](https://github.com/cern-eam/eam-light-backend/commit/db4ef02d292283596e24c37bdbd31a54e02be668))
 ### 3.6.1 
 * Upgrade eam-components to v1.7.1 ([885215](https://github.com/cern-eam/eam-light-frontend/commit/8852153fae934a31758165e3cffaecfe61bd8d0c))
 * Update eam-components to v1.7.2 ([689f66](https://github.com/cern-eam/eam-light-frontend/commit/689f66b54cc84031e52faf52b4f9c2abec136a21))
-* Revert to SNAPSHOT ([65cbf0](https://github.com/cern-eam/eam-light-backend/commit/65cbf03a79a1648422477be47f05aa58dc03be04))
 ### 3.6.0 
 * [EAM-1101] Consider Infor EAM tab visibility and availability for displaying EAM-Light entity regions ([a71d69](https://github.com/cern-eam/eam-light-frontend/commit/a71d69c13bc87786c75f30bbad5f8470e3dff5e9))
 * [EAM-1101] Fix compatibility issues ([1b16a8](https://github.com/cern-eam/eam-light-frontend/commit/1b16a86c56f3e31d885e33dddcf438da444309a5))
@@ -372,40 +321,31 @@
 * [EAM-1022] Replace grid usages with new EAM Grid component ([abc367](https://github.com/cern-eam/eam-light-frontend/commit/abc367bcd0a8ec479ce8a26df617ad33ab81762d))
 * [EAM-1125] Change material list position in add activity dialog, and add max height to it ([c0affd](https://github.com/cern-eam/eam-light-frontend/commit/c0affd3668281f26fd16b6a7709ca24a0e5f152e))
 * Update eam-components to v1.7.0 ([06f3f1](https://github.com/cern-eam/eam-light-frontend/commit/06f3f1c918d1fe111cc4cdb8f4d48e1043832d6c))
-* Revert to SNAPSHOT ([6b1c07](https://github.com/cern-eam/eam-light-backend/commit/6b1c0777fad5eb04430e0d8fd14f6d7b9537d560))
 * [EAM-1086] Get Tab availavility; Refactor ScreenLayoutService ([d6ae24](https://github.com/cern-eam/eam-light-backend/commit/d6ae24a0798fe5058ed57181f7fd591d584d2ef0))
 * Update wshub-core version to 11.6-6 ([80dfd4](https://github.com/cern-eam/eam-light-backend/commit/80dfd482cc6f9118ba42ebd9e386b4c5282fe74c))
 ### 3.5.36 
 * [EAM-221] Hide scroll bars and improve cross browser support ([b4dc37](https://github.com/cern-eam/eam-light-frontend/commit/b4dc377bf3d111402fe98c33027cea5a509ac17b))
 * Update README.md ([e6fa93](https://github.com/cern-eam/eam-light-frontend/commit/e6fa9300804924fa1d72156a9b9394c232807906))
 * Bugfix: Side-effects not triggered when selecting equipment with a barcode reader on Equipment Replacemnt ([e0ae01](https://github.com/cern-eam/eam-light-frontend/commit/e0ae0191424b0a627efc25cbd7ab1fc950897b54))
-* Revert to SNAPSHOT ([026520](https://github.com/cern-eam/eam-light-backend/commit/0265209ae644264aeb74dff3c0f28dbbb9514064))
 * Update README.md ([5da947](https://github.com/cern-eam/eam-light-backend/commit/5da9472dc710783fc346c1f82184906f86675bfa))
-### 3.5.35 
-* Revert to SNAPSHOT ([bcbd8e](https://github.com/cern-eam/eam-light-backend/commit/bcbd8e4d48b66c9a83e9523a08faade84ad4a0b4))
 ### 3.5.34 
 * [EAM-221] Make the content on the sub menu scrollable ([f8cafd](https://github.com/cern-eam/eam-light-frontend/commit/f8cafd462e68acaf806e937197faa837dbe5a5eb))
 * Updated dependencies. ([f66086](https://github.com/cern-eam/eam-light-frontend/commit/f6608635230fcbe08e9c19e018f2461b0f4046f4))
-* Revert to SNAPSHOT ([99d29d](https://github.com/cern-eam/eam-light-backend/commit/99d29dbb292fb9723053788dbdea5d1f207a85d5))
 * [UDF_CODEDESC_HOTFIX] Fetch UDF Code Desc using LVUDFCD ([48ee91](https://github.com/cern-eam/eam-light-backend/commit/48ee91948fab6ead5e8d2bab628d1cd8dd4414ee))
 * Remove /members endpoint ([015db1](https://github.com/cern-eam/eam-light-backend/commit/015db1684e270881e04fc3377f2e34d4e3513a26))
 ### 3.5.33 
 * Changed default status and state for old equipment replaced with specific classes. ([61dbae](https://github.com/cern-eam/eam-light-frontend/commit/61dbaec29314b3daa6d4d043b021b7ac8c444454))
-* Revert to SNAPSHOT ([44d916](https://github.com/cern-eam/eam-light-backend/commit/44d9164e60ecace62b0c15a361c0f7e0f1d39fc0))
 ### 3.5.32 
 * [EAM-1114] Add udf char 19 support to work order scheduling ([b01833](https://github.com/cern-eam/eam-light-frontend/commit/b0183379d7a4e8f9243843caa082f689a2ed9a8d))
-* Revert to SNAPSHOT ([93015b](https://github.com/cern-eam/eam-light-backend/commit/93015b35556ac42f44095f114d45d1bf5d5ef901))
 * Revert eam-light-cern to SNAPSHOT ([d5b599](https://github.com/cern-eam/eam-light-backend/commit/d5b599085c9ad2bdc979c72eeee00bc8b2b39920))
 ### 3.5.31 
 * [EAM-1098] Add support for group labels ([edbb2c](https://github.com/cern-eam/eam-light-frontend/commit/edbb2c33210aadec05d8d218b824d1db29640fd3))
 * [EAM-1103] Add default sorting options to Equipment history and work orders ([4551fe](https://github.com/cern-eam/eam-light-frontend/commit/4551fe0ece67c4783cdbaa69498ff9a3d8554394))
-* Revert to SNAPSHOT ([cf9ee5](https://github.com/cern-eam/eam-light-backend/commit/cf9ee56fe8732b58cc9611e52415944c1ea6acd9))
 * Revert eam-light-cern to SNAPSHOT ([e098d8](https://github.com/cern-eam/eam-light-backend/commit/e098d85940fcf049ecb93f040b169986fffc6e05))
 * Set row count for /lookupvalues from 100 to 1000 ([efdf64](https://github.com/cern-eam/eam-light-backend/commit/efdf6439ab2858771309ab287f37a9fb01f9bbad))
 * Update eam-wshub-core to 11.6-4 ([1a986f](https://github.com/cern-eam/eam-light-backend/commit/1a986f4431f7a5c772517488f14d651d65df2e67))
 ### 3.5.30 
 * Update eam-components to 1.5.21 ([167a02](https://github.com/cern-eam/eam-light-frontend/commit/167a02e0222f2a7cbb333516322b678ac4888d42))
-* Revert to SNAPSHOT ([fb12b8](https://github.com/cern-eam/eam-light-backend/commit/fb12b8ee7ba895005b9b7811f7ec48fbe6087d0f))
 * Update the version of wshub-core to 11.6-3 ([d5f1f6](https://github.com/cern-eam/eam-light-backend/commit/d5f1f6132bc70e83eb9b46661eda73baa3b88268))
 * Revert eam-light-cern to SNAPSHOT ([c9600f](https://github.com/cern-eam/eam-light-backend/commit/c9600fcf0c152851aa84a4fada9b5d9659c4629f))
 * Merge branch 'master-cern' ([7c656e](https://github.com/cern-eam/eam-light-backend/commit/7c656e9ca2078f65a6b847d41d8dfd7672805c0d))
@@ -418,17 +358,13 @@
 * Update eam-components to v1.5.20 ([95df1e](https://github.com/cern-eam/eam-light-frontend/commit/95df1eda3f34cb48f5d91b3f4856a87a5316cf54))
 * 3.5.28open3 ([4a419a](https://github.com/cern-eam/eam-light-frontend/commit/4a419a1b0ad974085c7e695dd2092e3bc0c2988c))
 * [EAM-1103] Order dates properly in Work Orders and History of Equipment ([fc9f38](https://github.com/cern-eam/eam-light-frontend/commit/fc9f3845df034d04f5a375e923cdd78473c92759))
-* Revert to SNAPSHOT ([4d0cb7](https://github.com/cern-eam/eam-light-backend/commit/4d0cb7f384ce4e08f8bb1caab16665455443b895))
 * 3.5.28open ([d76a78](https://github.com/cern-eam/eam-light-backend/commit/d76a78c176e4ccf0010682fbe95103193a5f6f29))
-* Revert to SNAPSHOT ([3ac928](https://github.com/cern-eam/eam-light-backend/commit/3ac9289f8677c52c9813bf33ccfaefa007b6d3a8))
 * [EAM-862] Add equipment type endpoint ([4caf79](https://github.com/cern-eam/eam-light-backend/commit/4caf7931b000696020201673426f305257e67e35))
 * Merge branch 'master-cern' ([6d883a](https://github.com/cern-eam/eam-light-backend/commit/6d883ac83bf128b58b034e1bfe1354ecc16517d6))
 * 3.5.28open2 ([7b0591](https://github.com/cern-eam/eam-light-backend/commit/7b0591c7a9e0571a15d92a44b7fe9f9422ce6a64))
-* Revert to SNAPSHOT ([5676c0](https://github.com/cern-eam/eam-light-backend/commit/5676c0410d2943ec74dfc03c779dde66c5d24bd1))
 * Set Grid Type to LOV in AutocompleteEquipment ([8d3cdc](https://github.com/cern-eam/eam-light-backend/commit/8d3cdc4928509a61441a5fd8ceb993d2872b9fd6))
 * Merge branch 'master-cern' ([39f2a6](https://github.com/cern-eam/eam-light-backend/commit/39f2a6a2ecd77dfc5f5d19db946e3ed7ca7b2c44))
 * 3.5.28open3 ([35f625](https://github.com/cern-eam/eam-light-backend/commit/35f6254fbff5508335e8824e79935bd99830be48))
-* Revert to SNAPSHOT ([02765f](https://github.com/cern-eam/eam-light-backend/commit/02765f170c80e59f32515e4a9e54cea0101cc2d7))
 * Fixed wrong import causing compilation failure. Reference parent pom on new modules ([e4dd01](https://github.com/cern-eam/eam-light-backend/commit/e4dd01fa70062d29da34a99f99123635207c4819))
 * Conditionally include modules on generated artefact ([05509d](https://github.com/cern-eam/eam-light-backend/commit/05509da51d58308748cc01eeab982d76808dd07d))
 * Parameterize GRIDTYPE in AutocompleteEquipment ([fd1c88](https://github.com/cern-eam/eam-light-backend/commit/fd1c8806578aedaf0809b5139321a8fae532d413))
@@ -457,7 +393,6 @@
 * [EAM-915] Renamed assetColumns to equipmentColumns regarding the custom grid url params. ([743b16](https://github.com/cern-eam/eam-light-frontend/commit/743b167d5c664e1373a9891286dac7eaaa9cb05a))
 * [EAM-906] Support part usage for MEC parent work orders ([3b6e44](https://github.com/cern-eam/eam-light-frontend/commit/3b6e4441437a578407511e9e6c803bcb8e0d6dc3))
 * [EAM-980] Add CERNMode to StatusRow ([0440ab](https://github.com/cern-eam/eam-light-frontend/commit/0440ab1a548f72b7a1be3da433c0697461e1e286))
-* Revert to SNAPSHOT ([37ec83](https://github.com/cern-eam/eam-light-backend/commit/37ec83cffcbe562e5ee46ab93e92036665cc215b))
 * [EAM-980] Revert useNative change and refactor work orders/events of equipment ([07a24f](https://github.com/cern-eam/eam-light-backend/commit/07a24f6771bb635789aa53ebb4f18e7030a30924))
 * [EAM-980] Make typeToUserFunctionMap in MyWorkOrders::getObjectEvents final and static ([83577a](https://github.com/cern-eam/eam-light-backend/commit/83577a2ec87d3e514280b0b6fb14741abfc24939))
 * [EAM-980] Update eam-wshub-core to 11.6-2 ([e0cefa](https://github.com/cern-eam/eam-light-backend/commit/e0cefaa6b9088cb29fc926678c392d075685971d))
@@ -466,7 +401,6 @@
 * [EAM-980] Add eamtools dependency to eam-light-backendear in CERN profile ([6bfeb3](https://github.com/cern-eam/eam-light-backend/commit/6bfeb3f51133e3d07aa0599281f29195400c7ce0))
 ### 3.5.27 
 * Update eam-components to v1.5.13 ([fc71f8](https://github.com/cern-eam/eam-light-frontend/commit/fc71f8a486131d5f4abecc498fa6ffd0ef5bcff8))
-* Revert to SNAPSHOT ([5c07c9](https://github.com/cern-eam/eam-light-backend/commit/5c07c9eeb8ed2885b065498e0839cbc8524efacb))
 * [EAM-228] Clear Equipment hierarchy whenever equipment status updated to D ([230749](https://github.com/cern-eam/eam-light-backend/commit/2307494fdc31d92472b1b43f21ec0ea17568608f))
 * [EAM-980] Remove LDAPTools from AuthenticationTools ([6f8ab8](https://github.com/cern-eam/eam-light-backend/commit/6f8ab86c7a912fa71e5d605975349dd7c9df2291))
 * [EAM-980] Facilitate support for miltiorg ([61fc26](https://github.com/cern-eam/eam-light-backend/commit/61fc26b7b8f2a81706f864915c88b26322dcf5fa))
@@ -479,33 +413,26 @@
 * [EAM-980] Fix work orders in equipment; hide equipment history ([e2d6de](https://github.com/cern-eam/eam-light-backend/commit/e2d6de7a0a814ab92c9277c0a16fae79ff92d8ab))
 * [EAM-980] Initial module commit ([a35d08](https://github.com/cern-eam/eam-light-backend/commit/a35d08c1594fa5e479a0ae0a7906a66998fd1591))
 ### 3.5.26 
-* Revert to SNAPSHOT ([c80e1c](https://github.com/cern-eam/eam-light-backend/commit/c80e1c5864a61fd449a35fd8ea7383e1dc1a678a))
 * [EAM-1023] Allow equipment replacement using equipment in store ([10ebfa](https://github.com/cern-eam/eam-light-backend/commit/10ebfaf7ab9ff567a42429ee8f54b9d87f1242ae))
 ### 3.5.25 
 * [EAM-1065] Fix second condition for displaying refresh cache button ([70f6ad](https://github.com/cern-eam/eam-light-frontend/commit/70f6ad89abdc8c7adc0a4b49082c48d774732624))
-* Revert to SNAPSHOT ([8747fd](https://github.com/cern-eam/eam-light-backend/commit/8747fd4ca9fdfe769d6756691729a2085de588a8))
 ### 3.5.24 
 * [EAM-1065] Fix refresh cache not displaying in EAM Light ([e0ac66](https://github.com/cern-eam/eam-light-frontend/commit/e0ac668b8c3332fe7e153ca82905e57e1d803142))
 * [EAM-862] Fetch only equipment type for redirect ([0d572d](https://github.com/cern-eam/eam-light-frontend/commit/0d572dc7eed9f455382a45292ed37eefffc33581))
-* Revert to SNAPSHOT ([f794d1](https://github.com/cern-eam/eam-light-backend/commit/f794d1edf23047af39cb687874141be7e3a1df1c))
 ### 3.5.23 
 * [EAM-966] Add Status row ([2e02c8](https://github.com/cern-eam/eam-light-frontend/commit/2e02c83e38404347d04364261bb2adeaad0b6794))
 * [EAM-966] Add Tooltip to status bar icons ([03bb31](https://github.com/cern-eam/eam-light-frontend/commit/03bb31a5724d767e5e4f0dc2beb647b2e6eccbe2))
 * [EAM-966] Change Radioactive Icon in Status Bar ([eafeef](https://github.com/cern-eam/eam-light-frontend/commit/eafeef499e586b188891246468546bc638f3556e))
 * [RQG1747570] Fix extended linking bug ([c4c683](https://github.com/cern-eam/eam-light-frontend/commit/c4c683fad1dfff1971c4a1c6968369d80fecc210))
 * [EAM-966] Change Tooltip text ([946a60](https://github.com/cern-eam/eam-light-frontend/commit/946a60a2d09349f255a1b4ca312b159cd5e49d5e))
-* Revert to SNAPSHOT ([88afc6](https://github.com/cern-eam/eam-light-backend/commit/88afc6614b65bfb345678dba7ccb884fbbaf3d44))
 ### 3.5.22 
 * [EAM-1058] Add all UDF checkboxes to Work Orders ([8b3705](https://github.com/cern-eam/eam-light-frontend/commit/8b3705cbecfa85ffd4e3aac7a3138c3e5d6bc4a4))
-* Revert to SNAPSHOT ([dc7176](https://github.com/cern-eam/eam-light-backend/commit/dc717639e1eb1fd4609b968dc83662082ed2e04b))
 * [EAM-631] Fix bug of code lists not being loaded ([4ab7a7](https://github.com/cern-eam/eam-light-backend/commit/4ab7a749326cf8d9266f29d641de95c4f14ae279))
 ### 3.5.21 
 * [RQF-1740076] Fix race condition in onChangeClass handler ([e2b760](https://github.com/cern-eam/eam-light-frontend/commit/e2b760f2981e73d189597016e219dd9e336a3fb1))
-* Revert to SNAPSHOT ([c6f126](https://github.com/cern-eam/eam-light-backend/commit/c6f12658eb36caceebeeb2baf341e416466ab067))
 ### 3.5.20 
 * [EAM-921][EAM-915] Improvements on url params as grid filters. Improvements on links on custom grids. ([63fb78](https://github.com/cern-eam/eam-light-frontend/commit/63fb78a050312f2b8c63734ecf92fb4f6b13f962))
 * [RQF1738383] Changed labels for new search checkboxes. ([c7ca59](https://github.com/cern-eam/eam-light-frontend/commit/c7ca59361f3bdc28126c8e1dc8480108e0154ae1))
-* Revert to SNAPSHOT ([296d1f](https://github.com/cern-eam/eam-light-backend/commit/296d1fe8875d29c9a15d4b0157914c4f2f7e31ad))
 * [EAM-1032] Add checklist definition endpoint ([1272bf](https://github.com/cern-eam/eam-light-backend/commit/1272bffb7005e0306f5b984ee4b4b52db319ad3d))
 * [EAM-917] Fix on-start up action code mapping ([14d4ac](https://github.com/cern-eam/eam-light-backend/commit/14d4acf53a4d225c5693de7f5a12883bbd58556e))
 ### 3.5.19 
@@ -523,12 +450,10 @@
 * [EAM-591] Improve bin selection in EAM Light add part usage ([d2aed7](https://github.com/cern-eam/eam-light-frontend/commit/d2aed7a300343b9f7c82c1215458694341277099))
 * [EAM-1036] Rename AbstractToolbar to Toolbar ([f5ded7](https://github.com/cern-eam/eam-light-frontend/commit/f5ded7b8b6864e150a7804c265d5401b728a0a33))
 * [EAM-683] Do not clone date completed in WOs ([beeaa5](https://github.com/cern-eam/eam-light-frontend/commit/beeaa53e43ddf4d2bdd540a6f9405aaaad550e45))
-* Revert to SNAPSHOT ([46c982](https://github.com/cern-eam/eam-light-backend/commit/46c982e4f87b9732c3b5a791a195eeaa8071efa6))
 * [EAM-934] Show Events tab of extended in Work Orders of Equipment ([e829d6](https://github.com/cern-eam/eam-light-backend/commit/e829d65fed9cf89898a33245b170ed21bac2cdf6))
 * [EAM-979] Add new employee autocomplete ([27ece7](https://github.com/cern-eam/eam-light-backend/commit/27ece7f45093aa8fc38888bc2ca85c1fe516c365))
 ### 3.5.17 
 * [EAM-545] Call createPageUsage request from PartUsageDialog to fix erroneous data clearing bug ([f851f9](https://github.com/cern-eam/eam-light-frontend/commit/f851f9658a61085d222d26551c7dfae42af556c0))
-* Revert to SNAPSHOT ([2c83b0](https://github.com/cern-eam/eam-light-backend/commit/2c83b081f0245dae2fbed5cd99ed52538fa7cf45))
 * [EAM-540] Add endpoint to read TaskPlans ([473046](https://github.com/cern-eam/eam-light-backend/commit/473046b09e44e99c4d81385fcdbcb98d51f5cb51))
 * [EAM-917] Update wshub-core version to 11.5-28 ([af7bc0](https://github.com/cern-eam/eam-light-backend/commit/af7bc0b9e3b212bcb462d0c953801179c46e705e))
 * [EAM-917] Rename Funtion class to EAMFunction ([b92872](https://github.com/cern-eam/eam-light-backend/commit/b928724ccf89afc7e7332edb520152c44f32e17f))
@@ -539,43 +464,28 @@
 * [EAM-925] Change logic of EAMlight.js to display invalid user error message ([5d238f](https://github.com/cern-eam/eam-light-frontend/commit/5d238ff0182e72a477b8268f8c9d2b17c17bc942))
 * [EAM-918] Show type checkboxes only when search on top. Re-run search when changing types. ([82fd3e](https://github.com/cern-eam/eam-light-frontend/commit/82fd3e67ac6cec979aaba212118e0f2bfc4e66f2))
 * [EAM-917] Define start-up action condition as prop ([3951b8](https://github.com/cern-eam/eam-light-frontend/commit/3951b8e673e7f75757989f94c3836a22cfd8a1bf))
-* Revert to SNAPSHOT ([f743d4](https://github.com/cern-eam/eam-light-backend/commit/f743d4b09cb080cffdccd1afa8fe9c081f3b6271))
 * [EAM-917] Get Screen startup action in ScreenService::getScreens ([ffcbf9](https://github.com/cern-eam/eam-light-backend/commit/ffcbf9e106f8d17347fe5f8929fde329166c531c))
 * [EAM-917] Map Start-up Action Descriptions to Start-up Action Codes ([3ee10b](https://github.com/cern-eam/eam-light-backend/commit/3ee10b6bed6c515e2da456be036e878b89475c85))
 ### 3.5.15 
 * [EAM-918] Added entityTypes selection to index search ([a635f2](https://github.com/cern-eam/eam-light-frontend/commit/a635f2d2f07c40fc1228a5f0621db4118f74c556))
-* Revert to SNAPSHOT ([c974ae](https://github.com/cern-eam/eam-light-backend/commit/c974ae2bbab94da52d30b3a94cfbe4a98ac8d891))
 * [EAM-918] New query for index search. Added functionality to search on specific entity types. ([ccaef9](https://github.com/cern-eam/eam-light-backend/commit/ccaef9cfd7c06a7a91cf1037fe63651769198049))
 ### 3.5.14 
 * [EAM-962] Post message on equipment tree node click ([4ad1f1](https://github.com/cern-eam/eam-light-frontend/commit/4ad1f148a86ce8bc53f3d289f9b128b949a72548))
-* Revert to SNAPSHOT ([fd36c7](https://github.com/cern-eam/eam-light-backend/commit/fd36c7be25ddffa90601466d99a323a50a644e8a))
-### 3.5.13 
-* Revert to SNAPSHOT ([4deb06](https://github.com/cern-eam/eam-light-backend/commit/4deb06b5051e4f10d21ee9d425d6957fba65c6c1))
-### 3.5.11 
-* Revert to SNAPSHOT ([23ebd2](https://github.com/cern-eam/eam-light-backend/commit/23ebd2a0088971e3e861df0492e13046911e3b69))
 ### 3.5.10 
 * Changed ScanUser title for scanner only mode ([3df6e6](https://github.com/cern-eam/eam-light-frontend/commit/3df6e6478fa869c93eab65d1b73f3df2b93d8b94))
 * [EAM-222] Merge quantity and UoM columns ([2b5a2f](https://github.com/cern-eam/eam-light-frontend/commit/2b5a2f08d1dd70d00f3f32fefb463c7916523ce1))
 * [EAM-925] Display an error message, when an account does not exist ([0238ac](https://github.com/cern-eam/eam-light-frontend/commit/0238ac8b3bcd33b6ad3107e01b8d4d5e3efb241f))
 * [EAM-222] Add UoM to Part Usage Dialog ([da558f](https://github.com/cern-eam/eam-light-frontend/commit/da558fd2c0a254c1079d2fc2e2a55e89ccb5469e))
-* Revert to SNAPSHOT ([46bd09](https://github.com/cern-eam/eam-light-backend/commit/46bd09801ae60317fc12e1c1f643ea99ed4e47ac))
 * [EAM-925] Send forbidden status code when user does not exist ([e1d0a1](https://github.com/cern-eam/eam-light-backend/commit/e1d0a1e2659b4a77ba8f68204dd7b96e9985f7a8))
 ### 3.5.9 
 * [EAM-959] DocLight: Use custom object type for material and lot ([f01404](https://github.com/cern-eam/eam-light-frontend/commit/f01404f70863a6507a4e4b564171e167770948c6))
-* Revert to SNAPSHOT ([342dcd](https://github.com/cern-eam/eam-light-backend/commit/342dcdc28572cd5bd4832eb52aaa00a654856e8e))
-### 3.5.8 
-* Revert to SNAPSHOT ([627957](https://github.com/cern-eam/eam-light-backend/commit/627957b90a568c428982e5d03cae06dd4b642378))
 ### 3.5.7 
 * [EAM-222] Add partUoM in table for part usage ([b154ad](https://github.com/cern-eam/eam-light-frontend/commit/b154adfc2fd3f31e58b52a9047b064695c20178c))
-* Revert to SNAPSHOT ([08d66a](https://github.com/cern-eam/eam-light-backend/commit/08d66a7bb0b4ad85e09b681bbcb9da409bedc71b))
-### 3.5.6 
-* Revert to SNAPSHOT ([84e4ab](https://github.com/cern-eam/eam-light-backend/commit/84e4ab47ef450031a0f68b90e581b170003be71d))
 ### 3.5.5 
 * [EAM-949] Fix add part usage ([268ff4](https://github.com/cern-eam/eam-light-frontend/commit/268ff4895514530c13d23aa1803937258bb36615))
 * [EAM-582] Add Unit of Measure to custom fields ([0bd907](https://github.com/cern-eam/eam-light-frontend/commit/0bd907cc76de70022326cc6822247598fae7d99d))
 * Update eam-components v1.5.7 ([7d2bf2](https://github.com/cern-eam/eam-light-frontend/commit/7d2bf281185290c7ecb710930ef27aec9ffdba56))
 * Added modes ALL, PERSON to Impersonate. Added SCANNER_ONLY mode. ([0209bc](https://github.com/cern-eam/eam-light-frontend/commit/0209bc019bee04c520143489c42497d7bde770c5))
-* Revert to SNAPSHOT ([d6c0a2](https://github.com/cern-eam/eam-light-backend/commit/d6c0a2712dcf5213a426fc622c882645192bfebf))
 * Added modes ALL, PERSON to Impersonate WS ([dc83f0](https://github.com/cern-eam/eam-light-backend/commit/dc83f0be455f62c6b14bfc77b72d35d2e7881cbe))
 ### 3.5.4 
 * [EAM-850] ScanUser component: uppercase input ([d62870](https://github.com/cern-eam/eam-light-frontend/commit/d62870b4e7f9b88521ab4d53593dafea81aac0ca))
@@ -586,7 +496,6 @@
 * [EAM-894] Include Scheduled Start Date for My and My Team's WOs ([5b225b](https://github.com/cern-eam/eam-light-frontend/commit/5b225b83db280417ef5572911bbe2f404432f518))
 * [EAM-894] Include Scheduled Start Date for My and My Team's WOs ([f0ac01](https://github.com/cern-eam/eam-light-frontend/commit/f0ac011d04cc50a33f6408d33ab16769f1cd4819))
 * Added budget code to asset screen ([63986e](https://github.com/cern-eam/eam-light-frontend/commit/63986ea2392b2ba219d59f75d2ed11fd4884a7ec))
-* Revert to SNAPSHOT ([1b5ea0](https://github.com/cern-eam/eam-light-backend/commit/1b5ea0ddaef3db9335ef736997dbdc4c92425e07))
 * Update eamtools to 2.3.1 ([662c4a](https://github.com/cern-eam/eam-light-backend/commit/662c4a18156bce9ca2ea0692eb9a4656c4f60e7c))
 * Update eam-wshub-core:11.5-24, eamtools:2.3.2 ([1bbf55](https://github.com/cern-eam/eam-light-backend/commit/1bbf55b693c8a398cc4c3093d18fca1c4544a449))
 * [EAM-631] Add support for different UDF lookup types ([e7493c](https://github.com/cern-eam/eam-light-backend/commit/e7493c614aa6a59bbfb57eef2b1b53e5ca50a278))
@@ -596,7 +505,6 @@
 * Added equipment cost code webservice. ([18346f](https://github.com/cern-eam/eam-light-backend/commit/18346ffb34375855ffa29aa3909d3da8b3a46ef4))
 ### 3.5.3 
 * [EAM-850] Impersonator: allow any ID (cern id, person id, username) to be used. Improvements on workflow. ([e1967f](https://github.com/cern-eam/eam-light-frontend/commit/e1967f766cfa6d636089891df31d26f2793bbcd5))
-* Revert to SNAPSHOT ([7e7eeb](https://github.com/cern-eam/eam-light-backend/commit/7e7eeb94a586530c27cdb2fcfd77e7f3192a30ed))
 * [EAM-850] Prevent potential NPE if Service Account is not set ([14b2bb](https://github.com/cern-eam/eam-light-backend/commit/14b2bb5c6a10355a07cffb80bb9c25972ce900e0))
 * [EAM-850] User impersonator improvements. LDAP Tools included to read egroups. Cache for install params. ([cde937](https://github.com/cern-eam/eam-light-backend/commit/cde9378f165c01c5d63d8268ad88d7155c3abfde))
 * Updated dependencies. ([8116a5](https://github.com/cern-eam/eam-light-backend/commit/8116a51b417ec86eb9f424069630d55e05119c02))
@@ -667,7 +575,6 @@
 * Merge branch 'master-cern' of https://github.com/cern-eam/eam-light-frontend into master-cern ([a19eed](https://github.com/cern-eam/eam-light-frontend/commit/a19eed8243cfed5c4bb26af5ab10d74f71eb9057))
 * Merge branch 'master' into master-cern ([f6eb70](https://github.com/cern-eam/eam-light-frontend/commit/f6eb709ae0dd3921f81354d1366122f0c3e6fd84))
 * [EAM-850] Impersonate login handler for service accounts ([cf37dc](https://github.com/cern-eam/eam-light-frontend/commit/cf37dc3b028adcf10a49bfdd1396d4fe0ebbb1b3))
-* Revert to SNAPSHOT ([686820](https://github.com/cern-eam/eam-light-backend/commit/686820853f82e36bd01adfb248f6301eb7b9c79b))
 * [EAM-364] initWorkOrder now returns the bare work order, with empty UDFs and the custom fields for class * ([0abe79](https://github.com/cern-eam/eam-light-backend/commit/0abe79081866cf24bfbff632f631be0ff93727b9))
 * [EAM-444] EAM Light improvements ([41d16d](https://github.com/cern-eam/eam-light-backend/commit/41d16dd593fe45c19444e52d2ba75edf38a51031))
 * [EAM-444] Changed sorting to grid request ([18300e](https://github.com/cern-eam/eam-light-backend/commit/18300e15c6750106b75eda957138d83b03c2f1ea))
@@ -709,7 +616,6 @@
 * Change contextRoot to '/' for the open-sourced version ([524979](https://github.com/cern-eam/eam-light-backend/commit/5249790a774ee7f18ec7b502b6314d6e1005fc6c))
 * [EAM-850] Allow user to be impersonated for service account ([5a6326](https://github.com/cern-eam/eam-light-backend/commit/5a6326011796a9ef2c5127031d3ecbdfa1ca9f58))
 ### 3.5.1 
-* Revert to SNAPSHOT ([7d070e](https://github.com/cern-eam/eam-light-backend/commit/7d070e4eedf6de08f2ad0432db5b66e06d6d5810))
 * Updated dependencies ([bfa053](https://github.com/cern-eam/eam-light-backend/commit/bfa05351d4d08a3e3cbac6dfd27b24d9ea49272b))
 ### 3.5.0 
 * [EAM-105] add missing SSO/eamlight prefix on WO creation with parametrized hyperlink ([89cbf3](https://github.com/cern-eam/eam-light-frontend/commit/89cbf3669b862ec0cd0263a8979b37848312d915))
@@ -770,7 +676,6 @@
 * Refactored and fixed a few issues in EntityTools ([a60409](https://github.com/cern-eam/eam-light-frontend/commit/a60409000e2eaa295d6f90ce6e39b8567470178f))
 * Fixed a few bugs ([6558b8](https://github.com/cern-eam/eam-light-frontend/commit/6558b8e9497f403ce97c302135ec30cf9c815a69))
 * Set default of assignDefaultValues to forced ([35270e](https://github.com/cern-eam/eam-light-frontend/commit/35270e692129a22d26859e837bc13b3e56dc8109))
-* Revert to SNAPSHOT ([6ab4e7](https://github.com/cern-eam/eam-light-backend/commit/6ab4e7ad5db5777294ada0ad04442baa5cecc79b))
 * Only set screen if user has access to it ([957a2e](https://github.com/cern-eam/eam-light-backend/commit/957a2e072f38614fb0e447925f59ad53b4ccabda))
 * Simplified the condition that checks if the user has access to a specific screen ([b595fb](https://github.com/cern-eam/eam-light-backend/commit/b595fbc67b9588ff562d0aa2b55a2eb9dd4236ee))
 * [EAM-97] Add location screen and location REST ([95b7f5](https://github.com/cern-eam/eam-light-backend/commit/95b7f5d343354298546ba369f6297232492bc0d1))
@@ -805,25 +710,21 @@
 * Use EAM query param names that identify the entity ([1cb8dc](https://github.com/cern-eam/eam-light-frontend/commit/1cb8dc6f8084dad58c4c6f629dd818e5e5082a1b))
 * Generalize the usage of EAM query params to identify an entity ([bea84c](https://github.com/cern-eam/eam-light-frontend/commit/bea84c641081ff9b4d363616e2f47ef4d69e4eda))
 * MTF Repeat Step: Fixed check for out of service equipment ([43c0fb](https://github.com/cern-eam/eam-light-frontend/commit/43c0fbffc4f350694b9468e8abd5e4059c231c22))
-* Revert to SNAPSHOT ([0fddee](https://github.com/cern-eam/eam-light-backend/commit/0fddee64e8ecf6bc3e676ae4ab15b72cae4db44d))
 ### 3.3.4 
 * Support html comments. Removed CommentsContainer that did not exist in eam-components ([dd3f76](https://github.com/cern-eam/eam-light-frontend/commit/dd3f766a734ba9848ca0582972fc53fddf59ff92))
 ### 3.3.3 
 * Adapt to new init WS ([0e2aa4](https://github.com/cern-eam/eam-light-frontend/commit/0e2aa426faa28a2d93d2bff8c054575b9a116981))
 * Merge branch 'master-cern' of https://github.com/cern-eam/eam-light-frontend into master-cern ([bf736e](https://github.com/cern-eam/eam-light-frontend/commit/bf736ef5103f78535d22924e06d91219b3f74ea8))
 * Remove EDMS/NCR (CERN specific) regions ([829a26](https://github.com/cern-eam/eam-light-frontend/commit/829a26f4368fd00d6980bb72d2da9fa684375ed8))
-* Revert to SNAPSHOT ([7f8e0a](https://github.com/cern-eam/eam-light-backend/commit/7f8e0ad41e383892649d0198522cae8c73ec2ffc))
 * Simplify init methods for each entity ([9edea7](https://github.com/cern-eam/eam-light-backend/commit/9edea7647477ea296ed58c0c87cabcd7f7c8796b))
 * Merge branch 'master-cern' of https://github.com/cern-eam/eam-light-backend into master-cern ([d4991d](https://github.com/cern-eam/eam-light-backend/commit/d4991d0deb0d352eb28fa675855cd910b027bf3a))
 * Change REST apis patch ([6e69b7](https://github.com/cern-eam/eam-light-backend/commit/6e69b716f3a34f96b8d4e5edbd7656bec7c6bcaa))
 ### 3.3.2 
 * Update eam-components to v1.1.46 ([c2a820](https://github.com/cern-eam/eam-light-frontend/commit/c2a8200fcda3ccb7d5c92768f6e518470f365cba))
 * Fix MTF filter for equipment work orders ([1a8bdc](https://github.com/cern-eam/eam-light-frontend/commit/1a8bdc8d2be7bb9206cf875a6b3b8d982308a919))
-* Revert to SNAPSHOT ([8c8372](https://github.com/cern-eam/eam-light-backend/commit/8c8372e5ef0ae95064795e580c396c9f2462b562))
 * GET Endpoint for version. Updated pom.xml ([c6a6dc](https://github.com/cern-eam/eam-light-backend/commit/c6a6dc9138dbd15475de5daabd8c3f7751563bc6))
 ### 3.3.1 
 * Added tar.gz to gitignore ([6482e9](https://github.com/cern-eam/eam-light-frontend/commit/6482e9d332d421008dfd2778b80b268bf1549bfe))
-* Revert to SNAPSHOT ([75dbf2](https://github.com/cern-eam/eam-light-backend/commit/75dbf2ebd25d98cded598b282b91c70b3ec3527d))
 * Added version to build filename ([8734ca](https://github.com/cern-eam/eam-light-backend/commit/8734cad5d0459d2aa39873407922c0cd10c933f1))
 ### 3.3.0 
 * First commit ([ecc045](https://github.com/cern-eam/eam-light-frontend/commit/ecc0459ef90ff03c42635e360dc38ee63ce32167))
@@ -1096,5 +997,4 @@
 * Refactoring linked to the removal of some legacy classes (SimpleGridinput, GridUtils, ...) ([a2a706](https://github.com/cern-eam/eam-light-backend/commit/a2a7068b63483846b1cd55eac55f89288298e1e4))
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
-### 0 
 

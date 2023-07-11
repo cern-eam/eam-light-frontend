@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import ReactMarkdown from "react-markdown";
-import releaseNotesFile from '../../../CHANGELOG.md';
+import releaseNotesFile from '../../CHANGELOG.md';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 const ReleaseNotes = () => {
