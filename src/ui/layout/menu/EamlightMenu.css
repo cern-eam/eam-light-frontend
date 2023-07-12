@@ -97,6 +97,10 @@
     height: calc(100% - 150px);
   }
 
+  .layout-tab-submenu>li> div + div + ul {
+    height: calc(100% - 200px);
+  }
+
   .layout-tab-submenu>li ul::-webkit-scrollbar {
     width: 0 !important;
     display: none;
