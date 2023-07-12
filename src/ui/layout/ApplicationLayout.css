@@ -30,7 +30,7 @@
 #layout-menu-cover {
     z-index: 1100;
     width: 280px;
-    height: 100%;
+    height: calc(100% - 48px);
     box-sizing: border-box;
     display: table-cell;
     position: fixed;

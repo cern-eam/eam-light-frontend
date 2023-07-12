@@ -47,7 +47,7 @@
   }
 
   .layout-tab-submenu {
-    padding: 10px;
+    padding: 0px;
     margin: 0px;
     width: 220px;
     box-sizing: border-box;
@@ -55,7 +55,6 @@
     min-height: 100%;
     margin-left: 58px;
     background-color: #282828;
-    padding-bottom: 0;
     display: none;
   }
 
@@ -64,7 +63,8 @@
   }
 
   .layout-tab-submenu>li {
-    display: block;
+    display: flex;
+    flex-direction: column;
     margin: 0px;
     padding: 0px;
     position: absolute;
@@ -89,12 +89,9 @@
     margin: 0px;
     padding: 0px;
     overflow-y: scroll;
-    height: calc(100% - 95px);
+    height: 100%;
+    padding-bottom: 0.5rem;
     scrollbar-color: transparent transparent;
-  }
-
-  .layout-tab-submenu>li> span + div + ul {
-    height: calc(100% - 150px);
   }
 
   .layout-tab-submenu>li ul::-webkit-scrollbar {
