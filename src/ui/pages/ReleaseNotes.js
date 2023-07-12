@@ -16,11 +16,12 @@ const ReleaseNotes = () => {
 
 
     return (
-        <InfiniteScroll height="calc(100vh)">
-            <ReactMarkdown>{fileContent}</ReactMarkdown>
+      <div style={{ marginLeft: 20, height: "100%", overflow: "auto" }}>
+        <InfiniteScroll height="100%">
+          <ReactMarkdown>{fileContent}</ReactMarkdown>
         </InfiniteScroll>
-
-    )
+      </div>
+    );
 }
 
 export default ReleaseNotes;

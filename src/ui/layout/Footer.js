@@ -22,7 +22,7 @@ const Footer = props => {
     return (
         <div style={style}>
             <span style={{fontWeight: 900}}>EAM Light</span>
-            <span style={{marginLeft: 5, marginRight: 5}}  onClick={() => history.push(process.env.PUBLIC_URL + "releaseNotes")}>(v{version})</span>
+            <span style={{marginLeft: 5, marginRight: 5}}>(<span style={{textDecorationLine: "underline", cursor: "pointer"}}  onClick={() => history.push("/releaseNotes")}>v{version}</span>)</span>
             {isCernMode && <a style={{color: "white", marginRight: 10}} href="mailto:eam.support@cern.ch">eam.support@cern.ch</a>}
         </div>
     )
