@@ -32,10 +32,10 @@ function AddActivityDialog(props) {
     useEffect(() => {
         computeHoursWorked()
     }, [formValues["startHour"], formValues["startMinutes"], formValues["endHour"], formValues["endMinutes"]])
-
-    useEffect(() => {
-        computeEndTime()
-    }, [formValues['hoursWorked']])
+    //
+    // useEffect(() => {
+    //     //computeEndTime()
+    // }, [formValues['hoursWorked']])
 
     let init = () => {
         setFormValues({
@@ -116,19 +116,21 @@ function AddActivityDialog(props) {
         const endMinutes = parseInt(formValues["endMinutes"] || "00");
         const timeWorked = (endHour * 60 + endMinutes) - (startHour * 60 + startMinutes)
 
-        if(timeWorked < 0) {
+        if (timeWorked < 0) {
             updateFormValues("endHour", startHour)
             updateFormValues("endMinutes", startMinutes)
         }
-        updateFormValues("hoursWorked", timeWorked / 60 || 0)
+        updateFormValues("hoursWorked", (timeWorked / 60) || "0")
     }
 
     let computeEndTime = () => {
-        const endHour = parseInt(formValues["endHour"] || "00");
-        const endMinutes = parseInt(formValues["endMinutes"] || "00");
-        const [hoursWorked, minutesWorked] = (formValues["hoursWorked"] || "0").split(".")
-        updateFormValues("endHour", endHour + parseInt(hoursWorked || "0"))
-        updateFormValues("endMinutes", endMinutes + parseInt(minutesWorked || "0"))
+        const startHour = parseInt(formValues["startHour"] || "00");
+        const startMinutes = parseInt(formValues["startMinutes"] || "00");
+        // const endHour = parseInt(formValues["endHour"] || "00");
+        // const endMinutes = parseInt(formValues["endMinutes"] || "00");
+        const [hoursWorked, minutesWorked] = (formValues["hoursWorked"] || 0).toString().split(".")
+        updateFormValues("endHour", startHour + parseInt(hoursWorked || "0"))
+        updateFormValues("endMinutes", startMinutes + parseInt(minutesWorked || "0"))
     }
 
     let validateHourInput = (input) => parseInt(input) > 23 ? "00" : input;
@@ -202,7 +204,7 @@ function AddActivityDialog(props) {
                                     maxLength={2}
                                     onChange={val => updateFormValues("startHour", validateHourInput(val))}
                                 />
-                                <div style={{marginTop: '20px'}}>:</div>
+                                <div style={{marginTop: '24px'}}>:</div>
                                 <EAMTextField
                                     {...processElementInfo(props.layout.actstarttime)}
                                     type="number"
@@ -220,7 +222,7 @@ function AddActivityDialog(props) {
                                     maxLength={2}
                                     onChange={val => updateFormValues("endHour", validateHourInput(val))}
                                 />
-                                <div style={{marginTop: '20px'}}>:</div>
+                                <div style={{marginTop: '24px'}}>:</div>
                                 <EAMTextField
                                     {...processElementInfo(props.layout.actendtime)}
                                     type="number"
