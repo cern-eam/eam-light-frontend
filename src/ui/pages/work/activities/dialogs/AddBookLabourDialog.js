@@ -56,7 +56,9 @@ function AddActivityDialog(props) {
 
         let bookingLabour = {
             ...formValues,
-            tradeCode
+            'startTime': convertTimeToSeconds(formValues['startTime']),
+            'endTime': convertTimeToSeconds(formValues['endTime']),
+             tradeCode
         }
         delete bookingLabour.departmentDesc;
 
@@ -87,8 +89,12 @@ function AddActivityDialog(props) {
             });
     };
 
+    let convertTimeToSeconds = (value) => {
+        const date = new Date(value)
+        return  date.getMinutes() * 60 + date.getHours() * 3600
+    }
+
     let updateFormValues = (key, value) => {
-        console.log(key, value)
         setFormValues(prevFormValues => ({
             ...prevFormValues,
             [key]: value
@@ -102,43 +108,43 @@ function AddActivityDialog(props) {
         }
     }
 
-    let updateTimeWorked = (startHour, endHour) => {
-        const timeWorked = (endHour.getHours() * 60 + endHour.getMinutes()) - (startHour.getHours() * 60 + startHour.getMinutes())
+    let updateTimeWorked = (startTime, endTime) => {
+        const timeWorked = (endTime.getHours() * 60 + endTime.getMinutes()) - (startTime.getHours() * 60 + startTime.getMinutes())
         updateFormValues("hoursWorked", (timeWorked / 60) || "0")
     }
 
-    let updateStartHour = (key, value) => {
+    let updateStartTime = (key, value) => {
         let startTime = new Date(value)
-        const endTime = new Date(formValues['endHour'])
+        const endTime = new Date(formValues['endTime'])
 
         if(startTime > endTime) {
             startTime = endTime
         }
 
-        updateFormValues('startHour', startTime.toString())
+        updateFormValues('startTime', startTime.toString())
         updateTimeWorked(startTime, endTime)
     }
 
-    let updateEndHour = (key, value) => {
+    let updateEndTime = (key, value) => {
         let endTime = new Date(value)
-        const startTime = new Date(formValues['startHour'])
+        const startTime = new Date(formValues['startTime'])
 
         if(startTime > endTime) {
             endTime = startTime
         }
 
-        updateFormValues('endHour', endTime.toString())
+        updateFormValues('endTime', endTime.toString())
         updateTimeWorked(startTime, endTime)
     }
     let updateHoursWorked = (key, value) => {
-        const startTime = new Date(formValues['startHour'])
-        const endTime = new Date(formValues['endHour'])
+        const startTime = new Date(formValues['startTime'])
+        const endTime = new Date(formValues['endTime'])
         const [hoursWorked, minutesWorked] = (value || "0.0").split(".")
 
         const newEndTime = endTime.setHours(startTime.getHours() + parseInt(hoursWorked),
             startTime.getMinutes() + parseInt(minutesWorked || '0') * 6)
 
-        updateFormValues('endHour', newEndTime)
+        updateFormValues('endTime', newEndTime)
         updateFormValues("hoursWorked", value)
     }
 
@@ -203,13 +209,13 @@ function AddActivityDialog(props) {
                             />
                             <EAMTimePicker
                                 {...processElementInfo(props.layout.actstarttime)}
-                                value={formValues['startHour'] || null}
-                                onChange={createOnChangeHandler("startHour", null, null, updateStartHour)}
+                                value={formValues['startTime'] || null}
+                                onChange={createOnChangeHandler("startTime", null, null, updateStartTime)}
                             />
                             <EAMTimePicker
                                 {...processElementInfo(props.layout.actendtime)}
-                                value={formValues['endHour'] || null}
-                                onChange={createOnChangeHandler("endHour", null, null, updateEndHour)}
+                                value={formValues['endTime'] || null}
+                                onChange={createOnChangeHandler("endTime", null, null, updateEndTime)}
                             />
                         </BlockUi>
                     </div>
