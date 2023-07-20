@@ -11,8 +11,9 @@ import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
-import { createOnChangeHandler, processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import {createOnChangeHandler, processElementInfo} from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 import LightDialog from 'ui/components/LightDialog';
+import EAMTimePicker from 'eam-components/dist/ui/components/inputs-ng/EAMTimePicker';
 
 /**
  * Display detail of an activity
@@ -55,7 +56,9 @@ function AddActivityDialog(props) {
 
         let bookingLabour = {
             ...formValues,
-            tradeCode
+            'startTime': convertTimeToSeconds(formValues['startTime']),
+            'endTime': convertTimeToSeconds(formValues['endTime']),
+             tradeCode
         }
         delete bookingLabour.departmentDesc;
 
@@ -67,11 +70,11 @@ function AddActivityDialog(props) {
 
                 const workorder = result.body.data;
                 if (props.updateCount + 1 === workorder.updateCount
-                        && props.startDate === null) {
+                    && props.startDate === null) {
                     props.updateEntityProperty('startDate', workorder.startDate);
                     props.updateEntityProperty('updateCount', props.updateCount + 1);
                 } else if (props.updateCount !== workorder.updateCount
-                        || props.startDate !== workorder.startDate) {
+                    || props.startDate !== workorder.startDate) {
                     // an unexpected situation has happened, reload the page
                     window.location.reload();
                 }
@@ -86,6 +89,11 @@ function AddActivityDialog(props) {
             });
     };
 
+    let convertTimeToSeconds = (value) => {
+        const date = new Date(value)
+        return  date.getMinutes() * 60 + date.getHours() * 3600
+    }
+
     let updateFormValues = (key, value) => {
         setFormValues(prevFormValues => ({
             ...prevFormValues,
@@ -99,7 +107,47 @@ function AddActivityDialog(props) {
             handleSave();
         }
     }
-    
+
+    let updateTimeWorked = (startTime, endTime) => {
+        const timeWorked = (endTime.getHours() * 60 + endTime.getMinutes()) - (startTime.getHours() * 60 + startTime.getMinutes())
+        updateFormValues("hoursWorked", (timeWorked / 60) || "0")
+    }
+
+    let updateStartTime = (key, value) => {
+        let startTime = new Date(value)
+        const endTime = new Date(formValues['endTime'])
+
+        if(startTime > endTime) {
+            startTime = endTime
+        }
+
+        updateFormValues('startTime', startTime.toString())
+        updateTimeWorked(startTime, endTime)
+    }
+
+    let updateEndTime = (key, value) => {
+        let endTime = new Date(value)
+        const startTime = new Date(formValues['startTime'])
+
+        if(startTime > endTime) {
+            endTime = startTime
+        }
+
+        updateFormValues('endTime', endTime.toString())
+        updateTimeWorked(startTime, endTime)
+    }
+    let updateHoursWorked = (key, value) => {
+        const startTime = new Date(formValues['startTime'])
+        const endTime = new Date(formValues['endTime'])
+        const [hoursWorked, minutesWorked] = (value || "0.0").split(".")
+
+        const newEndTime = endTime.setHours(startTime.getHours() + parseInt(hoursWorked),
+            startTime.getMinutes() + parseInt(minutesWorked || '0') * 6)
+
+        updateFormValues('endTime', newEndTime)
+        updateFormValues("hoursWorked", value)
+    }
+
     return (
         <div onKeyDown={onKeyDown}>
             <LightDialog
@@ -157,7 +205,17 @@ function AddActivityDialog(props) {
                             <EAMTextField
                                 {...processElementInfo(props.layout.hrswork)}
                                 value={formValues['hoursWorked']}
-                                onChange={createOnChangeHandler("hoursWorked", null, null, updateFormValues)}
+                                onChange={createOnChangeHandler("hoursWorked", null, null, updateHoursWorked)}
+                            />
+                            <EAMTimePicker
+                                {...processElementInfo(props.layout.actstarttime)}
+                                value={formValues['startTime'] || null}
+                                onChange={createOnChangeHandler("startTime", null, null, updateStartTime)}
+                            />
+                            <EAMTimePicker
+                                {...processElementInfo(props.layout.actendtime)}
+                                value={formValues['endTime'] || null}
+                                onChange={createOnChangeHandler("endTime", null, null, updateEndTime)}
                             />
                         </BlockUi>
                     </div>
