@@ -79,6 +79,7 @@
     "react-error-overlay": "6.0.9"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "react-error-overlay": "6.0.9"
   }
 }
