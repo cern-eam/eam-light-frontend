@@ -1,6 +1,16 @@
-# Version (2023-07-11)
+# Version (2023-07-24)
 
 ## Features
+### 3.14.23 
+* Updated dependencies ([c803ba](https://github.com/cern-eam/eam-light-backend/commit/c803ba5a658e5cdb3a51a6099274cb8ca1459205))
+### 3.14.22 
+* Added babel dev dependency to provent build errors ([2d8012](https://github.com/cern-eam/eam-light-frontend/commit/2d801286f8911ea93a728018a762cfda8b1e64ba))
+* [EAM-2743] Fix additional cost to use WO Header Equipment ([2dbfd6](https://github.com/cern-eam/eam-light-backend/commit/2dbfd6882550caf6d7efaaf55339743f1883ad8b))
+### 3.14.21 
+* Always use default dataspy when fetch LOV for CFs ([f70bab](https://github.com/cern-eam/eam-light-backend/commit/f70bab24cd0288e3608a716d7157913ffbca64a8))
+* Merge branch 'master' of github.com:cern-eam/eam-light-backend ([f33d80](https://github.com/cern-eam/eam-light-backend/commit/f33d808a1e77202a1ac8a5935a3b7929865f0a4a))
+* Improve suport of default dataspies for custom fields ([0481e5](https://github.com/cern-eam/eam-light-backend/commit/0481e5329183a389b1c4ae2c0f24162986093cdc))
+* Updated eam-wshub-core ([b48a28](https://github.com/cern-eam/eam-light-backend/commit/b48a284977a0cc36b78e0087b09201930186640a))
 ### 3.14.8 
 * Use queryParam for getWOEquipLinearDetails ([cefdd8](https://github.com/cern-eam/eam-light-backend/commit/cefdd83081858d8dfc5e0a4b37c946b47b739d03))
 ### 3.14.7 
@@ -710,6 +720,7 @@
 * Use EAM query param names that identify the entity ([1cb8dc](https://github.com/cern-eam/eam-light-frontend/commit/1cb8dc6f8084dad58c4c6f629dd818e5e5082a1b))
 * Generalize the usage of EAM query params to identify an entity ([bea84c](https://github.com/cern-eam/eam-light-frontend/commit/bea84c641081ff9b4d363616e2f47ef4d69e4eda))
 * MTF Repeat Step: Fixed check for out of service equipment ([43c0fb](https://github.com/cern-eam/eam-light-frontend/commit/43c0fbffc4f350694b9468e8abd5e4059c231c22))
+* Update wshub-core version ([870c2d](https://github.com/cern-eam/eam-light-backend/commit/870c2df52b2b25a39b5377af9c72e451f55f003e))
 ### 3.3.4 
 * Support html comments. Removed CommentsContainer that did not exist in eam-components ([dd3f76](https://github.com/cern-eam/eam-light-frontend/commit/dd3f766a734ba9848ca0582972fc53fddf59ff92))
 ### 3.3.3 
