@@ -58,7 +58,7 @@ function AddActivityDialog(props) {
             ...formValues,
             'startTime': convertTimeToSeconds(formValues['startTime']),
             'endTime': convertTimeToSeconds(formValues['endTime']),
-             tradeCode
+            tradeCode
         }
         delete bookingLabour.departmentDesc;
 
@@ -91,7 +91,7 @@ function AddActivityDialog(props) {
 
     let convertTimeToSeconds = (value) => {
         const date = new Date(value)
-        return  date.getMinutes() * 60 + date.getHours() * 3600
+        return date.getMinutes() * 60 + date.getHours() * 3600
     }
 
     let updateFormValues = (key, value) => {
@@ -108,18 +108,21 @@ function AddActivityDialog(props) {
         }
     }
 
+    let formatHoursWorkedValue = (value) => parseFloat(value).toFixed(2).toString()
+
     let updateTimeWorked = (startTime, endTime) => {
         const timeWorked = (endTime.getHours() * 60 + endTime.getMinutes()) - (startTime.getHours() * 60 + startTime.getMinutes())
-        updateFormValues("hoursWorked", (timeWorked / 60) || "0")
+        updateFormValues("hoursWorked", formatHoursWorkedValue((timeWorked / 60) || "0"))
     }
 
     let updateStartTime = (key, value) => {
         let startTime = new Date(value)
         const endTime = new Date(formValues['endTime'])
 
-        if(startTime > endTime) {
-            startTime = endTime
-        }
+        // TODO: Waiting for EAM-2766
+        // if(startTime > endTime) {
+        //     startTime = endTime
+        // }
 
         updateFormValues('startTime', startTime.toString())
         updateTimeWorked(startTime, endTime)
@@ -129,9 +132,10 @@ function AddActivityDialog(props) {
         let endTime = new Date(value)
         const startTime = new Date(formValues['startTime'])
 
-        if(startTime > endTime) {
-            endTime = startTime
-        }
+        // TODO: Waiting for EAM-2766
+        // if(startTime > endTime) {
+        //     endTime = startTime
+        // }
 
         updateFormValues('endTime', endTime.toString())
         updateTimeWorked(startTime, endTime)
@@ -145,7 +149,7 @@ function AddActivityDialog(props) {
             startTime.getMinutes() + parseInt(minutesWorked || '0') * 6)
 
         updateFormValues('endTime', newEndTime)
-        updateFormValues("hoursWorked", value)
+        updateFormValues("hoursWorked", formatHoursWorkedValue(value))
     }
 
     return (
