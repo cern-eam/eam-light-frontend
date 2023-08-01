@@ -19,8 +19,9 @@ import MenuTools from './MenuTools'
 import RoomIcon from '@mui/icons-material/Room';
 import BuildIcon from '@mui/icons-material/Build';
 import CERNMode from '../../components/CERNMode';
-import MenuGridLink from "./MenuGridLink";
+import MenuLink from "./MenuLink";
 import MenuItemInputHistory from './MenuItemInputHistory';
+import EISPanel from 'ui/components/panel/Panel';
 
 export const menuIconStyle = {
     display: "inline-block",
@@ -41,6 +42,33 @@ const getScreenHeaderFunction = (screens = {}) => ({ screenName, screen, updateS
         screen={screen}
         screens = {Object.values(screens).filter(screen => screen.parentScreen === screenName)}
     />
+
+const EAM_REPORTS_MENU = "Lists & Reports"
+
+const generateReportMenuLinks = (menusMetaData) => (
+    menusMetaData.map((metadata) => {
+        if (['WEBD'].includes(metadata.classcode)) {
+            const code = metadata.screencode;
+            const link = '/grid?gridName=' + code;
+            return (
+                <MenuLink
+                    description={metadata.screendescription}
+                    link={link}
+                    key={code}
+                />
+            );
+        } else if (metadata.classcode === 'WEB') {
+            const link = '/report?url=' + metadata.urlpath;
+            return (
+                <MenuLink
+                    description={metadata.screendescription}
+                    link={link}
+                    key={metadata.screencode}
+                />
+            );
+        }
+    })
+)
 
 class EamlightMenu extends Component {
     constructor(props) {
@@ -198,7 +226,7 @@ class EamlightMenu extends Component {
                         {reports &&
                         <li>
                             <div rel="customgrids" onClick={this.mainMenuClickHandler}>
-                                <Tooltip title="CUSTOM GRIDS" placement="right">
+                                <Tooltip title="LISTS & REPORTS" placement="right">
                                     <FormatListBulletedTriangle style={iconStyles} />
                                 </Tooltip>
                             </div>
@@ -377,15 +405,36 @@ class EamlightMenu extends Component {
                         <MenuItemInputHistory />
                     </EamlightSubmenu>
 
-                    {reports &&
-                    <EamlightSubmenu id="customgrids" header={<span>CUSTOM GRIDS</span>}>
-                        {
-                        reports.map( report => (
-                            <MenuGridLink grid={report} key={report?.code} />
-                            ))
-                        }
-                    </EamlightSubmenu>
-                    }
+                    {reports && (
+                        <EamlightSubmenu
+                            id="customgrids"
+                            header={<span>LISTS & REPORTS</span>}
+                        >
+                            {/* Render list in main menu */}
+                            <div>{generateReportMenuLinks(reports[EAM_REPORTS_MENU])}</div>
+
+                            {/* Render sub-menus */}
+                            {Object.entries(reports).map(([menuName, menusMetaData]) => {
+                                if (menuName !== EAM_REPORTS_MENU) {
+                                    return (
+                                        <EISPanel
+                                            heading={menuName}
+                                            key={menuName}
+                                            detailsStyle={{
+                                                backgroundColor: '#242021',
+                                            }}
+                                            summaryStyle={{
+                                                backgroundColor: '#242021',
+                                                color: 'white',
+                                            }}
+                                        >
+                                            {generateReportMenuLinks(menusMetaData)}
+                                        </EISPanel>
+                                    );
+                                }
+                            })}
+                        </EamlightSubmenu>
+                    )}
                 </div>
             </div>
         )
