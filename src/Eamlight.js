@@ -120,6 +120,9 @@ class Eamlight extends Component {
                                                  <Route path="/grid"
                                                         component={Grid}/>
 
+                                                 <Route path="/report"
+                                                        component={Report}/>
+
                                                  <Route path={eqpRegex}
                                                         component={Equipment}/>
 

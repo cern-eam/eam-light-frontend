@@ -164,3 +164,8 @@
     font: 10px Arial, sans-serif;
     vertical-align: center;
 }
+
+/* In the list & reports menu change the expand icon color */
+.MuiAccordionSummary-expandIconWrapper {
+  color: white;
+}
