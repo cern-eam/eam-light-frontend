@@ -2,12 +2,13 @@ import React from "react";
 import { useTheme } from '@mui/material/styles';
 import { isCernMode } from "ui/components/CERNMode";
 import {version} from '../../../package.json'
-import { useHistory } from "react-router";
+import EAMFooter from 'eam-components/dist/ui/components/footer/Footer';
 
 const Footer = props => {
 
+    const {applicationData} = props;
+
     const theme = useTheme();
-    const history = useHistory();
 
     const style = {
         backgroundColor: theme.palette.primary.main,
@@ -20,12 +21,19 @@ const Footer = props => {
     }
 
     return (
-        <div style={style}>
-            <span style={{fontWeight: 900}}>EAM Light</span>
-            <span style={{marginLeft: 5, marginRight: 5}}>(<span style={{textDecorationLine: "underline", cursor: "pointer"}}  onClick={() => history.push("/releaseNotes")}>v{version}</span>)</span>
-            {isCernMode && <a style={{color: "white", marginRight: 10}} href="mailto:eam.support@cern.ch">eam.support@cern.ch</a>}
-        </div>
-    )
+      <div style={style}>
+        <EAMFooter
+          appName={
+            "EAM Light " +
+            (applicationData.EL_ENVIR !== "PROD"
+              ? applicationData.EL_ENVIR
+              : "")
+          }
+          version={version}
+          supportEmail={isCernMode && "eam.support@cern.ch"}
+        />
+      </div>
+    );
 }
 
 export default Footer
