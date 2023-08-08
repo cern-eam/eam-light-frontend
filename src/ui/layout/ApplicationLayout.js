@@ -111,7 +111,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
                     </div>}
                     <div id="layout-portlets-cover">
                         {props.children[1]}
-                        <Footer/>
+                        <Footer applicationData={applicationData}/>
                     </div>
                 </div>
             }
