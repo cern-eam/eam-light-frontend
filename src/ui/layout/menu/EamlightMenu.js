@@ -215,14 +215,6 @@ class EamlightMenu extends Component {
                         </li>
                         }
 
-                        <li>
-                            <div rel="settings" onClick={this.mainMenuClickHandler}>
-                                <Tooltip title="SETTINGS" placement="right">
-                                    <Tune style={iconStyles} />
-                                </Tooltip>
-                            </div>
-                        </li>
-
                         {reports &&
                         <li>
                             <div rel="customgrids" onClick={this.mainMenuClickHandler}>
@@ -232,6 +224,14 @@ class EamlightMenu extends Component {
                             </div>
                         </li>
                         }
+
+                        <li>
+                            <div rel="settings" onClick={this.mainMenuClickHandler}>
+                                <Tooltip title="SETTINGS" placement="right">
+                                    <Tune style={iconStyles} />
+                                </Tooltip>
+                            </div>
+                        </li>
                     </ul>
 
                     <MenuMyWorkorders myOpenWorkOrders={myOpenWorkOrders}/>
@@ -396,15 +396,6 @@ class EamlightMenu extends Component {
                     </EamlightSubmenu>
                     }
 
-                    <EamlightSubmenu id="settings" header={<span>SETTINGS</span>}>
-                        {applicationData.EL_ADMUG && applicationData.EL_ADMUG.split(',').includes(eamAccount.userGroup) &&
-                        <MenuItem label="Refresh EAM Light Cache"
-                                  icon={<DatabaseRefresh style={menuIconStyle}/>}
-                                  onClick={MenuTools.refreshCache.bind(null, showNotification, showError)}/>
-                        }
-                        <MenuItemInputHistory />
-                    </EamlightSubmenu>
-
                     {reports && (
                         <EamlightSubmenu
                             id="customgrids"
@@ -435,6 +426,16 @@ class EamlightMenu extends Component {
                             })}
                         </EamlightSubmenu>
                     )}
+
+                    <EamlightSubmenu id="settings" header={<span>SETTINGS</span>}>
+                        {applicationData.EL_ADMUG && applicationData.EL_ADMUG.split(',').includes(eamAccount.userGroup) &&
+                        <MenuItem label="Refresh EAM Light Cache"
+                                  icon={<DatabaseRefresh style={menuIconStyle}/>}
+                                  onClick={MenuTools.refreshCache.bind(null, showNotification, showError)}/>
+                        }
+                        <MenuItemInputHistory />
+                    </EamlightSubmenu>
+
                 </div>
             </div>
         )
