@@ -28,6 +28,8 @@ import config from './config';
 import Equipment from 'ui/pages/equipment/Equipment';
 import ReleaseNotes from "./ui/pages/ReleaseNotes";
 
+export const releaseNotesPath = "/releasenotes";
+
 class Eamlight extends Component {
 
     blockUiStyle = {
@@ -121,7 +123,7 @@ class Eamlight extends Component {
                                                  <Route path={eqpRegex}
                                                         component={Equipment}/>
 
-                                              <Route path="/releaseNotes"
+                                                 <Route path={releaseNotesPath}
                                                      component={ReleaseNotes}/>
                                           </div>
                                    </ApplicationLayoutContainer>
