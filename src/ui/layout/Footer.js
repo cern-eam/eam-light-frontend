@@ -3,6 +3,7 @@ import { useTheme } from '@mui/material/styles';
 import { isCernMode } from "ui/components/CERNMode";
 import {version} from '../../../package.json'
 import EAMFooter from 'eam-components/dist/ui/components/footer/Footer';
+import { releaseNotesPath } from "Eamlight";
 
 const Footer = props => {
 
@@ -31,6 +32,7 @@ const Footer = props => {
           }
           version={version}
           supportEmail={isCernMode && "eam.support@cern.ch"}
+          releaseNotesPath={releaseNotesPath}
         />
       </div>
     );
