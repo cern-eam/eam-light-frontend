@@ -1,11 +1,11 @@
 import React from "react";
-import releaseNotesFile from "../../CHANGELOG.md";
 import ReleaseNotes from "eam-components/dist/ui/components/releasenotes/ReleaseNotes";
 
 const ReleaseNotesContainer = () => {
-  if (releaseNotesFile) {
-    return <ReleaseNotes file={releaseNotesFile} />;
-  } else {
+  try {
+    return <ReleaseNotes file={require("../../CHANGELOG.md").default} />;
+  }
+  catch (e) {
     return <h1>Release notes not available</h1>;
   }
 };
