@@ -124,7 +124,7 @@ class Eamlight extends Component {
                                                         component={Equipment}/>
 
                                                  <Route path={releaseNotesPath}
-                                                     component={ReleaseNotes}/>
+                                                        component={ReleaseNotes}/>
                                           </div>
                                    </ApplicationLayoutContainer>
                             </Switch>
