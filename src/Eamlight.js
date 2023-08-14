@@ -26,7 +26,7 @@ import EqpTree from "./ui/components/eqtree/EqpTree";
 import Themes from 'eam-components/dist/ui/components/theme';
 import config from './config';
 import Equipment from 'ui/pages/equipment/Equipment';
-import ReleaseNotes from "./ui/pages/ReleaseNotes";
+import ReleaseNotesPage from "./ui/pages/releaseNotes/ReleaseNotes";
 
 export const releaseNotesPath = "/releasenotes";
 
@@ -124,7 +124,7 @@ class Eamlight extends Component {
                                                         component={Equipment}/>
 
                                                  <Route path={releaseNotesPath}
-                                                        component={ReleaseNotes}/>
+                                                        component={ReleaseNotesPage}/>
                                           </div>
                                    </ApplicationLayoutContainer>
                             </Switch>
