@@ -26,6 +26,7 @@ import EqpTree from "./ui/components/eqtree/EqpTree";
 import Themes from 'eam-components/dist/ui/components/theme';
 import config from './config';
 import Equipment from 'ui/pages/equipment/Equipment';
+import Report from 'ui/pages/report/Report';
 import ReleaseNotesPage from "./ui/pages/releaseNotes/ReleaseNotes";
 
 export const releaseNotesPath = "/releasenotes";
