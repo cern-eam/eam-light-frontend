@@ -1,75 +1,87 @@
-
 import 'core-js';
 import 'regenerator-runtime';
-import { polyfill } from 'es6-promise';
+import {polyfill} from 'es6-promise';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as ReactDOMClient from 'react-dom/client'
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import './index.css';
 import EamlightContainer from './EamlightContainer';
-import { applyMiddleware, createStore, compose } from 'redux';
+import {applyMiddleware, createStore, compose} from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
-import { unregister } from './registerServiceWorker';
-import { create } from 'jss';
+import {unregister} from './registerServiceWorker';
+import {create} from 'jss';
 import StylesProvider from '@mui/styles/StylesProvider';
 import jssPreset from '@mui/styles/jssPreset';
 import SnackbarContainer from './ui/components/snackbar/SnackbarContainer';
 import Ajax from 'eam-components/dist/tools/ajax';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns'
 // EAM-480, en-GB locale used in order to have monday as first day of the week
-import { enGB } from "date-fns/locale";
-import { UPDATE_SCANNED_USER } from "./actions/scannedUserActions";
-import AuthWrapper, { tokens, keycloak } from "./AuthWrapper";
+import {enGB} from "date-fns/locale";
+import {UPDATE_SCANNED_USER} from "./actions/scannedUserActions";
+import AuthWrapper, {keycloak, exchangeToken, injectBearerToken} from "./AuthWrapper";
 
 const jss = create(jssPreset());
 
 unregister();
 polyfill();
 
-Ajax.getAxiosInstance().interceptors.request.use(
-    (config) => {
-        if (process.env.REACT_APP_LOGIN_METHOD !== "OPENID") {
-            return config;
-        }
-        // updateToken if it will last less than 5 minutes
-        return keycloak.updateToken(300).then(() => {
-            const newConfig = config;
-            if (tokens && tokens.token) {
-                newConfig.headers.Authorization = `Bearer ${tokens.token}`;
-            }
-            return newConfig;
-        });
-    },
-    (error) => {
-        Promise.reject(error);
+const getClientID = ({url}) => {
+    if (url?.startsWith(process.env.REACT_APP_EAM_SERVICES_URL)) {
+        return process.env.REACT_APP_KEYCLOAK_EAM_SERVICES_CLIENTID;
+    } else return process.env.REACT_APP_KEYCLOAK_CLIENTID;
+};
+
+export const onRequestFulfilledInterceptor = config => {
+    if (process.env.REACT_APP_LOGIN_METHOD !== "OPENID") {
+        return config;
     }
-);
+    // updateToken if it will last less than 5 minutes
+    return keycloak.updateToken(300).then(async () => {
+        const clientID = getClientID({url: config.url});
+        if (clientID !== process.env.REACT_APP_KEYCLOAK_CLIENTID) {
+            await exchangeToken({
+                sourceClient: process.env.REACT_APP_KEYCLOAK_CLIENTID,
+                targetClient: clientID,
+            });
+        }
+        return injectBearerToken({
+            config: {
+                ...config,
+                timeout: 300000,
+            },
+            clientID,
+        });
+    });
+    return config
+}
+
+Ajax.getAxiosInstance().interceptors.request.use(onRequestFulfilledInterceptor, (error) => Promise.reject(error));
 
 function createAxiosAuthMiddleware() {
-    return ({ getState }) =>
+    return ({getState}) =>
         (next) =>
-        (action) => {
-            const inforContext = getState().inforContext;
-            if (action.type === UPDATE_SCANNED_USER) {
-                Ajax.getAxiosInstance().defaults.headers.common.INFOR_USER =
-                    (action.value && action.value.userCode) || "";
-            } else if (inforContext) {
-                Ajax.getAxiosInstance().defaults.headers.common.INFOR_USER =
-                    inforContext.INFOR_USER;
-                Ajax.getAxiosInstance().defaults.headers.common.INFOR_PASSWORD =
-                    inforContext.INFOR_PASSWORD;
-                Ajax.getAxiosInstance().defaults.headers.common.INFOR_ORGANIZATION =
-                    inforContext.INFOR_ORGANIZATION;
-                Ajax.getAxiosInstance().defaults.headers.common.INFOR_SESSIONID =
-                    inforContext.INFOR_SESSIONID;
-                Ajax.getAxiosInstance().defaults.headers.common.INFOR_TENANT =
-                    inforContext.INFOR_TENANT;
-            }
-            next(action);
-        };
+            (action) => {
+                const inforContext = getState().inforContext;
+                if (action.type === UPDATE_SCANNED_USER) {
+                    Ajax.getAxiosInstance().defaults.headers.common.INFOR_USER =
+                        (action.value && action.value.userCode) || "";
+                } else if (inforContext) {
+                    Ajax.getAxiosInstance().defaults.headers.common.INFOR_USER =
+                        inforContext.INFOR_USER;
+                    Ajax.getAxiosInstance().defaults.headers.common.INFOR_PASSWORD =
+                        inforContext.INFOR_PASSWORD;
+                    Ajax.getAxiosInstance().defaults.headers.common.INFOR_ORGANIZATION =
+                        inforContext.INFOR_ORGANIZATION;
+                    Ajax.getAxiosInstance().defaults.headers.common.INFOR_SESSIONID =
+                        inforContext.INFOR_SESSIONID;
+                    Ajax.getAxiosInstance().defaults.headers.common.INFOR_TENANT =
+                        inforContext.INFOR_TENANT;
+                }
+                next(action);
+            };
 }
 
 
@@ -85,8 +97,8 @@ ReactDOMClient.createRoot(document.getElementById('root')).render(
             <Provider store={store}>
                 <LocalizationProvider dateAdapter={AdapterDateFns} locale={enGB}>
                     <div style={{width: "100%", height: "100%"}}>
-                        <EamlightContainer />
-                        <SnackbarContainer />
+                        <EamlightContainer/>
+                        <SnackbarContainer/>
                     </div>
                 </LocalizationProvider>
             </Provider>

@@ -1,10 +1,11 @@
 import Checklists from 'eam-components/dist/ui/components/checklists/Checklists';
 import Comments from 'eam-components/dist/ui/components/comments/Comments';
-import { useHistory } from 'react-router-dom';
-import React, { useEffect, useState, useRef } from 'react';
+import {useHistory} from 'react-router-dom';
+import React, {useEffect, useRef, useState} from 'react';
 import BlockUi from 'react-block-ui';
 import WSEquipment from "../../../tools/WSEquipment";
 import WSWorkorder from "../../../tools/WSWorkorders";
+import WSWorkorders from "../../../tools/WSWorkorders";
 import {ENTITY_TYPE} from "../../components/Toolbar";
 import CustomFields from 'eam-components/dist/ui/components/customfields/CustomFields';
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
@@ -19,20 +20,24 @@ import PartUsageContainer from "./partusage/PartUsageContainer";
 import WorkorderClosingCodes from './WorkorderClosingCodes';
 import WorkorderGeneral from './WorkorderGeneral';
 import WorkorderScheduling from './WorkorderScheduling';
-import { assignStandardWorkOrderValues, isReadOnlyCustomHandler, isRegionAvailable, layoutPropertiesMap } from "./WorkorderTools";
+import {
+    assignStandardWorkOrderValues,
+    isReadOnlyCustomHandler,
+    isRegionAvailable,
+    layoutPropertiesMap
+} from "./WorkorderTools";
 import EntityRegions from '../../components/entityregions/EntityRegions';
 import IconButton from '@mui/material/IconButton';
 import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
-import { isCernMode } from '../../components/CERNMode';
-import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility, registerCustomField } from '../EntityTools';
+import {isCernMode} from '../../components/CERNMode';
+import {TAB_CODES} from '../../components/entityregions/TabCodeMapping';
+import {getTabAvailability, getTabInitialVisibility, registerCustomField} from '../EntityTools';
 import WSParts from '../../../tools/WSParts';
-import WSWorkorders from '../../../tools/WSWorkorders';
 import useEntity from "hooks/useEntity";
-import { updateMyWorkOrders } from '../../../actions/workorderActions'
-import { useDispatch } from 'react-redux';
+import {updateMyWorkOrders} from '../../../actions/workorderActions'
+import {useDispatch} from 'react-redux';
 import UserDefinedFields from 'ui/components/userdefinedfields/UserDefinedFields';
-import { isHidden } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import {isHidden} from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -44,14 +49,16 @@ import SpeedIcon from '@mui/icons-material/Speed';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import MonetizationOnRoundedIcon from '@mui/icons-material/MonetizationOnRounded';
 import SegmentRoundedIcon from '@mui/icons-material/SegmentRounded';
-import { PendingActions } from '@mui/icons-material';
+import {PendingActions} from '@mui/icons-material';
 import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-import { PartIcon } from 'eam-components/dist/ui/components/icons';
+import {PartIcon} from 'eam-components/dist/ui/components/icons';
 import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
-import { Typography } from '@mui/material';
+import {Typography} from '@mui/material';
+import PreviewDocumentsDialogContainer from "./activities/dialogs/PreviewDocumentsDialogContainer";
+import {exchangeToken, tokens} from "../../../AuthWrapper";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
     if (!eqCode || !swoCode) {
@@ -68,70 +75,77 @@ const Workorder = () => {
     const [equipmentPart, setEquipmentPart] = useState();
     const [statuses, setStatuses] = useState([]);
     const [otherIdMapping, setOtherIdMapping] = useState({})
+    const [previewDocuments, setPreviewDocuments] = useState([]);
+    const [eamServicesToken, setEamServicesToken] = useState(null);
     const checklists = useRef(null);
     const dispatch = useDispatch();
     const updateMyWorkOrdersConst = (...args) => dispatch(updateMyWorkOrders(...args));
     //
     //
     //
-    const {screenLayout: workOrderLayout, entity: workorder, setEntity: setWorkOrder, loading, readOnly, isModified,
+    const {
+        screenLayout: workOrderLayout, entity: workorder, setEntity: setWorkOrder, loading, readOnly, isModified,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
         isHiddenRegion, getHiddenRegionState, getUniqueRegionID,
         toggleHiddenRegion, setRegionVisibility, setLayoutProperty,
         newHandler, saveHandler, deleteHandler, copyHandler, updateEntityProperty: updateWorkorderProperty, register,
-        handleError, showError, showNotification, showWarning, createEntity, setLoading, setReadOnly} = useEntity({
-            WS: {
-                create: WSWorkorder.createWorkOrder,
-                read: WSWorkorder.getWorkOrder,
-                update: WSWorkorder.updateWorkOrder,
-                delete: WSWorkorder.deleteWorkOrder,
-                new:  WSWorkorder.initWorkOrder,
-            },
-            postActions: {
-                read: postRead,
-                new: postInit,
-                copy: postCopy
-            },
-            handlers: {
-                standardWO: onChangeStandardWorkOrder,
-                equipmentCode: onChangeEquipment
-            },
-            isReadOnlyCustomHandler: isReadOnlyCustomHandler,
-            entityCode: "EVNT",
-            entityDesc: "Work Order",
-            entityURL: "/workorder/",
-            entityCodeProperty: "number",
-            screenProperty: "workOrderScreen",
-            layoutProperty: "workOrderLayout",
-            layoutPropertiesMap,
-            onMountHandler: mountHandler,
-            onUnmountHandler: unmountHandler,
-            codeQueryParamName: "workordernum"
+        handleError, showError, showNotification, showWarning, createEntity, setLoading, setReadOnly
+    } = useEntity({
+        WS: {
+            create: WSWorkorder.createWorkOrder,
+            read: WSWorkorder.getWorkOrder,
+            update: WSWorkorder.updateWorkOrder,
+            delete: WSWorkorder.deleteWorkOrder,
+            new: WSWorkorder.initWorkOrder,
+        },
+        postActions: {
+            read: postRead,
+            new: postInit,
+            copy: postCopy
+        },
+        handlers: {
+            standardWO: onChangeStandardWorkOrder,
+            equipmentCode: onChangeEquipment
+        },
+        isReadOnlyCustomHandler: isReadOnlyCustomHandler,
+        entityCode: "EVNT",
+        entityDesc: "Work Order",
+        entityURL: "/workorder/",
+        entityCodeProperty: "number",
+        screenProperty: "workOrderScreen",
+        layoutProperty: "workOrderLayout",
+        layoutPropertiesMap,
+        onMountHandler: mountHandler,
+        onUnmountHandler: unmountHandler,
+        codeQueryParamName: "workordernum"
     });
 
     //
     //
     //
 
-    useEffect( () => {
+    useEffect(() => {
         setEquipment(null);
         setEquipmentPart(null);
 
         if (!workorder?.equipmentCode) {
             return;
         }
-
+        exchangeToken({
+            sourceClient: process.env.REACT_APP_KEYCLOAK_CLIENTID,
+            targetClient: process.env.REACT_APP_KEYCLOAK_EAM_SERVICES_CLIENTID,
+        }).then(response => setEamServicesToken(response.access_token /*tokens[process.env.REACT_APP_KEYCLOAK_EAM_SERVICES_CLIENTID]*/))
         WSEquipment.getEquipment(workorder.equipmentCode)
-        .then(response => {
-            const equipmentResponse = response.body.data;
-            setEquipment(equipmentResponse);
-            if (equipmentResponse.partCode) {
-                WSParts.getPart(equipmentResponse.partCode)
-                .then(response => setEquipmentPart(response.body.data))
-                .catch(console.error);
-            }
-        })
-        .catch(console.error);
+            .then(response => {
+                const equipmentResponse = response.body.data;
+                setEquipment(equipmentResponse);
+                if (equipmentResponse.partCode) {
+                    WSParts.getPart(equipmentResponse.partCode)
+                        .then(response => setEquipmentPart(response.body.data))
+                        .catch(console.error);
+                }
+            })
+            .catch(console.error);
 
     }, [workorder?.equipmentCode])
 
@@ -139,14 +153,14 @@ const Workorder = () => {
     //
     //
     function onChangeEquipment(equipmentCode) {
-        if(!equipmentCode) {
+        if (!equipmentCode) {
             return;
         }
 
         Promise.all([
             WSEquipment.getEquipment(equipmentCode),
             WSWorkorders.getWOEquipLinearDetails(equipmentCode),
-        ]).then( response => {
+        ]).then(response => {
             const equipment = response[0].body.data;
             const linearDetails = response[1].body.data;
 
@@ -165,20 +179,20 @@ const Workorder = () => {
                 showWarning('This equipment is currently under warranty.');
             }
         })
-        .catch(console.error);
+            .catch(console.error);
 
     };
 
     function onChangeStandardWorkOrder(standardWorkOrderCode) {
         if (standardWorkOrderCode) {
             WSWorkorder.getStandardWorkOrder(standardWorkOrderCode)
-            .then(response => setWorkOrder( oldWorkOrder => assignStandardWorkOrderValues(oldWorkOrder, response.body.data)))
-            .catch(console.error);
+                .then(response => setWorkOrder(oldWorkOrder => assignStandardWorkOrderValues(oldWorkOrder, response.body.data)))
+                .catch(console.error);
         }
     }
 
     const getRegions = () => {
-        const { tabs } = workOrderLayout;
+        const {tabs} = workOrderLayout;
 
         const commonProps = {
             workorder,
@@ -235,7 +249,7 @@ const Workorder = () => {
                 maximizable: false,
                 customVisibility: () => isRegionAvailable('CLOSING_CODES', commonProps.workOrderLayout),
                 render: () =>
-                    <WorkorderClosingCodes {...commonProps} equipment={equipment} />
+                    <WorkorderClosingCodes {...commonProps} equipment={equipment}/>
                 ,
                 column: 1,
                 order: 3,
@@ -254,7 +268,7 @@ const Workorder = () => {
                         workorder={workorder}
                         tabLayout={tabs.PAR}
                         equipmentMEC={equipmentMEC}
-                        disabled={readOnly} />
+                        disabled={readOnly}/>
                 ,
                 column: 1,
                 order: 4,
@@ -273,7 +287,7 @@ const Workorder = () => {
                         workorder={workorder}
                         tabLayout={tabs.ACO}
                         equipmentMEC={equipmentMEC}
-                        disabled={readOnly} />
+                        disabled={readOnly}/>
                 ,
                 column: 1,
                 order: 4,
@@ -287,7 +301,7 @@ const Workorder = () => {
                 isVisibleWhenNewEntity: false,
                 maximizable: false,
                 customVisibility: () => isRegionAvailable('CWO', commonProps.workOrderLayout),
-                render: () => <WorkorderChildren workorder={workorder.number} />,
+                render: () => <WorkorderChildren workorder={workorder.number}/>,
                 column: 1,
                 order: 4,
                 summaryIcon: SegmentRoundedIcon,
@@ -302,10 +316,10 @@ const Workorder = () => {
                 render: () =>
                     <EDMSDoclightIframeContainer
                         objectType="J"
-                        objectID={workorder.number} />
+                        objectID={workorder.number}/>
                 ,
                 RegionPanelProps: {
-                    detailsStyle: { padding: 0 }
+                    detailsStyle: {padding: 0}
                 },
                 column: 2,
                 order: 5,
@@ -326,7 +340,7 @@ const Workorder = () => {
                     />
                 ,
                 RegionPanelProps: {
-                    detailsStyle: { padding: 0 }
+                    detailsStyle: {padding: 0}
                 },
                 column: 2,
                 order: 6,
@@ -348,10 +362,10 @@ const Workorder = () => {
                         handleError={handleError}
                         allowHtml={true}
                         //entityOrganization={workorder.organization}
-                        disabled={readOnly} />
+                        disabled={readOnly}/>
                 ,
                 RegionPanelProps: {
-                    detailsStyle: { padding: 0 }
+                    detailsStyle: {padding: 0}
                 },
                 column: 2,
                 order: 7,
@@ -391,7 +405,7 @@ const Workorder = () => {
                 label: 'Checklists',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
-                render: ({panelQueryParams}) =>  (
+                render: ({panelQueryParams}) => (
                     <Checklists
                         workorder={workorder.number}
                         eqpToOtherId={otherIdMapping}
@@ -402,6 +416,12 @@ const Workorder = () => {
                         showSuccess={showNotification}
                         showError={showError}
                         handleError={handleError}
+                        showPreviewDocumentsDialog={() => setPreviewDocuments([{
+                            uri: 'http://localhost:3000/apis/cern-eam-services/rest/edms/file?edmsid=2072511&version=1&filename=Screenshot_from_2022-09-19_23-55-08.png&filetype=IMAGE&convertedname=',
+                        },
+                            {
+                                uri: 'http://localhost:3000/apis/cern-eam-services/rest/edms/file?edmsid=2072512&version=1&filename=test.pdf&filetype=PDF&convertedname=',
+                            }])}
                         userCode={userData.eamAccount.userCode}
                         disabled={readOnly}
                         hideFollowUpProp={isHidden(
@@ -411,19 +431,19 @@ const Workorder = () => {
                         activity={panelQueryParams.CHECKLISTSactivity}
                         topSlot={
                             applicationData.EL_PRTCL &&
-                                <div style={{
-                                    width: "100%",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                }}>
-                                    <IconButton
-                                        onClick={() => window.open(applicationData.EL_PRTCL + workorder.number, '_blank', 'noopener noreferrer')}
-                                        style={{ color: "#00aaff" }}
-                                        size="large">
-                                        <OpenInNewIcon style={{ padding: "9px" }} />
-                                         <Typography>Results</Typography>
-                                    </IconButton>
-                                </div>
+                            <div style={{
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "row",
+                            }}>
+                                <IconButton
+                                    onClick={() => window.open(applicationData.EL_PRTCL + workorder.number, '_blank', 'noopener noreferrer')}
+                                    style={{color: "#00aaff"}}
+                                    size="large">
+                                    <OpenInNewIcon style={{padding: "9px"}}/>
+                                    <Typography>Results</Typography>
+                                </IconButton>
+                            </div>
                         }/>
                 )
                 ,
@@ -444,7 +464,7 @@ const Workorder = () => {
                         entityKeyCode={workorder.number}
                         classCode={workorder.classCode}
                         customFields={workorder.customField}
-                        register={register} />
+                        register={register}/>
                 ,
                 column: 2,
                 order: 10,
@@ -496,7 +516,7 @@ const Workorder = () => {
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
                 render: () =>
-                    <MeterReadingContainerWO equipment={workorder.equipmentCode} disabled={readOnly} />
+                    <MeterReadingContainerWO equipment={workorder.equipmentCode} disabled={readOnly}/>
                 ,
                 column: 2,
                 order: 12,
@@ -544,7 +564,7 @@ const Workorder = () => {
     const repeatStepHandler = async () => {
         setLoading(true);
         const fields = workOrderLayout.fields;
-        const { customField, number, equipmentCode, standardWO, parentWO, departmentCode, locationCode } = workorder;
+        const {customField, number, equipmentCode, standardWO, parentWO, departmentCode, locationCode} = workorder;
         try {
             let value;
 
@@ -555,7 +575,7 @@ const Workorder = () => {
                 value = "";
             }
 
-            const newCustomFields = [{code: 'MTFEVP1', value }];
+            const newCustomFields = [{code: 'MTFEVP1', value}];
             const newWorkOrder = {
                 standardWO,
                 equipmentCode,
@@ -672,14 +692,19 @@ const Workorder = () => {
                     regions={getRegions()}
                     getUniqueRegionID={getUniqueRegionID}
                     getHiddenRegionState={getHiddenRegionState}
-                    isHiddenRegion={isHiddenRegion} />
+                    isHiddenRegion={isHiddenRegion}/>
                 <EntityRegions
                     regions={getRegions()}
                     isNewEntity={newEntity}
                     getUniqueRegionID={getUniqueRegionID}
                     getHiddenRegionState={getHiddenRegionState}
                     setRegionVisibility={setRegionVisibility}
-                    isHiddenRegion={isHiddenRegion} />
+                    isHiddenRegion={isHiddenRegion}/>
+                <PreviewDocumentsDialogContainer
+                    open={previewDocuments.length > 0 && eamServicesToken}
+                    docs={previewDocuments}
+                    token={eamServicesToken}
+                    onClose={() => setPreviewDocuments([])}/>
             </BlockUi>
         </div>
     )
