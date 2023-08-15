@@ -1,6 +1,11 @@
 # Version (2023-08-15)
 
 ## Features
+### 3.14.24-SNAP-3 
+* [EAM-2777] set eam-comp footer ([df78b9](https://github.com/cern-eam/eam-light-frontend/commit/df78b9034232bb3cf985150634c74488b4bf75e4))
+* [EAM-2777] changes after review ([27b259](https://github.com/cern-eam/eam-light-frontend/commit/27b259886371e2336c28d8f21a3a051a7dac2595))
+* add spacing ([839f06](https://github.com/cern-eam/eam-light-frontend/commit/839f069a99d2f55a75b25b2b1be1b805919d03de))
+* [EAM-2779] Use generic release notes component ([255fc1](https://github.com/cern-eam/eam-light-frontend/commit/255fc1a4ca019416f9b4e97cb6757dd40f3daa0e))
 ### 3.14.23 
 * Updated dependencies ([c803ba](https://github.com/cern-eam/eam-light-backend/commit/c803ba5a658e5cdb3a51a6099274cb8ca1459205))
 ### 3.14.22 
@@ -894,5 +899,4 @@
 * Refactoring linked to the removal of some legacy classes (SimpleGridinput, GridUtils, ...) ([a2a706](https://github.com/cern-eam/eam-light-backend/commit/a2a7068b63483846b1cd55eac55f89288298e1e4))
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
-### 0 
 
