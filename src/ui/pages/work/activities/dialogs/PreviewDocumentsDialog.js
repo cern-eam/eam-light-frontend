@@ -8,7 +8,6 @@ import './AddActivityDialog.css'
 import KeyCode from "eam-components/dist/enums/KeyCode";
 import LightDialog from 'ui/components/LightDialog';
 import DocViewer, {DocViewerRenderers} from "@cyntler/react-doc-viewer";
-import {tokens} from "../../../../../AuthWrapper";
 
 /**
  * Display detail of an activity
@@ -27,10 +26,6 @@ function PreviewDocumentsDialog(props) {
         }
     }
 
-    const headers = {
-        "Authorization": `Bearer ${props.token}`,
-    }
-
     return (
         <div onKeyDown={onKeyDown}>
             <LightDialog
@@ -45,7 +40,6 @@ function PreviewDocumentsDialog(props) {
                     <div>
                         <BlockUi tag="div" blocking={loading}>
                             <DocViewer documents={props.docs}
-                                       requestHeaders={headers}
                                        prefetchMethod="GET"
                                        initialActiveDocument={props.docs[0]} pluginRenderers={DocViewerRenderers}/>;
                         </BlockUi>

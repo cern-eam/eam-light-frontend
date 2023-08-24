@@ -58,7 +58,7 @@ import HardwareIcon from '@mui/icons-material/Hardware';
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
 import {Typography} from '@mui/material';
 import PreviewDocumentsDialogContainer from "./activities/dialogs/PreviewDocumentsDialogContainer";
-import {exchangeToken, tokens} from "../../../AuthWrapper";
+import eamServicesClient from "../../../tools/EamServicesClient";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
     if (!eqCode || !swoCode) {
@@ -76,7 +76,7 @@ const Workorder = () => {
     const [statuses, setStatuses] = useState([]);
     const [otherIdMapping, setOtherIdMapping] = useState({})
     const [previewDocuments, setPreviewDocuments] = useState([]);
-    const [eamServicesToken, setEamServicesToken] = useState(null);
+    const [showPreviewDocumentsDialog, setShowPreviewDocumentsDialog] = useState(false);
     const checklists = useRef(null);
     const dispatch = useDispatch();
     const updateMyWorkOrdersConst = (...args) => dispatch(updateMyWorkOrders(...args));
@@ -124,6 +124,19 @@ const Workorder = () => {
     //
     //
 
+    const base64ToBlob = (base64, mimeType='') => {
+        const byteCharacters = atob(base64);
+        const byteNumbers = new Array(byteCharacters.length);
+
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+
+        return new Blob([byteArray], {type: mimeType});
+    }
+
     useEffect(() => {
         setEquipment(null);
         setEquipmentPart(null);
@@ -131,10 +144,14 @@ const Workorder = () => {
         if (!workorder?.equipmentCode) {
             return;
         }
-        exchangeToken({
-            sourceClient: process.env.REACT_APP_KEYCLOAK_CLIENTID,
-            targetClient: process.env.REACT_APP_KEYCLOAK_EAM_SERVICES_CLIENTID,
-        }).then(response => setEamServicesToken(response.access_token /*tokens[process.env.REACT_APP_KEYCLOAK_EAM_SERVICES_CLIENTID]*/))
+        console.log(workorder)
+        eamServicesClient.getAllFiles("2072511").then(response => {
+                const documents = response.data.data.map((item) => ({
+                    uri: URL.createObjectURL(base64ToBlob(item, "image/png")),
+                }))
+                setPreviewDocuments(documents)
+            }
+        )
         WSEquipment.getEquipment(workorder.equipmentCode)
             .then(response => {
                 const equipmentResponse = response.body.data;
@@ -156,7 +173,6 @@ const Workorder = () => {
         if (!equipmentCode) {
             return;
         }
-
         Promise.all([
             WSEquipment.getEquipment(equipmentCode),
             WSWorkorders.getWOEquipLinearDetails(equipmentCode),
@@ -416,12 +432,7 @@ const Workorder = () => {
                         showSuccess={showNotification}
                         showError={showError}
                         handleError={handleError}
-                        showPreviewDocumentsDialog={() => setPreviewDocuments([{
-                            uri: 'http://localhost:3000/apis/cern-eam-services/rest/edms/file?edmsid=2072511&version=1&filename=Screenshot_from_2022-09-19_23-55-08.png&filetype=IMAGE&convertedname=',
-                        },
-                            {
-                                uri: 'http://localhost:3000/apis/cern-eam-services/rest/edms/file?edmsid=2072512&version=1&filename=test.pdf&filetype=PDF&convertedname=',
-                            }])}
+                        showPreviewDocumentsDialog={() => setShowPreviewDocumentsDialog(true)}
                         userCode={userData.eamAccount.userCode}
                         disabled={readOnly}
                         hideFollowUpProp={isHidden(
@@ -701,10 +712,9 @@ const Workorder = () => {
                     setRegionVisibility={setRegionVisibility}
                     isHiddenRegion={isHiddenRegion}/>
                 <PreviewDocumentsDialogContainer
-                    open={previewDocuments.length > 0 && eamServicesToken}
+                    open={previewDocuments.length > 0 && showPreviewDocumentsDialog}
                     docs={previewDocuments}
-                    token={eamServicesToken}
-                    onClose={() => setPreviewDocuments([])}/>
+                    onClose={() => setShowPreviewDocumentsDialog(false)}/>
             </BlockUi>
         </div>
     )

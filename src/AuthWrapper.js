@@ -17,7 +17,6 @@ const keycloakAxios = axios.create({
 let tokens = {};
 
 const handleTokens = (key, freshTokens) => {
-    console.log(key, freshTokens)
     tokens[key] = freshTokens;
 };
 
@@ -55,7 +54,6 @@ const injectBearerToken = ({ config, clientID }) => {
 };
 
 const exchangeToken = async ({ sourceClient, targetClient }) => {
-    console.log("EXCHANGE TOKEN")
     if(!tokens[sourceClient]) return null;
     if(tokens[targetClient]) return tokens[targetClient];
 
