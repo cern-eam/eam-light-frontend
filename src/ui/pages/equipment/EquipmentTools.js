@@ -232,3 +232,17 @@ export const locationLayoutPropertiesMap =  {
     safety: "safety",
     outofservice: "outOfService"
 }
+
+export const COST_ROLL_UP_CODES = {
+    asset: "hierarchyAssetCostRollUp",
+    position: "hierarchyPositionCostRollUp",
+    primarySystem: "hierarchyPrimarySystemCostRollUp",
+}
+
+export const updateCostRollUpProperty = (
+    costRollUpCode,
+    equipmentCode,
+    updatingFunction
+) => {
+    updatingFunction(costRollUpCode, equipmentCode ? true : false);
+};
