@@ -144,7 +144,7 @@ const Workorder = () => {
         if (!workorder?.equipmentCode) {
             return;
         }
-        console.log(workorder)
+        //TODO: Update with actual value
         eamServicesClient.getAllFiles("2072511").then(response => {
                 const documents = response.data.data.map((item) => ({
                     uri: URL.createObjectURL(base64ToBlob(item, "image/png")),
