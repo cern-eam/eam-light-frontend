@@ -3,7 +3,7 @@ import WSEquipment from "../../../../tools/WSEquipment";
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import Dependency from '../components/Dependency';
 import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
-import { onChangeDependentInput, isDependencySet } from '../EquipmentTools';
+import { onChangeDependentInput, isDependencySet, COST_ROLL_UP_CODES, updateCostRollUpProperty } from '../EquipmentTools';
 
 const DEPENDENCY_KEYS = {
     asset: 'hierarchyAssetDependent',
@@ -40,6 +40,11 @@ const AssetHierarchy = (props) => {
                         updateEquipmentProperty,
                         showWarning
                     );
+                    updateCostRollUpProperty(
+                        COST_ROLL_UP_CODES.asset,
+                        value,
+                        updateEquipmentProperty
+                    );
                 })}
                 barcodeScanner
                 autocompleteHandler={WSEquipment.autocompleteAssetParent}
@@ -66,6 +71,11 @@ const AssetHierarchy = (props) => {
                         updateEquipmentProperty,
                         showWarning
                     );
+                    updateCostRollUpProperty(
+                        COST_ROLL_UP_CODES.position,
+                        value,
+                        updateEquipmentProperty
+                    );
                 })}
                 barcodeScanner
                 autocompleteHandler={WSEquipment.autocompletePositionParent}
@@ -91,6 +101,11 @@ const AssetHierarchy = (props) => {
                         equipment,
                         updateEquipmentProperty,
                         showWarning
+                    );
+                    updateCostRollUpProperty(
+                        COST_ROLL_UP_CODES.primarySystem,
+                        value,
+                        updateEquipmentProperty
                     );
                 })}
                 barcodeScanner

@@ -3,7 +3,7 @@ import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import React from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
 import Dependency from '../components/Dependency';
-import { onChangeDependentInput, isDependencySet } from '../EquipmentTools';
+import { onChangeDependentInput, isDependencySet, COST_ROLL_UP_CODES, updateCostRollUpProperty } from '../EquipmentTools';
 
 const DEPENDENCY_KEYS = {
     asset: 'hierarchyAssetDependent',
@@ -44,6 +44,11 @@ const PositionHierarchy = (props) => {
                         updateEquipmentProperty,
                         showWarning
                     );
+                    updateCostRollUpProperty(
+                        COST_ROLL_UP_CODES.asset,
+                        value,
+                        updateEquipmentProperty
+                    );
                 })}
                 autocompleteHandler={WSEquipment.autocompleteAssetParent}
                 renderDependencies={renderDependenciesForDependencyInputs}
@@ -70,6 +75,11 @@ const PositionHierarchy = (props) => {
                         updateEquipmentProperty,
                         showWarning
                     );
+                    updateCostRollUpProperty(
+                        COST_ROLL_UP_CODES.position,
+                        value,
+                        updateEquipmentProperty
+                    );
                 })}
                 autocompleteHandler={WSEquipment.autocompletePositionParent}
                 renderDependencies={renderDependenciesForDependencyInputs}
@@ -95,6 +105,11 @@ const PositionHierarchy = (props) => {
                         equipment,
                         updateEquipmentProperty,
                         showWarning
+                    );
+                    updateCostRollUpProperty(
+                        COST_ROLL_UP_CODES.primarySystem,
+                        value,
+                        updateEquipmentProperty
                     );
                 })}
                 autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}

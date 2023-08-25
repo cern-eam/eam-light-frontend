@@ -47,7 +47,8 @@ export default function InstallEqp(props) {
     const createInstallEquipmentStructure = (newParent, child) => {
         return {
             newParentCode: newParent,
-            childCode: child
+            childCode: child,
+            costRollUp: true,
         };
     }
 
