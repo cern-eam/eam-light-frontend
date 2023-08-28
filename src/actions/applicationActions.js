@@ -18,46 +18,88 @@ export function updateApplication(value) {
     }
 }
 
+const RETRIES_ALLOWED = 5;
+
 export function getUserInfo() {
     return (dispatch) => {
-        //Get URL parameters
-        const values = queryString.parse(window.location.search)
-        const screenCode = values.screen;
-        const currentScreen = window.location.pathname.replace(process.env.PUBLIC_URL,'').split('/')[1];
-        return WS.getUserData(currentScreen, screenCode)
-            .then(response => {
-                let userdata = response.body.data;
-                Promise.all(createPromiseArray(userdata)).then(values => {
+        let retriesDone = 0;
+
+        const fetchUserData = () => {
+            //Get URL parameters
+            const values = queryString.parse(window.location.search);
+            const screenCode = values.screen;
+            const currentScreen = window.location.pathname
+                .replace(process.env.PUBLIC_URL, '')
+                .split('/')[1];
+            return WS.getUserData(currentScreen, screenCode);
+        };
+
+        const handleUserDataResponseError = (error) => {
+            if (error?.response?.status === 403) {
+                dispatch(
+                    updateApplication({ userData: { invalidAccount: true } })
+                );
+            } else {
+                dispatch(updateApplication({ userData: {} }));
+            }
+        };
+
+        const fetchScreenLayout = (response) => {
+            let userdata = response.body.data;
+
+            Promise.all(createPromiseArray(userdata))
+                .then((values) => {
                     let serviceAccounts;
                     try {
-                        serviceAccounts = values[0].body.data.EL_SERVI && Object.keys(JSON.parse(values[0].body.data.EL_SERVI));
+                        serviceAccounts =
+                            values[0].body.data.EL_SERVI &&
+                            Object.keys(
+                                JSON.parse(values[0].body.data.EL_SERVI)
+                            );
                     } catch (err) {
                         serviceAccounts = [];
                     }
-                    dispatch(updateApplication({
-                        userData: response.body.data,
-                        applicationData: {
-                            ...values[0].body.data,
-                            serviceAccounts
-                        },
-                        assetLayout: values[1] ? values[1].body.data : null,
-                        positionLayout: values[2] ? values[2].body.data : null,
-                        systemLayout: values[3] ? values[3].body.data : null,
-                        partLayout: values[4] ? values[4].body.data : null,
-                        workOrderLayout: values[5] ? values[5].body.data : null,
-                        locationLayout: values[6] ? values[6].body.data : null
-                    }))
+                    dispatch(
+                        updateApplication({
+                            userData: response.body.data,
+                            applicationData: {
+                                ...values[0].body.data,
+                                serviceAccounts,
+                            },
+                            assetLayout: values[1] ? values[1].body.data : null,
+                            positionLayout: values[2] ? values[2].body.data : null,
+                            systemLayout: values[3] ? values[3].body.data : null,
+                            partLayout: values[4] ? values[4].body.data : null,
+                            workOrderLayout: values[5] ? values[5].body.data : null,
+                            locationLayout: values[6] ? values[6].body.data : null,
+                        })
+                    );
                 })
-            })
-            .catch(response => {
-                if (response && response.response.status === 403) {
-                    dispatch(updateApplication({userData: {invalidAccount: true}}));
-                }
-                else {
-                    dispatch(updateApplication({userData: {}}));
-                }
-            })
-    }
+                .catch((error) => {
+                    if (retriesDone++ < RETRIES_ALLOWED) {
+                        console.error(
+                            `Error fetching screen layouts, retrying (attempt number ${retriesDone})...`
+                        );
+                        fetchScreenLayout(response);
+                    } else {
+                        console.error(
+                            `Error fetching screen layouts, maximum number of retries reached: ${RETRIES_ALLOWED}`
+                        );
+                        dispatch(
+                            updateApplication({
+                                userData: {
+                                    screenLayoutFetchingFailed: true,
+                                },
+                            })
+                        );
+                    }
+                });
+        };
+
+        return fetchUserData()
+            .then(fetchScreenLayout)
+            .catch(handleUserDataResponseError);
+    };
 }
 
 export function updateScreenLayout(entity, entityDesc, systemFunction, userFunction, tabs) {

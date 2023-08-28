@@ -55,10 +55,24 @@ class Eamlight extends Component {
             )
         }
 
-        if (this.props.userData && this.props.userData.invalidAccount) {
-              return <InfoPage title="Access Denied"
-                               message="You don't have valid EAM account. "/>
-       }
+        if (this.props.userData) {
+            if (this.props.userData.invalidAccount) {
+                return (
+                    <InfoPage
+                        title="Access Denied"
+                        message="You don't have valid EAM account. "
+                    />
+                );
+            }
+            if (this.props.userData.screenLayoutFetchingFailed) {
+                return (
+                    <InfoPage
+                        title="Unable to initialize EAM Light"
+                        message="Something went wrong while loading the screen layouts, please retry or contact the support at eam.support@cern.ch."
+                    />
+                );
+            }
+        }
 
         // User data still not there, display loading page
         if (!this.props.userData || !this.props.applicationData) {
