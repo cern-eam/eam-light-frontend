@@ -56,8 +56,8 @@ const useEntity = (params) => {
     const getUniqueRegionIDConst =  useSelector(state => getUniqueRegionID(state)(screenCode))
 
     useEffect( () => {
-        if (codeQueryParam) {
-            history.push(process.env.PUBLIC_URL + entityURL + codeQueryParam);
+        if (!code && codeQueryParam) {
+            history.push(process.env.PUBLIC_URL + entityURL + codeQueryParam + window.location.search);
             return;
         }
         code ? readEntity(code) : initNewEntity();
