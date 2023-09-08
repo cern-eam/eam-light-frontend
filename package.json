@@ -1,6 +1,6 @@
 {
   "name": "eamlight",
-  "version": "3.14.25",
+  "version": "3.14.26-SNAP",
   "private": true,
   "sideEffects": false,
   "dependencies": {
