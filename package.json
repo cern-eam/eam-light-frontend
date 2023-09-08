@@ -59,7 +59,7 @@
     "redux-thunk": "2.3.0",
     "regenerator-runtime": "0.13.3",
     "sanitize-html": "1.20.1",
-    "set-value": "3.0.1"
+    "set-value": "4.0.1"
   },
   "scripts": {
     "start-js": "react-scripts start",
