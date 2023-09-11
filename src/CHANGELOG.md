@@ -1,6 +1,10 @@
-# Version (2023-09-08)
+# Version (2023-09-11)
 
 ## Features
+### 3.14.27 
+* [EAM-2744] Update getReports to work with sub-menus and URL reports ([07f9ec](https://github.com/cern-eam/eam-light-backend/commit/07f9ece390d1b8bed4b10f8fbbec82469f18220f))
+* 3.14.26-SNAP ([a0b233](https://github.com/cern-eam/eam-light-backend/commit/a0b2336a73cb9cad9860a90baf5010b086468d1d))
+* Updated eam-wshub-core ([606c8e](https://github.com/cern-eam/eam-light-backend/commit/606c8edff6b20ffc4b3eac0e28b35892d7f70e6c))
 ### 3.14.25 
 * [EAM-2777] set eam-comp footer ([df78b9](https://github.com/cern-eam/eam-light-frontend/commit/df78b9034232bb3cf985150634c74488b4bf75e4))
 * [EAM-2777] changes after review ([27b259](https://github.com/cern-eam/eam-light-frontend/commit/27b259886371e2336c28d8f21a3a051a7dac2595))
