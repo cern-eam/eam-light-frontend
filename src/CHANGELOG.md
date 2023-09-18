@@ -1,9 +1,15 @@
-# Version (2023-09-11)
+# Version (2023-09-18)
 
 ## Features
 ### 3.14.27 
+* [EAM-2787] Set cost roll-up automatically in installEqp and hierarchy (#189) ([eb5212](https://github.com/cern-eam/eam-light-frontend/commit/eb52121cfd42e13c928362f0269149ad1e83ebd7))
+* Append query params when rewriting the URL (done when reading an entity based on the identifier passed as one of the query params) ([37d90c](https://github.com/cern-eam/eam-light-frontend/commit/37d90ce4fb0d6847442a8a485788ba056a14807a))
+* [EAM-2156] Configuration EAM light pour saisie des heures ([2587c4](https://github.com/cern-eam/eam-light-frontend/commit/2587c48e4fa36f6cac87530ec4bdf1aa182bde30))
+* [EAM-2744] Add support for reports (sidebar) ([7e9fd3](https://github.com/cern-eam/eam-light-frontend/commit/7e9fd3e916dcebeefcca7fb8d0f4e4e9be4c8734))
+* [EAM-2744] Move settings to bottom (sidebar) ([7cc472](https://github.com/cern-eam/eam-light-frontend/commit/7cc4722bcfa408c55d61a732c95f365e4d492917))
+* Add missing import ([0f8a91](https://github.com/cern-eam/eam-light-frontend/commit/0f8a9163564f800a848981be9f99d315e0805e62))
+* 3.14.26-SNAP ([f6c4df](https://github.com/cern-eam/eam-light-frontend/commit/f6c4df4e81a01c8a996b707c3267d7981e40b0b6))
 * [EAM-2744] Update getReports to work with sub-menus and URL reports ([07f9ec](https://github.com/cern-eam/eam-light-backend/commit/07f9ece390d1b8bed4b10f8fbbec82469f18220f))
-* 3.14.26-SNAP ([a0b233](https://github.com/cern-eam/eam-light-backend/commit/a0b2336a73cb9cad9860a90baf5010b086468d1d))
 * Updated eam-wshub-core ([606c8e](https://github.com/cern-eam/eam-light-backend/commit/606c8edff6b20ffc4b3eac0e28b35892d7f70e6c))
 ### 3.14.25 
 * [EAM-2777] set eam-comp footer ([df78b9](https://github.com/cern-eam/eam-light-frontend/commit/df78b9034232bb3cf985150634c74488b4bf75e4))
@@ -904,5 +910,4 @@
 * Refactoring linked to the removal of some legacy classes (SimpleGridinput, GridUtils, ...) ([a2a706](https://github.com/cern-eam/eam-light-backend/commit/a2a7068b63483846b1cd55eac55f89288298e1e4))
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
-### 0 
 
