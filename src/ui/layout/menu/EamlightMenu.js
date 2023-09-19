@@ -46,7 +46,7 @@ const getScreenHeaderFunction = (screens = {}) => ({ screenName, screen, updateS
 const EAM_REPORTS_MENU = "Lists & Reports"
 
 const generateReportMenuLinks = (menusMetaData) => (
-    menusMetaData.map((metadata) => {
+    menusMetaData?.map((metadata) => {
         if (['WEBD'].includes(metadata.classcode)) {
             const code = metadata.screencode;
             const link = '/grid?gridName=' + code;
