@@ -46,7 +46,7 @@ const getScreenHeaderFunction = (screens = {}) => ({ screenName, screen, updateS
 const EAM_REPORTS_MENU = "Lists & Reports"
 
 const generateReportMenuLinks = (menusMetaData) => (
-    menusMetaData.map((metadata) => {
+    menusMetaData?.map((metadata) => {
         if (['WEBD'].includes(metadata.classcode)) {
             const code = metadata.screencode;
             const link = '/grid?gridName=' + code;
@@ -85,7 +85,7 @@ class EamlightMenu extends Component {
         const rel = event.currentTarget.getAttribute('rel');
         event.currentTarget.classList.add('active');
         this.menudiv.querySelector('#' + rel).classList.add('active');
-        
+
         // At the time of writing, this is required for the tab indicator on my team WOs to work
         // Identified in issue https://github.com/mui-org/material-ui/issues/9337
         // Fixed in material-ui on Aug 26th https://github.com/mui-org/material-ui/pull/27791
@@ -116,10 +116,10 @@ class EamlightMenu extends Component {
             color: "white"
         };
 
-        const { myOpenWorkOrders, myTeamWorkOrders, userData, applicationData, showNotification, showError, updateWorkOrderScreenLayout, 
+        const { myOpenWorkOrders, myTeamWorkOrders, userData, applicationData, showNotification, showError, updateWorkOrderScreenLayout,
             updateAssetScreenLayout, updatePositionScreenLayout, updateSystemScreenLayout, updatePartScreenLayout, updateLocationScreenLayout } = this.props;
         const { workOrderScreen, assetScreen, positionScreen, systemScreen, partScreen, locationScreen, eamAccount, screens, reports } = userData;
-        
+
         const currentPartScreen = screens[partScreen] || {};
         const currentWorkOrderScreen = screens[workOrderScreen] || {};
 
@@ -291,11 +291,11 @@ class EamlightMenu extends Component {
 
                         <MenuItem label="Meter Reading"
                                   icon={<SpeedometerIcon style={menuIconStyle}/>}
-                                  link="meterreading"/>  
-                        
+                                  link="meterreading"/>
+
                         <MenuItem label="Install / Detach Equipment"
                                   icon={<BuildIcon style={menuIconStyle}/>}
-                                  link="installeqp"/>         
+                                  link="installeqp"/>
                     </EamlightSubmenu>
                     }
 
