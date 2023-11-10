@@ -14,7 +14,7 @@
     "@mui/styles": "5.11.7",
     "@mui/x-date-pickers": "5.0.18",
     "@react-keycloak/web": "3.4.0",
-    "axios": "0.22.0",
+    "axios": "1.6.0",
     "classnames": "2.2.6",
     "core-js": "3.1.4",
     "date-fns": "2.28.0",
