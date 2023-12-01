@@ -41,7 +41,7 @@ import { handleError } from 'actions/uiActions';
 import Variables from '../components/Variables';
 
 const Asset = () => {
-    const [part, setPart] = useState(part);
+    const [part, setPart] = useState(null);
     const [statuses, setStatuses] = useState([]);
 
     const {screenLayout: assetLayout, entity: equipment, loading, readOnly, isModified,
@@ -74,14 +74,14 @@ const Asset = () => {
     useEffect(() => {
         // Part input is cleared
         if (equipment?.partCode === '') {
-            setPart(undefined);
+            setPart(null);
         }
         // Part input is filled
         if (equipment?.partCode) {
             WSParts.getPart(equipment.partCode).then(response => {
                 setPart(response.body.data);
             }).catch(error => {
-                setPart(undefined);
+                setPart(null);
             });
         }
     }, [equipment?.partCode]);
