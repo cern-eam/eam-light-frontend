@@ -166,6 +166,6 @@
 }
 
 /* In the list & reports menu change the expand icon color */
-.MuiAccordionSummary-expandIconWrapper {
+ul .MuiAccordionSummary-expandIconWrapper {
   color: white;
 }
