@@ -16,6 +16,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { createOnChangeHandler, processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 import Panel from 'ui/components/panel/Panel';
+import WSEquipment from "../../../../tools/WSEquipment";
 
 const buttonStyle = {
     bottom: '-10px',
@@ -36,9 +37,12 @@ const ReplaceEqpGeneral = (props) => {
         statusList,
         showError,
         updateProperty,
+        setBlocking,
+        handleError,
     } = props;
 
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [detachableEquipment, setDetachableEquipment] = useState({});
 
     const idPrefix = "EAMID_ReplaceEqpGeneral_";
 
@@ -58,7 +62,22 @@ const ReplaceEqpGeneral = (props) => {
             showError('New Equipment cannot be the same Old Equipment');
             return;
         }
-        setDialogOpen(true);
+
+        // Fetch equipment that will potentially get detached from parents
+        if (replaceEquipment.replacementMode === MODE_STANDARD) {
+            setBlocking(true);
+            setDetachableEquipment({});
+
+            WSEquipment.collectDetachableEquipment(replaceEquipment.oldEquipment)
+                .then(response => {
+                    setDetachableEquipment(response.body.data);
+                    setDialogOpen(true);
+                })
+                .catch(error => handleError(error))
+                .finally(() => setBlocking(false));
+        } else {
+            setDialogOpen(true);
+        }
     };
 
     const executeReplace = () => {
@@ -103,6 +122,8 @@ const ReplaceEqpGeneral = (props) => {
             </div>
         );
     };
+
+    const detachableEquipmentEntries = Object.entries(detachableEquipment);
 
     return (
         <Panel heading="REPLACE EQUIPMENT" alwaysExpanded={true}>
@@ -166,6 +187,12 @@ const ReplaceEqpGeneral = (props) => {
                         <DialogContentText id="alert-dialog-description">
                             Are you sure you want to
                             replace {replaceEquipment.oldEquipment} with {replaceEquipment.newEquipment}?
+                            {replaceEquipment.replacementMode === MODE_STANDARD
+                                && detachableEquipmentEntries.length > 0
+                                && " The following equipment will be detached: "}
+                            {detachableEquipmentEntries
+                                .map(([child, parent], index) =>
+                                <li key={index}>'{child}' from '{parent}'</li>)}
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>

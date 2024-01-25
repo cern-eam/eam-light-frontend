@@ -181,7 +181,9 @@ const ReplaceEqp = (props) => {
                                                 statusList={statusList}
                                                 stateList={stateList}
                                                 replaceEquipmentHandler={replaceEquipmentHandler}
-                                                showError={showError}/>
+                                                showError={showError}
+                                                handleError={handleError}
+                                                setBlocking={setBlocking}/>
                         </Grid>
                         <Grid item sm={6} xs={12}>
                             <ReplaceEqpHierarchy equipment={oldEquipment} title="CURRENT HIERARCHY OF THE OLD EQUIPMENT"
