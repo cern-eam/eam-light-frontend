@@ -1,22 +1,21 @@
-# Version (2023-09-18)
+# Version (2024-02-19)
 
 ## Features
 ### 3.14.27 
+* Updated eam-wshub-core ([606c8e](https://github.com/cern-eam/eam-light-backend/commit/606c8edff6b20ffc4b3eac0e28b35892d7f70e6c))
+### 3.14.26-SNAP 
 * [EAM-2787] Set cost roll-up automatically in installEqp and hierarchy (#189) ([eb5212](https://github.com/cern-eam/eam-light-frontend/commit/eb52121cfd42e13c928362f0269149ad1e83ebd7))
 * Append query params when rewriting the URL (done when reading an entity based on the identifier passed as one of the query params) ([37d90c](https://github.com/cern-eam/eam-light-frontend/commit/37d90ce4fb0d6847442a8a485788ba056a14807a))
 * [EAM-2156] Configuration EAM light pour saisie des heures ([2587c4](https://github.com/cern-eam/eam-light-frontend/commit/2587c48e4fa36f6cac87530ec4bdf1aa182bde30))
 * [EAM-2744] Add support for reports (sidebar) ([7e9fd3](https://github.com/cern-eam/eam-light-frontend/commit/7e9fd3e916dcebeefcca7fb8d0f4e4e9be4c8734))
 * [EAM-2744] Move settings to bottom (sidebar) ([7cc472](https://github.com/cern-eam/eam-light-frontend/commit/7cc4722bcfa408c55d61a732c95f365e4d492917))
 * Add missing import ([0f8a91](https://github.com/cern-eam/eam-light-frontend/commit/0f8a9163564f800a848981be9f99d315e0805e62))
-* 3.14.26-SNAP ([f6c4df](https://github.com/cern-eam/eam-light-frontend/commit/f6c4df4e81a01c8a996b707c3267d7981e40b0b6))
 * [EAM-2744] Update getReports to work with sub-menus and URL reports ([07f9ec](https://github.com/cern-eam/eam-light-backend/commit/07f9ece390d1b8bed4b10f8fbbec82469f18220f))
-* Updated eam-wshub-core ([606c8e](https://github.com/cern-eam/eam-light-backend/commit/606c8edff6b20ffc4b3eac0e28b35892d7f70e6c))
-### 3.14.25 
+### 3.14.24-SNAP-3 
 * [EAM-2777] set eam-comp footer ([df78b9](https://github.com/cern-eam/eam-light-frontend/commit/df78b9034232bb3cf985150634c74488b4bf75e4))
 * [EAM-2777] changes after review ([27b259](https://github.com/cern-eam/eam-light-frontend/commit/27b259886371e2336c28d8f21a3a051a7dac2595))
 * add spacing ([839f06](https://github.com/cern-eam/eam-light-frontend/commit/839f069a99d2f55a75b25b2b1be1b805919d03de))
 * [EAM-2779] Use generic release notes component ([255fc1](https://github.com/cern-eam/eam-light-frontend/commit/255fc1a4ca019416f9b4e97cb6757dd40f3daa0e))
-* 3.14.24-SNAP-3 ([92b5a1](https://github.com/cern-eam/eam-light-frontend/commit/92b5a17330916dc1d3f793cfbb9b15b4fee61fa8))
 ### 3.14.23 
 * Updated dependencies ([c803ba](https://github.com/cern-eam/eam-light-backend/commit/c803ba5a658e5cdb3a51a6099274cb8ca1459205))
 ### 3.14.22 
@@ -910,4 +909,10 @@
 * Refactoring linked to the removal of some legacy classes (SimpleGridinput, GridUtils, ...) ([a2a706](https://github.com/cern-eam/eam-light-backend/commit/a2a7068b63483846b1cd55eac55f89288298e1e4))
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
+###  
+* Added hotfix for app crashing when no reports are present ([78e764](https://github.com/cern-eam/eam-light-frontend/commit/78e764c967bb318a2c717fbe09c30a7d3120dfac))
+* Fix EAMAutocomplete props in MeterReadingSearch ([ee0c9f](https://github.com/cern-eam/eam-light-frontend/commit/ee0c9feeb6df1aa19fa53c15f2dbb10a2e41806d))
+* Fix default value for part in Asset.js ([2a53a7](https://github.com/cern-eam/eam-light-frontend/commit/2a53a7ef1eb344a6c5c848f0b6b7c4947fff5a90))
+* Change the styling of .MuiAccordionSummary-expandIconWrapper used for List and Reports ([a67606](https://github.com/cern-eam/eam-light-frontend/commit/a67606db3cc7e77dca9742b176550014199e04e3))
+* Updated eam-components ([b21d78](https://github.com/cern-eam/eam-light-frontend/commit/b21d78a8c3a1aaea29748c8a22cfd9eed09a445a))
 
