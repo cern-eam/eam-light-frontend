@@ -1,6 +1,14 @@
-# Version (2024-02-19)
+# Version (2024-02-23)
 
 ## Features
+### 3.14.30 
+* [EAM-2960] Add field 'Assigned by' in EAMlight ([88ef0e](https://github.com/cern-eam/eam-light-backend/commit/88ef0e78c66f3587fe628dff3b47ce105f04cf34))
+### 3.14.29 
+* Added hotfix for app crashing when no reports are present ([78e764](https://github.com/cern-eam/eam-light-frontend/commit/78e764c967bb318a2c717fbe09c30a7d3120dfac))
+* Fix EAMAutocomplete props in MeterReadingSearch ([ee0c9f](https://github.com/cern-eam/eam-light-frontend/commit/ee0c9feeb6df1aa19fa53c15f2dbb10a2e41806d))
+* Fix default value for part in Asset.js ([2a53a7](https://github.com/cern-eam/eam-light-frontend/commit/2a53a7ef1eb344a6c5c848f0b6b7c4947fff5a90))
+* Change the styling of .MuiAccordionSummary-expandIconWrapper used for List and Reports ([a67606](https://github.com/cern-eam/eam-light-frontend/commit/a67606db3cc7e77dca9742b176550014199e04e3))
+* Updated eam-components ([b21d78](https://github.com/cern-eam/eam-light-frontend/commit/b21d78a8c3a1aaea29748c8a22cfd9eed09a445a))
 ### 3.14.27 
 * Updated eam-wshub-core ([606c8e](https://github.com/cern-eam/eam-light-backend/commit/606c8edff6b20ffc4b3eac0e28b35892d7f70e6c))
 ### 3.14.26-SNAP 
@@ -910,9 +918,5 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* Added hotfix for app crashing when no reports are present ([78e764](https://github.com/cern-eam/eam-light-frontend/commit/78e764c967bb318a2c717fbe09c30a7d3120dfac))
-* Fix EAMAutocomplete props in MeterReadingSearch ([ee0c9f](https://github.com/cern-eam/eam-light-frontend/commit/ee0c9feeb6df1aa19fa53c15f2dbb10a2e41806d))
-* Fix default value for part in Asset.js ([2a53a7](https://github.com/cern-eam/eam-light-frontend/commit/2a53a7ef1eb344a6c5c848f0b6b7c4947fff5a90))
-* Change the styling of .MuiAccordionSummary-expandIconWrapper used for List and Reports ([a67606](https://github.com/cern-eam/eam-light-frontend/commit/a67606db3cc7e77dca9742b176550014199e04e3))
-* Updated eam-components ([b21d78](https://github.com/cern-eam/eam-light-frontend/commit/b21d78a8c3a1aaea29748c8a22cfd9eed09a445a))
+* Updated dependencies. ([77011c](https://github.com/cern-eam/eam-light-frontend/commit/77011c3983c02bc69d8a9188f911549a3ff73315))
 
