@@ -44,7 +44,7 @@ const WorkorderScheduling = (props) => {
             <EAMAutocomplete
                 {...register('schedgroup','assignedBy')}
                 barcodeScanner
-                autocompleteHandler={WS.autocompleteSupervisor}  //TODO: We require a new implementation of the autocomplete but for supervisors
+                autocompleteHandler={WS.autocompleteSupervisor}
             />
 
             <EAMDatePicker
