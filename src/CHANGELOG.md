@@ -1,6 +1,8 @@
-# Version (2024-02-23)
+# Version (2024-03-05)
 
 ## Features
+### 3.14.31 
+* [EAM-2811] Add error handling to screen layout fetching ([06d3c8](https://github.com/cern-eam/eam-light-frontend/commit/06d3c85e94f266e1d827c50e21fd9d88ca574614))
 ### 3.14.30 
 * Updated dependencies. ([77011c](https://github.com/cern-eam/eam-light-frontend/commit/77011c3983c02bc69d8a9188f911549a3ff73315))
 * [EAM-2960] Add field 'Assigned by' in EAMlight ([88ef0e](https://github.com/cern-eam/eam-light-backend/commit/88ef0e78c66f3587fe628dff3b47ce105f04cf34))
@@ -919,5 +921,6 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* [EAM-2811] Add error handling to screen layout fetching ([06d3c8](https://github.com/cern-eam/eam-light-frontend/commit/06d3c85e94f266e1d827c50e21fd9d88ca574614))
+* [EAM-2960] Add field 'Assigned by' in EAMlight ([b48366](https://github.com/cern-eam/eam-light-frontend/commit/b4836635974bb3cc9128360c95791c3358653a0e))
+* [EAM-2960] Comment deleted ([bedb54](https://github.com/cern-eam/eam-light-frontend/commit/bedb546387e1dceae1c4cfdf862429402b58c1fe))
 
