@@ -89,7 +89,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
     );
 
     const isInsideIframe = window.self !== window.top;
-    const isInsideAllowedURL = document.referrer.match(applicationData.EL_IFURL);
+    const isInsideAllowedURL = document.referrer.match('^' + applicationData.EL_IFURL);
     const showTopBar = !(isInsideAllowedURL && isInsideIframe);
 
     const loadAfterLogin = GridTools.getURLParameterByName("loadAfterLogin") === 'true';
