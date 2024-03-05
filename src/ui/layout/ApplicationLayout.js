@@ -88,9 +88,9 @@ export default withStyles(styles)(function ApplicationLayout(props) {
         </div>
     );
 
-    const startsWithString = 'https://inforos-test.cern.ch';
     const isInsideIframe = window.self !== window.top;
-    const showTopBar = !(document.referrer.startsWith(startsWithString) && isInsideIframe);
+    const isInsideAllowedURL = document.referrer.match(applicationData.EL_IFURL);
+    const showTopBar = !(isInsideAllowedURL && isInsideIframe);
 
     const loadAfterLogin = GridTools.getURLParameterByName("loadAfterLogin") === 'true';
 
