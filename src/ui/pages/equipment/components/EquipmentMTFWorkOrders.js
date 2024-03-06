@@ -6,6 +6,7 @@ import EAMTableGridRequestAdapter from "eam-components/dist/ui/components/eamtab
 import compareAsc from 'date-fns/compareAsc'
 import parse from 'date-fns/parse'
 import { withCernMode } from '../../../components/CERNMode';
+import { formatConsistentDate } from "../../../../tools/DateTools";
 
 const DATE_FORMAT = "dd-LLL-yyyy";
 
@@ -14,26 +15,32 @@ const customCellStyle = {
 }
 
 const customCellRenderer = ({ row, columnMetadata, getDisplayValue, CellComponent }) => {
-    const customRenders = {
-        "last_repeated_status_color": (
-            <CellComponent
-                style={{ backgroundColor: getDisplayValue() }}
-            />
-        ),
-        "mtf_step": (
-            <CellComponent>
-                <Link
-                    to={{ pathname: `/workorder/${row["evt_code"]}` }}
-                >
-                    {getDisplayValue()}
-                </Link>
-            </CellComponent>
-        ),
-        "evt_desc": (
-            <CellComponent>{getDisplayValue()}</CellComponent>
-        )
+    const customRenders = (id) => {
+        switch (id) {
+            case "last_repeated_status_color": return (
+                <CellComponent
+                    style={{ backgroundColor: getDisplayValue() }}
+                />
+            )
+            case "mtf_step": return (
+                <CellComponent>
+                    <Link
+                        to={{ pathname: `/workorder/${row["evt_code"]}` }}
+                    >
+                        {getDisplayValue()}
+                    </Link>
+                </CellComponent>
+            )
+            case "evt_desc": return (
+                <CellComponent>{getDisplayValue()}</CellComponent>
+            )
+            case "evt_completed": return (
+                <CellComponent>{formatConsistentDate(getDisplayValue())}</CellComponent>
+            )
+        }
+        
     }
-    return customRenders[columnMetadata.id] || <CellComponent style={customCellStyle}>{getDisplayValue()}</CellComponent>;
+    return customRenders(columnMetadata.id) || <CellComponent style={customCellStyle}>{getDisplayValue()}</CellComponent>;
 }
 
 const headers = {
