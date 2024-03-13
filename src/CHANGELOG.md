@@ -1,7 +1,9 @@
-# Version (2024-03-12)
+# Version (2024-03-13)
 
 ## Features
 ### 3.15.0 
+* [EAM-3126] Allow hidden top bar when inside iframe (#201) ([74bf9b](https://github.com/cern-eam/eam-light-frontend/commit/74bf9b31431386f931cb6893a70703a0712dc4cc))
+* Updated eam-components ([eebd37](https://github.com/cern-eam/eam-light-frontend/commit/eebd373f51b712a03508fe4df981c541c62bf48e))
 * Update wshub-core version to 12.1-1 ([58b996](https://github.com/cern-eam/eam-light-backend/commit/58b996bcb77b480a3cff1c4e6a3e7dada7a0df85))
 * Updated dependencies ([3981db](https://github.com/cern-eam/eam-light-backend/commit/3981dbc24bd58feea980c97e25cd1467161261ee))
 ### 3.14.32 
@@ -927,6 +929,5 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* [EAM-3126] Allow hidden top bar when inside iframe (#201) ([74bf9b](https://github.com/cern-eam/eam-light-frontend/commit/74bf9b31431386f931cb6893a70703a0712dc4cc))
-* Updated eam-components ([eebd37](https://github.com/cern-eam/eam-light-frontend/commit/eebd373f51b712a03508fe4df981c541c62bf48e))
+* Updated eam-components ([ae8026](https://github.com/cern-eam/eam-light-frontend/commit/ae80269261d785a4f8299eeff5c669f0b81550b9))
 
