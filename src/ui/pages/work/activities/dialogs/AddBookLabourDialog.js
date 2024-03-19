@@ -171,7 +171,7 @@ function AddActivityDialog(props) {
                                 options={props.activities.map(activity => {
                                     return {
                                         code: activity.activityCode,
-                                        desc: activity.tradeCode
+                                        desc: activity.activityNote
                                     }
                                 })}
                                 onChange={createOnChangeHandler("activityCode", null, null, updateFormValues)}
