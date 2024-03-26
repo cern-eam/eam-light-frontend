@@ -1,5 +1,5 @@
 import {connect} from 'react-redux'
-import {handleError, showError, showNotification} from '../../../../actions/uiActions'
+import {handleError, showError, showNotification, showWarning} from '../../../../actions/uiActions'
 import PartUsage from "./PartUsage";
 
 function mapStateToProps(state) {
@@ -11,6 +11,7 @@ function mapStateToProps(state) {
 const PartUsageContainer = connect(mapStateToProps, {
         showNotification,
         showError,
+        showWarning,
         handleError
     }
 )(PartUsage);
