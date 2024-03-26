@@ -22,7 +22,9 @@ import WorkorderScheduling from './WorkorderScheduling';
 import { assignStandardWorkOrderValues, isReadOnlyCustomHandler, isRegionAvailable, layoutPropertiesMap } from "./WorkorderTools";
 import EntityRegions from '../../components/entityregions/EntityRegions';
 import IconButton from '@mui/material/IconButton';
-import OpenInNewIcon from 'mdi-material-ui/OpenInNew';
+import PrintIcon from '@mui/icons-material/Print';
+import TuneIcon from '@mui/icons-material/Tune';
+import {IconSlash} from 'eam-components/dist/ui/components/icons/index';
 import { isCernMode } from '../../components/CERNMode';
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility, registerCustomField } from '../EntityTools';
@@ -51,7 +53,6 @@ import { PartIcon } from 'eam-components/dist/ui/components/icons';
 import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
-import { Typography } from '@mui/material';
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
     if (!eqCode || !swoCode) {
@@ -68,6 +69,7 @@ const Workorder = () => {
     const [equipmentPart, setEquipmentPart] = useState();
     const [statuses, setStatuses] = useState([]);
     const [otherIdMapping, setOtherIdMapping] = useState({})
+    const [expandChecklistsOptions, setExpandChecklistsOptions] = useState(false)
     const checklists = useRef(null);
     const dispatch = useDispatch();
     const updateMyWorkOrdersConst = (...args) => dispatch(updateMyWorkOrders(...args));
@@ -407,26 +409,27 @@ const Workorder = () => {
                         hideFollowUpProp={isHidden(
                             commonProps.workOrderLayout.tabs.ACK.fields.createfollowupwo
                         )}
-                        hideFilledItems={panelQueryParams.CHECKLISTShideFilledItems === 'true'}
+                        expandChecklistsOptions={expandChecklistsOptions}
+                        showFilledItems={panelQueryParams.CHECKLISTSshowFilledItems === 'true' || panelQueryParams.CHECKLISTSshowFilledItems === undefined}
                         activity={panelQueryParams.CHECKLISTSactivity}
-                        topSlot={
-                            applicationData.EL_PRTCL &&
-                                <div style={{
-                                    width: "100%",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                }}>
-                                    <IconButton
-                                        onClick={() => window.open(applicationData.EL_PRTCL + workorder.number, '_blank', 'noopener noreferrer')}
-                                        style={{ color: "#00aaff" }}
-                                        size="large">
-                                        <OpenInNewIcon style={{ padding: "9px" }} />
-                                         <Typography>Results</Typography>
-                                    </IconButton>
-                                </div>
-                        }/>
+                        register={register}
+                        />
                 )
                 ,
+                RegionPanelProps: {
+                    customHeadingBar:
+                    applicationData.EL_PRTCL && <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%'}}>
+                                        <IconButton
+                                            onClick={() => window.open(applicationData.EL_PRTCL + workorder.number, '_blank', 'noopener noreferrer')}>
+                                            <PrintIcon fontSize='small' />
+                                        </IconButton>
+                                        <IconButton
+                                            onClick={(e) => { e.stopPropagation(); setExpandChecklistsOptions(!expandChecklistsOptions); }}>
+                                            <TuneIcon fontSize='small'/> { expandChecklistsOptions ? <IconSlash backgroundColor='#fafafa' iconColor='#737373'/> : null }
+                                        </IconButton>
+                                      </div>
+    
+                },
                 column: 2,
                 order: 9,
                 summaryIcon: PlaylistAddCheckIcon,
