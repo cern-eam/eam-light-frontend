@@ -1,6 +1,8 @@
 # Version (2024-03-26)
 
 ## Features
+### 3.16.2 
+* Removed unused SharedPlugin methods ([0a4cab](https://github.com/cern-eam/eam-light-backend/commit/0a4cab0d4ea61a5077aea12e67969fd9a86bedce))
 ### 3.16.1 
 * Updated eam-wshub-core ([b0ebee](https://github.com/cern-eam/eam-light-backend/commit/b0ebeeb5b91f7cf9ac81447cb2304c170ae05292))
 ### 3.16.0 
