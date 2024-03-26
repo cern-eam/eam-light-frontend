@@ -171,6 +171,38 @@ class WSWorkorders {
         return WS._get(`/partusage/bins?transaction=${transaction}&bin=${bin}&part=${part}&store=${store}`, config);
     }
 
+    getPartUsageLotIssue(
+        lot,
+        bin,
+        part,
+        store,
+        requireAvailableQty = true,
+        config = {}
+    ) {
+        return WS._get(`/partusage/lots/issue`, {
+            ...config,
+            params: {
+                ...config.params,
+                lot,
+                bin,
+                part,
+                store,
+                requireAvailableQty,
+            },
+        });
+    }
+
+    getPartUsageLotReturn(lot, part, config = {}) {
+        return WS._get(`/partusage/lots/return`, {
+            ...config,
+            params: {
+                ...config.params,
+                lot,
+                part,
+            },
+        });
+    }
+
     //
     // ACTIVITIES AND BOOKED LABOURS
     //
