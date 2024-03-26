@@ -1,7 +1,14 @@
 # Version (2024-03-26)
 
 ## Features
+### 3.16.1 
+* Updated eam-wshub-core ([b0ebee](https://github.com/cern-eam/eam-light-backend/commit/b0ebeeb5b91f7cf9ac81447cb2304c170ae05292))
 ### 3.16.0 
+* Include activity note in the activity lookup when booking labor ([c311ed](https://github.com/cern-eam/eam-light-frontend/commit/c311ed00a700840d1eeef9f227fc4a7bc6bba6f6))
+* [EAM-3116] Link and iconbutton added to checklists topbar (#202) ([f32624](https://github.com/cern-eam/eam-light-frontend/commit/f32624f1aa05d9c49b8fe52a2b712b157806b648))
+* [EAM-2225] Add lot field and improvements to part usage dialog (#178) ([2d5e53](https://github.com/cern-eam/eam-light-frontend/commit/2d5e532e75b8ececb65b5726d19f9d03aaa4cccc))
+* Updated eam-components ([01dbc3](https://github.com/cern-eam/eam-light-frontend/commit/01dbc36aac195300d21553991e43bec767d5dc9b))
+* EAM-2704 Show potentially detachable equipment (#199) ([2ea345](https://github.com/cern-eam/eam-light-frontend/commit/2ea34503bb7181d05dc67adfb63fccb4c167de56))
 * [EAM-2225] Add lot list endpoint (#102) ([4d9eb5](https://github.com/cern-eam/eam-light-backend/commit/4d9eb5f942eeebb0fecf851288001ac213e0732a))
 * [EAM-2704] Update replace equipment to detach dependent assets from their positions (#105) ([70c65e](https://github.com/cern-eam/eam-light-backend/commit/70c65e7303648a1c35367de69b87d3128cf00b84))
 ### 3.15.1 
@@ -933,10 +940,4 @@
 * Refactoring linked to the removal of some legacy classes (SimpleGridinput, GridUtils, ...) ([a2a706](https://github.com/cern-eam/eam-light-backend/commit/a2a7068b63483846b1cd55eac55f89288298e1e4))
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
-###  
-* Include activity note in the activity lookup when booking labor ([c311ed](https://github.com/cern-eam/eam-light-frontend/commit/c311ed00a700840d1eeef9f227fc4a7bc6bba6f6))
-* [EAM-3116] Link and iconbutton added to checklists topbar (#202) ([f32624](https://github.com/cern-eam/eam-light-frontend/commit/f32624f1aa05d9c49b8fe52a2b712b157806b648))
-* [EAM-2225] Add lot field and improvements to part usage dialog (#178) ([2d5e53](https://github.com/cern-eam/eam-light-frontend/commit/2d5e532e75b8ececb65b5726d19f9d03aaa4cccc))
-* Updated eam-components ([01dbc3](https://github.com/cern-eam/eam-light-frontend/commit/01dbc36aac195300d21553991e43bec767d5dc9b))
-* EAM-2704 Show potentially detachable equipment (#199) ([2ea345](https://github.com/cern-eam/eam-light-frontend/commit/2ea34503bb7181d05dc67adfb63fccb4c167de56))
 
