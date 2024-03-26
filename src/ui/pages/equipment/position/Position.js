@@ -5,6 +5,7 @@ import CustomFields from 'eam-components/dist/ui/components/customfields/CustomF
 import WSEquipment from "../../../../tools/WSEquipment"
 import BlockUi from 'react-block-ui'
 import 'react-block-ui/style.css'
+import { Link } from 'react-router-dom';
 import PositionGeneral from './PositionGeneral'
 import PositionDetails from './PositionDetails'
 import PositionHierarchy from './PositionHierarchy'
@@ -35,10 +36,25 @@ import ShareIcon from '@mui/icons-material/Share';
 import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import GridOnIcon from '@mui/icons-material/GridOn';
+import IconButton from '@mui/material/IconButton';
+import {IconSlash} from 'eam-components/dist/ui/components/icons/index';
 import Variables from '../components/Variables.js';
+import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab.js';
+
+
+const customRenderers = (applicationData) => {
+    return {
+        'caseno': value => <a href={applicationData.EL_LOURL + value} target="_blank">{value}</a>,
+        'equipmentno': value => <Link to={{ pathname: `/equipment/${value}`}} target="_blank">{value}</Link>,
+        'workorderno': value => <Link to={{ pathname: `/workorder/${value}`}} target="_blank">{value}</Link>,
+        'partno': value => <Link to={{ pathname: `/part/${value}`}} target="_blank">{value}</Link>
+    }
+}
 
 const Position = () => {
     const [statuses, setStatuses] = useState([]);
+    const [showGrid, setShowGrid] = useState({});
 
     const {screenLayout: positionLayout, entity: equipment, loading, readOnly, isModified,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
@@ -84,6 +100,51 @@ const Position = () => {
                 .then(response => setStatuses(response.body.data))
                 .catch(console.error)
         }
+
+        const toggleGrid = (tabId) => {
+            setShowGrid(prevState => ({
+              ...prevState, // Mantenemos el estado anterior
+              [tabId]: !prevState[tabId] // Cambiamos el valor de la propiedad específica
+            }));
+          };
+    
+    const getTabGridRegions = () => {
+        return Object.entries(positionLayout.customGridTabs).map(([tabId, tab], index) => {
+            return ({
+                id: tab.tabDescription.replaceAll(' ','').toUpperCase(),
+                label: tab.tabDescription,
+                isVisibleWhenNewEntity: true,
+                maximizable: true,
+                render: () =>
+                    <EAMGridTab
+                        screenCode={screenCode}
+                        tabName={tabId}
+                        objectCode={equipment.code}
+                        customRenderers={customRenderers(applicationData)}
+                        showGrid={showGrid[tabId]}
+                        rowCount={100}
+                    >   
+                    </EAMGridTab>
+                ,
+                RegionPanelProps: {
+                    customHeadingBar:
+                        applicationData.EL_PRTCL && 
+                        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '100%'}}>
+                            <IconButton
+                                onClick={(e) => { e.stopPropagation(); toggleGrid(tabId); }}>
+                                <GridOnIcon fontSize='small'/> { showGrid[tabId] ? <IconSlash backgroundColor='#fafafa' iconColor='#737373'/> : null }
+                            </IconButton>
+                        </div>
+        
+                },
+                column: 2,
+                order: 30 + 5*index,
+                summaryIcon: GridOnIcon,
+                ignore: !tab.tabAvailable,
+                initialVisibility: tab.alwaysDisplayed    
+            });
+        }).filter(Boolean)
+    }
 
     const getRegions = () => {
         const tabs = positionLayout.tabs;
@@ -328,6 +389,7 @@ const Position = () => {
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_POSITIONS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_POSITIONS)
             },
+            ...getTabGridRegions()
         ]
     }
 
