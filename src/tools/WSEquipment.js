@@ -144,6 +144,11 @@ class WSEquipment {
         return WS._post('/equipment/replace', equipmentRpl, config);
     }
 
+    collectDetachableEquipment(oldEquipment, config = {}) {
+        oldEquipment = encodeURIComponent(oldEquipment);
+        return WS._get(`/equipment/collectdetachables/${oldEquipment}`, config);
+    }
+
     getEquipmentChildren(equipment, config = {}) {
         equipment = encodeURIComponent(equipment);
         return WS._get(`/equipment/children/${equipment}`, config);
