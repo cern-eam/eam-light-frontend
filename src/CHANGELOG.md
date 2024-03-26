@@ -1,6 +1,11 @@
-# Version (2024-03-13)
+# Version (2024-03-26)
 
 ## Features
+### 3.16.0 
+* [EAM-2225] Add lot list endpoint (#102) ([4d9eb5](https://github.com/cern-eam/eam-light-backend/commit/4d9eb5f942eeebb0fecf851288001ac213e0732a))
+* [EAM-2704] Update replace equipment to detach dependent assets from their positions (#105) ([70c65e](https://github.com/cern-eam/eam-light-backend/commit/70c65e7303648a1c35367de69b87d3128cf00b84))
+### 3.15.1 
+* Updated eam-components ([ae8026](https://github.com/cern-eam/eam-light-frontend/commit/ae80269261d785a4f8299eeff5c669f0b81550b9))
 ### 3.15.0 
 * [EAM-3126] Allow hidden top bar when inside iframe (#201) ([74bf9b](https://github.com/cern-eam/eam-light-frontend/commit/74bf9b31431386f931cb6893a70703a0712dc4cc))
 * Updated eam-components ([eebd37](https://github.com/cern-eam/eam-light-frontend/commit/eebd373f51b712a03508fe4df981c541c62bf48e))
@@ -929,5 +934,9 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* Updated eam-components ([ae8026](https://github.com/cern-eam/eam-light-frontend/commit/ae80269261d785a4f8299eeff5c669f0b81550b9))
+* Include activity note in the activity lookup when booking labor ([c311ed](https://github.com/cern-eam/eam-light-frontend/commit/c311ed00a700840d1eeef9f227fc4a7bc6bba6f6))
+* [EAM-3116] Link and iconbutton added to checklists topbar (#202) ([f32624](https://github.com/cern-eam/eam-light-frontend/commit/f32624f1aa05d9c49b8fe52a2b712b157806b648))
+* [EAM-2225] Add lot field and improvements to part usage dialog (#178) ([2d5e53](https://github.com/cern-eam/eam-light-frontend/commit/2d5e532e75b8ececb65b5726d19f9d03aaa4cccc))
+* Updated eam-components ([01dbc3](https://github.com/cern-eam/eam-light-frontend/commit/01dbc36aac195300d21553991e43bec767d5dc9b))
+* EAM-2704 Show potentially detachable equipment (#199) ([2ea345](https://github.com/cern-eam/eam-light-frontend/commit/2ea34503bb7181d05dc67adfb63fccb4c167de56))
 
