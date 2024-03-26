@@ -1,6 +1,6 @@
 {
   "name": "eamlight",
-  "version": "3.15.1",
+  "version": "3.16.0",
   "private": true,
   "sideEffects": false,
   "dependencies": {
