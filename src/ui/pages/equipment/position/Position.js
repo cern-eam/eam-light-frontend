@@ -115,7 +115,7 @@ const Position = () => {
                 label: tab.tabDescription,
                 isVisibleWhenNewEntity: true,
                 maximizable: true,
-                render: () =>
+                render: ({ isMaximized }) =>
                     <EAMGridTab
                         screenCode={screenCode}
                         tabName={tabId}
@@ -123,6 +123,7 @@ const Position = () => {
                         customRenderers={customRenderers(applicationData)}
                         showGrid={showGrid[tabId]}
                         rowCount={100}
+                        gridContainerStyle={{ height: isMaximized ? '65vh' : '300px'}}
                     >   
                     </EAMGridTab>
                 ,
