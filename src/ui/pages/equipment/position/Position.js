@@ -43,7 +43,7 @@ import Variables from '../components/Variables.js';
 import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab.js';
 
 
-const customRenderers = (applicationData) => {
+const getCustomRenderers = (applicationData) => {
     return {
         'caseno': value => <a href={applicationData.EL_LOURL + value} target="_blank">{value}</a>,
         'equipmentno': value => <Link to={{ pathname: `/equipment/${value}`}} target="_blank">{value}</Link>,
@@ -103,12 +103,13 @@ const Position = () => {
 
         const toggleGrid = (tabId) => {
             setShowGrid(prevState => ({
-              ...prevState, // Mantenemos el estado anterior
-              [tabId]: !prevState[tabId] // Cambiamos el valor de la propiedad específica
+              ...prevState,
+              [tabId]: !prevState[tabId]
             }));
           };
     
     const getTabGridRegions = () => {
+        const customRenderers = getCustomRenderers(applicationData);
         return Object.entries(positionLayout.customGridTabs).map(([tabId, tab], index) => {
             return ({
                 id: tab.tabDescription.replaceAll(' ','').toUpperCase(),
@@ -120,7 +121,7 @@ const Position = () => {
                         screenCode={screenCode}
                         tabName={tabId}
                         objectCode={equipment.code}
-                        customRenderers={customRenderers(applicationData)}
+                        customRenderers={customRenderers}
                         showGrid={showGrid[tabId]}
                         rowCount={100}
                         gridContainerStyle={{ height: isMaximized ? '65vh' : '300px'}}
