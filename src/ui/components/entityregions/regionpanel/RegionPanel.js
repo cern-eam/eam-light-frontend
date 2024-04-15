@@ -11,7 +11,7 @@ const RegionPanel = (props) => {
 
     const divStyle = {
         display: "flex",
-        width: "100%",
+        flexGrow: 1,
         justifyContent: "flex-end"
     }
 
