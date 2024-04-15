@@ -41,6 +41,12 @@ const WorkorderScheduling = (props) => {
                 autocompleteHandler={WS.autocompleteEmployee}
             />
 
+            <EAMAutocomplete
+                {...register('schedgroup','assignedBy')}
+                barcodeScanner
+                autocompleteHandler={WS.autocompleteSupervisor}
+            />
+
             <EAMDatePicker
                 {...register('reqstartdate','requestedStartDate')}/>
 
