@@ -5,7 +5,6 @@ import CustomFields from 'eam-components/dist/ui/components/customfields/CustomF
 import WSEquipment from "../../../../tools/WSEquipment"
 import BlockUi from 'react-block-ui'
 import 'react-block-ui/style.css'
-import { Link } from 'react-router-dom';
 import PositionGeneral from './PositionGeneral'
 import PositionDetails from './PositionDetails'
 import PositionHierarchy from './PositionHierarchy'
@@ -19,7 +18,7 @@ import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
+import { getTabAvailability, getTabInitialVisibility , getCustomTabGridRenderers} from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, positionLayoutPropertiesMap } from '../EquipmentTools.js';
@@ -37,24 +36,13 @@ import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import GridOnIcon from '@mui/icons-material/GridOn';
-import IconButton from '@mui/material/IconButton';
-import {IconSlash} from 'eam-components/dist/ui/components/icons/index';
 import Variables from '../components/Variables.js';
 import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab.js';
 
-
-const getCustomRenderers = (applicationData) => {
-    return {
-        'caseno': value => <a href={applicationData.EL_LOURL + value} target="_blank">{value}</a>,
-        'equipmentno': value => <Link to={{ pathname: `/equipment/${value}`}} target="_blank">{value}</Link>,
-        'workorderno': value => <Link to={{ pathname: `/workorder/${value}`}} target="_blank">{value}</Link>,
-        'partno': value => <Link to={{ pathname: `/part/${value}`}} target="_blank">{value}</Link>
-    }
-}
+const customTabGridParamNames =  ["equipmentno", "position", "obj_code", "main_eqp_code", "OBJ_CODE", "object"];
 
 const Position = () => {
     const [statuses, setStatuses] = useState([]);
-    const [showGrid, setShowGrid] = useState({});
 
     const {screenLayout: positionLayout, entity: equipment, loading, readOnly, isModified,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
@@ -100,16 +88,9 @@ const Position = () => {
                 .then(response => setStatuses(response.body.data))
                 .catch(console.error)
         }
-
-        const toggleGrid = (tabId) => {
-            setShowGrid(prevState => ({
-              ...prevState,
-              [tabId]: !prevState[tabId]
-            }));
-          };
     
     const getTabGridRegions = () => {
-        const customRenderers = getCustomRenderers(applicationData);
+        const customTabGridRenderers = getCustomTabGridRenderers(applicationData);
         return Object.entries(positionLayout.customGridTabs).map(([tabId, tab], index) => {
             return ({
                 id: tab.tabDescription.replaceAll(' ','').toUpperCase(),
@@ -121,31 +102,21 @@ const Position = () => {
                         screenCode={screenCode}
                         tabName={tabId}
                         objectCode={equipment.code}
-                        customRenderers={customRenderers}
-                        showGrid={showGrid[tabId]}
+                        paramNames= {customTabGridParamNames}
+                        customRenderers={customTabGridRenderers}
+                        showGrid={isMaximized}
                         rowCount={100}
-                        gridContainerStyle={{ height: isMaximized ? '65vh' : '300px'}}
+                        gridContainerStyle={isMaximized ? { height: `${document.getElementById('entityContent').offsetHeight - 220}px`} : {}}
                     >   
                     </EAMGridTab>
                 ,
-                RegionPanelProps: {
-                    customHeadingBar:
-                        applicationData.EL_PRTCL && 
-                        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '100%'}}>
-                            <IconButton
-                                onClick={(e) => { e.stopPropagation(); toggleGrid(tabId); }}>
-                                <GridOnIcon fontSize='small'/> { showGrid[tabId] ? <IconSlash backgroundColor='#fafafa' iconColor='#737373'/> : null }
-                            </IconButton>
-                        </div>
-        
-                },
                 column: 2,
-                order: 30 + 5*index,
+                order: 30 + 5 * index,
                 summaryIcon: GridOnIcon,
-                ignore: !tab.tabAvailable,
+                ignore: !tab.tabAvailable,             
                 initialVisibility: tab.alwaysDisplayed    
             });
-        }).filter(Boolean)
+        })
     }
 
     const getRegions = () => {
