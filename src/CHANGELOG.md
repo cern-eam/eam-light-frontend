@@ -1,6 +1,8 @@
 # Version (2024-05-21)
 
 ## Features
+### 3.16.5 
+* Updated dependencies ([b285c8](https://github.com/cern-eam/eam-light-backend/commit/b285c8cf5f23202d47ae49ed5173b14a6d7553c7))
 ### 3.16.4 
 * [EAM-3314][HOTFIX] CFs list not fetched if hifen present on property code ([04b525](https://github.com/cern-eam/eam-light-backend/commit/04b5251b503c95eac6cbbf714435ed4f1ee9cb97))
 ### 3.16.3 
