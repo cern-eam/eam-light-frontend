@@ -1,6 +1,11 @@
-# Version (2024-04-15)
+# Version (2024-05-21)
 
 ## Features
+### 3.16.4 
+* [EAM-3314][HOTFIX] CFs list not fetched if hifen present on property code ([04b525](https://github.com/cern-eam/eam-light-backend/commit/04b5251b503c95eac6cbbf714435ed4f1ee9cb97))
+### 3.16.3 
+* [EAM-3116] RegionPanel heading width fix (#204) ([d7592a](https://github.com/cern-eam/eam-light-frontend/commit/d7592afdc3ab88aa8a69c514695cbb01bd311cb2))
+* Updated eam-components ([652da3](https://github.com/cern-eam/eam-light-frontend/commit/652da32563fe11431ca9fd4b87185d0552b46d54))
 ### 3.16.2 
 * Removed unused SharedPlugin methods ([0a4cab](https://github.com/cern-eam/eam-light-backend/commit/0a4cab0d4ea61a5077aea12e67969fd9a86bedce))
 ### 3.16.1 
@@ -942,7 +947,4 @@
 * Refactoring linked to the removal of some legacy classes (SimpleGridinput, GridUtils, ...) ([a2a706](https://github.com/cern-eam/eam-light-backend/commit/a2a7068b63483846b1cd55eac55f89288298e1e4))
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
-###  
-* [EAM-3116] RegionPanel heading width fix (#204) ([d7592a](https://github.com/cern-eam/eam-light-frontend/commit/d7592afdc3ab88aa8a69c514695cbb01bd311cb2))
-* Updated eam-components ([652da3](https://github.com/cern-eam/eam-light-frontend/commit/652da32563fe11431ca9fd4b87185d0552b46d54))
 
