@@ -24,7 +24,7 @@ function Activity(props) {
         .map(Number)
         .reduce((a, b) => a + b, 0) ?? 0
 
-    const tradeString = activity.tradeCode === '*' ? '' : ` - ${activity.tradeCode}`
+    const descriptionString = activity.activityNote ? ` - ${activity.activityNote}` : activity.tradeCode === '*' ? '' : ` - ${activity.tradeCode}`
 
     const handleOptionsOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -109,7 +109,7 @@ function Activity(props) {
                         <Grid item direction="row" container justifyContent="space-between" flexWrap="nowrap">
                             <Grid item container direction="row" alignItems='center'>
                                 <Typography variant="subtitle1" className="activityTitle">
-                                    {activity.activityCode}{tradeString}
+                                    {activity.activityCode}{descriptionString}
                                 </Typography>
                             </Grid>
                             {renderOptionsMenu()}
@@ -119,7 +119,7 @@ function Activity(props) {
                                 <Typography variant="subtitle2" color="black" sx={{
                                     wordBreak: 'break-all',
                                 }}>
-                                    {activity.activityNote}
+                                    {activity.tradeCode}
                                 </Typography>
                             </Grid>}
                     </Grid>
