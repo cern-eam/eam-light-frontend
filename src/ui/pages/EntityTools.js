@@ -1,6 +1,7 @@
 import set from "set-value";
 import queryString from "query-string";
 import formatfns from "date-fns/format";
+import { Link } from 'react-router-dom';
 import { parseISO } from "date-fns";
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { get } from "lodash";
@@ -275,3 +276,12 @@ export const prepareDataForFieldsValidator = (entity, screenLayout, layoutProper
 }
 
 export const isMultiOrg = process.env.REACT_APP_MULTI_ORG === 'TRUE';
+
+export const getCustomTabGridRenderers = (applicationData) => {
+    return {
+        'caseno': value => <a href={applicationData.EL_LOURL + value} target="_blank">{value}</a>,
+        'equipmentno': value => <Link to={{ pathname: `/equipment/${value}`}} target="_blank">{value}</Link>,
+        'workorderno': value => <Link to={{ pathname: `/workorder/${value}`}} target="_blank">{value}</Link>,
+        'partno': value => <Link to={{ pathname: `/part/${value}`}} target="_blank">{value}</Link>
+    }
+}

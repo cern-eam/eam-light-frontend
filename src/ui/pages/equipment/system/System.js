@@ -18,7 +18,7 @@ import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
+import { getTabAvailability, getTabInitialVisibility, getCustomTabGridRenderers } from '../../EntityTools';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, systemLayoutPropertiesMap } from '../EquipmentTools.js';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
@@ -34,6 +34,10 @@ import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import Variables from '../components/Variables.js';
+import GridOnIcon from '@mui/icons-material/GridOn';
+import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab.js';
+
+const customTabGridParamNames =  ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
 const System = () => {
     const [statuses, setStatuses] = useState([]);
@@ -89,6 +93,36 @@ const System = () => {
             return 'A';
         }
         return 'X';
+    }
+
+    const getTabGridRegions = () => {
+        const customTabGridRenderers = getCustomTabGridRenderers(applicationData);
+        return Object.entries(systemLayout.customGridTabs).map(([tabId, tab], index) => {
+            return ({
+                id: tab.tabDescription.replaceAll(' ','').toUpperCase(),
+                label: tab.tabDescription,
+                isVisibleWhenNewEntity: true,
+                maximizable: true,
+                render: ({ isMaximized }) =>
+                    <EAMGridTab
+                        screenCode={screenCode}
+                        tabName={tabId}
+                        objectCode={equipment.code}
+                        paramNames= {customTabGridParamNames}
+                        customRenderers={customTabGridRenderers}
+                        showGrid={isMaximized}
+                        rowCount={100}
+                        gridContainerStyle={isMaximized ? { height: `${document.getElementById('entityContent').offsetHeight - 220}px`} : {}}
+                    >   
+                    </EAMGridTab>
+                ,
+                column: 2,
+                order: 30 + 5 * index,
+                summaryIcon: GridOnIcon,
+                ignore: !tab.tabAvailable,             
+                initialVisibility: tab.alwaysDisplayed    
+            });
+        })
     }
 
     const getRegions = () => {
@@ -319,6 +353,7 @@ const System = () => {
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_SYSTEMS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_SYSTEMS)
             },
+            ...getTabGridRegions()
         ]
     }
 
