@@ -18,7 +18,7 @@ import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
 import useEntity from "hooks/useEntity";
 
-import { AssetIcon, PartIcon } from 'eam-components/dist/ui/components/icons'
+import { AssetIcon, PartIcon, PartPlusIcon } from 'eam-components/dist/ui/components/icons'
 import DescriptionIcon from '@mui/icons-material/Description';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
@@ -26,6 +26,7 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import PlaceIcon from '@mui/icons-material/Place';
+import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab'
 
 const Part = () => {
     const {screenLayout: partLayout, entity: part, loading, readOnly, isModified,
@@ -220,6 +221,29 @@ const Part = () => {
                 summaryIcon: ListAltIcon,
                 ignore: partLayout.fields.block_6.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
+            },
+            {
+                id: 'PARTSASSOCIATED',
+                label: 'Parts Associated',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: ({ isMaximized }) =>
+                    <EAMGridTab
+                        gridName={'BSPARA'}
+                        objectCode={part.code + '#' + part.organization}
+                        paramNames={['param.valuecode']}
+                        additionalParams={{'param.entity': 'PART'}}
+                        showGrid={isMaximized}
+                        rowCount={100}
+                        gridContainerStyle={isMaximized ? { height: `${document.getElementById('entityContent').offsetHeight - 220}px`} : {}}
+                    >   
+                    </EAMGridTab>
+                ,
+                column: 2,
+                order: 7,
+                summaryIcon: PartPlusIcon,
+                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
             },
         ]
     }
