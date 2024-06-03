@@ -26,6 +26,7 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import PlaceIcon from '@mui/icons-material/Place';
+import { isCernMode } from 'ui/components/CERNMode';
 
 const Part = () => {
     const {screenLayout: partLayout, entity: part, loading, readOnly, isModified,
@@ -174,7 +175,7 @@ const Part = () => {
                 column: 2,
                 order: 5,
                 summaryIcon: FunctionsRoundedIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_PARTS),
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_PARTS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_PARTS)
             },
             {

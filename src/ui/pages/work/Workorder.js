@@ -312,7 +312,7 @@ const Workorder = () => {
                 column: 2,
                 order: 5,
                 summaryIcon: FunctionsRoundedIcon,
-                ignore: !isCernMode && !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS)
             },
             {
