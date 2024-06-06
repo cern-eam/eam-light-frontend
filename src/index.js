@@ -22,12 +22,18 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 // EAM-480, en-GB locale used in order to have monday as first day of the week
 import { enGB } from "date-fns/locale";
 import { UPDATE_SCANNED_USER } from "./actions/scannedUserActions";
-import AuthWrapper, { tokens, keycloak } from "./AuthWrapper";
+import AuthWrapper, { keycloak, exchangeToken, injectBearerToken } from "./AuthWrapper";
 
 const jss = create(jssPreset());
 
 unregister();
 polyfill();
+
+const getClientID = ({url}) => {
+    if (url?.startsWith(process.env.REACT_APP_EAM_SERVICES_URL)) {
+        return process.env.REACT_APP_KEYCLOAK_EAM_SERVICES_CLIENTID;
+    } else return process.env.REACT_APP_KEYCLOAK_CLIENTID;
+};
 
 Ajax.getAxiosInstance().interceptors.request.use(
     (config) => {
@@ -35,12 +41,21 @@ Ajax.getAxiosInstance().interceptors.request.use(
             return config;
         }
         // updateToken if it will last less than 5 minutes
-        return keycloak.updateToken(300).then(() => {
-            const newConfig = config;
-            if (tokens && tokens.token) {
-                newConfig.headers.Authorization = `Bearer ${tokens.token}`;
+        return keycloak.updateToken(300).then(async () => {
+            const clientID = getClientID({url: config.url});
+            if (clientID !== process.env.REACT_APP_KEYCLOAK_CLIENTID) {
+                await exchangeToken({
+                    sourceClient: process.env.REACT_APP_KEYCLOAK_CLIENTID,
+                    targetClient: clientID,
+                });
             }
-            return newConfig;
+            return injectBearerToken({
+                config: {
+                    ...config,
+                    timeout: 300000,
+                },
+                clientID,
+            });
         });
     },
     (error) => {
