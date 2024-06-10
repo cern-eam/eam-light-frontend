@@ -212,7 +212,7 @@ const Asset = () => {
                 column: 1,
                 order: 25,
                 summaryIcon: ManageHistoryIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
