@@ -24,7 +24,7 @@ import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, assetLayoutPropertiesMap } from '../EquipmentTools';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
-import { AssetIcon, PartIcon } from 'eam-components/dist/ui/components/icons';
+import { AssetIcon, PartIcon, PartPlusIcon } from 'eam-components/dist/ui/components/icons';
 import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
@@ -39,6 +39,7 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import { handleError } from 'actions/uiActions';
 import Variables from '../components/Variables';
+import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab';
 
 const Asset = () => {
     const [part, setPart] = useState(null);
@@ -215,16 +216,16 @@ const Asset = () => {
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
-                id: 'PARTS',
-                label: 'Parts',
+                id: 'ASSETPARTS',
+                label: 'Asset Parts',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
                 render: () => <EquipmentPartsMadeOf equipmentcode={equipment.code} />,
                 column: 1,
                 order: 30,
                 summaryIcon: PartIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
-                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
+                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS)
             },
             {
                 id: 'EDMSDOCUMENTS',
@@ -363,6 +364,29 @@ const Asset = () => {
                 summaryIcon: ShareIcon,
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS)
+            },
+            {
+                id: 'PARTSASSOCIATED',
+                label: 'Parts Associated',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: ({ isMaximized }) =>
+                    <EAMGridTab
+                        gridName={'BSPARA'}
+                        objectCode={equipment.code + '#' + equipment.organization}
+                        paramNames={['param.valuecode']}
+                        additionalParams={{'param.entity': 'OBJ'}}
+                        showGrid={isMaximized}
+                        rowCount={100}
+                        gridContainerStyle={isMaximized ? { height: `${document.getElementById('entityContent').offsetHeight - 220}px`} : {}}
+                    >   
+                    </EAMGridTab>
+                ,
+                column: 2,
+                order: 35,
+                summaryIcon: PartPlusIcon,
+                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
             },
         ]
     }
