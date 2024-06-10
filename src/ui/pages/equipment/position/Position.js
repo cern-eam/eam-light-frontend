@@ -23,7 +23,7 @@ import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, positionLayoutPropertiesMap } from '../EquipmentTools.js';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
-import {PositionIcon, PartIcon} from 'eam-components/dist/ui/components/icons'
+import {PositionIcon, PartPlusIcon} from 'eam-components/dist/ui/components/icons'
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
@@ -36,6 +36,7 @@ import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import Variables from '../components/Variables.js';
+import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab';
 
 const Position = () => {
     const [statuses, setStatuses] = useState([]);
@@ -195,18 +196,25 @@ const Position = () => {
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
             {
-                id: 'PARTS',
-                label: 'Parts',
+                id: 'PARTSASSOCIATED',
+                label: 'Parts Associated',
                 isVisibleWhenNewEntity: false,
-                maximizable: false,
-                render: () =>
-                    <EquipmentPartsAssociated
-                        equipmentcode={equipment.code}
-                        parentScreen={userData.screens[userData.positionScreen].parentScreen} />
+                maximizable: true,
+                render: ({ isMaximized }) =>
+                    <EAMGridTab
+                        gridName={'BSPARA'}
+                        objectCode={equipment.code + '#' + equipment.organization}
+                        paramNames={['param.valuecode']}
+                        additionalParams={{'param.entity': 'OBJ'}}
+                        showGrid={isMaximized}
+                        rowCount={100}
+                        gridContainerStyle={isMaximized ? { height: `${document.getElementById('entityContent').offsetHeight - 220}px`} : {}}
+                    >   
+                    </EAMGridTab>
                 ,
                 column: 1,
                 order: 30,
-                summaryIcon: PartIcon,
+                summaryIcon: PartPlusIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
             },
