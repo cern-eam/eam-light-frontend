@@ -1,7 +1,7 @@
 import React from 'react';
 import LinkIcon from '@mui/icons-material/Link';
 import LinkOffIcon from '@mui/icons-material/LinkOff';
-import { Switch } from '@mui/material';
+import { Switch, Tooltip } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 const switchIconStyle = {
@@ -45,28 +45,30 @@ const Dependency = (props) => {
 
     return (
         <>
-            <Switch
-                style = {{ height: '100%' }}
-                disabled={disabled} 
-                onChange={onChangeHandler} 
-                checked={isTrue(value)}
-                icon={ 
-                    <LinkOffIcon 
-                    style={{ 
-                        ...switchIconStyle,
-                        backgroundColor: disabled
-                            ? '#ccc'
-                            : '#737373'
-                    }}/>
-                }
-                checkedIcon={
-                    <LinkIcon 
-                    style={{
-                        ...switchIconStyle,
-                        backgroundColor: `${theme.palette.primary.main}`
-                    }}/>
-                }
-            />
+            <Tooltip title={ 
+                isTrue(value) ? "Remove dependency on this input"
+                : "Add dependency on this input"}>
+                <Switch
+                    style = {{ height: '100%' }}
+                    disabled={disabled} 
+                    onChange={onChangeHandler} 
+                    checked={isTrue(value)}
+                    icon={ 
+                        <LinkOffIcon 
+                        style={{ 
+                            ...switchIconStyle,
+                            backgroundColor: disabled ? '#ccc' : '#737373'
+                        }}/>
+                    }
+                    checkedIcon={
+                        <LinkIcon 
+                        style={{
+                            ...switchIconStyle,
+                            backgroundColor: `${theme.palette.primary.main}`
+                        }}/>
+                    }
+                />
+            </Tooltip>
         </>
     );
 }
