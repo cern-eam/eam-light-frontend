@@ -4,7 +4,7 @@ import { Alert } from '@mui/material';
 import KeyCode from 'eam-components/dist/enums/KeyCode';
 import WS from '../../../tools/WS';
 import BlockUi from 'react-block-ui';
-import { withCernMode } from '../CERNMode';
+import { withCernMode } from 'eam-components/dist/tools/CERNMode';
 import GridTools from '../../../tools/GridTools';
 
 const setUser = (userId, onSuccess, onError, mode) => {

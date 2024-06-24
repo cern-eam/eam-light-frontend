@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
 import {handleError, showError, showWarning, showNotification} from '../../../../actions/uiActions'
 import ReplaceEqp from "./ReplaceEqp";
-import { withCernMode } from '../../../components/CERNMode';
+import { withCernMode } from 'eam-components/dist/tools/CERNMode';
 
 function mapStateToProps(state) {
     return {

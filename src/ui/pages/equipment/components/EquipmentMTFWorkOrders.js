@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import EAMTableGridRequestAdapter from "eam-components/dist/ui/components/eamtable/EAMTableGridRequestAdapter";
 import compareAsc from 'date-fns/compareAsc'
 import parse from 'date-fns/parse'
-import { withCernMode } from '../../../components/CERNMode';
+import { withCernMode } from 'eam-components/dist/tools/CERNMode';
 
 const DATE_FORMAT = "dd-LLL-yyyy";
 

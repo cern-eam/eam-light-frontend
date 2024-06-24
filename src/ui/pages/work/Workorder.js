@@ -25,7 +25,7 @@ import IconButton from '@mui/material/IconButton';
 import PrintIcon from '@mui/icons-material/Print';
 import TuneIcon from '@mui/icons-material/Tune';
 import {IconSlash} from 'eam-components/dist/ui/components/icons/index';
-import { isCernMode } from '../../components/CERNMode';
+import { isCernMode } from 'eam-components/dist/tools/CERNMode';
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility, registerCustomField } from '../EntityTools';
 import WSParts from '../../../tools/WSParts';

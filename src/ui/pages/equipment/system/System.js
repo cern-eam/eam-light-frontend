@@ -16,7 +16,7 @@ import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDocligh
 import {ENTITY_TYPE} from "../../../components/Toolbar";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
-import { isCernMode } from '../../../components/CERNMode';
+import { isCernMode } from 'eam-components/dist/tools/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
 import useEntity from "hooks/useEntity";

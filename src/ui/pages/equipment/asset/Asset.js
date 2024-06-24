@@ -17,7 +17,7 @@ import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentPartsMadeOf from "../components/EquipmentPartsMadeOf";
 import WSParts from '../../../../tools/WSParts';
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
-import { isCernMode } from '../../../components/CERNMode';
+import { isCernMode } from 'eam-components/dist/tools/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility, registerCustomField } from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
