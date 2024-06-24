@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme } from '@mui/material/styles';
-import { isCernMode } from "ui/components/CERNMode";
+import { isCernMode } from 'eam-components/dist/tools/CERNMode';
 import {version} from '../../../package.json'
 import EAMFooter from 'eam-components/dist/ui/components/footer/Footer';
 import { releaseNotesPath } from "Eamlight";

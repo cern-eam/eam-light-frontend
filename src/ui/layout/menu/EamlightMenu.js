@@ -18,7 +18,7 @@ import ScreenChange from "./ScreenChange";
 import MenuTools from './MenuTools'
 import RoomIcon from '@mui/icons-material/Room';
 import BuildIcon from '@mui/icons-material/Build';
-import CERNMode from '../../components/CERNMode';
+import CERNMode from 'eam-components/dist/tools/CERNMode';
 import MenuLink from "./MenuLink";
 import MenuItemInputHistory from './MenuItemInputHistory';
 import EISPanel from 'ui/components/panel/Panel';

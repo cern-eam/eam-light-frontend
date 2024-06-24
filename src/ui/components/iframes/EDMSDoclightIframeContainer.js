@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import ComponentIframe from './ComponentIframe'
-import { withCernMode } from '../CERNMode'
+import { withCernMode } from 'eam-components/dist/tools/CERNMode'
 
 function mapStateToProps(state) {
     return {

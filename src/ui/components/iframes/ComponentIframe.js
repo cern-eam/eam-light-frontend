@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import queryString from "query-string"
 import ResizableIframe from "./ResizableIframe";
-import { withCernMode } from "../CERNMode";
+import { withCernMode } from 'eam-components/dist/tools/CERNMode';
 
 class ComponentIframe extends Component {
     docLightStyle = {

@@ -26,7 +26,7 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import PlaceIcon from '@mui/icons-material/Place';
-import { isCernMode } from 'ui/components/CERNMode';
+import { isCernMode } from 'eam-components/dist/tools/CERNMode';
 
 const Part = () => {
     const {screenLayout: partLayout, entity: part, loading, readOnly, isModified,

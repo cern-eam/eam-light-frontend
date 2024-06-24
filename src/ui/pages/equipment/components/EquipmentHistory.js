@@ -3,7 +3,7 @@ import WSEquipment from '../../../../tools/WSEquipment';
 import EISTable, {TRANSFORM_KEYS} from 'eam-components/dist/ui/components/table';
 import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/SimpleEmptyState'
 import BlockUi from 'react-block-ui';
-import { withCernMode } from '../../../components/CERNMode';
+import { withCernMode } from 'eam-components/dist/tools/CERNMode';
 import Constants from 'eam-components/dist/enums/Constants';
 import { formatDateTime } from 'ui/pages/EntityTools';
 
