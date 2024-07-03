@@ -98,8 +98,8 @@ const exchangeToken = async ({ sourceClient, targetClient }) => {
         handleTokens(targetClient, response.data);
         setTimeout(() => exchangeToken({ sourceClient, targetClient }), (response.data.expires_in - 20) * 1000);
         return response.data;
-    } catch (_) {
-        console.log(_)
+    } catch (error) {
+        console.error('Unable to exchange token: ' + error)
     }
 }
 
