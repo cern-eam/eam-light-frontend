@@ -26,14 +26,10 @@ import AuthWrapper, { keycloak, exchangeToken, injectBearerToken } from "./AuthW
 
 const jss = create(jssPreset());
 
+let tokenExchange = {};
+
 unregister();
 polyfill();
-
-const getClientID = ({url}) => {
-    if (url?.startsWith(process.env.REACT_APP_EAM_SERVICES_URL)) {
-        return process.env.REACT_APP_KEYCLOAK_EAM_SERVICES_CLIENTID;
-    } else return process.env.REACT_APP_KEYCLOAK_CLIENTID;
-};
 
 Ajax.getAxiosInstance().interceptors.request.use(
     (config) => {
@@ -42,12 +38,15 @@ Ajax.getAxiosInstance().interceptors.request.use(
         }
         // updateToken if it will last less than 5 minutes
         return keycloak.updateToken(300).then(async () => {
-            const clientID = getClientID({url: config.url});
+            const clientID = config.clientIdExchange || process.env.REACT_APP_KEYCLOAK_CLIENTID;
             if (clientID !== process.env.REACT_APP_KEYCLOAK_CLIENTID) {
-                await exchangeToken({
-                    sourceClient: process.env.REACT_APP_KEYCLOAK_CLIENTID,
-                    targetClient: clientID,
-                });
+                if (!tokenExchange[clientID]) {
+                    tokenExchange[clientID] = exchangeToken({
+                        sourceClient: process.env.REACT_APP_KEYCLOAK_CLIENTID,
+                        targetClient: clientID,
+                    });
+                }
+                await tokenExchange[clientID];
             }
             return injectBearerToken({
                 config: {

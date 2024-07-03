@@ -18,7 +18,6 @@ const keycloakAxios = axios.create({
 
 const handleTokens = (key, freshTokens) => {
     tokens[key] = freshTokens;
-    console.log(tokens)
 };
 
 export default (props) => {
