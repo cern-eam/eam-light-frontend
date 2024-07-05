@@ -1,13 +1,20 @@
-# Version (2024-05-21)
+# Version (2024-07-05)
 
 ## Features
+### 3.17.0 
+* Corrections ([e0d267](https://github.com/cern-eam/eam-light-backend/commit/e0d267572128a69f95e258b8e1bef032ba66e5f5))
+* Update eam-wshub-core to v12.1-11 ([932fbd](https://github.com/cern-eam/eam-light-backend/commit/932fbd83a57b0617e12f1b4d68a0ef091073fa47))
+* Upgrade wshub-core to 12.4-14 ([63a007](https://github.com/cern-eam/eam-light-backend/commit/63a007219f6d3d768a05cd0a867c1a206a371f06))
+* Fix the entity lookup for checklists ([c367ca](https://github.com/cern-eam/eam-light-backend/commit/c367ca9c26f4404381749aacffe90af71a01d0dd))
 ### 3.16.5 
 * Updated dependencies ([b285c8](https://github.com/cern-eam/eam-light-backend/commit/b285c8cf5f23202d47ae49ed5173b14a6d7553c7))
 ### 3.16.4 
+* Pass row count to the GridRequest ([889286](https://github.com/cern-eam/eam-light-backend/commit/8892860c539287807e774f8e7214bf04bfab7278))
 * [EAM-3314][HOTFIX] CFs list not fetched if hifen present on property code ([04b525](https://github.com/cern-eam/eam-light-backend/commit/04b5251b503c95eac6cbbf714435ed4f1ee9cb97))
 ### 3.16.3 
 * [EAM-3116] RegionPanel heading width fix (#204) ([d7592a](https://github.com/cern-eam/eam-light-frontend/commit/d7592afdc3ab88aa8a69c514695cbb01bd311cb2))
 * Updated eam-components ([652da3](https://github.com/cern-eam/eam-light-frontend/commit/652da32563fe11431ca9fd4b87185d0552b46d54))
+* POM update ([bfccfc](https://github.com/cern-eam/eam-light-backend/commit/bfccfcac60c26c64b15a98ff2438066640b79fd9))
 ### 3.16.2 
 * Removed unused SharedPlugin methods ([0a4cab](https://github.com/cern-eam/eam-light-backend/commit/0a4cab0d4ea61a5077aea12e67969fd9a86bedce))
 ### 3.16.1 
@@ -18,6 +25,8 @@
 * [EAM-2225] Add lot field and improvements to part usage dialog (#178) ([2d5e53](https://github.com/cern-eam/eam-light-frontend/commit/2d5e532e75b8ececb65b5726d19f9d03aaa4cccc))
 * Updated eam-components ([01dbc3](https://github.com/cern-eam/eam-light-frontend/commit/01dbc36aac195300d21553991e43bec767d5dc9b))
 * EAM-2704 Show potentially detachable equipment (#199) ([2ea345](https://github.com/cern-eam/eam-light-frontend/commit/2ea34503bb7181d05dc67adfb63fccb4c167de56))
+* (WIP)[EAM-3108] Entity autocomplete controller with class filter ([c15d0a](https://github.com/cern-eam/eam-light-backend/commit/c15d0a2c3665fdc5380023ea972fd8f915653f1c))
+* [EAM-3108] pom update ([fe8bc0](https://github.com/cern-eam/eam-light-backend/commit/fe8bc07b8686ea01b052b3a6415b08dba56065b4))
 * [EAM-2225] Add lot list endpoint (#102) ([4d9eb5](https://github.com/cern-eam/eam-light-backend/commit/4d9eb5f942eeebb0fecf851288001ac213e0732a))
 * [EAM-2704] Update replace equipment to detach dependent assets from their positions (#105) ([70c65e](https://github.com/cern-eam/eam-light-backend/commit/70c65e7303648a1c35367de69b87d3128cf00b84))
 ### 3.15.1 
@@ -25,6 +34,7 @@
 ### 3.15.0 
 * [EAM-3126] Allow hidden top bar when inside iframe (#201) ([74bf9b](https://github.com/cern-eam/eam-light-frontend/commit/74bf9b31431386f931cb6893a70703a0712dc4cc))
 * Updated eam-components ([eebd37](https://github.com/cern-eam/eam-light-frontend/commit/eebd373f51b712a03508fe4df981c541c62bf48e))
+* [EAM-3108] Entity autocomplete controller ([b773d8](https://github.com/cern-eam/eam-light-backend/commit/b773d80995420114f0c19228771a9d852915b61e))
 * Update wshub-core version to 12.1-1 ([58b996](https://github.com/cern-eam/eam-light-backend/commit/58b996bcb77b480a3cff1c4e6a3e7dada7a0df85))
 * Updated dependencies ([3981db](https://github.com/cern-eam/eam-light-backend/commit/3981dbc24bd58feea980c97e25cd1467161261ee))
 ### 3.14.32 
@@ -949,4 +959,7 @@
 * Refactoring linked to the removal of some legacy classes (SimpleGridinput, GridUtils, ...) ([a2a706](https://github.com/cern-eam/eam-light-backend/commit/a2a7068b63483846b1cd55eac55f89288298e1e4))
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
+###  
+* [EAM-2965] Activity description change (#205) ([00931d](https://github.com/cern-eam/eam-light-frontend/commit/00931d2c0bbd8b800d5fcb6e2bc012579aee9c9c))
+* Show EDMS Docs only in CERN mode ([fefe60](https://github.com/cern-eam/eam-light-frontend/commit/fefe6050fc87148e92c646a77781fe897ec34ba3))
 
