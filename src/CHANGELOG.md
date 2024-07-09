@@ -961,4 +961,6 @@
 * Refactoring linked to the removal of some legacy classes (SimpleGridinput, GridUtils, ...) ([a2a706](https://github.com/cern-eam/eam-light-backend/commit/a2a7068b63483846b1cd55eac55f89288298e1e4))
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
+###  
+* Updated dependencies ([421c00](https://github.com/cern-eam/eam-light-frontend/commit/421c0037c4fee97918dc22c80c227239e3bff70a))
 
