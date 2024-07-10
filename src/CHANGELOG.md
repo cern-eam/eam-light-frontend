@@ -1,6 +1,8 @@
-# Version (2024-07-09)
+# Version (2024-07-10)
 
 ## Features
+### 3.17.1 
+* Updated dependencies ([421c00](https://github.com/cern-eam/eam-light-frontend/commit/421c0037c4fee97918dc22c80c227239e3bff70a))
 ### 3.17.0 
 * [EAM-2965] Activity description change (#205) ([00931d](https://github.com/cern-eam/eam-light-frontend/commit/00931d2c0bbd8b800d5fcb6e2bc012579aee9c9c))
 * Show EDMS Docs only in CERN mode ([fefe60](https://github.com/cern-eam/eam-light-frontend/commit/fefe6050fc87148e92c646a77781fe897ec34ba3))
@@ -962,5 +964,5 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* Updated dependencies ([421c00](https://github.com/cern-eam/eam-light-frontend/commit/421c0037c4fee97918dc22c80c227239e3bff70a))
+* Updated dependencies ([e71a2d](https://github.com/cern-eam/eam-light-frontend/commit/e71a2d68453999e78afa2b621e964d18063019a0))
 
