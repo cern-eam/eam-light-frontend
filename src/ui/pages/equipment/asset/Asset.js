@@ -19,7 +19,7 @@ import WSParts from '../../../../tools/WSParts';
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility, registerCustomField } from '../../EntityTools';
+import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions} from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, assetLayoutPropertiesMap } from '../EquipmentTools';
@@ -40,7 +40,10 @@ import HardwareIcon from '@mui/icons-material/Hardware';
 import WarningIcon from '@mui/icons-material/Warning';
 import { handleError } from 'actions/uiActions';
 import Variables from '../components/Variables';
+import getPartsAssociated from 'ui/pages/PartsAssociated';
 import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab';
+
+const customTabGridParamNames =  ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
 const Asset = () => {
     const [part, setPart] = useState(null);
@@ -106,7 +109,6 @@ const Asset = () => {
             .then(response => setStatuses(response.body.data))
             .catch(console.error)
     }
-
 
     const getRegions = () => {
         const tabs = assetLayout.tabs;
@@ -390,29 +392,8 @@ const Asset = () => {
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS)
             },
-            {
-                id: 'PARTSASSOCIATED',
-                label: 'Parts Associated',
-                isVisibleWhenNewEntity: false,
-                maximizable: true,
-                render: ({ isMaximized }) =>
-                    <EAMGridTab
-                        gridName={'BSPARA'}
-                        objectCode={equipment.code + '#' + equipment.organization}
-                        paramNames={['param.valuecode']}
-                        additionalParams={{'param.entity': 'OBJ'}}
-                        showGrid={isMaximized}
-                        rowCount={100}
-                        gridContainerStyle={isMaximized ? { height: `${document.getElementById('entityContent').offsetHeight - 220}px`} : {}}
-                    >   
-                    </EAMGridTab>
-                ,
-                column: 2,
-                order: 35,
-                summaryIcon: PartPlusIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
-                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
-            },
+            getPartsAssociated(equipment.code, equipment.organization, !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED), getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED), 2, 31),
+            ...getTabGridRegions(applicationData, assetLayout.customGridTabs, customTabGridParamNames, screenCode, equipment.code)
         ]
     }
 

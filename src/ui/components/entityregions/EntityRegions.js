@@ -119,7 +119,7 @@ const EntityRegions = (props) => {
                                     showMaximizeControls={region.maximizable}
                                     initiallyExpanded={expandedRegion === undefined || expandedRegion === region.id}
                                     {...region.RegionPanelProps}>
-                                    {region.render({ panelQueryParams: getRegionPanelQueryParams(region.id), isMaximized: region.id === regionMaximized })}
+                                    {region.render({ panelQueryParams: getRegionPanelQueryParams(region.id),  isMaximized: region.id === regionMaximized})}
                                 </RegionPanel>
                             ))
                         }
