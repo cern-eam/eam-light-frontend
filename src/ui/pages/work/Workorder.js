@@ -27,7 +27,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import {IconSlash} from 'eam-components/dist/ui/components/icons/index';
 import { isCernMode } from '../../components/CERNMode';
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility, registerCustomField } from '../EntityTools';
+import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions } from '../EntityTools';
 import WSParts from '../../../tools/WSParts';
 import WSWorkorders from '../../../tools/WSWorkorders';
 import useEntity from "hooks/useEntity";
@@ -61,6 +61,8 @@ const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
     const response = await WSWorkorder.getEquipmentStandardWOMaxStep(eqCode, swoCode);
     return response.body.data;
 }
+
+const customTabGridParamNames =  ["evt_code", "EVENT", "WO_CODE"];
 
 const Workorder = () => {
     const history = useHistory();
@@ -539,6 +541,7 @@ const Workorder = () => {
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
+            ...getTabGridRegions(applicationData, workOrderLayout.customGridTabs, customTabGridParamNames, screenCode, workorder.number)
         ];
     }
 

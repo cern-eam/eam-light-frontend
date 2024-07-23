@@ -18,7 +18,7 @@ import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
+import { getTabAvailability, getTabInitialVisibility, getTabGridRegions } from '../../EntityTools';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, systemLayoutPropertiesMap } from '../EquipmentTools.js';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
@@ -34,6 +34,8 @@ import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import Variables from '../components/Variables.js';
+
+const customTabGridParamNames =  ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
 const System = () => {
     const [statuses, setStatuses] = useState([]);
@@ -319,6 +321,7 @@ const System = () => {
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_SYSTEMS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_SYSTEMS)
             },
+            ...getTabGridRegions(applicationData, systemLayout.customGridTabs, customTabGridParamNames, screenCode, equipment.code)
         ]
     }
 

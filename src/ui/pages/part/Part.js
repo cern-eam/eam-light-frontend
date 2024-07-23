@@ -15,7 +15,7 @@ import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIf
 import {ENTITY_TYPE} from '../../components/Toolbar';
 import EntityRegions from "../../components/entityregions/EntityRegions";
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
+import { getTabAvailability, getTabInitialVisibility, getTabGridRegions } from '../EntityTools';
 import useEntity from "hooks/useEntity";
 
 import { AssetIcon, PartIcon } from 'eam-components/dist/ui/components/icons'
@@ -27,6 +27,9 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import PlaceIcon from '@mui/icons-material/Place';
 import { isCernMode } from 'ui/components/CERNMode';
+
+const customTabGridParamNames =  ["equipmentno", "obj_code", "part", "PAR_CODE", "par_code", "OBJ_CODE", "object", "puobject"];
+
 
 const Part = () => {
     const {screenLayout: partLayout, entity: part, loading, readOnly, isModified,
@@ -222,6 +225,7 @@ const Part = () => {
                 ignore: partLayout.fields.block_6.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
+            ...getTabGridRegions(applicationData, partLayout.customGridTabs, customTabGridParamNames, screenCode, part.code)
         ]
     }
 
