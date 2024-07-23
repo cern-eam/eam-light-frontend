@@ -57,6 +57,7 @@ const AssetGeneral = (props) => {
             <StatusRow
                 entity={equipment}
                 entityType={"equipment"}
+                hasHazards={props.hasHazards}
                 style={{marginTop: "10px", marginBottom: "-10px"}}
             />
         </React.Fragment>

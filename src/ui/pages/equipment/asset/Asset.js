@@ -45,6 +45,7 @@ import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab';
 const Asset = () => {
     const [part, setPart] = useState(null);
     const [statuses, setStatuses] = useState([]);
+    const [hasHazards, setHasHazards] = useState(false);
 
     const {screenLayout: assetLayout, entity: equipment, loading, readOnly, isModified,
         screenPermissions, screenCode, userData, applicationData, newEntity, commentsComponent,
@@ -134,7 +135,8 @@ const Asset = () => {
                         statuses={statuses}
                         userData={userData}
                         screenCode={screenCode}
-                        screenPermissions={screenPermissions}/>
+                        screenPermissions={screenPermissions}
+                        hasHazards={hasHazards}/>
                 ,
                 column: 1,
                 order: 1,
@@ -240,6 +242,7 @@ const Asset = () => {
                         additionalParams={Object.fromEntries([['parameter.objorganization','*'], ['parameter.object',equipment.code]])}
                         paramNames={['equipmentno']}
                         additionalAttributes={Object.fromEntries([['userFunctionName', 'OSOBJA']])}
+                        setHasHazards={setHasHazards}
                     />
                 ,
                 column: 1,
