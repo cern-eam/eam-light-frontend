@@ -15,7 +15,7 @@ import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIf
 import {ENTITY_TYPE} from '../../components/Toolbar';
 import EntityRegions from "../../components/entityregions/EntityRegions";
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility } from '../EntityTools';
+import { getTabAvailability, getTabInitialVisibility, getTabGridRegions } from '../EntityTools';
 import useEntity from "hooks/useEntity";
 
 import { AssetIcon, PartIcon, PartPlusIcon } from 'eam-components/dist/ui/components/icons'
@@ -28,6 +28,10 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import PlaceIcon from '@mui/icons-material/Place';
 import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab'
 import { isCernMode } from 'ui/components/CERNMode';
+import getPartsAssociated from '../PartsAssociated';
+
+const customTabGridParamNames =  ["equipmentno", "obj_code", "part", "PAR_CODE", "par_code", "OBJ_CODE", "object", "puobject"];
+
 
 const Part = () => {
     const {screenLayout: partLayout, entity: part, loading, readOnly, isModified,
@@ -223,29 +227,8 @@ const Part = () => {
                 ignore: partLayout.fields.block_6.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
-            {
-                id: 'PARTSASSOCIATED',
-                label: 'Parts Associated',
-                isVisibleWhenNewEntity: false,
-                maximizable: true,
-                render: ({ isMaximized }) =>
-                    <EAMGridTab
-                        gridName={'BSPARA'}
-                        objectCode={part.code + '#' + part.organization}
-                        paramNames={['param.valuecode']}
-                        additionalParams={{'param.entity': 'PART'}}
-                        showGrid={isMaximized}
-                        rowCount={100}
-                        gridContainerStyle={isMaximized ? { height: `${document.getElementById('entityContent').offsetHeight - 220}px`} : {}}
-                    >   
-                    </EAMGridTab>
-                ,
-                column: 2,
-                order: 7,
-                summaryIcon: PartPlusIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
-                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
-            },
+            getPartsAssociated(part.code, part.organization, !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED), getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED), 2, 8),
+            ...getTabGridRegions(applicationData, partLayout.customGridTabs, customTabGridParamNames, screenCode, part.code)
         ]
     }
 

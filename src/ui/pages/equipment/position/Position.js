@@ -18,7 +18,7 @@ import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
+import { getTabAvailability, getTabInitialVisibility , getTabGridRegions} from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, positionLayoutPropertiesMap } from '../EquipmentTools.js';
@@ -37,6 +37,9 @@ import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import Variables from '../components/Variables.js';
 import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab';
+import getPartsAssociated from 'ui/pages/PartsAssociated.js';
+
+const customTabGridParamNames =  ["equipmentno", "position", "obj_code", "main_eqp_code", "OBJ_CODE", "object"];
 
 const Position = () => {
     const [statuses, setStatuses] = useState([]);
@@ -195,29 +198,7 @@ const Position = () => {
                 ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
-            {
-                id: 'PARTSASSOCIATED',
-                label: 'Parts Associated',
-                isVisibleWhenNewEntity: false,
-                maximizable: true,
-                render: ({ isMaximized }) =>
-                    <EAMGridTab
-                        gridName={'BSPARA'}
-                        objectCode={equipment.code + '#' + equipment.organization}
-                        paramNames={['param.valuecode']}
-                        additionalParams={{'param.entity': 'OBJ'}}
-                        showGrid={isMaximized}
-                        rowCount={100}
-                        gridContainerStyle={isMaximized ? { height: `${document.getElementById('entityContent').offsetHeight - 220}px`} : {}}
-                    >   
-                    </EAMGridTab>
-                ,
-                column: 1,
-                order: 30,
-                summaryIcon: PartPlusIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
-                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
-            },
+            getPartsAssociated(equipment.code, equipment.organization, !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED), getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),1, 30),
             {
                 id: 'EDMSDOCUMENTS',
                 label: 'EDMS Documents',
@@ -336,6 +317,7 @@ const Position = () => {
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_POSITIONS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_POSITIONS)
             },
+            ...getTabGridRegions(applicationData, positionLayout.customGridTabs, customTabGridParamNames, screenCode, equipment.code)
         ]
     }
 
