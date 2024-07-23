@@ -18,7 +18,7 @@ import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
 import { getTabAvailability, getTabInitialVisibility, getTabGridRegions } from '../EntityTools';
 import useEntity from "hooks/useEntity";
 
-import { AssetIcon, PartIcon, PartPlusIcon } from 'eam-components/dist/ui/components/icons'
+import { AssetIcon, PartIcon } from 'eam-components/dist/ui/components/icons'
 import DescriptionIcon from '@mui/icons-material/Description';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';

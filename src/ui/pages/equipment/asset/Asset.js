@@ -24,7 +24,7 @@ import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, assetLayoutPropertiesMap } from '../EquipmentTools';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
-import { AssetIcon, PartIcon, PartPlusIcon } from 'eam-components/dist/ui/components/icons';
+import { AssetIcon, PartIcon } from 'eam-components/dist/ui/components/icons';
 import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';

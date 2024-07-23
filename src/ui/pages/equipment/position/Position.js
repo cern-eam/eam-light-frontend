@@ -23,7 +23,7 @@ import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, positionLayoutPropertiesMap } from '../EquipmentTools.js';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
-import {PositionIcon, PartPlusIcon} from 'eam-components/dist/ui/components/icons'
+import {PositionIcon} from 'eam-components/dist/ui/components/icons'
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
