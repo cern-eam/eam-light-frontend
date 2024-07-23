@@ -9,7 +9,6 @@ import PositionGeneral from './PositionGeneral'
 import PositionDetails from './PositionDetails'
 import PositionHierarchy from './PositionHierarchy'
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
-import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import {ENTITY_TYPE} from "../../../components/Toolbar";
@@ -18,7 +17,7 @@ import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility , getTabGridRegions} from '../../EntityTools';
+import { getTabAvailability, getTabInitialVisibility , getTabGridRegionsd} from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, positionLayoutPropertiesMap } from '../EquipmentTools.js';
@@ -36,7 +35,6 @@ import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import Variables from '../components/Variables.js';
-import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab';
 import getPartsAssociated from 'ui/pages/PartsAssociated.js';
 
 const customTabGridParamNames =  ["equipmentno", "position", "obj_code", "main_eqp_code", "OBJ_CODE", "object"];
