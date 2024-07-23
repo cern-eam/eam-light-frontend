@@ -23,7 +23,7 @@ import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, positionLayoutPropertiesMap } from '../EquipmentTools.js';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
-import {PositionIcon, PartIcon} from 'eam-components/dist/ui/components/icons'
+import {PositionIcon} from 'eam-components/dist/ui/components/icons'
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
@@ -36,6 +36,8 @@ import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import Variables from '../components/Variables.js';
+import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab';
+import getPartsAssociated from 'ui/pages/PartsAssociated.js';
 
 const customTabGridParamNames =  ["equipmentno", "position", "obj_code", "main_eqp_code", "OBJ_CODE", "object"];
 
@@ -196,22 +198,7 @@ const Position = () => {
                 ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS)
             },
-            {
-                id: 'PARTS',
-                label: 'Parts',
-                isVisibleWhenNewEntity: false,
-                maximizable: false,
-                render: () =>
-                    <EquipmentPartsAssociated
-                        equipmentcode={equipment.code}
-                        parentScreen={userData.screens[userData.positionScreen].parentScreen} />
-                ,
-                column: 1,
-                order: 30,
-                summaryIcon: PartIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
-                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
-            },
+            getPartsAssociated(equipment.code, equipment.organization, !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED), getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),1, 30),
             {
                 id: 'EDMSDOCUMENTS',
                 label: 'EDMS Documents',

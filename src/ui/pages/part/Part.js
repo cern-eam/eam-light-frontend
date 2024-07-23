@@ -26,7 +26,9 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import PlaceIcon from '@mui/icons-material/Place';
+import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab'
 import { isCernMode } from 'ui/components/CERNMode';
+import getPartsAssociated from '../PartsAssociated';
 
 const customTabGridParamNames =  ["equipmentno", "obj_code", "part", "PAR_CODE", "par_code", "OBJ_CODE", "object", "puobject"];
 
@@ -225,6 +227,7 @@ const Part = () => {
                 ignore: partLayout.fields.block_6.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
+            getPartsAssociated(part.code, part.organization, !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED), getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED), 2, 8),
             ...getTabGridRegions(applicationData, partLayout.customGridTabs, customTabGridParamNames, screenCode, part.code)
         ]
     }
