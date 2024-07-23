@@ -13,7 +13,7 @@ import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDocligh
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import { ENTITY_TYPE } from "../../../components/Toolbar";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
-import { getTabAvailability, getTabInitialVisibility, getCustomTabGridRenderers } from '../../EntityTools';
+import { getTabAvailability, getTabInitialVisibility, getTabGridRegions } from '../../EntityTools';
 import EquipmentHistory from "../components/EquipmentHistory.js";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EamlightToolbarContainer from "./../../../components/EamlightToolbarContainer";
@@ -32,8 +32,6 @@ import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import { locationLayoutPropertiesMap } from "../EquipmentTools";
-import GridOnIcon from '@mui/icons-material/GridOn';
-import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab.js';
 
 const customTabGridParamNames =  ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -79,36 +77,6 @@ export default Location = (props) => {
 
     function postCreate(location) {
         commentsComponent.current?.createCommentForNewEntity(location.code);
-    }
-
-    const getTabGridRegions = () => {
-        const customTabGridRenderers = getCustomTabGridRenderers(applicationData);
-        return Object.entries(locationLayout.customGridTabs).map(([tabId, tab], index) => {
-            return ({
-                id: tab.tabDescription.replaceAll(' ','').toUpperCase(),
-                label: tab.tabDescription,
-                isVisibleWhenNewEntity: true,
-                maximizable: true,
-                render: ({ isMaximized }) =>
-                    <EAMGridTab
-                        screenCode={screenCode}
-                        tabName={tabId}
-                        objectCode={equipment.code}
-                        paramNames= {customTabGridParamNames}
-                        customRenderers={customTabGridRenderers}
-                        showGrid={isMaximized}
-                        rowCount={100}
-                        gridContainerStyle={isMaximized ? { height: `${document.getElementById('entityContent').offsetHeight - 220}px`} : {}}
-                    >   
-                    </EAMGridTab>
-                ,
-                column: 2,
-                order: 30 + 5 * index,
-                summaryIcon: GridOnIcon,
-                ignore: !tab.tabAvailable,             
-                initialVisibility: tab.alwaysDisplayed    
-            });
-        })
     }
 
     const getRegions = () => {
@@ -331,7 +299,7 @@ export default Location = (props) => {
             //     ignore: !isCernMode,
             //     initialVisibility: false
             // },
-            ...getTabGridRegions()
+            ...getTabGridRegions(applicationData, locationLayout.customGridTabs, customTabGridParamNames, screenCode, location.code)
         ]
 
     }

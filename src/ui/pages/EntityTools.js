@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 import { parseISO } from "date-fns";
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { get } from "lodash";
+import GridOnIcon from '@mui/icons-material/GridOn';
+import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab.js';
+
 
 // clones an entity deeply
 export const cloneEntity = entity => ({
@@ -284,4 +287,34 @@ export const getCustomTabGridRenderers = (applicationData) => {
         'workorderno': value => <Link to={{ pathname: `/workorder/${value}`}} target="_blank">{value}</Link>,
         'partno': value => <Link to={{ pathname: `/part/${value}`}} target="_blank">{value}</Link>
     }
+}
+
+export const getTabGridRegions = (applicationData, customGridTabs, paramNames, screenCode, objectCode) => {
+    const customTabGridRenderers = getCustomTabGridRenderers(applicationData);
+    return Object.entries(customGridTabs).map(([tabId, tab], index) => {
+        return ({
+            id: tab.tabDescription.replaceAll(' ','').toUpperCase(),
+            label: tab.tabDescription,
+            isVisibleWhenNewEntity: true,
+            maximizable: true,
+            render: ({ isMaximized }) =>
+                <EAMGridTab
+                    screenCode={screenCode}
+                    tabName={tabId}
+                    objectCode={objectCode}
+                    paramNames= {paramNames}
+                    customRenderers={customTabGridRenderers}
+                    showGrid={isMaximized}
+                    rowCount={100}
+                    gridContainerStyle={isMaximized ? { height: `${document.getElementById('entityContent').offsetHeight - 220}px`} : {}}
+                >   
+                </EAMGridTab>
+            ,
+            column: 2,
+            order: 30 + 5 * index,
+            summaryIcon: GridOnIcon,
+            ignore: !tab.tabAvailable,             
+            initialVisibility: tab.alwaysDisplayed    
+        });
+    })
 }

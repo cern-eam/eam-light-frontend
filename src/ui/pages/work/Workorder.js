@@ -27,7 +27,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import {IconSlash} from 'eam-components/dist/ui/components/icons/index';
 import { isCernMode } from '../../components/CERNMode';
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility, registerCustomField, getCustomTabGridRenderers } from '../EntityTools';
+import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions } from '../EntityTools';
 import WSParts from '../../../tools/WSParts';
 import WSWorkorders from '../../../tools/WSWorkorders';
 import useEntity from "hooks/useEntity";
@@ -53,8 +53,6 @@ import { PartIcon } from 'eam-components/dist/ui/components/icons';
 import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
-import GridOnIcon from '@mui/icons-material/GridOn';
-import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab.js';
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
     if (!eqCode || !swoCode) {
@@ -181,36 +179,6 @@ const Workorder = () => {
             .then(response => setWorkOrder( oldWorkOrder => assignStandardWorkOrderValues(oldWorkOrder, response.body.data)))
             .catch(console.error);
         }
-    }
-
-    const getTabGridRegions = () => {
-        const customTabGridRenderers = getCustomTabGridRenderers(applicationData);
-        return Object.entries(workOrderLayout.customGridTabs).map(([tabId, tab], index) => {
-            return ({
-                id: tab.tabDescription.replaceAll(' ','').toUpperCase(),
-                label: tab.tabDescription,
-                isVisibleWhenNewEntity: true,
-                maximizable: true,
-                render: ({ isMaximized }) =>
-                    <EAMGridTab
-                        screenCode={screenCode}
-                        tabName={tabId}
-                        objectCode={workorder.number}
-                        paramNames= {customTabGridParamNames}
-                        customRenderers={customTabGridRenderers}
-                        showGrid={isMaximized}
-                        rowCount={100}
-                        gridContainerStyle={isMaximized ? { height: `${document.getElementById('entityContent').offsetHeight - 220}px`} : {}}
-                    >   
-                    </EAMGridTab>
-                ,
-                column: 2,
-                order: 30 + 5 * index,
-                summaryIcon: GridOnIcon,
-                ignore: !tab.tabAvailable,             
-                initialVisibility: tab.alwaysDisplayed    
-            });
-        })
     }
 
     const getRegions = () => {
@@ -346,7 +314,7 @@ const Workorder = () => {
                 column: 2,
                 order: 5,
                 summaryIcon: FunctionsRoundedIcon,
-                ignore: !isCernMode && !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS)
             },
             {
@@ -573,7 +541,7 @@ const Workorder = () => {
                 ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
-            ...getTabGridRegions()
+            ...getTabGridRegions(applicationData, workOrderLayout.customGridTabs, customTabGridParamNames, screenCode, workorder.number)
         ];
     }
 

@@ -15,7 +15,7 @@ import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIf
 import {ENTITY_TYPE} from '../../components/Toolbar';
 import EntityRegions from "../../components/entityregions/EntityRegions";
 import { TAB_CODES } from '../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility, getCustomTabGridRenderers } from '../EntityTools';
+import { getTabAvailability, getTabInitialVisibility, getTabGridRegions } from '../EntityTools';
 import useEntity from "hooks/useEntity";
 
 import { AssetIcon, PartIcon } from 'eam-components/dist/ui/components/icons'
@@ -26,10 +26,10 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import PlaceIcon from '@mui/icons-material/Place';
-import GridOnIcon from '@mui/icons-material/GridOn';
-import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab.js';
+import { isCernMode } from 'ui/components/CERNMode';
 
 const customTabGridParamNames =  ["equipmentno", "obj_code", "part", "PAR_CODE", "par_code", "OBJ_CODE", "object", "puobject"];
+
 
 const Part = () => {
     const {screenLayout: partLayout, entity: part, loading, readOnly, isModified,
@@ -68,36 +68,6 @@ const Part = () => {
 
     function postUpdate() {
         commentsComponent.current.createCommentForNewEntity();
-    }
-
-    const getTabGridRegions = () => {
-        const customTabGridRenderers = getCustomTabGridRenderers(applicationData);
-        return Object.entries(partLayout.customGridTabs).map(([tabId, tab], index) => {
-            return ({
-                id: tab.tabDescription.replaceAll(' ','').toUpperCase(),
-                label: tab.tabDescription,
-                isVisibleWhenNewEntity: true,
-                maximizable: true,
-                render: ({ isMaximized }) =>
-                    <EAMGridTab
-                        screenCode={screenCode}
-                        tabName={tabId}
-                        objectCode={part.code}
-                        paramNames= {customTabGridParamNames}
-                        customRenderers={customTabGridRenderers}
-                        showGrid={isMaximized}
-                        rowCount={100}
-                        gridContainerStyle={isMaximized ? { height: `${document.getElementById('entityContent').offsetHeight - 220}px`} : {}}
-                    >   
-                    </EAMGridTab>
-                ,
-                column: 2,
-                order: 30 + 5 * index,
-                summaryIcon: GridOnIcon,
-                ignore: !tab.tabAvailable,             
-                initialVisibility: tab.alwaysDisplayed    
-            });
-        })
     }
 
     const getRegions = () => {
@@ -208,7 +178,7 @@ const Part = () => {
                 column: 2,
                 order: 5,
                 summaryIcon: FunctionsRoundedIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_PARTS),
+                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_PARTS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_PARTS)
             },
             {
@@ -255,7 +225,7 @@ const Part = () => {
                 ignore: partLayout.fields.block_6.attribute === 'H',
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
-            ...getTabGridRegions()
+            ...getTabGridRegions(applicationData, partLayout.customGridTabs, customTabGridParamNames, screenCode, part.code)
         ]
     }
 
