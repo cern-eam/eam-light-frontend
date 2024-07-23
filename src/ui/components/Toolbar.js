@@ -8,7 +8,7 @@ import OpenInNewIcon from 'mdi-material-ui/OpenInNew'
 import {Barcode, ContentCopy, EmailOutline, Map, Printer, Domain, Camera, Eye, Repeat} from 'mdi-material-ui';
 import { RadiationIcon } from "eam-components/dist/ui/components/icons";
 import { Link } from "react-router-dom";
-import { isCernMode } from "./CERNMode";
+import { isCernMode } from 'eam-components/dist/tools/CERNMode';
 import EditWatchlistDialog from './watchlist/EditWatchlistDialog';
 
 export const ENTITY_TYPE = {

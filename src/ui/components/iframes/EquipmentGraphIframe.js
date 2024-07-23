@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import ResizableIframe from "./ResizableIframe";
-import { withCernMode } from '../CERNMode'
+import { withCernMode } from 'eam-components/dist/tools/CERNMode';
 
 const functionToEAMLightPageMapping = {
     'OSOBJA': '/asset',

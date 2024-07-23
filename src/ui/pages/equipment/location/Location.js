@@ -5,7 +5,7 @@ import React from "react";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import WSLocation from "../../../../tools/WSLocation";
-import { isCernMode } from '../../../components/CERNMode';
+import { isCernMode } from 'eam-components/dist/tools/CERNMode';
 import CustomFields from 'eam-components/dist/ui/components/customfields/CustomFields';
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';

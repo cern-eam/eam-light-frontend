@@ -5,7 +5,7 @@ import EISTable, {TRANSFORM_KEYS} from 'eam-components/dist/ui/components/table'
 import EISTableFilter from 'eam-components/dist/ui/components/table/EISTableFilter';
 import EquipmentMTFWorkOrders from "./EquipmentMTFWorkOrders"
 import BlockUi from 'react-block-ui';
-import { isCernMode } from '../../../components/CERNMode';
+import { isCernMode } from 'eam-components/dist/tools/CERNMode';
 import Constants from 'eam-components/dist/enums/Constants';
 import useLocalStorage from '../../../../hooks/useLocalStorage';
 

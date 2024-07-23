@@ -7,7 +7,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import ReportIcon from '@mui/icons-material/Report';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import {EISIcon, RadioactiveWarningIcon} from 'eam-components/dist/ui/components/icons/index'
-import {isCernMode} from '../CERNMode';
+import { isCernMode } from 'eam-components/dist/tools/CERNMode';
 
 const STATUS_KEYS = {
     OUT_OF_SERVICE: "OUT_OF_SERVICE",

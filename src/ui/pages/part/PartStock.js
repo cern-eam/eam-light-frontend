@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import WSParts from '../../../tools/WSParts'
 import EISTable from 'eam-components/dist/ui/components/table';
 import {Link} from 'react-router-dom';
-import { isCernMode } from '../../components/CERNMode';
+import { isCernMode } from 'eam-components/dist/tools/CERNMode';
 import queryString from 'query-string';
 
 function PartStock(props) {
