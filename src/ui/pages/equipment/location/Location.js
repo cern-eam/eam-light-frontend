@@ -13,7 +13,7 @@ import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDocligh
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import { ENTITY_TYPE } from "../../../components/Toolbar";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
-import { getTabAvailability, getTabInitialVisibility } from '../../EntityTools';
+import { getTabAvailability, getTabInitialVisibility, getTabGridRegions } from '../../EntityTools';
 import EquipmentHistory from "../components/EquipmentHistory.js";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EamlightToolbarContainer from "./../../../components/EamlightToolbarContainer";
@@ -32,6 +32,8 @@ import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import { locationLayoutPropertiesMap } from "../EquipmentTools";
+
+const customTabGridParamNames =  ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
 export default Location = (props) => {
 
@@ -297,6 +299,7 @@ export default Location = (props) => {
             //     ignore: !isCernMode,
             //     initialVisibility: false
             // },
+            ...getTabGridRegions(applicationData, locationLayout.customGridTabs, customTabGridParamNames, screenCode, location.code)
         ]
 
     }

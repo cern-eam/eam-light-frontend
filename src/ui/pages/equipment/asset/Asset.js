@@ -19,7 +19,7 @@ import WSParts from '../../../../tools/WSParts';
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility, registerCustomField } from '../../EntityTools';
+import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions} from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, assetLayoutPropertiesMap } from '../EquipmentTools';
@@ -39,6 +39,8 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import { handleError } from 'actions/uiActions';
 import Variables from '../components/Variables';
+
+const customTabGridParamNames =  ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
 const Asset = () => {
     const [part, setPart] = useState(null);
@@ -103,7 +105,6 @@ const Asset = () => {
             .then(response => setStatuses(response.body.data))
             .catch(console.error)
     }
-
 
     const getRegions = () => {
         const tabs = assetLayout.tabs;
@@ -364,6 +365,7 @@ const Asset = () => {
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS)
             },
+            ...getTabGridRegions(applicationData, assetLayout.customGridTabs, customTabGridParamNames, screenCode, equipment.code)
         ]
     }
 
