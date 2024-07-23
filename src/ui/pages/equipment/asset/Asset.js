@@ -39,6 +39,7 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import { handleError } from 'actions/uiActions';
 import Variables from '../components/Variables';
+import getPartsAssociated from 'ui/pages/PartsAssociated';
 
 const customTabGridParamNames =  ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -216,16 +217,16 @@ const Asset = () => {
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW)
             },
             {
-                id: 'PARTS',
-                label: 'Parts',
+                id: 'ASSETPARTS',
+                label: 'Asset Parts',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
                 render: () => <EquipmentPartsMadeOf equipmentcode={equipment.code} />,
                 column: 1,
                 order: 30,
                 summaryIcon: PartIcon,
-                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
-                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED)
+                ignore: !getTabAvailability(tabs, TAB_CODES.PARTS),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS)
             },
             {
                 id: 'EDMSDOCUMENTS',
@@ -365,6 +366,7 @@ const Asset = () => {
                 ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS)
             },
+            getPartsAssociated(equipment.code, equipment.organization, !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED), getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED), 2, 31),
             ...getTabGridRegions(applicationData, assetLayout.customGridTabs, customTabGridParamNames, screenCode, equipment.code)
         ]
     }
