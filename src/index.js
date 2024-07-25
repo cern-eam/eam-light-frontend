@@ -22,9 +22,11 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 // EAM-480, en-GB locale used in order to have monday as first day of the week
 import { enGB } from "date-fns/locale";
 import { UPDATE_SCANNED_USER } from "./actions/scannedUserActions";
-import AuthWrapper, { tokens, keycloak } from "./AuthWrapper";
+import AuthWrapper, { keycloak, exchangeToken, injectBearerToken } from "./AuthWrapper";
 
 const jss = create(jssPreset());
+
+let tokenExchange = {};
 
 unregister();
 polyfill();
@@ -35,12 +37,24 @@ Ajax.getAxiosInstance().interceptors.request.use(
             return config;
         }
         // updateToken if it will last less than 5 minutes
-        return keycloak.updateToken(300).then(() => {
-            const newConfig = config;
-            if (tokens && tokens.token) {
-                newConfig.headers.Authorization = `Bearer ${tokens.token}`;
+        return keycloak.updateToken(300).then(async () => {
+            const clientID = config.clientIdExchange || process.env.REACT_APP_KEYCLOAK_CLIENTID;
+            if (clientID !== process.env.REACT_APP_KEYCLOAK_CLIENTID) {
+                if (!tokenExchange[clientID]) {
+                    tokenExchange[clientID] = exchangeToken({
+                        sourceClient: process.env.REACT_APP_KEYCLOAK_CLIENTID,
+                        targetClient: clientID,
+                    });
+                }
+                await tokenExchange[clientID];
             }
-            return newConfig;
+            return injectBearerToken({
+                config: {
+                    ...config,
+                    timeout: 300000,
+                },
+                clientID,
+            });
         });
     },
     (error) => {

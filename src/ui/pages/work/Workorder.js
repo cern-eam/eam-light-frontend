@@ -400,6 +400,7 @@ const Workorder = () => {
                         workorder={workorder.number}
                         eqpToOtherId={otherIdMapping}
                         printingChecklistLinkToAIS={applicationData.EL_PRTCL}
+                        edmsLoginServletLink={applicationData.EL_EDMSS}
                         maxExpandedChecklistItems={Math.abs(parseInt(applicationData.EL_MCHLS)) || 50}
                         getWoLink={wo => '/workorder/' + wo}
                         ref={checklists}
