@@ -1,6 +1,10 @@
-# Version (2024-07-10)
+# Version (2024-07-25)
 
 ## Features
+### 3.19.0 
+* [EAM-3113] Activity update confirm delete checklists (#109) ([171ed1](https://github.com/cern-eam/eam-light-backend/commit/171ed19243440481eade64f866fc0b0bd6dde184))
+### 3.18.0 
+* Updated dependencies ([e71a2d](https://github.com/cern-eam/eam-light-frontend/commit/e71a2d68453999e78afa2b621e964d18063019a0))
 ### 3.17.1 
 * Updated dependencies ([421c00](https://github.com/cern-eam/eam-light-frontend/commit/421c0037c4fee97918dc22c80c227239e3bff70a))
 ### 3.17.0 
@@ -964,5 +968,9 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* Updated dependencies ([e71a2d](https://github.com/cern-eam/eam-light-frontend/commit/e71a2d68453999e78afa2b621e964d18063019a0))
+* [EAM-2288] [EAM-2707] Hover and better dependency design (#208) ([9e3c88](https://github.com/cern-eam/eam-light-frontend/commit/9e3c88a5c0f65b02b84b15b61f124d2b0776562d))
+* [EAM-2442] Green dots in replace equipment - swap picture (#210) ([2a1000](https://github.com/cern-eam/eam-light-frontend/commit/2a1000556a6c9cd61b667f3667a368cce0eded13))
+* [EAM-3122] All custom tab grids displayed in the Position page (#203) ([9f4e35](https://github.com/cern-eam/eam-light-frontend/commit/9f4e3526813435c70907af87213d652aaa74350a))
+* [EAM-2914] Added region Parts Associated in Asset, Part and Possition (#207) ([0f5be7](https://github.com/cern-eam/eam-light-frontend/commit/0f5be70a404b828482447af6d225a68db43aee99))
+* Updated eam-components ([714375](https://github.com/cern-eam/eam-light-frontend/commit/7143754be3e8c3f56afc867c05b97accecd18063))
 
