@@ -35,7 +35,6 @@ import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import Variables from '../components/Variables.js';
-import getPartsAssociated from 'ui/pages/PartsAssociated.js';
 
 const customTabGridParamNames =  ["equipmentno", "position", "obj_code", "main_eqp_code", "OBJ_CODE", "object"];
 
