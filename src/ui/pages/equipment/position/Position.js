@@ -17,7 +17,7 @@ import EntityRegions from "../../../components/entityregions/EntityRegions";
 import EquipmentGraphIframe from '../../../components/iframes/EquipmentGraphIframe';
 import { isCernMode } from '../../../components/CERNMode';
 import { TAB_CODES } from '../../../components/entityregions/TabCodeMapping';
-import { getTabAvailability, getTabInitialVisibility , getTabGridRegionsd} from '../../EntityTools';
+import { getTabAvailability, getTabInitialVisibility , getTabGridRegions} from '../../EntityTools';
 import NCRIframeContainer from '../../../components/iframes/NCRIframeContainer';
 import useEntity from "hooks/useEntity";
 import { isClosedEquipment, positionLayoutPropertiesMap } from '../EquipmentTools.js';
