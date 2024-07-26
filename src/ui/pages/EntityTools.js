@@ -289,7 +289,7 @@ export const getCustomTabGridRenderers = (applicationData) => {
     }
 }
 
-export const getTabGridRegions = (applicationData, customGridTabs, paramNames, screenCode, objectCode) => {
+export const getTabGridRegions = (applicationData, customGridTabs, paramNames, screenCode, objectCode, customTabGridRegionProps) => {
     const customTabGridRenderers = getCustomTabGridRenderers(applicationData);
     return Object.entries(customGridTabs).map(([tabId, tab], index) => {
         return ({
@@ -314,7 +314,8 @@ export const getTabGridRegions = (applicationData, customGridTabs, paramNames, s
             order: 30 + 5 * index,
             summaryIcon: GridOnIcon,
             ignore: !tab.tabAvailable,             
-            initialVisibility: tab.alwaysDisplayed    
+            initialVisibility: tab.alwaysDisplayed,
+            ...customTabGridRegionProps[tabId]   
         });
     })
 }
