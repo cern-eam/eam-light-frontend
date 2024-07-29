@@ -106,10 +106,10 @@ const EntityRegions = (props) => {
                     <Grid key={column} item xs={gridDimensions.xs} sm={gridDimensions.sm} md={gridDimensions.md} lg={gridDimensions.lg}>
                         {columns[column]
                             .sort((a,b) => a.id === regionMaximized ? -1 : a.order - b.order)
-                            .filter(region => visibleRegions[region.id])
+                            .filter(region => visibleRegions[region.id] || region.shouldRender)
                             .map(region => (
                                 <RegionPanel
-                                    style={{ display: regionMaximized && region.id !== regionMaximized ? 'none' : '' }}
+                                    style={{ display: (regionMaximized && region.id !== regionMaximized) || (!visibleRegions[region.id]) ? 'none' : '' }}
                                     key={region.id}
                                     heading={region.label.toUpperCase()}
                                     summaryIcon={region.summaryIcon && styleSummaryIcon(region.summaryIcon)}

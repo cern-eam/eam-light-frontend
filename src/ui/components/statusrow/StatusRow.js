@@ -59,7 +59,7 @@ const STATUSES = [
     },
     {
         key: STATUS_KEYS.HAZARDOUS,
-        shouldRender: (entity, entityType, hasHazards) => isCernMode && entityType === "equipment" && hasHazards,
+        shouldRender: (entity, entityType, hasHazards) => entityType === "equipment" && hasHazards,
         getIcon: () => <HazardIcon style={iconStyle}/>,
         getDescription: () => "Hazardous",
         getTooltip: () => "Hazardous",

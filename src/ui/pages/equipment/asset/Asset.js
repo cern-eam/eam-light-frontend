@@ -233,8 +233,8 @@ const Asset = () => {
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS)
             },
             {
-                id: 'HAZARDS',
-                label: 'Hazards',
+                id: 'SAFETY',
+                label: 'Safety',
                 isVisibleWhenNewEntity: false,
                 maximizable: true,
                 render: () =>
@@ -244,14 +244,15 @@ const Asset = () => {
                         additionalParams={Object.fromEntries([['parameter.objorganization','*'], ['parameter.object',equipment.code]])}
                         paramNames={['equipmentno']}
                         additionalAttributes={Object.fromEntries([['userFunctionName', 'OSOBJA']])}
-                        setHasHazards={setHasHazards}
+                        computed={(params) => {setHasHazards(params.rowCount > 0)}}
                     />
                 ,
                 column: 1,
                 order: 35,
                 summaryIcon: WarningIcon,
-                ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS),
-                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS)
+                ignore: !getTabAvailability(tabs, TAB_CODES.SAFETY),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.SAFETY),
+                shouldRender: true
 
             },
             {
