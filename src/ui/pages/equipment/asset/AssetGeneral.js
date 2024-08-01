@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
 import StatusRow from "../../../components/statusrow/StatusRow"
@@ -7,6 +7,22 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAuto
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import { isDepartmentReadOnly, isMultiOrg } from 'ui/pages/EntityTools';
 import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
+import GridWS from 'eam-components/dist/ui/components/eamgrid/lib/GridWS';
+
+async function fetchHasHazards(equipmentCode) {
+    const gridRequest = {
+        rowCount: 1,
+        params: {
+            //equipmentno: equipmentCode,
+            "parameter.object": equipmentCode,
+            "parameter.objorganization": "*",
+        },
+        gridName: "OSOBJA_ESF",
+        userFunctionName: 'OSOBJA'
+    };
+    const gridData = await GridWS.getGridData(gridRequest);
+    return gridData.body.data.records !== '0';
+}
 
 const AssetGeneral = (props) => {
 
@@ -19,6 +35,9 @@ const AssetGeneral = (props) => {
         screenCode,
         screenPermissions
     } = props;
+
+    const [hasHazards, setHasHazards] = useState(false);
+    fetchHasHazards(equipment.code).then(setHasHazards);
 
     return (
         <React.Fragment>
@@ -53,11 +72,10 @@ const AssetGeneral = (props) => {
                 {...register('state', 'stateCode')}
                 autocompleteHandler={WSEquipment.getEquipmentStateValues}
             />
-
             <StatusRow
                 entity={equipment}
                 entityType={"equipment"}
-                hasHazards={props.hasHazards}
+                hasHazards={hasHazards}
                 style={{marginTop: "10px", marginBottom: "-10px"}}
             />
         </React.Fragment>
