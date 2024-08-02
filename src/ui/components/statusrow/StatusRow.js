@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import BlockIcon from '@mui/icons-material/Block';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -6,7 +6,7 @@ import ErrorOutlinedIcon from '@mui/icons-material/ErrorOutlined';
 import LockIcon from '@mui/icons-material/Lock';
 import ReportIcon from '@mui/icons-material/Report';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
-import {EISIcon, RadioactiveWarningIcon} from 'eam-components/dist/ui/components/icons/index'
+import {EISIcon, RadioactiveWarningIcon, HazardIcon} from 'eam-components/dist/ui/components/icons/index'
 import {isCernMode} from '../CERNMode';
 
 const STATUS_KEYS = {
@@ -15,6 +15,7 @@ const STATUS_KEYS = {
     RADIOACTIVE: 'RADIOACTIVE',
     SAFETY_CONFORMITY: 'SAFETY_CONFORMITY',
     LOCKED_OUT: 'LOCKED_OUT',
+    HAZARDOUS : 'HAZARDOUS'
 }
 
 const iconStyle = {
@@ -33,6 +34,12 @@ const safetyConformity = ({
 const getSafetyConformity = (entity) => {
     return safetyConformity[entity.userDefinedFields.udfchar30];
 };
+
+function processSafetyData(safetyData){
+    const [hasHazards, setHasHazards] = useState(false);
+    safetyData.then(datas => setHasHazards(datas.records !== '0'));
+    return hasHazards;
+}
 
 const STATUSES = [
     {
@@ -57,6 +64,13 @@ const STATUSES = [
         getTooltip: () => "Radioactive",
     },
     {
+        key: STATUS_KEYS.HAZARDOUS,
+        shouldRender: (entity, entityType, hasHazards) => entityType === "equipment" && hasHazards,
+        getIcon: () => <HazardIcon style={iconStyle}/>,
+        getDescription: () => "Hazardous",
+        getTooltip: () => "Hazardous",
+    },
+    {
         key: STATUS_KEYS.SAFETY_CONFORMITY,
         shouldRender: (entity, entityType) => isCernMode && entityType === "equipment" && getSafetyConformity(entity) !== undefined,
         getIcon: (entity) => getSafetyConformity(entity).icon,
@@ -73,9 +87,10 @@ const STATUSES = [
 ]
 
 const StatusRow = (props) => {
-    const generateCells = (entity, entityType) => {
+    const generateCells = (entity, entityType, safetyData) => {
+        const hasHazards = processSafetyData(safetyData);
         return STATUSES.map(status => {
-            if (status.shouldRender(entity, entityType)) {
+            if (status.shouldRender(entity, entityType, hasHazards)) {
                 return (
                     <Tooltip key={status.key} title={status.getTooltip(entity)}>
                         <div style={{textAlign: "center", width: "80px"}}>
@@ -88,7 +103,7 @@ const StatusRow = (props) => {
         })
     }
 
-    const icons = generateCells(props.entity, props.entityType);
+    const icons = generateCells(props.entity, props.entityType, props.safetyData);
     return icons.length && <div style={{width: "100%", display: "flex", ...props.style}}>{icons}</div>;
 }
 
