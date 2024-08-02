@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import BlockIcon from '@mui/icons-material/Block';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -34,6 +34,12 @@ const safetyConformity = ({
 const getSafetyConformity = (entity) => {
     return safetyConformity[entity.userDefinedFields.udfchar30];
 };
+
+function processSafetyData(safetyData){
+    const [hasHazards, setHasHazards] = useState(false);
+    safetyData.then(datas => setHasHazards(datas.records !== '0'));
+    return hasHazards;
+}
 
 const STATUSES = [
     {
@@ -81,7 +87,8 @@ const STATUSES = [
 ]
 
 const StatusRow = (props) => {
-    const generateCells = (entity, entityType, hasHazards) => {
+    const generateCells = (entity, entityType, safetyData) => {
+        const hasHazards = processSafetyData(safetyData);
         return STATUSES.map(status => {
             if (status.shouldRender(entity, entityType, hasHazards)) {
                 return (
@@ -96,7 +103,7 @@ const StatusRow = (props) => {
         })
     }
 
-    const icons = generateCells(props.entity, props.entityType, props.hasHazards);
+    const icons = generateCells(props.entity, props.entityType, props.safetyData);
     return icons.length && <div style={{width: "100%", display: "flex", ...props.style}}>{icons}</div>;
 }
 

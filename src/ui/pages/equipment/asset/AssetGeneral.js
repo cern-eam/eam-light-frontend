@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
 import StatusRow from "../../../components/statusrow/StatusRow"
@@ -9,7 +9,7 @@ import { isDepartmentReadOnly, isMultiOrg } from 'ui/pages/EntityTools';
 import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
 import GridWS from 'eam-components/dist/ui/components/eamgrid/lib/GridWS';
 
-async function fetchHasHazards(equipmentCode) {
+async function fetchSafetyData(equipmentCode) {
     const gridRequest = {
         rowCount: 1,
         params: {
@@ -21,7 +21,7 @@ async function fetchHasHazards(equipmentCode) {
         userFunctionName: 'OSOBJA'
     };
     const gridData = await GridWS.getGridData(gridRequest);
-    return gridData.body.data.records !== '0';
+    return gridData.body.data;
 }
 
 const AssetGeneral = (props) => {
@@ -35,9 +35,6 @@ const AssetGeneral = (props) => {
         screenCode,
         screenPermissions
     } = props;
-
-    const [hasHazards, setHasHazards] = useState(false);
-    fetchHasHazards(equipment.code).then(setHasHazards);
 
     return (
         <React.Fragment>
@@ -75,7 +72,7 @@ const AssetGeneral = (props) => {
             <StatusRow
                 entity={equipment}
                 entityType={"equipment"}
-                hasHazards={hasHazards}
+                safetyData={fetchSafetyData(equipment.code)}
                 style={{marginTop: "10px", marginBottom: "-10px"}}
             />
         </React.Fragment>
