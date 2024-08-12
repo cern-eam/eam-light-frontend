@@ -56,6 +56,7 @@ const PartGeneral = (props) => {
             <StatusRow
                 entity={part}
                 entityType={"part"}
+                screenCode={screenCode}
                 style={{marginTop: "10px", marginBottom: "-10px"}}
             />
             

@@ -7,22 +7,6 @@ import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAuto
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import { isDepartmentReadOnly, isMultiOrg } from 'ui/pages/EntityTools';
 import EAMUDF from 'ui/components/userdefinedfields/EAMUDF';
-import GridWS from 'eam-components/dist/ui/components/eamgrid/lib/GridWS';
-
-async function fetchSafetyData(equipmentCode) {
-    const gridRequest = {
-        rowCount: 1,
-        params: {
-            //equipmentno: equipmentCode,
-            "parameter.object": equipmentCode,
-            "parameter.objorganization": "*",
-        },
-        gridName: "OSOBJA_ESF",
-        userFunctionName: 'OSOBJA'
-    };
-    const gridData = await GridWS.getGridData(gridRequest);
-    return gridData.body.data;
-}
 
 const AssetGeneral = (props) => {
 
@@ -35,7 +19,6 @@ const AssetGeneral = (props) => {
         screenCode,
         screenPermissions
     } = props;
-
     return (
         <React.Fragment>
 
@@ -72,7 +55,7 @@ const AssetGeneral = (props) => {
             <StatusRow
                 entity={equipment}
                 entityType={"equipment"}
-                safetyData={fetchSafetyData(equipment.code)}
+                screenCode={screenCode}
                 style={{marginTop: "10px", marginBottom: "-10px"}}
             />
         </React.Fragment>

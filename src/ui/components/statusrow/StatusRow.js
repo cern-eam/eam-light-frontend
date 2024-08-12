@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import BlockIcon from '@mui/icons-material/Block';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -8,6 +8,24 @@ import ReportIcon from '@mui/icons-material/Report';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import {EISIcon, RadioactiveWarningIcon, HazardIcon} from 'eam-components/dist/ui/components/icons/index'
 import {isCernMode} from '../CERNMode';
+import GridWS from 'eam-components/dist/ui/components/eamgrid/lib/GridWS';
+
+async function doEquipmentGridRequest(equipmentCode, screenCode, tabName) {
+    if (equipmentCode && screenCode){
+        const gridRequest = {
+            rowCount: 1,
+            params: {
+                //equipmentno: equipmentCode,
+                "parameter.object": equipmentCode,
+                "parameter.objorganization": "*",
+            },
+            gridName: screenCode + "_" + tabName,
+            userFunctionName: screenCode
+        };
+        const gridData = await GridWS.getGridData(gridRequest);
+        return gridData.body.data;
+    }
+}
 
 const STATUS_KEYS = {
     OUT_OF_SERVICE: "OUT_OF_SERVICE",
@@ -34,12 +52,6 @@ const safetyConformity = ({
 const getSafetyConformity = (entity) => {
     return safetyConformity[entity.userDefinedFields.udfchar30];
 };
-
-function processSafetyData(safetyData){
-    const [hasHazards, setHasHazards] = useState(false);
-    safetyData.then(datas => setHasHazards(datas.records !== '0'));
-    return hasHazards;
-}
 
 const STATUSES = [
     {
@@ -87,8 +99,13 @@ const STATUSES = [
 ]
 
 const StatusRow = (props) => {
-    const generateCells = (entity, entityType, safetyData) => {
-        const hasHazards = processSafetyData(safetyData);
+    const generateCells = (entity, entityType, screenCode) => {
+        const [hasHazards, setHasHazards] = useState(false);
+        useEffect(() => {
+            const safetyData = doEquipmentGridRequest(entity.code, screenCode, 'ESF');
+            safetyData.then(data => setHasHazards(data.records !== '0'));
+        }, [entity.code]);
+        
         return STATUSES.map(status => {
             if (status.shouldRender(entity, entityType, hasHazards)) {
                 return (
@@ -103,7 +120,7 @@ const StatusRow = (props) => {
         })
     }
 
-    const icons = generateCells(props.entity, props.entityType, props.safetyData);
+    const icons = generateCells(props.entity, props.entityType, props.screenCode);
     return icons.length && <div style={{width: "100%", display: "flex", ...props.style}}>{icons}</div>;
 }
 
