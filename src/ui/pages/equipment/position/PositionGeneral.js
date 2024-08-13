@@ -50,6 +50,7 @@ const PositionGeneral = (props) => {
             <StatusRow
                 entity={equipment}
                 entityType={"equipment"}
+                screenCode={screenCode}
                 style={{ marginTop: "10px", marginBottom: "-10px" }}
             />
         </React.Fragment>

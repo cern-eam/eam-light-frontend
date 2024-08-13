@@ -19,7 +19,6 @@ const AssetGeneral = (props) => {
         screenCode,
         screenPermissions
     } = props;
-
     return (
         <React.Fragment>
 
@@ -53,10 +52,10 @@ const AssetGeneral = (props) => {
                 {...register('state', 'stateCode')}
                 autocompleteHandler={WSEquipment.getEquipmentStateValues}
             />
-
             <StatusRow
                 entity={equipment}
                 entityType={"equipment"}
+                screenCode={screenCode}
                 style={{marginTop: "10px", marginBottom: "-10px"}}
             />
         </React.Fragment>
