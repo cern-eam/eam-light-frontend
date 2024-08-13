@@ -37,9 +37,11 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import HardwareIcon from '@mui/icons-material/Hardware';
+import WarningIcon from '@mui/icons-material/Warning';
 import { handleError } from 'actions/uiActions';
 import Variables from '../components/Variables';
 import getPartsAssociated from 'ui/pages/PartsAssociated';
+import EAMGridTab from 'eam-components/dist/ui/components/grids/eam/EAMGridTab';
 
 const customTabGridParamNames =  ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -227,6 +229,26 @@ const Asset = () => {
                 summaryIcon: PartIcon,
                 ignore: !getTabAvailability(tabs, TAB_CODES.PARTS),
                 initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS)
+            },
+            {
+                id: 'SAFETY',
+                label: 'Safety',
+                isVisibleWhenNewEntity: false,
+                maximizable: true,
+                render: () =>
+                    <EAMGridTab
+                        gridName={'OSOBJA_ESF'}
+                        objectCode={equipment.code}
+                        additionalParams={Object.fromEntries([['parameter.objorganization','*'], ['parameter.object',equipment.code]])}
+                        paramNames={['equipmentno']}
+                        additionalAttributes={Object.fromEntries([['userFunctionName', 'OSOBJA']])}
+                    />
+                ,
+                column: 1,
+                order: 35,
+                summaryIcon: WarningIcon,
+                ignore: !getTabAvailability(tabs, TAB_CODES.SAFETY),
+                initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.SAFETY)
             },
             {
                 id: 'EDMSDOCUMENTS',

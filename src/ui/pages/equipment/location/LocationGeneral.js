@@ -5,7 +5,7 @@ import WS from "../../../../tools/WS";
 import StatusRow from "../../../components/statusrow/StatusRow";
 
 const AssetGeneral = (props) => {
-    const { location, newEntity, register } = props;
+    const { location, locationLayout, newEntity, register } = props;
 
     return (
         <React.Fragment>
@@ -25,6 +25,7 @@ const AssetGeneral = (props) => {
             <StatusRow
                 entity={location}
                 entityType={"equipment"}
+                screenCode={locationLayout.fields.safety.pageName}
                 style={{marginTop: "10px", marginBottom: "-10px"}}
             />
         </React.Fragment>
