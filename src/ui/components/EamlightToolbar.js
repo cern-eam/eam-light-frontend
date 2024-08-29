@@ -14,6 +14,8 @@ import IconButton from '@mui/material/IconButton';
 import Toolbar from './Toolbar';
 import Divider from '@mui/material/Divider';
 import { isMultiOrg } from 'ui/pages/EntityTools';
+import { Collapse, ListItemButton} from '@mui/material';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
 const verticalLineStyle = {
     height: 25,
@@ -22,12 +24,14 @@ const verticalLineStyle = {
 };
 
 const SMALL_SCREEN_MODE_MAX_WIDTH = 375;
+const DEFAULT_MENU_CATEGORY = 'Others';
 
 class EamlightToolbar extends Component {
     state = {
         open: false,
         compactMenu: false,
         smallScreenMode: false,
+        collapsibleMenu: {}
     };
 
     iconMenuStyle = {
@@ -138,30 +142,65 @@ class EamlightToolbar extends Component {
     //
     getRegions = () => {
         const { regions, toggleHiddenRegion, getUniqueRegionID, isHiddenRegion } = this.props;
-        return regions
-            .filter(region => !region.ignore)
-            .map(region => (
-                <MenuItem key={region.id} onClick={() => toggleHiddenRegion(getUniqueRegionID(region.id))}>
-                    <Checkbox disabled checked={!isHiddenRegion(region.id)}/>
-                    {region.label}
-                </MenuItem>
-        ))
+    
+        let tabs = {};
+    
+        for (const region of regions) {
+            const category = region.menuCategory || DEFAULT_MENU_CATEGORY;
+    
+            if (!tabs[category]) {
+                tabs[category] = [];
+            }
+    
+            if (!region.ignore) {
+                let item = (
+                    <MenuItem key={region.id} onClick={() => toggleHiddenRegion(getUniqueRegionID(region.id))}>
+                        <Checkbox disabled checked={!isHiddenRegion(region.id)} />
+                        {region.label}
+                    </MenuItem>
+                );
+                tabs[category].push(item);
+            }
+        }
+    
+        return (
+            <>
+                {Object.keys(tabs).map((category, index) => (
+                    <div key={index}>
+                        <ListItemButton
+                            onClick={ () => {
+                                this.setState(
+                                    prevState => ({
+                                        collapsibleMenu: {
+                                            ...prevState.collapsibleMenu,
+                                            [category]: !prevState.collapsibleMenu[category],
+                                        }
+                                    })
+                                );
+                            }}
+                        >
+                            {category} {this.state.collapsibleMenu[category] ? <ExpandLess /> : <ExpandMore />}
+                        </ListItemButton>
+                        <Collapse in={this.state.collapsibleMenu[category]}>
+                            {tabs[category]}
+                        </Collapse>
+                    </div>
+                ))}
+            </>
+        );
     }
-
-    //
-    //
-    //
-
+    
     renderPanelSelectorMenu = (isInsideAMenu = false) => {
         return (
-            <div style={{flexGrow: '1'}}>
-                {isInsideAMenu && <Divider/>}
+            <div style={{ flexGrow: '1' }}>
+                {isInsideAMenu && <Divider />}
                 <IconButton
                     aria-label="More"
                     aria-owns={this.state.visibilityMenu ? 'simple-menu' : null}
                     onClick={this.handleVisibilityMenuClick.bind(this)}
-                    size="large">
-                    <TelevisionGuide style={isInsideAMenu ? {width: 18, marginRight: -5, marginLeft: 5} : {}}/> 
+                    size="large"
+                >
+                    <TelevisionGuide style={isInsideAMenu ? { width: 18, marginRight: -5, marginLeft: 5 } : {}} />
                 </IconButton>
                 {isInsideAMenu && <span>Panel Selector</span>}
                 <Menu
@@ -169,10 +208,14 @@ class EamlightToolbar extends Component {
                     anchorEl={this.state.visibilityMenu}
                     open={Boolean(this.state.visibilityMenu)}
                     onClose={this.handleVisibilityMenuClose.bind(this)}
+                    PaperProps={{
+                        style: {
+                            maxHeight: '75vh',
+                            overflowY: 'auto',
+                        }
+                    }}
                 >
-
                     {this.getRegions()}
-
                 </Menu>
             </div>
         );
