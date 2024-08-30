@@ -165,8 +165,8 @@ class EamlightToolbar extends Component {
     
         return (
             <>
-                {Object.keys(tabs).map((category, index) => (
-                    <div key={index}>
+                {Object.keys(tabs).map((category) => (
+                    <div>
                         <ListItemButton
                             onClick={ () => {
                                 this.setState(
@@ -210,7 +210,7 @@ class EamlightToolbar extends Component {
                     onClose={this.handleVisibilityMenuClose.bind(this)}
                     PaperProps={{
                         style: {
-                            maxHeight: '75vh',
+                            maxHeight: '75%',
                             overflowY: 'auto',
                         }
                     }}
