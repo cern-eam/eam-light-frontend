@@ -17,11 +17,11 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 3000,
-      proxy: {
-        "/": {
-          target: "http://localhost:10880/",
-        },
-      },
+      // proxy: {
+      //   "/": {
+      //     target: "http://localhost:10880/",
+      //   },
+      // },
     },
     optimizeDeps: {
       esbuildOptions: {
