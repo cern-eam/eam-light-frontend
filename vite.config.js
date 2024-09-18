@@ -17,11 +17,12 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 3000,
-      // proxy: {
-      //   "/": {
-      //     target: "http://localhost:10880/",
-      //   },
-      // },
+      host: "10.211.55.10",
+      proxy: {
+        "/apis": {
+          target: "http://localhost:10880/",
+        },
+      },
     },
     optimizeDeps: {
       esbuildOptions: {
@@ -29,8 +30,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     define: {
-      "process.env.PUBLIC_URL": JSON.stringify(env.VITE_PUBLIC_URL),
-      "process.env.REACT_APP_CERN_MODE": JSON.stringify(env.VITE_CERN_MODE),
+      "process.env.PUBLIC_URL": JSON.stringify(env.VITE_PUBLIC_URL)
     },
   };
 });
