@@ -32,6 +32,7 @@ export default defineConfig(({ mode }) => {
     define: {
       "process.env.PUBLIC_URL": JSON.stringify(env.VITE_PUBLIC_URL),
       "process.env.REACT_APP_CERN_MODE": JSON.stringify(env.VITE_CERN_MODE),
+      "process.env.REACT_APP_BACKEND": JSON.stringify(env.VITE_BACKEND),
     },
   };
 });
