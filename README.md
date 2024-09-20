@@ -8,12 +8,12 @@ This project was created using the create-react-app application and you can cons
 
 You can modify the following environment variables in the `Dockerfile` before building the docker image to change some of the default settings:
 
-| Variable            | Default value | Usage                                        |
-| ------------------- | ------------: | -------------------------------------------- |
-| VITE_BACKEND        |         /rest | Should have a leading, but no trailing slash |
-| PUBLIC_URL          |     /eamlight | Public URL for react-router-dom              |
-| VITE_LOGIN_METHOD   |           STD | Should match EAMLIGHT_AUTHENTICATION_MODE    |
-| REACT_APP_CERN_MODE |         FALSE | Not used for organizations outside CERN      |
+| Variable          | Default value | Usage                                        |
+| ----------------- | ------------: | -------------------------------------------- |
+| VITE_BACKEND      |         /rest | Should have a leading, but no trailing slash |
+| VITE_PUBLIC_URL   |     /eamlight | Public URL for react-router-dom              |
+| VITE_LOGIN_METHOD |           STD | Should match EAMLIGHT_AUTHENTICATION_MODE    |
+| VITE_CERN_MODE    |         FALSE | Not used for organizations outside CERN      |
 
 If you wish for others to use your locally deployed server, you have to change the VITE_BACKEND variable to an absolute URL: http://your_machine:9090/apis/rest.
 
