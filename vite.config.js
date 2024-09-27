@@ -10,6 +10,9 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     base: "/",
     assetsInclude: ["**/*.md"],
+    build: {
+      outDir: "build",
+    },
     resolve: {
       alias: {
         "@": "/src",
@@ -17,9 +20,8 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 3000,
-      host: "10.211.55.10",
       proxy: {
-        "/apis": {
+        "/SSO": {
           target: "http://localhost:10880/",
         },
       },
