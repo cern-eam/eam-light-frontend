@@ -20,8 +20,9 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 3000,
+      host: "0.0.0.0",
       proxy: {
-        "/SSO": {
+        "/apis": {
           target: "http://localhost:10880/",
         },
       },
