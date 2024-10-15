@@ -19,12 +19,7 @@ import WSParts from "../../../../tools/WSParts";
 import EquipmentGraphIframe from "../../../components/iframes/EquipmentGraphIframe";
 import { isCernMode } from "../../../components/CERNMode";
 import { TAB_CODES } from "../../../components/entityregions/TabCodeMapping";
-import {
-  getTabAvailability,
-  getTabInitialVisibility,
-  registerCustomField,
-  getTabGridRegions,
-} from "../../EntityTools";
+import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions } from "../../EntityTools";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer";
 import useEntity from "@/hooks/useEntity";
 import { isClosedEquipment, assetLayoutPropertiesMap } from "../EquipmentTools";
@@ -48,14 +43,7 @@ import Variables from "../components/Variables";
 import getPartsAssociated from "@/ui/pages/PartsAssociated";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 
-const customTabGridParamNames = [
-  "equipmentno",
-  "obj_code",
-  "main_eqp_code",
-  "OBJ_CODE",
-  "object",
-  "puobject",
-];
+const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
 const Asset = () => {
   const [part, setPart] = useState(null);
@@ -140,11 +128,7 @@ const Asset = () => {
   }
 
   const readStatuses = (neweqp, statusCode) => {
-    WSEquipment.getEquipmentStatusValues(
-      userData.eamAccount.userGroup,
-      neweqp,
-      statusCode
-    )
+    WSEquipment.getEquipmentStatusValues(userData.eamAccount.userGroup, neweqp, statusCode)
       .then((response) => setStatuses(response.body.data))
       .catch(console.error);
   };
@@ -252,18 +236,6 @@ const Asset = () => {
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
       },
       {
-        id: "ASSETPARTS",
-        label: "Asset Parts",
-        isVisibleWhenNewEntity: false,
-        maximizable: true,
-        render: () => <EquipmentPartsMadeOf equipmentcode={equipment.code} />,
-        column: 1,
-        order: 30,
-        summaryIcon: PartIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.PARTS),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS),
-      },
-      {
         id: "SAFETY",
         label: "Safety",
         isVisibleWhenNewEntity: false,
@@ -277,9 +249,7 @@ const Asset = () => {
               ["parameter.object", equipment.code],
             ])}
             paramNames={["equipmentno"]}
-            additionalAttributes={Object.fromEntries([
-              ["userFunctionName", "OSOBJA"],
-            ])}
+            additionalAttributes={Object.fromEntries([["userFunctionName", "OSOBJA"]])}
           />
         ),
         column: 1,
@@ -293,47 +263,30 @@ const Asset = () => {
         label: "EDMS Documents",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => (
-          <EDMSDoclightIframeContainer
-            objectType="A"
-            objectID={equipment.code}
-          />
-        ),
+        render: () => <EDMSDoclightIframeContainer objectType="A" objectID={equipment.code} />,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
         column: 2,
         order: 7,
         summaryIcon: FunctionsRoundedIcon,
-        ignore:
-          !isCernMode ||
-          !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
-        initialVisibility: getTabInitialVisibility(
-          tabs,
-          TAB_CODES.EDMS_DOCUMENTS_ASSETS
-        ),
+        ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
       },
       {
         id: "NCRS",
         label: "NCRs",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => (
-          <NCRIframeContainer objectType="A" objectID={equipment.code} />
-        ),
+        render: () => <NCRIframeContainer objectType="A" objectID={equipment.code} />,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
         column: 2,
         order: 8,
         summaryIcon: BookmarkBorderRoundedIcon,
-        ignore:
-          !isCernMode ||
-          !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
-        initialVisibility: getTabInitialVisibility(
-          tabs,
-          TAB_CODES.EDMS_DOCUMENTS_ASSETS
-        ),
+        ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
       },
       {
         id: "COMMENTS",
@@ -366,12 +319,7 @@ const Asset = () => {
         label: "User Defined Fields",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        render: () => (
-          <UserDefinedFields
-            {...commonProps}
-            entityLayout={assetLayout.fields}
-          />
-        ),
+        render: () => <UserDefinedFields {...commonProps} entityLayout={assetLayout.fields} />,
         column: 2,
         order: 10,
         summaryIcon: AssignmentIndIcon,
@@ -419,10 +367,7 @@ const Asset = () => {
         order: 25,
         summaryIcon: HardwareIcon,
         ignore: assetLayout.fields.block_6.attribute === "H",
-        initialVisibility: getTabInitialVisibility(
-          tabs,
-          TAB_CODES.PARTS_ASSOCIATED
-        ),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
       },
       {
         id: "EQUIPMENTGRAPH",
@@ -430,10 +375,7 @@ const Asset = () => {
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
-          <EquipmentGraphIframe
-            equipmentCode={equipment.code}
-            equipmentGraphURL={applicationData.EL_EQGRH}
-          />
+          <EquipmentGraphIframe equipmentCode={equipment.code} equipmentGraphURL={applicationData.EL_EQGRH} />
         ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
@@ -441,13 +383,8 @@ const Asset = () => {
         column: 2,
         order: 30,
         summaryIcon: ShareIcon,
-        ignore:
-          !isCernMode ||
-          !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS),
-        initialVisibility: getTabInitialVisibility(
-          tabs,
-          TAB_CODES.EQUIPMENT_GRAPH_ASSETS
-        ),
+        ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS),
       },
       getPartsAssociated(
         equipment.code,
@@ -472,11 +409,7 @@ const Asset = () => {
   }
 
   return (
-    <BlockUi
-      tag="div"
-      blocking={loading}
-      style={{ height: "100%", width: "100%" }}
-    >
+    <BlockUi tag="div" blocking={loading} style={{ height: "100%", width: "100%" }}>
       <EamlightToolbarContainer
         isModified={isModified}
         newEntity={newEntity}
