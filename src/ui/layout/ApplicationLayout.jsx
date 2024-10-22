@@ -18,6 +18,7 @@ import clsx from "clsx";
 import ScanUser from "../components/servicelogin/ScanUser";
 import Footer from "./Footer";
 import GridTools from "@/tools/GridTools";
+import queryString from "query-string";
 
 const styles = {
   topBarLink: {
@@ -51,7 +52,8 @@ export default withStyles(styles)(function ApplicationLayout(props) {
   const showEqpTree = useSelector((state) => state.ui.layout.showEqpTree);
   const equipment = useSelector((state) => state.ui.layout.equipment);
   const location = useLocation();
-
+  const hideHeader = queryString.parse(window.location.search)['hideHeader'] === 'true';
+  const hideMenu = queryString.parse(window.location.search)['hideMenu'] === 'true';
   const menuIconStyle = {
     color: "white",
     fontSize: 18,
@@ -119,12 +121,6 @@ export default withStyles(styles)(function ApplicationLayout(props) {
     </div>
   );
 
-  const isInsideIframe = window.self !== window.top;
-  const isInsideAllowedURL = document.referrer.match(
-    "^" + applicationData.EL_IFURL
-  );
-  const showTopBar = !(isInsideAllowedURL && isInsideIframe);
-
   const loadAfterLogin =
     GridTools.getURLParameterByName("loadAfterLogin") === "true";
 
@@ -146,10 +142,10 @@ export default withStyles(styles)(function ApplicationLayout(props) {
         !menuCompacted && mobileMenuActive && setMobileMenuActive(false)
       }
     >
-      {showTopBar && topbar}
+      {!hideHeader && topbar}
       {showScan && loadAfterLogin ? null : (
         <div id="layout-container">
-          {props.children[0] && (
+          {props.children[0] && !hideMenu && (
             <div
               id="layout-menu-cover"
               className={mobileMenuActive ? "active" : ""}
@@ -158,7 +154,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
               {props.children[0]}
             </div>
           )}
-          <div id="layout-portlets-cover">
+          <div id="layout-portlets-cover" style={{marginLeft: hideMenu ? 0 : undefined}}>
             {props.children[1]}
             <Footer applicationData={applicationData} />
           </div>
