@@ -52,8 +52,11 @@ export default withStyles(styles)(function ApplicationLayout(props) {
   const showEqpTree = useSelector((state) => state.ui.layout.showEqpTree);
   const equipment = useSelector((state) => state.ui.layout.equipment);
   const location = useLocation();
+
   const hideHeader = queryString.parse(window.location.search)['hideHeader'] === 'true';
   const hideMenu = queryString.parse(window.location.search)['hideMenu'] === 'true';
+  const hideFooter = queryString.parse(window.location.search)['hideFooter'] === 'true';
+
   const menuIconStyle = {
     color: "white",
     fontSize: 18,
@@ -76,6 +79,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
       </div>
 
       <div id="topbar-right">
+        {!hideMenu &&
         <div id="menu-resize-btn">
           <IconButton
             onClick={() => setMenuCompacted(!menuCompacted)}
@@ -88,6 +92,8 @@ export default withStyles(styles)(function ApplicationLayout(props) {
             )}
           </IconButton>
         </div>
+        }
+        {!hideMenu &&
         <div id="mobile-menu-btn">
           <IconButton
             onClick={() => setMobileMenuActive(!mobileMenuActive)}
@@ -96,15 +102,18 @@ export default withStyles(styles)(function ApplicationLayout(props) {
             <Menu style={menuIconStyle} />
           </IconButton>
         </div>
+        }
 
         {equipment && (
           <div id="eqp-tree-btn">
+            {!hideMenu &&
             <div
               style={{
                 borderLeft: "1px solid rgba(255, 255, 255, 0.8)",
                 height: 22,
               }}
             />
+            }
             <IconButton
               onClick={() =>
                 dispatch(setLayoutProperty("showEqpTree", !showEqpTree))
@@ -154,9 +163,10 @@ export default withStyles(styles)(function ApplicationLayout(props) {
               {props.children[0]}
             </div>
           )}
-          <div id="layout-portlets-cover" style={{marginLeft: hideMenu ? 0 : undefined}}>
+          <div id="layout-portlets-cover" style={{marginLeft: hideMenu ? 0 : undefined,
+                                                  height: hideFooter ? "calc(100% + 30px)" : undefined}}>
             {props.children[1]}
-            <Footer applicationData={applicationData} />
+            {!hideFooter && <Footer applicationData={applicationData} />}
           </div>
         </div>
       )}
