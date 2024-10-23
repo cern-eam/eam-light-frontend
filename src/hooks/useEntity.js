@@ -131,6 +131,7 @@ const useEntity = (params) => {
   useEffect(() => {
     if (!code && codeQueryParam) {
       history.push(
+        process.env.PUBLIC_URL +
           entityURL +
           codeQueryParam +
           window.location.search
@@ -165,6 +166,7 @@ const useEntity = (params) => {
         commentsComponent.current?.createCommentForNewEntity(entityCode);
         // Read after the creation (and append the organization in multi-org mode)
         history.push(
+          process.env.PUBLIC_URL +
             entityURL +
             encodeURIComponent(
               entityCode +
@@ -250,7 +252,7 @@ const useEntity = (params) => {
         showNotificationConst(
           `${entityDesc} ${entity[entityCodeProperty]} has been successfully deleted.`
         );
-        history.push(entityURL);
+        history.push(process.env.PUBLIC_URL + entityURL);
       })
       .catch((error) => {
         generateErrorMessagesFromException(error?.response?.body?.errors);
@@ -299,7 +301,7 @@ const useEntity = (params) => {
       ...assignDefaultValues(oldEntity, screenLayout, layoutPropertiesMap),
       copyFrom: code,
     }));
-    window.history.pushState({}, "", entityURL);
+    window.history.pushState({}, "", process.env.PUBLIC_URL + entityURL);
     document.title = "New " + entityDesc;
     postActions?.copy?.();
   };
