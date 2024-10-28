@@ -39,7 +39,12 @@ export function getUserInfo() {
                 dispatch(
                     updateApplication({ userData: { invalidAccount: true } })
                 );
-            } else {
+            } else if (error?.response?.status === 404 || error?.response?.status === 500) {
+                dispatch(
+                  updateApplication({ userData: { userDataFetchingFailed: true } })
+                );
+            }
+             else {
                 dispatch(updateApplication({ userData: {} }));
             }
         };
