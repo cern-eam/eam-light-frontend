@@ -29,7 +29,7 @@ export function getUserInfo() {
             const values = queryString.parse(window.location.search);
             const screenCode = values.screen;
             const currentScreen = window.location.pathname
-                .replace(process.env.PUBLIC_URL, '')
+                .replace(import.meta.env.VITE_PUBLIC_URL, '')
                 .split('/')[1];
             return WS.getUserData(currentScreen, screenCode);
         };

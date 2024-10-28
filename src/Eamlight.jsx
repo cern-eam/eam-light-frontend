@@ -106,7 +106,7 @@ class Eamlight extends Component {
     return (
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={selectedTheme}>
-          <Router basename={process.env.PUBLIC_URL}>
+          <Router basename={import.meta.env.VITE_PUBLIC_URL}>
             <Switch>
               <Route path="/eqptree" component={EqpTree} />
 
