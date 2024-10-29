@@ -35,6 +35,8 @@ const EntityRegions = (props) => {
         [].concat(searchParams[ENTITY_REGION_PARAMS.VISIBLE]) : [];
 
     const expandedRegion = searchParams.expanded;
+    const hideEntityMenu = queryString.parse(window.location.search)['hideEntityMenu'] === 'true';
+    const hideMaximizeControls = queryString.parse(window.location.search)['hideMaximizeControls'] === 'true';
     
     React.useEffect(() => {
         regions.filter(region => getHiddenRegionState(region.id) === undefined)
@@ -100,7 +102,7 @@ const EntityRegions = (props) => {
     , [searchParams]);
 
     return (
-        <div id="entityContent">
+        <div id="entityContent" style={{height: hideEntityMenu ? "100%" : "calc(100% - 60px)"}}>
             <Grid container spacing={1}>
                 {Object.keys(columns).sort().map(column => (
                     <Grid key={column} item xs={gridDimensions.xs} sm={gridDimensions.sm} md={gridDimensions.md} lg={gridDimensions.lg}>
@@ -116,7 +118,7 @@ const EntityRegions = (props) => {
                                     isMaximized={region.id === regionMaximized}
                                     maximize={updateMaximize(region.id)}
                                     unMaximize={updateMaximize(undefined)}
-                                    showMaximizeControls={region.maximizable}
+                                    showMaximizeControls={!hideMaximizeControls && region.maximizable}
                                     initiallyExpanded={expandedRegion === undefined || expandedRegion === region.id}
                                     {...region.RegionPanelProps}>
                                     {region.render({ panelQueryParams: getRegionPanelQueryParams(region.id),  isMaximized: region.id === regionMaximized})}

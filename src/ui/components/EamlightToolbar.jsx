@@ -14,6 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import Toolbar from "./Toolbar";
 import Divider from "@mui/material/Divider";
 import { isMultiOrg } from "@/ui/pages/EntityTools";
+import queryString from "query-string"
 
 const verticalLineStyle = {
   height: 25,
@@ -24,6 +25,9 @@ const verticalLineStyle = {
 const SMALL_SCREEN_MODE_MAX_WIDTH = 375;
 
 class EamlightToolbar extends Component {
+
+  hideEntityMenu = queryString.parse(window.location.search)['hideEntityMenu'] === 'true';
+
   state = {
     open: false,
     compactMenu: false,
@@ -301,6 +305,10 @@ class EamlightToolbar extends Component {
       justifyContent: "center",
       flexWrap: "wrap",
     };
+
+    if (this.hideEntityMenu) {
+      return React.Fragment;   
+    }
 
     return (
       <div
