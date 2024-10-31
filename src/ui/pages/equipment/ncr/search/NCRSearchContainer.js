@@ -6,7 +6,7 @@ function mapStateToProps(state) {
   return {
     ncrScreen:
       state.application.userData.screens[
-        state.application.userData.assetScreen
+        state.application.userData.ncrScreen
       ],
   };
 }

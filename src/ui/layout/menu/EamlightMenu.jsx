@@ -24,12 +24,13 @@ import {
   AccountMultiple,
   Tune,
   DatabaseRefresh,
-  Cog,
+  Cog
 } from "mdi-material-ui";
 import ScreenChange from "./ScreenChange";
 import MenuTools from "./MenuTools";
 import RoomIcon from "@mui/icons-material/Room";
 import BuildIcon from "@mui/icons-material/Build";
+import Rule from '@mui/icons-material/Rule';
 import CERNMode from "../../components/CERNMode";
 import MenuLink from "./MenuLink";
 import MenuItemInputHistory from "./MenuItemInputHistory";
@@ -350,7 +351,7 @@ class EamlightMenu extends Component {
               {ncrScreen && (
                 <MenuItem
                   label="NCRs"
-                  icon={<AssetIcon style={menuIconStyle} />} // TODO: Add NCR icon
+                  icon={<Rule style={menuIconStyle} />} // TODO: Add NCR icon
                   onClick={this.openSubMenu.bind(this, "ncrs")}
                 />
               )}

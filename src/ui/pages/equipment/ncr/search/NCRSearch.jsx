@@ -5,7 +5,7 @@ import { EAMCellField } from "eam-components/dist/ui/components/grids/eam/utils"
 import SyncedQueryParamsEAMGridContext from "../../../../../tools/SyncedQueryParamsEAMGridContext";
 
 const cellRenderer = ({ column, value, row }) => {
-  if (column.id === "equipmentno") {
+  if (column.id === "nonconformity") {
     return (
       <Typography>
         <Link

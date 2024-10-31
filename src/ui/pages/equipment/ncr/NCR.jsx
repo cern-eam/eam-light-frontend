@@ -2,10 +2,8 @@ import Comments from "eam-components/dist/ui/components/comments/Comments";
 import React, { useState } from "react";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
-import WSEquipment from "../../../../tools/WSEquipment.js";
 import { ENTITY_TYPE } from "../../../components/Toolbar.jsx";
 import EamlightToolbarContainer from "../../../components/EamlightToolbarContainer.js";
-import AssetGeneral from "../asset/AssetGeneral";
 import EntityRegions from "../../../components/entityregions/EntityRegions.jsx";
 import { TAB_CODES } from "../../../components/entityregions/TabCodeMapping.js";
 import {
@@ -13,21 +11,23 @@ import {
   getTabInitialVisibility,
 } from "../../EntityTools.jsx";
 import useEntity from "@/hooks/useEntity";
+import { createNonConformity, deleteNonConformity, getNonConformity, updateNonConformity,  } from "../../../../tools/WSNCRs.js";
 import {
   isClosedEquipment,
-  assetLayoutPropertiesMap,
 } from "../EquipmentTools.js";
-import { AssetIcon } from "eam-components/dist/ui/components/icons";
+import Rule from '@mui/icons-material/Rule';
 import DescriptionIcon from "@mui/icons-material/Description";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import { handleError } from "@/actions/uiActions";
+import NCRGeneral from "./NCRGeneral.jsx";
+import { layoutPropertiesMap } from "./NCRTools.js";
 
 const NCR = () => {
   const [statuses, setStatuses] = useState([]);
 
   const {
-    screenLayout: assetLayout,
-    entity: equipment,
+    screenLayout: ncrLayout,
+    entity: ncr,
     loading,
     readOnly,
     isModified,
@@ -48,17 +48,17 @@ const NCR = () => {
     saveHandler,
     deleteHandler,
     copyHandler,
-    updateEntityProperty: updateEquipmentProperty,
+    updateEntityProperty: updateNCRProperty,
     register,
     showNotification,
     showWarning,
   } = useEntity({
     WS: {
-      create: WSEquipment.createEquipment,
-      read: WSEquipment.getEquipment,
-      update: WSEquipment.updateEquipment,
-      delete: WSEquipment.deleteEquipment,
-      new: WSEquipment.initEquipment.bind(null, "A"), // TODO: again we have extra arguments. What to do?
+      create: createNonConformity,
+      read: getNonConformity,
+      update: updateNonConformity,
+      delete: deleteNonConformity,
+      new: () => ({})
     },
     postActions: {
       read: postRead,
@@ -66,44 +66,31 @@ const NCR = () => {
     },
     isReadOnlyCustomHandler: isClosedEquipment,
     entityCode: "OBJ",
-    entityDesc: "Asset",
-    entityURL: "/asset/",
+    entityDesc: "NCR",
+    entityURL: "/ncr/",
     entityCodeProperty: "code",
-    screenProperty: "assetScreen",
-    layoutProperty: "assetLayout",
-    layoutPropertiesMap: assetLayoutPropertiesMap,
+    screenProperty: "ncrScreen",
+    layoutProperty: "ncrLayout",
+    layoutPropertiesMap: layoutPropertiesMap
   });
 
   function postInit() {
-    readStatuses(true);
-    setLayoutProperty("equipment", null);
+    setLayoutProperty("ncr", null);
   }
 
   function postRead(equipment) {
-    readStatuses(false, equipment.statusCode);
-    if (!showEqpTree) {
-      setLayoutProperty("equipment", equipment);
-    }
+    
+
   }
 
-  const readStatuses = (neweqp, statusCode) => {
-    WSEquipment.getEquipmentStatusValues(
-      userData.eamAccount.userGroup,
-      neweqp,
-      statusCode
-    )
-      .then((response) => setStatuses(response.body.data))
-      .catch(console.error);
-  };
-
   const getRegions = () => {
-    const tabs = assetLayout.tabs;
+    const tabs = ncrLayout.tabs;
 
     const commonProps = {
       equipment,
       newEntity,
-      assetLayout,
-      updateEquipmentProperty,
+      ncrLayout,
+      updateNCRProperty,
       register,
       userGroup: userData.eamAccount.userGroup,
       readOnly,
@@ -117,7 +104,7 @@ const NCR = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <AssetGeneral
+          <NCRGeneral
             showNotification={showNotification}
             {...commonProps}
             statuses={statuses}
@@ -140,9 +127,9 @@ const NCR = () => {
         render: () => (
           <Comments
             ref={(comments) => (commentsComponent.current = comments)}
-            entityCode="OBJ"
-            entityKeyCode={!newEntity ? equipment.code : undefined}
-            entityOrganization={equipment.organization}
+            entityCode="NOCF"
+            entityKeyCode={!newEntity ? ncr.code : undefined}
+            entityOrganization={ncr.organizationCode}
             handleError={handleError}
             userCode={userData.eamAccount.userCode}
             allowHtml={true}
@@ -161,7 +148,7 @@ const NCR = () => {
     ];
   };
 
-  if (!equipment) {
+  if (!ncr) {
     return React.Fragment;
   }
 
@@ -176,14 +163,14 @@ const NCR = () => {
         newEntity={newEntity}
         entityScreen={screenPermissions}
         entityName="NCR"
-        entityKeyCode={equipment.code}
-        organization={equipment.organization}
+        entityKeyCode={ncr.code}
+        organization={ncr.organizationCode}
         saveHandler={saveHandler}
         newHandler={newHandler}
         deleteHandler={deleteHandler}
         toolbarProps={{
           entityDesc: "NCR",
-          entity: equipment,
+          entity: ncr,
           // postInit: this.postInit.bind(this),
           // setLayout: this.setLayout.bind(this),
           newEntity,
@@ -196,7 +183,7 @@ const NCR = () => {
           workorderScreencode: userData.workOrderScreen,
         }}
         width={730}
-        entityIcon={<AssetIcon style={{ height: 18 }} />}
+        entityIcon={<Rule style={{ height: 18 }} />}
         toggleHiddenRegion={toggleHiddenRegion}
         getUniqueRegionID={getUniqueRegionID}
         regions={getRegions()}
