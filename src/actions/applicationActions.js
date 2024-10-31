@@ -1,7 +1,7 @@
 import WS from "../tools/WS";
 import queryString from "query-string"
 import { 
-        TAB_CODES, 
+        TAB_CODES_NCR,
         TAB_CODES_ASSETS, 
         TAB_CODES_LOCATIONS, 
         TAB_CODES_POSITIONS, 
@@ -126,6 +126,10 @@ export function updateAssetScreenLayout(screenCode) {
     return updateScreenLayout('OBJ', 'asset', 'OSOBJA', screenCode, TAB_CODES_ASSETS);
 }
 
+export function updateNCRScreenLayout(screenCode) {
+    return updateScreenLayout('OBJ', 'ncr', 'OSOBJN', screenCode, TAB_CODES_NCR);
+}
+
 export function updatePositionScreenLayout(screenCode) {
     return updateScreenLayout('OBJ', 'position', 'OSOBJP', screenCode, TAB_CODES_POSITIONS);
 }
@@ -157,6 +161,12 @@ function createPromiseArray(userdata) {
     if (userdata.assetScreen) {
         assetScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup, 'OBJ', 'OSOBJA',
             userdata.assetScreen, TAB_CODES_ASSETS);
+    }
+    //
+    let ncrScreenPromise = Promise.resolve(false);
+    if (userdata.ncrScreen) {
+        ncrScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup, 'OBJ', 'OSOBJN',
+            userdata.ncrScreen, TAB_CODES_NCR);
     }
     //
     let positionScreenPromise = Promise.resolve(false);
@@ -192,6 +202,7 @@ function createPromiseArray(userdata) {
 
     return [applicationDataPromise,
         assetScreenPromise,
+        ncrScreenPromise,
         positionScreenPromise,
         systemScreenPromise,
         partScreenPromise,

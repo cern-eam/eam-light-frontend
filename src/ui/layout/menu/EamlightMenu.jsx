@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import "../ApplicationLayout.css";
 import "./EamlightMenu.css";
@@ -149,6 +149,7 @@ class EamlightMenu extends Component {
       showError,
       updateWorkOrderScreenLayout,
       updateAssetScreenLayout,
+      updateNcrScreenLayout,
       updatePositionScreenLayout,
       updateSystemScreenLayout,
       updatePartScreenLayout,
@@ -157,6 +158,7 @@ class EamlightMenu extends Component {
     const {
       workOrderScreen,
       assetScreen,
+      ncrScreen,
       positionScreen,
       systemScreen,
       partScreen,
@@ -179,6 +181,11 @@ class EamlightMenu extends Component {
         screenName: "OSOBJA",
         updateScreenLayout: updateAssetScreenLayout,
         screen: assetScreen,
+      },
+      ncr: {
+        screenName: "OSOBJN",
+        updateScreenLayout: updateNcrScreenLayout,
+        screen: ncrScreen,
       },
       position: {
         screenName: "OSOBJP",
@@ -260,6 +267,7 @@ class EamlightMenu extends Component {
             {(assetScreen ||
               positionScreen ||
               systemScreen ||
+              ncrScreen ||
               locationScreen) && (
               <li>
                 <div rel="equipment" onClick={this.mainMenuClickHandler}>
@@ -329,13 +337,21 @@ class EamlightMenu extends Component {
             </EamlightSubmenu>
           )}
 
-          {(assetScreen || positionScreen || systemScreen) && (
+          {(assetScreen || positionScreen || systemScreen || ncrScreen) && (
             <EamlightSubmenu id="equipment" header={<span>EQUIPMENT</span>}>
               {assetScreen && (
                 <MenuItem
                   label="Assets"
                   icon={<AssetIcon style={menuIconStyle} />}
                   onClick={this.openSubMenu.bind(this, "assets")}
+                />
+              )}
+
+              {ncrScreen && (
+                <MenuItem
+                  label="NCRs"
+                  icon={<AssetIcon style={menuIconStyle} />} // TODO: Add NCR icon
+                  onClick={this.openSubMenu.bind(this, "ncrs")}
                 />
               )}
 
@@ -405,6 +421,32 @@ class EamlightMenu extends Component {
                   label={"Search " + screens[assetScreen].screenDesc}
                   icon={<SearchIcon style={menuIconStyle} />}
                   link="assetsearch"
+                />
+              )}
+
+              <MenuItem
+                label="Back to Equipment"
+                icon={<ArrowBackIcon style={menuIconStyle} />}
+                onClick={this.openSubMenu.bind(this, "equipment")}
+              />
+            </EamlightSubmenu>
+          )}
+
+          {ncrScreen && (
+            <EamlightSubmenu id="ncrs">
+              {this.creationAllowed(screens, ncrScreen) && (
+                <MenuItem
+                  label="New NCR"
+                  icon={<AddIcon style={menuIconStyle} />}
+                  link="ncr"
+                />
+              )}
+
+              {this.readAllowed(screens, ncrScreen) && (
+                <MenuItem
+                  label={"Search " + screens[ncrScreen].screenDesc}
+                  icon={<SearchIcon style={menuIconStyle} />}
+                  link="ncrsearch"
                 />
               )}
 
