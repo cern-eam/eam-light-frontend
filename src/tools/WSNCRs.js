@@ -16,4 +16,8 @@ export function deleteNonConformity(code, config = {}) {
     return WS._delete(`/ncrs/${code}`, config);
 }
 
+export function initNonConformity(config = {}) {
+    return WS._get(`/ncrs/init`, config);
+}
+
   

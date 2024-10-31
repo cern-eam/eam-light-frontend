@@ -23,8 +23,8 @@ export default defineConfig(({ mode }) => {
       host: "0.0.0.0",
       proxy: {
         "/apis": {
-          //target: "http://localhost:10880/",
-          target: "http://ammtools.cern.ch:10880/",
+          target: "http://localhost:10880/",
+          //target: "http://ammtools.cern.ch:10880/",
         },
       },
     },

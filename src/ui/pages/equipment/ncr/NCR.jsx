@@ -11,7 +11,7 @@ import {
   getTabInitialVisibility,
 } from "../../EntityTools.jsx";
 import useEntity from "@/hooks/useEntity";
-import { createNonConformity, deleteNonConformity, getNonConformity, updateNonConformity,  } from "../../../../tools/WSNCRs.js";
+import { createNonConformity, deleteNonConformity, getNonConformity, initNonConformity, updateNonConformity,  } from "../../../../tools/WSNCRs.js";
 import {
   isClosedEquipment,
 } from "../EquipmentTools.js";
@@ -58,7 +58,7 @@ const NCR = () => {
       read: getNonConformity,
       update: updateNonConformity,
       delete: deleteNonConformity,
-      new: () => ({})
+      new: initNonConformity
     },
     postActions: {
       read: postRead,
@@ -78,8 +78,8 @@ const NCR = () => {
     setLayoutProperty("ncr", null);
   }
 
-  function postRead(equipment) {
-    
+  function postRead(ncr) {
+    console.log('NCR read', ncr)
 
   }
 
