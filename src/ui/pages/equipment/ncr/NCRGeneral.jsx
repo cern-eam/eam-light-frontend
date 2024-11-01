@@ -16,10 +16,10 @@ const NCRGeneral = (props) => {
   } = props;
   return (
     <React.Fragment>
-
       <EAMTextField {...register("description", "description")} />
-
-
+      <EAMTextField {...register("equipment", "equipmentCode")} />
+      <EAMTextField {...register("status", "statusCode")} />
+      <EAMTextField {...register("department", "department")} />
     </React.Fragment>
   );
 };
