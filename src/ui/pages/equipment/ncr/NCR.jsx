@@ -11,16 +11,22 @@ import {
   getTabInitialVisibility,
 } from "../../EntityTools.jsx";
 import useEntity from "@/hooks/useEntity";
-import { createNonConformity, deleteNonConformity, getNonConformity, initNonConformity, updateNonConformity,  } from "../../../../tools/WSNCRs.js";
 import {
-  isClosedEquipment,
-} from "../EquipmentTools.js";
-import Rule from '@mui/icons-material/Rule';
+  createNonConformity,
+  deleteNonConformity,
+  getNonConformity,
+  initNonConformity,
+  updateNonConformity,
+} from "../../../../tools/WSNCRs.js";
+import { isClosedEquipment } from "../EquipmentTools.js";
+import Rule from "@mui/icons-material/Rule";
 import DescriptionIcon from "@mui/icons-material/Description";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import { handleError } from "@/actions/uiActions";
 import NCRGeneral from "./NCRGeneral.jsx";
 import { layoutPropertiesMap } from "./NCRTools.js";
+import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields.jsx";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 
 const NCR = () => {
   const [statuses, setStatuses] = useState([]);
@@ -58,7 +64,7 @@ const NCR = () => {
       read: getNonConformity,
       update: updateNonConformity,
       delete: deleteNonConformity,
-      new: initNonConformity
+      new: initNonConformity,
     },
     postActions: {
       read: postRead,
@@ -71,7 +77,7 @@ const NCR = () => {
     entityCodeProperty: "code",
     screenProperty: "ncrScreen",
     layoutProperty: "ncrLayout",
-    layoutPropertiesMap: layoutPropertiesMap
+    layoutPropertiesMap: layoutPropertiesMap,
   });
 
   function postInit() {
@@ -79,8 +85,7 @@ const NCR = () => {
   }
 
   function postRead(ncr) {
-    console.log('NCR read', ncr)
-
+    console.log("NCR read", ncr);
   }
 
   const getRegions = () => {
@@ -144,6 +149,20 @@ const NCR = () => {
         summaryIcon: DriveFileRenameOutlineIcon,
         ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS),
+      },
+      {
+        id: "USERDEFINEDFIELDS",
+        label: "User Defined Fields",
+        isVisibleWhenNewEntity: true,
+        maximizable: false,
+        render: () => (
+          <UserDefinedFields entityLayout={ncrLayout.fields} {...commonProps} />
+        ),
+        column: 2,
+        order: 10,
+        summaryIcon: AssignmentIndIcon,
+        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
       },
     ];
   };
