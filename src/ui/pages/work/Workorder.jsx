@@ -32,12 +32,7 @@ import TuneIcon from "@mui/icons-material/Tune";
 import { IconSlash } from "eam-components/dist/ui/components/icons/index";
 import { isCernMode } from "../../components/CERNMode";
 import { TAB_CODES } from "../../components/entityregions/TabCodeMapping";
-import {
-  getTabAvailability,
-  getTabInitialVisibility,
-  registerCustomField,
-  getTabGridRegions,
-} from "../EntityTools";
+import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions } from "../EntityTools";
 import WSParts from "../../../tools/WSParts";
 import WSWorkorders from "../../../tools/WSWorkorders";
 import useEntity from "@/hooks/useEntity";
@@ -68,10 +63,7 @@ const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
     return;
   }
-  const response = await WSWorkorder.getEquipmentStandardWOMaxStep(
-    eqCode,
-    swoCode
-  );
+  const response = await WSWorkorder.getEquipmentStandardWOMaxStep(eqCode, swoCode);
   return response.body.data;
 };
 
@@ -87,8 +79,7 @@ const Workorder = () => {
   const [expandChecklistsOptions, setExpandChecklistsOptions] = useState(false);
   const checklists = useRef(null);
   const dispatch = useDispatch();
-  const updateMyWorkOrdersConst = (...args) =>
-    dispatch(updateMyWorkOrders(...args));
+  const updateMyWorkOrdersConst = (...args) => dispatch(updateMyWorkOrders(...args));
   //
   //
   //
@@ -187,10 +178,7 @@ const Workorder = () => {
       return;
     }
 
-    Promise.all([
-      WSEquipment.getEquipment(equipmentCode),
-      WSWorkorders.getWOEquipLinearDetails(equipmentCode),
-    ])
+    Promise.all([WSEquipment.getEquipment(equipmentCode), WSWorkorders.getWOEquipLinearDetails(equipmentCode)])
       .then((response) => {
         const equipment = response[0].body.data;
         const linearDetails = response[1].body.data;
@@ -217,9 +205,7 @@ const Workorder = () => {
     if (standardWorkOrderCode) {
       WSWorkorder.getStandardWorkOrder(standardWorkOrderCode)
         .then((response) =>
-          setWorkOrder((oldWorkOrder) =>
-            assignStandardWorkOrderValues(oldWorkOrder, response.body.data)
-          )
+          setWorkOrder((oldWorkOrder) => assignStandardWorkOrderValues(oldWorkOrder, response.body.data))
         )
         .catch(console.error);
     }
@@ -267,8 +253,7 @@ const Workorder = () => {
         label: "Scheduling",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        customVisibility: () =>
-          isRegionAvailable("SCHEDULING", commonProps.workOrderLayout),
+        customVisibility: () => isRegionAvailable("SCHEDULING", commonProps.workOrderLayout),
         render: () => <WorkorderScheduling {...commonProps} />,
         column: 1,
         order: 2,
@@ -281,27 +266,20 @@ const Workorder = () => {
         label: "Closing Codes",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        customVisibility: () =>
-          isRegionAvailable("CLOSING_CODES", commonProps.workOrderLayout),
-        render: () => (
-          <WorkorderClosingCodes {...commonProps} equipment={equipment} />
-        ),
+        customVisibility: () => isRegionAvailable("CLOSING_CODES", commonProps.workOrderLayout),
+        render: () => <WorkorderClosingCodes {...commonProps} equipment={equipment} />,
         column: 1,
         order: 3,
         summaryIcon: SportsScoreIcon,
         ignore: !getTabAvailability(tabs, TAB_CODES.CLOSING_CODES),
-        initialVisibility: getTabInitialVisibility(
-          tabs,
-          TAB_CODES.CLOSING_CODES
-        ),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CLOSING_CODES),
       },
       {
         id: "PARTUSAGE",
         label: "Part Usage",
         isVisibleWhenNewEntity: false,
         maximizable: false,
-        customVisibility: () =>
-          isRegionAvailable("PAR", commonProps.workOrderLayout),
+        customVisibility: () => isRegionAvailable("PAR", commonProps.workOrderLayout),
         render: () => (
           <PartUsageContainer
             workorder={workorder}
@@ -321,8 +299,7 @@ const Workorder = () => {
         label: "Additional Costs",
         isVisibleWhenNewEntity: false,
         maximizable: false,
-        customVisibility: () =>
-          isRegionAvailable("ACO", commonProps.workOrderLayout),
+        customVisibility: () => isRegionAvailable("ACO", commonProps.workOrderLayout),
         render: () => (
           <AdditionalCostsContainer
             workorder={workorder}
@@ -335,18 +312,14 @@ const Workorder = () => {
         order: 4,
         summaryIcon: MonetizationOnRoundedIcon,
         ignore: !getTabAvailability(tabs, TAB_CODES.ADDITIONAL_COSTS),
-        initialVisibility: getTabInitialVisibility(
-          tabs,
-          TAB_CODES.ADDITIONAL_COSTS
-        ),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.ADDITIONAL_COSTS),
       },
       {
         id: "CHILDRENWOS",
         label: "Child Work Orders",
         isVisibleWhenNewEntity: false,
         maximizable: false,
-        customVisibility: () =>
-          isRegionAvailable("CWO", commonProps.workOrderLayout),
+        customVisibility: () => isRegionAvailable("CWO", commonProps.workOrderLayout),
         render: () => <WorkorderChildren workorder={workorder.number} />,
         column: 1,
         order: 4,
@@ -359,51 +332,30 @@ const Workorder = () => {
         label: "EDMS Documents",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => (
-          <EDMSDoclightIframeContainer
-            objectType="J"
-            objectID={workorder.number}
-          />
-        ),
+        render: () => <EDMSDoclightIframeContainer objectType="J" objectID={workorder.number} />,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
         column: 2,
         order: 5,
         summaryIcon: FunctionsRoundedIcon,
-        ignore:
-          !isCernMode ||
-          !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
-        initialVisibility: getTabInitialVisibility(
-          tabs,
-          TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS
-        ),
+        ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
       },
       {
         id: "NCRS",
         label: "NCRs",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => (
-          <NCRIframeContainer
-            objectType="J"
-            objectID={workorder.number}
-            mode="NCR"
-          />
-        ),
+        render: () => <NCRIframeContainer objectType="J" objectID={workorder.number} mode="NCR" />,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
         column: 2,
         order: 6,
         summaryIcon: BookmarkBorderRoundedIcon,
-        ignore:
-          !isCernMode &&
-          !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
-        initialVisibility: getTabInitialVisibility(
-          tabs,
-          TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS
-        ),
+        ignore: !isCernMode && !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
       },
       {
         id: "COMMENTS",
@@ -439,6 +391,7 @@ const Workorder = () => {
         render: () => (
           <Activities
             workorder={workorder.number}
+            version={workorder.updateCount}
             department={workorder.departmentCode}
             departmentDesc={workorder.departmentDesc}
             layout={tabs}
@@ -455,12 +408,9 @@ const Workorder = () => {
         column: 2,
         order: 8,
         summaryIcon: PendingActions,
-        ignore:
-          !getTabAvailability(tabs, TAB_CODES.ACTIVITIES) &&
-          !getTabAvailability(tabs, TAB_CODES.BOOK_LABOR),
+        ignore: !getTabAvailability(tabs, TAB_CODES.ACTIVITIES) && !getTabAvailability(tabs, TAB_CODES.BOOK_LABOR),
         initialVisibility:
-          getTabInitialVisibility(tabs, TAB_CODES.ACTIVITIES) ||
-          getTabInitialVisibility(tabs, TAB_CODES.BOOK_LABOR),
+          getTabInitialVisibility(tabs, TAB_CODES.ACTIVITIES) || getTabInitialVisibility(tabs, TAB_CODES.BOOK_LABOR),
       },
       {
         id: "CHECKLISTS",
@@ -470,11 +420,10 @@ const Workorder = () => {
         render: ({ panelQueryParams }) => (
           <Checklists
             workorder={workorder.number}
+            version={workorder.updateCount}
             eqpToOtherId={otherIdMapping}
             printingChecklistLinkToAIS={applicationData.EL_PRTCL}
-            maxExpandedChecklistItems={
-              Math.abs(parseInt(applicationData.EL_MCHLS)) || 50
-            }
+            maxExpandedChecklistItems={Math.abs(parseInt(applicationData.EL_MCHLS)) || 50}
             getWoLink={(wo) => "/workorder/" + wo}
             ref={checklists}
             showSuccess={showNotification}
@@ -482,9 +431,7 @@ const Workorder = () => {
             handleError={handleError}
             userCode={userData.eamAccount.userCode}
             disabled={readOnly}
-            hideFollowUpProp={isHidden(
-              commonProps.workOrderLayout.tabs.ACK.fields.createfollowupwo
-            )}
+            hideFollowUpProp={isHidden(commonProps.workOrderLayout.tabs.ACK.fields.createfollowupwo)}
             expandChecklistsOptions={expandChecklistsOptions}
             showFilledItems={
               panelQueryParams.CHECKLISTSshowFilledItems === "true" ||
@@ -506,11 +453,7 @@ const Workorder = () => {
             >
               <IconButton
                 onClick={() =>
-                  window.open(
-                    applicationData.EL_PRTCL + workorder.number,
-                    "_blank",
-                    "noopener noreferrer"
-                  )
+                  window.open(applicationData.EL_PRTCL + workorder.number, "_blank", "noopener noreferrer")
                 }
               >
                 <PrintIcon fontSize="small" />
@@ -522,9 +465,7 @@ const Workorder = () => {
                 }}
               >
                 <TuneIcon fontSize="small" />{" "}
-                {expandChecklistsOptions ? (
-                  <IconSlash backgroundColor="#fafafa" iconColor="#737373" />
-                ) : null}
+                {expandChecklistsOptions ? <IconSlash backgroundColor="#fafafa" iconColor="#737373" /> : null}
               </IconButton>
             </div>
           ),
@@ -572,10 +513,7 @@ const Workorder = () => {
         column: 2,
         order: 11,
         summaryIcon: ConstructionIcon,
-        ignore: !isRegionAvailable(
-          "CUSTOM_FIELDS_EQP",
-          commonProps.workOrderLayout
-        ),
+        ignore: !isRegionAvailable("CUSTOM_FIELDS_EQP", commonProps.workOrderLayout),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
       },
       {
@@ -595,68 +533,40 @@ const Workorder = () => {
         column: 2,
         order: 12,
         summaryIcon: HardwareIcon,
-        ignore: !isRegionAvailable(
-          "CUSTOM_FIELDS_PART",
-          commonProps.workOrderLayout
-        ),
-        initialVisibility: getTabInitialVisibility(
-          tabs,
-          TAB_CODES.PARTS_ASSOCIATED
-        ),
+        ignore: !isRegionAvailable("CUSTOM_FIELDS_PART", commonProps.workOrderLayout),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
       },
       {
         id: "METERREADINGS",
         label: "Meter Readings",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => (
-          <MeterReadingContainerWO
-            equipment={workorder.equipmentCode}
-            disabled={readOnly}
-          />
-        ),
+        render: () => <MeterReadingContainerWO equipment={workorder.equipmentCode} disabled={readOnly} />,
         column: 2,
         order: 12,
         summaryIcon: SpeedIcon,
         ignore: !getTabAvailability(tabs, TAB_CODES.METER_READINGS),
-        initialVisibility: getTabInitialVisibility(
-          tabs,
-          TAB_CODES.METER_READINGS
-        ),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.METER_READINGS),
       },
       {
         id: "MULTIPLEEQUIPMENT",
         label: "Equipment",
         isVisibleWhenNewEntity: false,
-        customVisibility: () =>
-          isRegionAvailable("MEC", commonProps.workOrderLayout),
+        customVisibility: () => isRegionAvailable("MEC", commonProps.workOrderLayout),
         maximizable: false,
-        render: () => (
-          <WorkorderMultiequipment
-            workorder={workorder.number}
-            setEquipmentMEC={setEquipmentMEC}
-          />
-        ),
+        render: () => <WorkorderMultiequipment workorder={workorder.number} setEquipmentMEC={setEquipmentMEC} />,
         column: 2,
         order: 13,
         summaryIcon: PrecisionManufacturingIcon,
         ignore: !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_TAB_WO_SCREEN),
-        initialVisibility: getTabInitialVisibility(
-          tabs,
-          TAB_CODES.EQUIPMENT_TAB_WO_SCREEN
-        ),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_TAB_WO_SCREEN),
       },
       {
         id: "USERDEFINEDFIELDS",
         label: "User Defined Fields",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        render: () => (
-          <UserDefinedFields
-            {...commonProps}
-            entityLayout={workOrderLayout.fields}
-          />
-        ),
+        render: () => <UserDefinedFields {...commonProps} entityLayout={workOrderLayout.fields} />,
         column: 2,
         order: 10,
         summaryIcon: AssignmentIndIcon,
@@ -673,31 +583,17 @@ const Workorder = () => {
     ];
   };
 
-  const getNextStep = (n) =>
-    n
-      ? (([integ, deci]) => +(integ + "." + (+(deci || 0) + 1)))(n.split("."))
-      : "";
+  const getNextStep = (n) => (n ? (([integ, deci]) => +(integ + "." + (+(deci || 0) + 1)))(n.split(".")) : "");
 
   const repeatStepHandler = async () => {
     setLoading(true);
     const fields = workOrderLayout.fields;
-    const {
-      customField,
-      number,
-      equipmentCode,
-      standardWO,
-      parentWO,
-      departmentCode,
-      locationCode,
-    } = workorder;
+    const { customField, number, equipmentCode, standardWO, parentWO, departmentCode, locationCode } = workorder;
     try {
       let value;
 
       try {
-        const maxSWO = await getEquipmentStandardWOMaxStep(
-          equipmentCode,
-          standardWO
-        );
+        const maxSWO = await getEquipmentStandardWOMaxStep(equipmentCode, standardWO);
         value = getNextStep(maxSWO.step);
       } catch (err) {
         value = "";
@@ -744,18 +640,11 @@ const Workorder = () => {
     isCernMode &&
       updateWorkorderProperty(
         "statusCode",
-        fields.workorderstatus.defaultValue
-          ? fields.workorderstatus.defaultValue
-          : "R"
+        fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R"
       );
     isCernMode && updateWorkorderProperty("systemStatusCode", "R");
     isCernMode &&
-      updateWorkorderProperty(
-        "typeCode",
-        fields.workordertype.defaultValue
-          ? fields.workordertype.defaultValue
-          : "CD"
-      );
+      updateWorkorderProperty("typeCode", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD");
     isCernMode && updateWorkorderProperty("completedDate", "");
   }
 
@@ -763,12 +652,7 @@ const Workorder = () => {
   // DROP DOWN VALUES
   //
   const readStatuses = (status, type, newwo) => {
-    WSWorkorder.getWorkOrderStatusValues(
-      userData.eamAccount.userGroup,
-      status,
-      type,
-      newwo
-    )
+    WSWorkorder.getWorkOrderStatusValues(userData.eamAccount.userGroup, status, type, newwo)
       .then((response) => setStatuses(response.body.data))
       .catch(console.error);
   };
@@ -807,11 +691,7 @@ const Workorder = () => {
 
   return (
     <div className="entityContainer">
-      <BlockUi
-        tag="div"
-        blocking={loading}
-        style={{ height: "100%", width: "100%" }}
-      >
+      <BlockUi tag="div" blocking={loading} style={{ height: "100%", width: "100%" }}>
         <EamlightToolbarContainer
           isModified={isModified}
           newEntity={newEntity}
