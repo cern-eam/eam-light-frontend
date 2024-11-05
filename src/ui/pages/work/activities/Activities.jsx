@@ -17,12 +17,12 @@ function Activities(props) {
     let [isBookLaborModalOpen, setIsBookLaborModalOpen] = useState(false);
     let [loading, setLoading] = useState(false);
 
-    let {workorder, layout, disabled, handleError} = props;
+    let {workorder, layout, disabled, handleError, updateCount} = props;
 
     useEffect(() => {
         readActivities(workorder);
         readBookLabours(workorder);
-    }, [workorder])
+    }, [workorder, updateCount])
 
     /**
      * Load all activities
@@ -84,12 +84,12 @@ function Activities(props) {
             })}
 
             <Stack direction="row" spacing={2} style={{marginTop: 15}}>
-                <Button onClick={() => setIsActivityModalOpen(true)} color="primary" 
+                <Button onClick={() => setIsActivityModalOpen(true)} color="primary"
                         disabled={disabled || !layout.ACT.insertAllowed} variant="outlined">
                     Add activity
                 </Button>
 
-                <Button onClick={() => setIsBookLaborModalOpen(true)} color="primary" 
+                <Button onClick={() => setIsBookLaborModalOpen(true)} color="primary"
                         disabled={disabled || !layout.BOO.insertAllowed} variant="outlined">
                     Book Labor
                 </Button>
