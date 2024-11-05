@@ -17,14 +17,15 @@ export default defineConfig(({ mode }) => {
       alias: {
         "@": "/src",
       },
+      preserveSymlinks: true,
     },
     server: {
       port: 3000,
       host: "0.0.0.0",
       proxy: {
         "/apis": {
-          target: "http://localhost:10880/",
-          //target: "http://ammtools.cern.ch:10880/",
+          // target: "http://localhost:10880/",
+          target: "http://ammtools.cern.ch:10880/",
         },
       },
     },
@@ -37,7 +38,7 @@ export default defineConfig(({ mode }) => {
       "process.env.PUBLIC_URL": JSON.stringify(env.VITE_PUBLIC_URL),
       "process.env.REACT_APP_CERN_MODE": JSON.stringify(env.VITE_CERN_MODE),
       "process.env.REACT_APP_BACKEND": JSON.stringify(env.VITE_BACKEND),
-      "process.env.NODE_ENV": JSON.stringify(env.NODE_ENV)
+      "process.env.NODE_ENV": JSON.stringify(env.NODE_ENV),
     },
   };
 });
