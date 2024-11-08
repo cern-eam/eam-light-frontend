@@ -184,7 +184,7 @@ class EamlightMenu extends Component {
         screen: assetScreen,
       },
       ncr: {
-        screenName: "OSOBJN",
+        screenName: "OSNCHD",
         updateScreenLayout: updateNcrScreenLayout,
         screen: ncrScreen,
       },

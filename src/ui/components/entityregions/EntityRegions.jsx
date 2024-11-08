@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid';
 import { useHistory, useLocation } from 'react-router-dom';
 import queryString from "query-string"
 import { styled } from '@mui/material/styles';
+import { createPortal } from 'react-dom';
 
 const ENTITY_REGION_PARAMS = {
     MAXIMIZE: 'maximize',
@@ -37,6 +38,7 @@ const EntityRegions = (props) => {
     const expandedRegion = searchParams.expanded;
     const hideEntityMenu = queryString.parse(window.location.search)['hideEntityMenu'] === 'true';
     const hideMaximizeControls = queryString.parse(window.location.search)['hideMaximizeControls'] === 'true';
+    const portal = queryString.parse(window.location.search)['portal'];
     
     React.useEffect(() => {
         regions.filter(region => getHiddenRegionState(region.id) === undefined)
@@ -101,6 +103,11 @@ const EntityRegions = (props) => {
         }), {})
     , [searchParams]);
 
+    const matchingRegion = regions.find(region => region.id === portal);
+    if (matchingRegion) {
+        document.getElementById("root").style.display = "none";
+    }
+
     return (
         <div id="entityContent" style={{height: hideEntityMenu ? "100%" : "calc(100% - 60px)"}}>
             <Grid container spacing={1}>
@@ -128,6 +135,21 @@ const EntityRegions = (props) => {
                     </Grid>
                 ))}
             </Grid>
+
+            {matchingRegion &&
+                createPortal(
+                    <RegionPanel
+                    key={matchingRegion.id}
+                    heading={matchingRegion.label.toUpperCase()}
+                    summaryIcon={matchingRegion.summaryIcon && styleSummaryIcon(matchingRegion.summaryIcon)}
+                    initiallyExpanded={true}
+                    {...matchingRegion.RegionPanelProps}>
+                    {matchingRegion.render({ panelQueryParams: getRegionPanelQueryParams(matchingRegion.id)})}
+                    </RegionPanel>,
+                    document.getElementById("portal")
+                )
+            }
+
         </div>
     )
 }

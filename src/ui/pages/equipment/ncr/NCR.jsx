@@ -22,11 +22,13 @@ import { isClosedEquipment } from "../EquipmentTools.js";
 import Rule from "@mui/icons-material/Rule";
 import DescriptionIcon from "@mui/icons-material/Description";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
 import { handleError } from "@/actions/uiActions";
 import NCRGeneral from "./NCRGeneral.jsx";
 import { layoutPropertiesMap } from "./NCRTools.js";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields.jsx";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import EDMSDoclightIframeContainer from "@/ui/components/iframes/EDMSDoclightIframeContainer";
 
 const NCR = () => {
   const [statuses, setStatuses] = useState([]);
@@ -84,8 +86,8 @@ const NCR = () => {
     setLayoutProperty("ncr", null);
   }
 
-  function postRead(ncr) {
-    console.log("NCR read", ncr);
+  function postRead() {
+    
   }
 
   const getRegions = () => {
@@ -123,6 +125,25 @@ const NCR = () => {
         summaryIcon: DescriptionIcon,
         ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+      },
+      {
+        id: "EDMSDOCUMENTS",
+        label: "EDMS Documents",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => (
+          <EDMSDoclightIframeContainer
+            objectType="NOCF"
+            objectID={ncr.code}
+          />
+        ),
+        RegionPanelProps: {
+          detailsStyle: { padding: 0 },
+        },
+        column: 2,
+        order: 5,
+        summaryIcon: FunctionsRoundedIcon,
+        initialVisibility: true
       },
       {
         id: "COMMENTS",
