@@ -36,9 +36,7 @@ const EntityRegions = (props) => {
         [].concat(searchParams[ENTITY_REGION_PARAMS.VISIBLE]) : [];
 
     const expandedRegion = searchParams.expanded;
-    const hideEntityMenu = queryString.parse(window.location.search)['hideEntityMenu'] === 'true';
-    const hideMaximizeControls = queryString.parse(window.location.search)['hideMaximizeControls'] === 'true';
-    const portal = queryString.parse(window.location.search)['portal'];
+    const regionOnly = queryString.parse(window.location.search)['regionOnly'];
     
     React.useEffect(() => {
         regions.filter(region => getHiddenRegionState(region.id) === undefined)
@@ -103,19 +101,16 @@ const EntityRegions = (props) => {
         }), {})
     , [searchParams]);
 
-    const matchingRegion = regions.find(region => region.id === portal);
-    if (matchingRegion) {
-        document.getElementById("root").style.display = "none";
-    }
+    const matchingRegion = regions.find(region => region.id === regionOnly);
 
     return (
-        <div id="entityContent" style={{height: hideEntityMenu ? "100%" : "calc(100% - 60px)"}}>
+        <div id="entityContent" style={{height: "calc(100% - 60px)"}}>
             <Grid container spacing={1}>
                 {Object.keys(columns).sort().map(column => (
                     <Grid key={column} item xs={gridDimensions.xs} sm={gridDimensions.sm} md={gridDimensions.md} lg={gridDimensions.lg}>
                         {columns[column]
                             .sort((a,b) => a.id === regionMaximized ? -1 : a.order - b.order)
-                            .filter(region => visibleRegions[region.id])
+                            .filter(region => visibleRegions[region.id] && regionOnly !== region.id)
                             .map(region => (
                                 <RegionPanel
                                     style={{ display: regionMaximized && region.id !== regionMaximized ? 'none' : '' }}
@@ -125,7 +120,7 @@ const EntityRegions = (props) => {
                                     isMaximized={region.id === regionMaximized}
                                     maximize={updateMaximize(region.id)}
                                     unMaximize={updateMaximize(undefined)}
-                                    showMaximizeControls={!hideMaximizeControls && region.maximizable}
+                                    showMaximizeControls={region.maximizable}
                                     initiallyExpanded={expandedRegion === undefined || expandedRegion === region.id}
                                     {...region.RegionPanelProps}>
                                     {region.render({ panelQueryParams: getRegionPanelQueryParams(region.id),  isMaximized: region.id === regionMaximized})}
@@ -146,7 +141,7 @@ const EntityRegions = (props) => {
                     {...matchingRegion.RegionPanelProps}>
                     {matchingRegion.render({ panelQueryParams: getRegionPanelQueryParams(matchingRegion.id)})}
                     </RegionPanel>,
-                    document.getElementById("portal")
+                    document.getElementById("portalContent")
                 )
             }
 
