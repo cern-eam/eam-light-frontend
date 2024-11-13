@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import ResizableIframe from "./ResizableIframe";
 import { withCernMode } from '../CERNMode'
 
 const functionToEAMLightPageMapping = {
     'OSOBJA': '/asset',
+    'OSOBJN': '/ncr',
     'OSOBJS': '/system',
     'OSOBJP': '/position',
     'OSOBJL': '/location'

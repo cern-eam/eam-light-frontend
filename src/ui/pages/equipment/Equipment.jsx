@@ -1,10 +1,10 @@
-import * as React from "react";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import EquipmentTree from "./components/tree/EquipmentTree";
 import Position from "./position/Position";
 import Asset from "./asset/Asset";
+import NCR from "./ncr/NCR";
 import System from "./system/System";
 import Split from "react-split";
 import Location from "./location/Location";
@@ -12,7 +12,7 @@ import Workorder from "../work/Workorder";
 import { setLayoutProperty } from "@/actions/uiActions";
 import InstallEqpContainer from "./installeqp/InstallEqpContainer";
 
-const Equipment = (props) => {
+const Equipment = () => {
   const showEqpTree = useSelector((state) => state.ui.layout.showEqpTree);
   const equipment = useSelector((state) => state.ui.layout.equipment);
   const renderEqpTree = equipment && showEqpTree;
@@ -47,15 +47,11 @@ const Equipment = (props) => {
         >
           <Switch>
             <Route path={"/asset/:code(.+)?"} component={Asset} />
-
+            <Route path={"/ncr/:code(.+)?"} component={NCR} />
             <Route path={"/position/:code(.+)?"} component={Position} />
-
             <Route path={"/system/:code(.+)?"} component={System} />
-
             <Route path={"/location/:code(.+)?"} component={Location} />
-
             <Route path="/workorder/:code(.+)?" component={Workorder} />
-
             <Route path="/installeqp" component={InstallEqpContainer} />
           </Switch>
         </div>

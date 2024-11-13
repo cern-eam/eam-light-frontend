@@ -2,6 +2,7 @@ import Checklists from "eam-components/dist/ui/components/checklists/Checklists"
 import Comments from "eam-components/dist/ui/components/comments/Comments";
 import { useHistory } from "react-router-dom";
 import React, { useEffect, useState, useRef } from "react";
+import { createPortal } from 'react-dom';
 import BlockUi from "react-block-ui";
 import WSEquipment from "../../../tools/WSEquipment";
 import WSWorkorder from "../../../tools/WSWorkorders";
@@ -409,7 +410,7 @@ const Workorder = () => {
         id: "COMMENTS",
         label: "Comments",
         isVisibleWhenNewEntity: true,
-        maximizable: false,
+        maximizable: true,
         render: () => (
           <Comments
             ref={(comments) => (commentsComponent.current = comments)}

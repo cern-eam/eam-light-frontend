@@ -143,6 +143,10 @@ export default withStyles(styles)(function ApplicationLayout(props) {
       />
     );
 
+    if (queryString.parse(window.location.search)['regionOnly']) {
+      document.getElementById("root").style.display = "none";
+    }
+
   return (
     <div
       id="maindiv"

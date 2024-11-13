@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import "../ApplicationLayout.css";
 import "./EamlightMenu.css";
@@ -24,12 +24,13 @@ import {
   AccountMultiple,
   Tune,
   DatabaseRefresh,
-  Cog,
+  Cog
 } from "mdi-material-ui";
 import ScreenChange from "./ScreenChange";
 import MenuTools from "./MenuTools";
 import RoomIcon from "@mui/icons-material/Room";
 import BuildIcon from "@mui/icons-material/Build";
+import Rule from '@mui/icons-material/Rule';
 import CERNMode from "../../components/CERNMode";
 import MenuLink from "./MenuLink";
 import MenuItemInputHistory from "./MenuItemInputHistory";
@@ -149,6 +150,7 @@ class EamlightMenu extends Component {
       showError,
       updateWorkOrderScreenLayout,
       updateAssetScreenLayout,
+      updateNcrScreenLayout,
       updatePositionScreenLayout,
       updateSystemScreenLayout,
       updatePartScreenLayout,
@@ -157,6 +159,7 @@ class EamlightMenu extends Component {
     const {
       workOrderScreen,
       assetScreen,
+      ncrScreen,
       positionScreen,
       systemScreen,
       partScreen,
@@ -179,6 +182,11 @@ class EamlightMenu extends Component {
         screenName: "OSOBJA",
         updateScreenLayout: updateAssetScreenLayout,
         screen: assetScreen,
+      },
+      ncr: {
+        screenName: "OSNCHD",
+        updateScreenLayout: updateNcrScreenLayout,
+        screen: ncrScreen,
       },
       position: {
         screenName: "OSOBJP",
@@ -260,6 +268,7 @@ class EamlightMenu extends Component {
             {(assetScreen ||
               positionScreen ||
               systemScreen ||
+              ncrScreen ||
               locationScreen) && (
               <li>
                 <div rel="equipment" onClick={this.mainMenuClickHandler}>
@@ -329,13 +338,21 @@ class EamlightMenu extends Component {
             </EamlightSubmenu>
           )}
 
-          {(assetScreen || positionScreen || systemScreen) && (
+          {(assetScreen || positionScreen || systemScreen || ncrScreen) && (
             <EamlightSubmenu id="equipment" header={<span>EQUIPMENT</span>}>
               {assetScreen && (
                 <MenuItem
                   label="Assets"
                   icon={<AssetIcon style={menuIconStyle} />}
                   onClick={this.openSubMenu.bind(this, "assets")}
+                />
+              )}
+
+              {(eamAccount.userGroup === 'R5CERN') && ncrScreen && ( // Limit temporairly to R5CERN
+                <MenuItem
+                  label="NCRs"
+                  icon={<Rule style={menuIconStyle} />} // TODO: Add NCR icon
+                  onClick={this.openSubMenu.bind(this, "ncrs")}
                 />
               )}
 
@@ -405,6 +422,32 @@ class EamlightMenu extends Component {
                   label={"Search " + screens[assetScreen].screenDesc}
                   icon={<SearchIcon style={menuIconStyle} />}
                   link="assetsearch"
+                />
+              )}
+
+              <MenuItem
+                label="Back to Equipment"
+                icon={<ArrowBackIcon style={menuIconStyle} />}
+                onClick={this.openSubMenu.bind(this, "equipment")}
+              />
+            </EamlightSubmenu>
+          )}
+
+          {ncrScreen && (
+            <EamlightSubmenu id="ncrs">
+              {this.creationAllowed(screens, ncrScreen) && (
+                <MenuItem
+                  label="New NCR"
+                  icon={<AddIcon style={menuIconStyle} />}
+                  link="ncr"
+                />
+              )}
+
+              {this.readAllowed(screens, ncrScreen) && (
+                <MenuItem
+                  label={"Search " + screens[ncrScreen].screenDesc}
+                  icon={<SearchIcon style={menuIconStyle} />}
+                  link="ncrsearch"
                 />
               )}
 

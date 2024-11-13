@@ -2,13 +2,14 @@ import "./Eamlight.css";
 import "react-grid-layout/css/styles.css";
 // import "react-resizable/css/styles.css";
 
-import React, { Component } from "react";
+import { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ApplicationLayoutContainer from "./ui/layout/ApplicationLayoutContainer";
 import EamlightMenuContainer from "./ui/layout/menu/EamlightMenuContainer";
 import WorkorderSearchContainer from "./ui/pages/work/search/WorkorderSearchContainer";
 import PartSearchContainer from "./ui/pages/part/search/PartSearchContainer";
 import AssetSearchContainer from "./ui/pages/equipment/asset/search/AssetSearchContainer";
+import NCRSearchContainer from "./ui/pages/equipment/ncr/search/NCRSearchContainer";
 import PositionSearchContainer from "./ui/pages/equipment/position/search/PositionSearchContainer";
 import SystemSearchContainer from "./ui/pages/equipment/system/search/SystemSearchContainer";
 import LocationSearchContainer from "./ui/pages/equipment/location/search/LocationSearchContainer";
@@ -89,6 +90,7 @@ class Eamlight extends Component {
 
     const eqpRegex = [
       "/asset",
+      "/ncr",
       "/position",
       "/system",
       "/location",
@@ -125,6 +127,8 @@ class Eamlight extends Component {
                   <Route path="/partsearch" component={PartSearchContainer} />
 
                   <Route path="/assetsearch" component={AssetSearchContainer} />
+
+                  <Route path="/ncrsearch" component={NCRSearchContainer} />
 
                   <Route
                     path="/positionsearch"

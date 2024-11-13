@@ -2,6 +2,7 @@ import {connect} from 'react-redux'
 import EamlightMenu from './EamlightMenu'
 import {
     updateAssetScreenLayout,
+    updateNCRScreenLayout,
     updatePartScreenLayout,
     updatePositionScreenLayout,
     updateSystemScreenLayout,
@@ -25,6 +26,7 @@ const mapStateToProps = (state) => {
 const EamlightMenuContainer = connect(mapStateToProps, {
     updateWorkOrderScreenLayout,
     updateAssetScreenLayout,
+    updateNCRScreenLayout,
     updatePositionScreenLayout,
     updateSystemScreenLayout,
     updatePartScreenLayout,

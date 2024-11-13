@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import BlockUi from 'react-block-ui';
 import InfoPage from "../../components/infopage/InfoPage";
 import WSEquipment from "../../../tools/WSEquipment";
@@ -42,6 +42,9 @@ function EquipmentRedirect(props) {
                 switch (equipmentType) {
                     case 'A':
                         props.history.replace(`/asset/${code}`);
+                        break;
+                    case "N":
+                        props.history.replace(`/ncr/${code}`);
                         break;
                     case 'P':
                         props.history.replace(`/position/${code}`);
