@@ -2,7 +2,11 @@
   "name": "eamlight",
   "private": true,
   "sideEffects": false,
+<<<<<<< HEAD
     "version": "3.19.2",
+=======
+  "version": "3.19.2",
+>>>>>>> c0006ca380fd4761585fc52cf1524902628c4b99
   "type": "module",
   "scripts": {
     "dev": "vite",
