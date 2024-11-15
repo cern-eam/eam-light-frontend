@@ -1,6 +1,12 @@
 # Version (2024-11-15)
 
 ## Features
+### 3.19.4 
+* Remove snapshot version ([853c4b](https://github.com/cern-eam/eam-light-backend/commit/853c4b8530931fc9d0a07496cbcb0d1f839b780c))
+### 3.19.3 
+* Squashed commit of the following: ([12d2a8](https://github.com/cern-eam/eam-light-frontend/commit/12d2a8111316307b01d29c05e7a70652dad21eeb))
+* Add ammtools backend to vite.config ([ebeaf3](https://github.com/cern-eam/eam-light-frontend/commit/ebeaf33f33bafd86d30f5a83654c0355d07ed614))
+* Fix package.json ([05c013](https://github.com/cern-eam/eam-light-frontend/commit/05c013ada8eecbc76e0397068091e06363722865))
 ### 3.19.2 
 * [EAM-3381 | EAM-3382] Hazard tab and icon (#211) ([8b2569](https://github.com/cern-eam/eam-light-frontend/commit/8b25692b2f8b4b71d245b2cdb917d711413b90f8))
 * Migrate CRA to Vite ([60f46f](https://github.com/cern-eam/eam-light-frontend/commit/60f46f8b0670d3c038b2ec3a4553b0801108cc47))
@@ -997,8 +1003,4 @@
 * Refactoring linked to the removal of some legacy classes (SimpleGridinput, GridUtils, ...) ([a2a706](https://github.com/cern-eam/eam-light-backend/commit/a2a7068b63483846b1cd55eac55f89288298e1e4))
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
-###  
-* Squashed commit of the following: ([12d2a8](https://github.com/cern-eam/eam-light-frontend/commit/12d2a8111316307b01d29c05e7a70652dad21eeb))
-* Add ammtools backend to vite.config ([ebeaf3](https://github.com/cern-eam/eam-light-frontend/commit/ebeaf33f33bafd86d30f5a83654c0355d07ed614))
-* Fix package.json ([05c013](https://github.com/cern-eam/eam-light-frontend/commit/05c013ada8eecbc76e0397068091e06363722865))
 
