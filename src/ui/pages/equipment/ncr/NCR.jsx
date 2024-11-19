@@ -23,7 +23,7 @@ import { isRegionAvailable, layoutPropertiesMap } from "./NCRTools.js";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields.jsx";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import EDMSDoclightIframeContainer from "@/ui/components/iframes/EDMSDoclightIframeContainer";
-import Observations from "./observations/Observations.jsx";
+import ObservationsContainer from "./observations/ObservationsContainer";
 
 const NCR = () => {
     const [statuses, setStatuses] = useState([]);
@@ -203,9 +203,9 @@ const NCR = () => {
                         commonProps.ncrLayout
                     ),
                 render: () => (
-                    <Observations
+                    <ObservationsContainer
                         ncr={ncr}
-                        tabLayout={ncrLayout.fields}
+                        tabLayout={tabs[TAB_CODES.OBSERVATIONS]}
                         disabled={readOnly}
                     />
                 ),
