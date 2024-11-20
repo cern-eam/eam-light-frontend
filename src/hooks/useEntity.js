@@ -37,6 +37,7 @@ import {
 } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { get } from "lodash";
 import useFieldsValidator from "eam-components/dist/ui/components/inputs-ng/hooks/useFieldsValidator";
+import useLayoutStore from "../actions/layoutStore";
 
 const useEntity = (params) => {
   const {
@@ -83,13 +84,17 @@ const useEntity = (params) => {
   const setRegionVisibilityConst = (...args) =>
     dispatch(setRegionVisibility(...args));
 
+  const { screenLayout: screenLayoutStore } = useLayoutStore(); 
+  
   // Fetch data from the redux store
   const screenCode = useSelector(
     (state) => state.application.userData[screenProperty]
   );
+
   const screenLayout = useSelector(
     (state) => state.application[layoutProperty]
-  );
+  ) || screenLayoutStore[screenCode]; //TODO to be replaced once all screen layout is in the Zustand store 
+  
   const screenPermissions = useSelector(
     (state) => state.application.userData.screens[screenCode]
   );

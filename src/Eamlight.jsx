@@ -57,7 +57,7 @@ const Eamlight = ({ inforContext, userData, applicationData, initializeApplicati
 
   useEffect(() => {
     if (userData) {
-      fetchScreenLayout(userData.eamAccount.userGroup);
+      fetchScreenLayout(userData);
     }
   }, [userData]);
 

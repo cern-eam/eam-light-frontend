@@ -28,10 +28,9 @@ import useLayoutStore from "../../../../actions/layoutStore.js";
 
 const NCR = () => {
     const [statuses, setStatuses] = useState([]);
-    const { screenLayout } = useLayoutStore(); 
+    const { screenLayout: {OSNCHD: ncrLayout} } = useLayoutStore(); 
 
     const {
-        screenLayout: ncrLayout,
         entity: ncr,
         loading,
         readOnly,
@@ -84,7 +83,7 @@ const NCR = () => {
     }
 
     function postRead() {
-      console.log('layout', screenLayout)
+      
     }
 
     const getRegions = () => {

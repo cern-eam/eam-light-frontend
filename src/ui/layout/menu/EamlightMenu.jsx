@@ -150,7 +150,6 @@ class EamlightMenu extends Component {
       showError,
       updateWorkOrderScreenLayout,
       updateAssetScreenLayout,
-      updateNcrScreenLayout,
       updatePositionScreenLayout,
       updateSystemScreenLayout,
       updatePartScreenLayout,
@@ -185,7 +184,6 @@ class EamlightMenu extends Component {
       },
       ncr: {
         screenName: "OSNCHD",
-        updateScreenLayout: updateNcrScreenLayout,
         screen: ncrScreen,
       },
       position: {
