@@ -35,6 +35,7 @@ import CERNMode from "../../components/CERNMode";
 import MenuLink from "./MenuLink";
 import MenuItemInputHistory from "./MenuItemInputHistory";
 import EISPanel from "@/ui/components/panel/Panel";
+import useLayoutStore from "../../../actions/layoutStore";
 
 export const menuIconStyle = {
   display: "inline-block",
@@ -93,6 +94,7 @@ class EamlightMenu extends Component {
     super(props);
     this.mainMenuClickHandler = this.mainMenuClickHandler.bind(this);
     this.openSubMenu = this.openSubMenu.bind(this);
+    this.fetchNewScreenLayout = useLayoutStore.getState().fetchNewScreenLayout;
   }
 
   mainMenuClickHandler(event) {
@@ -148,12 +150,10 @@ class EamlightMenu extends Component {
       applicationData,
       showNotification,
       showError,
-      updateWorkOrderScreenLayout,
       updateAssetScreenLayout,
       updatePositionScreenLayout,
       updateSystemScreenLayout,
       updatePartScreenLayout,
-      updateLocationScreenLayout,
     } = this.props;
     const {
       workOrderScreen,
@@ -174,7 +174,7 @@ class EamlightMenu extends Component {
     const screenProps = {
       workOrder: {
         screenName: "WSJOBS",
-        updateScreenLayout: updateWorkOrderScreenLayout,
+        updateScreenLayout: this.fetchNewScreenLayout,
         screen: workOrderScreen,
       },
       asset: {
@@ -198,7 +198,7 @@ class EamlightMenu extends Component {
       },
       location: {
         screenName: "OSOBJL",
-        updateScreenLayout: updateLocationScreenLayout,
+        //updateScreenLayout: updateLocationScreenLayout,
         screen: locationScreen,
       },
       part: {

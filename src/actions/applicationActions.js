@@ -3,10 +3,8 @@ import queryString from "query-string"
 import { 
         TAB_CODES,
         TAB_CODES_ASSETS, 
-        TAB_CODES_LOCATIONS, 
         TAB_CODES_POSITIONS, 
         TAB_CODES_SYSTEMS, 
-        TAB_CODES_WORK_ORDERS, 
         TAB_CODES_PARTS 
     } from "../ui/components/entityregions/TabCodeMapping"
 export const UPDATE_APPLICATION = 'UPDATE_APPLICATION';
@@ -69,9 +67,7 @@ export function getUserInfo() {
                             assetLayout: values[1] ? values[1].body.data : null,
                             positionLayout: values[2] ? values[2].body.data : null,
                             systemLayout: values[3] ? values[3].body.data : null,
-                            partLayout: values[4] ? values[4].body.data : null,
-                            workOrderLayout: values[5] ? values[5].body.data : null,
-                            locationLayout: values[6] ? values[6].body.data : null
+                            partLayout: values[4] ? values[4].body.data : null
                         })
                     );
                 })
@@ -118,10 +114,6 @@ export function updateScreenLayout(entity, entityDesc, systemFunction, userFunct
     }
 }
 
-export function updateWorkOrderScreenLayout(screenCode) {
-    return updateScreenLayout('EVNT', 'workOrder', 'WSJOBS', screenCode, TAB_CODES_WORK_ORDERS)
-}
-
 export function updateAssetScreenLayout(screenCode) {
     return updateScreenLayout('OBJ', 'asset', 'OSOBJA', screenCode, TAB_CODES_ASSETS);
 }
@@ -136,10 +128,6 @@ export function updateSystemScreenLayout(screenCode) {
 
 export function updatePartScreenLayout(screenCode) {
     return updateScreenLayout('PART', 'part', 'SSPART', screenCode, TAB_CODES_PARTS);
-}
-
-export function updateLocationScreenLayout(screenCode) {
-    return updateScreenLayout('OBJ', 'location', 'OSOBJL', screenCode, TAB_CODES_LOCATIONS)
 }
 
 
@@ -176,27 +164,12 @@ function createPromiseArray(userdata) {
         partScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup,'PART', "SSPART",
             userdata.partScreen, TAB_CODES_PARTS)
     }
-    //
-    let woScreenPromise = Promise.resolve(false);
-    if (userdata.workOrderScreen) {
-        woScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup,'EVNT', "WSJOBS",
-            userdata.workOrderScreen, TAB_CODES_WORK_ORDERS)
-    }
-
-     //
-     let locationScreenPromise = Promise.resolve(false);
-     if (userdata.locationScreen) {
-        locationScreenPromise = WS.getScreenLayout(userdata.eamAccount.userGroup,'LOC', "OSOBJL",
-             userdata.locationScreen, TAB_CODES_LOCATIONS)
-     }
 
     return [applicationDataPromise,
         assetScreenPromise,
         positionScreenPromise,
         systemScreenPromise,
         partScreenPromise,
-        woScreenPromise,
-        locationScreenPromise
     ]
 }
 

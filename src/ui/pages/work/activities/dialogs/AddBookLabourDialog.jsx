@@ -21,10 +21,10 @@ import EAMTimePicker from "eam-components/dist/ui/components/inputs-ng/EAMTimePi
 /**
  * Display detail of an activity
  */
-function AddActivityDialog(props) {
+function AddBookLabourDialog(props) {
   let [loading, setLoading] = useState(false);
   let [formValues, setFormValues] = useState({});
-
+  
   useEffect(() => {
     if (props.open) {
       init();
@@ -298,4 +298,4 @@ function AddActivityDialog(props) {
   );
 }
 
-export default AddActivityDialog;
+export default AddBookLabourDialog;

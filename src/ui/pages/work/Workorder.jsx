@@ -214,7 +214,6 @@ const Workorder = () => {
 
   const getRegions = () => {
     const { tabs } = workOrderLayout;
-
     const commonProps = {
       workorder,
       newEntity,

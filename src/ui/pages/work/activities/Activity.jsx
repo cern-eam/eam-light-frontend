@@ -266,6 +266,7 @@ function Activity(props) {
       <Divider />
 
       <AddActivityDialogContainer
+        layout={layout.ACT.fields}
         open={isEditModalOpen}
         onChange={readActivities}
         onClose={() => setIsEditModalOpen(false)}

@@ -96,6 +96,7 @@ function Activities(props) {
             </Stack>
 
             <AddActivityDialogContainer
+                layout={layout.ACT.fields}
                 open={isActivityModalOpen}
                 workorderNumber={workorder}
                 onChange={() => readActivities(workorder)}
@@ -104,6 +105,7 @@ function Activities(props) {
                 newActivityCode={activities[activities.length - 1] ? parseInt(activities[activities.length - 1].activityCode) + 5 : 5} />
 
             <AddBookLabourDialogContainer
+                layout={layout.BOO.fields}
                 open={isBookLaborModalOpen}
                 activities={activities}
                 workorderNumber={workorder}

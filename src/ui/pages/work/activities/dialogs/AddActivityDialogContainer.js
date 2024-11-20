@@ -8,7 +8,7 @@ import {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    layout: state.application.workOrderLayout.tabs.ACT.fields,
+    //layout: state.application.workOrderLayout.tabs.ACT.fields,
   };
 };
 

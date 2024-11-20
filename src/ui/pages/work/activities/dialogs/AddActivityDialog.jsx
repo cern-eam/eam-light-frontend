@@ -16,6 +16,7 @@ import {
   processElementInfo,
 } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import LightDialog from "@/ui/components/LightDialog";
+import useLayoutStore from "../../../../../actions/layoutStore";
 
 /**
  * Display detail of an activity
@@ -26,7 +27,7 @@ function AddActivityDialog(props) {
 
   // Passing an 'activityToEdit' object indicates that we are editing an existing activity
   const { activityToEdit, layout } = props;
-
+  
   const fieldsData = {
     activityCode: layout.activity,
     activityNote: layout.activitynote,
