@@ -29,6 +29,7 @@ import useLayoutStore from "../../../../actions/layoutStore.js";
 const NCR = () => {
     const [statuses, setStatuses] = useState([]);
     const { screenLayout: {OSNCHD: ncrLayout} } = useLayoutStore(); 
+    const { screenLayout: {OSJOBS: ncrWorkOrderLayout} } = useLayoutStore(); 
 
     const {
         entity: ncr,
