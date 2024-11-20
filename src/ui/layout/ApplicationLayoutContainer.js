@@ -5,7 +5,6 @@ import ApplicationLayout from './ApplicationLayout';
 
 const mapStateToProps = (state) => {
     return {
-        applicationData: state.application.applicationData,
         scannedUser: state.scannedUser,
         userData: state.application.userData
     }

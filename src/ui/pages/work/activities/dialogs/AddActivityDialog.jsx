@@ -16,7 +16,6 @@ import {
   processElementInfo,
 } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import LightDialog from "@/ui/components/LightDialog";
-import useLayoutStore from "../../../../../actions/layoutStore";
 
 /**
  * Display detail of an activity

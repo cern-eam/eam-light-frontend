@@ -24,7 +24,7 @@ import UserDefinedFields from "../../../components/userdefinedfields/UserDefined
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import EDMSDoclightIframeContainer from "@/ui/components/iframes/EDMSDoclightIframeContainer";
 import ObservationsContainer from "./observations/ObservationsContainer";
-import useLayoutStore from "../../../../actions/layoutStore.js";
+import useLayoutStore from "../../../../state/layoutStore.js";
 
 const NCR = () => {
     const [statuses, setStatuses] = useState([]);

@@ -1,7 +1,7 @@
 // store.js
 import { create } from 'zustand';
 import WS from "../tools/WS";
-import { TAB_CODES_LOCATIONS, TAB_CODES_NCR, TAB_CODES_WORK_ORDERS } from '../ui/components/entityregions/TabCodeMapping';
+import { TAB_CODES_ASSETS, TAB_CODES_LOCATIONS, TAB_CODES_NCR, TAB_CODES_PARTS, TAB_CODES_POSITIONS, TAB_CODES_SYSTEMS, TAB_CODES_WORK_ORDERS } from '../ui/components/entityregions/TabCodeMapping';
 
 const screens = (userData) => ([
   {
@@ -29,10 +29,28 @@ const screens = (userData) => ([
     tabs: TAB_CODES_LOCATIONS
   },
   {
-    entity: "EVNT",
-    userFunctionCode: userData.workOrderScreen,
-    systemFunctionCode: "WSJOBS",
-    tabs: TAB_CODES_WORK_ORDERS
+    entity: "PART",
+    userFunctionCode: userData.partScreen,
+    systemFunctionCode: "SSPART",
+    tabs: TAB_CODES_PARTS
+  },
+  {
+    entity: "OBJ",
+    userFunctionCode: userData.assetScreen,
+    systemFunctionCode: "OSOBJA",
+    tabs: TAB_CODES_ASSETS
+  },
+  {
+    entity: "OBJ",
+    userFunctionCode: userData.positionScreen,
+    systemFunctionCode: "OSOBJP",
+    tabs: TAB_CODES_POSITIONS
+  },
+  {
+    entity: "OBJ",
+    userFunctionCode: userData.systemScreen,
+    systemFunctionCode: "OSOBJS",
+    tabs: TAB_CODES_SYSTEMS
   }
 ]);
 
@@ -60,6 +78,7 @@ const useLayoutStore = create((set) => ({
 
   fetchNewScreenLayout: async (...args) => {
     try {
+      console.log("fetch new layout", args)
       const newLayout = await WS.getScreenLayout(...args).then((result) => result.body.data);
 
       set((state) => ({

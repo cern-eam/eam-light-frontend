@@ -35,7 +35,8 @@ import CERNMode from "../../components/CERNMode";
 import MenuLink from "./MenuLink";
 import MenuItemInputHistory from "./MenuItemInputHistory";
 import EISPanel from "@/ui/components/panel/Panel";
-import useLayoutStore from "../../../actions/layoutStore";
+import useLayoutStore from "../../../state/layoutStore";
+import useApplicationDataStore from "../../../state/applicationDataStore";
 
 export const menuIconStyle = {
   display: "inline-block",
@@ -95,6 +96,7 @@ class EamlightMenu extends Component {
     this.mainMenuClickHandler = this.mainMenuClickHandler.bind(this);
     this.openSubMenu = this.openSubMenu.bind(this);
     this.fetchNewScreenLayout = useLayoutStore.getState().fetchNewScreenLayout;
+    this.applicationData = useApplicationDataStore.getState().applicationData;
   }
 
   mainMenuClickHandler(event) {
@@ -147,13 +149,8 @@ class EamlightMenu extends Component {
       myOpenWorkOrders,
       myTeamWorkOrders,
       userData,
-      applicationData,
       showNotification,
-      showError,
-      updateAssetScreenLayout,
-      updatePositionScreenLayout,
-      updateSystemScreenLayout,
-      updatePartScreenLayout,
+      showError
     } = this.props;
     const {
       workOrderScreen,
@@ -179,7 +176,7 @@ class EamlightMenu extends Component {
       },
       asset: {
         screenName: "OSOBJA",
-        updateScreenLayout: updateAssetScreenLayout,
+        //updateScreenLayout: updateAssetScreenLayout,
         screen: assetScreen,
       },
       ncr: {
@@ -188,12 +185,12 @@ class EamlightMenu extends Component {
       },
       position: {
         screenName: "OSOBJP",
-        updateScreenLayout: updatePositionScreenLayout,
+        //updateScreenLayout: updatePositionScreenLayout,
         screen: positionScreen,
       },
       system: {
         screenName: "OSOBJS",
-        updateScreenLayout: updateSystemScreenLayout,
+        //updateScreenLayout: updateSystemScreenLayout,
         screen: systemScreen,
       },
       location: {
@@ -203,7 +200,7 @@ class EamlightMenu extends Component {
       },
       part: {
         screenName: "SSPART",
-        updateScreenLayout: updatePartScreenLayout,
+        //updateScreenLayout: updatePartScreenLayout,
         screen: partScreen,
       },
     };
@@ -591,8 +588,8 @@ class EamlightMenu extends Component {
           )}
 
           <EamlightSubmenu id="settings" header={<span>SETTINGS</span>}>
-            {applicationData.EL_ADMUG &&
-              applicationData.EL_ADMUG.split(",").includes(
+            {this.applicationData.EL_ADMUG &&
+              this.applicationData.EL_ADMUG.split(",").includes(
                 eamAccount.userGroup
               ) && (
                 <MenuItem

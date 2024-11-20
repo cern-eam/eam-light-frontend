@@ -29,7 +29,9 @@ import config from "./config";
 import Equipment from "./ui/pages/equipment/Equipment";
 import Report from "./ui/pages/report/Report";
 import ReleaseNotesPage from "./ui/pages/releaseNotes/ReleaseNotes";
-import useLayoutStore from "./actions/layoutStore";
+import useLayoutStore from "./state/layoutStore";
+import useUserDataStore from "./state/userDataStore";
+import useApplicationDataStore from "./state/applicationDataStore";
 
 export const releaseNotesPath = "/releasenotes";
 
@@ -46,8 +48,22 @@ const blockUiStyleDiv = {
   alignItems: "flex-end",
 };
 
-const Eamlight = ({ inforContext, userData, applicationData, initializeApplication }) => {
+const Eamlight = ({ inforContext, userData, initializeApplication }) => {
   const { screenLayout, fetchScreenLayout } = useLayoutStore();
+  const { userData: userDataNew, fetchUserData} = useUserDataStore();
+  const {applicationData, fetchApplicationData} = useApplicationDataStore();
+
+  useEffect(() => {
+    if (!userDataNew) {
+      fetchUserData();
+    }
+  }, [userDataNew])
+
+  useEffect(() => {
+    if (!applicationData) {
+      fetchApplicationData();
+    }
+  }, [applicationData])
 
   useEffect(() => {
     if (!userData || !applicationData) {
@@ -88,7 +104,7 @@ const Eamlight = ({ inforContext, userData, applicationData, initializeApplicati
     }
   }
 
-  if (!userData || !applicationData || !screenLayout) {
+  if (!userData || !applicationData || !screenLayout || !userDataNew) {
     return (
       <BlockUi tag="div" blocking={true} style={blockUiStyle}>
         <div style={blockUiStyleDiv}>Loading EAM Light ...</div>
