@@ -24,9 +24,11 @@ import UserDefinedFields from "../../../components/userdefinedfields/UserDefined
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import EDMSDoclightIframeContainer from "@/ui/components/iframes/EDMSDoclightIframeContainer";
 import ObservationsContainer from "./observations/ObservationsContainer";
+import useLayoutStore from "../../../../actions/layoutStore.js";
 
 const NCR = () => {
     const [statuses, setStatuses] = useState([]);
+    const { screenLayout } = useLayoutStore(); 
 
     const {
         screenLayout: ncrLayout,
@@ -81,7 +83,9 @@ const NCR = () => {
         setLayoutProperty("ncr", null);
     }
 
-    function postRead() {}
+    function postRead() {
+      console.log('layout', screenLayout)
+    }
 
     const getRegions = () => {
         const tabs = ncrLayout.tabs;

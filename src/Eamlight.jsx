@@ -2,7 +2,7 @@ import "./Eamlight.css";
 import "react-grid-layout/css/styles.css";
 // import "react-resizable/css/styles.css";
 
-import { Component } from "react";
+import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ApplicationLayoutContainer from "./ui/layout/ApplicationLayoutContainer";
 import EamlightMenuContainer from "./ui/layout/menu/EamlightMenuContainer";
@@ -29,149 +29,121 @@ import config from "./config";
 import Equipment from "./ui/pages/equipment/Equipment";
 import Report from "./ui/pages/report/Report";
 import ReleaseNotesPage from "./ui/pages/releaseNotes/ReleaseNotes";
+import useLayoutStore from "./actions/layoutStore";
 
 export const releaseNotesPath = "/releasenotes";
 
-class Eamlight extends Component {
-  blockUiStyle = {
-    height: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  };
+const blockUiStyle = {
+  height: "100%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};
 
-  blockUiStyleDiv = {
-    display: "flex",
-    height: 60,
-    alignItems: "flex-end",
-  };
+const blockUiStyleDiv = {
+  display: "flex",
+  height: 60,
+  alignItems: "flex-end",
+};
 
-  render() {
-    // Display login screen
-    if (
-      !this.props.inforContext &&
-      import.meta.env.VITE_LOGIN_METHOD === "STD"
-    ) {
-      return (
-        <ThemeProvider theme={Themes[config.theme.DEFAULT]}>
-          <LoginContainer />
-        </ThemeProvider>
-      );
+const Eamlight = ({ inforContext, userData, applicationData, initializeApplication }) => {
+  const { screenLayout, fetchScreenLayout } = useLayoutStore();
+
+  useEffect(() => {
+    if (!userData || !applicationData) {
+      initializeApplication();
     }
+  }, [userData, applicationData]);
 
-    if (this.props.userData) {
-      if (this.props.userData.invalidAccount) {
-        return (
-          <InfoPage
-            title="Access Denied"
-            message="You don't have valid EAM account. "
-          />
-        );
-      }
-      if (this.props.userData.screenLayoutFetchingFailed) {
-        return (
-          <InfoPage
-            title="Unable to initialize EAM Light"
-            message="Something went wrong while loading the screen layouts, please retry or contact the support at eam.support@cern.ch."
-          />
-        );
-      }
+  useEffect(() => {
+    if (userData) {
+      fetchScreenLayout(userData.eamAccount.userGroup);
     }
+  }, [userData]);
 
-    // User data still not there, display loading page
-    if (!this.props.userData || !this.props.applicationData) {
-      this.props.initializeApplication();
-      return (
-        <BlockUi tag="div" blocking={true} style={this.blockUiStyle}>
-          <div style={this.blockUiStyleDiv}>Loading EAM Light ...</div>
-        </BlockUi>
-      );
-    }
-
-    const eqpRegex = [
-      "/asset",
-      "/ncr",
-      "/position",
-      "/system",
-      "/location",
-      "/workorder",
-      "/installeqp",
-    ].map((e) => `${e}/:code(.+)?`);
-
-    const selectedTheme =
-      Themes[
-        config.theme[this.props.applicationData.EL_ENVIR] ||
-          config.theme.DEFAULT
-      ] || Themes.DANGER;
-
-    // Render real application once user data is there and user has an EAM account
+  if (!inforContext && import.meta.env.VITE_LOGIN_METHOD === "STD") {
     return (
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={selectedTheme}>
-          <Router basename={process.env.PUBLIC_URL}>
-            <Switch>
-              <Route path="/eqptree" component={EqpTree} />
-
-              <ApplicationLayoutContainer>
-                <EamlightMenuContainer />
-                <div style={{ height: "calc(100% - 30px)" }}>
-                  <Route exact path="/" component={SearchContainer} />
-
-                  <Route
-                    path="/wosearch"
-                    component={WorkorderSearchContainer}
-                  />
-
-                  <Route path="/part/:code?" component={Part} />
-
-                  <Route path="/partsearch" component={PartSearchContainer} />
-
-                  <Route path="/assetsearch" component={AssetSearchContainer} />
-
-                  <Route path="/ncrsearch" component={NCRSearchContainer} />
-
-                  <Route
-                    path="/positionsearch"
-                    component={PositionSearchContainer}
-                  />
-
-                  <Route
-                    path="/systemsearch"
-                    component={SystemSearchContainer}
-                  />
-
-                  <Route
-                    path="/locationsearch"
-                    component={LocationSearchContainer}
-                  />
-
-                  <Route
-                    path="/equipment/:code?"
-                    component={EquipmentRedirect}
-                  />
-
-                  <Route path="/replaceeqp" component={ReplaceEqpContainer} />
-
-                  <Route
-                    path="/meterreading"
-                    component={MeterReadingContainer}
-                  />
-
-                  <Route path="/grid" component={Grid} />
-
-                  <Route path="/report" component={Report} />
-
-                  <Route path={eqpRegex} component={Equipment} />
-
-                  <Route path={releaseNotesPath} component={ReleaseNotesPage} />
-                </div>
-              </ApplicationLayoutContainer>
-            </Switch>
-          </Router>
-        </ThemeProvider>
-      </StyledEngineProvider>
+      <ThemeProvider theme={Themes[config.theme.DEFAULT]}>
+        <LoginContainer />
+      </ThemeProvider>
     );
   }
-}
+
+  if (userData) {
+    if (userData.invalidAccount) {
+      return (
+        <InfoPage
+          title="Access Denied"
+          message="You don't have valid EAM account. "
+        />
+      );
+    }
+    if (userData.screenLayoutFetchingFailed) {
+      return (
+        <InfoPage
+          title="Unable to initialize EAM Light"
+          message="Something went wrong while loading the screen layouts, please retry or contact the support at eam.support@cern.ch."
+        />
+      );
+    }
+  }
+
+  if (!userData || !applicationData || !screenLayout) {
+    return (
+      <BlockUi tag="div" blocking={true} style={blockUiStyle}>
+        <div style={blockUiStyleDiv}>Loading EAM Light ...</div>
+      </BlockUi>
+    );
+  }
+
+  const eqpRegex = [
+    "/asset",
+    "/ncr",
+    "/position",
+    "/system",
+    "/location",
+    "/workorder",
+    "/installeqp",
+  ].map((e) => `${e}/:code(.+)?`);
+
+  const selectedTheme =
+    Themes[
+      config.theme[applicationData.EL_ENVIR] || config.theme.DEFAULT
+    ] || Themes.DANGER;
+
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={selectedTheme}>
+        <Router basename={process.env.PUBLIC_URL}>
+          <Switch>
+            <Route path="/eqptree" component={EqpTree} />
+
+            <ApplicationLayoutContainer>
+              <EamlightMenuContainer />
+              <div style={{ height: "calc(100% - 30px)" }}>
+                <Route exact path="/" component={SearchContainer} />
+                <Route path="/wosearch" component={WorkorderSearchContainer} />
+                <Route path="/part/:code?" component={Part} />
+                <Route path="/partsearch" component={PartSearchContainer} />
+                <Route path="/assetsearch" component={AssetSearchContainer} />
+                <Route path="/ncrsearch" component={NCRSearchContainer} />
+                <Route path="/positionsearch" component={PositionSearchContainer} />
+                <Route path="/systemsearch" component={SystemSearchContainer} />
+                <Route path="/locationsearch" component={LocationSearchContainer} />
+                <Route path="/equipment/:code?" component={EquipmentRedirect} />
+                <Route path="/replaceeqp" component={ReplaceEqpContainer} />
+                <Route path="/meterreading" component={MeterReadingContainer} />
+                <Route path="/grid" component={Grid} />
+                <Route path="/report" component={Report} />
+                <Route path={eqpRegex} component={Equipment} />
+                <Route path={releaseNotesPath} component={ReleaseNotesPage} />
+              </div>
+            </ApplicationLayoutContainer>
+          </Switch>
+        </Router>
+      </ThemeProvider>
+    </StyledEngineProvider>
+  );
+};
 
 export default Eamlight;
