@@ -84,7 +84,7 @@ const NCR = () => {
     }
 
     function postRead() {
-      
+      console.log('ncr wo layout', ncrWorkOrderLayout)
     }
 
     const getRegions = () => {
