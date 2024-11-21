@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Account, Logout } from "mdi-material-ui";
 import { IconButton } from "@mui/material";
 import { logout } from "../../AuthWrapper";
-import useUserDataStore from "../../state/userDataStore";
+import useUserDataStore from "../../state/useUserDataStore";
 
 export default class UserInfo extends Component {
   constructor(props) {

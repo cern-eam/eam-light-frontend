@@ -37,9 +37,9 @@ import {
 } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { get } from "lodash";
 import useFieldsValidator from "eam-components/dist/ui/components/inputs-ng/hooks/useFieldsValidator";
-import useLayoutStore from "../state/layoutStore";
-import useUserDataStore from "../state/userDataStore";
-import useApplicationDataStore from "../state/applicationDataStore";
+import useLayoutStore from "../state/useLayoutStore";
+import useUserDataStore from "../state/useUserDataStore";
+import useApplicationDataStore from "../state/useApplicationDataStore";
 
 const useEntity = (params) => {
   const {

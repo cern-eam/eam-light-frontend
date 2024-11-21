@@ -29,9 +29,9 @@ import config from "./config";
 import Equipment from "./ui/pages/equipment/Equipment";
 import Report from "./ui/pages/report/Report";
 import ReleaseNotesPage from "./ui/pages/releaseNotes/ReleaseNotes";
-import useLayoutStore from "./state/layoutStore";
-import useUserDataStore from "./state/userDataStore";
-import useApplicationDataStore from "./state/applicationDataStore";
+import useLayoutStore from "./state/useLayoutStore";
+import useUserDataStore from "./state/useUserDataStore";
+import useApplicationDataStore from "./state/useApplicationDataStore";
 
 export const releaseNotesPath = "/releasenotes";
 

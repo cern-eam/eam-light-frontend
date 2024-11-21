@@ -15,7 +15,7 @@ import Toolbar from "./Toolbar";
 import Divider from "@mui/material/Divider";
 import { isMultiOrg } from "@/ui/pages/EntityTools";
 import queryString from "query-string"
-import useUserDataStore from "../../state/userDataStore";
+import useUserDataStore from "../../state/useUserDataStore";
 
 const verticalLineStyle = {
   height: 25,
@@ -197,6 +197,8 @@ class EamlightToolbar extends Component {
 
   renderPanelSelector = () => {
     const { entityScreen, isLocalAdministrator } = this.props;
+
+    console.log('local admin', isLocalAdministrator);
 
     return (
       <>

@@ -3,7 +3,7 @@ import MenuWorkorder from './MenuWorkorder'
 import MyWorkOrdersTimeFilter from './MyWorkOrdersTimeFilter'
 import MenuTools from './MenuTools'
 import useLocalStorage from '../../../hooks/useLocalStorage';
-import useMyOpenWorkOrdersStore from '../../../state/myOpenWorkOrdersStore';
+import useMyOpenWorkOrdersStore from '../../../state/useMyOpenWorkOrdersStore';
 
 export default function MenuMyWorkorders(props) {
     const [days, setDays] = useLocalStorage('myworkorders:days', 'ALL')

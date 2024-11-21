@@ -36,8 +36,6 @@ import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTa
 import WSParts from "../../../tools/WSParts";
 import WSWorkorders from "../../../tools/WSWorkorders";
 import useEntity from "@/hooks/useEntity";
-import { updateMyWorkOrders } from "../../../actions/workorderActions";
-import { useDispatch } from "react-redux";
 import UserDefinedFields from "@/ui/components/userdefinedfields/UserDefinedFields";
 import { isHidden } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import AssignmentIcon from "@mui/icons-material/Assignment";
@@ -59,6 +57,8 @@ import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
 import HardwareIcon from "@mui/icons-material/Hardware";
 import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
 import EamlightToolbar from "../../components/EamlightToolbar";
+import useWorkOrderStore from "../../../state/useWorkOrderStore";
+import { isLocalAdministrator } from "../../../state/utils";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -79,8 +79,7 @@ const Workorder = () => {
   const [otherIdMapping, setOtherIdMapping] = useState({});
   const [expandChecklistsOptions, setExpandChecklistsOptions] = useState(false);
   const checklists = useRef(null);
-  const dispatch = useDispatch();
-  const updateMyWorkOrdersConst = (...args) => dispatch(updateMyWorkOrders(...args));
+  const {setCurrentWorkOrder} = useWorkOrderStore();
   //
   //
   //
@@ -629,7 +628,7 @@ const Workorder = () => {
       code: workorder.equipmentCode,
       organization: workorder.equipmentOrganization,
     });
-    updateMyWorkOrdersConst(workorder);
+    setCurrentWorkOrder(workorder.number);
     readStatuses(workorder.statusCode, workorder.typeCode, false);
     readOtherIdMapping(workorder.number);
   }
@@ -726,6 +725,7 @@ const Workorder = () => {
           getUniqueRegionID={getUniqueRegionID}
           getHiddenRegionState={getHiddenRegionState}
           isHiddenRegion={isHiddenRegion}
+          isLocalAdministrator={isLocalAdministrator(userData)}
         />
         <EntityRegions
           regions={getRegions()}

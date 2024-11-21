@@ -35,9 +35,9 @@ import CERNMode from "../../components/CERNMode";
 import MenuLink from "./MenuLink";
 import MenuItemInputHistory from "./MenuItemInputHistory";
 import EISPanel from "@/ui/components/panel/Panel";
-import useLayoutStore from "../../../state/layoutStore";
-import useApplicationDataStore from "../../../state/applicationDataStore";
-import useUserDataStore from "../../../state/userDataStore";
+import useLayoutStore from "../../../state/useLayoutStore";
+import useApplicationDataStore from "../../../state/useApplicationDataStore";
+import useUserDataStore from "../../../state/useUserDataStore";
 import NumberOfMyOpenWorkOrders from "./components/NumberOfMyWorkOrders";
 import NumberOfMyTeamWorkOrders from "./components/NumberOfMyTeamWorkOrders";
 

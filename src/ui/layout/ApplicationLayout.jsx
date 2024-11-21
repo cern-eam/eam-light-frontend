@@ -19,8 +19,8 @@ import ScanUser from "../components/servicelogin/ScanUser";
 import Footer from "./Footer";
 import GridTools from "@/tools/GridTools";
 import queryString from "query-string";
-import useApplicationDataStore from "../../state/applicationDataStore";
-import useUserDataStore from "../../state/userDataStore";
+import useApplicationDataStore from "../../state/useApplicationDataStore";
+import useUserDataStore from "../../state/useUserDataStore";
 
 const styles = {
   topBarLink: {

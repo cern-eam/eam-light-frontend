@@ -1,6 +1,6 @@
 import React from 'react';
 import NumberBadge from './NumberBadge'; 
-import useMyTeamWorkOrdersStore from '../../../../state/myTeamWorkOrdersStore';
+import useMyTeamWorkOrdersStore from '../../../../state/useMyTeamWorkOrdersStore';
 
 const NumberOfMyTeamWorkOrders = () => {
   const { myTeamWorkOrders } = useMyTeamWorkOrdersStore();

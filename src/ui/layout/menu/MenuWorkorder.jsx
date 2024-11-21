@@ -2,8 +2,11 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import BellIcon from 'mdi-material-ui/Bell'
 import {format} from 'date-fns'
+import useWorkOrderStore from '../../../state/useWorkOrderStore'
 
 const MenuWorkorder = (props) => {
+
+    const {currentWorkOrder} = useWorkOrderStore();
 
     const spanStyle = {
         display: "block",
@@ -28,7 +31,7 @@ const MenuWorkorder = (props) => {
         marginTop: 5
     }
 
-    if (props.wo.opened) {
+    if (props.wo.number === currentWorkOrder) {
         linkStyle.borderLeft = '3px solid #00aaff'
     } else {
         linkStyle.borderLeft = '3px solid rgb(40,40,40)'

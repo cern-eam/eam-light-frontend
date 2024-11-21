@@ -1,6 +1,6 @@
 import React from 'react';
 import NumberBadge from './NumberBadge'; 
-import useMyOpenWorkOrdersStore from '../../../../state/myOpenWorkOrdersStore';
+import useMyOpenWorkOrdersStore from '../../../../state/useMyOpenWorkOrdersStore';
 
 const NumberOfMyOpenWorkOrders = () => {
   const { myOpenWorkOrders } = useMyOpenWorkOrdersStore();

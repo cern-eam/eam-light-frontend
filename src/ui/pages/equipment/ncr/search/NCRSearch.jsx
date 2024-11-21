@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import EAMGrid from "eam-components/dist/ui/components/grids/eam/EAMGrid";
 import { EAMCellField } from "eam-components/dist/ui/components/grids/eam/utils";
 import SyncedQueryParamsEAMGridContext from "../../../../../tools/SyncedQueryParamsEAMGridContext";
-import useUserDataStore from "../../../../../state/userDataStore";
+import useUserDataStore from "../../../../../state/useUserDataStore";
 
 const cellRenderer = ({ column, value, row }) => {
   if (column.id === "nonconformity") {

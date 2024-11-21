@@ -6,9 +6,9 @@ import ReplaceEqpGeneral from "./ReplaceEqpGeneral";
 import WSEquipment from "../../../../tools/WSEquipment";
 import './ReplaceEqp.css';
 import queryString from "query-string";
-import useUserDataStore from '../../../../state/userDataStore';
-import useApplicationDataStore from '../../../../state/applicationDataStore';
-import useLayoutStore from '../../../../state/layoutStore';
+import useUserDataStore from '../../../../state/useUserDataStore';
+import useApplicationDataStore from '../../../../state/useApplicationDataStore';
+import useLayoutStore from '../../../../state/useLayoutStore';
 
 const MODE_STANDARD = 'Standard';
 

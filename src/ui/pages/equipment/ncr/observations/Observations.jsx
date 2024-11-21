@@ -4,10 +4,10 @@ import EISTable from "eam-components/dist/ui/components/table";
 import BlockUi from "react-block-ui";
 import Button from "@mui/material/Button";
 import ObservationsDialog from "./ObservationsDialog";
-import useLayoutStore from "../../../../../state/layoutStore";
+import useLayoutStore from "../../../../../state/useLayoutStore";
 import WorkOrdersDialog from "./WorkOrdersDialog";
 import WSWorkorders from "../../../../../tools/WSWorkorders";
-import useUserDataStore from "../../../../../state/userDataStore";
+import useUserDataStore from "../../../../../state/useUserDataStore";
 
 const Observations = ({
     ncr,
