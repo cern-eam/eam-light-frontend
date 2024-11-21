@@ -2,8 +2,14 @@ import React, { Component } from "react";
 import { Account, Logout } from "mdi-material-ui";
 import { IconButton } from "@mui/material";
 import { logout } from "../../AuthWrapper";
+import useUserDataStore from "../../state/userDataStore";
 
 export default class UserInfo extends Component {
+  constructor(props) {
+    super(props);
+    this.userData = useUserDataStore.getState().userData;
+  }
+
   userInfoStyle = {
     color: "rgba(255, 255, 255, 0.8)",
     flexGrow: 1,
@@ -49,7 +55,7 @@ export default class UserInfo extends Component {
     const { scannedUser } = this.props;
 
     const usernameDisplay =
-      this.props.userData.eamAccount.userCode +
+      this.userData.eamAccount.userCode +
       (scannedUser ? ` (${scannedUser.userCode})` : "");
 
     return (

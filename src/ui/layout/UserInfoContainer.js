@@ -6,7 +6,6 @@ import { updateScannedUser } from "../../actions/scannedUserActions";
 
 const mapStateToProps = (state) => {
     return {
-        userData: state.application.userData,
         scannedUser: state.scannedUser,
     }
 };

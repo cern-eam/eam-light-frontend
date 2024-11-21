@@ -6,7 +6,5 @@ export function initializeApplication() {
         // fetch my and my team's work orders
         dispatch(updateMyOpenWorkOrders())
         dispatch(updateMyTeamWorkOrders())
-        // fetch user info
-        dispatch(getUserInfo())
     }
 }

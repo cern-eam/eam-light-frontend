@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
-import EamlightToolbarContainer from "../../../components/EamlightToolbarContainer";
 import CustomFields from "eam-components/dist/ui/components/customfields/CustomFields";
 import WSEquipment from "../../../../tools/WSEquipment";
 import BlockUi from "react-block-ui";
@@ -41,6 +40,7 @@ import AccountTreeRoundedIcon from "@mui/icons-material/AccountTreeRounded";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import Variables from "../components/Variables";
+import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -266,6 +266,7 @@ const System = () => {
           <EDMSDoclightIframeContainer
             objectType={getEDMSObjectType(equipment)}
             objectID={equipment.code}
+            url={applicationData.EL_DOCLI}
           />
         ),
         RegionPanelProps: {
@@ -392,7 +393,7 @@ const System = () => {
       blocking={loading}
       style={{ width: "100%", height: "100%" }}
     >
-      <EamlightToolbarContainer
+      <EamlightToolbar
         isModified={isModified}
         newEntity={newEntity}
         entityScreen={screenPermissions}

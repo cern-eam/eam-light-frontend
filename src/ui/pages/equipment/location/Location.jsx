@@ -20,7 +20,6 @@ import {
 } from "../../EntityTools";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
-import EamlightToolbarContainer from "../../../components/EamlightToolbarContainer";
 import LocationDetails from "./LocationDetails";
 import LocationGeneral from "./LocationGeneral";
 import LocationHierarchy from "./LocationHierarchy";
@@ -36,6 +35,7 @@ import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import { locationLayoutPropertiesMap } from "../EquipmentTools";
+import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -194,6 +194,7 @@ export default Location = (props) => {
           <EDMSDoclightIframeContainer
             objectType="L"
             objectID={location.code}
+            url={applicationData.EL_DOCLI}
           />
         ),
         RegionPanelProps: {
@@ -233,7 +234,7 @@ export default Location = (props) => {
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
-          <NCRIframeContainer objectType="L" objectID={location.code} />
+          <NCRIframeContainer objectType="L" objectID={location.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
         ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
@@ -350,7 +351,7 @@ export default Location = (props) => {
       blocking={loading}
       style={{ height: "100%", width: "100%" }}
     >
-      <EamlightToolbarContainer
+      <EamlightToolbar
         isModified={isModified}
         newEntity={newEntity}
         entityScreen={screenPermissions}

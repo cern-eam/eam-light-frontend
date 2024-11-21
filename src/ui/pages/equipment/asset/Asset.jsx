@@ -9,7 +9,6 @@ import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDocligh
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
-import EamlightToolbarContainer from "../../../components/EamlightToolbarContainer";
 import AssetDetails from "./AssetDetails";
 import AssetGeneral from "./AssetGeneral";
 import AssetHierarchy from "./AssetHierarchy";
@@ -42,6 +41,7 @@ import { handleError } from "@/actions/uiActions";
 import Variables from "../components/Variables";
 import getPartsAssociated from "@/ui/pages/PartsAssociated";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
+import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -263,7 +263,7 @@ const Asset = () => {
         label: "EDMS Documents",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <EDMSDoclightIframeContainer objectType="A" objectID={equipment.code} />,
+        render: () => <EDMSDoclightIframeContainer objectType="A" objectID={equipment.code} url={applicationData.EL_DOCLI}/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -278,7 +278,7 @@ const Asset = () => {
         label: "NCRs",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <NCRIframeContainer objectType="A" objectID={equipment.code} />,
+        render: () => <NCRIframeContainer objectType="A" objectID={equipment.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -410,7 +410,7 @@ const Asset = () => {
 
   return (
     <BlockUi tag="div" blocking={loading} style={{ height: "100%", width: "100%" }}>
-      <EamlightToolbarContainer
+      <EamlightToolbar
         isModified={isModified}
         newEntity={newEntity}
         entityScreen={screenPermissions}

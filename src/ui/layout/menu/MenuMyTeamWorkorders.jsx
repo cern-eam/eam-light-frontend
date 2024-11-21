@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MenuWorkorder from './MenuWorkorder';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -7,6 +7,7 @@ import withStyles from '@mui/styles/withStyles';
 import MyWorkOrdersTimeFilter from "./MyWorkOrdersTimeFilter";
 import MenuTools from "./MenuTools";
 import useLocalStorage from '../../../hooks/useLocalStorage';
+import useMyTeamWorkOrdersStore from '../../../state/myTeamWorkOrdersStore';
 
 const styles = {
     root: {
@@ -20,6 +21,11 @@ const styles = {
 const MenuMyTeamWorkorders = props =>  {
     const [days, setDays] = useLocalStorage('myteamworkorders:days', 'ALL');
     const [department, setDepartment] = useLocalStorage('myteamworkorders:department', 'ALL');
+    const { myTeamWorkOrders, fetchMyTeamWorkOrders }= useMyTeamWorkOrdersStore();
+
+    useEffect(() => {
+        fetchMyTeamWorkOrders();
+    }, [])
 
     const headingStyle = {
         display: "flex",
@@ -30,7 +36,7 @@ const MenuMyTeamWorkorders = props =>  {
         justifyContent: "center"
     }
 
-    const teamWorkOrders = props.myTeamWorkOrders.filter(wo => department === 'ALL' || wo.mrc === department);
+    const teamWorkOrders = myTeamWorkOrders.filter(wo => department === 'ALL' || wo.mrc === department);
 
     const generateMyTeamWorkOrders = () => {
         return teamWorkOrders

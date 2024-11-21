@@ -32,6 +32,8 @@ import ReleaseNotesPage from "./ui/pages/releaseNotes/ReleaseNotes";
 import useLayoutStore from "./state/layoutStore";
 import useUserDataStore from "./state/userDataStore";
 import useApplicationDataStore from "./state/applicationDataStore";
+import useMyWorkOrdersStore from "./state/myOpenWorkOrdersStore";
+import useMyTeamWorkOrdersStore from "./state/myTeamWorkOrdersStore";
 
 export const releaseNotesPath = "/releasenotes";
 
@@ -48,28 +50,15 @@ const blockUiStyleDiv = {
   alignItems: "flex-end",
 };
 
-const Eamlight = ({ inforContext, userData, initializeApplication }) => {
+const Eamlight = ({ inforContext }) => {
   const { screenLayout, fetchScreenLayout } = useLayoutStore();
-  const { userData: userDataNew, fetchUserData} = useUserDataStore();
-  const {applicationData, fetchApplicationData} = useApplicationDataStore();
+  const { userData, fetchUserData} = useUserDataStore();
+  const { applicationData, fetchApplicationData } = useApplicationDataStore();
 
   useEffect(() => {
-    if (!userDataNew) {
-      fetchUserData();
-    }
-  }, [userDataNew])
-
-  useEffect(() => {
-    if (!applicationData) {
-      fetchApplicationData();
-    }
-  }, [applicationData])
-
-  useEffect(() => {
-    if (!userData || !applicationData) {
-      initializeApplication();
-    }
-  }, [userData, applicationData]);
+    fetchUserData();
+    fetchApplicationData();
+  },[])
 
   useEffect(() => {
     if (userData) {
@@ -104,7 +93,7 @@ const Eamlight = ({ inforContext, userData, initializeApplication }) => {
     }
   }
 
-  if (!userData || !applicationData || !screenLayout || !userDataNew) {
+  if (!userData || !applicationData || !screenLayout) {
     return (
       <BlockUi tag="div" blocking={true} style={blockUiStyle}>
         <div style={blockUiStyleDiv}>Loading EAM Light ...</div>

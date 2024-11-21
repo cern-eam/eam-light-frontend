@@ -10,7 +10,6 @@ import { ENTITY_TYPE } from "../../components/Toolbar";
 import CustomFields from "eam-components/dist/ui/components/customfields/CustomFields";
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import NCRIframeContainer from "../../components/iframes/NCRIframeContainer";
-import EamlightToolbarContainer from "../../components/EamlightToolbarContainer";
 import Activities from "./activities/Activities";
 import AdditionalCostsContainer from "./additionalcosts/AdditionalCostsContainer";
 import WorkorderChildren from "./childrenwo/WorkorderChildren";
@@ -59,6 +58,7 @@ import { PartIcon } from "eam-components/dist/ui/components/icons";
 import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
 import HardwareIcon from "@mui/icons-material/Hardware";
 import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
+import EamlightToolbar from "../../components/EamlightToolbar";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -332,7 +332,7 @@ const Workorder = () => {
         label: "EDMS Documents",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <EDMSDoclightIframeContainer objectType="J" objectID={workorder.number} />,
+        render: () => <EDMSDoclightIframeContainer objectType="J" objectID={workorder.number} url={applicationData.EL_DOCLI}/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -347,7 +347,7 @@ const Workorder = () => {
         label: "NCRs",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <NCRIframeContainer objectType="J" objectID={workorder.number} mode="NCR" />,
+        render: () => <NCRIframeContainer objectType="J" objectID={workorder.number} mode="NCR" url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -692,7 +692,7 @@ const Workorder = () => {
   return (
     <div className="entityContainer">
       <BlockUi tag="div" blocking={loading} style={{ height: "100%", width: "100%" }}>
-        <EamlightToolbarContainer
+        <EamlightToolbar
           isModified={isModified}
           newEntity={newEntity}
           entityScreen={screenPermissions}

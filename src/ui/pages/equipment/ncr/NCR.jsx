@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import { ENTITY_TYPE } from "../../../components/Toolbar.jsx";
-import EamlightToolbarContainer from "../../../components/EamlightToolbarContainer.js";
 import EntityRegions from "../../../components/entityregions/EntityRegions.jsx";
 import { TAB_CODES } from "../../../components/entityregions/TabCodeMapping.js";
 import {
@@ -25,6 +24,7 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import EDMSDoclightIframeContainer from "@/ui/components/iframes/EDMSDoclightIframeContainer";
 import ObservationsContainer from "./observations/ObservationsContainer";
 import useLayoutStore from "../../../../state/layoutStore.js";
+import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 
 const NCR = () => {
     const [statuses, setStatuses] = useState([]);
@@ -135,6 +135,7 @@ const NCR = () => {
                     <EDMSDoclightIframeContainer
                         objectType="NOCF"
                         objectID={ncr.code}
+                        url={applicationData.EL_DOCLI}
                     />
                 ),
                 RegionPanelProps: {
@@ -235,7 +236,7 @@ const NCR = () => {
             blocking={loading}
             style={{ height: "100%", width: "100%" }}
         >
-            <EamlightToolbarContainer
+            <EamlightToolbar
                 isModified={isModified}
                 newEntity={newEntity}
                 entityScreen={screenPermissions}

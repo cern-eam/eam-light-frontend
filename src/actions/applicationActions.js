@@ -98,9 +98,8 @@ export function updateScreenLayout(entity, entityDesc, systemFunction, userFunct
  */
 function createPromiseArray(userdata) {
     //
-    let applicationDataPromise = WS.getApplicationData();
+    //let applicationDataPromise = WS.getApplicationData();
     //
-    return [applicationDataPromise
-    ]
+    return []
 }
 

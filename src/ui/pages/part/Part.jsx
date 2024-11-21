@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import EamlightToolbarContainer from "../../components/EamlightToolbarContainer";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import WSParts from "../../../tools/WSParts";
@@ -33,6 +32,7 @@ import PlaceIcon from "@mui/icons-material/Place";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import { isCernMode } from "@/ui/components/CERNMode";
 import getPartsAssociated from "../PartsAssociated";
+import EamlightToolbar from "../../components/EamlightToolbar";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -192,7 +192,7 @@ const Part = () => {
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
-          <EDMSDoclightIframeContainer objectType="PART" objectID={part.code} />
+          <EDMSDoclightIframeContainer objectType="PART" objectID={part.code} url={applicationData.EL_DOCLI} />
         ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
@@ -283,7 +283,7 @@ const Part = () => {
         blocking={loading}
         style={{ height: "100%", width: "100%" }}
       >
-        <EamlightToolbarContainer
+        <EamlightToolbar
           isModified={isModified}
           newEntity={newEntity}
           entityScreen={screenPermissions}

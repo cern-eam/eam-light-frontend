@@ -15,6 +15,7 @@ import Toolbar from "./Toolbar";
 import Divider from "@mui/material/Divider";
 import { isMultiOrg } from "@/ui/pages/EntityTools";
 import queryString from "query-string"
+import useUserDataStore from "../../state/userDataStore";
 
 const verticalLineStyle = {
   height: 25,
@@ -25,6 +26,11 @@ const verticalLineStyle = {
 const SMALL_SCREEN_MODE_MAX_WIDTH = 375;
 
 class EamlightToolbar extends Component {
+  constructor(props) {
+    super(props);
+    this.userData = useUserDataStore.getState().userData;
+    this.userCode = this.userData.eamAccount.userCode; // kura
+  }
 
   hideEntityMenu = queryString.parse(window.location.search)['hideEntityMenu'] === 'true';
 
@@ -270,7 +276,7 @@ class EamlightToolbar extends Component {
     <Toolbar
       {...this.props.toolbarProps}
       renderOption={renderOption}
-      userCode={this.props.userCode}
+      userCode={this.userCode}
     />
   );
 

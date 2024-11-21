@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
-import EamlightToolbarContainer from "../../../components/EamlightToolbarContainer";
 import CustomFields from "eam-components/dist/ui/components/customfields/CustomFields";
 import WSEquipment from "../../../../tools/WSEquipment";
 import BlockUi from "react-block-ui";
@@ -45,6 +44,7 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import Variables from "../components/Variables";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import getPartsAssociated from "@/ui/pages/PartsAssociated";
+import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -250,6 +250,7 @@ const Position = () => {
           <EDMSDoclightIframeContainer
             objectType="S"
             objectID={equipment.code}
+            url={applicationData.EL_DOCLI}
           />
         ),
         RegionPanelProps: {
@@ -272,7 +273,7 @@ const Position = () => {
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
-          <NCRIframeContainer objectType="S" objectID={equipment.code} />
+          <NCRIframeContainer objectType="S" objectID={equipment.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
         ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
@@ -395,7 +396,7 @@ const Position = () => {
       blocking={loading}
       style={{ width: "100%", height: "100%" }}
     >
-      <EamlightToolbarContainer
+      <EamlightToolbar
         isModified={isModified}
         newEntity={newEntity}
         entityScreen={screenPermissions}

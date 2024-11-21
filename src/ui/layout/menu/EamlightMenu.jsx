@@ -37,6 +37,9 @@ import MenuItemInputHistory from "./MenuItemInputHistory";
 import EISPanel from "@/ui/components/panel/Panel";
 import useLayoutStore from "../../../state/layoutStore";
 import useApplicationDataStore from "../../../state/applicationDataStore";
+import useUserDataStore from "../../../state/userDataStore";
+import useMyWorkOrdersStore from "../../../state/myOpenWorkOrdersStore";
+import useMyTeamWorkOrdersStore from "../../../state/myTeamWorkOrdersStore";
 
 export const menuIconStyle = {
   display: "inline-block",
@@ -97,6 +100,7 @@ class EamlightMenu extends Component {
     this.openSubMenu = this.openSubMenu.bind(this);
     this.fetchNewScreenLayout = useLayoutStore.getState().fetchNewScreenLayout;
     this.applicationData = useApplicationDataStore.getState().applicationData;
+    this.userData = useUserDataStore.getState().userData;
   }
 
   mainMenuClickHandler(event) {
@@ -146,9 +150,6 @@ class EamlightMenu extends Component {
     };
 
     const {
-      myOpenWorkOrders,
-      myTeamWorkOrders,
-      userData,
       showNotification,
       showError
     } = this.props;
@@ -163,7 +164,7 @@ class EamlightMenu extends Component {
       eamAccount,
       screens,
       reports,
-    } = userData;
+    } = this.userData;
 
     const currentPartScreen = screens[partScreen] || {};
     const currentWorkOrderScreen = screens[workOrderScreen] || {};
@@ -225,13 +226,13 @@ class EamlightMenu extends Component {
                 <Tooltip title="MY OPEN WOs" placement="right">
                   <Account style={iconStyles} />
                 </Tooltip>
-                {!!myOpenWorkOrders.length && (
+                {/* {!!this.myOpenWorkOrders.length && (
                   <div className="numberOfWorkOrders">
-                    {myOpenWorkOrders.length < 100
-                      ? myOpenWorkOrders.length
+                    {this.myOpenWorkOrders.length < 100
+                      ? this.myOpenWorkOrders.length
                       : "99+"}
                   </div>
-                )}
+                )} */}
               </div>
             </li>
 
@@ -240,13 +241,13 @@ class EamlightMenu extends Component {
                 <Tooltip title="MY TEAM's WOs" placement="right">
                   <AccountMultiple style={iconStyles} />
                 </Tooltip>
-                {!!myTeamWorkOrders.length && (
+                {/* {!!this.myTeamWorkOrders.length && (
                   <div className="numberOfWorkOrders">
-                    {myTeamWorkOrders.length < 100
-                      ? myTeamWorkOrders.length
+                    {this.myTeamWorkOrders.length < 100
+                      ? this.myTeamWorkOrders.length
                       : "99+"}
                   </div>
-                )}
+                )} */}
               </div>
             </li>
 
@@ -303,10 +304,9 @@ class EamlightMenu extends Component {
             </li>
           </ul>
 
-          <MenuMyWorkorders myOpenWorkOrders={myOpenWorkOrders} />
+          <MenuMyWorkorders/>
 
           <MenuMyTeamWorkorders
-            myTeamWorkOrders={myTeamWorkOrders}
             eamAccount={eamAccount}
           />
 

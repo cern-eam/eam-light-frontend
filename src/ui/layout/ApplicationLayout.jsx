@@ -20,6 +20,7 @@ import Footer from "./Footer";
 import GridTools from "@/tools/GridTools";
 import queryString from "query-string";
 import useApplicationDataStore from "../../state/applicationDataStore";
+import useUserDataStore from "../../state/userDataStore";
 
 const styles = {
   topBarLink: {
@@ -36,7 +37,6 @@ const styles = {
 export default withStyles(styles)(function ApplicationLayout(props) {
   const {
     classes,
-    userData,
     scannedUser,
     updateScannedUser,
     handleError,
@@ -44,6 +44,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
   } = props;
 
   const {applicationData} = useApplicationDataStore();
+  const {userData} = useUserDataStore();
   const environment = applicationData.EL_ENVIR;
 
   const [menuCompacted, setMenuCompacted] = useState(false);

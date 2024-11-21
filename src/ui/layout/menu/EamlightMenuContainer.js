@@ -8,8 +8,7 @@ import {
 const mapStateToProps = (state) => {
     return {
         myOpenWorkOrders: state.workorder.myOpenWorkOrders,
-        myTeamWorkOrders: state.workorder.myTeamWorkOrders,
-        userData: state.application.userData
+        myTeamWorkOrders: state.workorder.myTeamWorkOrders
     }
 };
 
