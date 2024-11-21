@@ -1,10 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  isHiddenRegion,
-  getHiddenRegionState,
-  getUniqueRegionID,
-} from "../selectors/uiSelectors";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import queryString from "query-string";
@@ -26,8 +21,6 @@ import {
   showError,
   showNotification,
   handleError,
-  toggleHiddenRegion,
-  setRegionVisibility,
   showWarning,
 } from "@/actions/uiActions";
 import WSCustomFields from "eam-components/dist/tools/WSCustomFields";
@@ -40,6 +33,7 @@ import useFieldsValidator from "eam-components/dist/ui/components/inputs-ng/hook
 import useLayoutStore from "../state/useLayoutStore";
 import useUserDataStore from "../state/useUserDataStore";
 import useApplicationDataStore from "../state/useApplicationDataStore";
+import { useHiddenRegionsStore, getUniqueRegionID } from "../state/useHiddenRegionsStore";
 
 const useEntity = (params) => {
   const {
@@ -81,17 +75,13 @@ const useEntity = (params) => {
   const showErrorConst = (...args) => dispatch(showError(...args));
   const showWarningConst = (...args) => dispatch(showWarning(...args));
   const handleErrorConst = (...args) => dispatch(handleError(...args));
-  const toggleHiddenRegionConst = (...args) =>
-    dispatch(toggleHiddenRegion(...args));
-  const setRegionVisibilityConst = (...args) =>
-    dispatch(setRegionVisibility(...args));
 
   const { userData } = useUserDataStore();
   const { applicationData } = useApplicationDataStore();
+  const { isHiddenRegion, getHiddenRegionState, toggleHiddenRegion, setRegionVisibility } = useHiddenRegionsStore();
   
   const screenCode = userData[screenProperty];  
   const screenLayout = useLayoutStore().screenLayout[screenCode];; 
-  
   const screenPermissions = userData.screens[screenCode];
 
   const showEqpTree = useSelector((state) => state.ui.layout.showEqpTree);
@@ -112,17 +102,6 @@ const useEntity = (params) => {
       [screenCode, entity?.customField]
     ),
     entity
-  );
-
-  // HIDDEN REGIONS
-  const isHiddenRegionConst = useSelector((state) =>
-    isHiddenRegion(state)(screenCode)
-  );
-  const getHiddenRegionStateConst = useSelector((state) =>
-    getHiddenRegionState(state)(screenCode)
-  );
-  const getUniqueRegionIDConst = useSelector((state) =>
-    getUniqueRegionID(state)(screenCode)
   );
 
   useEffect(() => {
@@ -401,9 +380,9 @@ const useEntity = (params) => {
     isModified,
     userData,
     applicationData,
-    isHiddenRegion: isHiddenRegionConst,
-    getHiddenRegionState: getHiddenRegionStateConst,
-    getUniqueRegionID: getUniqueRegionIDConst,
+    isHiddenRegion: isHiddenRegion(screenCode),
+    getHiddenRegionState: getHiddenRegionState(screenCode),
+    getUniqueRegionID: getUniqueRegionID(screenCode),
     commentsComponent,
     setLayoutProperty: setLayoutPropertyConst,
     showEqpTree,
@@ -412,8 +391,8 @@ const useEntity = (params) => {
     showNotification: showNotificationConst,
     handleError: handleErrorConst,
     showWarning: showWarningConst,
-    toggleHiddenRegion: toggleHiddenRegionConst,
-    setRegionVisibility: setRegionVisibilityConst,
+    toggleHiddenRegion,
+    setRegionVisibility,
     //
     newHandler,
     saveHandler,
