@@ -4,6 +4,7 @@ import WS from '../tools/WS';
 
 const useUserDataStore = create((set) => ({
     userData: null,
+    
     fetchUserData: async () => {
         const fetchUserData = () => {
             // Get URL parameters
@@ -18,6 +19,15 @@ const useUserDataStore = create((set) => ({
         const response = await fetchUserData();
         set({ userData: response.body.data });
     },
+
+    setUserData: (updatedData) => {
+        set((state) => ({
+            userData: {
+                ...state.userData, 
+                ...updatedData,  
+            },
+        }));
+    }
 }));
 
 export default useUserDataStore;

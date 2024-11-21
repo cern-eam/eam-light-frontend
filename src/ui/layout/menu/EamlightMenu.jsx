@@ -40,6 +40,7 @@ import useApplicationDataStore from "../../../state/useApplicationDataStore";
 import useUserDataStore from "../../../state/useUserDataStore";
 import NumberOfMyOpenWorkOrders from "./components/NumberOfMyWorkOrders";
 import NumberOfMyTeamWorkOrders from "./components/NumberOfMyTeamWorkOrders";
+import { TAB_CODES_ASSETS, TAB_CODES_LOCATIONS, TAB_CODES_PARTS, TAB_CODES_POSITIONS, TAB_CODES_SYSTEMS, TAB_CODES_WORK_ORDERS } from "../../components/entityregions/TabCodeMapping";
 
 export const menuIconStyle = {
   display: "inline-block",
@@ -172,12 +173,12 @@ class EamlightMenu extends Component {
     const screenProps = {
       workOrder: {
         screenName: "WSJOBS",
-        updateScreenLayout: this.fetchNewScreenLayout,
+        updateScreenLayout: screenCode => this.fetchNewScreenLayout(screenCode, TAB_CODES_WORK_ORDERS, 'workOrderScreen'),
         screen: workOrderScreen,
       },
       asset: {
         screenName: "OSOBJA",
-        //updateScreenLayout: updateAssetScreenLayout,
+        updateScreenLayout: screenCode => this.fetchNewScreenLayout(screenCode, TAB_CODES_ASSETS, 'assetScreen'),
         screen: assetScreen,
       },
       ncr: {
@@ -186,22 +187,22 @@ class EamlightMenu extends Component {
       },
       position: {
         screenName: "OSOBJP",
-        //updateScreenLayout: updatePositionScreenLayout,
+        updateScreenLayout: screenCode => this.fetchNewScreenLayout(screenCode, TAB_CODES_POSITIONS, 'positionScreen'),
         screen: positionScreen,
       },
       system: {
         screenName: "OSOBJS",
-        //updateScreenLayout: updateSystemScreenLayout,
+        updateScreenLayout: screenCode => this.fetchNewScreenLayout(screenCode, TAB_CODES_SYSTEMS, 'systemScreen'),
         screen: systemScreen,
       },
       location: {
         screenName: "OSOBJL",
-        //updateScreenLayout: updateLocationScreenLayout,
+        updateScreenLayout: screenCode => this.fetchNewScreenLayout(screenCode, TAB_CODES_LOCATIONS, 'locationScreen'),
         screen: locationScreen,
       },
       part: {
         screenName: "SSPART",
-        //updateScreenLayout: updatePartScreenLayout,
+        updateScreenLayout: screenCode => this.fetchNewScreenLayout(screenCode, TAB_CODES_PARTS, 'partScreen'),
         screen: partScreen,
       },
     };

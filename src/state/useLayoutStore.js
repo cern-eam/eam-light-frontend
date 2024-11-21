@@ -2,6 +2,7 @@
 import { create } from 'zustand';
 import WS from "../tools/WS";
 import { TAB_CODES_ASSETS, TAB_CODES_LOCATIONS, TAB_CODES_NCR, TAB_CODES_PARTS, TAB_CODES_POSITIONS, TAB_CODES_SYSTEMS, TAB_CODES_WORK_ORDERS } from '../ui/components/entityregions/TabCodeMapping';
+import useUserDataStore from './useUserDataStore';
 
 const screens = (userData) => ([
   {
@@ -55,7 +56,10 @@ const screens = (userData) => ([
 ]);
 
 const useLayoutStore = create((set) => ({
-  screenLayout: null, // Updated to store layouts as a key-value pair
+  
+  screenLayout: null, 
+  
+  fetchScreenLayoutFailed: false,
   
   fetchScreenLayout: async (userData) => {
     try {
@@ -69,24 +73,44 @@ const useLayoutStore = create((set) => ({
 
       // Convert array of results into an object 
       const layoutsMap = layouts.reduce((acc, { key, value }) => {acc[key] = value; return acc;}, {});
-      set({ screenLayout: layoutsMap });
+
+      await set((state) => ({
+        screenLayout: {
+          ...state.screenLayout,
+          ...layoutsMap,
+        },
+        fetchScreenLayoutFailed: false,
+      }));
+
     } catch (error) {
-      console.error(`Error fetching screen layouts for userGroup "${userGroup}":`, error);
-      set({ screenLayouts: {} });
+      console.error(`Error fetching screen layout`, error);
+      set({
+        screenLayout: {}, // Clear layouts on failure
+        fetchScreenLayoutFailed: true, // Set the failure flag
+      });
     }
   },
 
-  fetchNewScreenLayout: async (...args) => {
+  fetchNewScreenLayout: async (userFunctionCode, tabs, screenProperty) => {
     try {
-      console.log("fetch new layout", args)
-      const newLayout = await WS.getScreenLayout(...args).then((result) => result.body.data);
+      const {userData, setUserData} = useUserDataStore.getState();
 
-      set((state) => ({
+      const newLayout = await WS.getScreenLayout(userData.eamAccount.userGroup,
+        userData.screens[userFunctionCode].entity,
+        userData.screens[userFunctionCode].parentScreen,
+        userFunctionCode,
+        tabs
+      ).then((result) => result.body.data);
+
+      // await ensures that the setUserData will be called only when the state is updated
+      await set((state) => ({
         screenLayout: {
           ...state.screenLayout,
-          newScreenLayout: newLayout,
+          [userFunctionCode]: newLayout,
         },
       }));
+
+      setUserData({[screenProperty]: userFunctionCode});
     } catch (error) {
       console.error(`Error fetching new screen layout:`, error);
     }

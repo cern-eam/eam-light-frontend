@@ -1,7 +1,5 @@
 import "./Eamlight.css";
 import "react-grid-layout/css/styles.css";
-// import "react-resizable/css/styles.css";
-
 import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ApplicationLayoutContainer from "./ui/layout/ApplicationLayoutContainer";
@@ -49,7 +47,7 @@ const blockUiStyleDiv = {
 };
 
 const Eamlight = ({ inforContext }) => {
-  const { screenLayout, fetchScreenLayout } = useLayoutStore();
+  const { screenLayout, fetchScreenLayout, fetchScreenLayoutFailed } = useLayoutStore();
   const { userData, fetchUserData} = useUserDataStore();
   const { applicationData, fetchApplicationData } = useApplicationDataStore();
 
@@ -59,7 +57,7 @@ const Eamlight = ({ inforContext }) => {
   },[])
 
   useEffect(() => {
-    if (userData) {
+    if (userData && !screenLayout) {
       fetchScreenLayout(userData);
     }
   }, [userData]);
@@ -81,7 +79,7 @@ const Eamlight = ({ inforContext }) => {
         />
       );
     }
-    if (userData.screenLayoutFetchingFailed) {
+    if (fetchScreenLayoutFailed) {
       return (
         <InfoPage
           title="Unable to initialize EAM Light"
