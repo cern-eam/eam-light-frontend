@@ -682,6 +682,7 @@ const Workorder = () => {
 
   function unmountHandler() {
     setLayoutProperty("eqpTreeMenu", null);
+    setCurrentWorkOrder(null);
   }
 
   if (!workorder) {
