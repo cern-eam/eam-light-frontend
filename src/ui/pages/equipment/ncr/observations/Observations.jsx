@@ -7,6 +7,7 @@ import ObservationsDialog from "./ObservationsDialog";
 import useLayoutStore from "../../../../../state/layoutStore";
 import WorkOrdersDialog from "./WorkOrdersDialog";
 import WSWorkorders from "../../../../../tools/WSWorkorders";
+import useUserDataStore from "../../../../../state/userDataStore";
 
 const Observations = ({
     ncr,
@@ -14,7 +15,6 @@ const Observations = ({
     disabled,
     handleError,
     observationFields,
-    userData,
     statuses,
 }) => {
     const headers = [
@@ -34,6 +34,7 @@ const Observations = ({
         "daterecorded",
     ];
 
+    const {userData} = useUserDataStore();
     const [data, setData] = useState([]);
     const [isObservationsDialogOpen, setIsObservationsDialogOpen] =
         useState(false);

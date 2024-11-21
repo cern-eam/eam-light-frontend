@@ -5,14 +5,7 @@ import {
     showNotification
 } from '../../../actions/uiActions'
 
-const mapStateToProps = (state) => {
-    return {
-        myOpenWorkOrders: state.workorder.myOpenWorkOrders,
-        myTeamWorkOrders: state.workorder.myTeamWorkOrders
-    }
-};
-
-const EamlightMenuContainer = connect(mapStateToProps, {
+const EamlightMenuContainer = connect(null, {
     showError,
     showNotification
 })(EamlightMenu);

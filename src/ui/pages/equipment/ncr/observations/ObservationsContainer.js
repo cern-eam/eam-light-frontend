@@ -6,13 +6,7 @@ import {
 } from "../../../../../actions/uiActions";
 import Observations from "./Observations";
 
-function mapStateToProps(state) {
-    return {
-        userData: state.application.userData,
-    };
-}
-
-const ObservationsContainer = connect(mapStateToProps, {
+const ObservationsContainer = connect(null, {
     showNotification,
     showError,
     handleError,
