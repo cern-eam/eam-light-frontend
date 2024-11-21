@@ -1,4 +1,3 @@
-// store.js
 import { create } from 'zustand';
 import WS from "../tools/WS";
 import { TAB_CODES_ASSETS, TAB_CODES_LOCATIONS, TAB_CODES_NCR, TAB_CODES_PARTS, TAB_CODES_POSITIONS, TAB_CODES_SYSTEMS, TAB_CODES_WORK_ORDERS } from '../ui/components/entityregions/TabCodeMapping';
