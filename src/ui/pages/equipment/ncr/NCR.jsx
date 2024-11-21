@@ -158,7 +158,7 @@ const NCR = () => {
             {
                 id: "COMMENTS",
                 label: "Comments",
-                isVisibleWhenNewEntity: true,
+                isVisibleWhenNewEntity: false,
                 maximizable: false,
                 render: () => (
                     <Comments
@@ -266,7 +266,7 @@ const NCR = () => {
                     extendedLink: applicationData.EL_ASSLI,
                     screencode: screenCode,
                     copyHandler,
-                    entityType: ENTITY_TYPE.EQUIPMENT,
+                    entityType: ENTITY_TYPE.NCR,
                     screens: screenPermissions,
                     workorderScreencode: userData.workOrderScreen,
                 }}
