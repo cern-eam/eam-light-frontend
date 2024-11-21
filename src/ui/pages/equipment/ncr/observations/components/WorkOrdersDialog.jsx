@@ -1,5 +1,5 @@
-import WS from "../../../../../tools/WS";
-import WSWorkorders from "../../../../../tools/WSWorkorders";
+import WS from "../../../../../../tools/WS";
+import WSWorkorders from "../../../../../../tools/WSWorkorders";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -15,7 +15,7 @@ import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAuto
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import { IconButton } from "@mui/material";
 import { FileTree } from "mdi-material-ui";
-import { isDepartmentReadOnly } from "../../../../pages/EntityTools";
+import { isDepartmentReadOnly } from "../../../../../pages/EntityTools";
 
 const WorkOrdersDialog = ({
     handleSuccess,
