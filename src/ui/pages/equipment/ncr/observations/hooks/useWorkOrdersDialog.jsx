@@ -22,24 +22,22 @@ const useWorkOrdersDialog = (
         setWorkOrder((prev) => ({ ...prev, [key]: value }));
     }, []);
 
-    const successHandler = useCallback(
-        async (workOrder) => {
-            try {
-                const response = await WSWorkorders.createWorkOrder(workOrder);
-                showNotification(SUCCESS_DIALOG_MESSAGE);
-                await observationsDialogSuccessHandler({
-                    jobNum: response.body.data,
-                    nonConformityCode: ncrCode,
-                });
-                setIsOpen(false);
-            } catch (error) {
-                handleError(error);
-            } finally {
-                setIsLoading(false);
-            }
-        },
-        [observationsDialogSuccessHandler, ncrCode]
-    );
+    const successHandler = useCallback(async () => {
+        try {
+            const response = await WSWorkorders.createWorkOrder(workOrder);
+            showNotification(SUCCESS_DIALOG_MESSAGE);
+            await observationsDialogSuccessHandler({
+                jobNum: response.body.data,
+                nonConformityCode: ncrCode,
+            });
+            setIsOpen(false);
+        } catch (error) {
+            console.log(error);
+            handleError(error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [observationsDialogSuccessHandler, ncrCode, workOrder]);
 
     const cancelHandler = useCallback(() => setIsOpen(false), []);
 
