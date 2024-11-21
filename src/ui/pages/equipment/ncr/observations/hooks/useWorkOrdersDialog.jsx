@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import WSWorkorders from "../../../../../../tools/WSWorkorders";
+import WSWorkorders from "@/tools/WSWorkorders";
 import { SUCCESS_DIALOG_MESSAGE } from "../constants/workOrdersDialog";
 
 const useWorkOrdersDialog = (

@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
-import WSNCRs from "../../../../../tools/WSNCRs";
+import WSNCRs from "@/tools/WSNCRs";
 import EISTable from "eam-components/dist/ui/components/table";
 import BlockUi from "react-block-ui";
 import Button from "@mui/material/Button";
 import ObservationsDialog from "./components/ObservationsDialog";
-import useLayoutStore from "../../../../../state/layoutStore";
+import useLayoutStore from "@/state/layoutStore";
 import WorkOrdersDialog from "./components/WorkOrdersDialog";
-import useUserDataStore from "../../../../../state/userDataStore";
+import useUserDataStore from "@/state/userDataStore";
 import useObservationsDialog from "./hooks/useObservationsDialog";
 import useWorkOrdersDialog from "./hooks/useWorkOrdersDialog";
 
