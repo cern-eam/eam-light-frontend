@@ -1,4 +1,4 @@
-const NumberOfWorkOrders = ({ count }) => {
+const NumberBadge = ({ count }) => {
   if (!count) return null;
 
   return (
@@ -25,4 +25,4 @@ const NumberOfWorkOrders = ({ count }) => {
   );
 };
 
-export default NumberOfWorkOrders;
+export default NumberBadge;
