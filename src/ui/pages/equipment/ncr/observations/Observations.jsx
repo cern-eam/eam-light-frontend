@@ -2,13 +2,13 @@ import { useState, useEffect, useCallback } from "react";
 import WSNCRs from "@/tools/WSNCRs";
 import EISTable from "eam-components/dist/ui/components/table";
 import BlockUi from "react-block-ui";
-import Button from "@mui/material/Button";
 import ObservationsDialog from "./components/ObservationsDialog";
 import useLayoutStore from "@/state/layoutStore";
 import WorkOrdersDialog from "./components/WorkOrdersDialog";
 import useUserDataStore from "@/state/userDataStore";
 import useObservationsDialog from "./hooks/useObservationsDialog";
 import useWorkOrdersDialog from "./hooks/useWorkOrdersDialog";
+import ObservationsActions from "./components/ObservationsActions";
 
 const Observations = ({
     ncrCode,
@@ -106,24 +106,11 @@ const Observations = ({
                     />
                 )}
                 <div style={{ height: 15 }} />
-                <div style={{ display: "flex", columnGap: 10 }}>
-                    <Button
-                        onClick={observationsDialogOpenHandler}
-                        color="primary"
-                        disabled={disabled}
-                        variant="outlined"
-                    >
-                        Add Observation
-                    </Button>
-                    <Button
-                        onClick={workOrdersDialogOpenHandler}
-                        color="primary"
-                        disabled={disabled}
-                        variant="outlined"
-                    >
-                        Create WO
-                    </Button>
-                </div>
+                <ObservationsActions
+                    disabled={disabled}
+                    handleAddObservationClick={observationsDialogOpenHandler}
+                    handleCreateWorkOrderClick={workOrdersDialogOpenHandler}
+                />
             </div>
             <ObservationsDialog
                 handleSuccess={observationsDialogSuccessHandler}
