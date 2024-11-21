@@ -1,5 +1,3 @@
-import { useState, useEffect, useCallback } from "react";
-import WSNCRs from "@/tools/WSNCRs";
 import BlockUi from "react-block-ui";
 import ObservationsDialog from "./components/ObservationsDialog";
 import useLayoutStore from "@/state/layoutStore";
@@ -9,6 +7,7 @@ import useObservationsDialog from "./hooks/useObservationsDialog";
 import useWorkOrdersDialog from "./hooks/useWorkOrdersDialog";
 import ObservationsActions from "./components/ObservationsActions";
 import ObservationsTable from "./components/ObservationsTable";
+import useObservations from "./hooks/useObservations";
 
 const Observations = ({
     ncrCode,
@@ -19,8 +18,6 @@ const Observations = ({
     statuses,
 }) => {
     const { userData } = useUserDataStore();
-    const [observations, setObservations] = useState([]);
-    const [isLoading, setIsLoading] = useState([]);
 
     const {
         screenLayout: {
@@ -28,19 +25,10 @@ const Observations = ({
         },
     } = useLayoutStore();
 
-    const fetchData = useCallback(async (ncr) => {
-        if (ncr) {
-            try {
-                setIsLoading(true);
-                const response = await WSNCRs.getNonConformityObservations(ncr);
-                setObservations(response.body.data);
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setIsLoading(false);
-            }
-        }
-    }, []);
+    const { observations, isLoading, fetchData } = useObservations(
+        ncrCode,
+        handleError
+    );
 
     const {
         isOpen: isObservationsDialogOpen,
@@ -73,8 +61,6 @@ const Observations = ({
         observationsDialogSuccessHandler,
         ncrCode
     );
-
-    useEffect(() => fetchData(ncrCode), [ncrCode, fetchData]);
 
     return isLoading ? (
         <BlockUi tag="div" blocking={isLoading} style={{ width: "100%" }} />
