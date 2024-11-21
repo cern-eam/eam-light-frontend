@@ -6,6 +6,9 @@ import ReplaceEqpGeneral from "./ReplaceEqpGeneral";
 import WSEquipment from "../../../../tools/WSEquipment";
 import './ReplaceEqp.css';
 import queryString from "query-string";
+import useUserDataStore from '../../../../state/userDataStore';
+import useApplicationDataStore from '../../../../state/applicationDataStore';
+import useLayoutStore from '../../../../state/layoutStore';
 
 const MODE_STANDARD = 'Standard';
 
@@ -22,13 +25,10 @@ const initEqpReplacement = {
 
 const ReplaceEqp = (props) => {
     const {
-        cryoClasses,
-        equipmentLayout,
         handleError,
         showError,
         showNotification,
-        showWarning,
-        userData,
+        showWarning
     } = props;
 
     const [blocking, setBlocking] = useState(false);
@@ -37,6 +37,11 @@ const ReplaceEqp = (props) => {
     const [replaceEquipment, setReplaceEquipment] = useState(initEqpReplacement);
     const [stateList, setStateList] = useState([]);
     const [statusList, setStatusList] = useState([]);
+    const { userData } = useUserDataStore();
+    const { screenLayout } = useLayoutStore()
+    const { applicationData } = useApplicationDataStore();
+    const cryoClasses = applicationData.EL_CRYOC;
+    const equipmentLayout = screenLayout[userData.assetScreen];
 
     useEffect(() => {
         //Check URL parameters

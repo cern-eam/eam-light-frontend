@@ -3,15 +3,7 @@ import {handleError, showError, showWarning, showNotification} from '../../../..
 import ReplaceEqp from "./ReplaceEqp";
 import { withCernMode } from '../../../components/CERNMode';
 
-function mapStateToProps(state) {
-    return {
-        userData: state.application.userData,
-        equipmentLayout: state.application.assetLayout,
-        cryoClasses: state.application.applicationData.EL_CRYOC,
-    }
-}
-
-const ReplaceEqpContainer = connect(mapStateToProps, {
+const ReplaceEqpContainer = connect(null, {
         showNotification,
         showError,
         showWarning,
