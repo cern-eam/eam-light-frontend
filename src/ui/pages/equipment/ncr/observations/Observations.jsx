@@ -80,11 +80,12 @@ const Observations = ({
         <BlockUi tag="div" blocking={isLoading} style={{ width: "100%" }} />
     ) : (
         <>
-            <div style={{ width: "100%", height: "100%" }}>
+            <div
+                style={{ display: "flex", flexDirection: "column", rowGap: 15 }}
+            >
                 {observations?.length && (
                     <ObservationsTable observations={observations} />
                 )}
-                <div style={{ height: 15 }} />
                 <ObservationsActions
                     disabled={disabled}
                     handleAddObservationClick={observationsDialogOpenHandler}
