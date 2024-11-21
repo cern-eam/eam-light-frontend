@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import BlockUi from "react-block-ui";
-import WSNCRs from "../../../../../tools/WSNCRs";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import {
     createOnChangeHandler,
@@ -25,16 +24,11 @@ const ObservationsDialog = (props) => {
         setObservation((prev) => ({ ...prev, [key]: value }));
     };
 
-    const handleSave = () => {
+    const handleSave = useCallback(async () => {
         setLoading(true);
-        WSNCRs.createObservation({
-            ...observation,
-            nonConformityCode: props.ncr.code,
-        })
-            .then(props.successHandler)
-            .catch(props.handleError)
-            .finally(() => setLoading(false));
-    };
+        await props.successHandler(observation);
+        setLoading(false);
+    }, [observation]);
 
     return (
         <Dialog

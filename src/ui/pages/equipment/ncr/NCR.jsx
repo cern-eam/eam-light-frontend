@@ -23,12 +23,11 @@ import UserDefinedFields from "../../../components/userdefinedfields/UserDefined
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import EDMSDoclightIframeContainer from "@/ui/components/iframes/EDMSDoclightIframeContainer";
 import ObservationsContainer from "./observations/ObservationsContainer";
-import useLayoutStore from "../../../../state/layoutStore.js";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
+import WSWorkorders from "../../../../tools/WSWorkorders.js";
 
 const NCR = () => {
     const [statuses, setStatuses] = useState([]);
-    const { screenLayout: {OSJOBS: ncrWorkOrderLayout} } = useLayoutStore(); 
 
     const {
         screenLayout: ncrLayout,
@@ -84,14 +83,24 @@ const NCR = () => {
     }
 
     function postRead() {
-      console.log('ncr wo layout', ncrWorkOrderLayout)
+        readStatuses("", "", true);
     }
+
+    const readStatuses = (status, type, newwo) => {
+        WSWorkorders.getWorkOrderStatusValues(
+            userData.eamAccount.userGroup,
+            status,
+            type,
+            newwo
+        )
+            .then((response) => setStatuses(response.body.data))
+            .catch(console.error);
+    };
 
     const getRegions = () => {
         const tabs = ncrLayout.tabs;
 
         const commonProps = {
-            equipment,
             newEntity,
             ncrLayout,
             updateNCRProperty,
@@ -210,8 +219,9 @@ const NCR = () => {
                 render: () => (
                     <ObservationsContainer
                         ncr={ncr}
-                        tabLayout={tabs[TAB_CODES.OBSERVATIONS]}
+                        observationFields={tabs[TAB_CODES.OBSERVATIONS].fields}
                         disabled={readOnly}
+                        statuses={statuses}
                     />
                 ),
                 column: 2,
