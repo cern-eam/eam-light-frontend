@@ -198,8 +198,6 @@ class EamlightToolbar extends Component {
   renderPanelSelector = () => {
     const { entityScreen, isLocalAdministrator } = this.props;
 
-    console.log('local admin', isLocalAdministrator);
-
     return (
       <>
         {isLocalAdministrator && (
