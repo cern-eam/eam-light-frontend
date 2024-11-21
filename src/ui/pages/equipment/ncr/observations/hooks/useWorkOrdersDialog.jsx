@@ -6,8 +6,7 @@ const useWorkOrdersDialog = (
     isObservationsLoading,
     showNotification,
     handleError,
-    observationsDialogSuccessHandler,
-    ncrCode
+    observationsDialogSuccessHandler
 ) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +27,6 @@ const useWorkOrdersDialog = (
             showNotification(SUCCESS_DIALOG_MESSAGE);
             await observationsDialogSuccessHandler({
                 jobNum: response.body.data,
-                nonConformityCode: ncrCode,
             });
             setIsOpen(false);
         } catch (error) {
@@ -37,7 +35,7 @@ const useWorkOrdersDialog = (
         } finally {
             setIsLoading(false);
         }
-    }, [observationsDialogSuccessHandler, ncrCode, workOrder]);
+    }, [observationsDialogSuccessHandler, workOrder]);
 
     const cancelHandler = useCallback(() => setIsOpen(false), []);
 

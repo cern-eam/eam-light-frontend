@@ -81,7 +81,7 @@ const ObservationsDialog = ({
                     Cancel
                 </Button>
                 <Button
-                    onClick={handleSuccess}
+                    onClick={() => handleSuccess(observation)}
                     color="primary"
                     disabled={disabled}
                 >

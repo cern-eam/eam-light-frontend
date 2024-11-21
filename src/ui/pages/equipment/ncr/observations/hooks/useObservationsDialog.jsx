@@ -22,22 +22,25 @@ const useObservationsDialog = (
         setObservation((prev) => ({ ...prev, [key]: value }));
     }, []);
 
-    const successHandler = useCallback(async () => {
-        try {
-            setIsLoading(true);
-            await WSNCRs.createObservation({
-                ...observation,
-                nonConformityCode: ncrCode,
-            });
-            showNotification(SUCCESS_DIALOG_MESSAGE);
-            setIsOpen(false);
-            fetchData(ncrCode);
-        } catch (error) {
-            handleError(error);
-        } finally {
-            setIsLoading(false);
-        }
-    }, [fetchData, ncrCode, observation]);
+    const successHandler = useCallback(
+        async (observation) => {
+            try {
+                setIsLoading(true);
+                await WSNCRs.createObservation({
+                    ...observation,
+                    nonConformityCode: ncrCode,
+                });
+                showNotification(SUCCESS_DIALOG_MESSAGE);
+                setIsOpen(false);
+                fetchData(ncrCode);
+            } catch (error) {
+                handleError(error);
+            } finally {
+                setIsLoading(false);
+            }
+        },
+        [fetchData, ncrCode]
+    );
 
     const cancelHandler = useCallback(() => setIsOpen(false), []);
 

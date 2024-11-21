@@ -58,8 +58,7 @@ const Observations = ({
         isLoading,
         showNotification,
         handleError,
-        observationsDialogSuccessHandler,
-        ncrCode
+        observationsDialogSuccessHandler
     );
 
     return isLoading ? (
