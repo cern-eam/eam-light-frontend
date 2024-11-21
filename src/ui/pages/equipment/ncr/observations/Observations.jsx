@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import WSNCRs from "@/tools/WSNCRs";
-import EISTable from "eam-components/dist/ui/components/table";
 import BlockUi from "react-block-ui";
 import ObservationsDialog from "./components/ObservationsDialog";
 import useLayoutStore from "@/state/layoutStore";
@@ -9,6 +8,7 @@ import useUserDataStore from "@/state/userDataStore";
 import useObservationsDialog from "./hooks/useObservationsDialog";
 import useWorkOrdersDialog from "./hooks/useWorkOrdersDialog";
 import ObservationsActions from "./components/ObservationsActions";
+import ObservationsTable from "./components/ObservationsTable";
 
 const Observations = ({
     ncrCode,
@@ -18,23 +18,6 @@ const Observations = ({
     observationFields,
     statuses,
 }) => {
-    const headers = [
-        "Observation",
-        "Severity",
-        "Condition Score",
-        "Condition Index",
-        "Recorded By",
-        "Date Recorded",
-    ];
-    const propCodes = [
-        "observation",
-        "severity_display",
-        "conditionscore",
-        "conditionindex_display",
-        "recordedby",
-        "daterecorded",
-    ];
-
     const { userData } = useUserDataStore();
     const [observations, setObservations] = useState([]);
     const [isLoading, setIsLoading] = useState([]);
@@ -98,12 +81,8 @@ const Observations = ({
     ) : (
         <>
             <div style={{ width: "100%", height: "100%" }}>
-                {observations?.length > 0 && (
-                    <EISTable
-                        data={observations}
-                        headers={headers}
-                        propCodes={propCodes}
-                    />
+                {observations?.length && (
+                    <ObservationsTable observations={observations} />
                 )}
                 <div style={{ height: 15 }} />
                 <ObservationsActions
