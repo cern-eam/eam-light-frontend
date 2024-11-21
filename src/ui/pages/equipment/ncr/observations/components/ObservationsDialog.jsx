@@ -14,10 +14,10 @@ import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextFie
 
 const ObservationsDialog = ({
     handleSuccess,
-    isOpen,
+    open,
     handleCancel,
     fields,
-    isDisabled,
+    disabled,
     observation,
     handleUpdate,
 }) => {
@@ -30,14 +30,14 @@ const ObservationsDialog = ({
         <Dialog
             fullWidth
             id="addObservationDialog"
-            open={isOpen}
+            open={open}
             onClose={handleCancel}
             aria-labelledby="form-dialog-title"
         >
             <DialogTitle id="form-dialog-title">Add Observation</DialogTitle>
 
             <DialogContent id="content" style={{ overflowY: "visible" }}>
-                <BlockUi tag="div" blocking={isDisabled}>
+                <BlockUi tag="div" blocking={disabled}>
                     <EAMSelect
                         {...processElementInfo(fields["status"])}
                         options={lists.observationStatusCode}
@@ -76,14 +76,14 @@ const ObservationsDialog = ({
                 <Button
                     onClick={handleCancel}
                     color="primary"
-                    disabled={isDisabled}
+                    disabled={disabled}
                 >
                     Cancel
                 </Button>
                 <Button
                     onClick={handleSuccess}
                     color="primary"
-                    disabled={isDisabled}
+                    disabled={disabled}
                 >
                     Save
                 </Button>

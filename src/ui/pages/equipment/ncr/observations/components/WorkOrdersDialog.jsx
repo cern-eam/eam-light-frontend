@@ -19,10 +19,10 @@ import { isDepartmentReadOnly } from "@/ui/pages/EntityTools";
 
 const WorkOrdersDialog = ({
     handleSuccess,
-    isOpen,
+    open,
     handleCancel,
     fields,
-    isDisabled,
+    disabled,
     workOrder,
     handleUpdate,
     userData,
@@ -40,14 +40,14 @@ const WorkOrdersDialog = ({
         <Dialog
             fullWidth
             id="addNcrWorkOrderDialog"
-            open={isOpen}
+            open={open}
             onClose={handleCancel}
             aria-labelledby="form-dialog-title"
         >
             <DialogTitle id="form-dialog-title">Add Work Order</DialogTitle>
 
             <DialogContent id="content" style={{ overflowY: "visible" }}>
-                <BlockUi tag="div" blocking={isDisabled}>
+                <BlockUi tag="div" blocking={disabled}>
                     <EAMAutocomplete
                         {...processElementInfo(fields["equipment"])}
                         barcodeScanner
@@ -171,14 +171,14 @@ const WorkOrdersDialog = ({
                 <Button
                     onClick={handleCancel}
                     color="primary"
-                    disabled={isDisabled}
+                    disabled={disabled}
                 >
                     Cancel
                 </Button>
                 <Button
                     onClick={handleSuccess}
                     color="primary"
-                    disabled={isDisabled}
+                    disabled={disabled}
                 >
                     Save
                 </Button>

@@ -114,19 +114,19 @@ const Observations = ({
             </div>
             <ObservationsDialog
                 handleSuccess={observationsDialogSuccessHandler}
-                isOpen={isObservationsDialogOpen}
+                open={isObservationsDialogOpen}
                 handleCancel={observationsDialogCancelHandler}
                 fields={observationFields}
-                isDisabled={isObservationsDialogDisabled}
+                disabled={isObservationsDialogDisabled}
                 observation={observation}
                 handleUpdate={observationsDialogUpdateHandler}
             />
             <WorkOrdersDialog
                 handleSuccess={workOrdersDialogSuccessHandler}
-                isOpen={isWorkOrdersDialogOpen}
+                open={isWorkOrdersDialogOpen}
                 handleCancel={workOrdersDialogCancelHandler}
                 fields={workOrderFields}
-                isDisabled={isWorkOrdersDialogDisabled}
+                disabled={isWorkOrdersDialogDisabled}
                 workOrder={workOrder}
                 handleUpdate={workOrdersDialogUpdateHandler}
                 userData={userData}
