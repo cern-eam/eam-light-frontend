@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import WSNCRs from "../../../../../../tools/WSNCRs";
-import { SUCCESS_DIALOG_MESSAGE } from "../constants/observations";
+import { SUCCESS_DIALOG_MESSAGE } from "../constants/observationsDialog";
 
 const useObservationsDialog = (
     isObservationsLoading,
