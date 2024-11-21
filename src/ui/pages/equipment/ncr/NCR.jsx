@@ -218,7 +218,7 @@ const NCR = () => {
                     ),
                 render: () => (
                     <ObservationsContainer
-                        ncr={ncr}
+                        ncrCode={ncr.code}
                         observationFields={tabs[TAB_CODES.OBSERVATIONS].fields}
                         disabled={readOnly}
                         statuses={statuses}

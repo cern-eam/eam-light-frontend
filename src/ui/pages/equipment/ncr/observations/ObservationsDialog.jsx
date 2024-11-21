@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -12,82 +12,78 @@ import {
 } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 
-const ObservationsDialog = (props) => {
-    const [observation, setObservation] = useState({});
+const ObservationsDialog = ({
+    handleSuccess,
+    isOpen,
+    handleCancel,
+    fields,
+    isDisabled,
+    observation,
+    handleUpdate,
+}) => {
     const [lists, setLists] = useState({
         observationStatusCode: [{ code: "U", desc: "Unfinished" }],
         severity: [{ code: "HIGH", desc: "High" }],
     });
-    const [loading, setLoading] = useState(false);
-
-    const updateObservationProperty = (key, value) => {
-        setObservation((prev) => ({ ...prev, [key]: value }));
-    };
-
-    const handleSave = useCallback(async () => {
-        setLoading(true);
-        await props.successHandler(observation);
-        setLoading(false);
-    }, [observation]);
 
     return (
         <Dialog
             fullWidth
             id="addObservationDialog"
-            open={props.isDialogOpen}
-            onClose={props.handleCancel}
+            open={isOpen}
+            onClose={handleCancel}
             aria-labelledby="form-dialog-title"
         >
             <DialogTitle id="form-dialog-title">Add Observation</DialogTitle>
 
             <DialogContent id="content" style={{ overflowY: "visible" }}>
-                <BlockUi tag="div" blocking={loading || props.isLoading}>
+                <BlockUi tag="div" blocking={isDisabled}>
                     <EAMSelect
-                        {...processElementInfo(props.tabLayout["status"])}
+                        {...processElementInfo(fields["status"])}
                         options={lists.observationStatusCode}
                         value={observation.observationStatusCode}
                         onChange={createOnChangeHandler(
                             "observationStatusCode",
                             null,
                             null,
-                            updateObservationProperty
+                            handleUpdate
                         )}
                     />
                     <EAMSelect
-                        {...processElementInfo(props.tabLayout["severity"])}
+                        {...processElementInfo(fields["severity"])}
                         options={lists.severity}
                         value={observation.severity}
                         onChange={createOnChangeHandler(
                             "severity",
                             null,
                             null,
-                            updateObservationProperty
+                            handleUpdate
                         )}
                     />
                     <EAMTextField
-                        {...processElementInfo(props.tabLayout["note"])}
+                        {...processElementInfo(fields["note"])}
                         value={observation.note}
                         onChange={createOnChangeHandler(
                             "note",
                             null,
                             null,
-                            updateObservationProperty
+                            handleUpdate
                         )}
                     />
                 </BlockUi>
             </DialogContent>
             <DialogActions>
                 <Button
-                    onClick={props.handleCancel}
+                    onClick={handleCancel}
                     color="primary"
-                    disabled={loading || props.isLoading}
+                    disabled={isDisabled}
                 >
                     Cancel
                 </Button>
                 <Button
-                    onClick={handleSave}
+                    onClick={handleSuccess}
                     color="primary"
-                    disabled={loading || props.isLoading}
+                    disabled={isDisabled}
                 >
                     Save
                 </Button>

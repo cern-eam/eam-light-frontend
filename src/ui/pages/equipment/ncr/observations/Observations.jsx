@@ -8,9 +8,10 @@ import useLayoutStore from "../../../../../state/layoutStore";
 import WorkOrdersDialog from "./WorkOrdersDialog";
 import WSWorkorders from "../../../../../tools/WSWorkorders";
 import useUserDataStore from "../../../../../state/userDataStore";
+import useObservationsDialog from "./hooks/useObservationsDialog";
 
 const Observations = ({
-    ncr,
+    ncrCode,
     showNotification,
     disabled,
     handleError,
@@ -34,10 +35,8 @@ const Observations = ({
         "daterecorded",
     ];
 
-    const {userData} = useUserDataStore();
-    const [data, setData] = useState([]);
-    const [isObservationsDialogOpen, setIsObservationsDialogOpen] =
-        useState(false);
+    const { userData } = useUserDataStore();
+    const [observations, setObservations] = useState([]);
     const [isWorkOrdersDialogOpen, setIsWorkOrdersDialogOpen] = useState(false);
     const [isLoading, setIsLoading] = useState([]);
 
@@ -47,14 +46,12 @@ const Observations = ({
         },
     } = useLayoutStore();
 
-    const ncrCode = useMemo(() => ncr.code, [ncr.code]);
-
     const fetchData = useCallback(async (ncr) => {
         if (ncr) {
             try {
                 setIsLoading(true);
                 const response = await WSNCRs.getNonConformityObservations(ncr);
-                setData(response.body.data);
+                setObservations(response.body.data);
             } catch (error) {
                 console.log(error);
             } finally {
@@ -63,24 +60,23 @@ const Observations = ({
         }
     }, []);
 
-    useEffect(() => fetchData(ncrCode), [ncrCode, fetchData]);
-
-    const observationsDialogSuccessHandler = useCallback(
-        async (observation) => {
-            try {
-                await WSNCRs.createObservation({
-                    ...observation,
-                    nonConformityCode: ncrCode,
-                });
-                showNotification("Observation created successfully");
-                setIsObservationsDialogOpen(false);
-                fetchData(ncrCode);
-            } catch (error) {
-                handleError(error);
-            }
-        },
-        [fetchData, ncrCode]
+    const {
+        isOpen: isObservationsDialogOpen,
+        isDisabled: isObservationsDialogDisabled,
+        observation,
+        updateHandler: observationsDialogUpdateHandler,
+        successHandler: observationsDialogSuccessHandler,
+        cancelHandler: observationsDialogCancelHandler,
+        openHandler: observationsDialogOpenHandler,
+    } = useObservationsDialog(
+        isLoading,
+        showNotification,
+        handleError,
+        fetchData,
+        ncrCode
     );
+
+    useEffect(() => fetchData(ncrCode), [ncrCode, fetchData]);
 
     const workOrdersDialogSuccessHandler = useCallback(
         async (workOrder) => {
@@ -104,9 +100,9 @@ const Observations = ({
     ) : (
         <>
             <div style={{ width: "100%", height: "100%" }}>
-                {data?.length > 0 && (
+                {observations?.length > 0 && (
                     <EISTable
-                        data={data}
+                        data={observations}
                         headers={headers}
                         propCodes={propCodes}
                     />
@@ -114,7 +110,7 @@ const Observations = ({
                 <div style={{ height: 15 }} />
                 <div style={{ display: "flex", columnGap: 10 }}>
                     <Button
-                        onClick={() => setIsObservationsDialogOpen(true)}
+                        onClick={observationsDialogOpenHandler}
                         color="primary"
                         disabled={disabled}
                         variant="outlined"
@@ -132,12 +128,13 @@ const Observations = ({
                 </div>
             </div>
             <ObservationsDialog
-                handleCancel={() => setIsObservationsDialogOpen(false)}
-                tabLayout={observationFields}
-                isDialogOpen={isObservationsDialogOpen}
-                ncr={ncr}
-                isLoading={isLoading}
-                successHandler={observationsDialogSuccessHandler}
+                handleSuccess={observationsDialogSuccessHandler}
+                isOpen={isObservationsDialogOpen}
+                handleCancel={observationsDialogCancelHandler}
+                fields={observationFields}
+                isDisabled={isObservationsDialogDisabled}
+                observation={observation}
+                handleUpdate={observationsDialogUpdateHandler}
             />
             <WorkOrdersDialog
                 handleCancel={() => setIsWorkOrdersDialogOpen(false)}
