@@ -32,8 +32,6 @@ import ReleaseNotesPage from "./ui/pages/releaseNotes/ReleaseNotes";
 import useLayoutStore from "./state/layoutStore";
 import useUserDataStore from "./state/userDataStore";
 import useApplicationDataStore from "./state/applicationDataStore";
-import useMyWorkOrdersStore from "./state/myOpenWorkOrdersStore";
-import useMyTeamWorkOrdersStore from "./state/myTeamWorkOrdersStore";
 
 export const releaseNotesPath = "/releasenotes";
 

@@ -148,23 +148,6 @@
     background-color: #242021;
   }
 
-  .numberOfWorkOrders {
-    position: absolute;
-    pointer-events: none;
-    border-radius: 45%;
-    top: 2px;
-    right: 2px;
-    width: 11px;
-    height: 11px;
-    padding: 4px;
-    background: #0aa2f2;
-    border: 0px solid #666;
-    color: #fff;
-    text-align: center;
-    font: 10px Arial, sans-serif;
-    vertical-align: center;
-}
-
 /* In the list & reports menu change the expand icon color */
 ul .MuiAccordionSummary-expandIconWrapper {
   color: white;

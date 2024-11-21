@@ -38,8 +38,7 @@ import EISPanel from "@/ui/components/panel/Panel";
 import useLayoutStore from "../../../state/layoutStore";
 import useApplicationDataStore from "../../../state/applicationDataStore";
 import useUserDataStore from "../../../state/userDataStore";
-import useMyWorkOrdersStore from "../../../state/myOpenWorkOrdersStore";
-import useMyTeamWorkOrdersStore from "../../../state/myTeamWorkOrdersStore";
+import NumberOfWorkOrders from "./NumberOfWorkOrders";
 
 export const menuIconStyle = {
   display: "inline-block",
@@ -226,13 +225,7 @@ class EamlightMenu extends Component {
                 <Tooltip title="MY OPEN WOs" placement="right">
                   <Account style={iconStyles} />
                 </Tooltip>
-                {/* {!!this.myOpenWorkOrders.length && (
-                  <div className="numberOfWorkOrders">
-                    {this.myOpenWorkOrders.length < 100
-                      ? this.myOpenWorkOrders.length
-                      : "99+"}
-                  </div>
-                )} */}
+                <NumberOfWorkOrders count={3}/>
               </div>
             </li>
 
@@ -241,13 +234,7 @@ class EamlightMenu extends Component {
                 <Tooltip title="MY TEAM's WOs" placement="right">
                   <AccountMultiple style={iconStyles} />
                 </Tooltip>
-                {/* {!!this.myTeamWorkOrders.length && (
-                  <div className="numberOfWorkOrders">
-                    {this.myTeamWorkOrders.length < 100
-                      ? this.myTeamWorkOrders.length
-                      : "99+"}
-                  </div>
-                )} */}
+                <NumberOfWorkOrders count={3}/>
               </div>
             </li>
 

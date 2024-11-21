@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import EAMGrid from "eam-components/dist/ui/components/grids/eam/EAMGrid";
 import { EAMCellField } from "eam-components/dist/ui/components/grids/eam/utils";
 import SyncedQueryParamsEAMGridContext from "../../../../../tools/SyncedQueryParamsEAMGridContext";
+import useUserDataStore from "../../../../../state/userDataStore";
 
 const cellRenderer = ({ column, value, row }) => {
   if (column.id === "equipmentno") {
@@ -25,7 +26,10 @@ const cellRenderer = ({ column, value, row }) => {
 };
 
 const SystemSearch = (props) => {
-  const { systemScreen, handleError } = props;
+  const { handleError } = props;
+  const { userData } = useUserDataStore();
+  const systemScreen = userData.screens[userData.systemScreen]
+
   return (
     <SyncedQueryParamsEAMGridContext
       gridName={systemScreen.screenCode}
