@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import WSNCRs from "../../../../../tools/WSNCRs";
 import EISTable from "eam-components/dist/ui/components/table";
 import BlockUi from "react-block-ui";
@@ -6,9 +6,9 @@ import Button from "@mui/material/Button";
 import ObservationsDialog from "./ObservationsDialog";
 import useLayoutStore from "../../../../../state/layoutStore";
 import WorkOrdersDialog from "./WorkOrdersDialog";
-import WSWorkorders from "../../../../../tools/WSWorkorders";
 import useUserDataStore from "../../../../../state/userDataStore";
 import useObservationsDialog from "./hooks/useObservationsDialog";
+import useWorkOrdersDialog from "./hooks/useWorkOrdersDialog";
 
 const Observations = ({
     ncrCode,
@@ -37,7 +37,6 @@ const Observations = ({
 
     const { userData } = useUserDataStore();
     const [observations, setObservations] = useState([]);
-    const [isWorkOrdersDialogOpen, setIsWorkOrdersDialogOpen] = useState(false);
     const [isLoading, setIsLoading] = useState([]);
 
     const {
@@ -76,24 +75,23 @@ const Observations = ({
         ncrCode
     );
 
-    useEffect(() => fetchData(ncrCode), [ncrCode, fetchData]);
-
-    const workOrdersDialogSuccessHandler = useCallback(
-        async (workOrder) => {
-            try {
-                const response = await WSWorkorders.createWorkOrder(workOrder);
-                showNotification("Work order created successfully");
-                await observationsDialogSuccessHandler({
-                    jobNum: response.body.data,
-                    nonConformityCode: ncrCode,
-                });
-                setIsWorkOrdersDialogOpen(false);
-            } catch (error) {
-                handleError(error);
-            }
-        },
-        [observationsDialogSuccessHandler, ncrCode]
+    const {
+        isOpen: isWorkOrdersDialogOpen,
+        isDisabled: isWorkOrdersDialogDisabled,
+        workOrder,
+        updateHandler: workOrdersDialogUpdateHandler,
+        successHandler: workOrdersDialogSuccessHandler,
+        cancelHandler: workOrdersDialogCancelHandler,
+        openHandler: workOrdersDialogOpenHandler,
+    } = useWorkOrdersDialog(
+        isLoading,
+        showNotification,
+        handleError,
+        observationsDialogSuccessHandler,
+        ncrCode
     );
+
+    useEffect(() => fetchData(ncrCode), [ncrCode, fetchData]);
 
     return isLoading ? (
         <BlockUi tag="div" blocking={isLoading} style={{ width: "100%" }} />
@@ -118,7 +116,7 @@ const Observations = ({
                         Add Observation
                     </Button>
                     <Button
-                        onClick={() => setIsWorkOrdersDialogOpen(true)}
+                        onClick={workOrdersDialogOpenHandler}
                         color="primary"
                         disabled={disabled}
                         variant="outlined"
@@ -137,11 +135,13 @@ const Observations = ({
                 handleUpdate={observationsDialogUpdateHandler}
             />
             <WorkOrdersDialog
-                handleCancel={() => setIsWorkOrdersDialogOpen(false)}
+                handleSuccess={workOrdersDialogSuccessHandler}
+                isOpen={isWorkOrdersDialogOpen}
+                handleCancel={workOrdersDialogCancelHandler}
                 fields={workOrderFields}
-                isDialogOpen={isWorkOrdersDialogOpen}
-                isLoading={isLoading}
-                successHandler={workOrdersDialogSuccessHandler}
+                isDisabled={isWorkOrdersDialogDisabled}
+                workOrder={workOrder}
+                handleUpdate={workOrdersDialogUpdateHandler}
                 userData={userData}
                 statuses={statuses}
             />

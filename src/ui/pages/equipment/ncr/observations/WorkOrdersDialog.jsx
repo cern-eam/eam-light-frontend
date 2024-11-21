@@ -1,4 +1,3 @@
-import { useCallback, useState } from "react";
 import WS from "../../../../../tools/WS";
 import WSWorkorders from "../../../../../tools/WSWorkorders";
 import Button from "@mui/material/Button";
@@ -19,29 +18,16 @@ import { FileTree } from "mdi-material-ui";
 import { isDepartmentReadOnly } from "../../../../pages/EntityTools";
 
 const WorkOrdersDialog = ({
-    successHandler,
-    isDialogOpen,
+    handleSuccess,
+    isOpen,
     handleCancel,
-    isLoading,
     fields,
+    isDisabled,
+    workOrder,
+    handleUpdate,
     userData,
     statuses,
 }) => {
-    const [workOrder, setWorkOrder] = useState({});
-    const [loading, setLoading] = useState(false);
-
-    const updateWorkOrderProperty = useCallback((key, value) => {
-        setWorkOrder((prev) => ({ ...prev, [key]: value }));
-    }, []);
-
-    const handleSave = useCallback(async () => {
-        setLoading(true);
-        await successHandler(workOrder);
-        setLoading(false);
-    }, [workOrder]);
-
-    console.log("userData", userData);
-
     // const treeButtonClickHandler = (code) => {
     //     setLayoutProperty("equipment", {
     //         code: workorder.equipmentCode,
@@ -54,14 +40,14 @@ const WorkOrdersDialog = ({
         <Dialog
             fullWidth
             id="addNcrWorkOrderDialog"
-            open={isDialogOpen}
+            open={isOpen}
             onClose={handleCancel}
             aria-labelledby="form-dialog-title"
         >
             <DialogTitle id="form-dialog-title">Add Work Order</DialogTitle>
 
             <DialogContent id="content" style={{ overflowY: "visible" }}>
-                <BlockUi tag="div" blocking={loading || isLoading}>
+                <BlockUi tag="div" blocking={isDisabled}>
                     <EAMAutocomplete
                         {...processElementInfo(fields["equipment"])}
                         barcodeScanner
@@ -72,7 +58,7 @@ const WorkOrdersDialog = ({
                             "equipmentCode",
                             "equipmentDesc",
                             "equipmentOrganization",
-                            updateWorkOrderProperty
+                            handleUpdate
                         )}
                         link={() =>
                             workOrder.equipmentCode
@@ -97,7 +83,7 @@ const WorkOrdersDialog = ({
                             "description",
                             null,
                             null,
-                            updateWorkOrderProperty
+                            handleUpdate
                         )}
                     />
 
@@ -108,16 +94,16 @@ const WorkOrdersDialog = ({
                             "typeCode",
                             "typeDesc",
                             null,
-                            updateWorkOrderProperty
+                            handleUpdate
                         )}
                         renderSuggestion={(suggestion) => suggestion.desc}
                         renderValue={(value) => value.desc || value.code}
                         autocompleteHandler={
                             WSWorkorders.getWorkOrderTypeValues
                         }
-                        // autocompleteHandlerParams={[
-                        //     userData.eamAccount.userGroup,
-                        // ]}
+                        autocompleteHandlerParams={[
+                            userData.eamAccount.userGroup,
+                        ]}
                     />
 
                     <EAMSelect
@@ -127,17 +113,17 @@ const WorkOrdersDialog = ({
                             "statusCode",
                             "statusDesc",
                             null,
-                            updateWorkOrderProperty
+                            handleUpdate
                         )}
-                        // disabled={
-                        //     isDepartmentReadOnly(
-                        //         workOrder.departmentCode,
-                        //         userData
-                        //     )
-                        //     // ||
-                        //     // !screenPermissions.updateAllowed ||
-                        //     // !workOrder.jtAuthCanUpdate
-                        // }
+                        disabled={
+                            isDepartmentReadOnly(
+                                workOrder.departmentCode,
+                                userData
+                            )
+                            // ||
+                            // !screenPermissions.updateAllowed ||
+                            // !workOrder.jtAuthCanUpdate
+                        }
                         renderSuggestion={(suggestion) => suggestion.desc}
                         renderValue={(value) => value.desc || value.code}
                         options={statuses}
@@ -150,7 +136,7 @@ const WorkOrdersDialog = ({
                             "departmentCode",
                             "departmentDesc",
                             null,
-                            updateWorkOrderProperty
+                            handleUpdate
                         )}
                         autocompleteHandler={WS.autocompleteDepartment}
                         validate
@@ -163,7 +149,7 @@ const WorkOrdersDialog = ({
                             "locationCode",
                             "locationDesc",
                             null,
-                            updateWorkOrderProperty
+                            handleUpdate
                         )}
                         autocompleteHandler={WS.autocompleteLocation}
                     />
@@ -175,7 +161,7 @@ const WorkOrdersDialog = ({
                             "costCode",
                             "costCodeDesc",
                             null,
-                            updateWorkOrderProperty
+                            handleUpdate
                         )}
                         autocompleteHandler={WSWorkorders.autocompleteCostCode}
                     />
@@ -185,14 +171,14 @@ const WorkOrdersDialog = ({
                 <Button
                     onClick={handleCancel}
                     color="primary"
-                    disabled={loading || isLoading}
+                    disabled={isDisabled}
                 >
                     Cancel
                 </Button>
                 <Button
-                    onClick={handleSave}
+                    onClick={handleSuccess}
                     color="primary"
-                    disabled={loading || isLoading}
+                    disabled={isDisabled}
                 >
                     Save
                 </Button>
