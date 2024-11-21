@@ -20,7 +20,9 @@ const useObservations = (ncrCode, handleError) => {
         }
     }, []);
 
-    useEffect(() => fetchData(ncrCode), [ncrCode, fetchData]);
+    useEffect(() => {
+        if (ncrCode) fetchData(ncrCode);
+    }, [ncrCode, fetchData]);
 
     return { observations, isLoading, fetchData };
 };
