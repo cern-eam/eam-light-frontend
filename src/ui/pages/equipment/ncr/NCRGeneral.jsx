@@ -13,16 +13,28 @@ const NCRGeneral = (props) => {
     userData,
     screenCode,
     screenPermissions,
+    ncr
   } = props;
+  console.log("ncr", ncr)
   return (
     <React.Fragment>
       <EAMTextField {...register("description", "description")} />
-      <EAMTextField {...register("equipment", "equipmentCode")} />
+      <EAMTextField {...register("equipment", "equipmentCode")}
+      link={() =>
+        ncr.equipmentCode
+          ? "/equipment/" + ncr.equipmentCode
+          : null
+      }
+      
+      />
       <EAMTextField {...register("location", "locationCode")} />
       <EAMTextField {...register("department", "department")} />
       <EAMTextField {...register("type", "typeCode")} />
       <EAMTextField {...register("status", "statusCode")} />
       <EAMTextField {...register("class", "classCode")} />
+      <EAMTextField {...register("severity", "severity")} />
+      <EAMTextField {...register("importance", "importance")} />
+      <EAMTextField {...register("nonconformitynote", "nonConformityNote")} />
     </React.Fragment>
   );
 };

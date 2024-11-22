@@ -28,6 +28,10 @@ class WSNCRs {
     createObservation(observation, config = {}) {
         return WS._post(`/ncrobservations/`, observation, config);
     }
+
+    getAssetNonConformities(asset, config = {}) {
+        return WS._get(`/ncrs/asset/${asset}`, config)
+    }
 }
 
 export default new WSNCRs();

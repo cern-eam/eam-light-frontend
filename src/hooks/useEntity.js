@@ -383,6 +383,8 @@ const useEntity = (params) => {
     isHiddenRegion: isHiddenRegion(screenCode),
     getHiddenRegionState: getHiddenRegionState(screenCode),
     getUniqueRegionID: getUniqueRegionID(screenCode),
+    toggleHiddenRegion,
+    setRegionVisibility,
     commentsComponent,
     setLayoutProperty: setLayoutPropertyConst,
     showEqpTree,
@@ -391,8 +393,6 @@ const useEntity = (params) => {
     showNotification: showNotificationConst,
     handleError: handleErrorConst,
     showWarning: showWarningConst,
-    toggleHiddenRegion,
-    setRegionVisibility,
     //
     newHandler,
     saveHandler,

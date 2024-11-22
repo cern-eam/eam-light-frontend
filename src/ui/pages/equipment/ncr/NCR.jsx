@@ -124,6 +124,7 @@ const NCR = () => {
                         userData={userData}
                         screenCode={screenCode}
                         screenPermissions={screenPermissions}
+                        ncr
                     />
                 ),
                 column: 1,

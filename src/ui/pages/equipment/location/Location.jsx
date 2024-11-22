@@ -36,6 +36,7 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import { locationLayoutPropertiesMap } from "../EquipmentTools";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
+import AssetNCRs from "../asset/AssetNCRs.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -210,6 +211,21 @@ export default Location = (props) => {
           tabs,
           TAB_CODES.EDMS_DOCUMENTS_LOCATIONS
         ),
+      },
+      {
+        id: "LOCATIONNCRS",
+        label: "Non Conformities",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => <AssetNCRs assetCode={location.code}/>,
+        RegionPanelProps: {
+          detailsStyle: { padding: 0 },
+        },
+        column: 2,
+        order: 8,
+        summaryIcon: BookmarkBorderRoundedIcon,
+        ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
       },
       // {
       //     id: 'NCRS',

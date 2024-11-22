@@ -6,7 +6,7 @@ export const useHiddenRegionsStore = create(() => ({
   hiddenRegions: JSON.parse(localStorage.getItem('hiddenRegions')) || {},
 
   toggleHiddenRegion: (regionID) => {
-    console.log('toggleHiddenRegion', regionID);
+    //console.log('toggleHiddenRegion', regionID);
     useHiddenRegionsStore.setState((state) => {
       const updatedHiddenRegions = {
         ...state.hiddenRegions,
@@ -18,22 +18,22 @@ export const useHiddenRegionsStore = create(() => ({
   },
 
   isHiddenRegion: (screen) => (regionID) => {
-    console.log('isHiddenRegion', screen, regionID);
     const id = getUniqueRegionID(screen)(regionID);
     const state = useHiddenRegionsStore.getState();
+    //console.log('isHiddenRegion', screen, regionID, !!state.hiddenRegions[id]);
     return !!state.hiddenRegions[id];
   },
 
   getHiddenRegionState: (screen) => (regionID) => {
-    console.log('getHiddenRegionState', screen, regionID);
+    
     const id = getUniqueRegionID(screen)(regionID);
     const state = useHiddenRegionsStore.getState();
-    
-    return state.hiddenRegions[id];
+    //console.log('getHiddenRegionState', screen, regionID, !!state.hiddenRegions[id]);
+    return !!state.hiddenRegions[id];
   },
 
   setRegionVisibility: (regionID, isVisible) => {
-    console.log('set', regionID, isVisible);
+    //console.log('set', regionID, isVisible);
     useHiddenRegionsStore.setState((state) => {
       const updatedHiddenRegions = {
         ...state.hiddenRegions,

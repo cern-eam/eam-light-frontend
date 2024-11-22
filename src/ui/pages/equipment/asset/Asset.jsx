@@ -42,6 +42,7 @@ import Variables from "../components/Variables";
 import getPartsAssociated from "@/ui/pages/PartsAssociated";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
+import AssetNCRs from "./AssetNCRs.jsx";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -279,6 +280,21 @@ const Asset = () => {
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => <NCRIframeContainer objectType="A" objectID={equipment.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>,
+        RegionPanelProps: {
+          detailsStyle: { padding: 0 },
+        },
+        column: 2,
+        order: 8,
+        summaryIcon: BookmarkBorderRoundedIcon,
+        ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
+      },
+      {
+        id: "ASSETNCRS",
+        label: "Non Conformities",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => <AssetNCRs assetCode={equipment.code}/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
