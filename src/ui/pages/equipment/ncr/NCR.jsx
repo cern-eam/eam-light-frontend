@@ -124,7 +124,7 @@ const NCR = () => {
                         userData={userData}
                         screenCode={screenCode}
                         screenPermissions={screenPermissions}
-                        ncr
+                        ncr={ncr}
                     />
                 ),
                 column: 1,
