@@ -131,7 +131,7 @@ const Eamlight = ({ inforContext }) => {
                 <Route path="/positionsearch" component={PositionSearchContainer} />
                 <Route path="/systemsearch" component={SystemSearchContainer} />
                 <Route path="/locationsearch" component={LocationSearchContainer} />
-                <Route path="/equipment/:code?" component={EquipmentRedirect} />
+                <Route path="/equipment/:code(.+)?" component={EquipmentRedirect} />
                 <Route path="/replaceeqp" component={ReplaceEqpContainer} />
                 <Route path="/meterreading" component={MeterReadingContainer} />
                 <Route path="/grid" component={Grid} />
