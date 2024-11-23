@@ -23,7 +23,9 @@ const Observations = ({
     const {screenLayout: {OSJOBS: ncrWorkOrderLayout }, fetchScreenLayout} = useLayoutStore();
 
     useEffect(() => {
-        fetchScreenLayout(userData.eamAccount.userGroup, "OBJ", "OSJOBS", "OSJOBS", [])
+        if (!ncrWorkOrderLayout) {
+            fetchScreenLayout(userData.eamAccount.userGroup, "OBJ", "OSJOBS", "OSJOBS", [])
+        }
     }, [ncrWorkOrderLayout])
 
     const { observations, isLoading, fetchData } = useObservations(

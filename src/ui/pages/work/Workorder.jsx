@@ -138,7 +138,6 @@ const Workorder = () => {
     entityURL: "/workorder/",
     entityCodeProperty: "number",
     screenProperty: "workOrderScreen",
-    layoutProperty: "workOrderLayout",
     layoutPropertiesMap,
     onMountHandler: mountHandler,
     onUnmountHandler: unmountHandler,
