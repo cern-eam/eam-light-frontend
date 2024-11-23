@@ -30,21 +30,9 @@ import ReleaseNotesPage from "./ui/pages/releaseNotes/ReleaseNotes";
 import useLayoutStore from "./state/useLayoutStore";
 import useUserDataStore from "./state/useUserDataStore";
 import useApplicationDataStore from "./state/useApplicationDataStore";
+import { renderLoading } from "./ui/pages/EntityTools";
 
 export const releaseNotesPath = "/releasenotes";
-
-const blockUiStyle = {
-  height: "100%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-};
-
-const blockUiStyleDiv = {
-  display: "flex",
-  height: 60,
-  alignItems: "flex-end",
-};
 
 const Eamlight = ({ inforContext }) => {
   const { screenLayout, fetchScreenLayout, fetchScreenLayoutFailed } = useLayoutStore();
@@ -55,12 +43,6 @@ const Eamlight = ({ inforContext }) => {
     fetchUserData();
     fetchApplicationData();
   },[])
-
-  // useEffect(() => {
-  //   if (userData && !screenLayout) {
-  //     fetchScreenLayout(userData);
-  //   }
-  // }, [userData]);
 
   if (!inforContext && import.meta.env.VITE_LOGIN_METHOD === "STD") {
     return (
@@ -90,11 +72,7 @@ const Eamlight = ({ inforContext }) => {
   }
 
   if (!userData || !applicationData) {
-    return (
-      <BlockUi tag="div" blocking={true} style={blockUiStyle}>
-        <div style={blockUiStyleDiv}>Loading EAM Light ...</div>
-      </BlockUi>
-    );
+    return renderLoading("Loading EAM Light")
   }
 
   const eqpRegex = [

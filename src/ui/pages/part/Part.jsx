@@ -18,6 +18,7 @@ import {
   getTabAvailability,
   getTabInitialVisibility,
   getTabGridRegions,
+  renderLoading,
 } from "../EntityTools";
 import useEntity from "@/hooks/useEntity";
 
@@ -272,8 +273,8 @@ const Part = () => {
     ];
   };
 
-  if (!part) {
-    return React.Fragment;
+  if (!part || !partLayout) {
+    return renderLoading("Reading Part ...")
   }
 
   return (

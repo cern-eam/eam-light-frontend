@@ -21,6 +21,7 @@ import {
   getTabAvailability,
   getTabInitialVisibility,
   getTabGridRegions,
+  renderLoading,
 } from "../../EntityTools";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer";
 import useEntity from "@/hooks/useEntity";
@@ -386,8 +387,8 @@ const Position = () => {
     ];
   };
 
-  if (!equipment) {
-    return React.Fragment;
+  if (!equipment || !positionLayout) {
+    return renderLoading("Reading Position ...")
   }
 
   return (

@@ -32,7 +32,7 @@ import TuneIcon from "@mui/icons-material/Tune";
 import { IconSlash } from "eam-components/dist/ui/components/icons/index";
 import { isCernMode } from "../../components/CERNMode";
 import { TAB_CODES } from "../../components/entityregions/TabCodeMapping";
-import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions } from "../EntityTools";
+import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions, renderLoading } from "../EntityTools";
 import WSParts from "../../../tools/WSParts";
 import WSWorkorders from "../../../tools/WSWorkorders";
 import useEntity from "@/hooks/useEntity";
@@ -684,8 +684,8 @@ const Workorder = () => {
     setCurrentWorkOrder(null);
   }
 
-  if (!workorder) {
-    return React.Fragment;
+  if (!workorder || !workOrderLayout) {
+    return renderLoading("Reading Work Order ...")
   }
 
   return (

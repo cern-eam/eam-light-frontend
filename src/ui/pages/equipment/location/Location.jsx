@@ -17,6 +17,7 @@ import {
   getTabAvailability,
   getTabInitialVisibility,
   getTabGridRegions,
+  renderLoading,
 } from "../../EntityTools";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
@@ -362,8 +363,8 @@ export default Location = (props) => {
     ];
   };
 
-  if (!location) {
-    return React.Fragment;
+  if (!location || !locationLayout) {
+    return renderLoading("Reading Location ...")
   }
 
   return (

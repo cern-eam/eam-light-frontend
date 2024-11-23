@@ -93,7 +93,7 @@ const useEntity = (params) => {
     generateErrorMessagesFromException,
     resetErrorMessages,
   } = useFieldsValidator(
-    useMemo(
+    //useMemo(
       () =>
         prepareDataForFieldsValidator(
           entity,
@@ -101,7 +101,8 @@ const useEntity = (params) => {
           layoutPropertiesMap
         ),
       [screenCode, entity?.customField]
-    ),
+    //),
+    ,
     entity
   );
 
@@ -113,7 +114,7 @@ const useEntity = (params) => {
         screenCode,
         TABS[userData.screens[screenCode].parentScreen]);
     }
-  }, [])
+  }, [screenCode])
 
   useEffect(() => {
     if (!screenLayout) {

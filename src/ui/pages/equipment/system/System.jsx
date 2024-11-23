@@ -21,6 +21,7 @@ import {
   getTabAvailability,
   getTabInitialVisibility,
   getTabGridRegions,
+  renderLoading,
 } from "../../EntityTools";
 import useEntity from "@/hooks/useEntity";
 import {
@@ -383,8 +384,8 @@ const System = () => {
     ];
   };
 
-  if (!equipment) {
-    return React.Fragment;
+  if (!equipment || !systemLayout) {
+    return renderLoading("Reading System ...")
   }
 
   return (

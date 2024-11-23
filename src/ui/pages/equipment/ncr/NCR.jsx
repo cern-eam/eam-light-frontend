@@ -8,6 +8,7 @@ import { TAB_CODES } from "../../../components/entityregions/TabCodeMapping.js";
 import {
     getTabAvailability,
     getTabInitialVisibility,
+    renderLoading,
 } from "../../EntityTools.jsx";
 import useEntity from "@/hooks/useEntity";
 import WSNCRs from "../../../../tools/WSNCRs.js";
@@ -261,8 +262,8 @@ const NCR = () => {
         ];
     };
 
-    if (!ncr) {
-        return React.Fragment;
+    if (!ncr || !ncrLayout) {
+        return renderLoading("Reading NCR ...")
     }
 
     return (

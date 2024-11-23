@@ -29,7 +29,7 @@ class EamlightToolbar extends Component {
   constructor(props) {
     super(props);
     this.userData = useUserDataStore.getState().userData;
-    this.userCode = this.userData.eamAccount.userCode; // kura
+    this.userCode = this.userData.eamAccount.userCode; 
   }
 
   hideEntityMenu = queryString.parse(window.location.search)['hideEntityMenu'] === 'true';

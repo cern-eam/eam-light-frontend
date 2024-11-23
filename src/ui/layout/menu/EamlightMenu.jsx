@@ -99,9 +99,9 @@ class EamlightMenu extends Component {
     super(props);
     this.mainMenuClickHandler = this.mainMenuClickHandler.bind(this);
     this.openSubMenu = this.openSubMenu.bind(this);
-    this.fetchNewScreenLayout = useLayoutStore.getState().fetchNewScreenLayout;
     this.applicationData = useApplicationDataStore.getState().applicationData;
     this.userData = useUserDataStore.getState().userData;
+    this.setUserData = useUserDataStore.getState().setUserData;
   }
 
   mainMenuClickHandler(event) {
@@ -173,39 +173,41 @@ class EamlightMenu extends Component {
     const screenProps = {
       workOrder: {
         screenName: "WSJOBS",
-        updateScreenLayout: screenCode => this.fetchNewScreenLayout(screenCode, TAB_CODES_WORK_ORDERS, 'workOrderScreen'),
+        updateScreenLayout: (screenCode) => this.setUserData({ workOrderScreen: screenCode }),
         screen: workOrderScreen,
       },
       asset: {
         screenName: "OSOBJA",
-        updateScreenLayout: screenCode => this.fetchNewScreenLayout(screenCode, TAB_CODES_ASSETS, 'assetScreen'),
+        updateScreenLayout: (screenCode) => this.setUserData({ assetScreen: screenCode }),
         screen: assetScreen,
       },
       ncr: {
         screenName: "OSNCHD",
+        updateScreenLayout: (screenCode) => this.setUserData({ ncrScreen: screenCode }),
         screen: ncrScreen,
       },
       position: {
         screenName: "OSOBJP",
-        updateScreenLayout: screenCode => this.fetchNewScreenLayout(screenCode, TAB_CODES_POSITIONS, 'positionScreen'),
+        updateScreenLayout: (screenCode) => this.setUserData({ positionScreen: screenCode }),
         screen: positionScreen,
       },
       system: {
         screenName: "OSOBJS",
-        updateScreenLayout: screenCode => this.fetchNewScreenLayout(screenCode, TAB_CODES_SYSTEMS, 'systemScreen'),
+        updateScreenLayout: (screenCode) => this.setUserData({ systemScreen: screenCode }),
         screen: systemScreen,
       },
       location: {
         screenName: "OSOBJL",
-        updateScreenLayout: screenCode => this.fetchNewScreenLayout(screenCode, TAB_CODES_LOCATIONS, 'locationScreen'),
+        updateScreenLayout: (screenCode) => this.setUserData({ locationScreen: screenCode }),
         screen: locationScreen,
       },
       part: {
         screenName: "SSPART",
-        updateScreenLayout: screenCode => this.fetchNewScreenLayout(screenCode, TAB_CODES_PARTS, 'partScreen'),
+        updateScreenLayout: (screenCode) => this.setUserData({ partScreen: screenCode }),
         screen: partScreen,
       },
     };
+    
 
     const getScreenHeader = getScreenHeaderFunction(screens);
 
