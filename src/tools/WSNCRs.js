@@ -29,7 +29,7 @@ class WSNCRs {
         return WS._post(`/ncrobservations/`, observation, config);
     }
 
-    getAssetNonConformities(asset, config = {}) {
+    getEquipmentNonConformities(asset, config = {}) {
         return WS._get(`/ncrs/asset/${asset}`, config)
     }
 }

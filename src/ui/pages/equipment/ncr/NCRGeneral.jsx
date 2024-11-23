@@ -15,7 +15,7 @@ const NCRGeneral = (props) => {
     screenPermissions,
     ncr
   } = props;
-  console.log("ncr", ncr)
+  
   return (
     <React.Fragment>
       <EAMTextField {...register("description", "description")} />

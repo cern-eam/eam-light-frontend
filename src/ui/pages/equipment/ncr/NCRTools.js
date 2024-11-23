@@ -1,5 +1,6 @@
 export const layoutPropertiesMap = {
     description: "description",
+    equipment: "equipmentCode"
 };
 
 export function isRegionAvailable(regionCode, ncrLayout) {

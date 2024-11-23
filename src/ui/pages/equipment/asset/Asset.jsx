@@ -13,7 +13,8 @@ import AssetDetails from "./AssetDetails";
 import AssetGeneral from "./AssetGeneral";
 import AssetHierarchy from "./AssetHierarchy";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
-import EquipmentPartsMadeOf from "../components/EquipmentPartsMadeOf";
+import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser';
+import { Link } from "react-router-dom";
 import WSParts from "../../../../tools/WSParts";
 import EquipmentGraphIframe from "../../../components/iframes/EquipmentGraphIframe";
 import { isCernMode } from "../../../components/CERNMode";
@@ -42,7 +43,7 @@ import Variables from "../components/Variables";
 import getPartsAssociated from "@/ui/pages/PartsAssociated";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
-import AssetNCRs from "./AssetNCRs.jsx";
+import AssetNCRs from "../components/EquipmentNCRs.jsx";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -290,19 +291,23 @@ const Asset = () => {
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
       },
       {
-        id: "ASSETNCRS",
+        id: "LOCATIONNCRS",
         label: "Non Conformities",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <AssetNCRs assetCode={equipment.code}/>,
+        render: () => <AssetNCRs equipment={equipment.code}/>,
         RegionPanelProps: {
-          detailsStyle: { padding: 0 },
+          customHeadingBar:  (
+              <Link to ={`/ncr?equipmentCode=${location.code}&description=NCR for ${location.code}`}
+                    style={{padding: 10, display: "flex", alignItems: "center", justifyContent: "space-between", color: "#737373" }}>
+                <OpenInBrowserIcon />
+              </Link>
+          ),
         },
         column: 2,
-        order: 8,
+        order: 7,
         summaryIcon: BookmarkBorderRoundedIcon,
-        ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
+        ignore: !isCernMode 
       },
       {
         id: "COMMENTS",

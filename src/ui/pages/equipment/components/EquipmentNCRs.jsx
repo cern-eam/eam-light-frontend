@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import EISTable from 'eam-components/dist/ui/components/table';
 import WSNCRs from '../../../../tools/WSNCRs';
+import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/SimpleEmptyState'
 
-function AssetNCRs({assetCode}) {
+function AssetNCRs({equipment}) {
 
     let headers = ['NCR', 'Description', 'Status', 'Severity'];
     let propCodes = ['nonconformity', 'description', 'status_display', 'severity_display'];
@@ -10,12 +11,12 @@ function AssetNCRs({assetCode}) {
     let [data, setData] = useState([]);
 
     useEffect(() => {
-        fetchData(assetCode);
-    }, [assetCode])
+        fetchData(equipment);
+    }, [equipment])
 
-    let fetchData = (assetCode) => {
-        if (assetCode) {
-            WSNCRs.getAssetNonConformities(assetCode).then(response => {
+    let fetchData = (equipment) => {
+        if (equipment) {
+            WSNCRs.getEquipmentNonConformities(equipment).then(response => {
                 setData(response.body.data);
             }).catch(error => {
                 console.log('Error loading data', error);
@@ -25,16 +26,14 @@ function AssetNCRs({assetCode}) {
 
     //Do not render if there is no data
     if (data.length === 0)
-        return null;
+        return <SimpleEmptyState message="No NCRs to show."/>;
 
     return (
-        <div style={{padding: 15, width: "100%"}}>
-            <EISTable
-                data={data}
-                headers={headers}
-                propCodes={propCodes}
-                linksMap={linksMap} />
-        </div>
+        <EISTable
+            data={data}
+            headers={headers}
+            propCodes={propCodes}
+            linksMap={linksMap} />
     );
 }
 

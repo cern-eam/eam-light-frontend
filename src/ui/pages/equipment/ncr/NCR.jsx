@@ -25,6 +25,7 @@ import EDMSDoclightIframeContainer from "@/ui/components/iframes/EDMSDoclightIfr
 import ObservationsContainer from "./observations/ObservationsContainer";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import WSWorkorders from "../../../../tools/WSWorkorders.js";
+import WSEquipment from "../../../../tools/WSEquipment.js";
 
 const NCR = () => {
     const [statuses, setStatuses] = useState([]);
@@ -32,6 +33,7 @@ const NCR = () => {
     const {
         screenLayout: ncrLayout,
         entity: ncr,
+        setEntity: setNCR,
         loading,
         readOnly,
         isModified,
@@ -68,6 +70,9 @@ const NCR = () => {
             read: postRead,
             new: postInit,
         },
+        handlers: {
+            equipmentCode: onChangeEquipment,
+          },
         isReadOnlyCustomHandler: isClosedEquipment,
         entityCode: "OBJ",
         entityDesc: "NCR",
@@ -96,6 +101,25 @@ const NCR = () => {
             .then((response) => setStatuses(response.body.data))
             .catch(console.error);
     };
+
+    function onChangeEquipment(equipmentCode) {
+        
+        if (!equipmentCode) {
+          return;
+        }
+    
+        WSEquipment.getEquipment(equipmentCode)
+          .then((response) => {
+            const equipment = response.body.data;
+    
+            setNCR((oldNCR) => ({
+              ...oldNCR,
+              department: equipment.departmentCode,
+              location: equipment.hierarchyLocationCode,
+            }));
+          })
+          .catch(console.error);
+      }
 
     const getRegions = () => {
         const tabs = ncrLayout.tabs;

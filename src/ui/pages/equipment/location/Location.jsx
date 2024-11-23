@@ -23,7 +23,8 @@ import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import LocationDetails from "./LocationDetails";
 import LocationGeneral from "./LocationGeneral";
 import LocationHierarchy from "./LocationHierarchy";
-
+import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser';
+import { Link } from "react-router-dom";
 import AccountTreeRoundedIcon from "@mui/icons-material/AccountTreeRounded";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
@@ -36,7 +37,7 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import { locationLayoutPropertiesMap } from "../EquipmentTools";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
-import AssetNCRs from "../asset/AssetNCRs.jsx";
+import AssetNCRs from "../components/EquipmentNCRs.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -217,15 +218,19 @@ export default Location = (props) => {
         label: "Non Conformities",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <AssetNCRs assetCode={location.code}/>,
+        render: () => <AssetNCRs equipment={location.code}/>,
         RegionPanelProps: {
-          detailsStyle: { padding: 0 },
+          customHeadingBar:  (
+              <Link to ={`/ncr?equipmentCode=${location.code}&description=NCR for ${location.code}`}
+                    style={{padding: 10, display: "flex", alignItems: "center", justifyContent: "space-between", color: "#737373" }}>
+                <OpenInBrowserIcon />
+              </Link>
+          ),
         },
         column: 2,
-        order: 8,
+        order: 7,
         summaryIcon: BookmarkBorderRoundedIcon,
-        ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
+        ignore: !isCernMode 
       },
       // {
       //     id: 'NCRS',
@@ -256,7 +261,7 @@ export default Location = (props) => {
           detailsStyle: { padding: 0 },
         },
         column: 2,
-        order: 7,
+        order: 8,
         summaryIcon: BookmarkBorderRoundedIcon,
         ignore:
           !isCernMode ||
