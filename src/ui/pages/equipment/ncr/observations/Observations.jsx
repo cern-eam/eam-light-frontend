@@ -8,6 +8,7 @@ import useWorkOrdersDialog from "./hooks/useWorkOrdersDialog";
 import ObservationsActions from "./components/ObservationsActions";
 import ObservationsTable from "./components/ObservationsTable";
 import useObservations from "./hooks/useObservations";
+import { useEffect } from "react";
 
 const Observations = ({
     ncrCode,
@@ -19,11 +20,11 @@ const Observations = ({
 }) => {
     const { userData } = useUserDataStore();
 
-    const {
-        screenLayout: {
-            OSJOBS: { fields: workOrderFields },
-        },
-    } = useLayoutStore();
+    const {screenLayout: {OSJOBS: ncrWorkOrderLayout }, fetchScreenLayout} = useLayoutStore();
+
+    useEffect(() => {
+        fetchScreenLayout(userData.eamAccount.userGroup, "OBJ", "OSJOBS", "OSJOBS", [])
+    }, [ncrWorkOrderLayout])
 
     const { observations, isLoading, fetchData } = useObservations(
         ncrCode,
@@ -61,7 +62,7 @@ const Observations = ({
         observationsDialogSuccessHandler
     );
 
-    return isLoading ? (
+    return (isLoading || !ncrWorkOrderLayout) ? (
         <BlockUi tag="div" blocking={isLoading} style={{ width: "100%" }} />
     ) : (
         <>
@@ -90,7 +91,7 @@ const Observations = ({
                 handleSuccess={workOrdersDialogSuccessHandler}
                 open={isWorkOrdersDialogOpen}
                 handleCancel={workOrdersDialogCancelHandler}
-                fields={workOrderFields}
+                fields={ncrWorkOrderLayout.fields}
                 disabled={isWorkOrdersDialogDisabled}
                 workOrder={workOrder}
                 handleUpdate={workOrdersDialogUpdateHandler}

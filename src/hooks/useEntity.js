@@ -34,6 +34,7 @@ import useLayoutStore from "../state/useLayoutStore";
 import useUserDataStore from "../state/useUserDataStore";
 import useApplicationDataStore from "../state/useApplicationDataStore";
 import { useHiddenRegionsStore, getUniqueRegionID } from "../state/useHiddenRegionsStore";
+import { TABS } from "../ui/components/entityregions/TabCodeMapping";
 
 const useEntity = (params) => {
   const {
@@ -81,7 +82,7 @@ const useEntity = (params) => {
   const { isHiddenRegion, getHiddenRegionState, toggleHiddenRegion, setRegionVisibility } = useHiddenRegionsStore();
   
   const screenCode = userData[screenProperty];  
-  const screenLayout = useLayoutStore().screenLayout[screenCode];; 
+  const {screenLayout: {[screenCode]: screenLayout}, fetchScreenLayout} = useLayoutStore(); 
   const screenPermissions = userData.screens[screenCode];
 
   const showEqpTree = useSelector((state) => state.ui.layout.showEqpTree);
@@ -105,6 +106,20 @@ const useEntity = (params) => {
   );
 
   useEffect(() => {
+    if (!screenLayout) {
+      fetchScreenLayout(userData.eamAccount.userGroup,
+        userData.screens[screenCode].entity,
+        userData.screens[screenCode].parentScreen,
+        screenCode,
+        TABS[userData.screens[screenCode].parentScreen]);
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!screenLayout) {
+      return;
+    }
+
     if (!code && codeQueryParam) {
       history.push(
         process.env.PUBLIC_URL +
@@ -117,8 +132,9 @@ const useEntity = (params) => {
     code ? readEntity(code) : initNewEntity();
     // Reset window title when unmounting
     return () => (document.title = "EAM Light");
-  }, [code]);
+  }, [code, screenLayout]);
 
+  // Provide mount and unmount handlers to the client 
   useEffect(() => {
     onMountHandler?.();
     return () => onUnmountHandler?.();

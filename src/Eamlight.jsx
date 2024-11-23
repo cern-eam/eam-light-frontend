@@ -56,11 +56,11 @@ const Eamlight = ({ inforContext }) => {
     fetchApplicationData();
   },[])
 
-  useEffect(() => {
-    if (userData && !screenLayout) {
-      fetchScreenLayout(userData);
-    }
-  }, [userData]);
+  // useEffect(() => {
+  //   if (userData && !screenLayout) {
+  //     fetchScreenLayout(userData);
+  //   }
+  // }, [userData]);
 
   if (!inforContext && import.meta.env.VITE_LOGIN_METHOD === "STD") {
     return (
@@ -89,7 +89,7 @@ const Eamlight = ({ inforContext }) => {
     }
   }
 
-  if (!userData || !applicationData || !screenLayout) {
+  if (!userData || !applicationData) {
     return (
       <BlockUi tag="div" blocking={true} style={blockUiStyle}>
         <div style={blockUiStyleDiv}>Loading EAM Light ...</div>

@@ -30,7 +30,7 @@ class WSNCRs {
     }
 
     getEquipmentNonConformities(asset, config = {}) {
-        return WS._get(`/ncrs/asset/${asset}`, config)
+        return WS._get(`/ncrs/equipment/${asset}`, config)
     }
 }
 
