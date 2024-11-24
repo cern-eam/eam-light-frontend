@@ -9,6 +9,7 @@ import queryString from "query-string";
 import useUserDataStore from '../../../../state/useUserDataStore';
 import useApplicationDataStore from '../../../../state/useApplicationDataStore';
 import useLayoutStore from '../../../../state/useLayoutStore';
+import { renderLoading } from '../../EntityTools';
 
 const MODE_STANDARD = 'Standard';
 
@@ -38,10 +39,16 @@ const ReplaceEqp = (props) => {
     const [stateList, setStateList] = useState([]);
     const [statusList, setStatusList] = useState([]);
     const { userData } = useUserDataStore();
-    const { screenLayout } = useLayoutStore()
     const { applicationData } = useApplicationDataStore();
     const cryoClasses = applicationData.EL_CRYOC;
-    const equipmentLayout = screenLayout[userData.assetScreen];
+
+    const {screenLayout: {[userData.assetScreen]: equipmentLayout }, fetchScreenLayout} = useLayoutStore();
+
+    useEffect(() => {
+        if (!equipmentLayout) {
+            fetchScreenLayout(userData.eamAccount.userGroup, "OBJ", "OSOBJA", userData.assetScreen, [])
+        }
+    }, [equipmentLayout])
 
     useEffect(() => {
         //Check URL parameters
@@ -171,6 +178,10 @@ const ReplaceEqp = (props) => {
             .catch(error => handleError(error))
             .finally(() => setBlocking(false));
     };
+
+    if (!equipmentLayout) {
+        return renderLoading("Loading Screen Layout")
+    }
 
     return (
         <div className="entityContainer" >

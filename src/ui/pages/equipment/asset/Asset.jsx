@@ -44,6 +44,7 @@ import getPartsAssociated from "@/ui/pages/PartsAssociated";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import AssetNCRs from "../components/EquipmentNCRs.jsx";
+import useEquipmentTreeStore from "../../../../state/useEquipmentTreeStore.js";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -67,6 +68,7 @@ const Asset = () => {
     getHiddenRegionState,
     getUniqueRegionID,
     showEqpTree,
+    updateEquipmentTreeData,
     toggleHiddenRegion,
     setRegionVisibility,
     setLayoutProperty,
@@ -119,13 +121,13 @@ const Asset = () => {
 
   function postInit() {
     readStatuses(true);
-    setLayoutProperty("equipment", null);
+    updateEquipmentTreeData({equipment: null});
   }
 
   function postRead(equipment) {
     readStatuses(false, equipment.statusCode);
     if (!showEqpTree) {
-      setLayoutProperty("equipment", equipment);
+      updateEquipmentTreeData({equipment});
     }
   }
 

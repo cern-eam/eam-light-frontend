@@ -27,7 +27,6 @@ import config from "./config";
 import Equipment from "./ui/pages/equipment/Equipment";
 import Report from "./ui/pages/report/Report";
 import ReleaseNotesPage from "./ui/pages/releaseNotes/ReleaseNotes";
-import useLayoutStore from "./state/useLayoutStore";
 import useUserDataStore from "./state/useUserDataStore";
 import useApplicationDataStore from "./state/useApplicationDataStore";
 import { renderLoading } from "./ui/pages/EntityTools";
@@ -35,7 +34,6 @@ import { renderLoading } from "./ui/pages/EntityTools";
 export const releaseNotesPath = "/releasenotes";
 
 const Eamlight = ({ inforContext }) => {
-  const { screenLayout, fetchScreenLayout, fetchScreenLayoutFailed } = useLayoutStore();
   const { userData, fetchUserData} = useUserDataStore();
   const { applicationData, fetchApplicationData } = useApplicationDataStore();
 
@@ -58,14 +56,6 @@ const Eamlight = ({ inforContext }) => {
         <InfoPage
           title="Access Denied"
           message="You don't have valid EAM account. "
-        />
-      );
-    }
-    if (fetchScreenLayoutFailed) {
-      return (
-        <InfoPage
-          title="Unable to initialize EAM Light"
-          message="Something went wrong while loading the screen layouts, please retry or contact the support at eam.support@cern.ch."
         />
       );
     }

@@ -21,6 +21,7 @@ import GridTools from "@/tools/GridTools";
 import queryString from "query-string";
 import useApplicationDataStore from "../../state/useApplicationDataStore";
 import useUserDataStore from "../../state/useUserDataStore";
+import useEquipmentTreeStore from "../../state/useEquipmentTreeStore";
 
 const styles = {
   topBarLink: {
@@ -50,11 +51,9 @@ export default withStyles(styles)(function ApplicationLayout(props) {
   const [menuCompacted, setMenuCompacted] = useState(false);
   const [mobileMenuActive, setMobileMenuActive] = useState(false);
   const theme = useTheme();
-  const dispatch = useDispatch();
-  const showEqpTree = useSelector((state) => state.ui.layout.showEqpTree);
-  const equipment = useSelector((state) => state.ui.layout.equipment);
+  const {equipmentTreeData: {showEqpTree, equipment}, updateEquipmentTreeData} = useEquipmentTreeStore();
   const location = useLocation();
-
+  
   const hideHeader = queryString.parse(window.location.search)['hideHeader'] === 'true';
   const hideMenu = queryString.parse(window.location.search)['hideMenu'] === 'true';
   const hideFooter = queryString.parse(window.location.search)['hideFooter'] === 'true';
@@ -118,7 +117,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
             }
             <IconButton
               onClick={() =>
-                dispatch(setLayoutProperty("showEqpTree", !showEqpTree))
+                updateEquipmentTreeData({showEqpTree: !showEqpTree})
               }
               size="large"
             >

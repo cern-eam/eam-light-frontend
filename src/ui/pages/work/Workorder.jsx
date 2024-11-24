@@ -102,6 +102,7 @@ const Workorder = () => {
     toggleHiddenRegion,
     setRegionVisibility,
     setLayoutProperty,
+    updateEquipmentTreeData,
     newHandler,
     saveHandler,
     deleteHandler,
@@ -623,9 +624,11 @@ const Workorder = () => {
   }
 
   function postRead(workorder) {
-    setLayoutProperty("equipment", {
-      code: workorder.equipmentCode,
-      organization: workorder.equipmentOrganization,
+    updateEquipmentTreeData({
+      equipment: {
+        code: workorder.equipmentCode,
+        organization: workorder.equipmentOrganization
+      }
     });
     setCurrentWorkOrder(workorder.number);
     readStatuses(workorder.statusCode, workorder.typeCode, false);
@@ -667,7 +670,7 @@ const Workorder = () => {
   };
 
   function mountHandler() {
-    setLayoutProperty("eqpTreeMenu", [
+    updateEquipmentTreeData({eqpTreeMenu: [
       {
         desc: "Use for this Work Order",
         icon: <ContentPasteIcon />,
@@ -676,11 +679,11 @@ const Workorder = () => {
           updateWorkorderProperty("equipmentDesc", rowInfo.node.name);
         },
       },
-    ]);
+    ]});
   }
 
   function unmountHandler() {
-    setLayoutProperty("eqpTreeMenu", null);
+    updateEquipmentTreeData({eqpTreeMenu: null});
     setCurrentWorkOrder(null);
   }
 

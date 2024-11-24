@@ -23,7 +23,6 @@ export default function ui(state = buildDefaultUiObject(), action) {
 function buildDefaultUiObject() {
 
     return {
-        snackbar: {message: "", type: "", open: false},
-        layout: {showEqpTree: false}
+        snackbar: {message: "", type: "", open: false}
     }
 }

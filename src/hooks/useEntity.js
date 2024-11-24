@@ -35,6 +35,7 @@ import useUserDataStore from "../state/useUserDataStore";
 import useApplicationDataStore from "../state/useApplicationDataStore";
 import { useHiddenRegionsStore, getUniqueRegionID } from "../state/useHiddenRegionsStore";
 import { TABS } from "../ui/components/entityregions/TabCodeMapping";
+import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
 
 const useEntity = (params) => {
   const {
@@ -80,12 +81,11 @@ const useEntity = (params) => {
   const { userData } = useUserDataStore();
   const { applicationData } = useApplicationDataStore();
   const { isHiddenRegion, getHiddenRegionState, toggleHiddenRegion, setRegionVisibility } = useHiddenRegionsStore();
-  
+  const {equipmentTreeData: {showEqpTree}, updateEquipmentTreeData} = useEquipmentTreeStore();
+
   const screenCode = userData[screenProperty];  
   const {screenLayout: {[screenCode]: screenLayout}, fetchScreenLayout} = useLayoutStore(); 
   const screenPermissions = userData.screens[screenCode];
-
-  const showEqpTree = useSelector((state) => state.ui.layout.showEqpTree);
 
   const {
     errorMessages,
@@ -405,6 +405,7 @@ const useEntity = (params) => {
     commentsComponent,
     setLayoutProperty: setLayoutPropertyConst,
     showEqpTree,
+    updateEquipmentTreeData,
     // Dispatchers
     showError: showErrorConst,
     showNotification: showNotificationConst,

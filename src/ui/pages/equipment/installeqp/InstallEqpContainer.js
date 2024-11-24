@@ -1,18 +1,11 @@
 import {connect} from 'react-redux'
 import InstallEqp from './InstallEqp'
-import {handleError, showError, showNotification, setLayoutProperty} from '../../../../actions/uiActions'
+import {handleError, showError, showNotification} from '../../../../actions/uiActions'
 
-function mapStateToProps(state) {
-    return {
-        userData: state.application.userData
-    }
-}
-
-const InstallEqpContainer = connect(mapStateToProps, {
+const InstallEqpContainer = connect(null, {
         showNotification,
         showError,
-        handleError,
-        setLayoutProperty
+        handleError
     }
 )(InstallEqp);
 

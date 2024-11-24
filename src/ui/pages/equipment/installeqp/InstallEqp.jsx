@@ -8,21 +8,21 @@ import BlockUi from "react-block-ui";
 import { createOnChangeHandler } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { IconButton } from "@mui/material";
 import { FileTree } from "mdi-material-ui";
-import { useSelector } from "react-redux";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Stack from "@mui/material/Stack";
 import Panel from "@/ui/components/panel/Panel";
+import useEquipmentTreeStore from "../../../../state/useEquipmentTreeStore";
 
 export default function InstallEqp(props) {
   const [parentEq, setParentEq] = useState("");
   const [childEq, setChildEq] = useState("");
   const [blocking, setBlocking] = useState(false);
-  const currentRoot = useSelector((state) => state.ui.layout.currentRoot);
+  const {equipmentTreeData: {currentRoot}, updateEquipmentTreeData} = useEquipmentTreeStore();
   const idPrefix = "EAMID_InstallEqp_";
 
   useEffect(() => {
-    props.setLayoutProperty("eqpTreeMenu", [
+    updateEquipmentTreeData({eqpTreeMenu: [
       {
         desc: "Use as Parent",
         icon: <KeyboardArrowUpIcon />,
@@ -37,9 +37,9 @@ export default function InstallEqp(props) {
           setChildEq(rowInfo.node.id);
         },
       },
-    ]);
+    ]});
     return () => {
-      props.setLayoutProperty("eqpTreeMenu", null);
+      updateEquipmentTreeData({eqpTreeMenu: null});
     };
   }, []);
 
@@ -72,7 +72,7 @@ export default function InstallEqp(props) {
             `${childEq} was successfully attached to ${parentEq}`
           );
           setChildEq("");
-          props.setLayoutProperty("equipment", currentRoot);
+          updateEquipmentTreeData({equipment: currentRoot});
           setBlocking(false);
         })
         .catch((error) => {
@@ -96,7 +96,7 @@ export default function InstallEqp(props) {
             `${childEq} was successfully detached from ${parentEq}`
           );
           setChildEq("");
-          props.setLayoutProperty("equipment", currentRoot);
+          updateEquipmentTreeData({equipment: currentRoot});
           setBlocking(false);
         })
         .catch((error) => {
@@ -107,8 +107,9 @@ export default function InstallEqp(props) {
   };
 
   const treeButtonClickHandler = (code) => {
-    props.setLayoutProperty("equipment", { code });
-    props.setLayoutProperty("showEqpTree", true);
+    updateEquipmentTreeData({
+      equipment: { code }, 
+      showEqpTree: true });
   };
 
   return (

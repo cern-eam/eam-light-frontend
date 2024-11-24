@@ -4,7 +4,6 @@ import Eamlight from './Eamlight'
 const mapStateToProps = (state) => {
     return {
         inforContext: state.inforContext,
-        showEqpTree: state.ui.layout.showEqpTree
     }
 };
 

@@ -12,6 +12,7 @@ import NodeSelectMenu from "./components/NodeSelectMenu";
 import { isMultiOrg } from "@/ui/pages/EntityTools";
 import { handleError, setLayoutProperty } from "@/actions/uiActions";
 import { isEmpty } from "lodash";
+import useEquipmentTreeStore from "../../../state/useEquipmentTreeStore";
 
 const urlTypeMap = {
   A: "asset",
@@ -38,13 +39,11 @@ export default function EAMTree(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [currentRow, setCurrentRow] = React.useState(null);
 
-  const equipment = useSelector((state) => state.ui.layout.equipment);
-  const eqpTreeMenu = useSelector((state) => state.ui.layout.eqpTreeMenu);
+  const {equipmentTreeData: {equipment, eqpTreeMenu}, updateEquipmentTreeData} = useEquipmentTreeStore();
+
   const history = useHistory();
 
   const dispatch = useDispatch();
-  const setLayoutPropertyConst = (...args) =>
-    dispatch(setLayoutProperty(...args));
   const handleErrorConst = (...args) => dispatch(handleError(...args));
 
   const _loadTreeData = async (code, organization, type) => {
@@ -62,7 +61,7 @@ export default function EAMTree(props) {
         await _reExpandNodes(data);
       }
       setTreeData(data);
-      setLayoutPropertyConst("currentRoot", { code, organization, type });
+      updateEquipmentTreeData({currentRoot: { code, organization, type }});
     } catch (error) {
       if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
         handleErrorConst(error);
@@ -203,7 +202,7 @@ export default function EAMTree(props) {
                         rowInfo.node.parents.length > 0 && (
                           <TreeSelectParent
                             parents={rowInfo.node.parents}
-                            setLayoutProperty={setLayoutPropertyConst}
+                            //setLayoutProperty={setLayoutPropertyConst}
                             reloadData={_loadTreeData}
                           />
                         )}
