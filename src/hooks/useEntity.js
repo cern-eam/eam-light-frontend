@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, createElement } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
@@ -24,6 +24,7 @@ import {
   showWarning,
 } from "@/actions/uiActions";
 import WSCustomFields from "eam-components/dist/tools/WSCustomFields";
+import WSS from "../tools/WS"
 import {
   createOnChangeHandler,
   processElementInfo,
@@ -36,6 +37,12 @@ import useApplicationDataStore from "../state/useApplicationDataStore";
 import { useHiddenRegionsStore, getUniqueRegionID } from "../state/useHiddenRegionsStore";
 import { TABS } from "../ui/components/entityregions/TabCodeMapping";
 import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
+import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
+import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
+import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
+import EAMDateTimePicker from "eam-components/dist/ui/components/inputs-ng/EAMDateTimePicker";
+import EAMDatePicker from "eam-components/dist/ui/components/inputs-ng/EAMDatePicker";
+import EAMCheckbox from "eam-components/dist/ui/components/inputs-ng/EAMCheckbox";
 
 const useEntity = (params) => {
   const {
@@ -382,6 +389,67 @@ const useEntity = (params) => {
 
   const getHandlers = () => ({ ...handlers, classCode: onChangeClass });
 
+  const EAMInputField = ({layoutKey, valueKey, descKey, select, ...extraProps}) => {
+    const elementInfo = screenLayout.fields[layoutKey];
+  
+    let genericLov = null;
+    if (elementInfo.onLookup !== null) {
+        try {
+            const { lovName, inputVars, inputFields, returnFields } = JSON.parse(elementInfo.onLookup);
+            const inputParams = {
+              ...inputVars,
+              ...Object.entries(inputFields)
+                  .map(([key, val]) => ({[key]: entity?.[layoutPropertiesMap[val]]}))
+                  .reduce((acc, el) => ({...acc, ...el}), {}),
+              "param.pagemode": 'view',
+              //...extraParams,
+          }
+            genericLov = {
+                inputParams,
+                returnFields,
+                lovName,
+                exact: false,
+                rentity: screenCode,
+            };
+        } catch (err) {
+            // Handle error
+        }
+    }
+  
+    const Component =
+            select ? EAMSelect
+            : genericLov ? EAMAutocomplete
+            : elementInfo.fieldType === 'select' ? EAMSelect
+            : ['number', 'integer', 'currency'].includes(elementInfo.fieldType) ? EAMTextField
+            : elementInfo.fieldType === 'datetime' ? EAMDateTimePicker
+            : elementInfo.fieldType === 'date' ? EAMDatePicker
+            : elementInfo.fieldType === 'textarea' ? EAMTextField
+            : elementInfo.fieldType === 'text' ? EAMTextField
+            : elementInfo.fieldType === 'checkbox' ? EAMCheckbox
+            : null;
+  
+    if (!Component) {
+        console.error(elementInfo);
+        return null;
+    }
+  
+    return createElement(
+      Component,
+      {
+          ...register(layoutKey, valueKey, descKey),
+          ...(genericLov && !select && {
+              autocompleteHandler: (hint, config) => {
+                  return WSS.getLov({ ...genericLov, hint }, config);
+              }
+          }),
+          ...(genericLov && select && {
+            autocompleteHandler: () => {return WSS.getLov({ ...genericLov });}}
+            ),
+          ...extraProps
+      }
+  );
+  };
+
   //
   //
   //
@@ -422,6 +490,7 @@ const useEntity = (params) => {
     setLoading,
     setReadOnly,
     createEntity,
+    EAMInputField
   };
 };
 
