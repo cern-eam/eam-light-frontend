@@ -58,8 +58,7 @@ const NCR = () => {
         updateEntityProperty: updateNCRProperty,
         register,
         showNotification,
-        showWarning,
-        EAMInputField
+        showWarning
     } = useEntity({
         WS: {
             create: WSNCRs.createNonConformity,
@@ -127,7 +126,6 @@ const NCR = () => {
         const tabs = ncrLayout.tabs;
 
         const commonProps = {
-            EAMInputField,
             newEntity,
             ncrLayout,
             updateNCRProperty,

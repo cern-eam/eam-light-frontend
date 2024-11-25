@@ -3,28 +3,30 @@ import WS from "../../../../tools/WS";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import { isMultiOrg } from "@/ui/pages/EntityTools";
+import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 
 const NCRGeneral = (props) => {
   const {
-    ncrLayout,
     register,
-    ncr,
-    EAMInputField
+    ncr
   } = props;
   
   return (
     <React.Fragment>
       <EAMTextField {...register("description", "description")} />
-      <EAMInputField layoutKey="equipment" valueKey="equipmentCode"
-        link={() => ncr.equipmentCode ? "/equipment/" + ncr.equipmentCode : null
-        }
+      <EAMAutocomplete {...register("equipment", "equipmentCode")}
+      link={() =>
+        ncr.equipmentCode
+          ? "/equipment/" + ncr.equipmentCode
+          : null
+      }
+      
       />
-
-      <EAMInputField layoutKey="location" valueKey="locationCode" />
-      <EAMInputField layoutKey="department" valueKey="department"/>
-      <EAMInputField  layoutKey="type" valueKey="typeCode" select={true} />
+      <EAMAutocomplete {...register("location", "locationCode")} />
+      <EAMAutocomplete {...register("department", "department")} />
+      <EAMSelect {...register("type", "typeCode")} />
       <EAMTextField {...register("status", "statusCode")} />
-      <EAMInputField layoutKey="class" valueKey="classCode" />
+      <EAMTextField {...register("class", "classCode")} />
       <EAMTextField {...register("severity", "severity")} />
       <EAMTextField {...register("importance", "importance")} />
       <EAMTextField {...register("nonconformitynote", "nonConformityNote")} />
