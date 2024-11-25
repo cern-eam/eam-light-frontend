@@ -443,7 +443,7 @@ const useEntity = (params) => {
               }
           }),
           ...(genericLov && select && {
-            autocompleteHandler: () => {return WSS.getLov({ ...genericLov });}}
+            autocompleteHandler: () => {return WSS.getLov({ ...genericLov, hint: "" });}}
             ),
           ...extraProps
       }
