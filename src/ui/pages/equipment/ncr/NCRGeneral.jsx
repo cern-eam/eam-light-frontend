@@ -26,7 +26,7 @@ const NCRGeneral = (props) => {
       <EAMAutocomplete {...register("department", "department")} />
       <EAMSelect {...register("type", "typeCode")} />
       <EAMTextField {...register("status", "statusCode")} />
-      <EAMTextField {...register("class", "classCode")} />
+      <EAMAutocomplete {...register("class", "classCode")} />
       <EAMTextField {...register("severity", "severity")} />
       <EAMTextField {...register("importance", "importance")} />
       <EAMTextField {...register("nonconformitynote", "nonConformityNote")} />

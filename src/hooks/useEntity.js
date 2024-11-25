@@ -398,7 +398,8 @@ const useEntity = (params) => {
                 rentity: screenCode,
             };
 
-            data.autocompleteHandler = (hint, config) => WSS.getLov({ ...genericLov, hint }, config);
+            // hint might be of type signal (due to an autocomplete hook) which brakes the API, so for now make it a string if it's not
+            data.autocompleteHandler = (hint, config) => WSS.getLov({ ...genericLov, hint: typeof hint === 'string' ? hint : "" }, config);
         } catch (err) {
             console.error(`Error when setting autocompleteHandler on ${layoutKey}`, err)
         }
@@ -408,8 +409,6 @@ const useEntity = (params) => {
   };
 
   const getHandlers = () => ({ ...handlers, classCode: onChangeClass });
-
-
 
   //
   //
