@@ -3,22 +3,21 @@ import "react-grid-layout/css/styles.css";
 import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ApplicationLayoutContainer from "./ui/layout/ApplicationLayoutContainer";
-import EamlightMenuContainer from "./ui/layout/menu/EamlightMenuContainer";
-import WorkorderSearchContainer from "./ui/pages/work/search/WorkorderSearchContainer";
-import PartSearchContainer from "./ui/pages/part/search/PartSearchContainer";
-import AssetSearchContainer from "./ui/pages/equipment/asset/search/AssetSearchContainer";
+import EamlightMenu from "./ui/layout/menu/EamlightMenu";
+import WorkorderSearch from "./ui/pages/work/search/WorkorderSearch";
+import PartSearch from "./ui/pages/part/search/PartSearch";
+import AssetSearch from "./ui/pages/equipment/asset/search/AssetSearch";
 import NCRSearch from "./ui/pages/equipment/ncr/search/NCRSearch";
-import PositionSearchContainer from "./ui/pages/equipment/position/search/PositionSearchContainer";
-import SystemSearchContainer from "./ui/pages/equipment/system/search/SystemSearchContainer";
-import LocationSearchContainer from "./ui/pages/equipment/location/search/LocationSearchContainer";
-import BlockUi from "react-block-ui";
+import PositionSearch from "./ui/pages/equipment/position/search/PositionSearch";
+import SystemSearch from "./ui/pages/equipment/system/search/SystemSearch";
+import LocationSearch from "./ui/pages/equipment/location/search/LocationSearch";
 import InfoPage from "./ui/components/infopage/InfoPage";
 import Part from "./ui/pages/part/Part";
-import SearchContainer from "./ui/pages/search/SearchContainer";
-import ReplaceEqpContainer from "./ui/pages/equipment/replaceeqp/ReplaceEqpContainer";
+import Search from "./ui/pages/search/Search";
+import ReplaceEqp from "./ui/pages/equipment/replaceeqp/ReplaceEqp";
 import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import EquipmentRedirect from "./ui/pages/equipment/EquipmentRedirect";
-import MeterReadingContainer from "./ui/pages/meter/MeterReadingContainer";
+import MeterReading from "./ui/pages/meter/MeterReading";
 import LoginContainer from "./ui/pages/login/LoginContainer";
 import Grid from "./ui/pages/grid/Grid";
 import EqpTree from "./ui/components/eqtree/EqpTree";
@@ -88,20 +87,20 @@ const Eamlight = ({ inforContext }) => {
             <Route path="/eqptree" component={EqpTree} />
 
             <ApplicationLayoutContainer>
-              <EamlightMenuContainer />
+              <EamlightMenu />
               <div style={{ height: "calc(100% - 30px)" }}>
-                <Route exact path="/" component={SearchContainer} />
-                <Route path="/wosearch" component={WorkorderSearchContainer} />
+                <Route exact path="/" component={Search} />
+                <Route path="/wosearch" component={WorkorderSearch} />
                 <Route path="/part/:code?" component={Part} />
-                <Route path="/partsearch" component={PartSearchContainer} />
-                <Route path="/assetsearch" component={AssetSearchContainer} />
+                <Route path="/partsearch" component={PartSearch} />
+                <Route path="/assetsearch" component={AssetSearch} />
                 <Route path="/ncrsearch" component={NCRSearch} />
-                <Route path="/positionsearch" component={PositionSearchContainer} />
-                <Route path="/systemsearch" component={SystemSearchContainer} />
-                <Route path="/locationsearch" component={LocationSearchContainer} />
+                <Route path="/positionsearch" component={PositionSearch} />
+                <Route path="/systemsearch" component={SystemSearch} />
+                <Route path="/locationsearch" component={LocationSearch} />
                 <Route path="/equipment/:code(.+)?" component={EquipmentRedirect} />
-                <Route path="/replaceeqp" component={ReplaceEqpContainer} />
-                <Route path="/meterreading" component={MeterReadingContainer} />
+                <Route path="/replaceeqp" component={ReplaceEqp} />
+                <Route path="/meterreading" component={MeterReading} />
                 <Route path="/grid" component={Grid} />
                 <Route path="/report" component={Report} />
                 <Route path={eqpRegex} component={Equipment} />

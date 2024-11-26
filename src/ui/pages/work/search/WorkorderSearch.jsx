@@ -5,6 +5,7 @@ import { EAMCellField } from "eam-components/dist/ui/components/grids/eam/utils"
 import EAMGrid from "eam-components/dist/ui/components/grids/eam/EAMGrid";
 import SyncedQueryParamsEAMGridContext from "../../../../tools/SyncedQueryParamsEAMGridContext";
 import useUserDataStore from "../../../../state/useUserDataStore";
+import useSnackbarStore from "../../../../state/useSnackbarStore";
 
 const cellRenderer = ({ column, value }) => {
   if (column.id === "workordernum") {
@@ -19,7 +20,7 @@ const cellRenderer = ({ column, value }) => {
 };
 
 const WorkorderSearch = (props) => {
-  const { handleError } = props;
+  const { handleError } = useSnackbarStore();
   const { userData } = useUserDataStore();
   const workOrderScreen = userData.screens[userData.workOrderScreen];
 

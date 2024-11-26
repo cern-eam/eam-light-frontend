@@ -11,11 +11,11 @@ import CustomFields from "eam-components/dist/ui/components/customfields/CustomF
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import NCRIframeContainer from "../../components/iframes/NCRIframeContainer";
 import Activities from "./activities/Activities";
-import AdditionalCostsContainer from "./additionalcosts/AdditionalCostsContainer";
+import AdditionalCosts from "./additionalcosts/AdditionalCosts";
 import WorkorderChildren from "./childrenwo/WorkorderChildren";
-import MeterReadingContainerWO from "./meter/MeterReadingContainerWO";
+import MeterReadingWO from "./meter/MeterReadingWO";
 import WorkorderMultiequipment from "./multiequipmentwo/WorkorderMultiequipment";
-import PartUsageContainer from "./partusage/PartUsageContainer";
+import PartUsage from "./partusage/PartUsage";
 import WorkorderClosingCodes from "./WorkorderClosingCodes";
 import WorkorderGeneral from "./WorkorderGeneral";
 import WorkorderScheduling from "./WorkorderScheduling";
@@ -278,7 +278,7 @@ const Workorder = () => {
         maximizable: false,
         customVisibility: () => isRegionAvailable("PAR", commonProps.workOrderLayout),
         render: () => (
-          <PartUsageContainer
+          <PartUsage
             workorder={workorder}
             tabLayout={tabs.PAR}
             equipmentMEC={equipmentMEC}
@@ -298,7 +298,7 @@ const Workorder = () => {
         maximizable: false,
         customVisibility: () => isRegionAvailable("ACO", commonProps.workOrderLayout),
         render: () => (
-          <AdditionalCostsContainer
+          <AdditionalCosts
             workorder={workorder}
             tabLayout={tabs.ACO}
             equipmentMEC={equipmentMEC}
@@ -538,7 +538,7 @@ const Workorder = () => {
         label: "Meter Readings",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <MeterReadingContainerWO equipment={workorder.equipmentCode} disabled={readOnly} />,
+        render: () => <MeterReadingWO equipment={workorder.equipmentCode} disabled={readOnly} />,
         column: 2,
         order: 12,
         summaryIcon: SpeedIcon,

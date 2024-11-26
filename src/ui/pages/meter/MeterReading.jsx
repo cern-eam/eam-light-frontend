@@ -6,6 +6,7 @@ import MeterReadingList from "./MeterReadingList";
 import WSMeters from "../../../tools/WSMeters";
 import "./MeterReading.css";
 import EAMConfirmDialog from "../../components/EAMConfirmDialog";
+import useSnackbarStore from "../../../state/useSnackbarStore";
 
 /**
  * Meter Readings main class
@@ -15,6 +16,13 @@ const rollOverMessageCreate =
   "Value is less than the Last Reading, which indicates the meter has rolled over. Is this correct?";
 
 class MeterReading extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.handleError = useSnackbarStore.getState().handleError;
+    this.showNotification = useSnackbarStore.getState().showNotification;
+}
+
   state = {
     blocking: false,
     searchCriteria: {
@@ -52,7 +60,7 @@ class MeterReading extends React.Component {
           this.setState(() => ({ blocking: false }));
         })
         .catch((error) => {
-          this.props.handleError(error);
+          this.handleError(error);
           this.setState(() => ({ blocking: false }));
         });
     }
@@ -74,7 +82,7 @@ class MeterReading extends React.Component {
           this.setState(() => ({ blocking: false }));
         })
         .catch((error) => {
-          this.props.handleError(error);
+          this.handleError(error);
           this.setState(() => ({ blocking: false }));
         });
     }
@@ -103,7 +111,7 @@ class MeterReading extends React.Component {
         //Reload the data
         this.loadMeterReadings();
         //Message
-        this.props.showNotification("Meter Reading created successfully");
+        this.showNotification("Meter Reading created successfully");
       })
       .catch((error) => {
         this.props.handleError(error);

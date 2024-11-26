@@ -5,6 +5,7 @@ import EAMGrid from "eam-components/dist/ui/components/grids/eam/EAMGrid";
 import { EAMCellField } from "eam-components/dist/ui/components/grids/eam/utils";
 import SyncedQueryParamsEAMGridContext from "../../../../../tools/SyncedQueryParamsEAMGridContext";
 import useUserDataStore from "../../../../../state/useUserDataStore";
+import useSnackbarStore from "../../../../../state/useSnackbarStore";
 
 const cellRenderer = ({ column, value, row }) => {
   if (column.id === "equipmentno") {
@@ -26,7 +27,7 @@ const cellRenderer = ({ column, value, row }) => {
 };
 
 const PositionSearch = (props) => {
-  const { handleError } = props;
+  const { handleError } = useSnackbarStore();
   const { userData} = useUserDataStore();
   const positionScreen=  userData.screens[userData.positionScreen]
 

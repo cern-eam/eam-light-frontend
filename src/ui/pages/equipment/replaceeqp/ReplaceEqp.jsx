@@ -10,6 +10,7 @@ import useUserDataStore from '../../../../state/useUserDataStore';
 import useApplicationDataStore from '../../../../state/useApplicationDataStore';
 import useLayoutStore from '../../../../state/useLayoutStore';
 import { renderLoading } from '../../EntityTools';
+import useSnackbarStore from '../../../../state/useSnackbarStore';
 
 const MODE_STANDARD = 'Standard';
 
@@ -25,13 +26,6 @@ const initEqpReplacement = {
 };
 
 const ReplaceEqp = (props) => {
-    const {
-        handleError,
-        showError,
-        showNotification,
-        showWarning
-    } = props;
-
     const [blocking, setBlocking] = useState(false);
     const [newEquipment, setNewEquipment] = useState(undefined);
     const [oldEquipment, setOldEquipment] = useState(undefined);
@@ -40,13 +34,14 @@ const ReplaceEqp = (props) => {
     const [statusList, setStatusList] = useState([]);
     const { userData } = useUserDataStore();
     const { applicationData } = useApplicationDataStore();
+    const { handleError, showNotification, showError, showWarning} = useSnackbarStore();
     const cryoClasses = applicationData.EL_CRYOC;
 
     const {screenLayout: {[userData.assetScreen]: equipmentLayout }, fetchScreenLayout} = useLayoutStore();
 
     useEffect(() => {
         if (!equipmentLayout) {
-            fetchScreenLayout(userData.eamAccount.userGroup, "OBJ", "OSOBJA", userData.assetScreen, [])
+            fetchScreenLayout(userData.eamAccount.userGroup, "OBJ", "OSOBJA", userData.assetScreen, ['HDR'])
         }
     }, [equipmentLayout])
 

@@ -16,6 +16,7 @@ import {
   processElementInfo,
 } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import LightDialog from "@/ui/components/LightDialog";
+import useSnackbarStore from "../../../../../state/useSnackbarStore";
 
 /**
  * Display detail of an activity
@@ -23,6 +24,7 @@ import LightDialog from "@/ui/components/LightDialog";
 function AddActivityDialog(props) {
   let [loading, setLoading] = useState(false);
   let [formValues, setFormValues] = useState({});
+  const {handleError, showNotification} = useSnackbarStore();
 
   // Passing an 'activityToEdit' object indicates that we are editing an existing activity
   const { activityToEdit, layout } = props;
@@ -71,7 +73,7 @@ function AddActivityDialog(props) {
       })
       .catch((error) => {
         setLoading(false);
-        props.handleError(error);
+        handleError(error);
       });
   };
 
@@ -97,7 +99,7 @@ function AddActivityDialog(props) {
       .then(() => {
         props.postAddActivityHandler();
         setLoading(false);
-        props.showNotification(
+        showNotification(
           `Activity successfully ${activityToEdit ? "updated" : "created"}`
         );
         handleClose();
@@ -105,7 +107,7 @@ function AddActivityDialog(props) {
       })
       .catch((error) => {
         setLoading(false);
-        props.handleError(error);
+        handleError(error);
       });
   };
 

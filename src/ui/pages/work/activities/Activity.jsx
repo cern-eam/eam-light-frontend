@@ -14,7 +14,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { formatDate } from "@/ui/pages/EntityTools";
-import AddActivityDialogContainer from "./dialogs/AddActivityDialogContainer";
+import AddActivityDialog from "./dialogs/AddActivityDialog";
 import { CalendarStart } from "mdi-material-ui";
 import {
   MoreVert,
@@ -265,7 +265,7 @@ function Activity(props) {
 
       <Divider />
 
-      <AddActivityDialogContainer
+      <AddActivityDialog
         layout={layout.ACT.fields}
         open={isEditModalOpen}
         onChange={readActivities}

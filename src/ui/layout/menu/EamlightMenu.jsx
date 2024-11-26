@@ -41,6 +41,7 @@ import useUserDataStore from "../../../state/useUserDataStore";
 import NumberOfMyOpenWorkOrders from "./components/NumberOfMyWorkOrders";
 import NumberOfMyTeamWorkOrders from "./components/NumberOfMyTeamWorkOrders";
 import { TAB_CODES_ASSETS, TAB_CODES_LOCATIONS, TAB_CODES_PARTS, TAB_CODES_POSITIONS, TAB_CODES_SYSTEMS, TAB_CODES_WORK_ORDERS } from "../../components/entityregions/TabCodeMapping";
+import useSnackbarStore from "../../../state/useSnackbarStore";
 
 export const menuIconStyle = {
   display: "inline-block",
@@ -102,6 +103,8 @@ class EamlightMenu extends Component {
     this.applicationData = useApplicationDataStore.getState().applicationData;
     this.userData = useUserDataStore.getState().userData;
     this.setUserData = useUserDataStore.getState().setUserData;
+    this.showError = useSnackbarStore.getState().showError;
+    this.showNotification = useSnackbarStore.getState().showNotification;
   }
 
   mainMenuClickHandler(event) {
@@ -150,10 +153,6 @@ class EamlightMenu extends Component {
       color: "white",
     };
 
-    const {
-      showNotification,
-      showError
-    } = this.props;
     const {
       workOrderScreen,
       assetScreen,
@@ -588,8 +587,8 @@ class EamlightMenu extends Component {
                   icon={<DatabaseRefresh style={menuIconStyle} />}
                   onClick={MenuTools.refreshCache.bind(
                     null,
-                    showNotification,
-                    showError
+                    this.showNotification,
+                    this.showError
                   )}
                 />
               )}

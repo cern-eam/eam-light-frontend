@@ -9,7 +9,7 @@ import System from "./system/System";
 import Split from "react-split";
 import Location from "./location/Location";
 import Workorder from "../work/Workorder";
-import InstallEqpContainer from "./installeqp/InstallEqpContainer";
+import InstallEqp from "./installeqp/InstallEqp";
 import useEquipmentTreeStore from "../../../state/useEquipmentTreeStore";
 
 const Equipment = () => {
@@ -50,7 +50,7 @@ const Equipment = () => {
             <Route path={"/system/:code(.+)?"} component={System} />
             <Route path={"/location/:code(.+)?"} component={Location} />
             <Route path="/workorder/:code(.+)?" component={Workorder} />
-            <Route path="/installeqp" component={InstallEqpContainer} />
+            <Route path="/installeqp" component={InstallEqp} />
           </Switch>
         </div>
       </Split>
