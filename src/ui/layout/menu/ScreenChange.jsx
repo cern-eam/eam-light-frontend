@@ -1,46 +1,38 @@
-import React, {Component} from 'react';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import withStyles from '@mui/styles/withStyles';
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import withStyles from "@mui/styles/withStyles";
 
 const styles = {
     root: {
-        marginLeft: 10
+        marginLeft: 10,
     },
     icon: {
-        color: 'white'
+        color: "white",
     },
 };
 
-class ScreenChange extends Component {
-
-
-    handleScreenChange = (event) => {
-        this.props.updateScreenLayout(event.target.value)
-    };
-
-    render() {
-        return (
-            <div style={{display: "flex", justifyContent: "center"}}>
-                <FormControl>
-                    <Select style={{color: "white"}}
-                            classes={{
-                                root: this.props.classes.root,
-                                icon: this.props.classes.icon
-                            }}
-                            value={this.props.screen}
-                            onChange={this.handleScreenChange.bind(this)}
-                    >
-                    {this.props.screens.map(screen => (
-                        <MenuItem key={screen.screenCode} value={screen.screenCode}>{screen.screenDesc}</MenuItem>
+const ScreenChange = ({ updateScreenLayout, screens, screen, classes }) => {
+    return (
+        <div style={{ display: "flex", justifyContent: "center" }}>
+            <FormControl>
+                <Select
+                    style={{ color: "white" }}
+                    classes={{ root: classes.root, icon: classes.icon }}
+                    value={screen}
+                    onChange={(event) => updateScreenLayout(event.target.value)}
+                >
+                    {screens.map(({ screenCode, screenDesc }) => (
+                        <MenuItem key={screenCode} value={screenCode}>
+                            {screenDesc}
+                        </MenuItem>
                     ))}
-                    </Select>
-                </FormControl>
-            </div>
-        )
+                </Select>
+            </FormControl>
+        </div>
+    );
+};
 
-    }
-}
+const StyledScreenChange = withStyles(styles)(ScreenChange);
 
-export default withStyles(styles)(ScreenChange);
+export default StyledScreenChange;
