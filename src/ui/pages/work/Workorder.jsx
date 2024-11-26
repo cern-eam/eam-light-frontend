@@ -101,7 +101,6 @@ const Workorder = () => {
     getUniqueRegionID,
     toggleHiddenRegion,
     setRegionVisibility,
-    setLayoutProperty,
     updateEquipmentTreeData,
     newHandler,
     saveHandler,
@@ -238,7 +237,6 @@ const Workorder = () => {
             newEntity={newEntity}
             screenCode={screenCode}
             screenPermissions={screenPermissions}
-            setLayoutProperty={setLayoutProperty}
           />
         ),
         column: 1,

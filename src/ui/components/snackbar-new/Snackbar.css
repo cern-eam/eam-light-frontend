@@ -1,0 +1,11 @@
+div.snackbar.success div {
+    background-color: #00b300;
+}
+
+div.snackbar.warning div {
+    background-color: #f1a310;
+}
+
+div.snackbar.error div {
+background-color: #f44336;
+}

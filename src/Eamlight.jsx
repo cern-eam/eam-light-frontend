@@ -7,7 +7,7 @@ import EamlightMenuContainer from "./ui/layout/menu/EamlightMenuContainer";
 import WorkorderSearchContainer from "./ui/pages/work/search/WorkorderSearchContainer";
 import PartSearchContainer from "./ui/pages/part/search/PartSearchContainer";
 import AssetSearchContainer from "./ui/pages/equipment/asset/search/AssetSearchContainer";
-import NCRSearchContainer from "./ui/pages/equipment/ncr/search/NCRSearchContainer";
+import NCRSearch from "./ui/pages/equipment/ncr/search/NCRSearch";
 import PositionSearchContainer from "./ui/pages/equipment/position/search/PositionSearchContainer";
 import SystemSearchContainer from "./ui/pages/equipment/system/search/SystemSearchContainer";
 import LocationSearchContainer from "./ui/pages/equipment/location/search/LocationSearchContainer";
@@ -95,7 +95,7 @@ const Eamlight = ({ inforContext }) => {
                 <Route path="/part/:code?" component={Part} />
                 <Route path="/partsearch" component={PartSearchContainer} />
                 <Route path="/assetsearch" component={AssetSearchContainer} />
-                <Route path="/ncrsearch" component={NCRSearchContainer} />
+                <Route path="/ncrsearch" component={NCRSearch} />
                 <Route path="/positionsearch" component={PositionSearchContainer} />
                 <Route path="/systemsearch" component={SystemSearchContainer} />
                 <Route path="/locationsearch" component={LocationSearchContainer} />

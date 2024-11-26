@@ -14,7 +14,8 @@ import { unregister } from "./registerServiceWorker";
 import { create } from "jss";
 import StylesProvider from "@mui/styles/StylesProvider";
 import jssPreset from "@mui/styles/jssPreset";
-import SnackbarContainer from "./ui/components/snackbar/SnackbarContainer";
+//import SnackbarContainer from "./ui/components/snackbar/SnackbarContainer";
+import SnackbarLight from "./ui/components/snackbar-new/Snackbar";
 import Ajax from "eam-components/dist/tools/ajax";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -94,7 +95,7 @@ ReactDOMClient.createRoot(document.getElementById("root")).render(
         <LocalizationProvider dateAdapter={AdapterDateFns} locale={enGB}>
           <div style={{ width: "100%", height: "100%" }}>
             <EamlightContainer />
-            <SnackbarContainer />
+            <SnackbarLight />
           </div>
         </LocalizationProvider>
       </Provider>

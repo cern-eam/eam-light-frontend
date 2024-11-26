@@ -50,7 +50,6 @@ const NCR = () => {
         showEqpTree,
         toggleHiddenRegion,
         setRegionVisibility,
-        setLayoutProperty,
         newHandler,
         saveHandler,
         deleteHandler,
@@ -85,7 +84,7 @@ const NCR = () => {
     });
 
     function postInit() {
-        setLayoutProperty("ncr", null);
+        
     }
 
     function postRead() {

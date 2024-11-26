@@ -6,6 +6,7 @@ import EAMGrid from "eam-components/dist/ui/components/grids/eam/EAMGrid";
 import { EAMCellField } from "eam-components/dist/ui/components/grids/eam/utils";
 import { useCallback } from "react";
 import { Link, useHistory } from "react-router-dom";
+import useSnackbarStore from "../../../../../state/useSnackbarStore";
 
 const COLORS = {
     red: {
@@ -120,7 +121,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NCRSearch = (props) => {
-    const { handleError } = props;
+    const { handleError } = useSnackbarStore();
     const { userData } = useUserDataStore();
     const ncrScreen = userData.screens[userData.ncrScreen];
 
