@@ -1,21 +1,10 @@
-import Tooltip from "@mui/material/Tooltip";
-import {
-    Account,
-    AccountMultiple,
-    Tune,
-    DatabaseRefresh,
-    Cog,
-} from "mdi-material-ui";
-import NumberOfMyOpenWorkOrders from "./components/NumberOfMyWorkOrders";
-import NumberOfMyTeamWorkOrders from "./components/NumberOfMyTeamWorkOrders";
+import { DatabaseRefresh } from "mdi-material-ui";
+
 import {
     AssetIcon,
-    PartIcon,
     PositionIcon,
     SystemIcon,
-    WorkorderIcon,
 } from "eam-components/dist/ui/components/icons";
-import FormatListBulletedTriangle from "mdi-material-ui/FormatListBulletedTriangle";
 import MenuMyWorkorders from "./MenuMyWorkorders";
 import MenuMyTeamWorkorders from "./MenuMyTeamWorkorders";
 import EamlightSubmenu from "./EamlightSubmenu";
@@ -36,9 +25,10 @@ import { useCallback, useMemo, useRef } from "react";
 import MenuLink from "./MenuLink";
 import MenuTools from "./MenuTools";
 import Rule from "@mui/icons-material/Rule";
-import ScreenChange from "./ScreenChangeOld";
+import ScreenChange from "./ScreenChange";
 import "../ApplicationLayout.css";
 import "./EamlightMenu.css";
+import TabsMenu from "./components/TabsMenu";
 
 export const menuIconStyle = {
     display: "inline-block",
@@ -51,12 +41,6 @@ export const menuIconStyle = {
 export const menuIconStyleDisabled = {
     ...menuIconStyle,
     color: "#8b8c8b",
-};
-
-const iconStyles = {
-    width: 22,
-    height: 22,
-    color: "white",
 };
 
 const EAM_REPORTS_MENU = "Lists & Reports";
@@ -133,7 +117,7 @@ const EamlightMenu = ({ showNotification, showError }) => {
         },
     };
 
-    const mainMenuClickHandler = useCallback(
+    const tabsMenuClickHandler = useCallback(
         (e) => {
             if (!menuDivRef.current) return;
             // deactivate previous menu and submenu
@@ -226,92 +210,7 @@ const EamlightMenu = ({ showNotification, showError }) => {
     return (
         <div id="menu" ref={menuDivRef}>
             <div id="menuscrollable">
-                <ul id="layout-tab-menu">
-                    <li>
-                        <div
-                            rel="mywos"
-                            className="active"
-                            onClick={mainMenuClickHandler}
-                        >
-                            <Tooltip title="MY OPEN WOs" placement="right">
-                                <Account style={iconStyles} />
-                            </Tooltip>
-                            <NumberOfMyOpenWorkOrders />
-                        </div>
-                    </li>
-
-                    <li>
-                        <div rel="myteamwos" onClick={mainMenuClickHandler}>
-                            <Tooltip title="MY TEAM's WOs" placement="right">
-                                <AccountMultiple style={iconStyles} />
-                            </Tooltip>
-                            <NumberOfMyTeamWorkOrders />
-                        </div>
-                    </li>
-
-                    {workOrderScreen && (
-                        <li>
-                            <div
-                                rel="workorders"
-                                onClick={mainMenuClickHandler}
-                            >
-                                <Tooltip title="WORK ORDERS" placement="right">
-                                    <WorkorderIcon style={iconStyles} />
-                                </Tooltip>
-                            </div>
-                        </li>
-                    )}
-
-                    {(assetScreen ||
-                        positionScreen ||
-                        systemScreen ||
-                        ncrScreen ||
-                        locationScreen) && (
-                        <li>
-                            <div rel="equipment" onClick={mainMenuClickHandler}>
-                                <Tooltip title="EQUIPMENT" placement="right">
-                                    <Cog style={iconStyles} />
-                                </Tooltip>
-                            </div>
-                        </li>
-                    )}
-
-                    {partScreen && (
-                        <li>
-                            <div rel="materials" onClick={mainMenuClickHandler}>
-                                <Tooltip title="MATERIALS" placement="right">
-                                    <PartIcon style={iconStyles} />
-                                </Tooltip>
-                            </div>
-                        </li>
-                    )}
-
-                    {reports && (
-                        <li>
-                            <div
-                                rel="customgrids"
-                                onClick={mainMenuClickHandler}
-                            >
-                                <Tooltip
-                                    title="LISTS & REPORTS"
-                                    placement="right"
-                                >
-                                    <FormatListBulletedTriangle
-                                        style={iconStyles}
-                                    />
-                                </Tooltip>
-                            </div>
-                        </li>
-                    )}
-
-                    <li>
-                        <div rel="settings" onClick={mainMenuClickHandler}>
-                            <Tooltip title="SETTINGS" placement="right">
-                                <Tune style={iconStyles} />
-                            </Tooltip>
-                        </div>
-                    </li>
-                </ul>
+                <TabsMenu onTabClick={tabsMenuClickHandler} />
 
                 <MenuMyWorkorders />
 
