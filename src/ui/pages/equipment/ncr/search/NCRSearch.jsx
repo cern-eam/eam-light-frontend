@@ -7,6 +7,8 @@ import { EAMCellField } from "eam-components/dist/ui/components/grids/eam/utils"
 import { useCallback } from "react";
 import { Link, useHistory } from "react-router-dom";
 import useSnackbarStore from "../../../../../state/useSnackbarStore";
+import { Pending, Lock, AccessAlarm, Block } from "@mui/icons-material";
+
 
 const COLORS = {
     red: {
@@ -44,6 +46,13 @@ const STATUS_COLOR_MAP = {
     Closed: COLORS.green,
     "In Progress": COLORS.orange,
     Cancelled: COLORS.grey,
+};
+
+const ICON_MAP = {
+    Open: Pending,
+    Closed: Lock,
+    "In Progress": AccessAlarm,
+    Cancelled: Block,
 };
 
 const getColorFromStatus = (status) => {
@@ -88,7 +97,22 @@ const cellRenderer = ({ column, value, row }) => {
     if (column.id === "equipment") {
         return <LinkTo to={"/equipment/" + value} value={value} />;
     }
-
+    if (column.id === "icon") {
+        const Icon =
+            ICON_MAP[row.values.status_display] || (() => <div>?</div>);
+        return (
+            <div
+                style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
+                <Icon />
+            </div>
+        );
+    }
     return EAMCellField({ column, value });
 };
 
@@ -112,13 +136,15 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: theme.palette.primary.main,
         },
     },
-    icon: {
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-    },
 }));
+
+const extraColumns = [
+    {
+        width: "50px",
+        label: "Icon",
+        t: "icon",
+    },
+];
 
 const NCRSearch = (props) => {
     const { handleError } = useSnackbarStore();
@@ -154,6 +180,14 @@ const NCRSearch = (props) => {
             searchOnMount={ncrScreen.startupAction !== "N"}
             cellRenderer={cellRenderer}
             key={ncrScreen.screenCode}
+            modifyEAMGridColumns={(s) => [
+                ...(extraColumns?.map(({ width, t, label }) => ({
+                    name: t,
+                    label: label ?? "",
+                    width: width?.replaceAll("px", ""),
+                })) ?? []),
+                ...s,
+            ]}
         >
             <EAMGrid getRowProps={rowStyler} />
         </SyncedQueryParamsEAMGridContext>
