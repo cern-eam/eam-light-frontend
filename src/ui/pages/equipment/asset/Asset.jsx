@@ -77,6 +77,7 @@ const Asset = () => {
     register,
     showNotification,
     showWarning,
+    handleError,
   } = useEntity({
     WS: {
       create: WSEquipment.createEquipment,

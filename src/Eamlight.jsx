@@ -30,13 +30,15 @@ import useUserDataStore from "./state/useUserDataStore";
 import useApplicationDataStore from "./state/useApplicationDataStore";
 import { renderLoading } from "./ui/pages/EntityTools";
 import useInforContextStore from "./state/useInforContext";
+import useLayoutStore from "./state/useLayoutStore";
 
 export const releaseNotesPath = "/releasenotes";
 
 const Eamlight = () => {
   const { inforContext } = useInforContextStore();
-  const { userData, fetchUserData} = useUserDataStore();
-  const { applicationData, fetchApplicationData } = useApplicationDataStore(); 
+  const { userData, fetchUserData, userDataFetchError} = useUserDataStore();
+  const { applicationData, fetchApplicationData, applicationDataFetchError } = useApplicationDataStore(); 
+  const { screenLayoutFetchError } = useLayoutStore();
   const loginMethod = import.meta.env.VITE_LOGIN_METHOD;
 
   useEffect(() => {
@@ -53,16 +55,17 @@ const Eamlight = () => {
     );
   }
 
-  if (userData) {
-    if (userData.invalidAccount) {
-      return (
-        <InfoPage
-          title="Access Denied"
-          message="You don't have valid EAM account. "
-        />
-      );
-    }
+  if (userDataFetchError || applicationDataFetchError || screenLayoutFetchError) {
+    return (
+      <InfoPage
+        title="Error initializing EAM Light"
+        message="The application could not be initialized. Please contact your system administrator."
+        includeAutoRefresh={true}
+        includeSupportButton={true}
+      />
+    );
   }
+    
 
   if (!userData || !applicationData) {
     return renderLoading("Loading EAM Light")

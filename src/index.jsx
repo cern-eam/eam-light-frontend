@@ -40,7 +40,7 @@ Ajax.getAxiosInstance().interceptors.request.use(
       return config;
     }
 
-    //
+    // 
     const {scannedUser} = useScannedUserStore.getState();
     if (scannedUser && scannedUser.userCode) {
       config.headers.INFOR_USER = scannedUser.userCode;

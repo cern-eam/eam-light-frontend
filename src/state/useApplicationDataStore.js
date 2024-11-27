@@ -1,8 +1,10 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 import WS from '../tools/WS';
 
 const useApplicationDataStore = create((set) => ({
     applicationData: null,
+    applicationDataFetchError: false, 
+
     fetchApplicationData: async () => {
         try {
             const response = await WS.getApplicationData();
@@ -18,13 +20,19 @@ const useApplicationDataStore = create((set) => ({
                 serviceAccounts = [];
             }
             
-            set({ applicationData: 
-                {...response.body.data, 
-                    serviceAccounts}
-             });
+            set({
+                applicationData: {
+                    ...response.body.data,
+                    serviceAccounts,
+                },
+                applicationDataFetchError: false, 
+            });
         } catch (error) {
             console.error('Error fetching application data:', error);
-            set({ applicationData: null });
+            set({
+                applicationData: null,
+                applicationDataFetchError: true, 
+            });
         }
     },
 }));
