@@ -2,7 +2,7 @@ import "./Eamlight.css";
 import "react-grid-layout/css/styles.css";
 import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import ApplicationLayoutContainer from "./ui/layout/ApplicationLayoutContainer";
+import ApplicationLayout from "./ui/layout/ApplicationLayout";
 import EamlightMenu from "./ui/layout/menu/EamlightMenu";
 import WorkorderSearch from "./ui/pages/work/search/WorkorderSearch";
 import PartSearch from "./ui/pages/part/search/PartSearch";
@@ -90,7 +90,7 @@ const Eamlight = () => {
           <Switch>
             <Route path="/eqptree" component={EqpTree} />
 
-            <ApplicationLayoutContainer>
+            <ApplicationLayout>
               <EamlightMenu />
               <div style={{ height: "calc(100% - 30px)" }}>
                 <Route exact path="/" component={Search} />
@@ -110,7 +110,7 @@ const Eamlight = () => {
                 <Route path={eqpRegex} component={Equipment} />
                 <Route path={releaseNotesPath} component={ReleaseNotesPage} />
               </div>
-            </ApplicationLayoutContainer>
+            </ApplicationLayout>
           </Switch>
         </Router>
       </ThemeProvider>

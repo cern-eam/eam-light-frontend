@@ -17,13 +17,12 @@ import Rule from "@mui/icons-material/Rule";
 import DescriptionIcon from "@mui/icons-material/Description";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
-import { handleError } from "@/actions/uiActions";
 import NCRGeneral from "./NCRGeneral.jsx";
 import { isRegionAvailable, layoutPropertiesMap } from "./NCRTools.js";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields.jsx";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import EDMSDoclightIframeContainer from "@/ui/components/iframes/EDMSDoclightIframeContainer";
-import ObservationsContainer from "./observations/ObservationsContainer";
+import Observations from "./observations/Observations";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import WSWorkorders from "../../../../tools/WSWorkorders.js";
 import WSEquipment from "../../../../tools/WSEquipment.js";
@@ -54,6 +53,7 @@ const NCR = () => {
         saveHandler,
         deleteHandler,
         copyHandler,
+        handleError,
         updateEntityProperty: updateNCRProperty,
         register,
         showNotification,
@@ -242,7 +242,7 @@ const NCR = () => {
                         commonProps.ncrLayout
                     ),
                 render: () => (
-                    <ObservationsContainer
+                    <Observations
                         ncrCode={ncr.code}
                         observationFields={tabs[TAB_CODES.OBSERVATIONS].fields}
                         disabled={readOnly}
