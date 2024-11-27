@@ -1,0 +1,28 @@
+import HistoryIcon from "@mui/icons-material/History";
+import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
+import MenuItem from "../../common/MenuItem";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import { INPUT_HISTORY_SETTING_KEY } from "eam-components/dist/ui/components/inputs-ng/tools/history-tools";
+
+const MenuItemInputHistory = ({ iconStyle, disabledIconStyle }) => {
+    const [historySetting, setHistorySetting] = useLocalStorage(
+        INPUT_HISTORY_SETTING_KEY,
+        false
+    );
+
+    const menuProps = historySetting
+        ? {
+              label: "Disable Input History",
+              icon: <HistoryIcon style={iconStyle} />,
+              onClick: () => setHistorySetting(false),
+          }
+        : {
+              label: "Enable Input History",
+              icon: <HistoryToggleOffIcon style={disabledIconStyle} />,
+              onClick: () => setHistorySetting(true),
+          };
+
+    return <MenuItem {...menuProps} />;
+};
+
+export default MenuItemInputHistory;
