@@ -1,6 +1,6 @@
 import useUserDataStore from "@/state/useUserDataStore";
-import SubMenu from "../../common/SubMenu";
-import MenuItem from "../../common/MenuItem";
+import SubMenu from "./common/SubMenu";
+import MenuItem from "./common/MenuItem";
 import {
     AssetIcon,
     PositionIcon,
@@ -13,8 +13,9 @@ import AutorenewIcon from "mdi-material-ui/Autorenew";
 import CERNMode from "@/ui/components/CERNMode";
 import Rule from "@mui/icons-material/Rule";
 import { useMemo } from "react";
+import useMenuVisibilityStore from "@/state/useMenuVisibilityStore";
 
-const EquipmentMainMenu = ({ iconStyle, onTabsSubMenuClick }) => {
+const EquipmentMenu = ({ iconStyle }) => {
     const {
         userData: {
             assetScreen,
@@ -26,6 +27,7 @@ const EquipmentMainMenu = ({ iconStyle, onTabsSubMenuClick }) => {
             screens,
         },
     } = useUserDataStore();
+    const { setActiveMenuVisibility } = useMenuVisibilityStore();
 
     const assetUpdateAllowed = useMemo(
         () =>
@@ -42,7 +44,9 @@ const EquipmentMainMenu = ({ iconStyle, onTabsSubMenuClick }) => {
                     <MenuItem
                         label="Assets"
                         icon={<AssetIcon style={iconStyle} />}
-                        onClick={() => onTabsSubMenuClick("assets")}
+                        onClick={() =>
+                            setActiveMenuVisibility("equipmentAssets")
+                        }
                     />
                 )}
 
@@ -51,7 +55,9 @@ const EquipmentMainMenu = ({ iconStyle, onTabsSubMenuClick }) => {
                         <MenuItem
                             label="NCRs"
                             icon={<Rule style={iconStyle} />} // TODO: Add NCR icon
-                            onClick={() => onTabsSubMenuClick("ncrs")}
+                            onClick={() =>
+                                setActiveMenuVisibility("equipmentNcrs")
+                            }
                         />
                     )}
 
@@ -59,7 +65,9 @@ const EquipmentMainMenu = ({ iconStyle, onTabsSubMenuClick }) => {
                     <MenuItem
                         label="Positions"
                         icon={<PositionIcon style={iconStyle} />}
-                        onClick={() => onTabsSubMenuClick("positions")}
+                        onClick={() =>
+                            setActiveMenuVisibility("equipmentPositions")
+                        }
                     />
                 )}
 
@@ -67,7 +75,9 @@ const EquipmentMainMenu = ({ iconStyle, onTabsSubMenuClick }) => {
                     <MenuItem
                         label="Systems"
                         icon={<SystemIcon style={iconStyle} />}
-                        onClick={() => onTabsSubMenuClick("systems")}
+                        onClick={() =>
+                            setActiveMenuVisibility("equipmentSystems")
+                        }
                     />
                 )}
 
@@ -75,7 +85,9 @@ const EquipmentMainMenu = ({ iconStyle, onTabsSubMenuClick }) => {
                     <MenuItem
                         label="Locations"
                         icon={<RoomIcon style={iconStyle} />}
-                        onClick={() => onTabsSubMenuClick("locations")}
+                        onClick={() =>
+                            setActiveMenuVisibility("equipmentLocations")
+                        }
                     />
                 )}
 
@@ -105,4 +117,4 @@ const EquipmentMainMenu = ({ iconStyle, onTabsSubMenuClick }) => {
     );
 };
 
-export default EquipmentMainMenu;
+export default EquipmentMenu;

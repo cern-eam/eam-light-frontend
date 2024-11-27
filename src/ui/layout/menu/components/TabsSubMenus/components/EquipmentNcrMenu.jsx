@@ -1,15 +1,17 @@
 import useUserDataStore from "@/state/useUserDataStore";
-import SubMenu from "../../../../common/SubMenu";
+import SubMenu from "./common/SubMenu";
 import { useMemo } from "react";
-import MenuItem from "../../../../common/MenuItem";
+import MenuItem from "./common/MenuItem";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import useMenuVisibilityStore from "@/state/useMenuVisibilityStore";
 
-const NcrMenu = ({ iconStyle, onBackToEquipmentClick }) => {
+const EquipmentNcrMenu = ({ iconStyle }) => {
     const {
         userData: { ncrScreen, screens },
     } = useUserDataStore();
+    const { setActiveMenuVisibility } = useMenuVisibilityStore();
 
     const creationAllowed = useMemo(
         () =>
@@ -47,10 +49,10 @@ const NcrMenu = ({ iconStyle, onBackToEquipmentClick }) => {
             <MenuItem
                 label="Back to Equipment"
                 icon={<ArrowBackIcon style={iconStyle} />}
-                onClick={onBackToEquipmentClick}
+                onClick={() => setActiveMenuVisibility("equipment")}
             />
         </SubMenu>
     );
 };
 
-export default NcrMenu;
+export default EquipmentNcrMenu;

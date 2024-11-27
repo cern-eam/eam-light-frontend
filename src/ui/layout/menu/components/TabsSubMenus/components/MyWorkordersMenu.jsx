@@ -30,7 +30,7 @@ const MyWorkordersMenu = () => {
     }, [filteredWorkOrders]);
 
     return (
-        <ul className="layout-tab-submenu active" id="mywos">
+        <ul className="layout-tab-submenu">
             <li>
                 <span>MY OPEN WORK ORDERS</span>
                 <MyWorkOrdersTimeFilter

@@ -5,6 +5,12 @@ import PartsMenu from "./components/PartsMenu";
 import ReportsMenu from "./components/ReportsMenu";
 import SettingsMenu from "./components/SettingsMenu";
 import EquipmentMenu from "./components/EquipmentMenu";
+import useMenuVisibilityStore from "@/state/useMenuVisibilityStore";
+import EquipmentAssetMenu from "./components/EquipmentAssetMenu";
+import EquipmentNcrMenu from "./components/EquipmentNcrMenu";
+import EquipmentPositionMenu from "./components/EquipmentPositionMenu";
+import EquipmentSystemMenu from "./components/EquipmentSystemMenu";
+import EquipmentLocationMenu from "./components/EquipmentLocationMenu";
 
 export const menuIconStyle = {
     display: "inline-block",
@@ -19,28 +25,52 @@ export const menuIconStyleDisabled = {
     color: "#8b8c8b",
 };
 
-const TabsSubMenus = ({ onTabsSubMenuClick }) => {
+const TabsSubMenus = () => {
+    const {
+        menuVisibility: {
+            mywos,
+            myteamwos,
+            workorders,
+            equipment,
+            materials,
+            customgrids,
+            settings,
+            equipmentAssets,
+            equipmentNcrs,
+            equipmentPositions,
+            equipmentSystems,
+            equipmentLocations,
+        },
+    } = useMenuVisibilityStore();
+
     return (
         <>
-            <MyWorkordersMenu />
+            {mywos && <MyWorkordersMenu />}
+            {myteamwos && <MyTeamWorkordersMenu />}
+            {workorders && <WorkordersMenu iconStyle={menuIconStyle} />}
+            {equipment && <EquipmentMenu iconStyle={menuIconStyle} />}
+            {materials && <PartsMenu iconStyle={menuIconStyle} />}
+            {customgrids && <ReportsMenu />}
+            {settings && (
+                <SettingsMenu
+                    iconStyle={menuIconStyle}
+                    disabledIconStyle={menuIconStyleDisabled}
+                />
+            )}
+            {equipmentAssets && (
+                <EquipmentAssetMenu iconStyle={menuIconStyle} />
+            )}
 
-            <MyTeamWorkordersMenu />
-
-            <WorkordersMenu iconStyle={menuIconStyle} />
-
-            <EquipmentMenu
-                iconStyle={menuIconStyle}
-                onTabsSubMenuClick={onTabsSubMenuClick}
-            />
-
-            <PartsMenu iconStyle={menuIconStyle} />
-
-            <ReportsMenu />
-
-            <SettingsMenu
-                iconStyle={menuIconStyle}
-                disabledIconStyle={menuIconStyleDisabled}
-            />
+            {equipmentNcrs && <EquipmentNcrMenu iconStyle={menuIconStyle} />}
+            {equipmentPositions && (
+                <EquipmentPositionMenu iconStyle={menuIconStyle} />
+            )}
+            {equipmentSystems && (
+                <EquipmentSystemMenu iconStyle={menuIconStyle} />
+            )}
+            {equipmentLocations && (
+                <EquipmentLocationMenu iconStyle={menuIconStyle} />
+            )}
         </>
     );
 };

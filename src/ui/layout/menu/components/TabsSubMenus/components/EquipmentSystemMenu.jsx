@@ -1,17 +1,19 @@
 import useUserDataStore from "@/state/useUserDataStore";
-import SubMenu from "../../../../common/SubMenu";
-import ScreenChange from "../../../../common/ScreenChange";
+import SubMenu from "./common/SubMenu";
+import ScreenChange from "./common/ScreenChange";
 import { useMemo } from "react";
-import MenuItem from "../../../../common/MenuItem";
+import MenuItem from "./common/MenuItem";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import useMenuVisibilityStore from "@/state/useMenuVisibilityStore";
 
-const SystemMenu = ({ iconStyle, onBackToEquipmentClick }) => {
+const EquipmentSystemMenu = ({ iconStyle }) => {
     const {
         userData: { systemScreen, screens },
         setUserData,
     } = useUserDataStore();
+    const { setActiveMenuVisibility } = useMenuVisibilityStore();
 
     const systemScreens = useMemo(
         () =>
@@ -71,10 +73,10 @@ const SystemMenu = ({ iconStyle, onBackToEquipmentClick }) => {
             <MenuItem
                 label="Back to Equipment"
                 icon={<ArrowBackIcon style={iconStyle} />}
-                onClick={onBackToEquipmentClick}
+                onClick={() => setActiveMenuVisibility("equipment")}
             />
         </SubMenu>
     );
 };
 
-export default SystemMenu;
+export default EquipmentSystemMenu;

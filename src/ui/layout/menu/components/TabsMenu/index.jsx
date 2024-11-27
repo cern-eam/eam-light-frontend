@@ -9,6 +9,7 @@ import useUserDataStore from "@/state/useUserDataStore";
 import useMyOpenWorkOrdersStore from "@/state/useMyOpenWorkOrdersStore";
 import Badge from "./components/Badge";
 import useMyTeamWorkOrdersStore from "@/state/useMyTeamWorkOrdersStore";
+import useMenuVisibilityStore from "../../../../../state/useMenuVisibilityStore";
 
 const iconStyles = {
     width: 22,
@@ -16,7 +17,7 @@ const iconStyles = {
     color: "white",
 };
 
-const TabsMenu = ({ onTabClick }) => {
+const TabsMenu = () => {
     const {
         userData: {
             workOrderScreen,
@@ -31,11 +32,34 @@ const TabsMenu = ({ onTabClick }) => {
     } = useUserDataStore();
     const { myOpenWorkOrders } = useMyOpenWorkOrdersStore();
     const { myTeamWorkOrders } = useMyTeamWorkOrdersStore();
+    const {
+        menuVisibility: {
+            mywos,
+            myteamwos,
+            workorders,
+            equipment,
+            equipmentAssets,
+            equipmentNcrs,
+            equipmentPositions,
+            equipmentSystems,
+            equipmentLocations,
+            materials,
+            customgrids,
+            settings,
+        },
+        setActiveMenuVisibility,
+    } = useMenuVisibilityStore();
 
     return (
         <ul id="layout-tab-menu">
             <li>
-                <div rel="mywos" className="active" onClick={onTabClick}>
+                <div
+                    className={mywos ? "active" : ""}
+                    onClick={() => {
+                        setActiveMenuVisibility("mywos");
+                        window.dispatchEvent(new CustomEvent("resize"));
+                    }}
+                >
                     <Tooltip title="MY OPEN WOs" placement="right">
                         <Account style={iconStyles} />
                     </Tooltip>
@@ -44,7 +68,13 @@ const TabsMenu = ({ onTabClick }) => {
             </li>
 
             <li>
-                <div rel="myteamwos" onClick={onTabClick}>
+                <div
+                    className={myteamwos ? "active" : ""}
+                    onClick={() => {
+                        setActiveMenuVisibility("myteamwos");
+                        window.dispatchEvent(new CustomEvent("resize"));
+                    }}
+                >
                     <Tooltip title="MY TEAM's WOs" placement="right">
                         <AccountMultiple style={iconStyles} />
                     </Tooltip>
@@ -54,7 +84,10 @@ const TabsMenu = ({ onTabClick }) => {
 
             {workOrderScreen && (
                 <li>
-                    <div rel="workorders" onClick={onTabClick}>
+                    <div
+                        className={workorders ? "active" : ""}
+                        onClick={() => setActiveMenuVisibility("workorders")}
+                    >
                         <Tooltip title="WORK ORDERS" placement="right">
                             <WorkorderIcon style={iconStyles} />
                         </Tooltip>
@@ -68,7 +101,19 @@ const TabsMenu = ({ onTabClick }) => {
                 ncrScreen ||
                 locationScreen) && (
                 <li>
-                    <div rel="equipment" onClick={onTabClick}>
+                    <div
+                        className={
+                            equipment ||
+                            equipmentAssets ||
+                            equipmentNcrs ||
+                            equipmentPositions ||
+                            equipmentSystems ||
+                            equipmentLocations
+                                ? "active"
+                                : ""
+                        }
+                        onClick={() => setActiveMenuVisibility("equipment")}
+                    >
                         <Tooltip title="EQUIPMENT" placement="right">
                             <Cog style={iconStyles} />
                         </Tooltip>
@@ -78,7 +123,10 @@ const TabsMenu = ({ onTabClick }) => {
 
             {partScreen && (
                 <li>
-                    <div rel="materials" onClick={onTabClick}>
+                    <div
+                        className={materials ? "active" : ""}
+                        onClick={() => setActiveMenuVisibility("materials")}
+                    >
                         <Tooltip title="MATERIALS" placement="right">
                             <PartIcon style={iconStyles} />
                         </Tooltip>
@@ -88,7 +136,10 @@ const TabsMenu = ({ onTabClick }) => {
 
             {reports && (
                 <li>
-                    <div rel="customgrids" onClick={onTabClick}>
+                    <div
+                        className={customgrids ? "active" : ""}
+                        onClick={() => setActiveMenuVisibility("customgrids")}
+                    >
                         <Tooltip title="LISTS & REPORTS" placement="right">
                             <FormatListBulletedTriangle style={iconStyles} />
                         </Tooltip>
@@ -97,7 +148,10 @@ const TabsMenu = ({ onTabClick }) => {
             )}
 
             <li>
-                <div rel="settings" onClick={onTabClick}>
+                <div
+                    className={settings ? "active" : ""}
+                    onClick={() => setActiveMenuVisibility("settings")}
+                >
                     <Tooltip title="SETTINGS" placement="right">
                         <Tune style={iconStyles} />
                     </Tooltip>
