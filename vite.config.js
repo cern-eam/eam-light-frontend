@@ -27,8 +27,8 @@ export default defineConfig(({ mode }) => {
                     target: "http://localhost:10880/",
                 },
                 "/apis": {
-                    target: "http://localhost:10880/",
-                    //target: "http://ammtools.cern.ch:10880/",
+                    //target: "http://localhost:10880/",
+                    target: "http://ammtools.cern.ch:10880/",
                 },
                 "/SSO": {
                     target: "http://localhost:10880/",
