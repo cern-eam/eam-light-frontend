@@ -244,6 +244,7 @@ const NCR = () => {
                 render: () => (
                     <Observations
                         ncrCode={ncr.code}
+                        ncr={ncr}
                         observationFields={tabs[TAB_CODES.OBSERVATIONS].fields}
                         disabled={readOnly}
                         statuses={statuses}
