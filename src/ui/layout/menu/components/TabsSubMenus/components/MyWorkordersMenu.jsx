@@ -10,7 +10,9 @@ const MyWorkordersMenu = () => {
     const { myOpenWorkOrders, fetchMyOpenWorkOrders } =
         useMyOpenWorkOrdersStore();
 
-    useEffect(() => fetchMyOpenWorkOrders(), []);
+    useEffect(() => {
+        if (myOpenWorkOrders.length === 0) fetchMyOpenWorkOrders();
+    }, [fetchMyOpenWorkOrders, myOpenWorkOrders]);
 
     const filteredWorkOrders = useMemo(() => {
         return myOpenWorkOrders.filter(MenuTools.daysFilterFunctions[days]);

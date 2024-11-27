@@ -40,7 +40,9 @@ const MyTeamWorkordersMenu = ({ classes }) => {
         userData: { eamAccount },
     } = useUserDataStore();
 
-    useEffect(() => fetchMyTeamWorkOrders(), []);
+    useEffect(() => {
+        if (myTeamWorkOrders.length === 0) fetchMyTeamWorkOrders();
+    }, [fetchMyTeamWorkOrders, myTeamWorkOrders]);
 
     const departments = useMemo(
         () => eamAccount.userDepartments,
