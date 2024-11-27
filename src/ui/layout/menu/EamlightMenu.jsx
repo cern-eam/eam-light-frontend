@@ -102,7 +102,7 @@ class EamlightMenu extends Component {
     this.openSubMenu = this.openSubMenu.bind(this);
     this.applicationData = useApplicationDataStore.getState().applicationData;
     this.userData = useUserDataStore.getState().userData;
-    this.setUserData = useUserDataStore.getState().setUserData;
+    this.updateUserData = useUserDataStore.getState().updateUserData;
     this.showError = useSnackbarStore.getState().showError;
     this.showNotification = useSnackbarStore.getState().showNotification;
   }
@@ -172,37 +172,37 @@ class EamlightMenu extends Component {
     const screenProps = {
       workOrder: {
         screenName: "WSJOBS",
-        updateScreenLayout: (screenCode) => this.setUserData({ workOrderScreen: screenCode }),
+        updateScreenLayout: (screenCode) => this.updateUserData({ workOrderScreen: screenCode }),
         screen: workOrderScreen,
       },
       asset: {
         screenName: "OSOBJA",
-        updateScreenLayout: (screenCode) => this.setUserData({ assetScreen: screenCode }),
+        updateScreenLayout: (screenCode) => this.updateUserData({ assetScreen: screenCode }),
         screen: assetScreen,
       },
       ncr: {
         screenName: "OSNCHD",
-        updateScreenLayout: (screenCode) => this.setUserData({ ncrScreen: screenCode }),
+        updateScreenLayout: (screenCode) => this.updateUserData({ ncrScreen: screenCode }),
         screen: ncrScreen,
       },
       position: {
         screenName: "OSOBJP",
-        updateScreenLayout: (screenCode) => this.setUserData({ positionScreen: screenCode }),
+        updateScreenLayout: (screenCode) => this.updateUserData({ positionScreen: screenCode }),
         screen: positionScreen,
       },
       system: {
         screenName: "OSOBJS",
-        updateScreenLayout: (screenCode) => this.setUserData({ systemScreen: screenCode }),
+        updateScreenLayout: (screenCode) => this.updateUserData({ systemScreen: screenCode }),
         screen: systemScreen,
       },
       location: {
         screenName: "OSOBJL",
-        updateScreenLayout: (screenCode) => this.setUserData({ locationScreen: screenCode }),
+        updateScreenLayout: (screenCode) => this.updateUserData({ locationScreen: screenCode }),
         screen: locationScreen,
       },
       part: {
         screenName: "SSPART",
-        updateScreenLayout: (screenCode) => this.setUserData({ partScreen: screenCode }),
+        updateScreenLayout: (screenCode) => this.updateUserData({ partScreen: screenCode }),
         screen: partScreen,
       },
     };

@@ -23,6 +23,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { enGB } from "date-fns/locale";
 import { UPDATE_SCANNED_USER } from "./actions/scannedUserActions";
 import AuthWrapper, { tokens, keycloak } from "./AuthWrapper";
+import useInforContextStore from "./state/useInforContext";
 
 const jss = create(jssPreset());
 
@@ -32,8 +33,17 @@ polyfill();
 Ajax.getAxiosInstance().interceptors.request.use(
   (config) => {
     if (import.meta.env.VITE_LOGIN_METHOD !== "OPENID") {
+      const {inforContext} = useInforContextStore.getState();
+      if (inforContext) {
+          config.headers.INFOR_USER = inforContext.INFOR_USER;
+          config.headers.INFOR_PASSWORD = inforContext.INFOR_PASSWORD;
+          config.headers.INFOR_ORGANIZATION = inforContext.INFOR_ORGANIZATION;
+          config.headers.INFOR_SESSIONID = inforContext.INFOR_SESSIONID;
+          config.headers.INFOR_TENANT = inforContext.INFOR_TENANT;
+      }
       return config;
     }
+    
     // updateToken if it will last less than 5 minutes
     return keycloak.updateToken(300).then(() => {
       const newConfig = config;
@@ -52,22 +62,10 @@ function createAxiosAuthMiddleware() {
   return ({ getState }) =>
     (next) =>
     (action) => {
-      const inforContext = getState().inforContext;
       if (action.type === UPDATE_SCANNED_USER) {
         Ajax.getAxiosInstance().defaults.headers.common.INFOR_USER =
           (action.value && action.value.userCode) || "";
-      } else if (inforContext) {
-        Ajax.getAxiosInstance().defaults.headers.common.INFOR_USER =
-          inforContext.INFOR_USER;
-        Ajax.getAxiosInstance().defaults.headers.common.INFOR_PASSWORD =
-          inforContext.INFOR_PASSWORD;
-        Ajax.getAxiosInstance().defaults.headers.common.INFOR_ORGANIZATION =
-          inforContext.INFOR_ORGANIZATION;
-        Ajax.getAxiosInstance().defaults.headers.common.INFOR_SESSIONID =
-          inforContext.INFOR_SESSIONID;
-        Ajax.getAxiosInstance().defaults.headers.common.INFOR_TENANT =
-          inforContext.INFOR_TENANT;
-      }
+      } 
       next(action);
     };
 }

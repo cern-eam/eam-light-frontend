@@ -20,13 +20,17 @@ const useUserDataStore = create((set) => ({
         set({ userData: response.body.data });
     },
 
-    setUserData: (updatedData) => {
+    updateUserData: (updatedData) => {
         set((state) => ({
             userData: {
                 ...state.userData, 
                 ...updatedData,  
             },
         }));
+    },
+
+    cleanUserData: () => {
+        set({ userData: null });
     }
 }));
 

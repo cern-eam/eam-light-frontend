@@ -3,11 +3,14 @@ import { Account, Logout } from "mdi-material-ui";
 import { IconButton } from "@mui/material";
 import { logout } from "../../AuthWrapper";
 import useUserDataStore from "../../state/useUserDataStore";
+import useInforContextStore from "../../state/useInforContext";
 
 export default class UserInfo extends Component {
   constructor(props) {
     super(props);
     this.userData = useUserDataStore.getState().userData;
+    this.cleanUserData = useUserDataStore.getState().cleanUserData;
+    this.setInforContext = useInforContextStore.getState().setInforContext;
   }
 
   userInfoStyle = {
@@ -44,9 +47,8 @@ export default class UserInfo extends Component {
       return;
     }
     if (import.meta.env.VITE_LOGIN_METHOD === "STD") {
-      this.props.updateInforContext(null);
-      this.props.updateApplication({ userData: null });
-      sessionStorage.removeItem("inforContext");
+      this.setInforContext(null);
+      this.cleanUserData();
     }
     logout();
   }

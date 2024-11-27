@@ -18,7 +18,7 @@ import ReplaceEqp from "./ui/pages/equipment/replaceeqp/ReplaceEqp";
 import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import EquipmentRedirect from "./ui/pages/equipment/EquipmentRedirect";
 import MeterReading from "./ui/pages/meter/MeterReading";
-import LoginContainer from "./ui/pages/login/LoginContainer";
+import Login from "./ui/pages/login/Login";
 import Grid from "./ui/pages/grid/Grid";
 import EqpTree from "./ui/components/eqtree/EqpTree";
 import Themes from "eam-components/dist/ui/components/theme";
@@ -29,22 +29,26 @@ import ReleaseNotesPage from "./ui/pages/releaseNotes/ReleaseNotes";
 import useUserDataStore from "./state/useUserDataStore";
 import useApplicationDataStore from "./state/useApplicationDataStore";
 import { renderLoading } from "./ui/pages/EntityTools";
+import useInforContextStore from "./state/useInforContext";
 
 export const releaseNotesPath = "/releasenotes";
 
-const Eamlight = ({ inforContext }) => {
+const Eamlight = () => {
+  const { inforContext } = useInforContextStore();
   const { userData, fetchUserData} = useUserDataStore();
-  const { applicationData, fetchApplicationData } = useApplicationDataStore();
+  const { applicationData, fetchApplicationData } = useApplicationDataStore(); 
+  const loginMethod = import.meta.env.VITE_LOGIN_METHOD;
 
   useEffect(() => {
-    fetchUserData();
-    fetchApplicationData();
-  },[])
-
-  if (!inforContext && import.meta.env.VITE_LOGIN_METHOD === "STD") {
+    if (loginMethod !== "STD" || (loginMethod === "STD" && inforContext))
+      fetchUserData();
+      fetchApplicationData();
+  },[inforContext])
+  
+  if (!inforContext && loginMethod === "STD") {
     return (
       <ThemeProvider theme={Themes[config.theme.DEFAULT]}>
-        <LoginContainer />
+        <Login />
       </ThemeProvider>
     );
   }

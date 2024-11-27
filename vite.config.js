@@ -23,9 +23,12 @@ export default defineConfig(({ mode }) => {
             port: parseInt(env.VITE_PORT ?? "3000"),
             host: "0.0.0.0",
             proxy: {
+                "/rest": {
+                    target: "http://localhost:10880/",
+                },
                 "/apis": {
-                    //target: "http://localhost:10880/",
-                    target: "http://ammtools.cern.ch:10880/",
+                    target: "http://localhost:10880/",
+                    //target: "http://ammtools.cern.ch:10880/",
                 },
                 "/SSO": {
                     target: "http://localhost:10880/",

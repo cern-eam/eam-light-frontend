@@ -1,8 +1,8 @@
 import {create} from "zustand";
 
 const useInforContextStore = create((set) => ({
-  infoContext: null,
-  setInfoContext: (context) => set({ infoContext: context })
+  inforContext: null,
+  setInforContext: (context) => set({ inforContext: context })
 }));
 
 export default useInforContextStore;
