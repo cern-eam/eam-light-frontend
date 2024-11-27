@@ -19,7 +19,7 @@ export const menuIconStyleDisabled = {
     color: "#8b8c8b",
 };
 
-const TabsSubMenus = ({ onTabsSubMenuClick, showNotification, showError }) => {
+const TabsSubMenus = ({ onTabsSubMenuClick }) => {
     return (
         <>
             <MyWorkordersMenu />
@@ -40,8 +40,6 @@ const TabsSubMenus = ({ onTabsSubMenuClick, showNotification, showError }) => {
             <SettingsMenu
                 iconStyle={menuIconStyle}
                 disabledIconStyle={menuIconStyleDisabled}
-                showNotification={showNotification}
-                showError={showError}
             />
         </>
     );
