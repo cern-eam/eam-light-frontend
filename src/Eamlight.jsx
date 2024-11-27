@@ -59,7 +59,7 @@ const Eamlight = () => {
     return (
       <InfoPage
         title="Error initializing EAM Light"
-        message="The application could not be initialized. Please contact your system administrator."
+        message="The application could not be initialized. Please contact EAM support if the problem persists."
         includeAutoRefresh={true}
         includeSupportButton={true}
       />
