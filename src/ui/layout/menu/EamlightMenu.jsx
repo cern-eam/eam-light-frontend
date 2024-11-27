@@ -4,7 +4,7 @@ import "./EamlightMenu.css";
 import TabsMenu from "./components/TabsMenu";
 import TabsSubMenus from "./components/TabsSubMenus";
 
-const EamlightMenu = ({ showNotification, showError }) => {
+const EamlightMenu = () => {
     const menuDivRef = useRef(null);
 
     const tabsMenuClickHandler = useCallback((e) => {
@@ -44,11 +44,7 @@ const EamlightMenu = ({ showNotification, showError }) => {
         <div id="menu" ref={menuDivRef}>
             <div id="menuscrollable">
                 <TabsMenu onTabClick={tabsMenuClickHandler} />
-                <TabsSubMenus
-                    onTabsSubMenuClick={tabsSubMenuClickHandler}
-                    showNotification={showNotification}
-                    showError={showError}
-                />
+                <TabsSubMenus onTabsSubMenuClick={tabsSubMenuClickHandler} />
             </div>
         </div>
     );

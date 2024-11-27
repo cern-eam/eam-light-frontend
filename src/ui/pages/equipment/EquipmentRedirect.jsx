@@ -34,8 +34,7 @@ function EquipmentRedirect(props) {
     let loadEquipmentData = (code) => {
         if (code) {
             code = decodeURIComponent(code);
-            console.log(code);
-            console.log(window.location);
+
             setIsLoading(true);
             //Fetch the equipment
             WSEquipment.getEquipmentType(code)

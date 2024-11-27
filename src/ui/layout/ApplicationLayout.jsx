@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setLayoutProperty } from "../../actions/uiActions";
 import { Link } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import Menu from "mdi-material-ui/Menu";

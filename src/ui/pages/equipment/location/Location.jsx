@@ -66,9 +66,9 @@ export default Location = (props) => {
     getHiddenRegionState,
     getUniqueRegionID,
     showEqpTree,
+    updateEquipmentTreeData,
     toggleHiddenRegion,
     setRegionVisibility,
-    setLayoutProperty,
     newHandler,
     saveHandler,
     deleteHandler,
@@ -97,12 +97,12 @@ export default Location = (props) => {
   });
 
   function postInit() {
-    setLayoutProperty("equipment", null);
+    updateEquipmentTreeData({equipment: null});
   }
 
   function postRead(location) {
     if (!showEqpTree) {
-      setLayoutProperty("equipment", location);
+      updateEquipmentTreeData({equipment: location});
     }
   }
 

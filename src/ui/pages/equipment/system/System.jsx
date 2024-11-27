@@ -42,6 +42,7 @@ import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import Variables from "../components/Variables";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
+import { eq } from "lodash";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -71,9 +72,9 @@ const System = () => {
     getHiddenRegionState,
     getUniqueRegionID,
     showEqpTree,
+    updateEquipmentTreeData,
     toggleHiddenRegion,
     setRegionVisibility,
-    setLayoutProperty,
     newHandler,
     saveHandler,
     deleteHandler,
@@ -107,13 +108,13 @@ const System = () => {
 
   function postInit() {
     readStatuses(true);
-    setLayoutProperty("equipment", null);
+    updateEquipmentTreeData({equipment: null});
   }
 
   function postRead(equipment) {
     readStatuses(false, equipment.statusCode);
     if (!showEqpTree) {
-      setLayoutProperty("equipment", equipment);
+      updateEquipmentTreeData({equipment});
     }
   }
 

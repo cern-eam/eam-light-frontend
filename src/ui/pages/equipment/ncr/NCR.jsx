@@ -50,7 +50,6 @@ const NCR = () => {
         showEqpTree,
         toggleHiddenRegion,
         setRegionVisibility,
-        setLayoutProperty,
         newHandler,
         saveHandler,
         deleteHandler,
@@ -58,7 +57,7 @@ const NCR = () => {
         updateEntityProperty: updateNCRProperty,
         register,
         showNotification,
-        showWarning,
+        showWarning
     } = useEntity({
         WS: {
             create: WSNCRs.createNonConformity,
@@ -85,7 +84,7 @@ const NCR = () => {
     });
 
     function postInit() {
-        setLayoutProperty("ncr", null);
+        
     }
 
     function postRead() {

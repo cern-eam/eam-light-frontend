@@ -13,12 +13,14 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Stack from "@mui/material/Stack";
 import Panel from "@/ui/components/panel/Panel";
 import useEquipmentTreeStore from "../../../../state/useEquipmentTreeStore";
+import useSnackbarStore from "@/state/useSnackbarStore";
 
 export default function InstallEqp(props) {
   const [parentEq, setParentEq] = useState("");
   const [childEq, setChildEq] = useState("");
   const [blocking, setBlocking] = useState(false);
   const {equipmentTreeData: {currentRoot}, updateEquipmentTreeData} = useEquipmentTreeStore();
+  const {showNotification, handleError, showError} = useSnackbarStore();
   const idPrefix = "EAMID_InstallEqp_";
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export default function InstallEqp(props) {
 
   const installEqpHandler = (code) => {
     if (!parentEq || !childEq) {
-      props.showError("Please provide the Child and Parent Equipment.");
+      showError("Please provide the Child and Parent Equipment.");
       return;
     }
 
@@ -68,7 +70,7 @@ export default function InstallEqp(props) {
     if (code) {
       WSEquipment.installEquipment(code)
         .then((response) => {
-          props.showNotification(
+          showNotification(
             `${childEq} was successfully attached to ${parentEq}`
           );
           setChildEq("");
@@ -76,7 +78,7 @@ export default function InstallEqp(props) {
           setBlocking(false);
         })
         .catch((error) => {
-          props.handleError(error);
+          handleError(error);
           setBlocking(false);
         });
     }
@@ -84,7 +86,7 @@ export default function InstallEqp(props) {
 
   const detachEqpHandler = (code) => {
     if (!parentEq || !childEq) {
-      props.showError("Please provide the Child and Parent Equipment.");
+      showError("Please provide the Child and Parent Equipment.");
       return;
     }
 
@@ -92,7 +94,7 @@ export default function InstallEqp(props) {
     if (code) {
       WSEquipment.detachEquipment(code)
         .then((response) => {
-          props.showNotification(
+          showNotification(
             `${childEq} was successfully detached from ${parentEq}`
           );
           setChildEq("");
@@ -100,7 +102,7 @@ export default function InstallEqp(props) {
           setBlocking(false);
         })
         .catch((error) => {
-          props.handleError(error);
+          handleError(error);
           setBlocking(false);
         });
     }

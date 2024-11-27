@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, createElement } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
@@ -18,12 +18,13 @@ import {
 } from "@/ui/pages/EntityTools";
 import {
   setLayoutProperty,
-  showError,
-  showNotification,
-  handleError,
-  showWarning,
+  //showError,
+  //showNotification,
+  //handleError,
+  //showWarning,
 } from "@/actions/uiActions";
 import WSCustomFields from "eam-components/dist/tools/WSCustomFields";
+import WSS from "../tools/WS"
 import {
   createOnChangeHandler,
   processElementInfo,
@@ -36,6 +37,7 @@ import useApplicationDataStore from "../state/useApplicationDataStore";
 import { useHiddenRegionsStore, getUniqueRegionID } from "../state/useHiddenRegionsStore";
 import { TABS } from "../ui/components/entityregions/TabCodeMapping";
 import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
+import useSnackbarStore from "../state/useSnackbarStore";
 
 const useEntity = (params) => {
   const {
@@ -72,12 +74,8 @@ const useEntity = (params) => {
   const dispatch = useDispatch();
   const setLayoutPropertyConst = (...args) =>
     dispatch(setLayoutProperty(...args));
-  const showNotificationConst = (...args) =>
-    dispatch(showNotification(...args));
-  const showErrorConst = (...args) => dispatch(showError(...args));
-  const showWarningConst = (...args) => dispatch(showWarning(...args));
-  const handleErrorConst = (...args) => dispatch(handleError(...args));
 
+  const { showNotification, showError, showWarning, handleError } = useSnackbarStore();
   const { userData } = useUserDataStore();
   const { applicationData } = useApplicationDataStore();
   const { isHiddenRegion, getHiddenRegionState, toggleHiddenRegion, setRegionVisibility } = useHiddenRegionsStore();
@@ -153,7 +151,7 @@ const useEntity = (params) => {
     WS.create(entityToCreate)
       .then((response) => {
         const entityCode = response.body.data;
-        showNotificationConst(
+        showNotification(
           entityDesc + " " + entityCode + " has been successfully created."
         );
         commentsComponent.current?.createCommentForNewEntity(entityCode);
@@ -171,7 +169,7 @@ const useEntity = (params) => {
       })
       .catch((error) => {
         generateErrorMessagesFromException(error?.response?.body?.errors);
-        handleErrorConst(error);
+        handleError(error);
       })
       .finally(() => setLoading(false));
   };
@@ -206,7 +204,7 @@ const useEntity = (params) => {
       })
       .catch((error) => {
         if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
-          handleErrorConst(error);
+          handleError(error);
         }
       })
       .finally(() => setLoading(false));
@@ -225,14 +223,14 @@ const useEntity = (params) => {
         setIsModified(false);
 
         commentsComponent.current?.createCommentForNewEntity(entityCode);
-        showNotificationConst(
+        showNotification(
           `${entityDesc} ${entity[entityCodeProperty]} has been successfully updated.`
         );
         readEntity(code);
       })
       .catch((error) => {
         generateErrorMessagesFromException(error?.response?.body?.errors);
-        handleErrorConst(error);
+        handleError(error);
       })
       .finally(() => setLoading(false));
   };
@@ -242,14 +240,14 @@ const useEntity = (params) => {
 
     WS.delete(code)
       .then((response) => {
-        showNotificationConst(
+        showNotification(
           `${entityDesc} ${entity[entityCodeProperty]} has been successfully deleted.`
         );
         history.push(process.env.PUBLIC_URL + entityURL);
       })
       .catch((error) => {
         generateErrorMessagesFromException(error?.response?.body?.errors);
-        handleErrorConst(error);
+        handleError(error);
       })
       .finally(() => setLoading(false));
   };
@@ -277,7 +275,7 @@ const useEntity = (params) => {
         postActions.new(newEntity);
       })
       .catch((error) => {
-        handleErrorConst(error);
+        handleError(error);
       })
       .finally(() => setLoading(false));
   };
@@ -377,6 +375,33 @@ const useEntity = (params) => {
     // Errors
     data.errorText = errorMessages[valueKey];
 
+    // Autocomplete handlers 
+    if (data.elementInfo && data.elementInfo.onLookup && data.elementInfo.onLookup !== '{}') { // TODO !== '{}'
+        try {
+            const { lovName, inputVars, inputFields, returnFields } = JSON.parse(data.elementInfo.onLookup);
+            const inputParams = {
+              ...inputVars,
+              ...Object.entries(inputFields ?? {})
+                  .map(([key, val]) => ({[key]: entity?.[layoutPropertiesMap[val]]}))
+                  .reduce((acc, el) => ({...acc, ...el}), {}),
+              "param.pagemode": 'view',
+              //...extraParams,
+          }
+          let genericLov = {
+                inputParams,
+                returnFields,
+                lovName,
+                exact: false,
+                rentity: screenCode,
+            };
+
+            // hint might be of type signal (due to an autocomplete hook) which brakes the API, so for now make it a string if it's not
+            data.autocompleteHandler = (hint, config) => WSS.getLov({ ...genericLov, hint: typeof hint === 'string' ? hint : "" }, config);
+        } catch (err) {
+            console.error(`Error when setting autocompleteHandler on ${layoutKey}`, err)
+        }
+    }
+
     return data;
   };
 
@@ -407,10 +432,10 @@ const useEntity = (params) => {
     showEqpTree,
     updateEquipmentTreeData,
     // Dispatchers
-    showError: showErrorConst,
-    showNotification: showNotificationConst,
-    handleError: handleErrorConst,
-    showWarning: showWarningConst,
+    showError,
+    showNotification,
+    handleError,
+    showWarning,
     //
     newHandler,
     saveHandler,
@@ -421,7 +446,7 @@ const useEntity = (params) => {
     setNewEntity,
     setLoading,
     setReadOnly,
-    createEntity,
+    createEntity
   };
 };
 

@@ -28,13 +28,7 @@ const WorkOrdersDialog = ({
     userData,
     statuses,
 }) => {
-    // const treeButtonClickHandler = (code) => {
-    //     setLayoutProperty("equipment", {
-    //         code: workorder.equipmentCode,
-    //         organization: workorder.equipmentOrganization,
-    //     });
-    //     setLayoutProperty("showEqpTree", true);
-    // };
+
 
     return (
         <Dialog
@@ -164,6 +158,18 @@ const WorkOrdersDialog = ({
                             handleUpdate
                         )}
                         autocompleteHandler={WSWorkorders.autocompleteCostCode}
+                    />
+
+                    <EAMAutocomplete
+                        {...processElementInfo(fields["assignedto"])}
+                        value={workOrder.costCode}
+                        onChange={createOnChangeHandler(
+                            "assignedTo",
+                            "assignedToDesc",
+                            null,
+                            handleUpdate
+                        )}
+                        autocompleteHandler={WS.autocompleteEmployee}
                     />
                 </BlockUi>
             </DialogContent>

@@ -5,6 +5,7 @@ export const HEADERS = [
     "Condition Index",
     "Recorded By",
     "Date Recorded",
+    "Work Order"
 ];
 
 export const PROP_CODES = [
@@ -14,4 +15,5 @@ export const PROP_CODES = [
     "conditionindex_display",
     "recordedby",
     "daterecorded",
+    "workordernum"
 ];

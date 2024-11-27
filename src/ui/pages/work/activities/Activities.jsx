@@ -3,8 +3,8 @@ import WSWorkorders from "../../../../tools/WSWorkorders";
 import Activity from "./Activity";
 import './Activities.css';
 import Button from '@mui/material/Button';
-import AddActivityDialogContainer from "./dialogs/AddActivityDialogContainer";
-import AddBookLabourDialogContainer from "./dialogs/AddBookLabourDialogContainer";
+import AddActivityDialog from "./dialogs/AddActivityDialog";
+import AddBookLabourDialog from "./dialogs/AddBookLabourDialog";
 import { Stack } from '@mui/material';
 
 /**
@@ -95,7 +95,7 @@ function Activities(props) {
                 </Button>
             </Stack>
 
-            <AddActivityDialogContainer
+            <AddActivityDialog
                 layout={layout.ACT.fields}
                 open={isActivityModalOpen}
                 workorderNumber={workorder}
@@ -104,7 +104,7 @@ function Activities(props) {
                 postAddActivityHandler={props.postAddActivityHandler}
                 newActivityCode={activities[activities.length - 1] ? parseInt(activities[activities.length - 1].activityCode) + 5 : 5} />
 
-            <AddBookLabourDialogContainer
+            <AddBookLabourDialog
                 layout={layout.BOO.fields}
                 open={isBookLaborModalOpen}
                 activities={activities}

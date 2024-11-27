@@ -65,7 +65,6 @@ const Part = () => {
     showEqpTree,
     toggleHiddenRegion,
     setRegionVisibility,
-    setLayoutProperty,
     newHandler,
     saveHandler,
     deleteHandler,

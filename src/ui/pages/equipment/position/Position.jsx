@@ -75,9 +75,9 @@ const Position = () => {
     getHiddenRegionState,
     getUniqueRegionID,
     showEqpTree,
+    updateEquipmentTreeData,
     toggleHiddenRegion,
     setRegionVisibility,
-    setLayoutProperty,
     newHandler,
     saveHandler,
     deleteHandler,
@@ -112,13 +112,13 @@ const Position = () => {
 
   function postInit() {
     readStatuses(true);
-    setLayoutProperty("equipment", null);
+    updateEquipmentTreeData({equipment: null})
   }
 
   function postRead(equipment) {
     readStatuses(false, equipment.statusCode);
     if (!showEqpTree) {
-      setLayoutProperty("equipment", equipment);
+      updateEquipmentTreeData({equipment})
     }
   }
 
