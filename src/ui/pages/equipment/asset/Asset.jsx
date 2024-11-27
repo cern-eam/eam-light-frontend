@@ -43,8 +43,7 @@ import Variables from "../components/Variables";
 import getPartsAssociated from "@/ui/pages/PartsAssociated";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
-import AssetNCRs from "../components/EquipmentNCRs.jsx";
-import useEquipmentTreeStore from "../../../../state/useEquipmentTreeStore.js";
+import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -297,7 +296,7 @@ const Asset = () => {
         label: "Non Conformities",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <AssetNCRs equipment={equipment.code}/>,
+        render: () => <EquipmentNCRs equipment={equipment.code}/>,
         RegionPanelProps: {
           customHeadingBar:  (
               <Link to ={`/ncr?equipmentCode=${location.code}&description=NCR for ${location.code}`}

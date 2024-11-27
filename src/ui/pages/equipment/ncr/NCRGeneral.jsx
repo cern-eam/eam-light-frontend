@@ -1,9 +1,9 @@
 import * as React from "react";
-import WS from "../../../../tools/WS";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import { isMultiOrg } from "@/ui/pages/EntityTools";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
+import WS from "../../../../tools/WS";
 
 const NCRGeneral = (props) => {
   const {
@@ -22,13 +22,27 @@ const NCRGeneral = (props) => {
       }
       
       />
+      
       <EAMAutocomplete {...register("location", "locationCode")} />
+      
       <EAMAutocomplete {...register("department", "department")} />
+      
       <EAMSelect {...register("type", "typeCode")} />
+      
       <EAMTextField {...register("status", "statusCode")} />
+      
       <EAMAutocomplete {...register("class", "classCode")} />
-      <EAMTextField {...register("severity", "severity")} />
-      <EAMTextField {...register("importance", "importance")} />
+      
+      <EAMSelect {...register("severity", "severity")} 
+          autocompleteHandler={WS.getCodeLov}
+          autocompleteHandlerParams={['SEVE']}
+      />
+      
+      <EAMSelect {...register("importance", "importance")} 
+                autocompleteHandler={WS.getCodeLov}
+                autocompleteHandlerParams={['IMPT']}
+      />
+      
       <EAMTextField {...register("nonconformitynote", "nonConformityNote")} />
     </React.Fragment>
   );

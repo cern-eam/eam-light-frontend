@@ -24,7 +24,7 @@ import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import LocationDetails from "./LocationDetails";
 import LocationGeneral from "./LocationGeneral";
 import LocationHierarchy from "./LocationHierarchy";
-import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import { Link } from "react-router-dom";
 import AccountTreeRoundedIcon from "@mui/icons-material/AccountTreeRounded";
 import AssignmentIcon from "@mui/icons-material/Assignment";
@@ -38,7 +38,7 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import { locationLayoutPropertiesMap } from "../EquipmentTools";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
-import AssetNCRs from "../components/EquipmentNCRs.jsx";
+import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -219,12 +219,12 @@ export default Location = (props) => {
         label: "Non Conformities",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <AssetNCRs equipment={location.code}/>,
+        render: () => <EquipmentNCRs equipment={location.code}/>,
         RegionPanelProps: {
           customHeadingBar:  (
               <Link to ={`/ncr?equipmentCode=${location.code}&description=NCR for ${location.code}`}
                     style={{padding: 10, display: "flex", alignItems: "center", justifyContent: "space-between", color: "#737373" }}>
-                <OpenInBrowserIcon />
+                <AddBoxIcon />
               </Link>
           ),
         },
