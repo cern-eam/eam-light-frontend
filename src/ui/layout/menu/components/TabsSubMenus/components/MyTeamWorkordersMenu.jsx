@@ -42,7 +42,7 @@ const MyTeamWorkordersMenu = ({ classes }) => {
 
     useEffect(() => {
         if (myTeamWorkOrders.length === 0) fetchMyTeamWorkOrders();
-    }, [fetchMyTeamWorkOrders, myTeamWorkOrders]);
+    }, [fetchMyTeamWorkOrders]);
 
     const departments = useMemo(
         () => eamAccount.userDepartments,

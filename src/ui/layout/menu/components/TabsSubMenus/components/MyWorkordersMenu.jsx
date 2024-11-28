@@ -12,7 +12,7 @@ const MyWorkordersMenu = () => {
 
     useEffect(() => {
         if (myOpenWorkOrders.length === 0) fetchMyOpenWorkOrders();
-    }, [fetchMyOpenWorkOrders, myOpenWorkOrders]);
+    }, [fetchMyOpenWorkOrders]);
 
     const filteredWorkOrders = useMemo(() => {
         return myOpenWorkOrders.filter(MenuTools.daysFilterFunctions[days]);
