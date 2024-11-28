@@ -23,7 +23,7 @@ const NCRGeneral = (props) => {
       
       />
       
-      <EAMAutocomplete {...register("location", "locationCode")} />
+      <EAMAutocomplete {...register("location", "locationCode", "locationDesc")} />
       
       <EAMAutocomplete {...register("department", "department")} />
       

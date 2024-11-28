@@ -115,7 +115,7 @@ const NCR = () => {
             setNCR((oldNCR) => ({
               ...oldNCR,
               department: equipment.departmentCode,
-              location: equipment.hierarchyLocationCode,
+              locationCode: equipment.hierarchyLocationCode,
             }));
           })
           .catch(console.error);
@@ -245,6 +245,8 @@ const NCR = () => {
                     <Observations
                         ncrCode={ncr.code}
                         ncr={ncr}
+                        handleError={handleError}
+                        showNotification={showNotification}
                         observationFields={tabs[TAB_CODES.OBSERVATIONS].fields}
                         disabled={readOnly}
                         statuses={statuses}
