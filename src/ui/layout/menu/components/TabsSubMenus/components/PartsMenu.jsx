@@ -6,8 +6,10 @@ import MenuItem from "./common/MenuItem";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import useScreenPermissions from "../hooks/useScreenPermissions";
+import withStyles from "@mui/styles/withStyles";
+import { styles } from "../styles";
 
-const PartsMenu = ({ iconStyle }) => {
+const PartsMenu = ({ classes }) => {
     const {
         userData: { partScreen, screens },
         updateUserData,
@@ -45,7 +47,7 @@ const PartsMenu = ({ iconStyle }) => {
             {partScreenPermissions?.creationAllowed && (
                 <MenuItem
                     label="New Part"
-                    icon={<AddIcon style={iconStyle} />}
+                    icon={<AddIcon className={classes.menuIcon} />}
                     link="part"
                 />
             )}
@@ -53,7 +55,7 @@ const PartsMenu = ({ iconStyle }) => {
             {partScreenPermissions?.readAllowed && (
                 <MenuItem
                     label={"Search " + currentPartScreen.screenDesc}
-                    icon={<SearchIcon style={iconStyle} />}
+                    icon={<SearchIcon className={classes.menuIcon} />}
                     link="partsearch"
                 />
             )}
@@ -61,4 +63,6 @@ const PartsMenu = ({ iconStyle }) => {
     );
 };
 
-export default PartsMenu;
+const StyledPartsMenu = withStyles(styles)(PartsMenu);
+
+export default StyledPartsMenu;

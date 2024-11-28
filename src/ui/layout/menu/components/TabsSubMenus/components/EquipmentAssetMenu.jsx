@@ -8,8 +8,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import useMenuVisibilityStore from "@/state/useMenuVisibilityStore";
 import useScreenPermissions from "../hooks/useScreenPermissions";
+import withStyles from "@mui/styles/withStyles";
+import { styles } from "../styles";
 
-const EquipmentAssetMenu = ({ iconStyle }) => {
+const EquipmentAssetMenu = ({ classes }) => {
     const {
         userData: { assetScreen, screens },
         updateUserData,
@@ -43,7 +45,7 @@ const EquipmentAssetMenu = ({ iconStyle }) => {
             {assetScreenPermissions?.creationAllowed && (
                 <MenuItem
                     label="New Asset"
-                    icon={<AddIcon style={iconStyle} />}
+                    icon={<AddIcon className={classes.menuIcon} />}
                     link="asset"
                 />
             )}
@@ -51,18 +53,20 @@ const EquipmentAssetMenu = ({ iconStyle }) => {
             {assetScreenPermissions?.readAllowed && (
                 <MenuItem
                     label={"Search " + screens[assetScreen].screenDesc}
-                    icon={<SearchIcon style={iconStyle} />}
+                    icon={<SearchIcon className={classes.menuIcon} />}
                     link="assetsearch"
                 />
             )}
 
             <MenuItem
                 label="Back to Equipment"
-                icon={<ArrowBackIcon style={iconStyle} />}
+                icon={<ArrowBackIcon className={classes.menuIcon} />}
                 onClick={() => setActiveMenuVisibility("equipment")}
             />
         </SubMenu>
     );
 };
 
-export default EquipmentAssetMenu;
+const StyledEquipmentAssetMenu = withStyles(styles)(EquipmentAssetMenu);
+
+export default StyledEquipmentAssetMenu;

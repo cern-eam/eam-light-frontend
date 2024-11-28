@@ -6,8 +6,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import useUserDataStore from "@/state/useUserDataStore";
 import ScreenChange from "./common/ScreenChange";
 import useScreenPermissions from "../hooks/useScreenPermissions";
+import withStyles from "@mui/styles/withStyles";
+import { styles } from "../styles";
 
-const WorkordersMenu = ({ iconStyle }) => {
+const WorkordersMenu = ({ classes }) => {
     const {
         userData: { workOrderScreen, screens },
         updateUserData,
@@ -45,7 +47,7 @@ const WorkordersMenu = ({ iconStyle }) => {
             {workOrderScreenPermissions?.creationAllowed && (
                 <MenuItem
                     label="New Work Order"
-                    icon={<AddIcon style={iconStyle} />}
+                    icon={<AddIcon className={classes.menuIcon} />}
                     link="workorder"
                 />
             )}
@@ -53,7 +55,7 @@ const WorkordersMenu = ({ iconStyle }) => {
             {workOrderScreenPermissions?.readAllowed && (
                 <MenuItem
                     label={"Search " + currentWorkOrderScreen.screenDesc}
-                    icon={<SearchIcon style={iconStyle} />}
+                    icon={<SearchIcon className={classes.menuIcon} />}
                     link="wosearch"
                 />
             )}
@@ -61,4 +63,6 @@ const WorkordersMenu = ({ iconStyle }) => {
     );
 };
 
-export default WorkordersMenu;
+const StyledWorkordersMenu = withStyles(styles)(WorkordersMenu);
+
+export default StyledWorkordersMenu;

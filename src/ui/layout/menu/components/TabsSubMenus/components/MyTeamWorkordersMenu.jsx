@@ -17,15 +17,17 @@ const styles = {
     icon: {
         color: "white",
     },
-};
-
-const headingStyle = {
-    display: "flex",
-    padding: 5,
-    fontSize: 13,
-    color: "#ffffff",
-    alignItems: "center",
-    justifyContent: "center",
+    heading: {
+        display: "flex",
+        padding: 5,
+        fontSize: 13,
+        color: "#ffffff",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    select: {
+        color: "white",
+    },
 };
 
 const MyTeamWorkordersMenu = ({ classes }) => {
@@ -81,19 +83,19 @@ const MyTeamWorkordersMenu = ({ classes }) => {
         <ul className="layout-tab-submenu" id="myteamwos">
             <li>
                 {(!departments || departments.length === 0) && (
-                    <div style={headingStyle}>No department defined</div>
+                    <div className={classes.heading}>No department defined</div>
                 )}
                 {departments.length === 1 && (
-                    <div style={headingStyle}>
+                    <div className={classes.heading}>
                         WOs FOR DEP: {departments[0]}
                     </div>
                 )}
                 {departments.length > 1 && (
-                    <div style={headingStyle}>
+                    <div className={classes.heading}>
                         WOs FOR DEP:
                         <FormControl>
                             <Select
-                                style={{ color: "white" }}
+                                className={classes.select}
                                 classes={{
                                     root: classes.root,
                                     icon: classes.icon,
@@ -131,4 +133,6 @@ const MyTeamWorkordersMenu = ({ classes }) => {
     );
 };
 
-export default withStyles(styles)(MyTeamWorkordersMenu);
+const StyledMyTeamWorkordersMenu = withStyles(styles)(MyTeamWorkordersMenu);
+
+export default StyledMyTeamWorkordersMenu;

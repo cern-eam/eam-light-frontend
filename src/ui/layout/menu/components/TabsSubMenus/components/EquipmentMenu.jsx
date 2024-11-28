@@ -14,8 +14,10 @@ import CERNMode from "@/ui/components/CERNMode";
 import Rule from "@mui/icons-material/Rule";
 import useMenuVisibilityStore from "@/state/useMenuVisibilityStore";
 import useScreenPermissions from "../hooks/useScreenPermissions";
+import withStyles from "@mui/styles/withStyles";
+import { styles } from "../styles";
 
-const EquipmentMenu = ({ iconStyle }) => {
+const EquipmentMenu = ({ classes }) => {
     const {
         userData: {
             assetScreen,
@@ -35,7 +37,7 @@ const EquipmentMenu = ({ iconStyle }) => {
                 {assetScreen && (
                     <MenuItem
                         label="Assets"
-                        icon={<AssetIcon style={iconStyle} />}
+                        icon={<AssetIcon className={classes.menuIcon} />}
                         onClick={() =>
                             setActiveMenuVisibility("equipmentAssets")
                         }
@@ -46,7 +48,7 @@ const EquipmentMenu = ({ iconStyle }) => {
                     ncrScreen && ( // Limit temporairly to R5CERN
                         <MenuItem
                             label="NCRs"
-                            icon={<Rule style={iconStyle} />} // TODO: Add NCR icon
+                            icon={<Rule className={classes.menuIcon} />} // TODO: Add NCR icon
                             onClick={() =>
                                 setActiveMenuVisibility("equipmentNcrs")
                             }
@@ -56,7 +58,7 @@ const EquipmentMenu = ({ iconStyle }) => {
                 {positionScreen && (
                     <MenuItem
                         label="Positions"
-                        icon={<PositionIcon style={iconStyle} />}
+                        icon={<PositionIcon className={classes.menuIcon} />}
                         onClick={() =>
                             setActiveMenuVisibility("equipmentPositions")
                         }
@@ -66,7 +68,7 @@ const EquipmentMenu = ({ iconStyle }) => {
                 {systemScreen && (
                     <MenuItem
                         label="Systems"
-                        icon={<SystemIcon style={iconStyle} />}
+                        icon={<SystemIcon className={classes.menuIcon} />}
                         onClick={() =>
                             setActiveMenuVisibility("equipmentSystems")
                         }
@@ -76,7 +78,7 @@ const EquipmentMenu = ({ iconStyle }) => {
                 {locationScreen && (
                     <MenuItem
                         label="Locations"
-                        icon={<RoomIcon style={iconStyle} />}
+                        icon={<RoomIcon className={classes.menuIcon} />}
                         onClick={() =>
                             setActiveMenuVisibility("equipmentLocations")
                         }
@@ -87,7 +89,9 @@ const EquipmentMenu = ({ iconStyle }) => {
                     {assetScreenPermissions?.updateAllowed && (
                         <MenuItem
                             label="Replace Equipment"
-                            icon={<AutorenewIcon style={iconStyle} />}
+                            icon={
+                                <AutorenewIcon className={classes.menuIcon} />
+                            }
                             link="replaceeqp"
                         />
                     )}
@@ -95,13 +99,13 @@ const EquipmentMenu = ({ iconStyle }) => {
 
                 <MenuItem
                     label="Meter Reading"
-                    icon={<SpeedometerIcon style={iconStyle} />}
+                    icon={<SpeedometerIcon className={classes.menuIcon} />}
                     link="meterreading"
                 />
 
                 <MenuItem
                     label="Install / Detach Equipment"
-                    icon={<BuildIcon style={iconStyle} />}
+                    icon={<BuildIcon className={classes.menuIcon} />}
                     link="installeqp"
                 />
             </SubMenu>
@@ -109,4 +113,6 @@ const EquipmentMenu = ({ iconStyle }) => {
     );
 };
 
-export default EquipmentMenu;
+const StyledEquipmentMenu = withStyles(styles)(EquipmentMenu);
+
+export default StyledEquipmentMenu;

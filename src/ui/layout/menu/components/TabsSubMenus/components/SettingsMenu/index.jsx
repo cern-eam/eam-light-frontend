@@ -6,8 +6,10 @@ import MenuItem from "../common/MenuItem";
 import { DatabaseRefresh } from "mdi-material-ui";
 import MenuTools from "../../../../MenuTools";
 import MenuItemInputHistory from "./components/MenuItemInputHistory";
+import withStyles from "@mui/styles/withStyles";
+import { styles } from "../../styles";
 
-const SettingsMenu = ({ iconStyle, disabledIconStyle }) => {
+const SettingsMenu = ({ classes }) => {
     const { applicationData } = useApplicationDataStore();
     const {
         userData: { eamAccount },
@@ -22,18 +24,17 @@ const SettingsMenu = ({ iconStyle, disabledIconStyle }) => {
                 ) && (
                     <MenuItem
                         label="Refresh EAM Light Cache"
-                        icon={<DatabaseRefresh style={iconStyle} />}
+                        icon={<DatabaseRefresh className={classes.menuIcon} />}
                         onClick={() =>
                             MenuTools.refreshCache(showNotification, showError)
                         }
                     />
                 )}
-            <MenuItemInputHistory
-                iconStyle={iconStyle}
-                disabledIconStyle={disabledIconStyle}
-            />
+            <MenuItemInputHistory />
         </SubMenu>
     );
 };
 
-export default SettingsMenu;
+const StyledSettingsMenu = withStyles(styles)(SettingsMenu);
+
+export default StyledSettingsMenu;

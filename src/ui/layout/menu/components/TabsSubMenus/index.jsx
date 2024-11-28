@@ -12,19 +12,6 @@ import EquipmentPositionMenu from "./components/EquipmentPositionMenu";
 import EquipmentSystemMenu from "./components/EquipmentSystemMenu";
 import EquipmentLocationMenu from "./components/EquipmentLocationMenu";
 
-export const menuIconStyle = {
-    display: "inline-block",
-    marginRight: 5,
-    color: "#f7ce03",
-    width: "100%",
-    height: 36,
-};
-
-export const menuIconStyleDisabled = {
-    ...menuIconStyle,
-    color: "#8b8c8b",
-};
-
 const TabsSubMenus = () => {
     const {
         menuVisibility: {
@@ -47,30 +34,16 @@ const TabsSubMenus = () => {
         <>
             {mywos && <MyWorkordersMenu />}
             {myteamwos && <MyTeamWorkordersMenu />}
-            {workorders && <WorkordersMenu iconStyle={menuIconStyle} />}
-            {equipment && <EquipmentMenu iconStyle={menuIconStyle} />}
-            {materials && <PartsMenu iconStyle={menuIconStyle} />}
+            {workorders && <WorkordersMenu />}
+            {equipment && <EquipmentMenu />}
+            {materials && <PartsMenu />}
             {customgrids && <ReportsMenu />}
-            {settings && (
-                <SettingsMenu
-                    iconStyle={menuIconStyle}
-                    disabledIconStyle={menuIconStyleDisabled}
-                />
-            )}
-            {equipmentAssets && (
-                <EquipmentAssetMenu iconStyle={menuIconStyle} />
-            )}
-
-            {equipmentNcrs && <EquipmentNcrMenu iconStyle={menuIconStyle} />}
-            {equipmentPositions && (
-                <EquipmentPositionMenu iconStyle={menuIconStyle} />
-            )}
-            {equipmentSystems && (
-                <EquipmentSystemMenu iconStyle={menuIconStyle} />
-            )}
-            {equipmentLocations && (
-                <EquipmentLocationMenu iconStyle={menuIconStyle} />
-            )}
+            {settings && <SettingsMenu />}
+            {equipmentAssets && <EquipmentAssetMenu />}
+            {equipmentNcrs && <EquipmentNcrMenu />}
+            {equipmentPositions && <EquipmentPositionMenu />}
+            {equipmentSystems && <EquipmentSystemMenu />}
+            {equipmentLocations && <EquipmentLocationMenu />}
         </>
     );
 };

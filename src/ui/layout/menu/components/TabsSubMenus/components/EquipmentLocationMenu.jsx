@@ -6,8 +6,10 @@ import MenuItem from "./common/MenuItem";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import useMenuVisibilityStore from "@/state/useMenuVisibilityStore";
+import withStyles from "@mui/styles/withStyles";
+import { styles } from "../styles";
 
-const EquipmentLocationMenu = ({ iconStyle }) => {
+const EquipmentLocationMenu = ({ classes }) => {
     const {
         userData: { locationScreen, screens },
         updateUserData,
@@ -48,18 +50,20 @@ const EquipmentLocationMenu = ({ iconStyle }) => {
             {readAllowed && (
                 <MenuItem
                     label={"Search " + screens[locationScreen].screenDesc}
-                    icon={<SearchIcon style={iconStyle} />}
+                    icon={<SearchIcon className={classes.menuIcon} />}
                     link="locationsearch"
                 />
             )}
 
             <MenuItem
                 label="Back to Equipment"
-                icon={<ArrowBackIcon style={iconStyle} />}
+                icon={<ArrowBackIcon className={classes.menuIcon} />}
                 onClick={() => setActiveMenuVisibility("equipment")}
             />
         </SubMenu>
     );
 };
 
-export default EquipmentLocationMenu;
+const StyledEquipmentLocationMenu = withStyles(styles)(EquipmentLocationMenu);
+
+export default StyledEquipmentLocationMenu;
