@@ -30,7 +30,7 @@ export function getUserInfo() {
             const values = queryString.parse(window.location.search);
             const screenCode = values.screen;
             const currentScreen = window.location.pathname
-                .replace(process.env.PUBLIC_URL, '')
+                .replace(import.meta.env.VITE_PUBLIC_URL, '')
                 .split('/')[1];
             return WS.getUserData(currentScreen, screenCode);
         };
@@ -40,7 +40,12 @@ export function getUserInfo() {
                 dispatch(
                     updateApplication({ userData: { invalidAccount: true } })
                 );
-            } else {
+            } else if (error?.response?.status === 404 || error?.response?.status === 500) {
+                dispatch(
+                  updateApplication({ userData: { userDataFetchingFailed: true } })
+                );
+            }
+             else {
                 dispatch(updateApplication({ userData: {} }));
             }
         };

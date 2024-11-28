@@ -46,6 +46,24 @@ class Eamlight extends Component {
     alignItems: "flex-end",
   };
 
+  componentDidMount() {
+    if (
+      (this.props.inforContext ||
+        import.meta.env.VITE_LOGIN_METHOD !== "STD") &&
+      (!this.props.userData || !this.props.applicationData)
+    ) {
+      this.props.initializeApplication();
+
+      this.interval = setInterval(() => {
+        this.props.initializeApplication();
+      }, 60000);
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
   render() {
     // Display login screen
     if (
@@ -76,11 +94,18 @@ class Eamlight extends Component {
           />
         );
       }
+      if (this.props.userData.userDataFetchingFailed) {
+        return (
+          <InfoPage
+            title="Backend Error"
+            message="There was an error while fetching data from the backend"
+          />
+        );
+      }
     }
 
     // User data still not there, display loading page
     if (!this.props.userData || !this.props.applicationData) {
-      this.props.initializeApplication();
       return (
         <BlockUi tag="div" blocking={true} style={this.blockUiStyle}>
           <div style={this.blockUiStyleDiv}>Loading EAM Light ...</div>
@@ -108,7 +133,7 @@ class Eamlight extends Component {
     return (
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={selectedTheme}>
-          <Router basename={process.env.PUBLIC_URL}>
+          <Router basename={import.meta.env.VITE_PUBLIC_URL}>
             <Switch>
               <Route path="/eqptree" component={EqpTree} />
 
