@@ -1,13 +1,13 @@
 import useUserDataStore from "@/state/useUserDataStore";
 import SubMenu from "./common/SubMenu";
 import ScreenChange from "./common/ScreenChange";
-import { useMemo } from "react";
 import MenuItem from "./common/MenuItem";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import useMenuVisibilityStore from "@/state/useMenuVisibilityStore";
 import withStyles from "@mui/styles/withStyles";
 import { styles } from "../styles";
+import useScreenPermissions from "../hooks/useScreenPermissions";
 
 const EquipmentLocationMenu = ({ classes }) => {
     const {
@@ -15,14 +15,7 @@ const EquipmentLocationMenu = ({ classes }) => {
         updateUserData,
     } = useUserDataStore();
     const { setActiveMenuVisibility } = useMenuVisibilityStore();
-
-    const readAllowed = useMemo(
-        () =>
-            screen &&
-            screens[locationScreen] &&
-            screens[locationScreen].readAllowed,
-        [screens, locationScreen]
-    );
+    const locationScreenPermissions = useScreenPermissions(locationScreen);
 
     if (!locationScreen) return null;
 
@@ -39,7 +32,7 @@ const EquipmentLocationMenu = ({ classes }) => {
                 />
             }
         >
-            {readAllowed && (
+            {locationScreenPermissions?.readAllowed && (
                 <MenuItem
                     label={"Search " + screens[locationScreen].screenDesc}
                     icon={<SearchIcon className={classes.menuIcon} />}
