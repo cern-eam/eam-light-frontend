@@ -333,7 +333,7 @@ class EamlightMenu extends Component {
                 />
               )}
 
-              {(eamAccount.userGroup === 'R5CERN') && ncrScreen && ( // Limit temporairly to R5CERN
+              {ncrScreen && ( 
                 <MenuItem
                   label="NCRs"
                   icon={<Rule style={menuIconStyle} />} // TODO: Add NCR icon

@@ -43,7 +43,7 @@ const NCRGeneral = (props) => {
                 autocompleteHandlerParams={['IMPT']}
       />
       
-      <EAMTextField {...register("nonconformitynote", "nonConformityNote")} />
+      <EAMTextField {...register("nonconformitynote", "nonConformityNote")} textarea={true}/>
     </React.Fragment>
   );
 };

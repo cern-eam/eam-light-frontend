@@ -64,9 +64,10 @@ const Observations = ({
         handleError,
         observationsDialogSuccessHandler,
         {
+            departmentCode: userData?.eamAccount?.department,
             statusCode: "R",
             typeCode: "CD",
-            assignedTo: userData?.eamAccount?.userGroup,
+            assignedTo: userData?.eamAccount?.employeeCode,
             equipmentCode: ncr?.equipmentCode
         }
     );
