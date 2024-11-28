@@ -41,9 +41,12 @@ const ScreenChange = ({
                     value={screenCode}
                     onChange={(event) => updateScreenLayout(event.target.value)}
                 >
-                    {selectedScreen.map(({ screenCode, screenDesc }) => (
-                        <MenuItem key={screenCode} value={screenCode}>
-                            {screenDesc}
+                    {selectedScreen.map((screen) => (
+                        <MenuItem
+                            key={screen.screenCode}
+                            value={screen.screenCode}
+                        >
+                            {screen.screenDesc}
                         </MenuItem>
                     ))}
                 </Select>
