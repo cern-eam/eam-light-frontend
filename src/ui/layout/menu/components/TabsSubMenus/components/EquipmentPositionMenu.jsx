@@ -7,6 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import useMenuVisibilityStore from "@/state/useMenuVisibilityStore";
+import useScreenPermissions from "../hooks/useScreenPermissions";
 
 const EquipmentPositionMenu = ({ iconStyle }) => {
     const {
@@ -14,6 +15,7 @@ const EquipmentPositionMenu = ({ iconStyle }) => {
         updateUserData,
     } = useUserDataStore();
     const { setActiveMenuVisibility } = useMenuVisibilityStore();
+    const positionScreenPermissions = useScreenPermissions(positionScreen);
 
     const positionScreens = useMemo(
         () =>
@@ -21,22 +23,6 @@ const EquipmentPositionMenu = ({ iconStyle }) => {
                 ({ parentScreen }) => parentScreen === "OSOBJP"
             ),
         [screens]
-    );
-
-    const creationAllowed = useMemo(
-        () =>
-            positionScreen &&
-            screens[positionScreen] &&
-            screens[positionScreen].creationAllowed,
-        [screens, positionScreen]
-    );
-
-    const readAllowed = useMemo(
-        () =>
-            screen &&
-            screens[positionScreen] &&
-            screens[positionScreen].readAllowed,
-        [screens, positionScreen]
     );
 
     if (!positionScreen) return null;
@@ -54,7 +40,7 @@ const EquipmentPositionMenu = ({ iconStyle }) => {
                 />
             }
         >
-            {creationAllowed && (
+            {positionScreenPermissions?.creationAllowed && (
                 <MenuItem
                     label="New Position"
                     icon={<AddIcon style={iconStyle} />}
@@ -62,7 +48,7 @@ const EquipmentPositionMenu = ({ iconStyle }) => {
                 />
             )}
 
-            {readAllowed && (
+            {positionScreenPermissions?.readAllowed && (
                 <MenuItem
                     label={"Search " + screens[positionScreen].screenDesc}
                     icon={<SearchIcon style={iconStyle} />}

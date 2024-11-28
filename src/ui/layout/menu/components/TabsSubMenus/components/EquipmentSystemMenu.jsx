@@ -7,6 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import useMenuVisibilityStore from "@/state/useMenuVisibilityStore";
+import useScreenPermissions from "../hooks/useScreenPermissions";
 
 const EquipmentSystemMenu = ({ iconStyle }) => {
     const {
@@ -14,6 +15,7 @@ const EquipmentSystemMenu = ({ iconStyle }) => {
         updateUserData,
     } = useUserDataStore();
     const { setActiveMenuVisibility } = useMenuVisibilityStore();
+    const systemScreenPermissions = useScreenPermissions(systemScreen);
 
     const systemScreens = useMemo(
         () =>
@@ -21,22 +23,6 @@ const EquipmentSystemMenu = ({ iconStyle }) => {
                 ({ parentScreen }) => parentScreen === "OSOBJS"
             ),
         [screens]
-    );
-
-    const creationAllowed = useMemo(
-        () =>
-            systemScreen &&
-            screens[systemScreen] &&
-            screens[systemScreen].creationAllowed,
-        [screens, systemScreen]
-    );
-
-    const readAllowed = useMemo(
-        () =>
-            screen &&
-            screens[systemScreen] &&
-            screens[systemScreen].readAllowed,
-        [screens, systemScreen]
     );
 
     if (!systemScreen) return null;
@@ -54,7 +40,7 @@ const EquipmentSystemMenu = ({ iconStyle }) => {
                 />
             }
         >
-            {creationAllowed && (
+            {systemScreenPermissions?.creationAllowed && (
                 <MenuItem
                     label="New System"
                     icon={<AddIcon style={iconStyle} />}
@@ -62,7 +48,7 @@ const EquipmentSystemMenu = ({ iconStyle }) => {
                 />
             )}
 
-            {readAllowed && (
+            {systemScreenPermissions?.readAllowed && (
                 <MenuItem
                     label={"Search " + screens[systemScreen].screenDesc}
                     icon={<SearchIcon style={iconStyle} />}

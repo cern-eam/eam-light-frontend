@@ -12,8 +12,8 @@ import BuildIcon from "@mui/icons-material/Build";
 import AutorenewIcon from "mdi-material-ui/Autorenew";
 import CERNMode from "@/ui/components/CERNMode";
 import Rule from "@mui/icons-material/Rule";
-import { useMemo } from "react";
 import useMenuVisibilityStore from "@/state/useMenuVisibilityStore";
+import useScreenPermissions from "../hooks/useScreenPermissions";
 
 const EquipmentMenu = ({ iconStyle }) => {
     const {
@@ -24,18 +24,10 @@ const EquipmentMenu = ({ iconStyle }) => {
             systemScreen,
             locationScreen,
             eamAccount,
-            screens,
         },
     } = useUserDataStore();
     const { setActiveMenuVisibility } = useMenuVisibilityStore();
-
-    const assetUpdateAllowed = useMemo(
-        () =>
-            assetScreen &&
-            screens[assetScreen] &&
-            screens[assetScreen].updateAllowed,
-        [screens, assetScreen]
-    );
+    const assetScreenPermissions = useScreenPermissions(assetScreen);
 
     return (
         (assetScreen || positionScreen || systemScreen || ncrScreen) && (
@@ -92,7 +84,7 @@ const EquipmentMenu = ({ iconStyle }) => {
                 )}
 
                 <CERNMode>
-                    {assetUpdateAllowed && (
+                    {assetScreenPermissions?.updateAllowed && (
                         <MenuItem
                             label="Replace Equipment"
                             icon={<AutorenewIcon style={iconStyle} />}

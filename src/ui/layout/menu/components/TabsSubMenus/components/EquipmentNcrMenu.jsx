@@ -6,31 +6,20 @@ import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import useMenuVisibilityStore from "@/state/useMenuVisibilityStore";
+import useScreenPermissions from "../hooks/useScreenPermissions";
 
 const EquipmentNcrMenu = ({ iconStyle }) => {
     const {
         userData: { ncrScreen, screens },
     } = useUserDataStore();
     const { setActiveMenuVisibility } = useMenuVisibilityStore();
-
-    const creationAllowed = useMemo(
-        () =>
-            ncrScreen &&
-            screens[ncrScreen] &&
-            screens[ncrScreen].creationAllowed,
-        [screens, ncrScreen]
-    );
-
-    const readAllowed = useMemo(
-        () => screen && screens[ncrScreen] && screens[ncrScreen].readAllowed,
-        [screens, ncrScreen]
-    );
+    const ncrScreenPermissions = useScreenPermissions(ncrScreen);
 
     if (!ncrScreen) return null;
 
     return (
         <SubMenu id="ncrs">
-            {creationAllowed && (
+            {ncrScreenPermissions?.creationAllowed && (
                 <MenuItem
                     label="New NCR"
                     icon={<AddIcon style={iconStyle} />}
@@ -38,7 +27,7 @@ const EquipmentNcrMenu = ({ iconStyle }) => {
                 />
             )}
 
-            {readAllowed && (
+            {ncrScreenPermissions?.readAllowed && (
                 <MenuItem
                     label={"Search " + screens[ncrScreen].screenDesc}
                     icon={<SearchIcon style={iconStyle} />}

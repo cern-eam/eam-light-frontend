@@ -7,6 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import useMenuVisibilityStore from "@/state/useMenuVisibilityStore";
+import useScreenPermissions from "../hooks/useScreenPermissions";
 
 const EquipmentAssetMenu = ({ iconStyle }) => {
     const {
@@ -14,6 +15,7 @@ const EquipmentAssetMenu = ({ iconStyle }) => {
         updateUserData,
     } = useUserDataStore();
     const { setActiveMenuVisibility } = useMenuVisibilityStore();
+    const assetScreenPermissions = useScreenPermissions(assetScreen);
 
     const assetScreens = useMemo(
         () =>
@@ -21,20 +23,6 @@ const EquipmentAssetMenu = ({ iconStyle }) => {
                 ({ parentScreen }) => parentScreen === "OSOBJA"
             ),
         [screens]
-    );
-
-    const creationAllowed = useMemo(
-        () =>
-            assetScreen &&
-            screens[assetScreen] &&
-            screens[assetScreen].creationAllowed,
-        [screens, assetScreen]
-    );
-
-    const readAllowed = useMemo(
-        () =>
-            screen && screens[assetScreen] && screens[assetScreen].readAllowed,
-        [screens, assetScreen]
     );
 
     if (!assetScreen) return null;
@@ -52,7 +40,7 @@ const EquipmentAssetMenu = ({ iconStyle }) => {
                 />
             }
         >
-            {creationAllowed && (
+            {assetScreenPermissions?.creationAllowed && (
                 <MenuItem
                     label="New Asset"
                     icon={<AddIcon style={iconStyle} />}
@@ -60,7 +48,7 @@ const EquipmentAssetMenu = ({ iconStyle }) => {
                 />
             )}
 
-            {readAllowed && (
+            {assetScreenPermissions?.readAllowed && (
                 <MenuItem
                     label={"Search " + screens[assetScreen].screenDesc}
                     icon={<SearchIcon style={iconStyle} />}

@@ -5,12 +5,14 @@ import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import useUserDataStore from "@/state/useUserDataStore";
 import ScreenChange from "./common/ScreenChange";
+import useScreenPermissions from "../hooks/useScreenPermissions";
 
 const WorkordersMenu = ({ iconStyle }) => {
     const {
         userData: { workOrderScreen, screens },
         updateUserData,
     } = useUserDataStore();
+    const workOrderScreenPermissions = useScreenPermissions(workOrderScreen);
 
     const currentWorkOrderScreen = useMemo(
         () => screens[workOrderScreen] || {},
@@ -40,7 +42,7 @@ const WorkordersMenu = ({ iconStyle }) => {
                 />
             }
         >
-            {currentWorkOrderScreen.creationAllowed && (
+            {workOrderScreenPermissions?.creationAllowed && (
                 <MenuItem
                     label="New Work Order"
                     icon={<AddIcon style={iconStyle} />}
@@ -48,7 +50,7 @@ const WorkordersMenu = ({ iconStyle }) => {
                 />
             )}
 
-            {currentWorkOrderScreen.readAllowed && (
+            {workOrderScreenPermissions?.readAllowed && (
                 <MenuItem
                     label={"Search " + currentWorkOrderScreen.screenDesc}
                     icon={<SearchIcon style={iconStyle} />}

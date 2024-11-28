@@ -5,12 +5,14 @@ import { useMemo } from "react";
 import MenuItem from "./common/MenuItem";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
+import useScreenPermissions from "../hooks/useScreenPermissions";
 
 const PartsMenu = ({ iconStyle }) => {
     const {
         userData: { partScreen, screens },
         updateUserData,
     } = useUserDataStore();
+    const partScreenPermissions = useScreenPermissions(partScreen);
 
     const currentPartScreen = useMemo(
         () => screens[partScreen] || {},
@@ -40,7 +42,7 @@ const PartsMenu = ({ iconStyle }) => {
                 />
             }
         >
-            {currentPartScreen.creationAllowed && (
+            {partScreenPermissions?.creationAllowed && (
                 <MenuItem
                     label="New Part"
                     icon={<AddIcon style={iconStyle} />}
@@ -48,7 +50,7 @@ const PartsMenu = ({ iconStyle }) => {
                 />
             )}
 
-            {currentPartScreen.readAllowed && (
+            {partScreenPermissions?.readAllowed && (
                 <MenuItem
                     label={"Search " + currentPartScreen.screenDesc}
                     icon={<SearchIcon style={iconStyle} />}
