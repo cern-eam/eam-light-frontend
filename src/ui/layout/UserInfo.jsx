@@ -1,16 +1,17 @@
-import React, { Component } from "react";
+import React from "react";
 import { Account, Logout } from "mdi-material-ui";
 import { IconButton } from "@mui/material";
 import { logout } from "../../AuthWrapper";
 import useUserDataStore from "../../state/useUserDataStore";
+import useInforContextStore from "../../state/useInforContext";
+import useScannedUserStore from "../../state/useScannedUserStore";
 
-export default class UserInfo extends Component {
-  constructor(props) {
-    super(props);
-    this.userData = useUserDataStore.getState().userData;
-  }
+const UserInfo = () => {
+  const { userData, cleanUserData } = useUserDataStore();
+  const { setInforContext } = useInforContextStore();
+  const { scannedUser, setScannedUser} = useScannedUserStore();
 
-  userInfoStyle = {
+  const userInfoStyle = {
     color: "rgba(255, 255, 255, 0.8)",
     flexGrow: 1,
     height: 48,
@@ -19,58 +20,55 @@ export default class UserInfo extends Component {
     justifyContent: "flex-end",
   };
 
-  accountIcon = {
+  const accountIcon = {
     fontSize: 20,
     margin: 5,
   };
 
-  logoutIcon = {
+  const logoutIcon = {
     color: "rgba(255, 255, 255, 0.8)",
     paddingRight: 9,
     fontSize: 18,
     lineHeight: "22px",
   };
 
-  separatorStyle = {
+  const separatorStyle = {
     borderLeft: "1px solid rgba(255, 255, 255, 0.8)",
     width: 1,
     height: 22,
     marginLeft: 14,
   };
 
-  logoutHandler() {
-    if (this.props.scannedUser) {
-      this.props.updateScannedUser(null);
+  const logoutHandler = () => {
+    if (scannedUser) {
+      setScannedUser(null);
       return;
     }
     if (import.meta.env.VITE_LOGIN_METHOD === "STD") {
-      this.props.updateInforContext(null);
-      this.props.updateApplication({ userData: null });
-      sessionStorage.removeItem("inforContext");
+      setInforContext(null);
+      cleanUserData();
     }
     logout();
-  }
+  };
 
-  render() {
-    const { scannedUser } = this.props;
+  const usernameDisplay =
+    userData.eamAccount.userCode +
+    (scannedUser ? ` (${scannedUser.userCode})` : "");
 
-    const usernameDisplay =
-      this.userData.eamAccount.userCode +
-      (scannedUser ? ` (${scannedUser.userCode})` : "");
+  return (
+    <div style={userInfoStyle}>
+      <Account style={accountIcon} />
+      <span className="user-name">{usernameDisplay}</span>
+      <span style={separatorStyle} />
+      <IconButton
+        onClick={logoutHandler}
+        style={logoutIcon}
+        size="large"
+      >
+        <Logout style={{ fontSize: 20 }} />
+      </IconButton>
+    </div>
+  );
+};
 
-    return (
-      <div style={this.userInfoStyle}>
-        <Account style={this.accountIcon} />
-        <span className="user-name">{usernameDisplay}</span>
-        <span style={this.separatorStyle} />
-        <IconButton
-          onClick={this.logoutHandler.bind(this)}
-          style={this.logoutIcon}
-          size="large"
-        >
-          <Logout style={{ fontSize: 20 }} />
-        </IconButton>
-      </div>
-    );
-  }
-}
+export default UserInfo;

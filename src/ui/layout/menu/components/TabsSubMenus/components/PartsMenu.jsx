@@ -9,7 +9,7 @@ import SearchIcon from "@mui/icons-material/Search";
 const PartsMenu = ({ iconStyle }) => {
     const {
         userData: { partScreen, screens },
-        setUserData,
+        updateUserData,
     } = useUserDataStore();
 
     const currentPartScreen = useMemo(
@@ -33,7 +33,7 @@ const PartsMenu = ({ iconStyle }) => {
             header={
                 <StyledScreenChange
                     updateScreenLayout={(screenCode) =>
-                        setUserData({ partScreen: screenCode })
+                        updateUserData({ partScreen: screenCode })
                     }
                     screen={partScreen}
                     screens={partScreens}

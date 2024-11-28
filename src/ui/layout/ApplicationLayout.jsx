@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import Menu from "mdi-material-ui/Menu";
 import "./ApplicationLayout.css";
-import UserInfoContainer from "./UserInfoContainer";
+import UserInfo from "./UserInfo";
 import {
   FileTree,
   FormatHorizontalAlignLeft,
@@ -20,6 +20,7 @@ import queryString from "query-string";
 import useApplicationDataStore from "../../state/useApplicationDataStore";
 import useUserDataStore from "../../state/useUserDataStore";
 import useEquipmentTreeStore from "../../state/useEquipmentTreeStore";
+import useScannedUserStore from "../../state/useScannedUserStore";
 
 const styles = {
   topBarLink: {
@@ -36,10 +37,6 @@ const styles = {
 export default withStyles(styles)(function ApplicationLayout(props) {
   const {
     classes,
-    scannedUser,
-    updateScannedUser,
-    handleError,
-    showNotification,
   } = props;
 
   const {applicationData} = useApplicationDataStore();
@@ -50,6 +47,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
   const [mobileMenuActive, setMobileMenuActive] = useState(false);
   const theme = useTheme();
   const {equipmentTreeData: {showEqpTree, equipment}, updateEquipmentTreeData} = useEquipmentTreeStore();
+  const {scannedUser} = useScannedUserStore();
   const location = useLocation();
   
   const hideHeader = queryString.parse(window.location.search)['hideHeader'] === 'true';
@@ -124,7 +122,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
           </div>
         )}
 
-        <UserInfoContainer />
+        <UserInfo />
       </div>
     </div>
   );
@@ -135,11 +133,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
   const showScan = applicationData.serviceAccounts &&
     applicationData.serviceAccounts.includes(userData.eamAccount.userCode) &&
     (!scannedUser || !scannedUser.userCode) && (
-      <ScanUser
-        updateScannedUser={updateScannedUser}
-        showNotification={showNotification}
-        handleError={handleError}
-      />
+      <ScanUser/>
     );
 
     if (queryString.parse(window.location.search)['regionOnly']) {

@@ -162,7 +162,7 @@ const WorkOrdersDialog = ({
 
                     <EAMAutocomplete
                         {...processElementInfo(fields["assignedto"])}
-                        value={workOrder.costCode}
+                        value={workOrder.assignedTo}
                         onChange={createOnChangeHandler(
                             "assignedTo",
                             "assignedToDesc",

@@ -9,7 +9,7 @@ import ScreenChange from "./common/ScreenChange";
 const WorkordersMenu = ({ iconStyle }) => {
     const {
         userData: { workOrderScreen, screens },
-        setUserData,
+        updateUserData,
     } = useUserDataStore();
 
     const currentWorkOrderScreen = useMemo(
@@ -33,7 +33,7 @@ const WorkordersMenu = ({ iconStyle }) => {
             header={
                 <ScreenChange
                     updateScreenLayout={(screenCode) =>
-                        setUserData({ workOrderScreen: screenCode })
+                        updateUserData({ workOrderScreen: screenCode })
                     }
                     screen={workOrderScreen}
                     screens={workOrderScreens}

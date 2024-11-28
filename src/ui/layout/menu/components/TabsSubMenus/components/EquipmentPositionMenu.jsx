@@ -11,7 +11,7 @@ import useMenuVisibilityStore from "@/state/useMenuVisibilityStore";
 const EquipmentPositionMenu = ({ iconStyle }) => {
     const {
         userData: { positionScreen, screens },
-        setUserData,
+        updateUserData,
     } = useUserDataStore();
     const { setActiveMenuVisibility } = useMenuVisibilityStore();
 
@@ -47,7 +47,7 @@ const EquipmentPositionMenu = ({ iconStyle }) => {
             header={
                 <ScreenChange
                     updateScreenLayout={(screenCode) =>
-                        setUserData({ positionScreen: screenCode })
+                        updateUserData({ positionScreen: screenCode })
                     }
                     screen={positionScreen}
                     screens={positionScreens}

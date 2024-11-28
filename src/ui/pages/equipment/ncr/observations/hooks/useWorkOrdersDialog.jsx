@@ -6,11 +6,14 @@ const useWorkOrdersDialog = (
     isObservationsLoading,
     showNotification,
     handleError,
-    observationsDialogSuccessHandler
+    observationsDialogSuccessHandler,
+    workOrderDefaults
 ) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const [workOrder, setWorkOrder] = useState({});
+    const [workOrder, setWorkOrder] = useState({
+        ...workOrderDefaults
+    });
 
     const isDisabled = useMemo(
         () => isLoading || isObservationsLoading,

@@ -17,6 +17,7 @@ const Observations = ({
     handleError,
     observationFields,
     statuses,
+    ncr
 }) => {
     const { userData } = useUserDataStore();
 
@@ -32,7 +33,7 @@ const Observations = ({
         ncrCode,
         handleError
     );
-
+    
     const {
         isOpen: isObservationsDialogOpen,
         isDisabled: isObservationsDialogDisabled,
@@ -61,7 +62,13 @@ const Observations = ({
         isLoading,
         showNotification,
         handleError,
-        observationsDialogSuccessHandler
+        observationsDialogSuccessHandler,
+        {
+            statusCode: "R",
+            typeCode: "CD",
+            assignedTo: userData?.eamAccount?.userGroup,
+            equipmentCode: ncr?.equipmentCode
+        }
     );
 
     return (isLoading || !ncrWorkOrderLayout) ? (

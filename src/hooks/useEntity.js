@@ -16,13 +16,6 @@ import {
   getElementInfoFromCustomFields,
   prepareDataForFieldsValidator,
 } from "@/ui/pages/EntityTools";
-import {
-  setLayoutProperty,
-  //showError,
-  //showNotification,
-  //handleError,
-  //showWarning,
-} from "@/actions/uiActions";
 import WSCustomFields from "eam-components/dist/tools/WSCustomFields";
 import WSS from "../tools/WS"
 import {
@@ -69,11 +62,6 @@ const useEntity = (params) => {
   const history = useHistory();
   const abortController = useRef(null);
   const commentsComponent = useRef(null);
-
-  // Init dispatchers
-  const dispatch = useDispatch();
-  const setLayoutPropertyConst = (...args) =>
-    dispatch(setLayoutProperty(...args));
 
   const { showNotification, showError, showWarning, handleError } = useSnackbarStore();
   const { userData } = useUserDataStore();
@@ -428,7 +416,6 @@ const useEntity = (params) => {
     toggleHiddenRegion,
     setRegionVisibility,
     commentsComponent,
-    setLayoutProperty: setLayoutPropertyConst,
     showEqpTree,
     updateEquipmentTreeData,
     // Dispatchers
