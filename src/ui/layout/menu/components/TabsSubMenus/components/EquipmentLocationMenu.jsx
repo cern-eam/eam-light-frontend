@@ -16,14 +16,6 @@ const EquipmentLocationMenu = ({ classes }) => {
     } = useUserDataStore();
     const { setActiveMenuVisibility } = useMenuVisibilityStore();
 
-    const locationScreens = useMemo(
-        () =>
-            Object.values(screens).filter(
-                ({ parentScreen }) => parentScreen === "OSOBJL"
-            ),
-        [screens]
-    );
-
     const readAllowed = useMemo(
         () =>
             screen &&
@@ -42,8 +34,8 @@ const EquipmentLocationMenu = ({ classes }) => {
                     updateScreenLayout={(screenCode) =>
                         updateUserData({ locationScreen: screenCode })
                     }
-                    screen={locationScreen}
-                    screens={locationScreens}
+                    screenCode={locationScreen}
+                    screenId="OSOBJL"
                 />
             }
         >

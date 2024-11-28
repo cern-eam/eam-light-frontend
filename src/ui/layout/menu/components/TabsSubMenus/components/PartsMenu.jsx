@@ -21,14 +21,6 @@ const PartsMenu = ({ classes }) => {
         [screens, partScreen]
     );
 
-    const partScreens = useMemo(
-        () =>
-            Object.values(screens).filter(
-                ({ parentScreen }) => parentScreen === "SSPART"
-            ),
-        [screens]
-    );
-
     if (!partScreen) return null;
 
     return (
@@ -39,8 +31,8 @@ const PartsMenu = ({ classes }) => {
                     updateScreenLayout={(screenCode) =>
                         updateUserData({ partScreen: screenCode })
                     }
-                    screen={partScreen}
-                    screens={partScreens}
+                    screenCode={partScreen}
+                    screenId="SSPART"
                 />
             }
         >

@@ -1,7 +1,6 @@
 import useUserDataStore from "@/state/useUserDataStore";
 import SubMenu from "./common/SubMenu";
 import ScreenChange from "./common/ScreenChange";
-import { useMemo } from "react";
 import MenuItem from "./common/MenuItem";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
@@ -19,14 +18,6 @@ const EquipmentPositionMenu = ({ classes }) => {
     const { setActiveMenuVisibility } = useMenuVisibilityStore();
     const positionScreenPermissions = useScreenPermissions(positionScreen);
 
-    const positionScreens = useMemo(
-        () =>
-            Object.values(screens).filter(
-                ({ parentScreen }) => parentScreen === "OSOBJP"
-            ),
-        [screens]
-    );
-
     if (!positionScreen) return null;
 
     return (
@@ -37,8 +28,8 @@ const EquipmentPositionMenu = ({ classes }) => {
                     updateScreenLayout={(screenCode) =>
                         updateUserData({ positionScreen: screenCode })
                     }
-                    screen={positionScreen}
-                    screens={positionScreens}
+                    screenCode={positionScreen}
+                    screenId="OSOBJP"
                 />
             }
         >

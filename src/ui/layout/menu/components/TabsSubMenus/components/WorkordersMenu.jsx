@@ -21,15 +21,7 @@ const WorkordersMenu = ({ classes }) => {
         [screens, workOrderScreen]
     );
 
-    const workOrderScreens = useMemo(
-        () =>
-            Object.values(screens).filter(
-                ({ parentScreen }) => parentScreen === "WSJOBS"
-            ),
-        [screens]
-    );
-
-    if (!workOrderScreens) return null;
+    if (!workOrderScreen) return null;
 
     return (
         <SubMenu
@@ -39,8 +31,8 @@ const WorkordersMenu = ({ classes }) => {
                     updateScreenLayout={(screenCode) =>
                         updateUserData({ workOrderScreen: screenCode })
                     }
-                    screen={workOrderScreen}
-                    screens={workOrderScreens}
+                    screenCode={workOrderScreen}
+                    screenId="WSJOBS"
                 />
             }
         >

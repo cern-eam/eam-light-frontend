@@ -1,7 +1,6 @@
 import useUserDataStore from "@/state/useUserDataStore";
 import SubMenu from "./common/SubMenu";
 import ScreenChange from "./common/ScreenChange";
-import { useMemo } from "react";
 import MenuItem from "./common/MenuItem";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
@@ -19,14 +18,6 @@ const EquipmentSystemMenu = ({ classes }) => {
     const { setActiveMenuVisibility } = useMenuVisibilityStore();
     const systemScreenPermissions = useScreenPermissions(systemScreen);
 
-    const systemScreens = useMemo(
-        () =>
-            Object.values(screens).filter(
-                ({ parentScreen }) => parentScreen === "OSOBJS"
-            ),
-        [screens]
-    );
-
     if (!systemScreen) return null;
 
     return (
@@ -37,8 +28,8 @@ const EquipmentSystemMenu = ({ classes }) => {
                     updateScreenLayout={(screenCode) =>
                         updateUserData({ systemScreen: screenCode })
                     }
-                    screen={systemScreen}
-                    screens={systemScreens}
+                    screenCode={systemScreen}
+                    screenId="OSOBJS"
                 />
             }
         >

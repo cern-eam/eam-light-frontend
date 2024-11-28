@@ -2,6 +2,8 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import withStyles from "@mui/styles/withStyles";
+import { useMemo } from "react";
+import useUserDataStore from "@/state/useUserDataStore";
 
 const styles = {
     root: {
@@ -12,17 +14,34 @@ const styles = {
     },
 };
 
-const ScreenChange = ({ updateScreenLayout, screens, screen, classes }) => {
+const ScreenChange = ({
+    updateScreenLayout,
+    screenCode,
+    screenId,
+    classes,
+}) => {
+    const {
+        userData: { screens },
+    } = useUserDataStore();
+
+    const selectedScreen = useMemo(
+        () =>
+            Object.values(screens).filter(
+                ({ parentScreen }) => parentScreen === screenId
+            ),
+        [screens, screenId]
+    );
+
     return (
         <div style={{ display: "flex", justifyContent: "center" }}>
             <FormControl>
                 <Select
                     style={{ color: "white" }}
                     classes={{ root: classes.root, icon: classes.icon }}
-                    value={screen}
+                    value={screenCode}
                     onChange={(event) => updateScreenLayout(event.target.value)}
                 >
-                    {screens.map(({ screenCode, screenDesc }) => (
+                    {selectedScreen.map(({ screenCode, screenDesc }) => (
                         <MenuItem key={screenCode} value={screenCode}>
                             {screenDesc}
                         </MenuItem>
