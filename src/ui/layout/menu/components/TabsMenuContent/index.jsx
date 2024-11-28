@@ -12,7 +12,7 @@ import EquipmentPositionMenu from "./components/EquipmentPositionMenu";
 import EquipmentSystemMenu from "./components/EquipmentSystemMenu";
 import EquipmentLocationMenu from "./components/EquipmentLocationMenu";
 
-const TabsSubMenus = () => {
+const TabsMenuContent = () => {
     const {
         menuVisibility: {
             mywos,
@@ -48,4 +48,4 @@ const TabsSubMenus = () => {
     );
 };
 
-export default TabsSubMenus;
+export default TabsMenuContent;
