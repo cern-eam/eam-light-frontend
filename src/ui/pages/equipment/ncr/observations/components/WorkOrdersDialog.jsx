@@ -13,8 +13,6 @@ import {
 } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
-import { IconButton } from "@mui/material";
-import { FileTree } from "mdi-material-ui";
 import { isDepartmentReadOnly } from "@/ui/pages/EntityTools";
 
 const WorkOrdersDialog = ({
@@ -58,15 +56,6 @@ const WorkOrdersDialog = ({
                             workOrder.equipmentCode
                                 ? "/equipment/" + workOrder.equipmentCode
                                 : null
-                        }
-                        endAdornment={
-                            <IconButton
-                                size="small"
-                                // onClick={treeButtonClickHandler}
-                                disabled={!workOrder.equipmentCode}
-                            >
-                                <FileTree />
-                            </IconButton>
                         }
                     />
 
