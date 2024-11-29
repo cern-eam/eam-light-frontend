@@ -57,7 +57,7 @@ const NCR = () => {
         updateEntityProperty: updateNCRProperty,
         register,
         showNotification,
-        showWarning
+        showWarning,
     } = useEntity({
         WS: {
             create: WSNCRs.createNonConformity,
@@ -72,7 +72,7 @@ const NCR = () => {
         },
         handlers: {
             equipmentCode: onChangeEquipment,
-          },
+        },
         isReadOnlyCustomHandler: isClosedEquipment,
         entityCode: "OBJ",
         entityDesc: "NCR",
@@ -83,9 +83,7 @@ const NCR = () => {
         layoutPropertiesMap: layoutPropertiesMap,
     });
 
-    function postInit() {
-        
-    }
+    function postInit() {}
 
     function postRead() {
         readStatuses("", "", true);
@@ -103,23 +101,22 @@ const NCR = () => {
     };
 
     function onChangeEquipment(equipmentCode) {
-        
         if (!equipmentCode) {
-          return;
+            return;
         }
-    
+
         WSEquipment.getEquipment(equipmentCode)
-          .then((response) => {
-            const equipment = response.body.data;
-    
-            setNCR((oldNCR) => ({
-              ...oldNCR,
-              department: equipment.departmentCode,
-              location: equipment.hierarchyLocationCode,
-            }));
-          })
-          .catch(console.error);
-      }
+            .then((response) => {
+                const equipment = response.body.data;
+
+                setNCR((oldNCR) => ({
+                    ...oldNCR,
+                    department: equipment.departmentCode,
+                    locationCode: equipment.hierarchyLocationCode,
+                }));
+            })
+            .catch(console.error);
+    }
 
     const getRegions = () => {
         const tabs = ncrLayout.tabs;
@@ -245,6 +242,8 @@ const NCR = () => {
                     <Observations
                         ncrCode={ncr.code}
                         ncr={ncr}
+                        handleError={handleError}
+                        showNotification={showNotification}
                         observationFields={tabs[TAB_CODES.OBSERVATIONS].fields}
                         disabled={readOnly}
                         statuses={statuses}
@@ -263,7 +262,7 @@ const NCR = () => {
     };
 
     if (!ncr || !ncrLayout) {
-        return renderLoading("Reading NCR ...")
+        return renderLoading("Reading NCR ...");
     }
 
     return (

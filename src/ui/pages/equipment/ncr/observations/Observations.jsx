@@ -17,23 +17,32 @@ const Observations = ({
     handleError,
     observationFields,
     statuses,
-    ncr
+    ncr,
 }) => {
     const { userData } = useUserDataStore();
 
-    const {screenLayout: {OSJOBS: ncrWorkOrderLayout }, fetchScreenLayout} = useLayoutStore();
+    const {
+        screenLayout: { OSJOBS: ncrWorkOrderLayout },
+        fetchScreenLayout,
+    } = useLayoutStore();
 
     useEffect(() => {
         if (!ncrWorkOrderLayout) {
-            fetchScreenLayout(userData.eamAccount.userGroup, "OBJ", "OSJOBS", "OSJOBS", [])
+            fetchScreenLayout(
+                userData.eamAccount.userGroup,
+                "OBJ",
+                "OSJOBS",
+                "OSJOBS",
+                []
+            );
         }
-    }, [ncrWorkOrderLayout])
+    }, [ncrWorkOrderLayout]);
 
     const { observations, isLoading, fetchData } = useObservations(
         ncrCode,
         handleError
     );
-    
+
     const {
         isOpen: isObservationsDialogOpen,
         isDisabled: isObservationsDialogDisabled,
@@ -64,14 +73,15 @@ const Observations = ({
         handleError,
         observationsDialogSuccessHandler,
         {
+            departmentCode: userData?.eamAccount?.department,
             statusCode: "R",
             typeCode: "CD",
-            assignedTo: userData?.eamAccount?.userGroup,
-            equipmentCode: ncr?.equipmentCode
+            assignedTo: userData?.eamAccount?.employeeCode,
+            equipmentCode: ncr?.equipmentCode,
         }
     );
 
-    return (isLoading || !ncrWorkOrderLayout) ? (
+    return isLoading || !ncrWorkOrderLayout ? (
         <BlockUi tag="div" blocking={isLoading} style={{ width: "100%" }} />
     ) : (
         <>

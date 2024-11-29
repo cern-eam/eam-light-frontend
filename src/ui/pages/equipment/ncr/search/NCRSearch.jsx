@@ -9,7 +9,6 @@ import { Link, useHistory } from "react-router-dom";
 import useSnackbarStore from "../../../../../state/useSnackbarStore";
 import { Pending, Lock, AccessAlarm, Block } from "@mui/icons-material";
 
-
 const COLORS = {
     red: {
         color: "#bf360C",
@@ -97,12 +96,30 @@ const cellRenderer = ({ column, value, row }) => {
     if (column.id === "equipment") {
         return <LinkTo to={"/equipment/" + value} value={value} />;
     }
+    if (column.id === "status_display") {
+        return (
+            <Typography
+                style={{
+                    color: STATUS_COLOR_MAP[value]?.color,
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                }}
+            >
+                {value}
+            </Typography>
+        );
+    }
     if (column.id === "icon") {
-        const Icon =
-            ICON_MAP[row.values.status_display] || (() => <div>?</div>);
+        const statusCode = row.values.status_display;
+        const Icon = ICON_MAP[statusCode] || (() => <div>?</div>);
         return (
             <div
                 style={{
+                    color: STATUS_COLOR_MAP[statusCode]?.color,
                     width: "100%",
                     display: "flex",
                     justifyContent: "center",
@@ -157,7 +174,7 @@ const NCRSearch = (props) => {
     const rowStyler = useCallback(
         ({ values }) => {
             return {
-                style: getColorFromStatus(values.status_display),
+                // style: getColorFromStatus(values.status_display),
                 className: classes?.rowStyler,
                 onClick: () => {
                     const url =

@@ -13,7 +13,7 @@ import AssetDetails from "./AssetDetails";
 import AssetGeneral from "./AssetGeneral";
 import AssetHierarchy from "./AssetHierarchy";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
-import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import { Link } from "react-router-dom";
 import WSParts from "../../../../tools/WSParts";
 import EquipmentGraphIframe from "../../../components/iframes/EquipmentGraphIframe";
@@ -298,9 +298,9 @@ const Asset = () => {
         render: () => <EquipmentNCRs equipment={equipment.code}/>,
         RegionPanelProps: {
           customHeadingBar:  (
-              <Link to ={`/ncr?equipmentCode=${location.code}&description=NCR for ${location.code}`}
+              <Link to ={`/ncr?equipmentCode=${equipment.code}&description=NCR for ${equipment.code}`}
                     style={{padding: 10, display: "flex", alignItems: "center", justifyContent: "space-between", color: "#737373" }}>
-                <OpenInBrowserIcon />
+                <AddBoxIcon />
               </Link>
           ),
         },
