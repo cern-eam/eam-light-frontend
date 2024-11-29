@@ -9,18 +9,18 @@
     left: 0px;
     padding-bottom: 100px;
     box-sizing: border-box;
-  }
+}
 
-  #layout-tab-menu>li {
+#layout-tab-menu > li {
     width: 58px;
     height: 50px;
-  }
+}
 
-  #layout-tab-menu>li:first-child {
+#layout-tab-menu > li:first-child {
     padding: 1.5rem 0px 0px 0px;
-  }
+}
 
-  #layout-tab-menu>li>div {
+#layout-tab-menu > li > div {
     justify-content: center;
     align-items: center;
     position: relative;
@@ -35,18 +35,18 @@
     -ms-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
-  }
+}
 
-  #layout-tab-menu>li>div:hover,
-  #layout-tab-menu>li>div:focus,
-  #layout-tab-menu>li>div.active {
+#layout-tab-menu > li > div:hover,
+#layout-tab-menu > li > div:focus,
+#layout-tab-menu > li > div.active {
     background-color: #282828;
     color: #ffffff;
     -webkit-box-shadow: inset 2px 0 0 0 #00aaff;
     box-shadow: inset 2px 0 0 0 #00aaff;
-  }
+}
 
-  .layout-tab-submenu {
+.layout-tab-submenu {
     padding: 0px;
     margin: 0px;
     width: 220px;
@@ -55,14 +55,10 @@
     min-height: 100%;
     margin-left: 58px;
     background-color: #282828;
-    display: none;
-  }
-
-  .layout-tab-submenu.active {
     display: block;
-  }
+}
 
-  .layout-tab-submenu>li {
+.layout-tab-submenu > li {
     display: flex;
     flex-direction: column;
     margin: 0px;
@@ -70,42 +66,42 @@
     position: absolute;
     width: inherit;
     height: 100%;
-  }
+}
 
-  .layout-tab-submenu>li:first-child {
+.layout-tab-submenu > li:first-child {
     margin-top: 0.5rem;
-  }
+}
 
-  .layout-tab-submenu>li>span {
+.layout-tab-submenu > li > span {
     display: block;
     padding: 5px;
     font-size: 13px;
     color: #ffffff;
     cursor: pointer;
     text-align: center;
-  }
+}
 
-  .layout-tab-submenu>li ul {
+.layout-tab-submenu > li ul {
     margin: 0px;
     padding: 0px;
     overflow-y: scroll;
     height: 100%;
     padding-bottom: 0.5rem;
     scrollbar-color: transparent transparent;
-  }
+}
 
-  .layout-tab-submenu>li ul::-webkit-scrollbar {
+.layout-tab-submenu > li ul::-webkit-scrollbar {
     width: 0 !important;
     display: none;
-  }
+}
 
-  .layout-tab-submenu>li ul li {
+.layout-tab-submenu > li ul li {
     display: block;
     margin: 0px;
     padding: 0px;
-  }
+}
 
-  .layout-tab-submenu > li ul li a {
+.layout-tab-submenu > li ul li a {
     display: block;
     padding: 5px;
     font-size: 13px;
@@ -115,27 +111,27 @@
     text-decoration: none;
     outline: none;
     position: relative;
-  }
+}
 
-  .layout-tab-submenu>li ul li a:hover {
+.layout-tab-submenu > li ul li a:hover {
     color: #ffffff;
     background-color: rgba(255, 255, 255, 0.1);
-  }
+}
 
-  #menuHeader {
+#menuHeader {
     height: 45px;
     background-color: #00aaff;
     display: flex;
     align-items: center;
-  }
+}
 
-  #menu {
+#menu {
     height: 100%;
     position: relative;
     overflow: hidden;
-  }
+}
 
-  #menuscrollable {
+#menuscrollable {
     height: 100%;
     /* overflow-y: auto;
     margin-right: -17px;
@@ -146,9 +142,9 @@
     bottom: 0;
     left: 0;
     background-color: #242021;
-  }
+}
 
 /* In the list & reports menu change the expand icon color */
 ul .MuiAccordionSummary-expandIconWrapper {
-  color: white;
+    color: white;
 }
