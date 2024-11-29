@@ -58,7 +58,7 @@ const useEntity = (params) => {
   const { code } = useParams();
   const codeQueryParam = queryString.parse(window.location.search)[
     codeQueryParamName
-  ]; //TODO add equipment and part identifiers
+    ]; //TODO add equipment and part identifiers
   const history = useHistory();
   const abortController = useRef(null);
   const commentsComponent = useRef(null);
@@ -69,8 +69,8 @@ const useEntity = (params) => {
   const { isHiddenRegion, getHiddenRegionState, toggleHiddenRegion, setRegionVisibility } = useHiddenRegionsStore();
   const {equipmentTreeData: {showEqpTree}, updateEquipmentTreeData} = useEquipmentTreeStore();
 
-  const screenCode = userData[screenProperty];  
-  const {screenLayout: {[screenCode]: screenLayout}, fetchScreenLayout} = useLayoutStore(); 
+  const screenCode = userData[screenProperty];
+  const {screenLayout: {[screenCode]: screenLayout}, fetchScreenLayout} = useLayoutStore();
   const screenPermissions = userData.screens[screenCode];
 
   const {
@@ -80,13 +80,13 @@ const useEntity = (params) => {
     resetErrorMessages,
   } = useFieldsValidator(
     //useMemo(
-      () =>
-        prepareDataForFieldsValidator(
-          entity,
-          screenLayout,
-          layoutPropertiesMap
-        ),
-      [screenCode, entity?.customField]
+    () =>
+      prepareDataForFieldsValidator(
+        entity,
+        screenLayout,
+        layoutPropertiesMap
+      ),
+    [screenCode, entity?.customField]
     //),
     ,
     entity
@@ -110,9 +110,9 @@ const useEntity = (params) => {
     if (!code && codeQueryParam) {
       history.push(
         process.env.PUBLIC_URL +
-          entityURL +
-          codeQueryParam +
-          window.location.search
+        entityURL +
+        codeQueryParam +
+        window.location.search
       );
       return;
     }
@@ -146,13 +146,13 @@ const useEntity = (params) => {
         // Read after the creation (and append the organization in multi-org mode)
         history.push(
           process.env.PUBLIC_URL +
-            entityURL +
-            encodeURIComponent(
-              entityCode +
-                (isMultiOrg && entityToCreate.organization
-                  ? "#" + entityToCreate.organization
-                  : "")
-            )
+          entityURL +
+          encodeURIComponent(
+            entityCode +
+            (isMultiOrg && entityToCreate.organization
+              ? "#" + entityToCreate.organization
+              : "")
+          )
         );
       })
       .catch((error) => {
@@ -183,8 +183,8 @@ const useEntity = (params) => {
         // Render as read-only depending on screen rights, department security or custom handler
         setReadOnly(
           !screenPermissions.updateAllowed ||
-            isDepartmentReadOnly(readEntity.departmentCode, userData) ||
-            isReadOnlyCustomHandler?.(readEntity)
+          isDepartmentReadOnly(readEntity.departmentCode, userData) ||
+          isReadOnlyCustomHandler?.(readEntity)
         );
 
         // Invoke entity specific logic
@@ -338,7 +338,7 @@ const useEntity = (params) => {
   const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
     let data = processElementInfo(
       screenLayout.fields[layoutKey] ??
-        getElementInfoFromCustomFields(layoutKey, entity.customField)
+      getElementInfoFromCustomFields(layoutKey, entity.customField)
     );
 
     data.onChange = createOnChangeHandler(
@@ -364,30 +364,33 @@ const useEntity = (params) => {
     data.errorText = errorMessages[valueKey];
 
     // Autocomplete handlers 
-    if (data.elementInfo && data.elementInfo.onLookup && data.elementInfo.onLookup !== '{}') { // TODO !== '{}'
-        try {
-            const { lovName, inputVars, inputFields, returnFields } = JSON.parse(data.elementInfo.onLookup);
-            const inputParams = {
-              ...inputVars,
-              ...Object.entries(inputFields ?? {})
-                  .map(([key, val]) => ({[key]: entity?.[layoutPropertiesMap[val]]}))
-                  .reduce((acc, el) => ({...acc, ...el}), {}),
-              "param.pagemode": 'view',
-              //...extraParams,
-          }
-          let genericLov = {
-                inputParams,
-                returnFields,
-                lovName,
-                exact: false,
-                rentity: screenCode,
-            };
-
-            // hint might be of type signal (due to an autocomplete hook) which brakes the API, so for now make it a string if it's not
-            data.autocompleteHandler = (hint, config) => WSS.getLov({ ...genericLov, hint: typeof hint === 'string' ? hint : "" }, config);
-        } catch (err) {
-            console.error(`Error when setting autocompleteHandler on ${layoutKey}`, err)
+    if (data.elementInfo
+      && data.elementInfo.onLookup
+      && data.elementInfo.onLookup !== '{}' // TODO !== '{}'
+    ) {
+      try {
+        const { lovName, inputVars, inputFields, returnFields } = JSON.parse(data.elementInfo.onLookup);
+        const inputParams = {
+          ...inputVars,
+          ...Object.entries(inputFields ?? {})
+            .map(([key, val]) => ({[key]: entity?.[layoutPropertiesMap[val]]}))
+            .reduce((acc, el) => ({...acc, ...el}), {}),
+          "param.pagemode": 'view',
+          //...extraParams,
         }
+        let genericLov = {
+          inputParams,
+          returnFields,
+          lovName,
+          exact: false,
+          rentity: screenCode,
+        };
+
+        // hint might be of type signal (due to an autocomplete hook) which brakes the API, so for now make it a string if it's not
+        data.autocompleteHandler = (hint, config) => WSS.getLov({ ...genericLov, hint: typeof hint === 'string' ? hint : "" }, config);
+      } catch (err) {
+        console.error(`Error when setting autocompleteHandler on ${layoutKey}`, err)
+      }
     }
 
     return data;

@@ -144,10 +144,6 @@ const Workorder = () => {
     codeQueryParamName: "workordernum",
   });
 
-  //
-  //
-  //
-
   useEffect(() => {
     setEquipment(null);
     setEquipmentPart(null);
@@ -169,9 +165,6 @@ const Workorder = () => {
       .catch(console.error);
   }, [workorder?.equipmentCode]);
 
-  //
-  //
-  //
   function onChangeEquipment(equipmentCode) {
     if (!equipmentCode) {
       return;
@@ -329,7 +322,13 @@ const Workorder = () => {
         label: "EDMS Documents",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <EDMSDoclightIframeContainer objectType="J" objectID={workorder.number} url={applicationData.EL_DOCLI}/>,
+        render: () => (
+            <EDMSDoclightIframeContainer
+                objectType="J"
+                objectID={workorder.number}
+                url={applicationData.EL_DOCLI}
+            />
+        ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -344,7 +343,15 @@ const Workorder = () => {
         label: "NCRs",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <NCRIframeContainer objectType="J" objectID={workorder.number} mode="NCR" url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>,
+        render: () => (
+            <NCRIframeContainer
+                objectType="J"
+                objectID={workorder.number}
+                mode="NCR"
+                url={`${applicationData.EL_TBURL}/ncr`}
+                edmsDocListLink={applicationData.EL_EDMSL}
+            />
+        ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },

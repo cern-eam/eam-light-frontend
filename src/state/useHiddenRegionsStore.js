@@ -24,7 +24,7 @@ export const useHiddenRegionsStore = create(() => ({
     return !!state.hiddenRegions[id];
   },
 
-  getHiddenRegionState: (screen) => (regionID) => {
+  /*getHiddenRegionState: (screen) => (regionID) => {
     
     const id = getUniqueRegionID(screen)(regionID);
     const state = useHiddenRegionsStore.getState();
@@ -42,6 +42,6 @@ export const useHiddenRegionsStore = create(() => ({
       localStorage.setItem('hiddenRegions', JSON.stringify(updatedHiddenRegions));
       return { hiddenRegions: updatedHiddenRegions };
     });
-  },
+  },*/
 
 }));
