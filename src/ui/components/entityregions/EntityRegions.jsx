@@ -22,7 +22,7 @@ const styleSummaryIcon = (SummaryIcon) => styled(SummaryIcon)(({theme}) => ({
 }))
 
 const EntityRegions = (props) => {
-    const { isHiddenRegion, regions : inputRegions = [], showEqpTree, isNewEntity, setRegionVisibility, getHiddenRegionState, getUniqueRegionID } = props;
+    const { isHiddenRegion, setRegionVisibility, regions : inputRegions = [], showEqpTree, isNewEntity, getUniqueRegionID } = props;
     const [visibleRegions, setVisibleRegions] = React.useState([]);
     const [regionMaximized, setRegionMaximized] = React.useState(undefined);
 
@@ -39,9 +39,9 @@ const EntityRegions = (props) => {
     const regionOnly = queryString.parse(window.location.search)['regionOnly'];
     
     React.useEffect(() => {
-        regions.filter(region => getHiddenRegionState(region.id) === undefined)
+        regions.filter(region => isHiddenRegion(region.id) === undefined)
             .forEach(region => setRegionVisibility(getUniqueRegionID(region.id), region.initialVisibility))
-    }, [inputRegions, isHiddenRegion, getHiddenRegionState, setRegionVisibility, getUniqueRegionID]);
+    }, [inputRegions, isHiddenRegion, isHiddenRegion, setRegionVisibility, getUniqueRegionID]);
 
     React.useEffect(() => {
         const defaultVisibility = (region) => expandedRegion === region.id || regionMaximized === region.id ||

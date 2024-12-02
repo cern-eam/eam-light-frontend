@@ -60,10 +60,8 @@ const Part = () => {
     newEntity,
     commentsComponent,
     isHiddenRegion,
-    getHiddenRegionState,
     getUniqueRegionID,
     showEqpTree,
-    toggleHiddenRegion,
     setRegionVisibility,
     newHandler,
     saveHandler,
@@ -312,20 +310,18 @@ const Part = () => {
           }}
           width={730}
           entityIcon={<PartIcon style={{ height: 18 }} />}
-          toggleHiddenRegion={toggleHiddenRegion}
           getUniqueRegionID={getUniqueRegionID}
           regions={getRegions()}
-          setRegionVisibility={setRegionVisibility}
           isHiddenRegion={isHiddenRegion}
+          setRegionVisibility={setRegionVisibility}
         />
         <EntityRegions
           showEqpTree={showEqpTree}
           regions={getRegions()}
           isNewEntity={newEntity}
-          getHiddenRegionState={getHiddenRegionState}
           getUniqueRegionID={getUniqueRegionID}
-          setRegionVisibility={setRegionVisibility}
           isHiddenRegion={isHiddenRegion}
+          setRegionVisibility={setRegionVisibility}
         />
       </BlockUi>
     </div>

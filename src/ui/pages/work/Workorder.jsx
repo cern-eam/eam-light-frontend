@@ -97,9 +97,7 @@ const Workorder = () => {
     newEntity,
     commentsComponent,
     isHiddenRegion,
-    getHiddenRegionState,
     getUniqueRegionID,
-    toggleHiddenRegion,
     setRegionVisibility,
     updateEquipmentTreeData,
     newHandler,
@@ -728,18 +726,16 @@ const Workorder = () => {
             departmentalSecurity: userData.eamAccount.departmentalSecurity,
           }}
           entityIcon={<ContentPasteIcon style={{ height: 18 }} />}
-          toggleHiddenRegion={toggleHiddenRegion}
           regions={getRegions()}
           getUniqueRegionID={getUniqueRegionID}
-          getHiddenRegionState={getHiddenRegionState}
           isHiddenRegion={isHiddenRegion}
+          setRegionVisibility={setRegionVisibility}
           isLocalAdministrator={isLocalAdministrator(userData)}
         />
         <EntityRegions
           regions={getRegions()}
           isNewEntity={newEntity}
           getUniqueRegionID={getUniqueRegionID}
-          getHiddenRegionState={getHiddenRegionState}
           setRegionVisibility={setRegionVisibility}
           isHiddenRegion={isHiddenRegion}
         />

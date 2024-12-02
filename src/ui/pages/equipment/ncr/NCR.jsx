@@ -44,10 +44,8 @@ const NCR = () => {
         newEntity,
         commentsComponent,
         isHiddenRegion,
-        getHiddenRegionState,
         getUniqueRegionID,
         showEqpTree,
-        toggleHiddenRegion,
         setRegionVisibility,
         newHandler,
         saveHandler,
@@ -297,20 +295,18 @@ const NCR = () => {
                 }}
                 width={730}
                 entityIcon={<Rule style={{ height: 18 }} />}
-                toggleHiddenRegion={toggleHiddenRegion}
                 getUniqueRegionID={getUniqueRegionID}
                 regions={getRegions()}
                 isHiddenRegion={isHiddenRegion}
-                getHiddenRegionState={getHiddenRegionState}
+                setRegionVisibility={setRegionVisibility}
             />
             <EntityRegions
                 showEqpTree={showEqpTree}
                 regions={getRegions()}
                 isNewEntity={newEntity}
-                isHiddenRegion={isHiddenRegion}
                 getUniqueRegionID={getUniqueRegionID}
+                isHiddenRegion={isHiddenRegion}
                 setRegionVisibility={setRegionVisibility}
-                getHiddenRegionState={getHiddenRegionState}
             />
         </BlockUi>
     );

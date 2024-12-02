@@ -66,7 +66,7 @@ const useEntity = (params) => {
   const { showNotification, showError, showWarning, handleError } = useSnackbarStore();
   const { userData } = useUserDataStore();
   const { applicationData } = useApplicationDataStore();
-  const { isHiddenRegion, getHiddenRegionState, toggleHiddenRegion, setRegionVisibility } = useHiddenRegionsStore();
+  const { isHiddenRegion, setRegionVisibility } = useHiddenRegionsStore();
   const {equipmentTreeData: {showEqpTree}, updateEquipmentTreeData} = useEquipmentTreeStore();
 
   const screenCode = userData[screenProperty];
@@ -413,11 +413,9 @@ const useEntity = (params) => {
     isModified,
     userData,
     applicationData,
-    isHiddenRegion: isHiddenRegion(screenCode),
-    getHiddenRegionState: getHiddenRegionState(screenCode),
-    getUniqueRegionID: getUniqueRegionID(screenCode),
-    toggleHiddenRegion,
     setRegionVisibility,
+    isHiddenRegion: isHiddenRegion(screenCode),
+    getUniqueRegionID: getUniqueRegionID(screenCode),
     commentsComponent,
     showEqpTree,
     updateEquipmentTreeData,

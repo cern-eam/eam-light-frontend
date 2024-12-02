@@ -147,14 +147,14 @@ class EamlightToolbar extends Component {
   //
   //
   getRegions = () => {
-    const { regions, toggleHiddenRegion, getUniqueRegionID, isHiddenRegion } =
+    const { regions, setRegionVisibility, getUniqueRegionID, isHiddenRegion } =
       this.props;
     return regions
       .filter((region) => !region.ignore)
       .map((region) => (
         <MenuItem
           key={region.id}
-          onClick={() => toggleHiddenRegion(getUniqueRegionID(region.id))}
+          onClick={() => setRegionVisibility(getUniqueRegionID(region.id), !isHiddenRegion(region.id))}
         >
           <Checkbox disabled checked={!isHiddenRegion(region.id)} />
           {region.label}

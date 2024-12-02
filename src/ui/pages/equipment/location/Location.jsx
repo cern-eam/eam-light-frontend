@@ -63,11 +63,9 @@ export default Location = (props) => {
     newEntity,
     commentsComponent,
     isHiddenRegion,
-    getHiddenRegionState,
     getUniqueRegionID,
     showEqpTree,
     updateEquipmentTreeData,
-    toggleHiddenRegion,
     setRegionVisibility,
     newHandler,
     saveHandler,
@@ -398,20 +396,18 @@ export default Location = (props) => {
         }}
         width={730}
         entityIcon={<LocationIcon style={{ height: 18 }} />}
-        toggleHiddenRegion={toggleHiddenRegion}
         getUniqueRegionID={getUniqueRegionID}
         regions={getRegions()}
         isHiddenRegion={isHiddenRegion}
-        getHiddenRegionState={getHiddenRegionState}
+        setRegionVisibility={setRegionVisibility}
       />
       <EntityRegions
         showEqpTree={showEqpTree}
         regions={getRegions()}
         isNewEntity={newEntity}
+        getUniqueRegionID={getUniqueRegionID}
         isHiddenRegion={isHiddenRegion}
         setRegionVisibility={setRegionVisibility}
-        getUniqueRegionID={getUniqueRegionID}
-        getHiddenRegionState={getHiddenRegionState}
       />
     </BlockUi>
   );
