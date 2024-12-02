@@ -8,13 +8,12 @@ export const useHiddenRegionsStore = create(() => ({
   isHiddenRegion: (screen) => (regionID) => {
     const id = getUniqueRegionID(screen)(regionID);
     const state = useHiddenRegionsStore.getState();
-    console.log("screen = ", screen, " regionId = ", regionID)
-    console.log('isHiddenRegion', screen, regionID, !!state.hiddenRegions[id]);
+    //console.log('isHiddenRegion', screen, regionID, !!state.hiddenRegions[id]);
     return !!state.hiddenRegions[id];
   },
 
   setRegionVisibility: (regionID, isVisible) => {
-    console.log('set', regionID, isVisible);
+    //console.log('set', regionID, isVisible);
     useHiddenRegionsStore.setState((state) => {
       const updatedHiddenRegions = {
         ...state.hiddenRegions,
