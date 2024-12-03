@@ -41,7 +41,6 @@ const useEntity = (params) => {
     entityURL,
     entityCodeProperty,
     screenProperty,
-    layoutProperty,
     layoutPropertiesMap,
     isReadOnlyCustomHandler,
     onMountHandler,
