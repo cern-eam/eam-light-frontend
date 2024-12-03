@@ -9,7 +9,7 @@ import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import {
   EISIcon,
   RadioactiveWarningIcon,
-  // HazardIcon
+  HazardIcon
 } from "eam-components/dist/ui/components/icons/index";
 import { isCernMode } from "../CERNMode";
 import GridWS from "eam-components/dist/ui/components/eamgrid/lib/GridWS";
