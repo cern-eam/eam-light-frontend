@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import EquipmentTree from "./components/tree/EquipmentTree";
 import Position from "./position/Position";

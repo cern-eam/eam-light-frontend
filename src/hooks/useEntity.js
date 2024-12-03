@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useMemo, createElement } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import queryString from "query-string";
