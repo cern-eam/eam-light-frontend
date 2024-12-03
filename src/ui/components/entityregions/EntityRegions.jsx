@@ -41,9 +41,7 @@ const EntityRegions = (props) => {
     React.useEffect(() => {
         regions.filter(region => isHiddenRegion(region.id) === undefined)
             .forEach(region => setRegionVisibility(getUniqueRegionID(region.id), region.initialVisibility))
-    }, [inputRegions, isHiddenRegion, isHiddenRegion, setRegionVisibility, getUniqueRegionID]);
 
-    React.useEffect(() => {
         const defaultVisibility = (region) => expandedRegion === region.id || regionMaximized === region.id ||
             visibleRegionsParam.includes(region.id) ||
             !visibleRegionsParam.length && !isHiddenRegion(region.id) && (region.customVisibility ? region.customVisibility() : true);
