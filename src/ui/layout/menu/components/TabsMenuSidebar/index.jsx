@@ -17,7 +17,7 @@ const iconStyles = {
     color: "white",
 };
 
-const TabsMenu = () => {
+const TabsMenuSidebar = () => {
     const {
         userData: {
             workOrderScreen,
@@ -161,4 +161,4 @@ const TabsMenu = () => {
     );
 };
 
-export default TabsMenu;
+export default TabsMenuSidebar;

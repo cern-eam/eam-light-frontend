@@ -63,11 +63,9 @@ const Asset = () => {
     newEntity,
     commentsComponent,
     isHiddenRegion,
-    getHiddenRegionState,
     getUniqueRegionID,
     showEqpTree,
     updateEquipmentTreeData,
-    toggleHiddenRegion,
     setRegionVisibility,
     newHandler,
     saveHandler,
@@ -457,20 +455,18 @@ const Asset = () => {
         }}
         width={730}
         entityIcon={<AssetIcon style={{ height: 18 }} />}
-        toggleHiddenRegion={toggleHiddenRegion}
         getUniqueRegionID={getUniqueRegionID}
         regions={getRegions()}
         isHiddenRegion={isHiddenRegion}
-        getHiddenRegionState={getHiddenRegionState}
+        setRegionVisibility={setRegionVisibility}
       />
       <EntityRegions
         showEqpTree={showEqpTree}
         regions={getRegions()}
         isNewEntity={newEntity}
-        isHiddenRegion={isHiddenRegion}
         getUniqueRegionID={getUniqueRegionID}
+        isHiddenRegion={isHiddenRegion}
         setRegionVisibility={setRegionVisibility}
-        getHiddenRegionState={getHiddenRegionState}
       />
     </BlockUi>
   );
