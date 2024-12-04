@@ -10,7 +10,6 @@ import { unregister } from "./registerServiceWorker";
 import { create } from "jss";
 import StylesProvider from "@mui/styles/StylesProvider";
 import jssPreset from "@mui/styles/jssPreset";
-//import SnackbarContainer from "./ui/components/snackbar/SnackbarContainer";
 import SnackbarLight from "./ui/components/snackbar-new/Snackbar";
 import Ajax from "eam-components/dist/tools/ajax";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -29,19 +28,19 @@ polyfill();
 Ajax.getAxiosInstance().interceptors.request.use(
   (config) => {
     if (import.meta.env.VITE_LOGIN_METHOD !== "OPENID") {
-      const {inforContext} = useInforContextStore.getState();
+      const { inforContext } = useInforContextStore.getState();
       if (inforContext) {
-          config.headers.INFOR_USER = inforContext.INFOR_USER;
-          config.headers.INFOR_PASSWORD = inforContext.INFOR_PASSWORD;
-          config.headers.INFOR_ORGANIZATION = inforContext.INFOR_ORGANIZATION;
-          config.headers.INFOR_SESSIONID = inforContext.INFOR_SESSIONID;
-          config.headers.INFOR_TENANT = inforContext.INFOR_TENANT;
+        config.headers.INFOR_USER = inforContext.INFOR_USER;
+        config.headers.INFOR_PASSWORD = inforContext.INFOR_PASSWORD;
+        config.headers.INFOR_ORGANIZATION = inforContext.INFOR_ORGANIZATION;
+        config.headers.INFOR_SESSIONID = inforContext.INFOR_SESSIONID;
+        config.headers.INFOR_TENANT = inforContext.INFOR_TENANT;
       }
       return config;
     }
 
-    // 
-    const {scannedUser} = useScannedUserStore.getState();
+    //
+    const { scannedUser } = useScannedUserStore.getState();
     if (scannedUser && scannedUser.userCode) {
       config.headers.INFOR_USER = scannedUser.userCode;
     }
@@ -74,12 +73,12 @@ window.onerror = (event, source, lineno, colno, err) => {
 ReactDOMClient.createRoot(document.getElementById("root")).render(
   <AuthWrapper>
     <StylesProvider jss={jss}>
-        <LocalizationProvider dateAdapter={AdapterDateFns} locale={enGB}>
-          <div style={{ width: "100%", height: "100%" }}>
-            <Eamlight />
-            <SnackbarLight />
-          </div>
-        </LocalizationProvider>
+      <LocalizationProvider dateAdapter={AdapterDateFns} locale={enGB}>
+        <div style={{ width: "100%", height: "100%" }}>
+          <Eamlight />
+          <SnackbarLight />
+        </div>
+      </LocalizationProvider>
     </StylesProvider>
   </AuthWrapper>
 );
