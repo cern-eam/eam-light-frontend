@@ -16,7 +16,7 @@ import {
   prepareDataForFieldsValidator,
 } from "@/ui/pages/EntityTools";
 import WSCustomFields from "eam-components/dist/tools/WSCustomFields";
-import WSS from "../tools/WS"
+import WSS from "../tools/WS";
 import {
   createOnChangeHandler,
   processElementInfo,
@@ -26,7 +26,10 @@ import useFieldsValidator from "eam-components/dist/ui/components/inputs-ng/hook
 import useLayoutStore from "../state/useLayoutStore";
 import useUserDataStore from "../state/useUserDataStore";
 import useApplicationDataStore from "../state/useApplicationDataStore";
-import { useHiddenRegionsStore, getUniqueRegionID } from "../state/useHiddenRegionsStore";
+import {
+  useHiddenRegionsStore,
+  getUniqueRegionID,
+} from "../state/useHiddenRegionsStore";
 import { TABS } from "../ui/components/entityregions/TabCodeMapping";
 import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
 import useSnackbarStore from "../state/useSnackbarStore";
@@ -56,19 +59,26 @@ const useEntity = (params) => {
   const { code } = useParams();
   const codeQueryParam = queryString.parse(window.location.search)[
     codeQueryParamName
-    ]; //TODO add equipment and part identifiers
+  ]; //TODO add equipment and part identifiers
   const history = useHistory();
   const abortController = useRef(null);
   const commentsComponent = useRef(null);
 
-  const { showNotification, showError, showWarning, handleError } = useSnackbarStore();
+  const { showNotification, showError, showWarning, handleError } =
+    useSnackbarStore();
   const { userData } = useUserDataStore();
   const { applicationData } = useApplicationDataStore();
   const { isHiddenRegion, setRegionVisibility } = useHiddenRegionsStore();
-  const {equipmentTreeData: {showEqpTree}, updateEquipmentTreeData} = useEquipmentTreeStore();
+  const {
+    equipmentTreeData: { showEqpTree },
+    updateEquipmentTreeData,
+  } = useEquipmentTreeStore();
 
   const screenCode = userData[screenProperty];
-  const {screenLayout: {[screenCode]: screenLayout}, fetchScreenLayout} = useLayoutStore();
+  const {
+    screenLayout: { [screenCode]: screenLayout },
+    fetchScreenLayout,
+  } = useLayoutStore();
   const screenPermissions = userData.screens[screenCode];
 
   const {
@@ -79,26 +89,25 @@ const useEntity = (params) => {
   } = useFieldsValidator(
     //useMemo(
     () =>
-      prepareDataForFieldsValidator(
-        entity,
-        screenLayout,
-        layoutPropertiesMap
-      ),
-    [screenCode, entity?.customField]
+      prepareDataForFieldsValidator(entity, screenLayout, layoutPropertiesMap),
+    [screenCode, entity?.customField],
     //),
-    ,
     entity
   );
 
+  const userCode = useMemo(() => userData.eamAccount.userCode, [userData]);
+
   useEffect(() => {
     if (!screenLayout) {
-      fetchScreenLayout(userData.eamAccount.userGroup,
+      fetchScreenLayout(
+        userData.eamAccount.userGroup,
         userData.screens[screenCode].entity,
         userData.screens[screenCode].parentScreen,
         screenCode,
-        TABS[userData.screens[screenCode].parentScreen]);
+        TABS[userData.screens[screenCode].parentScreen]
+      );
     }
-  }, [screenCode])
+  }, [screenCode]);
 
   useEffect(() => {
     if (!screenLayout) {
@@ -108,9 +117,9 @@ const useEntity = (params) => {
     if (!code && codeQueryParam) {
       history.push(
         process.env.PUBLIC_URL +
-        entityURL +
-        codeQueryParam +
-        window.location.search
+          entityURL +
+          codeQueryParam +
+          window.location.search
       );
       return;
     }
@@ -119,7 +128,7 @@ const useEntity = (params) => {
     return () => (document.title = "EAM Light");
   }, [code, screenLayout]);
 
-  // Provide mount and unmount handlers to the client 
+  // Provide mount and unmount handlers to the client
   useEffect(() => {
     onMountHandler?.();
     return () => onUnmountHandler?.();
@@ -144,13 +153,13 @@ const useEntity = (params) => {
         // Read after the creation (and append the organization in multi-org mode)
         history.push(
           process.env.PUBLIC_URL +
-          entityURL +
-          encodeURIComponent(
-            entityCode +
-            (isMultiOrg && entityToCreate.organization
-              ? "#" + entityToCreate.organization
-              : "")
-          )
+            entityURL +
+            encodeURIComponent(
+              entityCode +
+                (isMultiOrg && entityToCreate.organization
+                  ? "#" + entityToCreate.organization
+                  : "")
+            )
         );
       })
       .catch((error) => {
@@ -181,8 +190,8 @@ const useEntity = (params) => {
         // Render as read-only depending on screen rights, department security or custom handler
         setReadOnly(
           !screenPermissions.updateAllowed ||
-          isDepartmentReadOnly(readEntity.departmentCode, userData) ||
-          isReadOnlyCustomHandler?.(readEntity)
+            isDepartmentReadOnly(readEntity.departmentCode, userData) ||
+            isReadOnlyCustomHandler?.(readEntity)
         );
 
         // Invoke entity specific logic
@@ -336,7 +345,7 @@ const useEntity = (params) => {
   const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
     let data = processElementInfo(
       screenLayout.fields[layoutKey] ??
-      getElementInfoFromCustomFields(layoutKey, entity.customField)
+        getElementInfoFromCustomFields(layoutKey, entity.customField)
     );
 
     data.onChange = createOnChangeHandler(
@@ -361,21 +370,26 @@ const useEntity = (params) => {
     // Errors
     data.errorText = errorMessages[valueKey];
 
-    // Autocomplete handlers 
-    if (data.elementInfo
-      && data.elementInfo.onLookup
-      && data.elementInfo.onLookup !== '{}' // TODO !== '{}'
+    // Autocomplete handlers
+    if (
+      data.elementInfo &&
+      data.elementInfo.onLookup &&
+      data.elementInfo.onLookup !== "{}" // TODO !== '{}'
     ) {
       try {
-        const { lovName, inputVars, inputFields, returnFields } = JSON.parse(data.elementInfo.onLookup);
+        const { lovName, inputVars, inputFields, returnFields } = JSON.parse(
+          data.elementInfo.onLookup
+        );
         const inputParams = {
           ...inputVars,
           ...Object.entries(inputFields ?? {})
-            .map(([key, val]) => ({[key]: entity?.[layoutPropertiesMap[val]]}))
-            .reduce((acc, el) => ({...acc, ...el}), {}),
-          "param.pagemode": 'view',
+            .map(([key, val]) => ({
+              [key]: entity?.[layoutPropertiesMap[val]],
+            }))
+            .reduce((acc, el) => ({ ...acc, ...el }), {}),
+          "param.pagemode": "view",
           //...extraParams,
-        }
+        };
         let genericLov = {
           inputParams,
           returnFields,
@@ -385,9 +399,16 @@ const useEntity = (params) => {
         };
 
         // hint might be of type signal (due to an autocomplete hook) which brakes the API, so for now make it a string if it's not
-        data.autocompleteHandler = (hint, config) => WSS.getLov({ ...genericLov, hint: typeof hint === 'string' ? hint : "" }, config);
+        data.autocompleteHandler = (hint, config) =>
+          WSS.getLov(
+            { ...genericLov, hint: typeof hint === "string" ? hint : "" },
+            config
+          );
       } catch (err) {
-        console.error(`Error when setting autocompleteHandler on ${layoutKey}`, err)
+        console.error(
+          `Error when setting autocompleteHandler on ${layoutKey}`,
+          err
+        );
       }
     }
 
@@ -412,8 +433,8 @@ const useEntity = (params) => {
     userData,
     applicationData,
     setRegionVisibility,
-    isHiddenRegion: isHiddenRegion(screenCode),
-    getUniqueRegionID: getUniqueRegionID(screenCode),
+    isHiddenRegion: isHiddenRegion(screenCode, userCode),
+    getUniqueRegionID: getUniqueRegionID(screenCode, userCode),
     commentsComponent,
     showEqpTree,
     updateEquipmentTreeData,
@@ -432,7 +453,7 @@ const useEntity = (params) => {
     setNewEntity,
     setLoading,
     setReadOnly,
-    createEntity
+    createEntity,
   };
 };
 
