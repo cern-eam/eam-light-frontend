@@ -61,8 +61,6 @@
     "react-table": "7.6.3",
     "react-user-avatar": "1.10.0",
     "react-virtualized": "9.22.3",
-    "redux": "4.0.4",
-    "redux-thunk": "2.3.0",
     "regenerator-runtime": "0.13.3",
     "sanitize-html": "2.11.0",
     "set-value": "3.0.3",
