@@ -45,16 +45,16 @@ class EamlightToolbar extends Component {
     width: 20,
   };
 
-  componentDidMount() {
+  /*componentDidMount() {
     window.addEventListener("resize", this.updateDimensions.bind(this));
     this.updateDimensions();
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.updateDimensions);
-  }
+  }*/
 
-  updateDimensions(event) {
+  /*updateDimensions(event) {
     if (this.entityToolbarDiv) {
       this.setState({
         compactMenu: this.entityToolbarDiv.clientWidth < this.props.width,
@@ -62,11 +62,11 @@ class EamlightToolbar extends Component {
           this.entityToolbarDiv.clientWidth < SMALL_SCREEN_MODE_MAX_WIDTH,
       });
     }
-  }
+  }*/
 
-  deleteHandler = () => {
+  /*deleteHandler = () => {
     this.setState({ open: true });
-  };
+  };*/
 
   newHandler = () => {
     if (this.props.isModified) {
@@ -76,12 +76,12 @@ class EamlightToolbar extends Component {
     }
   };
 
-  handleClose = (deleteEntity) => {
+  /*handleClose = (deleteEntity) => {
     if (deleteEntity === true) {
       this.props.deleteHandler();
     }
     this.setState({ open: false });
-  };
+  };*/
 
   isSaveButtonDisabled() {
     const { newEntity, entityScreen, readOnly } = this.props;
@@ -319,7 +319,6 @@ class EamlightToolbar extends Component {
     return (
       <div
         className={"entityToolbar"}
-        ref={(entityToolbarDiv) => (this.entityToolbarDiv = entityToolbarDiv)}
       >
         <div className={"entityToolbarContent"}>
           <div
