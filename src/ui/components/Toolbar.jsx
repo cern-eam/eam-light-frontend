@@ -26,6 +26,7 @@ export const ENTITY_TYPE = {
   EQUIPMENT: "EQUIPMENT",
   PART: "PART",
   LOCATION: "LOCATION",
+  NCR: "NCR"
 };
 
 const VIEW_MODES = {

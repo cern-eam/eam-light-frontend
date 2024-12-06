@@ -4,6 +4,7 @@ import EISTable from 'eam-components/dist/ui/components/table';
 import Button from '@mui/material/Button';
 import AdditionalCostDialog from "./AdditionalCostDialog";
 import BlockUi from 'react-block-ui';
+import useSnackbarStore from '../../../../state/useSnackbarStore';
 
 const buttonStyle = {
     //position: 'relative',
@@ -20,6 +21,7 @@ const AdditionalCosts = (props) => {
     const [data, setData] = useState([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isLoading, setIsLoading] = useState([]);
+    const {showError, showNotification, handleError} = useSnackbarStore();
 
     useEffect(() => {
         fetchData(props.workorder.number);
@@ -48,7 +50,7 @@ const AdditionalCosts = (props) => {
     };
 
     const successHandler = () => {
-        props.showNotification('Additional cost created successfully');
+        showNotification('Additional cost created successfully');
         setIsDialogOpen(false);
         fetchData(props.workorder.number);
     }
@@ -73,7 +75,7 @@ const AdditionalCosts = (props) => {
                 </Button>
             </div>
             <AdditionalCostDialog
-                handleError={props.handleError}
+                handleError={handleError}
                 handleCancel={() => setIsDialogOpen(false)}
                 tabLayout={props.tabLayout.fields}
                 isDialogOpen={isDialogOpen}

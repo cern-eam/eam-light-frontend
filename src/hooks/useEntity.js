@@ -1,10 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  isHiddenRegion,
-  getHiddenRegionState,
-  getUniqueRegionID,
-} from "../selectors/uiSelectors";
+import { useState, useEffect, useRef, useMemo, createElement } from "react";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import queryString from "query-string";
@@ -21,22 +15,24 @@ import {
   getElementInfoFromCustomFields,
   prepareDataForFieldsValidator,
 } from "@/ui/pages/EntityTools";
-import {
-  setLayoutProperty,
-  showError,
-  showNotification,
-  handleError,
-  toggleHiddenRegion,
-  setRegionVisibility,
-  showWarning,
-} from "@/actions/uiActions";
 import WSCustomFields from "eam-components/dist/tools/WSCustomFields";
+import WSS from "../tools/WS";
 import {
   createOnChangeHandler,
   processElementInfo,
 } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { get } from "lodash";
 import useFieldsValidator from "eam-components/dist/ui/components/inputs-ng/hooks/useFieldsValidator";
+import useLayoutStore from "../state/useLayoutStore";
+import useUserDataStore from "../state/useUserDataStore";
+import useApplicationDataStore from "../state/useApplicationDataStore";
+import {
+  useHiddenRegionsStore,
+  getUniqueRegionID,
+} from "../state/useHiddenRegionsStore";
+import { TABS } from "../ui/components/entityregions/TabCodeMapping";
+import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
+import useSnackbarStore from "../state/useSnackbarStore";
 
 const useEntity = (params) => {
   const {
@@ -48,7 +44,6 @@ const useEntity = (params) => {
     entityURL,
     entityCodeProperty,
     screenProperty,
-    layoutProperty,
     layoutPropertiesMap,
     isReadOnlyCustomHandler,
     onMountHandler,
@@ -69,35 +64,22 @@ const useEntity = (params) => {
   const abortController = useRef(null);
   const commentsComponent = useRef(null);
 
-  // Init dispatchers
-  const dispatch = useDispatch();
-  const setLayoutPropertyConst = (...args) =>
-    dispatch(setLayoutProperty(...args));
-  const showNotificationConst = (...args) =>
-    dispatch(showNotification(...args));
-  const showErrorConst = (...args) => dispatch(showError(...args));
-  const showWarningConst = (...args) => dispatch(showWarning(...args));
-  const handleErrorConst = (...args) => dispatch(handleError(...args));
-  const toggleHiddenRegionConst = (...args) =>
-    dispatch(toggleHiddenRegion(...args));
-  const setRegionVisibilityConst = (...args) =>
-    dispatch(setRegionVisibility(...args));
+  const { showNotification, showError, showWarning, handleError } =
+    useSnackbarStore();
+  const { userData } = useUserDataStore();
+  const { applicationData } = useApplicationDataStore();
+  const { isHiddenRegion, setRegionVisibility } = useHiddenRegionsStore();
+  const {
+    equipmentTreeData: { showEqpTree },
+    updateEquipmentTreeData,
+  } = useEquipmentTreeStore();
 
-  // Fetch data from the redux store
-  const screenCode = useSelector(
-    (state) => state.application.userData[screenProperty]
-  );
-  const screenLayout = useSelector(
-    (state) => state.application[layoutProperty]
-  );
-  const screenPermissions = useSelector(
-    (state) => state.application.userData.screens[screenCode]
-  );
-  const userData = useSelector((state) => state.application.userData);
-  const applicationData = useSelector(
-    (state) => state.application.applicationData
-  );
-  const showEqpTree = useSelector((state) => state.ui.layout.showEqpTree);
+  const screenCode = userData[screenProperty];
+  const {
+    screenLayout: { [screenCode]: screenLayout },
+    fetchScreenLayout,
+  } = useLayoutStore();
+  const screenPermissions = userData.screens[screenCode];
 
   const {
     errorMessages,
@@ -105,30 +87,33 @@ const useEntity = (params) => {
     generateErrorMessagesFromException,
     resetErrorMessages,
   } = useFieldsValidator(
-    useMemo(
-      () =>
-        prepareDataForFieldsValidator(
-          entity,
-          screenLayout,
-          layoutPropertiesMap
-        ),
-      [screenCode, entity?.customField]
-    ),
+    //useMemo(
+    () =>
+      prepareDataForFieldsValidator(entity, screenLayout, layoutPropertiesMap),
+    [screenCode, entity?.customField],
+    //),
     entity
   );
 
-  // HIDDEN REGIONS
-  const isHiddenRegionConst = useSelector((state) =>
-    isHiddenRegion(state)(screenCode)
-  );
-  const getHiddenRegionStateConst = useSelector((state) =>
-    getHiddenRegionState(state)(screenCode)
-  );
-  const getUniqueRegionIDConst = useSelector((state) =>
-    getUniqueRegionID(state)(screenCode)
-  );
+  const userCode = useMemo(() => userData.eamAccount.userCode, [userData]);
 
   useEffect(() => {
+    if (!screenLayout) {
+      fetchScreenLayout(
+        userData.eamAccount.userGroup,
+        userData.screens[screenCode].entity,
+        userData.screens[screenCode].parentScreen,
+        screenCode,
+        TABS[userData.screens[screenCode].parentScreen]
+      );
+    }
+  }, [screenCode]);
+
+  useEffect(() => {
+    if (!screenLayout) {
+      return;
+    }
+
     if (!code && codeQueryParam) {
       history.push(
         process.env.PUBLIC_URL +
@@ -141,8 +126,9 @@ const useEntity = (params) => {
     code ? readEntity(code) : initNewEntity();
     // Reset window title when unmounting
     return () => (document.title = "EAM Light");
-  }, [code]);
+  }, [code, screenLayout]);
 
+  // Provide mount and unmount handlers to the client
   useEffect(() => {
     onMountHandler?.();
     return () => onUnmountHandler?.();
@@ -160,7 +146,7 @@ const useEntity = (params) => {
     WS.create(entityToCreate)
       .then((response) => {
         const entityCode = response.body.data;
-        showNotificationConst(
+        showNotification(
           entityDesc + " " + entityCode + " has been successfully created."
         );
         commentsComponent.current?.createCommentForNewEntity(entityCode);
@@ -178,7 +164,7 @@ const useEntity = (params) => {
       })
       .catch((error) => {
         generateErrorMessagesFromException(error?.response?.body?.errors);
-        handleErrorConst(error);
+        handleError(error);
       })
       .finally(() => setLoading(false));
   };
@@ -213,7 +199,7 @@ const useEntity = (params) => {
       })
       .catch((error) => {
         if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
-          handleErrorConst(error);
+          handleError(error);
         }
       })
       .finally(() => setLoading(false));
@@ -232,14 +218,14 @@ const useEntity = (params) => {
         setIsModified(false);
 
         commentsComponent.current?.createCommentForNewEntity(entityCode);
-        showNotificationConst(
+        showNotification(
           `${entityDesc} ${entity[entityCodeProperty]} has been successfully updated.`
         );
         readEntity(code);
       })
       .catch((error) => {
         generateErrorMessagesFromException(error?.response?.body?.errors);
-        handleErrorConst(error);
+        handleError(error);
       })
       .finally(() => setLoading(false));
   };
@@ -249,14 +235,14 @@ const useEntity = (params) => {
 
     WS.delete(code)
       .then((response) => {
-        showNotificationConst(
+        showNotification(
           `${entityDesc} ${entity[entityCodeProperty]} has been successfully deleted.`
         );
         history.push(process.env.PUBLIC_URL + entityURL);
       })
       .catch((error) => {
         generateErrorMessagesFromException(error?.response?.body?.errors);
-        handleErrorConst(error);
+        handleError(error);
       })
       .finally(() => setLoading(false));
   };
@@ -284,7 +270,7 @@ const useEntity = (params) => {
         postActions.new(newEntity);
       })
       .catch((error) => {
-        handleErrorConst(error);
+        handleError(error);
       })
       .finally(() => setLoading(false));
   };
@@ -384,6 +370,48 @@ const useEntity = (params) => {
     // Errors
     data.errorText = errorMessages[valueKey];
 
+    // Autocomplete handlers
+    if (
+      data.elementInfo &&
+      data.elementInfo.onLookup &&
+      data.elementInfo.onLookup !== "{}" // TODO !== '{}'
+    ) {
+      try {
+        const { lovName, inputVars, inputFields, returnFields } = JSON.parse(
+          data.elementInfo.onLookup
+        );
+        const inputParams = {
+          ...inputVars,
+          ...Object.entries(inputFields ?? {})
+            .map(([key, val]) => ({
+              [key]: entity?.[layoutPropertiesMap[val]],
+            }))
+            .reduce((acc, el) => ({ ...acc, ...el }), {}),
+          "param.pagemode": "view",
+          //...extraParams,
+        };
+        let genericLov = {
+          inputParams,
+          returnFields,
+          lovName,
+          exact: false,
+          rentity: screenCode,
+        };
+
+        // hint might be of type signal (due to an autocomplete hook) which brakes the API, so for now make it a string if it's not
+        data.autocompleteHandler = (hint, config) =>
+          WSS.getLov(
+            { ...genericLov, hint: typeof hint === "string" ? hint : "" },
+            config
+          );
+      } catch (err) {
+        console.error(
+          `Error when setting autocompleteHandler on ${layoutKey}`,
+          err
+        );
+      }
+    }
+
     return data;
   };
 
@@ -404,19 +432,17 @@ const useEntity = (params) => {
     isModified,
     userData,
     applicationData,
-    isHiddenRegion: isHiddenRegionConst,
-    getHiddenRegionState: getHiddenRegionStateConst,
-    getUniqueRegionID: getUniqueRegionIDConst,
+    setRegionVisibility,
+    isHiddenRegion: isHiddenRegion(screenCode, userCode),
+    getUniqueRegionID: getUniqueRegionID(screenCode, userCode),
     commentsComponent,
-    setLayoutProperty: setLayoutPropertyConst,
     showEqpTree,
+    updateEquipmentTreeData,
     // Dispatchers
-    showError: showErrorConst,
-    showNotification: showNotificationConst,
-    handleError: handleErrorConst,
-    showWarning: showWarningConst,
-    toggleHiddenRegion: toggleHiddenRegionConst,
-    setRegionVisibility: setRegionVisibilityConst,
+    showError,
+    showNotification,
+    handleError,
+    showWarning,
     //
     newHandler,
     saveHandler,

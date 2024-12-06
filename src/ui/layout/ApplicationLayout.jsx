@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setLayoutProperty } from "../../actions/uiActions";
 import { Link } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import Menu from "mdi-material-ui/Menu";
 import "./ApplicationLayout.css";
-import UserInfoContainer from "./UserInfoContainer";
+import UserInfo from "./UserInfo";
 import {
   FileTree,
   FormatHorizontalAlignLeft,
@@ -19,6 +17,10 @@ import ScanUser from "../components/servicelogin/ScanUser";
 import Footer from "./Footer";
 import GridTools from "@/tools/GridTools";
 import queryString from "query-string";
+import useApplicationDataStore from "../../state/useApplicationDataStore";
+import useUserDataStore from "../../state/useUserDataStore";
+import useEquipmentTreeStore from "../../state/useEquipmentTreeStore";
+import useScannedUserStore from "../../state/useScannedUserStore";
 
 const styles = {
   topBarLink: {
@@ -35,24 +37,19 @@ const styles = {
 export default withStyles(styles)(function ApplicationLayout(props) {
   const {
     classes,
-    applicationData,
-    userData,
-    scannedUser,
-    updateScannedUser,
-    handleError,
-    showNotification,
   } = props;
 
+  const {applicationData} = useApplicationDataStore();
+  const {userData} = useUserDataStore();
   const environment = applicationData.EL_ENVIR;
 
   const [menuCompacted, setMenuCompacted] = useState(false);
   const [mobileMenuActive, setMobileMenuActive] = useState(false);
   const theme = useTheme();
-  const dispatch = useDispatch();
-  const showEqpTree = useSelector((state) => state.ui.layout.showEqpTree);
-  const equipment = useSelector((state) => state.ui.layout.equipment);
+  const {equipmentTreeData: {showEqpTree, equipment}, updateEquipmentTreeData} = useEquipmentTreeStore();
+  const {scannedUser} = useScannedUserStore();
   const location = useLocation();
-
+  
   const hideHeader = queryString.parse(window.location.search)['hideHeader'] === 'true';
   const hideMenu = queryString.parse(window.location.search)['hideMenu'] === 'true';
   const hideFooter = queryString.parse(window.location.search)['hideFooter'] === 'true';
@@ -116,7 +113,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
             }
             <IconButton
               onClick={() =>
-                dispatch(setLayoutProperty("showEqpTree", !showEqpTree))
+                updateEquipmentTreeData({showEqpTree: !showEqpTree})
               }
               size="large"
             >
@@ -125,7 +122,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
           </div>
         )}
 
-        <UserInfoContainer />
+        <UserInfo />
       </div>
     </div>
   );
@@ -136,11 +133,7 @@ export default withStyles(styles)(function ApplicationLayout(props) {
   const showScan = applicationData.serviceAccounts &&
     applicationData.serviceAccounts.includes(userData.eamAccount.userCode) &&
     (!scannedUser || !scannedUser.userCode) && (
-      <ScanUser
-        updateScannedUser={updateScannedUser}
-        showNotification={showNotification}
-        handleError={handleError}
-      />
+      <ScanUser/>
     );
 
     if (queryString.parse(window.location.search)['regionOnly']) {

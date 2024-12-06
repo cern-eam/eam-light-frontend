@@ -30,6 +30,14 @@ class WS {
     return this._get("/application/refreshCache", config);
   }
 
+  getLov = (genericLov, config = {}) => {
+    return this._post("/application/lov", genericLov, config);
+  }
+
+  getCodeLov = (code, config = {}) => {
+    return this._get(`/application/codelov/${code}`, config);
+  }
+
   getScreenLayout(
     userGroup,
     entity,

@@ -9,6 +9,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import KeyCode from 'eam-components/dist/enums/KeyCode'
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import Ajax from 'eam-components/dist/tools/ajax'
+import useSnackbarStore from '../../../state/useSnackbarStore';
 
 const INITIAL_STATE = {
     results: [],
@@ -19,6 +20,10 @@ const INITIAL_STATE = {
 }
 
 class Search extends Component {
+    constructor(props) {
+        super(props);
+        this.handleError = useSnackbarStore.getState().handleError;
+    }
 
     state = INITIAL_STATE;
 
@@ -220,7 +225,7 @@ class Search extends Component {
                         isFetching: false
                     });
 
-                    this.props.handleError(error);
+                    this.handleError(error);
                 }
             })), 200);
     }

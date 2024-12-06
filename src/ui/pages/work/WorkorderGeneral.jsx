@@ -9,6 +9,7 @@ import { isDepartmentReadOnly, isMultiOrg } from "../EntityTools";
 import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
 import { IconButton } from "@mui/material";
 import { FileTree } from "mdi-material-ui";
+import useEquipmentTreeStore from "../../../state/useEquipmentTreeStore";
 
 function WorkorderGeneral(props) {
   const {
@@ -22,7 +23,6 @@ function WorkorderGeneral(props) {
     screenPermissions,
     newEntity,
     screenCode,
-    setLayoutProperty,
   } = props;
   const rpawClassesList =
     (applicationData &&
@@ -31,12 +31,17 @@ function WorkorderGeneral(props) {
     [];
   const rpawLink = applicationData && applicationData.EL_TRPAW;
 
+  
+
   const treeButtonClickHandler = (code) => {
-    setLayoutProperty("equipment", {
-      code: workorder.equipmentCode,
-      organization: workorder.equipmentOrganization,
+
+    useEquipmentTreeStore.getState().updateEquipmentTreeData({
+      showEqpTree: true,
+      equipment: {
+        code: workorder.equipmentCode,
+        organization: workorder.equipmentOrganization
+      }
     });
-    setLayoutProperty("showEqpTree", true);
   };
 
   return (

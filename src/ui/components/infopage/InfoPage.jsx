@@ -1,47 +1,111 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import FontIcon from '@mui/material/Icon';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import EmailIcon from '@mui/icons-material/Email';
 
-export default class InfoPage extends Component
-{
-    mainDivStyle = {
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "#fafafa"
-    }
+const InfoPage = ({
+    title,
+    message,
+    includeAutoRefresh = false,
+    includeSupportButton = false,
+}) => {
+    const [countdown, setCountdown] = useState(20);
 
-    fontIconStyle = {
-        fontSize: 30,
-        color: "darkblue",
-        margin: 10
-    }
+    useEffect(() => {
+        if (includeAutoRefresh) {
+            const interval = setInterval(() => {
+                setCountdown((prev) => {
+                    if (prev === 1) {
+                        window.location.reload();
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
 
-    paperStyle = {
-        padding: 15,
-        margin: 10
-    }
+            return () => clearInterval(interval);
+        }
+    }, [includeAutoRefresh]);
 
-    render()
-    {
-        return (
-            (
-                <div style={this.mainDivStyle}>
-                    <Paper style={this.paperStyle}>
-                        <Typography type="headline" component="h3">
-                            <FontIcon style={this.fontIconStyle} className="fa fa-user-times" />
-                            {this.props.title}
-                        </Typography>
-                        <Typography component="p">
-                            {this.props.message}
-                        </Typography>
-                    </Paper>
-                </div>
-            )
-        )
-    }
-}
+    const handleEmail = () => {
+        window.location.href = 'mailto:EAM.Support@cern.ch';
+    };
 
+    const blueColor = '#1976d2'; // Material-UI primary blue
+
+    return (
+        <Box
+            sx={{
+                width: '100%',
+                height: '100vh',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#f0f4f8',
+                padding: 2,
+            }}
+        >
+            <Paper
+                elevation={4}
+                sx={{
+                    padding: 4,
+                    maxWidth: 500,
+                    textAlign: 'center',
+                    backgroundColor: '#ffffff',
+                    borderRadius: 2,
+                }}
+            >
+                <Typography
+                    variant="h4"
+                    component="h1"
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 'bold',
+                        marginBottom: 2,
+                    }}
+                >
+                    <InfoOutlinedIcon
+                        sx={{
+                            fontSize: 40,
+                            color: blueColor,
+                            marginRight: 1,
+                        }}
+                    />
+                    {title}
+                </Typography>
+                <Typography
+                    variant="body1"
+                    component="p"
+                    sx={{ color: 'gray', marginBottom: 3 }}
+                >
+                    {message}
+                    {includeAutoRefresh && ` Refreshing in ${countdown} seconds...`}
+                </Typography>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        gap: 2,
+                    }}
+                >
+                    {includeSupportButton && (
+                        <Button
+                            variant="outlined"
+                            color="secondary"
+                            startIcon={<EmailIcon />}
+                            onClick={handleEmail}
+                        >
+                            Contact Support
+                        </Button>
+                    )}
+                </Box>
+            </Paper>
+        </Box>
+    );
+};
+
+export default InfoPage;

@@ -4,6 +4,7 @@ import ResizableIframe from "./ResizableIframe";
 import { withCernMode } from "../CERNMode";
 
 class ComponentIframe extends Component {
+    
     docLightStyle = {
         width: "1px",
         minWidth: "100%",

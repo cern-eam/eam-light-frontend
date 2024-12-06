@@ -10,13 +10,12 @@ import { ENTITY_TYPE } from "../../components/Toolbar";
 import CustomFields from "eam-components/dist/ui/components/customfields/CustomFields";
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import NCRIframeContainer from "../../components/iframes/NCRIframeContainer";
-import EamlightToolbarContainer from "../../components/EamlightToolbarContainer";
 import Activities from "./activities/Activities";
-import AdditionalCostsContainer from "./additionalcosts/AdditionalCostsContainer";
+import AdditionalCosts from "./additionalcosts/AdditionalCosts";
 import WorkorderChildren from "./childrenwo/WorkorderChildren";
-import MeterReadingContainerWO from "./meter/MeterReadingContainerWO";
+import MeterReadingWO from "./meter/MeterReadingWO";
 import WorkorderMultiequipment from "./multiequipmentwo/WorkorderMultiequipment";
-import PartUsageContainer from "./partusage/PartUsageContainer";
+import PartUsage from "./partusage/PartUsage";
 import WorkorderClosingCodes from "./WorkorderClosingCodes";
 import WorkorderGeneral from "./WorkorderGeneral";
 import WorkorderScheduling from "./WorkorderScheduling";
@@ -33,12 +32,10 @@ import TuneIcon from "@mui/icons-material/Tune";
 import { IconSlash } from "eam-components/dist/ui/components/icons/index";
 import { isCernMode } from "../../components/CERNMode";
 import { TAB_CODES } from "../../components/entityregions/TabCodeMapping";
-import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions } from "../EntityTools";
+import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions, renderLoading } from "../EntityTools";
 import WSParts from "../../../tools/WSParts";
 import WSWorkorders from "../../../tools/WSWorkorders";
 import useEntity from "@/hooks/useEntity";
-import { updateMyWorkOrders } from "../../../actions/workorderActions";
-import { useDispatch } from "react-redux";
 import UserDefinedFields from "@/ui/components/userdefinedfields/UserDefinedFields";
 import { isHidden } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import AssignmentIcon from "@mui/icons-material/Assignment";
@@ -59,6 +56,9 @@ import { PartIcon } from "eam-components/dist/ui/components/icons";
 import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
 import HardwareIcon from "@mui/icons-material/Hardware";
 import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
+import EamlightToolbar from "../../components/EamlightToolbar";
+import useWorkOrderStore from "../../../state/useWorkOrderStore";
+import { isLocalAdministrator } from "../../../state/utils";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -79,8 +79,7 @@ const Workorder = () => {
   const [otherIdMapping, setOtherIdMapping] = useState({});
   const [expandChecklistsOptions, setExpandChecklistsOptions] = useState(false);
   const checklists = useRef(null);
-  const dispatch = useDispatch();
-  const updateMyWorkOrdersConst = (...args) => dispatch(updateMyWorkOrders(...args));
+  const {setCurrentWorkOrder} = useWorkOrderStore();
   //
   //
   //
@@ -98,11 +97,9 @@ const Workorder = () => {
     newEntity,
     commentsComponent,
     isHiddenRegion,
-    getHiddenRegionState,
     getUniqueRegionID,
-    toggleHiddenRegion,
     setRegionVisibility,
-    setLayoutProperty,
+    updateEquipmentTreeData,
     newHandler,
     saveHandler,
     deleteHandler,
@@ -139,16 +136,11 @@ const Workorder = () => {
     entityURL: "/workorder/",
     entityCodeProperty: "number",
     screenProperty: "workOrderScreen",
-    layoutProperty: "workOrderLayout",
     layoutPropertiesMap,
     onMountHandler: mountHandler,
     onUnmountHandler: unmountHandler,
     codeQueryParamName: "workordernum",
   });
-
-  //
-  //
-  //
 
   useEffect(() => {
     setEquipment(null);
@@ -171,9 +163,6 @@ const Workorder = () => {
       .catch(console.error);
   }, [workorder?.equipmentCode]);
 
-  //
-  //
-  //
   function onChangeEquipment(equipmentCode) {
     if (!equipmentCode) {
       return;
@@ -214,7 +203,6 @@ const Workorder = () => {
 
   const getRegions = () => {
     const { tabs } = workOrderLayout;
-
     const commonProps = {
       workorder,
       newEntity,
@@ -240,7 +228,6 @@ const Workorder = () => {
             newEntity={newEntity}
             screenCode={screenCode}
             screenPermissions={screenPermissions}
-            setLayoutProperty={setLayoutProperty}
           />
         ),
         column: 1,
@@ -282,7 +269,7 @@ const Workorder = () => {
         maximizable: false,
         customVisibility: () => isRegionAvailable("PAR", commonProps.workOrderLayout),
         render: () => (
-          <PartUsageContainer
+          <PartUsage
             workorder={workorder}
             tabLayout={tabs.PAR}
             equipmentMEC={equipmentMEC}
@@ -302,7 +289,7 @@ const Workorder = () => {
         maximizable: false,
         customVisibility: () => isRegionAvailable("ACO", commonProps.workOrderLayout),
         render: () => (
-          <AdditionalCostsContainer
+          <AdditionalCosts
             workorder={workorder}
             tabLayout={tabs.ACO}
             equipmentMEC={equipmentMEC}
@@ -333,7 +320,13 @@ const Workorder = () => {
         label: "EDMS Documents",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <EDMSDoclightIframeContainer objectType="J" objectID={workorder.number} />,
+        render: () => (
+            <EDMSDoclightIframeContainer
+                objectType="J"
+                objectID={workorder.number}
+                url={applicationData.EL_DOCLI}
+            />
+        ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -348,7 +341,15 @@ const Workorder = () => {
         label: "NCRs",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <NCRIframeContainer objectType="J" objectID={workorder.number} mode="NCR" />,
+        render: () => (
+            <NCRIframeContainer
+                objectType="J"
+                objectID={workorder.number}
+                mode="NCR"
+                url={`${applicationData.EL_TBURL}/ncr`}
+                edmsDocListLink={applicationData.EL_EDMSL}
+            />
+        ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -542,7 +543,7 @@ const Workorder = () => {
         label: "Meter Readings",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <MeterReadingContainerWO equipment={workorder.equipmentCode} disabled={readOnly} />,
+        render: () => <MeterReadingWO equipment={workorder.equipmentCode} disabled={readOnly} />,
         column: 2,
         order: 12,
         summaryIcon: SpeedIcon,
@@ -626,11 +627,13 @@ const Workorder = () => {
   }
 
   function postRead(workorder) {
-    setLayoutProperty("equipment", {
-      code: workorder.equipmentCode,
-      organization: workorder.equipmentOrganization,
+    updateEquipmentTreeData({
+      equipment: {
+        code: workorder.equipmentCode,
+        organization: workorder.equipmentOrganization
+      }
     });
-    updateMyWorkOrdersConst(workorder);
+    setCurrentWorkOrder(workorder.number);
     readStatuses(workorder.statusCode, workorder.typeCode, false);
     readOtherIdMapping(workorder.number);
   }
@@ -670,7 +673,7 @@ const Workorder = () => {
   };
 
   function mountHandler() {
-    setLayoutProperty("eqpTreeMenu", [
+    updateEquipmentTreeData({eqpTreeMenu: [
       {
         desc: "Use for this Work Order",
         icon: <ContentPasteIcon />,
@@ -679,21 +682,22 @@ const Workorder = () => {
           updateWorkorderProperty("equipmentDesc", rowInfo.node.name);
         },
       },
-    ]);
+    ]});
   }
 
   function unmountHandler() {
-    setLayoutProperty("eqpTreeMenu", null);
+    updateEquipmentTreeData({eqpTreeMenu: null});
+    setCurrentWorkOrder(null);
   }
 
-  if (!workorder) {
-    return React.Fragment;
+  if (!workorder || !workOrderLayout) {
+    return renderLoading("Reading Work Order ...")
   }
 
   return (
     <div className="entityContainer">
       <BlockUi tag="div" blocking={loading} style={{ height: "100%", width: "100%" }}>
-        <EamlightToolbarContainer
+        <EamlightToolbar
           isModified={isModified}
           newEntity={newEntity}
           entityScreen={screenPermissions}
@@ -722,17 +726,16 @@ const Workorder = () => {
             departmentalSecurity: userData.eamAccount.departmentalSecurity,
           }}
           entityIcon={<ContentPasteIcon style={{ height: 18 }} />}
-          toggleHiddenRegion={toggleHiddenRegion}
           regions={getRegions()}
           getUniqueRegionID={getUniqueRegionID}
-          getHiddenRegionState={getHiddenRegionState}
           isHiddenRegion={isHiddenRegion}
+          setRegionVisibility={setRegionVisibility}
+          isLocalAdministrator={isLocalAdministrator(userData)}
         />
         <EntityRegions
           regions={getRegions()}
           isNewEntity={newEntity}
           getUniqueRegionID={getUniqueRegionID}
-          getHiddenRegionState={getHiddenRegionState}
           setRegionVisibility={setRegionVisibility}
           isHiddenRegion={isHiddenRegion}
         />

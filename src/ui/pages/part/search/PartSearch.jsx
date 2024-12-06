@@ -4,6 +4,8 @@ import Typography from "@mui/material/Typography";
 import EAMGrid from "eam-components/dist/ui/components/grids/eam/EAMGrid";
 import { EAMCellField } from "eam-components/dist/ui/components/grids/eam/utils";
 import SyncedQueryParamsEAMGridContext from "../../../../tools/SyncedQueryParamsEAMGridContext";
+import useUserDataStore from "../../../../state/useUserDataStore";
+import useSnackbarStore from "../../../../state/useSnackbarStore";
 
 const cellRenderer = ({ column, value, row }) => {
   if (column.id === "partcode") {
@@ -25,7 +27,10 @@ const cellRenderer = ({ column, value, row }) => {
 };
 
 const PartSearch = (props) => {
-  const { partScreen, handleError } = props;
+  const { handleError } = useSnackbarStore();
+  const { userData } = useUserDataStore();
+  const partScreen = userData.screens[userData.partScreen]
+
   return (
     <SyncedQueryParamsEAMGridContext
       gridName={partScreen.screenCode}

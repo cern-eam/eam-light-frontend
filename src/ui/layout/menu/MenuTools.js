@@ -1,9 +1,9 @@
 import WS from '../../../tools/WS'
 import {isToday, isBefore, isThisWeek, startOfToday} from "date-fns";
 class MenuTools {
-    refreshCache(showNotificatoin, showError) {
+    refreshCache(showNotification, showError) {
         WS.refreshCache().then(response => {
-            showNotificatoin(response.body.data)
+            showNotification(response.body.data)
         }).catch(_ => {
             showError('EAM Light Cache Refresh has failed.')
         })

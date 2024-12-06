@@ -17,14 +17,15 @@ import {
   getTabAvailability,
   getTabInitialVisibility,
   getTabGridRegions,
+  renderLoading,
 } from "../../EntityTools";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
-import EamlightToolbarContainer from "../../../components/EamlightToolbarContainer";
 import LocationDetails from "./LocationDetails";
 import LocationGeneral from "./LocationGeneral";
 import LocationHierarchy from "./LocationHierarchy";
-
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import { Link } from "react-router-dom";
 import AccountTreeRoundedIcon from "@mui/icons-material/AccountTreeRounded";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
@@ -36,6 +37,8 @@ import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import { locationLayoutPropertiesMap } from "../EquipmentTools";
+import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
+import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -60,12 +63,10 @@ export default Location = (props) => {
     newEntity,
     commentsComponent,
     isHiddenRegion,
-    getHiddenRegionState,
     getUniqueRegionID,
     showEqpTree,
-    toggleHiddenRegion,
+    updateEquipmentTreeData,
     setRegionVisibility,
-    setLayoutProperty,
     newHandler,
     saveHandler,
     deleteHandler,
@@ -94,12 +95,12 @@ export default Location = (props) => {
   });
 
   function postInit() {
-    setLayoutProperty("equipment", null);
+    updateEquipmentTreeData({equipment: null});
   }
 
   function postRead(location) {
     if (!showEqpTree) {
-      setLayoutProperty("equipment", location);
+      updateEquipmentTreeData({equipment: location});
     }
   }
 
@@ -194,6 +195,7 @@ export default Location = (props) => {
           <EDMSDoclightIframeContainer
             objectType="L"
             objectID={location.code}
+            url={applicationData.EL_DOCLI}
           />
         ),
         RegionPanelProps: {
@@ -209,6 +211,25 @@ export default Location = (props) => {
           tabs,
           TAB_CODES.EDMS_DOCUMENTS_LOCATIONS
         ),
+      },
+      {
+        id: "LOCATIONNCRS",
+        label: "Non Conformities",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => <EquipmentNCRs equipment={location.code}/>,
+        RegionPanelProps: {
+          customHeadingBar:  (
+              <Link to ={`/ncr?equipmentCode=${location.code}&description=NCR for ${location.code}`}
+                    style={{padding: 10, display: "flex", alignItems: "center", justifyContent: "space-between", color: "#737373" }}>
+                <AddBoxIcon />
+              </Link>
+          ),
+        },
+        column: 2,
+        order: 7,
+        summaryIcon: BookmarkBorderRoundedIcon,
+        ignore: !isCernMode 
       },
       // {
       //     id: 'NCRS',
@@ -233,13 +254,13 @@ export default Location = (props) => {
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
-          <NCRIframeContainer objectType="L" objectID={location.code} />
+          <NCRIframeContainer objectType="L" objectID={location.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
         ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
         column: 2,
-        order: 7,
+        order: 8,
         summaryIcon: BookmarkBorderRoundedIcon,
         ignore:
           !isCernMode ||
@@ -340,8 +361,8 @@ export default Location = (props) => {
     ];
   };
 
-  if (!location) {
-    return React.Fragment;
+  if (!location || !locationLayout) {
+    return renderLoading("Reading Location ...")
   }
 
   return (
@@ -350,7 +371,7 @@ export default Location = (props) => {
       blocking={loading}
       style={{ height: "100%", width: "100%" }}
     >
-      <EamlightToolbarContainer
+      <EamlightToolbar
         isModified={isModified}
         newEntity={newEntity}
         entityScreen={screenPermissions}
@@ -375,20 +396,18 @@ export default Location = (props) => {
         }}
         width={730}
         entityIcon={<LocationIcon style={{ height: 18 }} />}
-        toggleHiddenRegion={toggleHiddenRegion}
         getUniqueRegionID={getUniqueRegionID}
         regions={getRegions()}
         isHiddenRegion={isHiddenRegion}
-        getHiddenRegionState={getHiddenRegionState}
+        setRegionVisibility={setRegionVisibility}
       />
       <EntityRegions
         showEqpTree={showEqpTree}
         regions={getRegions()}
         isNewEntity={newEntity}
+        getUniqueRegionID={getUniqueRegionID}
         isHiddenRegion={isHiddenRegion}
         setRegionVisibility={setRegionVisibility}
-        getUniqueRegionID={getUniqueRegionID}
-        getHiddenRegionState={getHiddenRegionState}
       />
     </BlockUi>
   );

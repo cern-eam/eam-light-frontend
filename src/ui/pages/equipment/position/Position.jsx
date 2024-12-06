@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
-import EamlightToolbarContainer from "../../../components/EamlightToolbarContainer";
 import CustomFields from "eam-components/dist/ui/components/customfields/CustomFields";
 import WSEquipment from "../../../../tools/WSEquipment";
 import BlockUi from "react-block-ui";
@@ -22,6 +21,7 @@ import {
   getTabAvailability,
   getTabInitialVisibility,
   getTabGridRegions,
+  renderLoading,
 } from "../../EntityTools";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer";
 import useEntity from "@/hooks/useEntity";
@@ -45,6 +45,7 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import Variables from "../components/Variables";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import getPartsAssociated from "@/ui/pages/PartsAssociated";
+import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -71,12 +72,10 @@ const Position = () => {
     newEntity,
     commentsComponent,
     isHiddenRegion,
-    getHiddenRegionState,
     getUniqueRegionID,
     showEqpTree,
-    toggleHiddenRegion,
+    updateEquipmentTreeData,
     setRegionVisibility,
-    setLayoutProperty,
     newHandler,
     saveHandler,
     deleteHandler,
@@ -111,13 +110,13 @@ const Position = () => {
 
   function postInit() {
     readStatuses(true);
-    setLayoutProperty("equipment", null);
+    updateEquipmentTreeData({equipment: null})
   }
 
   function postRead(equipment) {
     readStatuses(false, equipment.statusCode);
     if (!showEqpTree) {
-      setLayoutProperty("equipment", equipment);
+      updateEquipmentTreeData({equipment})
     }
   }
 
@@ -250,6 +249,7 @@ const Position = () => {
           <EDMSDoclightIframeContainer
             objectType="S"
             objectID={equipment.code}
+            url={applicationData.EL_DOCLI}
           />
         ),
         RegionPanelProps: {
@@ -272,7 +272,7 @@ const Position = () => {
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
-          <NCRIframeContainer objectType="S" objectID={equipment.code} />
+          <NCRIframeContainer objectType="S" objectID={equipment.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
         ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
@@ -385,8 +385,8 @@ const Position = () => {
     ];
   };
 
-  if (!equipment) {
-    return React.Fragment;
+  if (!equipment || !positionLayout) {
+    return renderLoading("Reading Position ...")
   }
 
   return (
@@ -395,7 +395,7 @@ const Position = () => {
       blocking={loading}
       style={{ width: "100%", height: "100%" }}
     >
-      <EamlightToolbarContainer
+      <EamlightToolbar
         isModified={isModified}
         newEntity={newEntity}
         entityScreen={screenPermissions}
@@ -421,20 +421,18 @@ const Position = () => {
         }}
         width={730}
         entityIcon={<PositionIcon style={{ height: 18 }} />}
-        toggleHiddenRegion={toggleHiddenRegion}
         getUniqueRegionID={getUniqueRegionID}
         regions={getRegions()}
-        getHiddenRegionState={getHiddenRegionState}
         isHiddenRegion={isHiddenRegion}
+        setRegionVisibility={setRegionVisibility}
       />
       <EntityRegions
         showEqpTree={showEqpTree}
         regions={getRegions()}
         isNewEntity={newEntity}
         getUniqueRegionID={getUniqueRegionID}
-        getHiddenRegionState={getHiddenRegionState}
-        setRegionVisibility={setRegionVisibility}
         isHiddenRegion={isHiddenRegion}
+        setRegionVisibility={setRegionVisibility}
       />
     </BlockUi>
   );

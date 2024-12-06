@@ -1,27 +1,24 @@
 import "./Eamlight.css";
 import "react-grid-layout/css/styles.css";
-// import "react-resizable/css/styles.css";
-
-import { Component } from "react";
+import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import ApplicationLayoutContainer from "./ui/layout/ApplicationLayoutContainer";
-import EamlightMenuContainer from "./ui/layout/menu/EamlightMenuContainer";
-import WorkorderSearchContainer from "./ui/pages/work/search/WorkorderSearchContainer";
-import PartSearchContainer from "./ui/pages/part/search/PartSearchContainer";
-import AssetSearchContainer from "./ui/pages/equipment/asset/search/AssetSearchContainer";
-import NCRSearchContainer from "./ui/pages/equipment/ncr/search/NCRSearchContainer";
-import PositionSearchContainer from "./ui/pages/equipment/position/search/PositionSearchContainer";
-import SystemSearchContainer from "./ui/pages/equipment/system/search/SystemSearchContainer";
-import LocationSearchContainer from "./ui/pages/equipment/location/search/LocationSearchContainer";
-import BlockUi from "react-block-ui";
+import ApplicationLayout from "./ui/layout/ApplicationLayout";
+import EamlightMenu from "./ui/layout/menu/EamlightMenu";
+import WorkorderSearch from "./ui/pages/work/search/WorkorderSearch";
+import PartSearch from "./ui/pages/part/search/PartSearch";
+import AssetSearch from "./ui/pages/equipment/asset/search/AssetSearch";
+import NCRSearch from "./ui/pages/equipment/ncr/search/NCRSearch";
+import PositionSearch from "./ui/pages/equipment/position/search/PositionSearch";
+import SystemSearch from "./ui/pages/equipment/system/search/SystemSearch";
+import LocationSearch from "./ui/pages/equipment/location/search/LocationSearch";
 import InfoPage from "./ui/components/infopage/InfoPage";
 import Part from "./ui/pages/part/Part";
-import SearchContainer from "./ui/pages/search/SearchContainer";
-import ReplaceEqpContainer from "./ui/pages/equipment/replaceeqp/ReplaceEqpContainer";
+import Search from "./ui/pages/search/Search";
+import ReplaceEqp from "./ui/pages/equipment/replaceeqp/ReplaceEqp";
 import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import EquipmentRedirect from "./ui/pages/equipment/EquipmentRedirect";
-import MeterReadingContainer from "./ui/pages/meter/MeterReadingContainer";
-import LoginContainer from "./ui/pages/login/LoginContainer";
+import MeterReading from "./ui/pages/meter/MeterReading";
+import Login from "./ui/pages/login/Login";
 import Grid from "./ui/pages/grid/Grid";
 import EqpTree from "./ui/components/eqtree/EqpTree";
 import Themes from "eam-components/dist/ui/components/theme";
@@ -29,149 +26,99 @@ import config from "./config";
 import Equipment from "./ui/pages/equipment/Equipment";
 import Report from "./ui/pages/report/Report";
 import ReleaseNotesPage from "./ui/pages/releaseNotes/ReleaseNotes";
+import useUserDataStore from "./state/useUserDataStore";
+import useApplicationDataStore from "./state/useApplicationDataStore";
+import { renderLoading } from "./ui/pages/EntityTools";
+import useInforContextStore from "./state/useInforContext";
+import useLayoutStore from "./state/useLayoutStore";
 
 export const releaseNotesPath = "/releasenotes";
 
-class Eamlight extends Component {
-  blockUiStyle = {
-    height: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  };
+const Eamlight = () => {
+  const { inforContext } = useInforContextStore();
+  const { userData, fetchUserData, userDataFetchError} = useUserDataStore();
+  const { applicationData, fetchApplicationData, applicationDataFetchError } = useApplicationDataStore(); 
+  const { screenLayoutFetchError } = useLayoutStore();
+  const loginMethod = import.meta.env.VITE_LOGIN_METHOD;
 
-  blockUiStyleDiv = {
-    display: "flex",
-    height: 60,
-    alignItems: "flex-end",
-  };
-
-  render() {
-    // Display login screen
-    if (
-      !this.props.inforContext &&
-      import.meta.env.VITE_LOGIN_METHOD === "STD"
-    ) {
-      return (
-        <ThemeProvider theme={Themes[config.theme.DEFAULT]}>
-          <LoginContainer />
-        </ThemeProvider>
-      );
-    }
-
-    if (this.props.userData) {
-      if (this.props.userData.invalidAccount) {
-        return (
-          <InfoPage
-            title="Access Denied"
-            message="You don't have valid EAM account. "
-          />
-        );
-      }
-      if (this.props.userData.screenLayoutFetchingFailed) {
-        return (
-          <InfoPage
-            title="Unable to initialize EAM Light"
-            message="Something went wrong while loading the screen layouts, please retry or contact the support at eam.support@cern.ch."
-          />
-        );
-      }
-    }
-
-    // User data still not there, display loading page
-    if (!this.props.userData || !this.props.applicationData) {
-      this.props.initializeApplication();
-      return (
-        <BlockUi tag="div" blocking={true} style={this.blockUiStyle}>
-          <div style={this.blockUiStyleDiv}>Loading EAM Light ...</div>
-        </BlockUi>
-      );
-    }
-
-    const eqpRegex = [
-      "/asset",
-      "/ncr",
-      "/position",
-      "/system",
-      "/location",
-      "/workorder",
-      "/installeqp",
-    ].map((e) => `${e}/:code(.+)?`);
-
-    const selectedTheme =
-      Themes[
-        config.theme[this.props.applicationData.EL_ENVIR] ||
-          config.theme.DEFAULT
-      ] || Themes.DANGER;
-
-    // Render real application once user data is there and user has an EAM account
+  useEffect(() => {
+    if (loginMethod !== "STD" || (loginMethod === "STD" && inforContext))
+      fetchUserData();
+      fetchApplicationData();
+  },[inforContext])
+  
+  if (!inforContext && loginMethod === "STD") {
     return (
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={selectedTheme}>
-          <Router basename={process.env.PUBLIC_URL}>
-            <Switch>
-              <Route path="/eqptree" component={EqpTree} />
-
-              <ApplicationLayoutContainer>
-                <EamlightMenuContainer />
-                <div style={{ height: "calc(100% - 30px)" }}>
-                  <Route exact path="/" component={SearchContainer} />
-
-                  <Route
-                    path="/wosearch"
-                    component={WorkorderSearchContainer}
-                  />
-
-                  <Route path="/part/:code?" component={Part} />
-
-                  <Route path="/partsearch" component={PartSearchContainer} />
-
-                  <Route path="/assetsearch" component={AssetSearchContainer} />
-
-                  <Route path="/ncrsearch" component={NCRSearchContainer} />
-
-                  <Route
-                    path="/positionsearch"
-                    component={PositionSearchContainer}
-                  />
-
-                  <Route
-                    path="/systemsearch"
-                    component={SystemSearchContainer}
-                  />
-
-                  <Route
-                    path="/locationsearch"
-                    component={LocationSearchContainer}
-                  />
-
-                  <Route
-                    path="/equipment/:code?"
-                    component={EquipmentRedirect}
-                  />
-
-                  <Route path="/replaceeqp" component={ReplaceEqpContainer} />
-
-                  <Route
-                    path="/meterreading"
-                    component={MeterReadingContainer}
-                  />
-
-                  <Route path="/grid" component={Grid} />
-
-                  <Route path="/report" component={Report} />
-
-                  <Route path={eqpRegex} component={Equipment} />
-
-                  <Route path={releaseNotesPath} component={ReleaseNotesPage} />
-                </div>
-              </ApplicationLayoutContainer>
-            </Switch>
-          </Router>
-        </ThemeProvider>
-      </StyledEngineProvider>
+      <ThemeProvider theme={Themes[config.theme.DEFAULT]}>
+        <Login />
+      </ThemeProvider>
     );
   }
-}
+
+  if (userDataFetchError || applicationDataFetchError || screenLayoutFetchError) {
+    return (
+      <InfoPage
+        title="Error initializing EAM Light"
+        message="The application could not be initialized. Please contact EAM support if the problem persists."
+        includeAutoRefresh={true}
+        includeSupportButton={true}
+      />
+    );
+  }
+    
+
+  if (!userData || !applicationData) {
+    return renderLoading("Loading EAM Light")
+  }
+
+  const eqpRegex = [
+    "/asset",
+    "/ncr",
+    "/position",
+    "/system",
+    "/location",
+    "/workorder",
+    "/installeqp",
+  ].map((e) => `${e}/:code(.+)?`);
+
+  const selectedTheme =
+    Themes[
+      config.theme[applicationData.EL_ENVIR] || config.theme.DEFAULT
+    ] || Themes.DANGER;
+
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={selectedTheme}>
+        <Router basename={process.env.PUBLIC_URL}>
+          <Switch>
+            <Route path="/eqptree" component={EqpTree} />
+
+            <ApplicationLayout>
+              <EamlightMenu />
+              <div style={{ height: "calc(100% - 30px)" }}>
+                <Route exact path="/" component={Search} />
+                <Route path="/wosearch" component={WorkorderSearch} />
+                <Route path="/part/:code?" component={Part} />
+                <Route path="/partsearch" component={PartSearch} />
+                <Route path="/assetsearch" component={AssetSearch} />
+                <Route path="/ncrsearch" component={NCRSearch} />
+                <Route path="/positionsearch" component={PositionSearch} />
+                <Route path="/systemsearch" component={SystemSearch} />
+                <Route path="/locationsearch" component={LocationSearch} />
+                <Route path="/equipment/:code(.+)?" component={EquipmentRedirect} />
+                <Route path="/replaceeqp" component={ReplaceEqp} />
+                <Route path="/meterreading" component={MeterReading} />
+                <Route path="/grid" component={Grid} />
+                <Route path="/report" component={Report} />
+                <Route path={eqpRegex} component={Equipment} />
+                <Route path={releaseNotesPath} component={ReleaseNotesPage} />
+              </div>
+            </ApplicationLayout>
+          </Switch>
+        </Router>
+      </ThemeProvider>
+    </StyledEngineProvider>
+  );
+};
 
 export default Eamlight;

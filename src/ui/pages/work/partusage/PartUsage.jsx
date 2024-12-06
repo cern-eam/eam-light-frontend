@@ -4,6 +4,7 @@ import EISTable from 'eam-components/dist/ui/components/table';
 import Button from '@mui/material/Button';
 import PartUsageDialog from "./PartUsageDialog";
 import BlockUi from 'react-block-ui';
+import useSnackbarStore from '@/state/useSnackbarStore';
 
 function PartUsage(props) {
 
@@ -14,6 +15,8 @@ function PartUsage(props) {
     let [data, setData] = useState([]);
     let [isDialogOpen, setIsDialogOpen] = useState(false);
     let [isLoading, setIsLoading] = useState([]);
+
+    const {showError, showWarning, showNotification, handleError} = useSnackbarStore();
 
     useEffect(() => {
         fetchData(props.workorder.number)
@@ -33,14 +36,14 @@ function PartUsage(props) {
                 setData(response.body.data);
                 setIsLoading(false);
             }).catch(error => {
-                props.handleError(error);
+                handleError(error);
                 setIsLoading(false);
             });
         }
     };
 
     let successHandler = () => {
-        props.showNotification('Part usage created successfully');
+        showNotification('Part usage created successfully');
         //Close dialog
         setIsDialogOpen(false);
         //Init the list of part usage again
@@ -68,10 +71,10 @@ function PartUsage(props) {
                 </Button>
             </div>
             <PartUsageDialog
-                showNotification={props.showNotification}
-                showError={props.showError}
-                showWarning={props.showWarning}
-                handleError={props.handleError}
+                showNotification={showNotification}
+                showError={showError}
+                showWarning={showWarning}
+                handleError={handleError}
                 handleCancel={() => setIsDialogOpen(false)}
                 tabLayout={props.tabLayout.fields}
                 isDialogOpen={isDialogOpen}

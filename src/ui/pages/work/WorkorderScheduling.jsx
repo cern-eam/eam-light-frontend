@@ -39,7 +39,6 @@ const WorkorderScheduling = (props) => {
       <EAMAutocomplete
         {...register("assignedto", "assignedTo", "assignedToDesc")}
         barcodeScanner
-        autocompleteHandler={WS.autocompleteEmployee}
       />
 
       <EAMAutocomplete

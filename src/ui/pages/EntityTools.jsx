@@ -7,6 +7,7 @@ import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/
 import { get } from "lodash";
 import GridOnIcon from "@mui/icons-material/GridOn";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
+import BlockUi from "react-block-ui";
 
 // clones an entity deeply
 export const cloneEntity = (entity) => ({
@@ -344,6 +345,29 @@ export const getCustomTabGridRenderers = (applicationData) => {
     ),
   };
 };
+
+export const renderLoading = (message) => {
+
+  const blockUiStyle = {
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+  
+  const blockUiStyleDiv = {
+    display: "flex",
+    height: 60,
+    alignItems: "flex-end"
+  };
+
+  return (
+    <BlockUi tag="div" blocking={true} style={blockUiStyle}>
+      <div style={{blockUiStyleDiv}}>{message}</div>
+    </BlockUi>
+  )
+  
+}
 
 export const getTabGridRegions = (
   applicationData,
