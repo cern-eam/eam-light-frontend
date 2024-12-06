@@ -8,10 +8,11 @@ import Typography from '@mui/material/Typography';
 import WS from "../../../tools/WS";
 import { Box, Container } from '@mui/material';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import useInforContextStore from '../../../state/useInforContext';
+import useSnackbarStore from '../../../state/useSnackbarStore';
 
 
 class Login extends Component {
-
     state = {
         infor_user: "",
         infor_password: "",
@@ -26,12 +27,15 @@ class Login extends Component {
         if (inforContextString) {
             this.props.updateInforContext(JSON.parse(inforContextString));
         }
+        this.handleError = useSnackbarStore.getState().handleError;
+        this.showError = useSnackbarStore.getState().showError;
+        this.setInforContext = useInforContextStore.getState().setInforContext;
     }
 
     loginHandler = () => {
         // Validate mandatory fields
         if (!this.state.infor_user || !this.state.infor_password || !this.state.infor_organization) {
-            this.props.showError("Please provide valid credentials.")
+            this.showError("Please provide valid credentials.")
             return;
         }
         // Login
@@ -44,14 +48,15 @@ class Login extends Component {
                 INFOR_TENANT: this.state.infor_tenant,
                 INFOR_SESSIONID: response.body.data,
             }
+            this.setInforContext(inforContext);
             // Store in the redux store (used by axios)
-            this.props.updateInforContext(inforContext)
+            //this.props.updateInforContext(inforContext)
             // Store in session store (used if page will be refreshed)
-            sessionStorage.setItem('inforContext', JSON.stringify(inforContext));
+            //sessionStorage.setItem('inforContext', JSON.stringify(inforContext));
             // Activate all elements again
             this.setState({loginInProgress: false})
         }).catch(error => {
-            this.props.handleError(error);
+            this.handleError(error);
             this.setState({loginInProgress: false})
         })
     }

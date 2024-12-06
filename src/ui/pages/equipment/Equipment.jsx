@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import EquipmentTree from "./components/tree/EquipmentTree";
 import Position from "./position/Position";
@@ -9,22 +8,20 @@ import System from "./system/System";
 import Split from "react-split";
 import Location from "./location/Location";
 import Workorder from "../work/Workorder";
-import { setLayoutProperty } from "@/actions/uiActions";
-import InstallEqpContainer from "./installeqp/InstallEqpContainer";
+import InstallEqp from "./installeqp/InstallEqp";
+import useEquipmentTreeStore from "../../../state/useEquipmentTreeStore";
 
 const Equipment = () => {
-  const showEqpTree = useSelector((state) => state.ui.layout.showEqpTree);
-  const equipment = useSelector((state) => state.ui.layout.equipment);
+  const {equipmentTreeData: {showEqpTree, equipment}, updateEquipmentTreeData} = useEquipmentTreeStore();
   const renderEqpTree = equipment && showEqpTree;
-  const dispatch = useDispatch();
-  const setLayoutPropertyConst = (...args) =>
-    dispatch(setLayoutProperty(...args));
 
   useEffect(() => {
     return () => {
-      setLayoutPropertyConst("equipment", null);
-      setLayoutPropertyConst("showEqpTree", false);
-      setLayoutPropertyConst("eqpTreeMenu", null);
+      updateEquipmentTreeData({
+        equipment: null,
+        showEqpTree: false,
+        eqpTreeMenu: null,
+      })
     };
   }, []);
 
@@ -52,7 +49,7 @@ const Equipment = () => {
             <Route path={"/system/:code(.+)?"} component={System} />
             <Route path={"/location/:code(.+)?"} component={Location} />
             <Route path="/workorder/:code(.+)?" component={Workorder} />
-            <Route path="/installeqp" component={InstallEqpContainer} />
+            <Route path="/installeqp" component={InstallEqp} />
           </Switch>
         </div>
       </Split>

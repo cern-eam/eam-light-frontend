@@ -8,21 +8,23 @@ import BlockUi from "react-block-ui";
 import { createOnChangeHandler } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { IconButton } from "@mui/material";
 import { FileTree } from "mdi-material-ui";
-import { useSelector } from "react-redux";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Stack from "@mui/material/Stack";
 import Panel from "@/ui/components/panel/Panel";
+import useEquipmentTreeStore from "../../../../state/useEquipmentTreeStore";
+import useSnackbarStore from "@/state/useSnackbarStore";
 
 export default function InstallEqp(props) {
   const [parentEq, setParentEq] = useState("");
   const [childEq, setChildEq] = useState("");
   const [blocking, setBlocking] = useState(false);
-  const currentRoot = useSelector((state) => state.ui.layout.currentRoot);
+  const {equipmentTreeData: {currentRoot}, updateEquipmentTreeData} = useEquipmentTreeStore();
+  const {showNotification, handleError, showError} = useSnackbarStore();
   const idPrefix = "EAMID_InstallEqp_";
 
   useEffect(() => {
-    props.setLayoutProperty("eqpTreeMenu", [
+    updateEquipmentTreeData({eqpTreeMenu: [
       {
         desc: "Use as Parent",
         icon: <KeyboardArrowUpIcon />,
@@ -37,9 +39,9 @@ export default function InstallEqp(props) {
           setChildEq(rowInfo.node.id);
         },
       },
-    ]);
+    ]});
     return () => {
-      props.setLayoutProperty("eqpTreeMenu", null);
+      updateEquipmentTreeData({eqpTreeMenu: null});
     };
   }, []);
 
@@ -60,7 +62,7 @@ export default function InstallEqp(props) {
 
   const installEqpHandler = (code) => {
     if (!parentEq || !childEq) {
-      props.showError("Please provide the Child and Parent Equipment.");
+      showError("Please provide the Child and Parent Equipment.");
       return;
     }
 
@@ -68,15 +70,15 @@ export default function InstallEqp(props) {
     if (code) {
       WSEquipment.installEquipment(code)
         .then((response) => {
-          props.showNotification(
+          showNotification(
             `${childEq} was successfully attached to ${parentEq}`
           );
           setChildEq("");
-          props.setLayoutProperty("equipment", currentRoot);
+          updateEquipmentTreeData({equipment: currentRoot});
           setBlocking(false);
         })
         .catch((error) => {
-          props.handleError(error);
+          handleError(error);
           setBlocking(false);
         });
     }
@@ -84,7 +86,7 @@ export default function InstallEqp(props) {
 
   const detachEqpHandler = (code) => {
     if (!parentEq || !childEq) {
-      props.showError("Please provide the Child and Parent Equipment.");
+      showError("Please provide the Child and Parent Equipment.");
       return;
     }
 
@@ -92,23 +94,24 @@ export default function InstallEqp(props) {
     if (code) {
       WSEquipment.detachEquipment(code)
         .then((response) => {
-          props.showNotification(
+          showNotification(
             `${childEq} was successfully detached from ${parentEq}`
           );
           setChildEq("");
-          props.setLayoutProperty("equipment", currentRoot);
+          updateEquipmentTreeData({equipment: currentRoot});
           setBlocking(false);
         })
         .catch((error) => {
-          props.handleError(error);
+          handleError(error);
           setBlocking(false);
         });
     }
   };
 
   const treeButtonClickHandler = (code) => {
-    props.setLayoutProperty("equipment", { code });
-    props.setLayoutProperty("showEqpTree", true);
+    updateEquipmentTreeData({
+      equipment: { code }, 
+      showEqpTree: true });
   };
 
   return (

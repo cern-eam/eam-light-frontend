@@ -4,6 +4,7 @@ import MeterReadingContent from "../../meter/MeterReadingContent";
 import EAMConfirmDialog from "../../../components/EAMConfirmDialog";
 import SimpleEmptyState from "eam-components/dist/ui/components/emptystates/SimpleEmptyState";
 import BlockUi from "react-block-ui";
+import useSnackbarStore from "../../../../state/useSnackbarStore";
 
 /**
  * Meter Readings inside the work order number (workorder).
@@ -14,6 +15,12 @@ const rollOverMessageCreate =
   "Value is less than the Last Reading, which indicates the meter has rolled over. Is this correct?";
 
 class MeterReadingWO extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleError = useSnackbarStore.getState().handleError;
+    this.showNotification = useSnackbarStore.getState().showNotification;
+}
+
   state = {
     blocking: true,
     meterReadings: [],
@@ -64,10 +71,10 @@ class MeterReadingWO extends React.Component {
         //Reload the data
         this.loadMeterReadings(this.props.equipment);
         //Message
-        this.props.showNotification("Meter Reading created successfully");
+        this.showNotification("Meter Reading created successfully");
       })
       .catch((error) => {
-        this.props.handleError(error);
+        this.handleError(error);
         this.setState(() => ({ blocking: false }));
       });
   };
@@ -88,7 +95,7 @@ class MeterReadingWO extends React.Component {
         this.setState(() => ({ blocking: false }));
       })
       .catch((error) => {
-        this.props.handleError(error);
+        this.handleError(error);
         this.setState(() => ({ blocking: false }));
       });
   };

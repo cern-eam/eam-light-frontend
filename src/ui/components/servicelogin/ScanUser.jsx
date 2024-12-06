@@ -6,6 +6,8 @@ import WS from '../../../tools/WS';
 import BlockUi from 'react-block-ui';
 import { withCernMode } from '../CERNMode';
 import GridTools from '../../../tools/GridTools';
+import useSnackbarStore from '../../../state/useSnackbarStore';
+import useScannedUserStore from '../../../state/useScannedUserStore';
 
 const setUser = (userId, onSuccess, onError, mode) => {
     if (userId) {
@@ -27,15 +29,17 @@ const MODES = {
 /**
  * Allows user to scan card
  */
-const ScanUser = ({ updateScannedUser, showNotification, handleError }) => {
+const ScanUser = () => {
         const [cernId, updateCernId] = useState("");
         //const [ref, updateRef] = useState(null);
         const [loading, setLoading] = useState(null);
         const [scannerTimeout, setScannerTimeout] = useState(null);
         const scannerOnly = GridTools.getURLParameterByName("scannerOnly") !== "false";
         const mode = GridTools.getURLParameterByName("mode") || MODES.PERSON;
-        const [focus, setFocus] = useState(false)
-
+        const [focus, setFocus] = useState(false);
+        const {handleError, showNotification} = useSnackbarStore();
+        const {setScannedUser} = useScannedUserStore();
+        
         const updateUser = (evt) => {
             if (loading) return;
             evt.persist();
@@ -43,7 +47,7 @@ const ScanUser = ({ updateScannedUser, showNotification, handleError }) => {
             const onSuccess = (user) => {
                 showNotification(`Welcome, ${user.userDesc}!`)
                 setLoading(false);
-                updateScannedUser(user);
+                setScannedUser(user);
             }
             const onError = (e) => {
                 e && handleError(e);

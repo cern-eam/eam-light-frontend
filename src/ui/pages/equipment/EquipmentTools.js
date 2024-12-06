@@ -56,7 +56,7 @@ export const onCategoryChange = (category, updateProperty) => {
       }
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
     });
 };
 

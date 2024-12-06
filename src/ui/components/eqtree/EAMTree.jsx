@@ -7,11 +7,11 @@ import TreeTheme from "./theme/TreeTheme";
 import TreeIcon from "./components/TreeIcon";
 import TreeSelectParent from "./components/TreeSelectParent";
 import BlockUi from "react-block-ui";
-import { useSelector, useDispatch } from "react-redux";
 import NodeSelectMenu from "./components/NodeSelectMenu";
 import { isMultiOrg } from "@/ui/pages/EntityTools";
-import { handleError, setLayoutProperty } from "@/actions/uiActions";
 import { isEmpty } from "lodash";
+import useEquipmentTreeStore from "../../../state/useEquipmentTreeStore";
+import useSnackbarStore from "../../../state/useSnackbarStore";
 
 const urlTypeMap = {
   A: "asset",
@@ -38,14 +38,10 @@ export default function EAMTree(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [currentRow, setCurrentRow] = React.useState(null);
 
-  const equipment = useSelector((state) => state.ui.layout.equipment);
-  const eqpTreeMenu = useSelector((state) => state.ui.layout.eqpTreeMenu);
-  const history = useHistory();
+  const {equipmentTreeData: {equipment, eqpTreeMenu}, updateEquipmentTreeData} = useEquipmentTreeStore();
+  const {handleError} = useSnackbarStore();
 
-  const dispatch = useDispatch();
-  const setLayoutPropertyConst = (...args) =>
-    dispatch(setLayoutProperty(...args));
-  const handleErrorConst = (...args) => dispatch(handleError(...args));
+  const history = useHistory();
 
   const _loadTreeData = async (code, organization, type) => {
     setLoading(true);
@@ -62,10 +58,10 @@ export default function EAMTree(props) {
         await _reExpandNodes(data);
       }
       setTreeData(data);
-      setLayoutPropertyConst("currentRoot", { code, organization, type });
+      updateEquipmentTreeData({currentRoot: { code, organization, type }});
     } catch (error) {
       if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
-        handleErrorConst(error);
+        handleError(error);
       }
     } finally {
       setLoading(false);
@@ -203,7 +199,7 @@ export default function EAMTree(props) {
                         rowInfo.node.parents.length > 0 && (
                           <TreeSelectParent
                             parents={rowInfo.node.parents}
-                            setLayoutProperty={setLayoutPropertyConst}
+                            //setLayoutProperty={setLayoutPropertyConst}
                             reloadData={_loadTreeData}
                           />
                         )}

@@ -9,17 +9,17 @@ import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDocligh
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
-import EamlightToolbarContainer from "../../../components/EamlightToolbarContainer";
 import AssetDetails from "./AssetDetails";
 import AssetGeneral from "./AssetGeneral";
 import AssetHierarchy from "./AssetHierarchy";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
-import EquipmentPartsMadeOf from "../components/EquipmentPartsMadeOf";
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import { Link } from "react-router-dom";
 import WSParts from "../../../../tools/WSParts";
 import EquipmentGraphIframe from "../../../components/iframes/EquipmentGraphIframe";
 import { isCernMode } from "../../../components/CERNMode";
 import { TAB_CODES } from "../../../components/entityregions/TabCodeMapping";
-import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions } from "../../EntityTools";
+import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions, renderLoading } from "../../EntityTools";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer";
 import useEntity from "@/hooks/useEntity";
 import { isClosedEquipment, assetLayoutPropertiesMap } from "../EquipmentTools";
@@ -38,10 +38,11 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import HardwareIcon from "@mui/icons-material/Hardware";
 import WarningIcon from "@mui/icons-material/Warning";
-import { handleError } from "@/actions/uiActions";
 import Variables from "../components/Variables";
 import getPartsAssociated from "@/ui/pages/PartsAssociated";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
+import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
+import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -62,12 +63,10 @@ const Asset = () => {
     newEntity,
     commentsComponent,
     isHiddenRegion,
-    getHiddenRegionState,
     getUniqueRegionID,
     showEqpTree,
-    toggleHiddenRegion,
+    updateEquipmentTreeData,
     setRegionVisibility,
-    setLayoutProperty,
     newHandler,
     saveHandler,
     deleteHandler,
@@ -76,6 +75,7 @@ const Asset = () => {
     register,
     showNotification,
     showWarning,
+    handleError,
   } = useEntity({
     WS: {
       create: WSEquipment.createEquipment,
@@ -117,13 +117,13 @@ const Asset = () => {
 
   function postInit() {
     readStatuses(true);
-    setLayoutProperty("equipment", null);
+    updateEquipmentTreeData({equipment: null});
   }
 
   function postRead(equipment) {
     readStatuses(false, equipment.statusCode);
     if (!showEqpTree) {
-      setLayoutProperty("equipment", equipment);
+      updateEquipmentTreeData({equipment});
     }
   }
 
@@ -263,7 +263,7 @@ const Asset = () => {
         label: "EDMS Documents",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <EDMSDoclightIframeContainer objectType="A" objectID={equipment.code} />,
+        render: () => <EDMSDoclightIframeContainer objectType="A" objectID={equipment.code} url={applicationData.EL_DOCLI}/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -278,7 +278,7 @@ const Asset = () => {
         label: "NCRs",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <NCRIframeContainer objectType="A" objectID={equipment.code} />,
+        render: () => <NCRIframeContainer objectType="A" objectID={equipment.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -287,6 +287,25 @@ const Asset = () => {
         summaryIcon: BookmarkBorderRoundedIcon,
         ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
+      },
+      {
+        id: "LOCATIONNCRS",
+        label: "Non Conformities",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => <EquipmentNCRs equipment={equipment.code}/>,
+        RegionPanelProps: {
+          customHeadingBar:  (
+              <Link to ={`/ncr?equipmentCode=${equipment.code}&description=NCR for ${equipment.code}`}
+                    style={{padding: 10, display: "flex", alignItems: "center", justifyContent: "space-between", color: "#737373" }}>
+                <AddBoxIcon />
+              </Link>
+          ),
+        },
+        column: 2,
+        order: 7,
+        summaryIcon: BookmarkBorderRoundedIcon,
+        ignore: !isCernMode 
       },
       {
         id: "COMMENTS",
@@ -404,13 +423,13 @@ const Asset = () => {
     ];
   };
 
-  if (!equipment) {
-    return React.Fragment;
+  if (!equipment || !assetLayout) {
+    return renderLoading("Reading Asset ...")
   }
 
   return (
     <BlockUi tag="div" blocking={loading} style={{ height: "100%", width: "100%" }}>
-      <EamlightToolbarContainer
+      <EamlightToolbar
         isModified={isModified}
         newEntity={newEntity}
         entityScreen={screenPermissions}
@@ -436,20 +455,18 @@ const Asset = () => {
         }}
         width={730}
         entityIcon={<AssetIcon style={{ height: 18 }} />}
-        toggleHiddenRegion={toggleHiddenRegion}
         getUniqueRegionID={getUniqueRegionID}
         regions={getRegions()}
         isHiddenRegion={isHiddenRegion}
-        getHiddenRegionState={getHiddenRegionState}
+        setRegionVisibility={setRegionVisibility}
       />
       <EntityRegions
         showEqpTree={showEqpTree}
         regions={getRegions()}
         isNewEntity={newEntity}
-        isHiddenRegion={isHiddenRegion}
         getUniqueRegionID={getUniqueRegionID}
+        isHiddenRegion={isHiddenRegion}
         setRegionVisibility={setRegionVisibility}
-        getHiddenRegionState={getHiddenRegionState}
       />
     </BlockUi>
   );

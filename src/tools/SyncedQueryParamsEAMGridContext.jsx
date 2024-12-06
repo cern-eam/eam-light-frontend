@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 import GridTools from "./GridTools";
 import StatusIcon from '../ui/layout/StatusIcon';
 import { EAMGridContextProvider } from "eam-components/dist/ui/components/grids/eam/EAMGridContext";
