@@ -17,25 +17,6 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import Toolbar from "./Toolbar";
 import "./EamlightToolbar.css";
 
-const verticalLineStyle = {
-  height: 25,
-  borderRight: "1px solid gray",
-  margin: 5,
-};
-
-const entityCodeStyle = {
-  marginLeft: 12,
-  marginRight: 5,
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  flexWrap: "wrap",
-};
-
-const iconMenuStyle = {
-  marginRight: 5,
-  width: 20,
-};
 
 const EamlightToolbar = ({
   regions,
@@ -159,20 +140,12 @@ const EamlightToolbar = ({
         {isLocalAdministrator && (
           <>
             <span
-              className="screen-code"
-              style={{
-                marginRight: 5,
-                color: "#ccc",
-                fontWeight: "lighter",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                minWidth: "0px",
-              }}
+              className="screen-code-constant screen-code-max-width"
             >
               {entityScreen.screenCode}
             </span>
             {!smallScreenMode && (
-              <div style={{ ...verticalLineStyle, borderRightColor: "#ccc" }} />
+              <div className="verticalLineStyle" style={{ borderRightColor: "#ccc" }} />
             )}
           </>
         )}
@@ -190,7 +163,6 @@ const EamlightToolbar = ({
   );
 
   const renderCompactMenu = () => {
-    //this.props.entityToolbar.props.renderOption = 'MENUITEMS'
     return (
       <div style={{ display: "flex" }}>
         <Button
@@ -211,14 +183,14 @@ const EamlightToolbar = ({
           onClose={() => moreMenu && setMoreMenu(null)}
         >
           <MenuItem onClick={localNewHandler} disabled={isNewButtonDisabled}>
-            <AddIcon className="iconButton" style={iconMenuStyle} />
+            <AddIcon className="iconButton iconMenuStyle" />
             <div> New</div>
           </MenuItem>
           <MenuItem
             onClick={() => deleteConfirmation.current.show()}
             disabled={isDeleteButtonDisabled}
           >
-            <DeleteOutlineIcon className="iconButton" style={iconMenuStyle} />
+            <DeleteOutlineIcon className="iconButton iconMenuStyle" />
             <div> Delete</div>
           </MenuItem>
           {getToolbar("MENUITEMS")}
@@ -254,10 +226,10 @@ const EamlightToolbar = ({
     <div className={"entityToolbar"}>
       <div className={"entityToolbarContent"}>
         <div
-          style={
-            compactMenu
-              ? { ...entityCodeStyle, flexBasis: "8em", flexShrink: "0" }
-              : entityCodeStyle
+          className="entityCodeStyle"
+          style={compactMenu
+              ? { flexBasis: "8em", flexShrink: "0" }
+              : {}
           }
         >
           <div
@@ -276,7 +248,7 @@ const EamlightToolbar = ({
           </div>
         </div>
 
-        <div style={verticalLineStyle} />
+        <div className="verticalLineStyle" />
 
         <Button
           onClick={saveHandler}
