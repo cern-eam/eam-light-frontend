@@ -87,7 +87,7 @@ const useEntity = (params) => {
     generateErrorMessagesFromException,
     resetErrorMessages,
   } = useFieldsValidator(
-    //useMemo(
+    //useMemo( // TODO!!!
     () =>
       prepareDataForFieldsValidator(entity, screenLayout, layoutPropertiesMap),
     [screenCode, entity?.customField],
