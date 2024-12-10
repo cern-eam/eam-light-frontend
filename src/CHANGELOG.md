@@ -1,6 +1,15 @@
-# Version (2024-11-15)
+# Version (2024-12-10)
 
 ## Features
+### 3.20.0 
+* Updated eam-wshub-core ([c4c669](https://github.com/cern-eam/eam-light-backend/commit/c4c6694c98892608bc531e12a37380b7dc5a35d5))
+* Use env variable for keycloak resource ([ee38bf](https://github.com/cern-eam/eam-light-backend/commit/ee38bf3405b096e8b2ed55205eee9c38c6282510))
+### 3.19.13-SNAP 
+* [EAM-3877] Entity lookup case sensitive and class ignored ([5ca337](https://github.com/cern-eam/eam-light-backend/commit/5ca337ba32303e0f06bd803f1b9c7cc5126e8936))
+* Updated eam-wshub-core to have location as an equipment type ([9d994d](https://github.com/cern-eam/eam-light-backend/commit/9d994d040dedef1a23e91dbdaafde0a961eb1e3d))
+* Add endpoint to read Equipment NCRs ([ee9181](https://github.com/cern-eam/eam-light-backend/commit/ee9181d8ff847b39f2a96de09d03fc7b9816c2f8))
+* Update eam-wshub-core version ([e77be3](https://github.com/cern-eam/eam-light-backend/commit/e77be3b158e1240c702583095846d6aa022fd7d0))
+* Add endpoints for Autocomplete / Select lookups ([a44ce3](https://github.com/cern-eam/eam-light-backend/commit/a44ce39c9cfdb8d8a106775c583caecd752d3b4a))
 ### 3.19.4 
 * Remove snapshot version ([853c4b](https://github.com/cern-eam/eam-light-backend/commit/853c4b8530931fc9d0a07496cbcb0d1f839b780c))
 ### 3.19.3 
@@ -1003,4 +1012,10 @@
 * Refactoring linked to the removal of some legacy classes (SimpleGridinput, GridUtils, ...) ([a2a706](https://github.com/cern-eam/eam-light-backend/commit/a2a7068b63483846b1cd55eac55f89288298e1e4))
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
+###  
+* Remove commented Hazard Icon import (#217) ([e63997](https://github.com/cern-eam/eam-light-frontend/commit/e63997db64d056975f880b42b585841188a6345a))
+* Eam 3990 (#219) ([1d7033](https://github.com/cern-eam/eam-light-frontend/commit/1d7033376fd5549dc0afa26db100d941b65979fa))
+* Add missing overflow style to portal content div ([7e44f6](https://github.com/cern-eam/eam-light-frontend/commit/7e44f645386d23c5591755fdfa9502415e9de71b))
+* Do not limit NCRs to R5CERN anymore ([aef410](https://github.com/cern-eam/eam-light-frontend/commit/aef410e154b8fe8b4d99e47b3b71fef3629d5c3a))
+* Do not process anything else when regionOnly was specified ([100459](https://github.com/cern-eam/eam-light-frontend/commit/100459604f9c19b29da474fae4b4f7a4c0de8d89))
 
