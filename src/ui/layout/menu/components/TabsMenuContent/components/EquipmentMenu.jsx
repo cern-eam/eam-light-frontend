@@ -44,8 +44,7 @@ const EquipmentMenu = ({ classes }) => {
                     />
                 )}
 
-                {eamAccount.userGroup === "R5CERN" &&
-                    ncrScreen && ( // Limit temporairly to R5CERN
+                {ncrScreen && ( 
                         <MenuItem
                             label="NCRs"
                             icon={<Rule className={classes.menuIcon} />} // TODO: Add NCR icon
@@ -53,7 +52,7 @@ const EquipmentMenu = ({ classes }) => {
                                 setActiveMenuVisibility("equipmentNcrs")
                             }
                         />
-                    )}
+                )}
 
                 {positionScreen && (
                     <MenuItem
