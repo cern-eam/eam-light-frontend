@@ -106,6 +106,20 @@ const EntityRegions = (props) => {
         [paramKey.replace(`${regionID}_`, '')]: searchParams[paramKey],
       }), {}), [searchParams]);
 
+  if (matchingRegion) {
+    return createPortal(
+      <RegionPanel
+        key={matchingRegion.id}
+        heading={matchingRegion.label.toUpperCase()}
+        summaryIcon={matchingRegion.summaryIcon && styleSummaryIcon(matchingRegion.summaryIcon)}
+        initiallyExpanded={true}
+        {...matchingRegion.RegionPanelProps}>
+        {matchingRegion.render({ panelQueryParams: getRegionPanelQueryParams(matchingRegion.id)})}
+      </RegionPanel>,
+      document.getElementById("portalContent")
+    )
+  }
+  
   return (
     <div id="entityContent" style={{height: "calc(100% - 60px)"}}>
       <Grid container spacing={1}>
@@ -113,7 +127,7 @@ const EntityRegions = (props) => {
           <Grid key={column} item xs={gridDimensions.xs} sm={gridDimensions.sm} md={gridDimensions.md} lg={gridDimensions.lg}>
             {columns[column]
               .sort((a,b) => a.id === regionMaximized ? -1 : a.order - b.order)
-              .filter(region => visibleRegions[region.id] && regionOnly !== region.id)
+              .filter(region => visibleRegions[region.id])
               .map(region => (
                 <RegionPanel
                   style={{ display: regionMaximized && region.id !== regionMaximized ? 'none' : '' }}
@@ -136,21 +150,6 @@ const EntityRegions = (props) => {
           </Grid>
         ))}
       </Grid>
-
-      {matchingRegion &&
-        createPortal(
-          <RegionPanel
-            key={matchingRegion.id}
-            heading={matchingRegion.label.toUpperCase()}
-            summaryIcon={matchingRegion.summaryIcon && styleSummaryIcon(matchingRegion.summaryIcon)}
-            initiallyExpanded={true}
-            {...matchingRegion.RegionPanelProps}>
-            {matchingRegion.render({ panelQueryParams: getRegionPanelQueryParams(matchingRegion.id)})}
-          </RegionPanel>,
-          document.getElementById("portalContent")
-        )
-      }
-
     </div>
   )
 }
