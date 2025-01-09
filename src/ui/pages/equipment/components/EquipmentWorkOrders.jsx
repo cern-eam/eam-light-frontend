@@ -54,11 +54,11 @@ function EquipmentWorkOrders(props) {
 
     const [workOrderFilter, setWorkOrderFilter] = useLocalStorage(LOCAL_STORAGE_FILTER_KEY, WO_FILTER_TYPES.ALL, defaultFilter);
     let headers = ['Work Order', 'Equipment', 'Description', 'Status', 'Date'];
-    let propCodes = ['number', 'object','desc', 'status', 'createdDate'];
+    let propCodes = ['number', 'object','desc', 'status', 'date'];
 
     if (workOrderFilter === WO_FILTER_TYPES.THIS) {
         headers = ['Work Order', 'Description', 'Status', 'Date'];
-        propCodes = ['number', 'desc', 'status', 'createdDate'];
+        propCodes = ['number', 'desc', 'status', 'date'];
     }
 
     // make spaces in header strings non-breaking so headers do not wrap to multiple lines
@@ -84,7 +84,7 @@ function EquipmentWorkOrders(props) {
     };
 
     const keyMap = {
-        createdDate: TRANSFORM_KEYS.DATE_DD_MMM_YYYY
+        date: TRANSFORM_KEYS.DATE_DD_MMM_YYYY
     }
 
     let getFilteredWorkOrderList = (workOrders) => {
@@ -103,9 +103,18 @@ function EquipmentWorkOrders(props) {
     const fetchData = (equipmentCode, equipmentType) => {
         Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode, equipmentType)])
             .then(responses => {
+                const getDateLabel = (element) => {
+                    const fallbackDateLabel = element.createdDate ? format(new Date(element.createdDate),'dd-MMM-yyyy') : '-';
+
+                    // closed/cancelled element
+                    if(element.status.startsWith('T') || element.status.startsWith('C')) return element.completedDate ? format(new Date(element.completedDate),'dd-MMM-yyyy') : fallbackDateLabel;
+                    
+                    // open element
+                    return element.schedulingStartDate ? format(new Date(element.schedulingStartDate), 'dd-MMM-yyyy') : fallbackDateLabel
+                }
                 const formatResponse = response => response.body.data.map(element => ({
                     ...element,
-                    createdDate: element.createdDate && format(new Date(element.createdDate),'dd-MMM-yyyy'),
+                    date: getDateLabel(element),
                     objectUrl: `equipment/${encodeURIComponent(element?.object || '')}`
                 }));
 
@@ -138,7 +147,7 @@ function EquipmentWorkOrders(props) {
                     linksMap={linksMap}
                     stylesMap={stylesMap}
                     keyMap={keyMap}
-                    defaultOrderBy='createdDate'
+                    defaultOrderBy='date'
                     defaultOrder={Constants.SORT_DESC}
                     />
                 </BlockUi>
