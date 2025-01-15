@@ -3,7 +3,7 @@ import SearchResults, { FSearchResults } from "./SearchResults";
 import "./Search.css";
 import InfiniteScroll from "react-infinite-scroll-component";
 import WS from "../../../tools/WS";
-import SearchHeader from "./SearchHeader";
+import SearchHeader, { FSearchHeader } from "./SearchHeader";
 import { Redirect } from "react-router-dom";
 import LinearProgress from "@mui/material/LinearProgress";
 import KeyCode from "eam-components/dist/enums/KeyCode";
@@ -49,7 +49,7 @@ class Search extends Component {
             : "searchContainer searchContainerHome"
         }
       >
-        <SearchHeader
+        <FSearchHeader
           keyword={this.state.keyword}
           searchBoxUp={this.state.searchBoxUp}
           fetchDataHandler={this.fetchNewData.bind(this)}
