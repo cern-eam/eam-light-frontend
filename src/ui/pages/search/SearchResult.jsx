@@ -1,6 +1,6 @@
 import * as React from "react";
 import TableCell from "@mui/material/TableCell";
-import SearchHighlighter from "./SearchHighlighter";
+import SearchHighlighter, { FSearchHighlighter } from "./SearchHighlighter";
 import EntityCode from "../../../enums/EntityCode";
 
 export default class SearchResult extends React.Component {
@@ -126,7 +126,7 @@ export function FSearchResult({ selected, data, keyword }) {
           <tr>
             <td>{getSearchItemLabel(data.type)}</td>
             <td>
-              <SearchHighlighter
+              <FSearchHighlighter
                 style={{ color: "#1a0dab", fontWeight: "bold" }}
                 data={data.code}
                 keyword={keyword}
@@ -138,13 +138,13 @@ export function FSearchResult({ selected, data, keyword }) {
           {data.serial ? (
             <tr>
               <td>Serial number:</td>
-              <SearchHighlighter data={data.serial} keyword={keyword} />
+              <FSearchHighlighter data={data.serial} keyword={keyword} />
             </tr>
           ) : null}
           {data.alias ? (
             <tr>
               <td>Alias:</td>
-              <SearchHighlighter data={data.alias} keyword={keyword} />
+              <FSearchHighlighter data={data.alias} keyword={keyword} />
             </tr>
           ) : null}
           <tr>

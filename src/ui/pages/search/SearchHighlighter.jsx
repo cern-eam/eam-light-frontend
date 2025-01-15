@@ -35,3 +35,26 @@ export default class SearchHighlighter extends React.Component {
     return text.replace(keyword, "<mark>" + keyword + "</mark>");
   }
 }
+
+const replace = (text, keyword) =>
+  !text ? "" : text.replace(keyword, "<mark>" + keyword + "</mark>");
+
+export function FSearchHighlighter(props) {
+  return !!props.link ? (
+    <Link to={{ pathname: props.link }}>
+      <span
+        dangerouslySetInnerHTML={{
+          __html: replace(props.data, props.keyword.toUpperCase()),
+        }}
+        style={props.style}
+      />
+    </Link>
+  ) : (
+    <td
+      dangerouslySetInnerHTML={{
+        __html: replace(props.data, props.keyword.toUpperCase()),
+      }}
+      style={props.style}
+    ></td>
+  );
+}
