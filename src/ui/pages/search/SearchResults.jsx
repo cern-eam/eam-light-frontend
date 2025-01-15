@@ -24,7 +24,7 @@ export default class SearchResults extends React.Component {
       <TableRow
         key={number}
         selected={isSelected}
-        style={isSelected ? { backgroundColor: "#def4fa" } : {}}
+        style={isSelected ? { backgroundColor: "green" } : {}}
       >
         <SearchResult
           data={item}
@@ -34,4 +34,35 @@ export default class SearchResults extends React.Component {
       </TableRow>
     );
   }
+}
+
+/**
+ * Function Version of the component
+ */
+export function FSearchResults(props) {
+  const mapItemToSearchResult = (item, number) => {
+    const isSelected = item.code === props.selectedItemCode;
+
+    return (
+      <TableRow
+        key={number}
+        selected={isSelected}
+        style={isSelected ? { backgroundColor: "#def4fa" } : {}}
+      >
+        <SearchResult
+          data={item}
+          keyword={props.keyword}
+          selected={isSelected}
+        />
+      </TableRow>
+    );
+  };
+
+  return (
+    <div style={{ fontSize: "16px" }}>
+      <Table>
+        <TableBody>{props.data.map(mapItemToSearchResult)}</TableBody>
+      </Table>
+    </div>
+  );
 }
