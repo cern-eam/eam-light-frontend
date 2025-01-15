@@ -1,5 +1,5 @@
 import * as React from "react";
-import SearchResult from "./SearchResult";
+import SearchResult, {FSearchResult} from "./SearchResult";
 import Table from "@mui/material/Table";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
@@ -49,7 +49,7 @@ export function FSearchResults(props) {
         selected={isSelected}
         style={isSelected ? { backgroundColor: "#def4fa" } : {}}
       >
-        <SearchResult
+        <FSearchResult
           data={item}
           keyword={props.keyword}
           selected={isSelected}
