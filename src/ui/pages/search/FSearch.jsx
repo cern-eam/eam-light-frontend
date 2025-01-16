@@ -1,15 +1,15 @@
-import React, { Component, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SearchResults from "./SearchResults";
 import "./Search.css";
 import InfiniteScroll from "react-infinite-scroll-component";
-import WS from "../../../tools/WS";
+import WS from "@/tools/WS";
 import SearchHeader from "./SearchHeader";
 import { Redirect } from "react-router-dom";
 import LinearProgress from "@mui/material/LinearProgress";
 import KeyCode from "eam-components/dist/enums/KeyCode";
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import Ajax from "eam-components/dist/tools/ajax";
-import useSnackbarStore from "../../../state/useSnackbarStore";
+import useSnackbarStore from "@/state/useSnackbarStore";
 
 const INITIAL_STATE = {
   results: [],
