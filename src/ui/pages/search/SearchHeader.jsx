@@ -238,6 +238,9 @@ const SearchHeaderInput = ({
 }) => {
   const entityTypes = searchOn.join(",");
   const searchInput = React.useRef(null);
+  React.useEffect(() => {
+    searchInput.current.focus();
+  }, []);
 
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
