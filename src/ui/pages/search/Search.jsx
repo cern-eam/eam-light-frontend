@@ -10,7 +10,6 @@ import KeyCode from "eam-components/dist/enums/KeyCode";
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import Ajax from "eam-components/dist/tools/ajax";
 import useSnackbarStore from "../../../state/useSnackbarStore";
-import { result, set } from "lodash";
 
 const INITIAL_STATE = {
   results: [],
@@ -20,56 +19,98 @@ const INITIAL_STATE = {
   redirectRoute: "",
 };
 
-const useSearchState = () => {
-  const [results, setResults] = useState([]);
-  const [searchBoxUp, setSearchBoxUp] = useState(false);
-  const [keyword, setKeyword] = useState("");
-  const [isFetching, setIsFetching] = useState(false);
-  const [redirectRoute, setRedirectRoute] = useState("");
+const prepareKeyword = (keyword) => {
+  return keyword.replace("_", "\\_").replace("%", "\\%").toUpperCase();
+};
+
+const useSearchResources = (props) => {
+  const [results, setResults] = useState(INITIAL_STATE.results);
+  const [searchBoxUp, setSearchBoxUp] = useState(INITIAL_STATE.searchBoxUp);
+  const [keyword, setKeyword] = useState(INITIAL_STATE.keyword);
+  const [isFetching, setIsFetching] = useState(INITIAL_STATE.isFetching);
+  const [redirectRoute, setRedirectRoute] = useState(
+    INITIAL_STATE.redirectRoute
+  );
   const [selectedItemIndex, setSelectedItemIndex] = useState(-1);
 
+  const timeout = useRef(null);
+  const cancelSource = useRef(null);
+  const prevProps = useRef(props);
+
+  useEffect(() => {
+    scrollWindowIfNecessary();
+    if (prevProps.current.location !== props.location) {
+      cancelSource.current && cancelSource.current.cancel();
+      setResults(INITIAL_STATE.results);
+      setSearchBoxUp(INITIAL_STATE.searchBoxUp);
+      setKeyword(INITIAL_STATE.keyword);
+      setIsFetching(INITIAL_STATE.isFetching);
+      setRedirectRoute(INITIAL_STATE.redirectRoute);
+      setSelectedItemIndex(-1);
+    }
+    prevProps.current = props;
+  }, [props.location]);
+
+  const scrollWindowIfNecessary = () => {
+    const selectedRow = document.getElementsByClassName("selectedRow")[0];
+
+    if (!selectedRow) {
+      return;
+    }
+
+    const rect = selectedRow.getBoundingClientRect();
+    const margin = 230;
+    const isInViewport =
+      rect.top >= margin &&
+      rect.bottom <=
+        (window.innerHeight || document.documentElement.clientHeight) - margin;
+
+    if (!isInViewport) {
+      selectedRow.scrollIntoView();
+    }
+  };
+
   return {
-    results,
-    setResults,
-    searchBoxUp,
-    setSearchBoxUp,
-    keyword,
-    setKeyword,
-    isFetching,
-    setIsFetching,
-    redirectRoute,
-    setRedirectRoute,
-    selectedItemIndex,
-    setSelectedItemIndex,
+    state: {
+      results,
+      setResults,
+      searchBoxUp,
+      setSearchBoxUp,
+      keyword,
+      setKeyword,
+      isFetching,
+      setIsFetching,
+      redirectRoute,
+      setRedirectRoute,
+      selectedItemIndex,
+      setSelectedItemIndex,
+    },
+    ref: {
+      timeout,
+      cancelSource,
+    },
   };
 };
 
 function FSearch(props) {
   const {
-    results,
-    setResults,
-    redirectRoute,
-    setRedirectRoute,
-    searchBoxUp,
-    setSearchBoxUp,
-    keyword,
-    setKeyword,
-    isFetching,
-    setIsFetching,
-    selectedItemIndex,
-    setSelectedItemIndex,
-  } = useSearchState();
-  const prevProps = useRef(props);
-  useEffect(() => {
-    scrollWindowIfNecessary();
-    if (prevProps.current.location !== props.location) {
-      // return to initial state
-      cancelSource.current && cancelSource.current.cancel();
-    }
-    prevProps.current = props;
-  }, [props.location]);
-  const timeout = useRef(null);
-  const cancelSource = useRef(null);
+    state: {
+      results,
+      setResults,
+      redirectRoute,
+      setRedirectRoute,
+      searchBoxUp,
+      setSearchBoxUp,
+      keyword,
+      setKeyword,
+      isFetching,
+      setIsFetching,
+      selectedItemIndex,
+      setSelectedItemIndex,
+    },
+    ref: { timeout, cancelSource },
+  } = useSearchResources(props);
+
   const handleError = useSnackbarStore.getState().handleError;
   /**
    * Handles the moving of arrows
@@ -148,25 +189,6 @@ function FSearch(props) {
     setSelectedItemIndex(results.length - 1);
   };
 
-  const scrollWindowIfNecessary = () => {
-    let selectedRow = document.getElementsByClassName("selectedRow")[0];
-
-    if (!selectedRow) {
-      return;
-    }
-
-    let rect = selectedRow.getBoundingClientRect();
-    const margin = 230;
-    const isInViewport =
-      rect.top >= margin &&
-      rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) - margin;
-
-    if (!isInViewport) {
-      selectedRow.scrollIntoView();
-    }
-  };
-
   const fetchNewData = (keyword, entityTypes) => {
     if (!!cancelSource.current) {
       cancelSource.current?.cancelSource?.cancel();
@@ -209,9 +231,15 @@ function FSearch(props) {
     );
   };
 
-  const prepareKeyword = (keyword) => {
-    return keyword.replace("_", "\\_").replace("%", "\\%").toUpperCase();
-  };
+  if (redirectRoute) {
+    return <Redirect to={redirectRoute} />;
+  }
+
+  const selectedItemCode = !!results[selectedItemIndex]
+    ? results[selectedItemIndex].code
+    : null;
+
+  const noResultsAvailable = !isFetching && results.length === 0 && keyword;
 
   return (
     <div
@@ -238,18 +266,14 @@ function FSearch(props) {
           {isFetching && <LinearProgress className="linearProgress" />}
         </div>
         <div className="searchScrollBox">
-          {!isFetching && results.length === 0 && keyword ? (
+          {noResultsAvailable ? (
             <div className="searchNoResults">No results found.</div>
           ) : (
             <InfiniteScroll height="calc(100vh - 180px)">
               <FSearchResults
                 data={results}
                 keyword={keyword}
-                selectedItemCode={
-                  !!results[selectedItemIndex]
-                    ? results[selectedItemIndex].code
-                    : null
-                }
+                selectedItemCode={selectedItemCode}
               />
             </InfiniteScroll>
           )}
