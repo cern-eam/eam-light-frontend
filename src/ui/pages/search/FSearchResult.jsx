@@ -1,7 +1,7 @@
 import * as React from "react";
 import TableCell from "@mui/material/TableCell";
 import SearchHighlighter from "./SearchHighlighter";
-import EntityCode from "../../../enums/EntityCode";
+import EntityCode from "@/enums/EntityCode";
 
 function FSearchResult({ selected, data, keyword }) {
   return (

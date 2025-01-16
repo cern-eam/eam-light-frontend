@@ -4,7 +4,6 @@ import EAMCheckbox from "eam-components/dist/ui/components/inputs-ng/EAMCheckbox
 import EAMBarcodeScanner from "eam-components/dist/ui/components/inputs-ng/components/EAMBarcodeScanner";
 import FSearchHeader from "./FSearchHeader";
 
-export default FSearchHeader;
 const SEARCH_TYPES = {
   PART: {
     text: "Parts",
@@ -31,6 +30,7 @@ const searchIconStyle = {
   top: 5,
 };
 
+export default FSearchHeader;
 class SearchHeader extends React.Component {
   state = {
     searchOn: Object.values(SEARCH_TYPES).map((v) => v.value),
