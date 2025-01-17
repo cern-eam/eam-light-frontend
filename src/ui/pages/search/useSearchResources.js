@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-const INITIAL_STATE = {
+
+export const INITIAL_STATE = {
   results: [],
   searchBoxUp: false,
   keyword: "",
@@ -17,7 +18,6 @@ export default function useSearchResources(props) {
   );
   const [selectedItemIndex, setSelectedItemIndex] = useState(-1);
 
-  const timeout = useRef(null);
   const cancelSource = useRef(null);
 
   const prevProps = useRef(props);
@@ -76,7 +76,6 @@ export default function useSearchResources(props) {
       setSelectedItemIndex,
     },
     ref: {
-      timeout,
       cancelSource,
     },
   };

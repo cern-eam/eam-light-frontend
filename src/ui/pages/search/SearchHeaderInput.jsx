@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
+import { INITIAL_STATE } from "./useSearchResources";
 
 const SearchHeaderInput = ({
   handleSearchInput,
@@ -9,7 +10,6 @@ const SearchHeaderInput = ({
   isFetching,
 }) => {
   const [searchText, setSearchText] = useState(value);
-  const searchInput = useRef(null);
   const propagateChangeOfValue = useDebouncedCallback(
     () => handleSearchInput({ target: { value: searchText } }),
     200
@@ -19,6 +19,12 @@ const SearchHeaderInput = ({
     propagateChangeOfValue();
   }, [searchText]);
 
+  useEffect(() => {
+    // when keyword is initial state, reset the input value to the initial state
+    if (INITIAL_STATE.keyword === value) setSearchText(INITIAL_STATE.keyword);
+  }, [value]);
+
+  const searchInput = useRef(null);
   useEffect(() => {
     searchInput.current.focus();
   }, []);

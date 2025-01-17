@@ -8,11 +8,11 @@ function SearchResults({ data, renderResult, selectedItemCode }) {
   return (
     <Table style={{ fontSize: "16px" }}>
       <TableBody>
-        {data.map((item) => {
+        {data.map((item, index) => {
           const isSelected = item.code === selectedItemCode;
           return (
             <TableRow
-              key={item.code}
+              key={item.code + index}
               selected={isSelected}
               style={isSelected ? { backgroundColor: "#def4fa" } : {}}
             >
