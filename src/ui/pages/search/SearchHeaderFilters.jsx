@@ -19,44 +19,36 @@ const SEARCH_TYPES = {
 };
 
 const SearchHeaderFilters = ({
-  showTypes,
   searchOn = "",
   setSearchOn,
   handleSearchInput,
   keyword,
 }) => {
   return (
-    <>
-      {showTypes ? (
-        <div className="searchTypes">
-          {Object.values(SEARCH_TYPES).map((searchType) => (
-            <EAMCheckbox
-              key={searchType.code}
-              label={searchType.text}
-              value={searchOn.includes(searchType.value).toString()}
-              rootStyle={{ flex: "0 1 auto" }}
-              onChange={() => {
-                setSearchOn((prevSearchOn) => {
-                  const newState = prevSearchOn.includes(searchType.value)
-                    ? prevSearchOn.filter((val) => val !== searchType.value)
-                    : [...prevSearchOn, searchType.value];
-                  handleSearchInput(
-                    {
-                      target: { value: keyword },
-                    },
-                    newState
-                  );
-                  return newState;
-                });
-              }}
-            />
-          ))}
-        </div>
-      ) : null}
-      <label id="searchPlaceHolder">
-        {!keyword ? "Search for Equipment, Work Orders, Parts, ..." : null}
-      </label>
-    </>
+    <div className="searchTypes">
+      {Object.values(SEARCH_TYPES).map((searchType) => (
+        <EAMCheckbox
+          key={searchType.code}
+          label={searchType.text}
+          value={searchOn.includes(searchType.value).toString()}
+          rootStyle={{ flex: "0 1 auto" }}
+          onChange={() => {
+            setSearchOn((prevSearchOn) => {
+              const newState = prevSearchOn.includes(searchType.value)
+                ? prevSearchOn.filter((val) => val !== searchType.value)
+                : [...prevSearchOn, searchType.value];
+              handleSearchInput(
+                {
+                  target: { value: keyword },
+                },
+                newState
+              );
+              return newState;
+            });
+          }}
+        />
+      ))}
+    </div>
   );
 };
 
