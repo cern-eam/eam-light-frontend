@@ -29,12 +29,7 @@ const SearchHeaderFilters = ({
   return (
     <>
       {showTypes ? (
-        <div
-          className="searchTypes"
-          style={
-            isPhoneScreen ? { flexDirection: "column", height: "auto" } : {}
-          }
-        >
+        <div className="searchTypes">
           {Object.values(SEARCH_TYPES).map((searchType) => (
             <EAMCheckbox
               key={searchType.code}
