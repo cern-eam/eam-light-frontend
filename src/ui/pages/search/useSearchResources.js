@@ -19,12 +19,17 @@ export default function useSearchResources(props) {
 
   const timeout = useRef(null);
   const cancelSource = useRef(null);
+
   const prevProps = useRef(props);
 
+  /**
+   * Effect to reset all state when we change the location
+   * e.g. clicking on the EAM Light logo in the top left corner
+   */
   useEffect(() => {
     scrollWindowIfNecessary();
+
     if (prevProps.current.location !== props.location) {
-      debugger;
       cancelSource.current && cancelSource.current.cancel();
       setResults(INITIAL_STATE.results);
       setSearchBoxUp(INITIAL_STATE.searchBoxUp);
