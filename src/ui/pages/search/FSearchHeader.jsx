@@ -32,8 +32,8 @@ function FSearchHeader(props) {
 
   const searchBoxDiv = React.useRef(null);
 
-  const handleSearchInput = (event) => {
-    props.fetchDataHandler(event.target.value, searchOn.join(","));
+  const handleSearchInput = (event, searchOnCurrentValue = searchOn) => {
+    props.fetchDataHandler(event.target.value, searchOnCurrentValue.join(","));
   };
   const searchBoxInTheTop = !!(props.searchBoxUp && isPhoneScreen);
 
