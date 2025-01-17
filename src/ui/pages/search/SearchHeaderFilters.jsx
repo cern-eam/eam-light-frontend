@@ -24,7 +24,6 @@ const SearchHeaderFilters = ({
   setSearchOn,
   handleSearchInput,
   keyword,
-  isPhoneScreen,
 }) => {
   return (
     <>
