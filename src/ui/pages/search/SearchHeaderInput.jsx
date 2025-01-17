@@ -23,8 +23,6 @@ const SearchHeaderInput = ({
         onKeyDown={onKeyDown}
         placeholder="Search for Equipment, Work Orders, Parts, ..."
         value={value}
-        class="searchInputText"
-        style={{ textTransform: "uppercase" }}
         ref={(input) => {
           searchInput.current = input;
         }}
