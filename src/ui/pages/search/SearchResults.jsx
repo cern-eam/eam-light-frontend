@@ -1,37 +1,28 @@
 import * as React from "react";
-import SearchResult from "./SearchResult";
+
 import Table from "@mui/material/Table";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
-/**
- * Function Version of the component
- */
-function FSearchResults(props) {
-  const mapItemToSearchResult = (item, number) => {
-    const isSelected = item.code === props.selectedItemCode;
 
-    return (
-      <TableRow
-        key={number}
-        selected={isSelected}
-        style={isSelected ? { backgroundColor: "#def4fa" } : {}}
-      >
-        <SearchResult
-          data={item}
-          keyword={props.keyword}
-          selected={isSelected}
-        />
-      </TableRow>
-    );
-  };
-
+function SearchResults({ data, renderResult, selectedItemCode }) {
   return (
-    <div style={{ fontSize: "16px" }}>
-      <Table>
-        <TableBody>{props.data.map(mapItemToSearchResult)}</TableBody>
-      </Table>
-    </div>
+    <Table style={{ fontSize: "16px" }}>
+      <TableBody>
+        {data.map((item) => {
+          const isSelected = item.code === selectedItemCode;
+          return (
+            <TableRow
+              key={item.code}
+              selected={isSelected}
+              style={isSelected ? { backgroundColor: "#def4fa" } : {}}
+            >
+              {renderResult({ item, isSelected })}
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    </Table>
   );
 }
 
-export default FSearchResults;
+export default SearchResults;
