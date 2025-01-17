@@ -8,6 +8,7 @@ import { withCernMode } from '../CERNMode';
 import GridTools from '../../../tools/GridTools';
 import useSnackbarStore from '../../../state/useSnackbarStore';
 import useScannedUserStore from '../../../state/useScannedUserStore';
+import EAMBarcodeScanner from 'eam-components/dist/ui/components/inputs-ng/components/EAMBarcodeScanner';
 
 const setUser = (userId, onSuccess, onError, mode) => {
     if (userId) {
@@ -39,28 +40,35 @@ const ScanUser = () => {
         const [focus, setFocus] = useState(false);
         const {handleError, showNotification} = useSnackbarStore();
         const {setScannedUser} = useScannedUserStore();
-        
-        const updateUser = (evt) => {
-            if (loading) return;
-            evt.persist();
-            setLoading(true);
-            const onSuccess = (user) => {
-                showNotification(`Welcome, ${user.userDesc}!`)
-                setLoading(false);
-                setScannedUser(user);
-            }
-            const onError = (e) => {
+
+        const onSuccessUpdateUser = (user) => {
+            showNotification(`Welcome, ${user.userDesc}!`);
+            setLoading(false);
+            setScannedUser(user);
+        };
+
+        const onErrorUpdateUser = (e, evt) => {
                 e && handleError(e);
                 setLoading(false);
                 updateCernId("");
-                evt.target && evt.target.focus();
-                //ref && ref.focus();
-            }
-            setUser(cernId, onSuccess, onError, mode);
+                evt?.target?.focus();
+        };
+
+        const updateUser = (evt) => {
+            if (loading) return;
+            evt && evt.persist();
+            setLoading(true);
+            setUser(cernId, onSuccessUpdateUser, (e) => onErrorUpdateUser(e, evt), mode);
+        }
+
+        const updateUserScanner = (value) => {
+            if (loading) return;
+            setLoading(true);
+            setUser(value, onSuccessUpdateUser, (e) => onErrorUpdateUser(e), mode); 
         }
 
         return (
-            <div style={{zIndex: '1399', backgroundColor: 'rgba(0, 0, 0, 0.8)', position: 'absolute', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', display: "flex", flexDirection: 'column'}}>
+            <div style={{zIndex: '1300', backgroundColor: 'rgba(0, 0, 0, 0.8)', position: 'absolute', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', display: "flex", flexDirection: 'column'}}>
                 <BlockUi blocking={loading} style={{zIndex: '1399', backgroundColor: 'rgba(255, 255, 255, 1)', position: 'absolute', width: '50%', height: '50%', alignItems: 'center', justifyContent: 'center', display: "flex", flexDirection: 'column'}}>
                     <span className="FontLatoBlack Fleft Fs30 DispBlock" style={{fontSize: '18px', color: "#02a2f2"}}>{mode === MODES.PERSON ? "Scan your CERN badge: " : "Insert your ID: "}</span>
                         <Input
@@ -86,6 +94,11 @@ const ScanUser = () => {
                                 }
                                 event.keyCode === KeyCode.ENTER && updateUser(event)
                             }}
+                            endAdornment={
+                                <EAMBarcodeScanner
+                                    onChange={updateUserScanner}
+                                />
+                            }
                         />
                         {!focus ?
                             <div style={{position: 'relative', width: '90%', maxWidth: '450px', display: 'flex', justifyContent: 'center'}}>
