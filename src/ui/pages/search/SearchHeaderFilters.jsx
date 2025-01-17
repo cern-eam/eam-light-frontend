@@ -43,12 +43,16 @@ const SearchHeaderFilters = ({
               rootStyle={{ flex: "0 1 auto" }}
               onChange={() => {
                 setSearchOn((prevSearchOn) => {
-                  return prevSearchOn.includes(searchType.value)
+                  const newState = prevSearchOn.includes(searchType.value)
                     ? prevSearchOn.filter((val) => val !== searchType.value)
                     : [...prevSearchOn, searchType.value];
-                });
-                handleSearchInput({
-                  target: { value: keyword },
+                  handleSearchInput(
+                    {
+                      target: { value: keyword },
+                    },
+                    newState
+                  );
+                  return newState;
                 });
               }}
             />
