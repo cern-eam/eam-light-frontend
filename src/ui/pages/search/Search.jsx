@@ -1,16 +1,15 @@
-import React, { Component, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SearchResults from "./SearchResults";
-import FSearch from "./FSearch";
 import "./Search.css";
 import InfiniteScroll from "react-infinite-scroll-component";
-import WS from "../../../tools/WS";
+import WS from "@/tools/WS";
 import SearchHeader from "./SearchHeader";
 import { Redirect } from "react-router-dom";
 import LinearProgress from "@mui/material/LinearProgress";
 import KeyCode from "eam-components/dist/enums/KeyCode";
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import Ajax from "eam-components/dist/tools/ajax";
-import useSnackbarStore from "../../../state/useSnackbarStore";
+import useSnackbarStore from "@/state/useSnackbarStore";
 
 const INITIAL_STATE = {
   results: [],
@@ -20,185 +19,46 @@ const INITIAL_STATE = {
   redirectRoute: "",
 };
 
-class Search extends Component {
-  constructor(props) {
-    super(props);
-    this.handleError = useSnackbarStore.getState().handleError;
-  }
+const prepareKeyword = (keyword) => {
+  return keyword.replace("_", "\\_").replace("%", "\\%").toUpperCase();
+};
 
-  state = INITIAL_STATE;
+const useSearchResources = (props) => {
+  const [results, setResults] = useState(INITIAL_STATE.results);
+  const [searchBoxUp, setSearchBoxUp] = useState(INITIAL_STATE.searchBoxUp);
+  const [keyword, setKeyword] = useState(INITIAL_STATE.keyword);
+  const [isFetching, setIsFetching] = useState(INITIAL_STATE.isFetching);
+  const [redirectRoute, setRedirectRoute] = useState(
+    INITIAL_STATE.redirectRoute
+  );
+  const [selectedItemIndex, setSelectedItemIndex] = useState(-1);
 
-  componentDidUpdate(prevProps) {
-    this.scrollWindowIfNecessary();
-    if (prevProps.location !== this.props.location) {
-      this.setState(INITIAL_STATE);
-      this.cancelSource && this.cancelSource.cancel();
+  const timeout = useRef(null);
+  const cancelSource = useRef(null);
+  const prevProps = useRef(props);
+
+  useEffect(() => {
+    scrollWindowIfNecessary();
+    if (prevProps.current.location !== props.location) {
+      cancelSource.current && cancelSource.current.cancel();
+      setResults(INITIAL_STATE.results);
+      setSearchBoxUp(INITIAL_STATE.searchBoxUp);
+      setKeyword(INITIAL_STATE.keyword);
+      setIsFetching(INITIAL_STATE.isFetching);
+      setRedirectRoute(INITIAL_STATE.redirectRoute);
+      setSelectedItemIndex(-1);
     }
-  }
+    prevProps.current = props;
+  }, [props.location]);
 
-  render() {
-    if (!!this.state.redirectRoute) {
-      return <Redirect to={this.state.redirectRoute} />;
-    }
-
-    return (
-      <div
-        id="searchContainer"
-        className={
-          this.state.searchBoxUp
-            ? "searchContainer searchContainerSearch"
-            : "searchContainer searchContainerHome"
-        }
-      >
-        <SearchHeader
-          keyword={this.state.keyword}
-          searchBoxUp={this.state.searchBoxUp}
-          fetchDataHandler={this.fetchNewData.bind(this)}
-          onKeyDown={this.onKeyDown.bind(this)}
-          tryToGoToResult={this.tryToGoToResult.bind(this)}
-          showTypes={this.state.searchBoxUp}
-        />
-        <div
-          id="searchResults"
-          className={
-            this.state.searchBoxUp ? "searchResultsSearch" : "searchResultsHome"
-          }
-        >
-          <div className="linearProgressBox">
-            {this.state.isFetching && (
-              <LinearProgress className="linearProgress" />
-            )}
-          </div>
-          <div className="searchScrollBox">
-            {!this.state.isFetching &&
-            this.state.results.length === 0 &&
-            this.state.keyword ? (
-              <div className="searchNoResults">No results found.</div>
-            ) : (
-              <InfiniteScroll height="calc(100vh - 180px)">
-                <SearchResults
-                  data={this.state.results}
-                  keyword={this.state.keyword}
-                  selectedItemCode={
-                    !!this.state.results[this.state.selectedItemIndex]
-                      ? this.state.results[this.state.selectedItemIndex].code
-                      : null
-                  }
-                />
-              </InfiniteScroll>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  /**
-   * Handles the moving of arrows
-   * @param event
-   */
-  onKeyDown(event) {
-    switch (event.keyCode) {
-      case KeyCode.DOWN: {
-        this.handleSearchArrowDown();
-        break;
-      }
-
-      case KeyCode.UP: {
-        this.handleSearchArrowUp();
-        break;
-      }
-
-      case KeyCode.ENTER: {
-        this.tryToGoToResult();
-        break;
-      }
-    }
-  }
-
-  tryToGoToResult() {
-    // if only one result, enter sends you to the result
-    if (this.state.results.length === 1) {
-      this.setState({
-        redirectRoute: this.state.results[0].link,
-      });
-
-      return;
-    }
-
-    // redirects to the record selected with arrows
-    if (
-      this.state.selectedItemIndex >= 0 &&
-      this.state.selectedItemIndex < this.state.results.length
-    ) {
-      this.setState({
-        redirectRoute: this.state.results[this.state.selectedItemIndex].link,
-      });
-
-      return;
-    }
-
-    // if enter pressed and there is a record
-    // with the code exactly matching the keyword
-    // redirect to this record
-    if (this.state.results.length > 0) {
-      this.state.results.forEach((result) => {
-        if (result.code === this.state.keyword) {
-          this.setState({
-            redirectRoute: result.link,
-          });
-
-          return;
-        }
-      });
-    }
-
-    if (this.state.keyword) {
-      // try to get single result
-      WS.getSearchSingleResult(this.state.keyword)
-        .then((response) => {
-          if (response.body && response.body.data) {
-            this.setState({
-              redirectRoute: response.body.data.link,
-            });
-          }
-        })
-        .catch(console.error);
-    }
-  }
-
-  handleSearchArrowDown() {
-    if (this.state.selectedItemIndex !== this.state.results.length - 1) {
-      this.setState({
-        selectedItemIndex: ++this.state.selectedItemIndex,
-      });
-    } else {
-      this.setState({
-        selectedItemIndex: 0,
-      });
-    }
-  }
-
-  handleSearchArrowUp() {
-    if (this.state.selectedItemIndex > 0) {
-      this.setState(() => ({
-        selectedItemIndex: --this.state.selectedItemIndex,
-      }));
-    } else {
-      this.setState(() => ({
-        selectedItemIndex: this.state.results.length - 1,
-      }));
-    }
-  }
-
-  scrollWindowIfNecessary() {
-    let selectedRow = document.getElementsByClassName("selectedRow")[0];
+  const scrollWindowIfNecessary = () => {
+    const selectedRow = document.getElementsByClassName("selectedRow")[0];
 
     if (!selectedRow) {
       return;
     }
 
-    let rect = selectedRow.getBoundingClientRect();
+    const rect = selectedRow.getBoundingClientRect();
     const margin = 230;
     const isInViewport =
       rect.top >= margin &&
@@ -208,61 +68,219 @@ class Search extends Component {
     if (!isInViewport) {
       selectedRow.scrollIntoView();
     }
-  }
+  };
 
-  fetchNewData(keyword, entityTypes) {
-    if (!!this.cancelSource) {
-      this.cancelSource.cancel();
+  return {
+    state: {
+      results,
+      setResults,
+      searchBoxUp,
+      setSearchBoxUp,
+      keyword,
+      setKeyword,
+      isFetching,
+      setIsFetching,
+      redirectRoute,
+      setRedirectRoute,
+      selectedItemIndex,
+      setSelectedItemIndex,
+    },
+    ref: {
+      timeout,
+      cancelSource,
+    },
+  };
+};
+
+function Search(props) {
+  const {
+    state: {
+      results,
+      setResults,
+      redirectRoute,
+      setRedirectRoute,
+      searchBoxUp,
+      setSearchBoxUp,
+      keyword,
+      setKeyword,
+      isFetching,
+      setIsFetching,
+      selectedItemIndex,
+      setSelectedItemIndex,
+    },
+    ref: { timeout, cancelSource },
+  } = useSearchResources(props);
+
+  const handleError = useSnackbarStore.getState().handleError;
+  /**
+   * Handles the moving of arrows
+   * @param event
+   */
+  const onKeyDown = (event) => {
+    switch (event.keyCode) {
+      case KeyCode.DOWN: {
+        handleSearchArrowDown();
+        break;
+      }
+
+      case KeyCode.UP: {
+        handleSearchArrowUp();
+        break;
+      }
+
+      case KeyCode.ENTER: {
+        tryToGoToResult();
+        break;
+      }
     }
+  };
 
-    if (!keyword) {
-      this.setState({
-        results: [],
-        keyword,
-        isFetching: false,
-      });
+  const tryToGoToResult = () => {
+    // if only one result, enter sends you to the result
+    if (results.length === 1) {
+      setRedirectRoute(results[0].link);
       return;
     }
 
-    this.cancelSource = Ajax.getAxiosInstance().CancelToken.source();
+    // redirects to the record selected with arrows
+    if (selectedItemIndex >= 0 && selectedItemIndex < results.length) {
+      setRedirectRoute(results[selectedItemIndex].link);
 
-    this.setState({
-      searchBoxUp: true,
-      keyword,
-      isFetching: true,
-    });
+      return;
+    }
 
-    clearTimeout(this.timeout);
-    this.timeout = setTimeout(
+    // if enter pressed and there is a record
+    // with the code exactly matching the keyword
+    // redirect to this record
+    if (results.length > 0) {
+      results.forEach((result) => {
+        if (result.code === keyword) {
+          setRedirectRoute(result.link);
+          return;
+        }
+      });
+    }
+
+    if (keyword) {
+      // try to get single result
+      WS.getSearchSingleResult(keyword)
+        .then((response) => {
+          if (response.body && response.body.data) {
+            setRedirectRoute(response.body.data.link);
+          }
+        })
+        .catch(console.error);
+    }
+  };
+
+  const handleSearchArrowDown = () => {
+    if (selectedItemIndex !== results.length - 1) {
+      setSelectedItemIndex(selectedItemIndex + 1);
+      return;
+    }
+    setSelectedItemIndex(0);
+  };
+
+  const handleSearchArrowUp = () => {
+    if (selectedItemIndex > 0) {
+      setSelectedItemIndex(selectedItemIndex - 1);
+      return;
+    }
+    setSelectedItemIndex(results.length - 1);
+  };
+
+  const fetchNewData = (keyword, entityTypes) => {
+    if (!!cancelSource.current) {
+      cancelSource.current?.cancelSource?.cancel();
+    }
+
+    if (!keyword) {
+      setResults([]);
+      setKeyword(keyword);
+      setIsFetching(false);
+      return;
+    }
+
+    cancelSource.current = Ajax.getAxiosInstance().CancelToken.source();
+
+    setSearchBoxUp(true);
+    setKeyword(keyword);
+    setIsFetching(true);
+
+    clearTimeout(timeout.current);
+    timeout.current = setTimeout(
       () =>
-        WS.getSearchData(this.prepareKeyword(keyword), entityTypes, {
-          cancelToken: this.cancelSource.token,
+        WS.getSearchData(prepareKeyword(keyword), entityTypes, {
+          cancelToken: cancelSource.current?.token,
         })
           .then((response) => {
-            this.cancelSource = null;
+            cancelSource.current = null;
 
-            this.setState({
-              results: response.body.data,
-              selectedItemIndex: -1,
-              isFetching: false,
-            });
+            setResults(response.body.data);
+            setSelectedItemIndex(-1);
+            setIsFetching(false);
           })
           .catch((error) => {
             if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
-              this.setState({
-                isFetching: false,
-              });
+              setIsFetching(false);
 
-              this.handleError(error);
+              handleError(error);
             }
           }),
       200
     );
+  };
+
+  if (redirectRoute) {
+    return <Redirect to={redirectRoute} />;
   }
 
-  prepareKeyword(keyword) {
-    return keyword.replace("_", "\\_").replace("%", "\\%").toUpperCase();
-  }
+  const selectedItemCode = !!results[selectedItemIndex]
+    ? results[selectedItemIndex].code
+    : null;
+
+  const noResultsAvailable = !isFetching && results.length === 0 && keyword;
+
+  return (
+    <div
+      id="searchContainer"
+      className={
+        searchBoxUp
+          ? "searchContainer searchContainerSearch"
+          : "searchContainer searchContainerHome"
+      }
+    >
+      <SearchHeader
+        keyword={keyword}
+        searchBoxUp={searchBoxUp}
+        fetchDataHandler={fetchNewData}
+        onKeyDown={onKeyDown}
+        tryToGoToResult={tryToGoToResult}
+        showTypes={searchBoxUp}
+      />
+      <div
+        id="searchResults"
+        className={searchBoxUp ? "searchResultsSearch" : "searchResultsHome"}
+      >
+        <div className="linearProgressBox">
+          {isFetching && <LinearProgress className="linearProgress" />}
+        </div>
+        <div className="searchScrollBox">
+          {noResultsAvailable ? (
+            <div className="searchNoResults">No results found.</div>
+          ) : (
+            <InfiniteScroll height="calc(100vh - 180px)">
+              <SearchResults
+                data={results}
+                keyword={keyword}
+                selectedItemCode={selectedItemCode}
+              />
+            </InfiniteScroll>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default FSearch;
+export default Search;

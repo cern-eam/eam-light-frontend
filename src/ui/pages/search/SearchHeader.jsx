@@ -1,8 +1,9 @@
 import * as React from "react";
-import FontIcon from "@mui/material/Icon";
-import EAMCheckbox from "eam-components/dist/ui/components/inputs-ng/EAMCheckbox";
+
 import EAMBarcodeScanner from "eam-components/dist/ui/components/inputs-ng/components/EAMBarcodeScanner";
-import FSearchHeader from "./FSearchHeader";
+import SearchHeaderFilters from "./SearchHeaderFilters";
+import SearchHeaderIcon from "./SearchHeaderIcon";
+import SearchHeaderInput from "./SearchHeaderInput";
 
 const SEARCH_TYPES = {
   PART: {
@@ -22,184 +23,62 @@ const SEARCH_TYPES = {
   },
 };
 
-const searchIconStyle = {
-  color: "#02a2f2",
-  fontSize: 25,
-  position: "absolute",
-  right: -4,
-  top: 5,
-};
-
-export default FSearchHeader;
-class SearchHeader extends React.Component {
-  state = {
-    searchOn: Object.values(SEARCH_TYPES).map((v) => v.value),
-    isPhoneScreen: false,
-  };
-
-  componentDidMount() {
-    this.searchInput.focus();
-  }
-
-  renderTypeCheckbox(searchType) {
-    const { searchOn } = this.state;
-    return (
-      <EAMCheckbox
-        key={searchType.code}
-        label={searchType.text}
-        value={searchOn.includes(searchType.value).toString()}
-        rootStyle={{ flex: "0 1 auto" }}
-        onChange={() => {
-          this.setState(
-            (prevState) => {
-              const prevSearchOn = prevState.searchOn;
-
-              return {
-                searchOn: prevSearchOn.includes(searchType.value)
-                  ? prevSearchOn.filter((val) => val !== searchType.value)
-                  : [...prevSearchOn, searchType.value],
-              };
-            },
-            () =>
-              this.handleSearchInput({
-                target: { value: this.props.keyword },
-              })
-          );
-        }}
-      />
-    );
-  }
-
-  renderIcon = () => (
-    <>
-      <img
-        src="images/eamlight_logo.png"
-        alt="EAM Light Logo"
-        style={{ paddingLeft: 20, paddingRight: 10 }}
-      />
-      <div
-        id="searchBoxLabelGreeting"
-        className={
-          this.props.searchBoxUp
-            ? "searchBoxLabelGreetingSearch"
-            : "searchBoxLabelGreetingHome"
-        }
-      >
-        <span
-          className="FontLatoBlack Fleft Fs30 DispBlock"
-          style={{ color: "#02a2f2" }}
-        >
-          Welcome to EAM Light
-        </span>
-      </div>
-    </>
+function FSearchHeader(props) {
+  const [searchOn, setSearchOn] = React.useState(
+    Object.values(SEARCH_TYPES).map((v) => v.value)
   );
 
-  renderInput = () => {
-    const entityTypes = this.state.searchOn.join(",");
-    return (
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <input
-          onInput={this.handleSearchInput.bind(this)}
-          id="searchInputText"
-          onKeyDown={this.props.onKeyDown}
-          value={this.props.keyword}
-          style={{ textTransform: "uppercase" }}
-          ref={(input) => {
-            this.searchInput = input;
-          }}
-        />
-        <EAMBarcodeScanner
-          onChange={(value) => this.props.fetchDataHandler(value, entityTypes)}
-        />
-      </div>
-    );
-  };
+  const searchBoxDiv = React.useRef(null);
 
-  renderFilters = () => {
-    const { showTypes } = this.props;
-    return (
+  const handleSearchInput = (event, searchOnCurrentValue = searchOn) => {
+    props.fetchDataHandler(event.target.value, searchOnCurrentValue.join(","));
+    // TODO: we need to pass the current keyword always, I think it's working good right now
+  };
+  const searchBoxInTheTop = !!props.searchBoxUp;
+
+  return (
+    <div
+      id="searchBox"
+      className={
+        props.searchBoxUp
+          ? "searchBox searchBoxSearch"
+          : "searchBox searchBoxHome"
+      }
+      ref={(_searchBoxDiv) => (searchBoxDiv.current = _searchBoxDiv)}
+      style={
+        searchBoxInTheTop
+          ? { height: "fit-content", paddingTop: "5px", paddingBottom: "5px" }
+          : {}
+      }
+    >
       <>
-        {showTypes && (
-          <div
-            className="searchTypes"
-            style={
-              this.state.isPhoneScreen
-                ? { flexDirection: "column", height: "auto" }
-                : {}
-            }
-          >
-            {Object.values(SEARCH_TYPES).map(
-              this.renderTypeCheckbox.bind(this)
-            )}
-          </div>
-        )}
-        <label id="searchPlaceHolder">
-          {!this.props.keyword &&
-            "Search for Equipment, Work Orders, Parts, ..."}
-        </label>
+        <div id="searchBoxLabel" className="searchBoxLabelHome">
+          <SearchHeaderIcon searchBoxUp={props.searchBoxUp} />
+        </div>
+        <div
+          id="searchBoxInput"
+          className={
+            props.searchBoxUp ? "searchBoxInputSearch" : "searchBoxInputHome"
+          }
+        >
+          <SearchHeaderInput
+            searchBoxUp={props.searchBoxUp}
+            searchOn={searchOn}
+            handleSearchInput={handleSearchInput}
+            onKeyDown={props.onKeyDown}
+            value={props.keyword}
+          />
+          <SearchHeaderFilters
+            keyword={props.keyword}
+            searchOn={searchOn}
+            handleSearchInput={handleSearchInput}
+            showTypes={props.showTypes}
+            setSearchOn={setSearchOn}
+          />
+        </div>
       </>
-    );
-  };
-
-  render() {
-    return (
-      <div
-        id="searchBox"
-        className={
-          this.props.searchBoxUp
-            ? "searchBox searchBoxSearch"
-            : "searchBox searchBoxHome"
-        }
-        ref={(searchBoxDiv) => (this.searchBoxDiv = searchBoxDiv)}
-        style={
-          this.props.searchBoxUp && this.state.isPhoneScreen
-            ? { height: "fit-content", paddingTop: "5px", paddingBottom: "5px" }
-            : {}
-        }
-      >
-        {this.props.searchBoxUp && this.state.isPhoneScreen ? (
-          <div
-            id="searchBoxInput"
-            className="searchBoxInputSearch"
-            style={{ width: "100%" }}
-          >
-            {this.renderInput()}
-            <div
-              id="searchBoxLabel"
-              className="searchBoxLabelHome"
-              style={{ justifyContent: "left" }}
-            >
-              {this.renderIcon()}
-              {this.renderFilters()}
-            </div>
-          </div>
-        ) : (
-          <>
-            <div id="searchBoxLabel" className="searchBoxLabelHome">
-              {this.renderIcon()}
-            </div>
-            <div
-              id="searchBoxInput"
-              className={
-                this.props.searchBoxUp
-                  ? "searchBoxInputSearch"
-                  : "searchBoxInputHome"
-              }
-            >
-              {this.renderInput()}
-              {this.renderFilters()}
-            </div>
-          </>
-        )}
-      </div>
-    );
-  }
-
-  handleSearchInput = (event) => {
-    this.props.fetchDataHandler(
-      event.target.value,
-      this.state.searchOn.join(",")
-    );
-  };
+    </div>
+  );
 }
+
+export default FSearchHeader;
