@@ -115,9 +115,7 @@ function Search(props) {
   };
 
   const fetchNewData = (keyword, entityTypes) => {
-    if (!!cancelSource.current) {
-      cancelSource.current?.cancelSource?.cancel();
-    }
+    if (!!cancelSource.current) cancelSource.current?.cancelSource?.cancel();
 
     if (!keyword) {
       setResults([]);
@@ -140,18 +138,13 @@ function Search(props) {
         })
           .then((response) => {
             cancelSource.current = null;
-
             setResults(response.body.data);
             setSelectedItemIndex(-1);
-            setIsFetching(false);
           })
           .catch((error) => {
-            if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
-              setIsFetching(false);
-
-              handleError(error);
-            }
-          }),
+            if (error.type !== ErrorTypes.REQUEST_CANCELLED) handleError(error);
+          })
+          .finally(() => setIsFetching(false)),
       200
     );
   };
@@ -179,6 +172,7 @@ function Search(props) {
         keyword={keyword}
         searchBoxUp={searchBoxUp}
         fetchDataHandler={fetchNewData}
+        isFetching={isFetching}
         onKeyDown={onKeyDown}
         tryToGoToResult={tryToGoToResult}
         showTypes={searchBoxUp}
