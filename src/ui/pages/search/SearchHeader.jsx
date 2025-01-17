@@ -66,13 +66,14 @@ function FSearchHeader(props) {
             onKeyDown={props.onKeyDown}
             value={props.keyword}
           />
-          <SearchHeaderFilters
-            keyword={props.keyword}
-            searchOn={searchOn}
-            handleSearchInput={handleSearchInput}
-            showTypes={props.showTypes}
-            setSearchOn={setSearchOn}
-          />
+          {props.showTypes ? (
+            <SearchHeaderFilters
+              keyword={props.keyword}
+              searchOn={searchOn}
+              handleSearchInput={handleSearchInput}
+              setSearchOn={setSearchOn}
+            />
+          ) : null}
         </div>
       </>
     </div>

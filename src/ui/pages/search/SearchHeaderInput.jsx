@@ -1,16 +1,17 @@
-import * as React from "react";
+import React, { useEffect, useRef } from "react";
 import EAMBarcodeScanner from "eam-components/dist/ui/components/inputs-ng/components/EAMBarcodeScanner";
 
 const SearchHeaderInput = ({
   searchOn = "",
   handleSearchInput,
   onKeyDown,
-  keyword,
+  value,
   fetchDataHandler,
 }) => {
   const entityTypes = searchOn.join(",");
-  const searchInput = React.useRef(null);
-  React.useEffect(() => {
+  const searchInput = useRef(null);
+
+  useEffect(() => {
     searchInput.current.focus();
   }, []);
 
@@ -20,7 +21,9 @@ const SearchHeaderInput = ({
         onChange={handleSearchInput}
         id="searchInputText"
         onKeyDown={onKeyDown}
-        value={keyword}
+        placeholder="Search for Equipment, Work Orders, Parts, ..."
+        value={value}
+        class="searchInputText"
         style={{ textTransform: "uppercase" }}
         ref={(input) => {
           searchInput.current = input;
