@@ -3,6 +3,7 @@ import * as React from "react";
 import SearchHeaderFilters from "./SearchHeaderFilters";
 import SearchHeaderIcon from "./SearchHeaderIcon";
 import SearchHeaderInput from "./SearchHeaderInput";
+import EAMBarcodeScanner from "eam-components/dist/ui/components/inputs-ng/components/EAMBarcodeScanner";
 
 const SEARCH_TYPES = {
   PART: {
@@ -22,25 +23,30 @@ const SEARCH_TYPES = {
   },
 };
 
-function FSearchHeader(props) {
+function SearchHeader({
+  fetchDataHandler,
+  searchBoxUp,
+  keyword,
+  onKeyDown,
+  isFetching,
+  showTypes,
+}) {
   const [searchOn, setSearchOn] = React.useState(
     Object.values(SEARCH_TYPES).map((v) => v.value)
   );
 
   const searchBoxDiv = React.useRef(null);
-
+  const entityTypes = searchOn.join(",");
   const handleSearchInput = (event, searchOnCurrentValue = searchOn) => {
-    props.fetchDataHandler(event.target.value, searchOnCurrentValue.join(","));
+    fetchDataHandler(event.target.value, searchOnCurrentValue.join(","));
   };
-  const searchBoxInTheTop = !!props.searchBoxUp;
+  const searchBoxInTheTop = !!searchBoxUp;
 
   return (
     <div
       id="searchBox"
       className={
-        props.searchBoxUp
-          ? "searchBox searchBoxSearch"
-          : "searchBox searchBoxHome"
+        searchBoxUp ? "searchBox searchBoxSearch" : "searchBox searchBoxHome"
       }
       ref={(_searchBoxDiv) => (searchBoxDiv.current = _searchBoxDiv)}
       style={
@@ -51,24 +57,28 @@ function FSearchHeader(props) {
     >
       <>
         <div id="searchBoxLabel" className="searchBoxLabelHome">
-          <SearchHeaderIcon searchBoxUp={props.searchBoxUp} />
+          <SearchHeaderIcon searchBoxUp={searchBoxUp} />
         </div>
         <div
           id="searchBoxInput"
           className={
-            props.searchBoxUp ? "searchBoxInputSearch" : "searchBoxInputHome"
+            searchBoxUp ? "searchBoxInputSearch" : "searchBoxInputHome"
           }
         >
           <SearchHeaderInput
-            searchBoxUp={props.searchBoxUp}
-            searchOn={searchOn}
+            searchBoxUp={searchBoxUp}
+            value={keyword}
+            isFetching={isFetching}
             handleSearchInput={handleSearchInput}
-            onKeyDown={props.onKeyDown}
-            value={props.keyword}
-          />
-          {props.showTypes ? (
+            onKeyDown={onKeyDown}
+          >
+            <EAMBarcodeScanner
+              onChange={(value) => fetchDataHandler(value, entityTypes)}
+            />
+          </SearchHeaderInput>
+          {showTypes ? (
             <SearchHeaderFilters
-              keyword={props.keyword}
+              keyword={keyword}
               searchOn={searchOn}
               handleSearchInput={handleSearchInput}
               setSearchOn={setSearchOn}
@@ -80,4 +90,4 @@ function FSearchHeader(props) {
   );
 }
 
-export default FSearchHeader;
+export default SearchHeader;
