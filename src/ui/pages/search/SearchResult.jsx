@@ -3,7 +3,7 @@ import TableCell from "@mui/material/TableCell";
 import SearchHighlighter from "./SearchHighlighter";
 import EntityCode from "@/enums/EntityCode";
 
-function FSearchResult({ selected, data, keyword }) {
+function SearchResult({ selected, data, keyword }) {
   return (
     <TableCell>
       <table
@@ -52,7 +52,7 @@ function FSearchResult({ selected, data, keyword }) {
   );
 }
 
-export default FSearchResult;
+export default SearchResult;
 
 const getSearchItemLabel = (code) => {
   switch (code) {

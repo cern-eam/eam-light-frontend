@@ -1,5 +1,6 @@
 import * as React from "react";
 import SearchResults from "./SearchResults";
+import SearchResult from "./SearchResult";
 import "./Search.css";
 import InfiniteScroll from "react-infinite-scroll-component";
 import WS from "@/tools/WS";
@@ -187,7 +188,7 @@ function Search(props) {
         className={searchBoxUp ? "searchResultsSearch" : "searchResultsHome"}
       >
         <div className="linearProgressBox">
-          {isFetching && <LinearProgress className="linearProgress" />}
+          {isFetching ? <LinearProgress className="linearProgress" /> : null}
         </div>
         <div className="searchScrollBox">
           {noResultsAvailable ? (
@@ -196,8 +197,14 @@ function Search(props) {
             <InfiniteScroll height="calc(100vh - 180px)">
               <SearchResults
                 data={results}
-                keyword={keyword}
                 selectedItemCode={selectedItemCode}
+                renderResult={({ isSelected, item }) => (
+                  <SearchResult
+                    keyword={keyword}
+                    selected={isSelected}
+                    data={item}
+                  />
+                )}
               />
             </InfiniteScroll>
           )}
