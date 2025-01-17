@@ -27,15 +27,14 @@ function FSearchHeader(props) {
   const [searchOn, setSearchOn] = React.useState(
     Object.values(SEARCH_TYPES).map((v) => v.value)
   );
-  // const [isPhoneScreen, setIsPhoneScreen] = React.useState(false);  - is it used?
-  const isPhoneScreen = false; // temporarly
 
   const searchBoxDiv = React.useRef(null);
 
   const handleSearchInput = (event, searchOnCurrentValue = searchOn) => {
     props.fetchDataHandler(event.target.value, searchOnCurrentValue.join(","));
+    // TODO: we need to pass the current keyword always, I think it's working good right now
   };
-  const searchBoxInTheTop = !!(props.searchBoxUp && isPhoneScreen);
+  const searchBoxInTheTop = !!props.searchBoxUp;
 
   return (
     <div
@@ -52,11 +51,15 @@ function FSearchHeader(props) {
           : {}
       }
     >
-      {searchBoxInTheTop ? (
+      <>
+        <div id="searchBoxLabel" className="searchBoxLabelHome">
+          <SearchHeaderIcon searchBoxUp={props.searchBoxUp} />
+        </div>
         <div
           id="searchBoxInput"
-          className="searchBoxInputSearch"
-          style={{ width: "100%" }}
+          className={
+            props.searchBoxUp ? "searchBoxInputSearch" : "searchBoxInputHome"
+          }
         >
           <SearchHeaderInput
             searchBoxUp={props.searchBoxUp}
@@ -65,51 +68,15 @@ function FSearchHeader(props) {
             onKeyDown={props.onKeyDown}
             value={props.keyword}
           />
-          <div
-            id="searchBoxLabel"
-            className="searchBoxLabelHome"
-            style={{ justifyContent: "left" }}
-          >
-            <SearchHeaderIcon searchBoxUp={props.searchBoxUp} />
-            <SearchHeaderFilters
-              isPhoneScreen={isPhoneScreen}
-              setSearchOn={setSearchOn}
-              searchOn={searchOn}
-              keyword={props.keyword}
-              showTypes={props.showTypes}
-              handleSearchInput={handleSearchInput}
-            />
-          </div>
+          <SearchHeaderFilters
+            keyword={props.keyword}
+            searchOn={searchOn}
+            handleSearchInput={handleSearchInput}
+            showTypes={props.showTypes}
+            setSearchOn={setSearchOn}
+          />
         </div>
-      ) : (
-        <>
-          <div id="searchBoxLabel" className="searchBoxLabelHome">
-            <SearchHeaderIcon searchBoxUp={props.searchBoxUp} />
-          </div>
-          <div
-            id="searchBoxInput"
-            className={
-              props.searchBoxUp ? "searchBoxInputSearch" : "searchBoxInputHome"
-            }
-          >
-            <SearchHeaderInput
-              searchBoxUp={props.searchBoxUp}
-              searchOn={searchOn}
-              handleSearchInput={handleSearchInput}
-              onKeyDown={props.onKeyDown}
-              value={props.keyword}
-            />
-            <SearchHeaderFilters
-              isPhoneScreen={isPhoneScreen}
-              keyword={props.keyword}
-              searchOn={searchOn}
-              handleSearchInput={handleSearchInput}
-              showTypes={props.showTypes}
-              setSearchOn={setSearchOn}
-            />
-          </div>
-        </>
-      )}
+      </>
     </div>
   );
 }
