@@ -33,7 +33,7 @@ function Search(props) {
       selectedItemIndex,
       setSelectedItemIndex,
     },
-    ref: { timeout, cancelSource },
+    ref: { cancelSource },
   } = useSearchResources(props);
 
   const handleError = useSnackbarStore.getState().handleError;
@@ -94,7 +94,7 @@ function Search(props) {
             setRedirectRoute(response.body.data.link);
           }
         })
-        .catch(console.error);
+        .catch(handleError);
     }
   };
 
@@ -115,7 +115,10 @@ function Search(props) {
   };
 
   const fetchNewData = (keyword, entityTypes) => {
-    if (!!cancelSource.current) cancelSource.current?.cancelSource?.cancel();
+    if (!!cancelSource.current) {
+      // TODO: fix cancelling the request
+      cancelSource.current?.cancelSource?.cancel();
+    }
 
     if (!keyword) {
       setResults([]);
@@ -130,23 +133,18 @@ function Search(props) {
     setKeyword(keyword);
     setIsFetching(true);
 
-    clearTimeout(timeout.current);
-    timeout.current = setTimeout(
-      () =>
-        WS.getSearchData(prepareKeyword(keyword), entityTypes, {
-          cancelToken: cancelSource.current?.token,
-        })
-          .then((response) => {
-            cancelSource.current = null;
-            setResults(response.body.data);
-            setSelectedItemIndex(-1);
-          })
-          .catch((error) => {
-            if (error.type !== ErrorTypes.REQUEST_CANCELLED) handleError(error);
-          })
-          .finally(() => setIsFetching(false)),
-      200
-    );
+    WS.getSearchData(prepareKeyword(keyword), entityTypes, {
+      cancelToken: cancelSource.current?.token,
+    })
+      .then((response) => {
+        cancelSource.current = null;
+        setResults(response.body.data);
+        setSelectedItemIndex(-1);
+      })
+      .catch((error) => {
+        if (error.type !== ErrorTypes.REQUEST_CANCELLED) handleError(error);
+      })
+      .finally(() => setIsFetching(false));
   };
 
   if (redirectRoute) {
