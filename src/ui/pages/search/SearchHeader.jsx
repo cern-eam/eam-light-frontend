@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import EAMBarcodeScanner from "eam-components/dist/ui/components/inputs-ng/components/EAMBarcodeScanner";
 import SearchHeaderFilters from "./SearchHeaderFilters";
 import SearchHeaderIcon from "./SearchHeaderIcon";
 import SearchHeaderInput from "./SearchHeaderInput";
@@ -32,7 +31,6 @@ function FSearchHeader(props) {
 
   const handleSearchInput = (event, searchOnCurrentValue = searchOn) => {
     props.fetchDataHandler(event.target.value, searchOnCurrentValue.join(","));
-    // TODO: we need to pass the current keyword always, I think it's working good right now
   };
   const searchBoxInTheTop = !!props.searchBoxUp;
 
