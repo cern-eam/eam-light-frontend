@@ -7,6 +7,7 @@ const SearchHeaderInput = ({
   onKeyDown,
   value,
   children,
+  isSuccess,
   isFetching,
 }) => {
   const [searchText, setSearchText] = useState(value);
@@ -30,7 +31,9 @@ const SearchHeaderInput = ({
   }, []);
 
   const searchTextColor =
-    value === searchText && !isFetching ? "unset" : "#737373";
+    (value === searchText && isFetching) || value !== searchText
+      ? "#737373"
+      : "unset";
 
   return (
     <div style={{ display: "flex", alignItems: "center" }}>

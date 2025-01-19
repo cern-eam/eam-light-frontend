@@ -1,4 +1,27 @@
 import { useEffect, useRef, useState } from "react";
+import WS from "@/tools/WS";
+import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
+import Ajax from "eam-components/dist/tools/ajax";
+import useSnackbarStore from "@/state/useSnackbarStore";
+import { useQuery } from "@tanstack/react-query";
+
+const SEARCH_TYPES = {
+  PART: {
+    text: "Parts",
+    value: "PART",
+    code: "PART",
+  },
+  EQUIPMENT_TYPES: {
+    text: "Equipment",
+    value: "A,P,S,L",
+    code: "EQUIPMENT",
+  },
+  JOB: {
+    text: "Work Orders",
+    value: "JOB",
+    code: "JOB",
+  },
+};
 
 export const INITIAL_STATE = {
   results: [],
@@ -6,21 +29,45 @@ export const INITIAL_STATE = {
   keyword: "",
   isFetching: false,
   redirectRoute: "",
+  entityTypes: Object.values(SEARCH_TYPES).map((v) => v.value),
+};
+
+const prepareKeyword = (keyword) => {
+  return keyword.replace("_", "\\_").replace("%", "\\%").toUpperCase();
+};
+
+const fetchSearchData = async (
+  keyword,
+  entityTypes = Object.values(SEARCH_TYPES).map((v) => v.value),
+  cancelSourceCurrentToken = null
+) => {
+  if (!keyword) return [];
+
+  const response = await WS.getSearchData(
+    prepareKeyword(keyword),
+    entityTypes,
+    {
+      cancelToken: cancelSourceCurrentToken,
+    }
+  );
+  return response.body.data;
 };
 
 export default function useSearchResources(props) {
-  const [results, setResults] = useState(INITIAL_STATE.results);
-  const [searchBoxUp, setSearchBoxUp] = useState(INITIAL_STATE.searchBoxUp);
   const [keyword, setKeyword] = useState(INITIAL_STATE.keyword);
-  const [isFetching, setIsFetching] = useState(INITIAL_STATE.isFetching);
   const [redirectRoute, setRedirectRoute] = useState(
     INITIAL_STATE.redirectRoute
   );
   const [selectedItemIndex, setSelectedItemIndex] = useState(-1);
-
+  const [entityTypes, setEntityTypes] = useState(INITIAL_STATE.entityTypes);
+  const { data, isLoading, isError, isSuccess } = useQuery({
+    queryKey: ["search-results", keyword, entityTypes],
+    queryFn: () => fetchSearchData(keyword),
+  });
   const cancelSource = useRef(null);
 
   const prevProps = useRef(props);
+  const handleError = useSnackbarStore.getState().handleError;
 
   /**
    * Effect to reset all state when we change the location
@@ -28,13 +75,10 @@ export default function useSearchResources(props) {
    */
   useEffect(() => {
     scrollWindowIfNecessary();
-
     if (prevProps.current.location !== props.location) {
       cancelSource.current && cancelSource.current.cancel();
-      setResults(INITIAL_STATE.results);
-      setSearchBoxUp(INITIAL_STATE.searchBoxUp);
       setKeyword(INITIAL_STATE.keyword);
-      setIsFetching(INITIAL_STATE.isFetching);
+      setEntityTypes(INITIAL_STATE.entityTypes);
       setRedirectRoute(INITIAL_STATE.redirectRoute);
       setSelectedItemIndex(-1);
     }
@@ -60,23 +104,31 @@ export default function useSearchResources(props) {
     }
   };
 
+  const fetchNewData = (keyword, entityTypes) => {
+    setKeyword(keyword);
+    setEntityTypes(entityTypes);
+  };
+
+  const searchBoxUp = keyword.length > 0;
+  const noResultsAvailable = keyword.length > 0 && isSuccess && data.length < 1;
+
   return {
     state: {
-      results,
-      setResults,
+      results: data,
+      isError,
+      isSuccess,
       searchBoxUp,
-      setSearchBoxUp,
+      noResultsAvailable,
       keyword,
       setKeyword,
-      isFetching,
-      setIsFetching,
+      isFetching: isLoading,
       redirectRoute,
       setRedirectRoute,
       selectedItemIndex,
       setSelectedItemIndex,
     },
-    ref: {
-      cancelSource,
+    actions: {
+      fetchNewData,
     },
   };
 }

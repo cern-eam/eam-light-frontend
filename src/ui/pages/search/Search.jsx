@@ -8,32 +8,35 @@ import SearchHeader from "./SearchHeader";
 import { Redirect } from "react-router-dom";
 import LinearProgress from "@mui/material/LinearProgress";
 import KeyCode from "eam-components/dist/enums/KeyCode";
-import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
-import Ajax from "eam-components/dist/tools/ajax";
+
 import useSnackbarStore from "@/state/useSnackbarStore";
 import useSearchResources from "./useSearchResources";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const prepareKeyword = (keyword) => {
-  return keyword.replace("_", "\\_").replace("%", "\\%").toUpperCase();
-};
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      gcTime: 1000 * 60 * 60 * 24, // 24 hours
+      staleTime: 1000 * 60 * 5, // 5 minutes
+    },
+  },
+});
 
 function Search(props) {
   const {
     state: {
       results,
-      setResults,
       redirectRoute,
       setRedirectRoute,
       searchBoxUp,
-      setSearchBoxUp,
       keyword,
-      setKeyword,
       isFetching,
-      setIsFetching,
+      isSuccess,
       selectedItemIndex,
       setSelectedItemIndex,
+      noResultsAvailable,
     },
-    ref: { cancelSource },
+    actions: { fetchNewData },
   } = useSearchResources(props);
 
   const handleError = useSnackbarStore.getState().handleError;
@@ -114,48 +117,13 @@ function Search(props) {
     setSelectedItemIndex(results.length - 1);
   };
 
-  const fetchNewData = (keyword, entityTypes) => {
-    if (!!cancelSource.current) {
-      // TODO: fix cancelling the request
-      cancelSource.current?.cancelSource?.cancel();
-    }
-
-    if (!keyword) {
-      setResults([]);
-      setKeyword(keyword);
-      setIsFetching(false);
-      return;
-    }
-
-    cancelSource.current = Ajax.getAxiosInstance().CancelToken.source();
-
-    setSearchBoxUp(true);
-    setKeyword(keyword);
-    setIsFetching(true);
-
-    WS.getSearchData(prepareKeyword(keyword), entityTypes, {
-      cancelToken: cancelSource.current?.token,
-    })
-      .then((response) => {
-        cancelSource.current = null;
-        setResults(response.body.data);
-        setSelectedItemIndex(-1);
-      })
-      .catch((error) => {
-        if (error.type !== ErrorTypes.REQUEST_CANCELLED) handleError(error);
-      })
-      .finally(() => setIsFetching(false));
-  };
-
   if (redirectRoute) {
     return <Redirect to={redirectRoute} />;
   }
 
-  const selectedItemCode = !!results[selectedItemIndex]
+  const selectedItemCode = !!results?.[selectedItemIndex]
     ? results[selectedItemIndex].code
     : null;
-
-  const noResultsAvailable = !isFetching && results.length === 0 && keyword;
 
   return (
     <div
@@ -170,6 +138,7 @@ function Search(props) {
         keyword={keyword}
         searchBoxUp={searchBoxUp}
         fetchDataHandler={fetchNewData}
+        isSuccess={isSuccess}
         isFetching={isFetching}
         onKeyDown={onKeyDown}
         tryToGoToResult={tryToGoToResult}
@@ -206,4 +175,11 @@ function Search(props) {
   );
 }
 
-export default Search;
+const QueryWrapperSearch = (props) => (
+  <QueryClientProvider client={queryClient}>
+    <Search {...props}></Search>
+  </QueryClientProvider>
+);
+export default QueryWrapperSearch;
+
+// export default Search;
