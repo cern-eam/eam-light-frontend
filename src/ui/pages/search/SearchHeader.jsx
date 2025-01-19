@@ -29,6 +29,7 @@ function SearchHeader({
   keyword,
   onKeyDown,
   isFetching,
+  isSuccess,
   showTypes,
 }) {
   const [searchOn, setSearchOn] = React.useState(
@@ -68,6 +69,7 @@ function SearchHeader({
           <SearchHeaderInput
             searchBoxUp={searchBoxUp}
             value={keyword}
+            isSuccess={isSuccess}
             isFetching={isFetching}
             handleSearchInput={handleSearchInput}
             onKeyDown={onKeyDown}

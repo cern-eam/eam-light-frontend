@@ -4,24 +4,24 @@ import { Link } from "react-router-dom";
 const replace = (text, keyword) =>
   !text ? "" : text.replace(keyword, "<mark>" + keyword + "</mark>");
 
-function FSearchHighlighter(props) {
-  return !!props.link ? (
-    <Link to={{ pathname: props.link }}>
+function SearchHighlighter({ link, keyword = "", style, data }) {
+  return !!link ? (
+    <Link to={{ pathname: link }}>
       <span
         dangerouslySetInnerHTML={{
-          __html: replace(props.data, props.keyword.toUpperCase()),
+          __html: replace(data, keyword.toUpperCase()),
         }}
-        style={props.style}
+        style={style}
       />
     </Link>
   ) : (
     <td
       dangerouslySetInnerHTML={{
-        __html: replace(props.data, props.keyword.toUpperCase()),
+        __html: replace(data, keyword.toUpperCase()),
       }}
-      style={props.style}
+      style={style}
     ></td>
   );
 }
 
-export default FSearchHighlighter;
+export default SearchHighlighter;
