@@ -116,6 +116,8 @@ export default function useSearchResources(props) {
     state: {
       results: data,
       isError,
+      entityTypes,
+      setEntityTypes,
       isSuccess,
       searchBoxUp,
       noResultsAvailable,
