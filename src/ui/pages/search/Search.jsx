@@ -12,6 +12,7 @@ import KeyCode from "eam-components/dist/enums/KeyCode";
 import useSnackbarStore from "@/state/useSnackbarStore";
 import useSearchResources from "./useSearchResources";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import SearchHeaderFilters from "./SearchHeaderFilters";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,6 +31,8 @@ function Search(props) {
       setRedirectRoute,
       searchBoxUp,
       keyword,
+      entityTypes,
+      setEntityTypes,
       isFetching,
       isSuccess,
       selectedItemIndex,
@@ -143,7 +146,18 @@ function Search(props) {
         onKeyDown={onKeyDown}
         tryToGoToResult={tryToGoToResult}
         showTypes={searchBoxUp}
-      />
+      >
+        {searchBoxUp ? (
+          <SearchHeaderFilters
+            keyword={keyword}
+            searchOn={entityTypes}
+            handleSearchInput={(event, entityTypes = entityTypes.join(",")) =>
+              fetchNewData(event.target.value, entityTypes)
+            }
+            setSearchOn={setEntityTypes}
+          />
+        ) : null}
+      </SearchHeader>
       <div
         id="searchResults"
         className={searchBoxUp ? "searchResultsSearch" : "searchResultsHome"}
