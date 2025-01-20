@@ -62,7 +62,7 @@ export default function useSearchResources(props) {
   const [entityTypes, setEntityTypes] = useState(INITIAL_STATE.entityTypes);
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ["search-results", keyword, entityTypes],
-    queryFn: () => fetchSearchData(keyword),
+    queryFn: () => fetchSearchData(keyword, entityTypes),
   });
   const cancelSource = useRef(null);
 
@@ -104,7 +104,7 @@ export default function useSearchResources(props) {
     }
   };
 
-  const fetchNewData = (keyword, entityTypes) => {
+  const updateQueryKeys = (keyword, entityTypes) => {
     setKeyword(keyword);
     setEntityTypes(entityTypes);
   };
@@ -130,7 +130,7 @@ export default function useSearchResources(props) {
       setSelectedItemIndex,
     },
     actions: {
-      fetchNewData,
+      updateQueryKeys,
     },
   };
 }
