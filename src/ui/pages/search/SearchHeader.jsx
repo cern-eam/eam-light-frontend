@@ -3,6 +3,7 @@ import * as React from "react";
 import SearchHeaderIcon from "./SearchHeaderIcon";
 import SearchHeaderInput from "./SearchHeaderInput";
 import EAMBarcodeScanner from "eam-components/dist/ui/components/inputs-ng/components/EAMBarcodeScanner";
+import { INITIAL_STATE } from "./useSearchResources";
 
 const SEARCH_TYPES = {
   PART: {
@@ -23,25 +24,18 @@ const SEARCH_TYPES = {
 };
 
 function SearchHeader({
-  fetchDataHandler,
+  updateQueryKeys,
   searchBoxUp,
   keyword,
+  setKeyword,
   onKeyDown,
   isFetching,
-  isSuccess,
   children,
 }) {
   const searchBoxDiv = React.useRef(null);
-  const entityTypes = Object.values(SEARCH_TYPES)
-    .map((v) => v.value)
-    .join(",");
-  const handleSearchInput = (event, searchOnCurrentValue) => {
-    fetchDataHandler(
-      event.target.value,
-      searchOnCurrentValue?.join(",") ? "" : "3"
-    );
+  const handleSearchInput = (event) => {
+    setKeyword(event.target.value);
   };
-  const searchBoxInTheTop = !!searchBoxUp;
 
   return (
     <div
@@ -51,7 +45,7 @@ function SearchHeader({
       }
       ref={(_searchBoxDiv) => (searchBoxDiv.current = _searchBoxDiv)}
       style={
-        searchBoxInTheTop
+        searchBoxUp
           ? { height: "fit-content", paddingTop: "5px", paddingBottom: "5px" }
           : {}
       }
@@ -69,13 +63,14 @@ function SearchHeader({
           <SearchHeaderInput
             searchBoxUp={searchBoxUp}
             value={keyword}
-            isSuccess={isSuccess}
             isFetching={isFetching}
             handleSearchInput={handleSearchInput}
             onKeyDown={onKeyDown}
           >
             <EAMBarcodeScanner
-              onChange={(value) => fetchDataHandler(value, entityTypes)}
+              onChange={(value) =>
+                updateQueryKeys(value, INITIAL_STATE.entityTypes)
+              }
             />
           </SearchHeaderInput>
           {children}

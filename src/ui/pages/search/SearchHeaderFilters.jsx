@@ -18,12 +18,8 @@ const SEARCH_TYPES = {
   },
 };
 
-const SearchHeaderFilters = ({
-  searchOn = "",
-  setSearchOn,
-  handleSearchInput,
-  keyword,
-}) => {
+const SearchHeaderFilters = ({ entityTypes, setEntityTypes }) => {
+  const searchOn = entityTypes.join(",");
   return (
     <div className="searchTypes">
       {Object.values(SEARCH_TYPES).map((searchType) => (
@@ -33,16 +29,11 @@ const SearchHeaderFilters = ({
           value={searchOn.includes(searchType.value).toString()}
           rootStyle={{ flex: "0 1 auto" }}
           onChange={() => {
-            setSearchOn((prevSearchOn) => {
+            setEntityTypes((prevSearchOn) => {
               const newState = prevSearchOn.includes(searchType.value)
                 ? prevSearchOn.filter((val) => val !== searchType.value)
                 : [...prevSearchOn, searchType.value];
-              handleSearchInput(
-                {
-                  target: { value: keyword },
-                },
-                newState
-              );
+
               return newState;
             });
           }}
