@@ -5,23 +5,7 @@ import Ajax from "eam-components/dist/tools/ajax";
 import useSnackbarStore from "@/state/useSnackbarStore";
 import { useQuery } from "@tanstack/react-query";
 
-const SEARCH_TYPES = {
-  PART: {
-    text: "Parts",
-    value: "PART",
-    code: "PART",
-  },
-  EQUIPMENT_TYPES: {
-    text: "Equipment",
-    value: "A,P,S,L",
-    code: "EQUIPMENT",
-  },
-  JOB: {
-    text: "Work Orders",
-    value: "JOB",
-    code: "JOB",
-  },
-};
+import { SEARCH_TYPES } from "./consts";
 
 export const INITIAL_STATE = {
   results: [],
@@ -38,7 +22,7 @@ const prepareKeyword = (keyword) => {
 
 const fetchSearchData = async (
   keyword,
-  entityTypes = Object.values(SEARCH_TYPES).map((v) => v.value),
+  entityTypes,
   cancelSourceCurrentToken = null
 ) => {
   if (!keyword) return [];
