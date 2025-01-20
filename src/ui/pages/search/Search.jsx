@@ -31,6 +31,7 @@ function Search(props) {
       setRedirectRoute,
       searchBoxUp,
       keyword,
+      setKeyword,
       entityTypes,
       setEntityTypes,
       isFetching,
@@ -39,7 +40,7 @@ function Search(props) {
       setSelectedItemIndex,
       noResultsAvailable,
     },
-    actions: { fetchNewData },
+    actions: { updateQueryKeys },
   } = useSearchResources(props);
 
   const handleError = useSnackbarStore.getState().handleError;
@@ -139,8 +140,9 @@ function Search(props) {
     >
       <SearchHeader
         keyword={keyword}
+        setKeyword={setKeyword}
         searchBoxUp={searchBoxUp}
-        fetchDataHandler={fetchNewData}
+        updateQueryKeys={updateQueryKeys}
         isSuccess={isSuccess}
         isFetching={isFetching}
         onKeyDown={onKeyDown}
@@ -149,12 +151,8 @@ function Search(props) {
       >
         {searchBoxUp ? (
           <SearchHeaderFilters
-            keyword={keyword}
-            searchOn={entityTypes}
-            handleSearchInput={(event, entityTypes = entityTypes.join(",")) =>
-              fetchNewData(event.target.value, entityTypes)
-            }
-            setSearchOn={setEntityTypes}
+            entityTypes={entityTypes}
+            setEntityTypes={setEntityTypes}
           />
         ) : null}
       </SearchHeader>

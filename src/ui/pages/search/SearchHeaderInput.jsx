@@ -7,7 +7,6 @@ const SearchHeaderInput = ({
   onKeyDown,
   value,
   children,
-  isSuccess,
   isFetching,
 }) => {
   const [searchText, setSearchText] = useState(value);
