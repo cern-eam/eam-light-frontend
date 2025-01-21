@@ -15,9 +15,7 @@ const SearchHeaderInput = ({
     200
   );
 
-  useEffect(() => {
-    propagateChangeOfValue();
-  }, [searchText]);
+  useEffect(propagateChangeOfValue, [searchText]);
 
   useEffect(() => {
     // when keyword is initial state, reset the input value to the initial state
