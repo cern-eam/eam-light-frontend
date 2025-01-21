@@ -4,6 +4,8 @@ import SearchHighlighter from "./SearchHighlighter";
 import EntityCode from "@/enums/EntityCode";
 
 function SearchResult({ selected, data, keyword }) {
+  const searchItemLabel = entityLabels[data.type] ?? FALLBACK_ENTITY_LABEL;
+
   return (
     <TableCell>
       <table
@@ -15,7 +17,7 @@ function SearchResult({ selected, data, keyword }) {
       >
         <tbody className="searchResultRowCell">
           <tr>
-            <td>{getSearchItemLabel(data.type)}</td>
+            <td>{searchItemLabel}</td>
             <td>
               <SearchHighlighter
                 style={{ color: "#1a0dab", fontWeight: "bold" }}
@@ -79,3 +81,14 @@ const getSearchItemLabel = (code) => {
     }
   }
 };
+
+const entityLabels = {
+  [EntityCode.ASSET]: "Asset:",
+  [EntityCode.POSITION]: "Position:",
+  [EntityCode.SYSTEM]: "System:",
+  [EntityCode.WORKORDER]: "Work Order:",
+  [EntityCode.PART]: "Part:",
+  [EntityCode.LOCATION]: "Location:",
+};
+
+const FALLBACK_ENTITY_LABEL = "Equipment";
