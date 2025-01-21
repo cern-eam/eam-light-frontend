@@ -44,8 +44,8 @@ function Search(props) {
     },
   } = useSearchResources(props);
 
-  const handleError = useSnackbarStore.getState().handleError;
-  /**
+  const { handleError } = useSnackbarStore();
+  /*
    * Handles the moving of arrows
    * @param event
    */

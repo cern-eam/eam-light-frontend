@@ -8,7 +8,7 @@ function SearchResults({ data = [], renderResult, selectedItemCode }) {
   return (
     <Table style={{ fontSize: "16px" }}>
       <TableBody>
-        {data?.map((item, index) => {
+        {data.map((item, index) => {
           const isSelected = item.code === selectedItemCode;
           return (
             <TableRow

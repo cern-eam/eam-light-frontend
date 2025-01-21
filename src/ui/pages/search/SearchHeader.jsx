@@ -14,7 +14,6 @@ function SearchHeader({
   isFetching,
   children,
 }) {
-  const searchBoxDiv = React.useRef(null);
   const handleSearchInput = (event) => {
     setKeyword(event.target.value);
   };
@@ -25,7 +24,6 @@ function SearchHeader({
       className={
         searchBoxUp ? "searchBox searchBoxSearch" : "searchBox searchBoxHome"
       }
-      ref={(_searchBoxDiv) => (searchBoxDiv.current = _searchBoxDiv)}
       style={
         searchBoxUp
           ? { height: "fit-content", paddingTop: "5px", paddingBottom: "5px" }
