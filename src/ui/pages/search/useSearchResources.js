@@ -1,30 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import WS from "@/tools/WS";
-import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
-import Ajax from "eam-components/dist/tools/ajax";
 import useSnackbarStore from "@/state/useSnackbarStore";
 import { useQuery } from "@tanstack/react-query";
-
 import { INITIAL_STATE } from "./consts";
 
 const prepareKeyword = (keyword) => {
   return keyword.replace("_", "\\_").replace("%", "\\%").toUpperCase();
 };
 
-const fetchSearchData = async (
-  keyword,
-  entityTypes,
-  cancelSourceCurrentToken = null
-) => {
+const fetchSearchData = async (keyword, entityTypes) => {
   if (!keyword) return [];
 
-  const response = await WS.getSearchData(
-    prepareKeyword(keyword),
-    entityTypes,
-    {
-      cancelToken: cancelSourceCurrentToken,
-    }
-  );
+  const response = await WS.getSearchData(prepareKeyword(keyword), entityTypes);
   return response.body.data;
 };
 
@@ -42,21 +29,17 @@ export default function useSearchResources(props) {
     queryKey: ["search-results", keyword, entityTypes],
     queryFn: () => fetchSearchData(keyword, entityTypes),
   });
-  const cancelSource = useRef(null);
 
-  const prevProps = useRef(props);
-  const handleError = useSnackbarStore.getState().handleError;
-
+  const { handleError } = useSnackbarStore();
   useEffect(() => {
-    if (isError) {
-      handleError(error);
-    }
+    if (isError) handleError(error);
   }, [error, isError]);
 
   useEffect(() => {
     if (keyword.length > 0) setSearchBoxUp(true);
   }, [keyword]);
 
+  const prevProps = useRef(props);
   /**
    * Effect to reset all state when we change the location
    * e.g. clicking on the EAM Light logo in the top left corner
@@ -64,7 +47,6 @@ export default function useSearchResources(props) {
   useEffect(() => {
     scrollWindowIfNecessary();
     if (prevProps.current.location !== props.location) {
-      cancelSource.current && cancelSource.current.cancel();
       setKeyword(INITIAL_STATE.keyword);
       setEntityTypes(INITIAL_STATE.entityTypes);
       setSearchBoxUp(INITIAL_STATE.searchBoxUp);

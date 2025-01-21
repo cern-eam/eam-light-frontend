@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const SearchHeaderIcon = (props) => {
+const SearchHeaderIcon = ({ searchBoxUp }) => {
   return (
     <>
       <img
@@ -11,7 +11,7 @@ const SearchHeaderIcon = (props) => {
       <div
         id="searchBoxLabelGreeting"
         className={
-          props.searchBoxUp
+          searchBoxUp
             ? "searchBoxLabelGreetingSearch"
             : "searchBoxLabelGreetingHome"
         }
