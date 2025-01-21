@@ -28,19 +28,20 @@ function Search(props) {
     state: {
       results,
       redirectRoute,
-      setRedirectRoute,
       searchBoxUp,
       keyword,
-      setKeyword,
       entityTypes,
-      setEntityTypes,
       isFetching,
-      isSuccess,
       selectedItemIndex,
-      setSelectedItemIndex,
       noResultsAvailable,
     },
-    actions: { updateQueryKeys },
+    actions: {
+      setKeyword,
+      setEntityTypes,
+      setRedirectRoute,
+      updateQueryKeys,
+      setSelectedItemIndex,
+    },
   } = useSearchResources(props);
 
   const handleError = useSnackbarStore.getState().handleError;
@@ -143,7 +144,6 @@ function Search(props) {
         setKeyword={setKeyword}
         searchBoxUp={searchBoxUp}
         updateQueryKeys={updateQueryKeys}
-        isSuccess={isSuccess}
         isFetching={isFetching}
         onKeyDown={onKeyDown}
         tryToGoToResult={tryToGoToResult}
@@ -192,6 +192,5 @@ const QueryWrapperSearch = (props) => (
     <Search {...props}></Search>
   </QueryClientProvider>
 );
-export default QueryWrapperSearch;
 
-// export default Search;
+export default QueryWrapperSearch;

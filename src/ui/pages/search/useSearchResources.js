@@ -5,16 +5,7 @@ import Ajax from "eam-components/dist/tools/ajax";
 import useSnackbarStore from "@/state/useSnackbarStore";
 import { useQuery } from "@tanstack/react-query";
 
-import { SEARCH_TYPES } from "./consts";
-
-export const INITIAL_STATE = {
-  results: [],
-  searchBoxUp: false,
-  keyword: "",
-  isFetching: false,
-  redirectRoute: "",
-  entityTypes: Object.values(SEARCH_TYPES).map((v) => v.value),
-};
+import { INITIAL_STATE } from "./consts";
 
 const prepareKeyword = (keyword) => {
   return keyword.replace("_", "\\_").replace("%", "\\%").toUpperCase();
@@ -42,9 +33,12 @@ export default function useSearchResources(props) {
   const [redirectRoute, setRedirectRoute] = useState(
     INITIAL_STATE.redirectRoute
   );
-  const [selectedItemIndex, setSelectedItemIndex] = useState(-1);
+  const [searchBoxUp, setSearchBoxUp] = useState(INITIAL_STATE.searchBoxUp);
+  const [selectedItemIndex, setSelectedItemIndex] = useState(
+    INITIAL_STATE.selectedItemIndex
+  );
   const [entityTypes, setEntityTypes] = useState(INITIAL_STATE.entityTypes);
-  const { data, isLoading, isError, isSuccess } = useQuery({
+  const { data, isLoading, isError, error, isSuccess } = useQuery({
     queryKey: ["search-results", keyword, entityTypes],
     queryFn: () => fetchSearchData(keyword, entityTypes),
   });
@@ -52,6 +46,16 @@ export default function useSearchResources(props) {
 
   const prevProps = useRef(props);
   const handleError = useSnackbarStore.getState().handleError;
+
+  useEffect(() => {
+    if (isError) {
+      handleError(error);
+    }
+  }, [error, isError]);
+
+  useEffect(() => {
+    if (keyword.length > 0) setSearchBoxUp(true);
+  }, [keyword]);
 
   /**
    * Effect to reset all state when we change the location
@@ -63,8 +67,9 @@ export default function useSearchResources(props) {
       cancelSource.current && cancelSource.current.cancel();
       setKeyword(INITIAL_STATE.keyword);
       setEntityTypes(INITIAL_STATE.entityTypes);
+      setSearchBoxUp(INITIAL_STATE.searchBoxUp);
       setRedirectRoute(INITIAL_STATE.redirectRoute);
-      setSelectedItemIndex(-1);
+      setSelectedItemIndex(INITIAL_STATE.selectedItemIndex);
     }
     prevProps.current = props;
   }, [props.location]);
@@ -93,28 +98,25 @@ export default function useSearchResources(props) {
     setEntityTypes(entityTypes);
   };
 
-  const searchBoxUp = keyword.length > 0;
   const noResultsAvailable = keyword.length > 0 && isSuccess && data.length < 1;
 
   return {
     state: {
       results: data,
-      isError,
       entityTypes,
-      setEntityTypes,
-      isSuccess,
       searchBoxUp,
       noResultsAvailable,
       keyword,
-      setKeyword,
       isFetching: isLoading,
       redirectRoute,
-      setRedirectRoute,
       selectedItemIndex,
-      setSelectedItemIndex,
     },
     actions: {
+      setKeyword,
+      setEntityTypes,
+      setRedirectRoute,
       updateQueryKeys,
+      setSelectedItemIndex,
     },
   };
 }

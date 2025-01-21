@@ -3,25 +3,7 @@ import * as React from "react";
 import SearchHeaderIcon from "./SearchHeaderIcon";
 import SearchHeaderInput from "./SearchHeaderInput";
 import EAMBarcodeScanner from "eam-components/dist/ui/components/inputs-ng/components/EAMBarcodeScanner";
-import { INITIAL_STATE } from "./useSearchResources";
-
-const SEARCH_TYPES = {
-  PART: {
-    text: "Parts",
-    value: "PART",
-    code: "PART",
-  },
-  EQUIPMENT_TYPES: {
-    text: "Equipment",
-    value: "A,P,S,L",
-    code: "EQUIPMENT",
-  },
-  JOB: {
-    text: "Work Orders",
-    value: "JOB",
-    code: "JOB",
-  },
-};
+import { INITIAL_STATE } from "./consts";
 
 function SearchHeader({
   updateQueryKeys,
