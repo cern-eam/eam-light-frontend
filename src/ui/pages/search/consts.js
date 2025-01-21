@@ -15,3 +15,13 @@ export const SEARCH_TYPES = {
     code: "JOB",
   },
 };
+
+export const INITIAL_STATE = {
+  results: [],
+  searchBoxUp: false,
+  keyword: "",
+  isFetching: false,
+  redirectRoute: "",
+  selectedItemIndex: -1,
+  entityTypes: Object.values(SEARCH_TYPES).map((v) => v.value),
+};
