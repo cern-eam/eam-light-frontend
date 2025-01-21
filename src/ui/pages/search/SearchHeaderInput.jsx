@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import { INITIAL_STATE } from "./useSearchResources";
+import { INITIAL_STATE } from "./consts";
 
 const SearchHeaderInput = ({
   handleSearchInput,
