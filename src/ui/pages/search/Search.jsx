@@ -187,10 +187,13 @@ function Search(props) {
   );
 }
 
-const QueryWrapperSearch = (props) => (
+/**
+ * Usage of @tanstack/react-query locally
+ */
+const LocalQueryWrapperSearch = (props) => (
   <QueryClientProvider client={queryClient}>
-    <Search {...props}></Search>
+    <Search {...props} />
   </QueryClientProvider>
 );
 
-export default QueryWrapperSearch;
+export default LocalQueryWrapperSearch;
