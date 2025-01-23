@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import WS from "@/tools/WS";
+import Ajax from "eam-components/dist/tools/ajax";
 import useSnackbarStore from "@/state/useSnackbarStore";
 import { useQuery } from "@tanstack/react-query";
 import { INITIAL_STATE } from "./consts";
@@ -8,10 +9,16 @@ const prepareKeyword = (keyword) => {
   return keyword.replace("_", "\\_").replace("%", "\\%").toUpperCase();
 };
 
-const fetchSearchData = async (keyword, entityTypes) => {
+const fetchSearchData = async (keyword, entityTypes, cancelToken) => {
   if (!keyword) return [];
 
-  const response = await WS.getSearchData(prepareKeyword(keyword), entityTypes);
+  const response = await WS.getSearchData(
+    prepareKeyword(keyword),
+    entityTypes,
+    {
+      cancelToken,
+    }
+  );
   return response.body.data;
 };
 
@@ -25,9 +32,18 @@ export default function useSearchResources(props) {
     INITIAL_STATE.selectedItemIndex
   );
   const [entityTypes, setEntityTypes] = useState(INITIAL_STATE.entityTypes);
+  const [cancelToken, setCancelToken] = useState(null);
+
   const { data, isLoading, isError, error, isSuccess } = useQuery({
     queryKey: ["search-results", keyword, entityTypes],
-    queryFn: () => fetchSearchData(keyword, entityTypes),
+    queryFn: async () => {
+      if (cancelToken) cancelToken.cancel();
+      const source = Ajax.getAxiosInstance().CancelToken.source();
+      setCancelToken(source);
+      const result = await fetchSearchData(keyword, entityTypes, source.token);
+      setCancelToken(null);
+      return result;
+    },
   });
 
   const { handleError } = useSnackbarStore();
