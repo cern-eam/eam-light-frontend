@@ -18,7 +18,6 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       gcTime: 1000 * 60 * 60 * 24, // 24 hours
-      staleTime: 1000 * 60 * 5, // 5 minutes
     },
   },
 });
@@ -189,6 +188,7 @@ function Search(props) {
 
 /**
  * Usage of @tanstack/react-query locally
+ * TODO: consider to use it globally in the EAM light
  */
 const LocalQueryWrapperSearch = (props) => (
   <QueryClientProvider client={queryClient}>
