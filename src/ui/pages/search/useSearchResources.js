@@ -44,6 +44,7 @@ export default function useSearchResources(props) {
       setCancelToken(null);
       return result;
     },
+    staleTime: 1000 * 60, // 1 min
   });
 
   const { handleError } = useSnackbarStore();
