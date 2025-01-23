@@ -9,7 +9,7 @@ import useScannedUserStore from "../../state/useScannedUserStore";
 const UserInfo = () => {
   const { userData, cleanUserData } = useUserDataStore();
   const { setInforContext } = useInforContextStore();
-  const { scannedUser, setScannedUser} = useScannedUserStore();
+  const { scannedUser, setScannedUser } = useScannedUserStore();
 
   const userInfoStyle = {
     color: "rgba(255, 255, 255, 0.8)",
@@ -45,6 +45,8 @@ const UserInfo = () => {
       return;
     }
     if (import.meta.env.VITE_LOGIN_METHOD === "STD") {
+      window.localStorage.setItem("inforContext", null);
+      sessionStorage.setItem("inforContext", null);
       setInforContext(null);
       cleanUserData();
     }
@@ -60,11 +62,7 @@ const UserInfo = () => {
       <Account style={accountIcon} />
       <span className="user-name">{usernameDisplay}</span>
       <span style={separatorStyle} />
-      <IconButton
-        onClick={logoutHandler}
-        style={logoutIcon}
-        size="large"
-      >
+      <IconButton onClick={logoutHandler} style={logoutIcon} size="large">
         <Logout style={{ fontSize: 20 }} />
       </IconButton>
     </div>
