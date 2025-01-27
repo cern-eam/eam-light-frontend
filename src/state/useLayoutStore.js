@@ -1,14 +1,32 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 import WS from "../tools/WS";
 
 const useLayoutStore = create((set) => ({
-  screenLayout: {}, 
+  screenLayout: {},
   screenLayoutFetchError: false, // Add a boolean property to track fetch errors
-  
-  fetchScreenLayout: async (userGroup, entity, parentScreen, screen, tabs, screenProperty) => {
+
+  fetchScreenLayout: async (
+    userGroup,
+    entity,
+    parentScreen,
+    screen,
+    tabs,
+    screenProperty
+  ) => {
     try {
-      const newScreenLayout = await WS.getScreenLayout(userGroup, entity, parentScreen, screen, tabs)
-        .then((result) => result.body.data);
+      let newScreenLayout = await WS.getScreenLayout(
+        userGroup,
+        entity,
+        parentScreen,
+        screen,
+        tabs
+      ).then((result) => result.body.data);
+      if (screen === "OSOBJA") {
+        delete newScreenLayout.customGridTabs.XDP;
+      } else if (screen === "OSOBJP") {
+        delete newScreenLayout.customGridTabs.XPI;
+        delete newScreenLayout.customGridTabs.XPM;
+      }
 
       set((state) => ({
         screenLayout: {

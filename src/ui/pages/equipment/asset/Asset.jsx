@@ -97,7 +97,6 @@ const Asset = () => {
     layoutProperty: "assetLayout",
     layoutPropertiesMap: assetLayoutPropertiesMap,
   });
-
   useEffect(() => {
     // Part input is cleared
     if (equipment?.partCode === "") {
@@ -232,7 +231,7 @@ const Asset = () => {
         column: 1,
         order: 25,
         summaryIcon: ManageHistoryIcon,
-        ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
       },
       {
@@ -245,7 +244,7 @@ const Asset = () => {
             gridName={"OSOBJA_ESF"}
             objectCode={equipment.code}
             additionalParams={Object.fromEntries([
-              ["parameter.objorganization", "*"],
+              ["parameter.objorganization", equipment.organization ?? "*"],
               ["parameter.object", equipment.code],
             ])}
             paramNames={["equipmentno"]}
@@ -305,7 +304,7 @@ const Asset = () => {
         column: 2,
         order: 7,
         summaryIcon: BookmarkBorderRoundedIcon,
-        ignore: !isCernMode 
+        ignore: !isCernMode
       },
       {
         id: "COMMENTS",
@@ -405,7 +404,7 @@ const Asset = () => {
         ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS),
       },
-      getPartsAssociated(
+     getPartsAssociated(
         equipment.code,
         equipment.organization,
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
