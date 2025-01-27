@@ -31,29 +31,21 @@ import useApplicationDataStore from "./state/useApplicationDataStore";
 import { renderLoading } from "./ui/pages/EntityTools";
 import useInforContextStore from "./state/useInforContext";
 import useLayoutStore from "./state/useLayoutStore";
-import useMyTeamWorkOrdersStore from "./state/useMyTeamWorkOrdersStore";
 
 export const releaseNotesPath = "/releasenotes";
 
-const Eamlight = () => {  
-  const { inforContext } = useInforContextStore();  
-  const { userData, fetchUserData, userDataFetchError} = useUserDataStore();  
-  const {  
-    applicationData,  
-    fetchApplicationData,  
-    applicationDataFetchError  
-  } = useApplicationDataStore();  
-  const { screenLayoutFetchError } = useLayoutStore();  
-  const { fetchMyTeamWorkOrders } = useMyTeamWorkOrdersStore();
+const Eamlight = () => {
+  const { inforContext } = useInforContextStore();
+  const { userData, fetchUserData, userDataFetchError} = useUserDataStore();
+  const { applicationData, fetchApplicationData, applicationDataFetchError } = useApplicationDataStore(); 
+  const { screenLayoutFetchError } = useLayoutStore();
+  const loginMethod = import.meta.env.VITE_LOGIN_METHOD;
 
-const loginMethod = import.meta.env.VITE_LOGIN_METHOD;
-
-useEffect(() => {  
-    if (loginMethod !== "STD" || (loginMethod === "STD" && inforContext))  
-      fetchUserData();  
-    fetchApplicationData();  
-    fetchMyTeamWorkOrders();  
-}, [inforContext]);
+  useEffect(() => {
+    if (loginMethod !== "STD" || (loginMethod === "STD" && inforContext))
+      fetchUserData();
+      fetchApplicationData();
+  },[inforContext])
   
   if (!inforContext && loginMethod === "STD") {
     return (

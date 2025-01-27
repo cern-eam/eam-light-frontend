@@ -10,6 +10,7 @@ import useMyOpenWorkOrdersStore from "@/state/useMyOpenWorkOrdersStore";
 import Badge from "./components/Badge";
 import useMyTeamWorkOrdersStore from "@/state/useMyTeamWorkOrdersStore";
 import useMenuVisibilityStore from "../../../../../state/useMenuVisibilityStore";
+import { useEffect } from "react";
 
 const iconStyles = {
     width: 22,
@@ -18,6 +19,9 @@ const iconStyles = {
 };
 
 const TabsMenuSidebar = () => {
+    const { myOpenWorkOrders } = useMyOpenWorkOrdersStore();
+    const { myTeamWorkOrders, fetchMyTeamWorkOrders } = useMyTeamWorkOrdersStore();
+
     const {
         userData: {
             workOrderScreen,
@@ -30,8 +34,7 @@ const TabsMenuSidebar = () => {
             reports,
         },
     } = useUserDataStore();
-    const { myOpenWorkOrders } = useMyOpenWorkOrdersStore();
-    const { myTeamWorkOrders } = useMyTeamWorkOrdersStore();
+
     const {
         menuVisibility: {
             mywos,
@@ -49,6 +52,10 @@ const TabsMenuSidebar = () => {
         },
         setActiveMenuVisibility,
     } = useMenuVisibilityStore();
+
+    useEffect(() => {
+        fetchMyTeamWorkOrders();
+    }, []);
 
     return (
         <ul id="layout-tab-menu">
