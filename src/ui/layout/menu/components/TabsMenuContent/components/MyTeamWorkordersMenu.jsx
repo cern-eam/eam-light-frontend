@@ -43,7 +43,7 @@ const MyTeamWorkordersMenu = ({ classes }) => {
     } = useUserDataStore();
 
     useEffect(() => {
-        if (myTeamWorkOrders.length === 0) fetchMyTeamWorkOrders();
+        if (!myTeamWorkOrders.length) fetchMyTeamWorkOrders();
     }, [fetchMyTeamWorkOrders]);
 
     const departments = useMemo(
