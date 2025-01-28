@@ -14,14 +14,14 @@ import {
 import { isCernMode } from "../CERNMode";
 import GridWS from "eam-components/dist/ui/components/eamgrid/lib/GridWS";
 
-async function doEquipmentGridRequest(equipmentCode, screenCode, tabName) {
+async function doEquipmentGridRequest(equipmentCode, screenCode, tabName, organization) {
   if (equipmentCode && screenCode) {
     const gridRequest = {
       rowCount: 1,
       params: {
         //equipmentno: equipmentCode,
         "parameter.object": equipmentCode,
-        "parameter.objorganization": "*",
+        "parameter.objorganization": organization ?? "*",
       },
       gridName: screenCode + "_" + tabName,
       userFunctionName: screenCode,
@@ -140,7 +140,7 @@ const StatusRow = (props) => {
   const generateCells = (entity, entityType, screenCode) => {
     const [hasHazards, setHasHazards] = useState(false);
     useEffect(() => {
-      const safetyData = doEquipmentGridRequest(entity.code, screenCode, "ESF");
+      const safetyData = doEquipmentGridRequest(entity.code, screenCode, "ESF", entity.organization);
       safetyData.then((data) => setHasHazards(data.records !== "0"));
     }, [entity.code]);
 
