@@ -24,14 +24,14 @@ export default defineConfig(({ mode }) => {
       host: "0.0.0.0",
       proxy: {
         "/rest": {
-          target: "http://localhost:10880/",
+          target: `http://localhost:${env.VITE_BACKEND_PORT ?? '8080'}/`,
         },
         "/apis": {
-          target: "http://localhost:10880/",
+          target: `http://localhost:${env.VITE_BACKEND_PORT ?? '8080'}/`,
           // target: "http://ammtools.cern.ch:10880/",
         },
         "/SSO": {
-          target: "http://localhost:10880/",
+          target: `http://localhost:${env.VITE_BACKEND_PORT ?? '8080'}/`,
         },
       },
     },
