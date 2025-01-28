@@ -26,6 +26,7 @@ import Observations from "./observations/Observations";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import WSWorkorders from "../../../../tools/WSWorkorders.js";
 import WSEquipment from "../../../../tools/WSEquipment.js";
+import { isCernMode } from "../../../components/CERNMode.js";
 
 const NCR = () => {
     const [statuses, setStatuses] = useState([]);
@@ -174,6 +175,7 @@ const NCR = () => {
                 order: 5,
                 summaryIcon: FunctionsRoundedIcon,
                 initialVisibility: true,
+                ignore: !isCernMode,
             },
             {
                 id: "COMMENTS",
