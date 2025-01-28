@@ -46,7 +46,8 @@ const WO_FILTERS = {
 const LOCAL_STORAGE_FILTER_KEY = 'filters:workorders';
 
 function EquipmentWorkOrders(props) {
-    const { defaultFilter, equipmentcode, equipmenttype } = props;
+    const { defaultFilter: initialFilter, equipmentcode, equipmenttype } = props;
+    const defaultFilter = initialFilter ?? WO_FILTER_TYPES.THIS;
 
     let [events, setEvents] = useState([]);
     let [workorders, setWorkorders] = useState([]);
@@ -126,7 +127,7 @@ function EquipmentWorkOrders(props) {
                 }
                 activeFilter={workOrderFilter}
                 />
-                
+
             {workOrderFilter === WO_FILTER_TYPES.MTF ?
                 <EquipmentMTFWorkOrders equipmentcode={equipmentcode} />
                 :

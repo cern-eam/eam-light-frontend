@@ -229,7 +229,7 @@ const Position = () => {
         column: 1,
         order: 25,
         summaryIcon: ManageHistoryIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
+        ignore:  !isCernMode || !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS),
       },
       getPartsAssociated(
