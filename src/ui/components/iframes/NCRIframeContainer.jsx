@@ -1,5 +1,7 @@
+/* eslint-disable react/prop-types */
 import ComponentIframe from './ComponentIframe';
-import { withCernMode } from '../CERNMode';
+import AssetNCRs from '../../pages/equipment/components/EquipmentNCRs';
+
 
 const NCRIframeContainer = (props) => {
     const defaultProps = {
@@ -12,7 +14,23 @@ const NCRIframeContainer = (props) => {
         ...props // Allow additional props to override defaults
     };
 
-    return <ComponentIframe {...defaultProps} />;
+    function isValidHttpUrl(string) {
+        let url;
+        try {
+            url = new URL(string);
+        } catch (_) {
+            return false;  
+        }
+        return url.protocol === "http:" || url.protocol === "https:";
+    }
+
+    return (
+        isValidHttpUrl(props?.url) ? 
+            <ComponentIframe {...defaultProps} />
+        : (
+            <AssetNCRs equipment={props.equipmentCode} />
+        )
+    )
 };
 
-export default withCernMode(NCRIframeContainer);
+export default NCRIframeContainer;

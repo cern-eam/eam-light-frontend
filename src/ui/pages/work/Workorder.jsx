@@ -345,6 +345,7 @@ const Workorder = () => {
             <NCRIframeContainer
                 objectType="J"
                 objectID={workorder.number}
+                equipmentCode={workorder.equipmentCode}
                 mode="NCR"
                 url={`${applicationData.EL_TBURL}/ncr`}
                 edmsDocListLink={applicationData.EL_EDMSL}
