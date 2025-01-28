@@ -1,7 +1,18 @@
-# Version (2024-12-10)
+# Version (2025-01-28)
 
 ## Features
+### 3.21.0 
+* Preparations for open-source docker ([5a35f3](https://github.com/cern-eam/eam-light-backend/commit/5a35f3ad21fa439c38f0bb96e919a407851b017d))
+* [EAM-4181] Fix equipment search on serial number ([b9ef15](https://github.com/cern-eam/eam-light-backend/commit/b9ef15735bfee5ffb9482feacbd6a9599e7b7204))
+* feat: EAM-4185 get organization from the user to get events (#111) ([0d028e](https://github.com/cern-eam/eam-light-backend/commit/0d028ebc62fc86406aca1b593df6a4de4a10ac8d))
+* [EAM-4189] Return empty map if no entries in 'Lists & Reports' and update wshub-core (#112) ([b05fbe](https://github.com/cern-eam/eam-light-backend/commit/b05fbef829a73fd27890797d933b8dd0ae96baca))
+* fix(EAM-4182) modify grid of meter readings (#114) ([d151d9](https://github.com/cern-eam/eam-light-backend/commit/d151d9028a649013f849dff14a84cb96607ec3d0))
 ### 3.20.0 
+* Remove commented Hazard Icon import (#217) ([e63997](https://github.com/cern-eam/eam-light-frontend/commit/e63997db64d056975f880b42b585841188a6345a))
+* Eam 3990 (#219) ([1d7033](https://github.com/cern-eam/eam-light-frontend/commit/1d7033376fd5549dc0afa26db100d941b65979fa))
+* Add missing overflow style to portal content div ([7e44f6](https://github.com/cern-eam/eam-light-frontend/commit/7e44f645386d23c5591755fdfa9502415e9de71b))
+* Do not limit NCRs to R5CERN anymore ([aef410](https://github.com/cern-eam/eam-light-frontend/commit/aef410e154b8fe8b4d99e47b3b71fef3629d5c3a))
+* Do not process anything else when regionOnly was specified ([100459](https://github.com/cern-eam/eam-light-frontend/commit/100459604f9c19b29da474fae4b4f7a4c0de8d89))
 * Updated eam-wshub-core ([c4c669](https://github.com/cern-eam/eam-light-backend/commit/c4c6694c98892608bc531e12a37380b7dc5a35d5))
 * Use env variable for keycloak resource ([ee38bf](https://github.com/cern-eam/eam-light-backend/commit/ee38bf3405b096e8b2ed55205eee9c38c6282510))
 ### 3.19.13-SNAP 
@@ -1013,9 +1024,10 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* Remove commented Hazard Icon import (#217) ([e63997](https://github.com/cern-eam/eam-light-frontend/commit/e63997db64d056975f880b42b585841188a6345a))
-* Eam 3990 (#219) ([1d7033](https://github.com/cern-eam/eam-light-frontend/commit/1d7033376fd5549dc0afa26db100d941b65979fa))
-* Add missing overflow style to portal content div ([7e44f6](https://github.com/cern-eam/eam-light-frontend/commit/7e44f645386d23c5591755fdfa9502415e9de71b))
-* Do not limit NCRs to R5CERN anymore ([aef410](https://github.com/cern-eam/eam-light-frontend/commit/aef410e154b8fe8b4d99e47b3b71fef3629d5c3a))
-* Do not process anything else when regionOnly was specified ([100459](https://github.com/cern-eam/eam-light-frontend/commit/100459604f9c19b29da474fae4b4f7a4c0de8d89))
+* Preparations for open-source docker ([19fc98](https://github.com/cern-eam/eam-light-frontend/commit/19fc98d29fe9b14c2ee2a5cb939a5b9d9645c5e6))
+* [EAM-4000] Add EAMBarcodeScanner to ScanUser component (#222) ([d1f5e2](https://github.com/cern-eam/eam-light-frontend/commit/d1f5e2cc611f6bbe8448f3fa32bf3430c444b8ff))
+* [EAM-4210] Add backend port to .env (#226) ([85a3ce](https://github.com/cern-eam/eam-light-frontend/commit/85a3ce4a1a5e9f48e5d2685eda1e25a4b29f41c4))
+* [EAM-4182] ignore NCRS EDMS region if not CERN mode (#223) ([94fefc](https://github.com/cern-eam/eam-light-frontend/commit/94fefc8e30a6ca70f2792ece94b508694b643a12))
+* feat: EAM-4185 add or hide panel for outside cern user (#225) ([dcbdd9](https://github.com/cern-eam/eam-light-frontend/commit/dcbdd99ba1c5759340d1394151e43ba460232f4c))
+* load team work orders at startup (#224) ([417e1e](https://github.com/cern-eam/eam-light-frontend/commit/417e1e7126adf87c1561d2eab11ec5a76b82dc33))
 
