@@ -58,7 +58,8 @@ import HardwareIcon from "@mui/icons-material/Hardware";
 import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
 import EamlightToolbar from "../../components/EamlightToolbar";
 import useWorkOrderStore from "../../../state/useWorkOrderStore";
-import { isLocalAdministrator } from "../../../state/utils";
+import { isLocalAdministrator, isValidHttpUrl } from "../../../state/utils";
+import AssetNCRs from '../../pages/equipment/components/EquipmentNCRs';
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -341,8 +342,9 @@ const Workorder = () => {
         label: "NCRs",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => (
-            <NCRIframeContainer
+        render: () => ( 
+          isValidHttpUrl(`${applicationData.EL_TBURL}/ncr`) 
+            ? <NCRIframeContainer
                 objectType="J"
                 objectID={workorder.number}
                 equipmentCode={workorder.equipmentCode}
@@ -350,6 +352,7 @@ const Workorder = () => {
                 url={`${applicationData.EL_TBURL}/ncr`}
                 edmsDocListLink={applicationData.EL_EDMSL}
             />
+            : <AssetNCRs equipment={workorder.equipmentCode} />
         ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
