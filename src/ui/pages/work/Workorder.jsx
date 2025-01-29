@@ -14,7 +14,6 @@ import Activities from "./activities/Activities";
 import AdditionalCosts from "./additionalcosts/AdditionalCosts";
 import WorkorderChildren from "./childrenwo/WorkorderChildren";
 import MeterReadingWO from "./meter/MeterReadingWO";
-import WorkorderMultiequipment from "./multiequipmentwo/WorkorderMultiequipment";
 import PartUsage from "./partusage/PartUsage";
 import WorkorderClosingCodes from "./WorkorderClosingCodes";
 import WorkorderGeneral from "./WorkorderGeneral";
@@ -553,19 +552,6 @@ const Workorder = () => {
         summaryIcon: SpeedIcon,
         ignore: !getTabAvailability(tabs, TAB_CODES.METER_READINGS),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.METER_READINGS),
-      },
-      {
-        id: "MULTIPLEEQUIPMENT",
-        label: "Equipment",
-        isVisibleWhenNewEntity: false,
-        customVisibility: () => isRegionAvailable("MEC", commonProps.workOrderLayout),
-        maximizable: false,
-        render: () => <WorkorderMultiequipment workorder={workorder.number} setEquipmentMEC={setEquipmentMEC} />,
-        column: 2,
-        order: 13,
-        summaryIcon: PrecisionManufacturingIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.EQUIPMENT_TAB_WO_SCREEN),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_TAB_WO_SCREEN),
       },
       {
         id: "USERDEFINEDFIELDS",
