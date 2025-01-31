@@ -16,8 +16,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
-.idea/
-package-lock.json # TODO: Ask What is the reason to put this file here
+package-lock.json
 
 npm-debug.log*
 yarn-debug.log*
@@ -29,4 +28,5 @@ yarn.lock
 
 
 # IDE dirs
-.vscode
+.vscode/
+.idea/
