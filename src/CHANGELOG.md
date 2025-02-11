@@ -1,8 +1,17 @@
-# Version (2025-01-28)
+# Version (2025-02-11)
 
 ## Features
+### 3.22.0 
+* Revert unreleased eam-wshub-core ([57ef82](https://github.com/cern-eam/eam-light-backend/commit/57ef823b85e69d0bfdbab7ac93b8f857a484b248))
+* fix(EAM-4241) introduce generic functions to perform actions on gridrequest results ([15ae71](https://github.com/cern-eam/eam-light-backend/commit/15ae715bc851f8b7f6f4de654bd7961ed1fd0399))
+* Updated eam-wshub-core ([29477d](https://github.com/cern-eam/eam-light-backend/commit/29477d629f0ef723355d56877004f26caa210521))
 ### 3.21.0 
-* Preparations for open-source docker ([5a35f3](https://github.com/cern-eam/eam-light-backend/commit/5a35f3ad21fa439c38f0bb96e919a407851b017d))
+* Preparations for open-source docker ([19fc98](https://github.com/cern-eam/eam-light-frontend/commit/19fc98d29fe9b14c2ee2a5cb939a5b9d9645c5e6))
+* [EAM-4000] Add EAMBarcodeScanner to ScanUser component (#222) ([d1f5e2](https://github.com/cern-eam/eam-light-frontend/commit/d1f5e2cc611f6bbe8448f3fa32bf3430c444b8ff))
+* [EAM-4210] Add backend port to .env (#226) ([85a3ce](https://github.com/cern-eam/eam-light-frontend/commit/85a3ce4a1a5e9f48e5d2685eda1e25a4b29f41c4))
+* [EAM-4182] ignore NCRS EDMS region if not CERN mode (#223) ([94fefc](https://github.com/cern-eam/eam-light-frontend/commit/94fefc8e30a6ca70f2792ece94b508694b643a12))
+* feat: EAM-4185 add or hide panel for outside cern user (#225) ([dcbdd9](https://github.com/cern-eam/eam-light-frontend/commit/dcbdd99ba1c5759340d1394151e43ba460232f4c))
+* load team work orders at startup (#224) ([417e1e](https://github.com/cern-eam/eam-light-frontend/commit/417e1e7126adf87c1561d2eab11ec5a76b82dc33))
 * [EAM-4181] Fix equipment search on serial number ([b9ef15](https://github.com/cern-eam/eam-light-backend/commit/b9ef15735bfee5ffb9482feacbd6a9599e7b7204))
 * feat: EAM-4185 get organization from the user to get events (#111) ([0d028e](https://github.com/cern-eam/eam-light-backend/commit/0d028ebc62fc86406aca1b593df6a4de4a10ac8d))
 * [EAM-4189] Return empty map if no entries in 'Lists & Reports' and update wshub-core (#112) ([b05fbe](https://github.com/cern-eam/eam-light-backend/commit/b05fbef829a73fd27890797d933b8dd0ae96baca))
@@ -1024,10 +1033,6 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* Preparations for open-source docker ([19fc98](https://github.com/cern-eam/eam-light-frontend/commit/19fc98d29fe9b14c2ee2a5cb939a5b9d9645c5e6))
-* [EAM-4000] Add EAMBarcodeScanner to ScanUser component (#222) ([d1f5e2](https://github.com/cern-eam/eam-light-frontend/commit/d1f5e2cc611f6bbe8448f3fa32bf3430c444b8ff))
-* [EAM-4210] Add backend port to .env (#226) ([85a3ce](https://github.com/cern-eam/eam-light-frontend/commit/85a3ce4a1a5e9f48e5d2685eda1e25a4b29f41c4))
-* [EAM-4182] ignore NCRS EDMS region if not CERN mode (#223) ([94fefc](https://github.com/cern-eam/eam-light-frontend/commit/94fefc8e30a6ca70f2792ece94b508694b643a12))
-* feat: EAM-4185 add or hide panel for outside cern user (#225) ([dcbdd9](https://github.com/cern-eam/eam-light-frontend/commit/dcbdd99ba1c5759340d1394151e43ba460232f4c))
-* load team work orders at startup (#224) ([417e1e](https://github.com/cern-eam/eam-light-frontend/commit/417e1e7126adf87c1561d2eab11ec5a76b82dc33))
+* Add fallback NCRs for WO Equipment (#227) ([c7c0b0](https://github.com/cern-eam/eam-light-frontend/commit/c7c0b02468a26e189c9824e6996c72ffe81eeda2))
+* Build lock file ([99549c](https://github.com/cern-eam/eam-light-frontend/commit/99549c426c9933ce4046b9e3baff6a4f54b4f71b))
 
