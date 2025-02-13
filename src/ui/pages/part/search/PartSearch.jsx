@@ -15,7 +15,7 @@ const cellRenderer = ({ column, value, row }) => {
           to={
             "/part/" +
             value +
-            (row.values.organization ? "%23" + row.values.organization : "")
+            (row.original.organization ? "%23" + row.original.organization : "")
           }
         >
           {value}
@@ -29,7 +29,7 @@ const cellRenderer = ({ column, value, row }) => {
 const PartSearch = (props) => {
   const { handleError } = useSnackbarStore();
   const { userData } = useUserDataStore();
-  const partScreen = userData.screens[userData.partScreen]
+  const partScreen = userData.screens[userData.partScreen];
 
   return (
     <SyncedQueryParamsEAMGridContext

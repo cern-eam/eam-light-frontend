@@ -18,7 +18,6 @@ const handleTokens = (freshTokens) => {
 export default (props) => {
   switch (import.meta.env.VITE_LOGIN_METHOD) {
     case "OPENID":
-      console.log("Using OpenID");
       return (
         <ReactKeycloakProvider
           authClient={keycloak}

@@ -5669,9 +5669,9 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
 
-"eam-components@https://github.com/cern-eam/eam-components.git#v1.17.2":
-  version "1.17.0"
-  resolved "https://github.com/cern-eam/eam-components.git#09c17c76be7bcce827e85a722036a7814a970acb"
+"eam-components@https://github.com/cern-eam/eam-components.git#v1.18.0":
+  version "1.18.0"
+  resolved "https://github.com/cern-eam/eam-components.git#5b4bc41c672619f60e564d8db40931be0583f987"
   dependencies:
     "@babel/polyfill" "7.7.0"
     "@babel/runtime" "7.7.2"
