@@ -16,12 +16,11 @@ const rollOverMessageCreate =
   "Value is less than the Last Reading, which indicates the meter has rolled over. Is this correct?";
 
 class MeterReading extends React.Component {
-
   constructor(props) {
     super(props);
     this.handleError = useSnackbarStore.getState().handleError;
     this.showNotification = useSnackbarStore.getState().showNotification;
-}
+  }
 
   state = {
     blocking: false,

@@ -15,7 +15,7 @@ const cellRenderer = ({ column, value, row }) => {
           to={
             "/asset/" +
             value +
-            (row.values.organization ? "%23" + row.values.organization : "")
+            (row.original.organization ? "%23" + row.original.organization : "")
           }
         >
           {value}
@@ -29,7 +29,7 @@ const cellRenderer = ({ column, value, row }) => {
 const AssetSearch = (props) => {
   const { handleError } = useSnackbarStore();
   const { userData } = useUserDataStore();
-  const assetScreen = userData.screens[userData.assetScreen]
+  const assetScreen = userData.screens[userData.assetScreen];
 
   return (
     <SyncedQueryParamsEAMGridContext

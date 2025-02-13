@@ -15,7 +15,7 @@ const cellRenderer = ({ column, value, row }) => {
           to={
             "/position/" +
             value +
-            (row.values.organization ? "%23" + row.values.organization : "")
+            (row.original.organization ? "%23" + row.original.organization : "")
           }
         >
           {value}
@@ -28,8 +28,8 @@ const cellRenderer = ({ column, value, row }) => {
 
 const PositionSearch = (props) => {
   const { handleError } = useSnackbarStore();
-  const { userData} = useUserDataStore();
-  const positionScreen=  userData.screens[userData.positionScreen]
+  const { userData } = useUserDataStore();
+  const positionScreen = userData.screens[userData.positionScreen];
 
   return (
     <SyncedQueryParamsEAMGridContext
