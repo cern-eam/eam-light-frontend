@@ -45,6 +45,7 @@ const FORM = {
   BIN: "bin",
   PART: "partCode",
   PART_DESC: "partDesc",
+  PART_ORGANIZATION: "partOrganization",
   TRANSACTION_QTY: "transactionQty",
   LOT: "lot",
 };
@@ -616,7 +617,7 @@ function PartUsageDialog(props) {
                 onChange={createOnChangeHandler(
                   FORM.PART,
                   FORM.PART_DESC,
-                  null,
+                  FORM.PART_ORGANIZATION,
                   updateFormDataProperty,
                   (part) => runUiBlockingFunction(() => handlePartChange(part))
                 )}
