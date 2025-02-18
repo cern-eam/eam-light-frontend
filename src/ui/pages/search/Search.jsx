@@ -11,16 +11,10 @@ import KeyCode from "eam-components/dist/enums/KeyCode";
 
 import useSnackbarStore from "@/state/useSnackbarStore";
 import useSearchResources from "./useSearchResources";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import SearchHeaderFilters from "./SearchHeaderFilters";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      gcTime: 1000 * 60 * 60 * 24, // 24 hours
-    },
-  },
-});
+
 
 function Search(props) {
   const {
@@ -186,14 +180,4 @@ function Search(props) {
   );
 }
 
-/**
- * Usage of @tanstack/react-query locally
- * TODO: consider to use it globally in the EAM light
- */
-const LocalQueryWrapperSearch = (props) => (
-  <QueryClientProvider client={queryClient}>
-    <Search {...props} />
-  </QueryClientProvider>
-);
-
-export default LocalQueryWrapperSearch;
+export default Search;
