@@ -31,6 +31,7 @@ import useApplicationDataStore from "./state/useApplicationDataStore";
 import { renderLoading } from "./ui/pages/EntityTools";
 import useInforContextStore from "./state/useInforContext";
 import useLayoutStore from "./state/useLayoutStore";
+import { isCernMode } from "./ui/components/CERNMode";
 
 export const releaseNotesPath = "/releasenotes";
 
@@ -61,7 +62,8 @@ const Eamlight = () => {
         title="Error initializing EAM Light"
         message="The application could not be initialized. Please contact EAM support if the problem persists."
         includeAutoRefresh={true}
-        includeSupportButton={true}
+        includeSupportButton={isCernMode}
+        includeLogoutButton={!isCernMode}
       />
     );
   }

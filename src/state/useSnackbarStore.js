@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes"; 
+import useInforContextStore from './useInforContext';
 
 const useSnackbarStore = create((set, get) => ({
   snackbarData: {
@@ -46,6 +47,7 @@ const useSnackbarStore = create((set, get) => ({
     }),
   handleError: (error) => {
     const { showError } = get();
+    const { setInforContext } = useInforContextStore.getState();
 
     switch (error.type) {
       case ErrorTypes.CONNECTION_ABORDED:
@@ -63,6 +65,11 @@ const useSnackbarStore = create((set, get) => ({
           const errors = error.response.body.errors;
           if (errors && errors.length > 0) {
             const errorMessages = errors.reduce((acc, value) => acc + '\n' + value.message, '');
+
+            if (errors.some(error => error.name === "com.dstm.mp.businessprocess.NoSessionException")) {
+              setInforContext(null)
+            }
+           
             showError(errorMessages);
             return errorMessages;
           }
