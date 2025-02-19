@@ -5,12 +5,15 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import EmailIcon from '@mui/icons-material/Email';
+import LogoutIcon from '@mui/icons-material/Logout';
+import useInforContextStore from '../../../state/useInforContext';
 
 const InfoPage = ({
     title,
     message,
     includeAutoRefresh = false,
     includeSupportButton = false,
+    includeLogoutButton = false,
 }) => {
     const [countdown, setCountdown] = useState(20);
 
@@ -31,6 +34,10 @@ const InfoPage = ({
 
     const handleEmail = () => {
         window.location.href = 'mailto:EAM.Support@cern.ch';
+    };
+
+    const handleLogout = () => {
+        useInforContextStore.getState().setInforContext(null);
     };
 
     const blueColor = '#1976d2'; // Material-UI primary blue
@@ -100,6 +107,16 @@ const InfoPage = ({
                             onClick={handleEmail}
                         >
                             Contact Support
+                        </Button>
+                    )}
+                    {includeLogoutButton && (
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            startIcon={<LogoutIcon />}
+                            onClick={handleLogout}
+                        >
+                            Logout
                         </Button>
                     )}
                 </Box>

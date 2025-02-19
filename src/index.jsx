@@ -31,7 +31,7 @@ Ajax.getAxiosInstance().interceptors.request.use(
       const { inforContext } = useInforContextStore.getState();
       if (inforContext) {
         config.headers.INFOR_USER = inforContext.INFOR_USER;
-        config.headers.INFOR_PASSWORD = inforContext.INFOR_PASSWORD;
+        //config.headers.INFOR_PASSWORD = inforContext.INFOR_PASSWORD;
         config.headers.INFOR_ORGANIZATION = inforContext.INFOR_ORGANIZATION;
         config.headers.INFOR_SESSIONID = inforContext.INFOR_SESSIONID;
         config.headers.INFOR_TENANT = inforContext.INFOR_TENANT;

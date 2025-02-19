@@ -22,17 +22,10 @@ class Login extends Component {
 
   constructor(props) {
     super(props);
-    let inforContextString =
-      sessionStorage.getItem("inforContext") ||
-      window.localStorage.getItem("inforContext");
-
     this.handleError = useSnackbarStore.getState().handleError;
     this.showError = useSnackbarStore.getState().showError;
     this.setInforContext = useInforContextStore.getState().setInforContext;
-    if (inforContextString) {
-      //this.props.updateInforContext(JSON.parse(inforContextString));
-      this.setInforContext(JSON.parse(inforContextString));
-    }
+
   }
 
   loginHandler = () => {
@@ -57,19 +50,11 @@ class Login extends Component {
         let inforContext = {
           INFOR_ORGANIZATION: this.state.infor_organization,
           INFOR_USER: this.state.infor_user.toUpperCase(),
-          INFOR_PASSWORD: this.state.infor_password,
+          //INFOR_PASSWORD: this.state.infor_password,
           INFOR_TENANT: this.state.infor_tenant,
           INFOR_SESSIONID: response.body.data,
         };
         this.setInforContext(inforContext);
-        // Store in the redux store (used by axios)
-        //this.props.updateInforContext(inforContext)
-        // Store in session store (used if page will be refreshed)
-        sessionStorage.setItem("inforContext", JSON.stringify(inforContext));
-        window.localStorage.setItem(
-          "inforContext",
-          JSON.stringify(inforContext)
-        );
         // Activate all elements again
         this.setState({ loginInProgress: false });
       })

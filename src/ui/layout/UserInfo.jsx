@@ -45,8 +45,6 @@ const UserInfo = () => {
       return;
     }
     if (import.meta.env.VITE_LOGIN_METHOD === "STD") {
-      window.localStorage.setItem("inforContext", null);
-      sessionStorage.setItem("inforContext", null);
       setInforContext(null);
       cleanUserData();
     }
