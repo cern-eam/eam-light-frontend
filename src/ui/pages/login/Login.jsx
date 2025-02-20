@@ -140,7 +140,7 @@ class Login extends Component {
             />
 
             <EAMCheckbox
-              label="Reuse credentials after login"
+              label="Stay logged in"
               value={this.state.reuseCredentials}
               onChange={() => {
                 this.setState({ reuseCredentials: !this.state.reuseCredentials });
