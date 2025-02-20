@@ -45,6 +45,7 @@ const FORM = {
   BIN: "bin",
   PART: "partCode",
   PART_DESC: "partDesc",
+  PART_ORGANIZATION: "partOrganization",
   TRANSACTION_QTY: "transactionQty",
   LOT: "lot",
 };
@@ -337,7 +338,7 @@ function PartUsageDialog(props) {
     }
   };
 
-  const handlePartChange = async (partCode) => {
+  const handlePartChange = async (partCode, part) => {
     // We should in principle clear related state because of data loads/field changes that come as side effects (such as the automatic selection of
     // a bin when there is only one possible) and because the user might have already filled related fields and afterwards change the selected part.
     resetFieldWithDesc(FORM.ASSET, FORM.ASSET_DESC);
@@ -356,7 +357,7 @@ function PartUsageDialog(props) {
     // This is only needed in the issue transaction since parts can be returned to any store when doing a return transaction.
     if (transactionType === ISSUE) {
       try {
-        const partStockResponse = await WSParts.getPartStock(partCode);
+        const partStockResponse = await WSParts.getPartStock(partCode + "#" + part.organization);
         const partStock = partStockResponse.body.data;
 
         // If not in the selected store, explicitly reset the part field since the part code will not be valid in that case.
@@ -372,7 +373,7 @@ function PartUsageDialog(props) {
       }
     }
 
-    const partData = await loadPartData(partCode);
+    const partData = await loadPartData(partCode + "#" + part.organization);
 
     if (partData?.trackByAsset === "true") {
       showNotification(`Selected part "${partCode}" is tracked by asset.`);
@@ -616,9 +617,9 @@ function PartUsageDialog(props) {
                 onChange={createOnChangeHandler(
                   FORM.PART,
                   FORM.PART_DESC,
-                  null,
+                  FORM.PART_ORGANIZATION,
                   updateFormDataProperty,
-                  (part) => runUiBlockingFunction(() => handlePartChange(part))
+                  (partCode, part) => runUiBlockingFunction(() => handlePartChange(partCode, part))
                 )}
                 renderDependencies={[formData.transactionType]}
                 errorText={errorMessages?.partCode}
