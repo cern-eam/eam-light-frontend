@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import WSParts from "../../../tools/WSParts";
 import EISTable from 'eam-components/dist/ui/components/table';
+import zIndex from '@mui/material/styles/zIndex';
 
 function PartWhereUsed(props) {
 

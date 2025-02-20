@@ -380,9 +380,9 @@ function PartUsageDialog(props) {
       // Bin loading is done later when the user selects an asset.
     } else if (partData?.trackByAsset === "false") {
       await Promise.all([
-        loadBinList("", partCode),
+        loadBinList("", partCode + "#" + part.organization),
         transactionType === RETURN
-          ? loadLotList(transactionType, "", "", partCode, "")
+          ? loadLotList(transactionType, "", "", partCode + "#" + part.organization, "")
           : null,
       ]);
     }
@@ -401,7 +401,7 @@ function PartUsageDialog(props) {
         response = await WSWorkorders.getPartUsageLotIssue(
           lot,
           bin,
-          partCode,
+          encodeURIComponent(partCode),
           storeCode
         );
       } else {
@@ -436,7 +436,7 @@ function PartUsageDialog(props) {
       const response = await WSWorkorders.getPartUsageBin(
         transactionType,
         binCode,
-        partCode,
+        encodeURIComponent(partCode),
         storeCode
       );
       const binList = response.body.data;
