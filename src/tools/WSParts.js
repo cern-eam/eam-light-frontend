@@ -14,7 +14,7 @@ class WSParts {
     }
 
     getPart(code, config = {}) {
-        return WS._get('/parts/' + encodeURIComponent(code), config);
+        return WS._get('/parts/' + code, config);
     }
 
     createPart(part, config = {}) {

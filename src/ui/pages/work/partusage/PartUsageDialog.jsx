@@ -467,7 +467,7 @@ function PartUsageDialog(props) {
     }
 
     try {
-      const response = await WSParts.getPart(partCode);
+      const response = await WSParts.getPart(encodeURIComponent(partCode));
       const partData = response.body.data;
 
       setIsTrackedByAsset(partData?.trackByAsset === "true");
