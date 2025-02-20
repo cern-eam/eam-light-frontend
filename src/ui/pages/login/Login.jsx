@@ -10,6 +10,7 @@ import { Box, Container } from "@mui/material";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import useInforContextStore from "../../../state/useInforContext";
 import useSnackbarStore from "../../../state/useSnackbarStore";
+import EAMCheckbox from "eam-components/dist/ui/components/inputs-ng/EAMCheckbox";
 
 class Login extends Component {
   state = {
@@ -17,6 +18,7 @@ class Login extends Component {
     infor_password: "",
     infor_organization: "",
     infor_tenant: "",
+    reuseCredentials: false,
     loginInProgress: false,
   };
 
@@ -50,10 +52,16 @@ class Login extends Component {
         let inforContext = {
           INFOR_ORGANIZATION: this.state.infor_organization,
           INFOR_USER: this.state.infor_user.toUpperCase(),
-          //INFOR_PASSWORD: this.state.infor_password,
           INFOR_TENANT: this.state.infor_tenant,
           INFOR_SESSIONID: response.body.data,
         };
+
+        if (this.state.reuseCredentials) {
+          inforContext.INFOR_PASSWORD = this.state.infor_password
+        } else {
+          inforContext.INFOR_SESSIONID = response.body.data
+        }
+
         this.setInforContext(inforContext);
         // Activate all elements again
         this.setState({ loginInProgress: false });
@@ -130,6 +138,15 @@ class Login extends Component {
               }}
               disabled={this.state.loginInProgress}
             />
+
+            <EAMCheckbox
+              label="Reuse credentials after login"
+              value={this.state.reuseCredentials}
+              onChange={() => {
+                this.setState({ reuseCredentials: !this.state.reuseCredentials });
+              }}
+            />
+
             <Button
               fullWidth
               variant="contained"
