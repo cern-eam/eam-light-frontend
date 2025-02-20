@@ -321,7 +321,7 @@ function PartUsageDialog(props) {
   };
 
   const handleBinChange = async (bin) => {
-    const { transactionType, partCode, storeCode, assetIDCode, lot } = formData;
+    const { transactionType, partCode, storeCode, assetIDCode, lot, partOrganization } = formData;
 
     // On a Return transaction, the lot can be filled before the bin (we expect there to be a lot list already),
     // as such we must not clear the lot field and we can avoid re-loading the lot list.
@@ -334,7 +334,7 @@ function PartUsageDialog(props) {
 
     if (transactionType === ISSUE) {
       resetFieldWithList(FORM.LOT, setLotList);
-      await loadLotList(transactionType, "", bin, partCode, storeCode);
+      await loadLotList(transactionType, "", bin, partCode + "#" + partOrganization, storeCode);
     }
   };
 
