@@ -120,8 +120,6 @@ function WorkorderGeneral(props) {
 
       <EAMAutocomplete
         {...register("woclass", "classCode", "classDesc")}
-        autocompleteHandler={WS.autocompleteClass}
-        autocompleteHandlerParams={["EVNT"]}
       />
 
       <EAMAutocomplete

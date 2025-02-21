@@ -14,8 +14,7 @@ const SystemDetails = (props) => {
     <React.Fragment>
       <EAMAutocomplete
         {...register("class", "classCode", "classDesc")}
-        autocompleteHandler={WS.autocompleteClass}
-        autocompleteHandlerParams={["OBJ"]}
+
       />
 
       <EAMAutocomplete

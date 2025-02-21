@@ -121,10 +121,6 @@ class WS {
     return this._get(`/autocomplete/users/${filter}`, config);
   };
 
-  autocompleteClass = (entity, filter, config = {}) => {
-    return this._get(`/autocomplete/class/${entity}/${filter}`, config);
-  };
-
   autocompleteDepartment = (filter, config = {}) => {
     filter = encodeURIComponent(filter);
     return this._get(`/autocomplete/department/${filter}`, config);
