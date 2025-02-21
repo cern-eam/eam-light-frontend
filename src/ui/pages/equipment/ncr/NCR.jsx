@@ -24,12 +24,10 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import EDMSDoclightIframeContainer from "@/ui/components/iframes/EDMSDoclightIframeContainer";
 import Observations from "./observations/Observations";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
-import WSWorkorders from "../../../../tools/WSWorkorders.js";
 import WSEquipment from "../../../../tools/WSEquipment.js";
 import { isCernMode } from "../../../components/CERNMode.js";
 
 const NCR = () => {
-    const [statuses, setStatuses] = useState([]);
 
     const {
         screenLayout: ncrLayout,
@@ -85,19 +83,9 @@ const NCR = () => {
     function postInit() {}
 
     function postRead() {
-        readStatuses("", "", true);
     }
 
-    const readStatuses = (status, type, newwo) => {
-        WSWorkorders.getWorkOrderStatusValues(
-            userData.eamAccount.userGroup,
-            status,
-            type,
-            newwo
-        )
-            .then((response) => setStatuses(response.body.data))
-            .catch(console.error);
-    };
+
 
     function onChangeEquipment(equipmentCode) {
         if (!equipmentCode) {
@@ -140,7 +128,6 @@ const NCR = () => {
                     <NCRGeneral
                         showNotification={showNotification}
                         {...commonProps}
-                        statuses={statuses}
                         userData={userData}
                         screenCode={screenCode}
                         screenPermissions={screenPermissions}
@@ -246,7 +233,6 @@ const NCR = () => {
                         showNotification={showNotification}
                         observationFields={tabs[TAB_CODES.OBSERVATIONS].fields}
                         disabled={readOnly}
-                        statuses={statuses}
                     />
                 ),
                 column: 2,

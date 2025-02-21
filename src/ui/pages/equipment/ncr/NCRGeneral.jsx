@@ -4,9 +4,10 @@ import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import { isMultiOrg } from "@/ui/pages/EntityTools";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import WS from "../../../../tools/WS";
+import { readStatuses } from "../../../../tools/WSGrids";
 
 const NCRGeneral = (props) => {
-    const { register, ncr } = props;
+    const { register, ncr, userGroup, newEntity } = props;
 
     return (
         <React.Fragment>
@@ -26,7 +27,11 @@ const NCRGeneral = (props) => {
 
             <EAMSelect {...register("type", "typeCode")} />
 
-            <EAMTextField {...register("status", "statusCode")} />
+            <EAMSelect 
+                {...register("status", "statusCode")} 
+                autocompleteHandler={readStatuses}
+                autocompleteHandlerParams={["NOCF", newEntity, ncr.statusCode]}
+            />
 
             <EAMAutocomplete {...register("class", "classCode")} />
 

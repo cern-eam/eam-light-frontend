@@ -115,7 +115,6 @@ const Observations = ({
                 workOrder={workOrder}
                 handleUpdate={workOrdersDialogUpdateHandler}
                 userData={userData}
-                statuses={statuses}
             />
         </>
     );

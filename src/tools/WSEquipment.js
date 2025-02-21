@@ -44,10 +44,6 @@ class WSEquipment {
         return WS._get(`/equipment/init/${eqpType}`, config);
     }
 
-    getEquipmentStatusValues(userGroup, neweqp, oldStatusCode, config = {}) {
-        return WS._get(`/eqplists/statuscodes?userGroup=${encodeURIComponent(userGroup)}&neweqp=${neweqp}&oldStatusCode=${oldStatusCode}`, config);
-    }
-
     getEquipmentCriticalityValues(config = {}) {
         return WS._get('/eqplists/criticalitycodes', config);
     }
