@@ -1,7 +1,23 @@
 import React, {useEffect, useState} from 'react';
-import WSParts from "../../../tools/WSParts";
 import EISTable from 'eam-components/dist/ui/components/table';
-import zIndex from '@mui/material/styles/zIndex';
+import GridRequest from '../../../tools/entities/GridRequest';
+import { getGridData, transformResponse } from '../../../tools/WSGrids';
+
+const keyMap = {
+    entity: "epaentity_display",
+    code: "code",
+    description: "epadesc",
+    quantity: "quantity",
+    epatypeshow: "qtyOnHand"
+  }
+
+ function getPartsAssociated(partCode, partOrganization) {
+    let gridRequest = new GridRequest("SSPART_EPA")
+    gridRequest.userFunctionName = "SSPART"
+    gridRequest.addParam("partcode", partCode)
+    gridRequest.addParam("partorg", partOrganization)
+    return getGridData(gridRequest).then(response => transformResponse(response, keyMap))
+}
 
 function PartWhereUsed(props) {
 
@@ -11,12 +27,13 @@ function PartWhereUsed(props) {
     let [data, setData] = useState([]);
 
     useEffect(() => {
-        fetchData(props.part.code);
+        fetchData(props.part.code, props.part.organization);
     }, [props.part.code])
 
-    let fetchData = (partCode) => {
+    let fetchData = (partCode, partOrganization) => {
         if (partCode) {
-            WSParts.getPartWhereUsed(partCode).then(response => {
+            getPartsAssociated(partCode, partOrganization)
+             .then(response => {
                 setData(response.body.data);
             }).catch(error => {
                 console.log('Error loading data', error);

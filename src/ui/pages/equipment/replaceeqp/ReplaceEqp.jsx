@@ -11,6 +11,7 @@ import useApplicationDataStore from '../../../../state/useApplicationDataStore';
 import useLayoutStore from '../../../../state/useLayoutStore';
 import { renderLoading } from '../../EntityTools';
 import useSnackbarStore from '../../../../state/useSnackbarStore';
+import { readStatuses, readUserCodes } from '../../../../tools/WSGrids';
 
 const MODE_STANDARD = 'Standard';
 
@@ -57,9 +58,9 @@ const ReplaceEqp = (props) => {
         if (newEquipment) {
             updateEqpReplacementProp('newEquipment', newEquipment);
         }
-        WSEquipment.getEquipmentStateValues()
-            .then(resp => setStateList(resp.body.data))
-            .catch(handleError)
+        readUserCodes("OBSA")
+        .then(resp => setStateList(resp.body.data))
+        .catch(handleError)
     }, [])
 
     useEffect(() => {
@@ -86,7 +87,7 @@ const ReplaceEqp = (props) => {
         }
 
         //Load list of statuses
-        WSEquipment.getEquipmentStatusValues(userGroup, false, oldEquipmentStatus)
+        readStatuses("OBJ", false, oldEquipmentStatus)
             .then(response => {
                 const data = response.body.data;
                 data.sort(({desc: a}, {desc: b}) => a < b ? -1 : a > b ? 1 : 0);

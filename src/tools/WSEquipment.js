@@ -44,14 +44,6 @@ class WSEquipment {
         return WS._get(`/equipment/init/${eqpType}`, config);
     }
 
-    getEquipmentCriticalityValues(config = {}) {
-        return WS._get('/eqplists/criticalitycodes', config);
-    }
-
-    getEquipmentStateValues(config = {}) {
-        return WS._get('/eqplists/statecodes', config);
-    }
-
     autocompleteManufacturer(filter, config = {}) {
         filter = encodeURIComponent(filter);
         return WS._get('/autocomplete/eqp/manufacturer/' + filter, config);

@@ -7,7 +7,7 @@ import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAuto
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import { isDepartmentReadOnly, isMultiOrg } from "@/ui/pages/EntityTools";
 import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
-import { readStatuses } from "../../../../tools/WSGrids";
+import { readStatuses, readUserCodes } from "../../../../tools/WSGrids";
 
 const AssetGeneral = (props) => {
   const {
@@ -53,7 +53,8 @@ const AssetGeneral = (props) => {
 
       <EAMSelect
         {...register("state", "stateCode")}
-        autocompleteHandler={WSEquipment.getEquipmentStateValues}
+        autocompleteHandler={readUserCodes}
+        autocompleteHandlerParams={["OBSA"]}
       />
       <StatusRow
         entity={equipment}
