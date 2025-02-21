@@ -19,6 +19,7 @@ import {
   isHidden,
 } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import WSEquipment from "@/tools/WSEquipment";
+import { getPartStock } from "../../part/PartStock";
 
 const overflowStyle = {
   overflowY: "visible",
@@ -357,7 +358,8 @@ function PartUsageDialog(props) {
     // This is only needed in the issue transaction since parts can be returned to any store when doing a return transaction.
     if (transactionType === ISSUE) {
       try {
-        const partStockResponse = await WSParts.getPartStock(partCode + "#" + part.organization);
+        const partStockResponse = await getPartStock(partCode, part.organization);
+        console.log('part stock', partStockResponse)
         const partStock = partStockResponse.body.data;
 
         // If not in the selected store, explicitly reset the part field since the part code will not be valid in that case.

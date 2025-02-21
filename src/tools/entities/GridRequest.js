@@ -1,13 +1,18 @@
-class GridRequest {
-    constructor(gridName) {
-      this.gridName = gridName;
-      this.gridFilter = [];
+const GridTypes = Object.freeze({ LIST: "LIST", LOV: "LOV" });
+
+export default class GridRequest {
+    constructor(gridName, gridType = GridTypes.LIST) {
+        this.gridName = gridName;
+        this.gridType = gridType;
+        this.gridFilter = [];
+        this.params = {}
     }
-  
+
     addFilter(fieldName, fieldValue, operator, joiner = "AND", leftParenthesis = false, rightParenthesis = false) {
-      this.gridFilter.push({ fieldName, fieldValue, operator, joiner, leftParenthesis, rightParenthesis });
+        this.gridFilter.push({ fieldName, fieldValue, operator, joiner, leftParenthesis, rightParenthesis });
     }
-  }
-  
-  export default GridRequest;
-  
+
+    addParam(key, value) {
+        this.params[key] = value; 
+    }
+}

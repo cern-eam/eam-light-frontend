@@ -1,9 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import WSParts from '../../../tools/WSParts'
 import EISTable from 'eam-components/dist/ui/components/table';
 import {Link} from 'react-router-dom';
 import { isCernMode } from '../../components/CERNMode';
 import queryString from 'query-string';
+import GridRequest from '../../../tools/entities/GridRequest';
+import {getGridData, transformResponse} from '../../../tools/WSGrids';
+
+const keyMap = { storeCode: "bisstore", storeDesc: "storedesc", bin: "bisbin", lot: "bislot", qtyOnHand: "bisqty",partCode: "conditionpartcode", repairQuantity: "repairquantity", assetCode: "bisassetid" };
+
+export function getPartStock(partCode, partOrganization) {
+    let gridRequest = new GridRequest("SSPART_BIS")
+    gridRequest.userFunctionName = "SSPART"
+    gridRequest.addParam("partcode", partCode)
+    gridRequest.addParam("partorg", partOrganization)
+    return getGridData(gridRequest).then(response => transformResponse(response, keyMap))
+}
 
 function PartStock(props) {
 
@@ -11,10 +22,12 @@ function PartStock(props) {
     let propCodes = ['storeCode', 'storeDesc', 'bin', 'lot', 'qtyOnHand', 'repairQuantity', 'assetCode'];
     let [data, setData] = useState([])
 
-    let fetchData = (partCode) => {
+    
+    let fetchData = (partCode, partOrganization) => {
         const userID = props.userData.eamAccount.employeeCode;
         if (partCode) {
-            WSParts.getPartStock(partCode).then(response => {
+            getPartStock(partCode, partOrganization)
+            .then(response => {
                 let stockData = response.body.data.map(line => {
                     let linkValueAsset = '/asset/';
                     const linkValueStore = `${props.applicationData.EL_TEKLI}/${line.storeCode}/issue/employee?${queryString.stringify({employee: userID, partCode: partCode,})}`;
@@ -36,7 +49,7 @@ function PartStock(props) {
     };
 
     useEffect(() => {
-       fetchData(props.part.code);
+       fetchData(props.part.code, props.part.organization);
     },[props.part.code])
 
     //Do not render if there is no data

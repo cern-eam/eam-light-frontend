@@ -6,6 +6,7 @@ import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAuto
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import { onCategoryChange } from "../EquipmentTools";
+import { readUserCodes } from "../../../../tools/WSGrids";
 
 const AssetDetails = (props) => {
   const { equipment, updateEquipmentProperty, register } = props;
@@ -43,7 +44,8 @@ const AssetDetails = (props) => {
 
       <EAMSelect
         {...register("criticality", "criticality")}
-        autocompleteHandler={WSEquipment.getEquipmentCriticalityValues}
+        autocompleteHandler={readUserCodes}
+        autocompleteHandlerParams={["OBCR"]}
       />
 
       <EAMAutocomplete

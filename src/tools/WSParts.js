@@ -65,16 +65,6 @@ class WSParts {
     }
 
     //
-    // PART STOCK
-    //
-
-    getPartStock(partCode, config = {}) {
-        partCode = encodeURIComponent(partCode);
-        return WS._get('/parts/partstock/' + partCode);
-    }
-
-
-    //
     // ASSETS LIST
     //
 
