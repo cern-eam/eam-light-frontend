@@ -6,7 +6,16 @@ import queryString from 'query-string';
 import GridRequest from '../../../tools/entities/GridRequest';
 import {getGridData, transformResponse} from '../../../tools/WSGrids';
 
-const keyMap = { storeCode: "bisstore", storeDesc: "storedesc", bin: "bisbin", lot: "bislot", qtyOnHand: "bisqty",partCode: "conditionpartcode", repairQuantity: "repairquantity", assetCode: "bisassetid" };
+const keyMap = { 
+    storeCode: "bisstore", 
+    storeDesc: "storedesc", 
+    bin: "bisbin", 
+    lot: "bislot", 
+    qtyOnHand: "bisqty",
+    partCode: "conditionpartcode", 
+    repairQuantity: "repairquantity", 
+    assetCode: "bisassetid" 
+};
 
 export function getPartStock(partCode, partOrganization) {
     let gridRequest = new GridRequest("SSPART_BIS")
