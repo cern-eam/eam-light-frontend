@@ -11,8 +11,6 @@ const LocationDetails = (props) => {
     <React.Fragment>
       <EAMAutocomplete
         {...register("class", "classCode", "classDesc")}
-        autocompleteHandler={WS.autocompleteClass}
-        autocompleteHandlerParams={["LOC"]}
       />
 
       <EAMTextField {...register("costcode", "costCode")} />

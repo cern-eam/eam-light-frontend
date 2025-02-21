@@ -27,8 +27,6 @@ const PartGeneral = (props) => {
 
       <EAMAutocomplete
         {...register("class", "classCode", "classDesc")}
-        autocompleteHandler={WS.autocompleteClass}
-        autocompleteHandlerParams={["PART"]}
       />
 
       <EAMAutocomplete

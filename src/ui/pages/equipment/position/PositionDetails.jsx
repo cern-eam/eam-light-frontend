@@ -16,8 +16,6 @@ const PositionDetails = (props) => {
 
             <EAMAutocomplete
                 {...register('class', 'classCode', 'classDesc')}
-                autocompleteHandler={WS.autocompleteClass}
-                autocompleteHandlerParams={['OBJ']}
             />
 
             <EAMAutocomplete
