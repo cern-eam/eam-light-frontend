@@ -7,12 +7,12 @@ import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAuto
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import { isDepartmentReadOnly, isMultiOrg } from "@/ui/pages/EntityTools";
 import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
+import { readStatuses } from "../../../../tools/WSGrids";
 
 const AssetGeneral = (props) => {
   const {
     equipment,
     newEntity,
-    statuses,
     register,
     userData,
     screenCode,
@@ -47,7 +47,8 @@ const AssetGeneral = (props) => {
           isDepartmentReadOnly(equipment.departmentCode, userData) ||
           !screenPermissions.updateAllowed
         }
-        options={statuses}
+        autocompleteHandler={readStatuses}
+        autocompleteHandlerParams={["OBJ", newEntity, equipment.statusCode]}
       />
 
       <EAMSelect

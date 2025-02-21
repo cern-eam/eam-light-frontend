@@ -6,13 +6,13 @@ import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
 import StatusRow from "../../../components/statusrow/StatusRow";
 import { isDepartmentReadOnly, isMultiOrg } from "@/ui/pages/EntityTools";
+import { readStatuses } from "../../../../tools/WSGrids";
 
 const PositionGeneral = (props) => {
   const {
     equipment,
     newEntity,
     register,
-    statuses,
     userData,
     screenCode,
     screenPermissions,
@@ -47,7 +47,8 @@ const PositionGeneral = (props) => {
           isDepartmentReadOnly(equipment.departmentCode, userData) ||
           !screenPermissions.updateAllowed
         }
-        options={statuses}
+        autocompleteHandler={readStatuses}
+        autocompleteHandlerParams={["OBJ", newEntity, equipment.statusCode]}
       />
 
       <StatusRow

@@ -14,6 +14,8 @@ import {
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import { isDepartmentReadOnly } from "@/ui/pages/EntityTools";
+import { useEffect, useState } from "react";
+import useUserDataStore from "../../../../../../state/useUserDataStore";
 
 const WorkOrdersDialog = ({
     handleSuccess,
@@ -22,11 +24,18 @@ const WorkOrdersDialog = ({
     fields,
     disabled,
     workOrder,
-    handleUpdate,
-    userData,
-    statuses,
+    handleUpdate
 }) => {
+    const [statuses, setStatuses] = useState([]);
+    const {userData} = useUserDataStore();
 
+    const readStatuses = (status, type, newwo) => {
+        WSWorkorders.getWorkOrderStatusValues(userData.eamAccount.userGroup, status, type, newwo)
+        .then((response) => setStatuses(response.body.data))
+        .catch(console.error);
+    };
+
+    useEffect( () => readStatuses("", "", true), [])
 
     return (
         <Dialog

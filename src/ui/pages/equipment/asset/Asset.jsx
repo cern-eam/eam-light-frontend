@@ -48,7 +48,6 @@ const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OB
 
 const Asset = () => {
   const [part, setPart] = useState(null);
-  const [statuses, setStatuses] = useState([]);
 
   const {
     screenLayout: assetLayout,
@@ -115,22 +114,14 @@ const Asset = () => {
   }, [equipment?.partCode]);
 
   function postInit() {
-    readStatuses(true);
     updateEquipmentTreeData({equipment: null});
   }
 
   function postRead(equipment) {
-    readStatuses(false, equipment.statusCode);
     if (!showEqpTree) {
       updateEquipmentTreeData({equipment});
     }
   }
-
-  const readStatuses = (neweqp, statusCode) => {
-    WSEquipment.getEquipmentStatusValues(userData.eamAccount.userGroup, neweqp, statusCode)
-      .then((response) => setStatuses(response.body.data))
-      .catch(console.error);
-  };
 
   const getRegions = () => {
     const tabs = assetLayout.tabs;
@@ -156,7 +147,6 @@ const Asset = () => {
           <AssetGeneral
             showNotification={showNotification}
             {...commonProps}
-            statuses={statuses}
             userData={userData}
             screenCode={screenCode}
             screenPermissions={screenPermissions}

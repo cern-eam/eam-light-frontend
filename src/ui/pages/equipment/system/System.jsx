@@ -54,7 +54,6 @@ const customTabGridParamNames = [
 ];
 
 const System = () => {
-  const [statuses, setStatuses] = useState([]);
 
   const {
     screenLayout: systemLayout,
@@ -105,26 +104,14 @@ const System = () => {
   });
 
   function postInit() {
-    readStatuses(true);
     updateEquipmentTreeData({equipment: null});
   }
 
   function postRead(equipment) {
-    readStatuses(false, equipment.statusCode);
     if (!showEqpTree) {
       updateEquipmentTreeData({equipment});
     }
   }
-
-  const readStatuses = (neweqp, statusCode) => {
-    WSEquipment.getEquipmentStatusValues(
-      userData.eamAccount.userGroup,
-      neweqp,
-      statusCode
-    )
-      .then((response) => setStatuses(response.body.data))
-      .catch(console.error);
-  };
 
   const getEDMSObjectType = (equipment) => {
     if (
@@ -159,7 +146,6 @@ const System = () => {
           <SystemGeneral
             showNotification={showNotification}
             {...commonProps}
-            statuses={statuses}
             userData={userData}
             screenCode={screenCode}
             screenPermissions={screenPermissions}
