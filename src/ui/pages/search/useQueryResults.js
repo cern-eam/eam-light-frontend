@@ -32,13 +32,9 @@ export const useQueryResults = ({
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [error, setError] = useState(null);
   const cacheRef = useRef(new Map());
   const { handleError } = useSnackbarStore();
 
-  useEffect(() => {
-    if (isError) handleError(error);
-  }, [error, isError, handleError]);
 
   useEffect(() => {
     const queryKey = JSON.stringify([keyword, entityTypes]);
@@ -60,7 +56,7 @@ export const useQueryResults = ({
         setCancelToken(null);
         cacheRef.current.set(queryKey, result);
       } catch (err) {
-        setError(err);
+        handleError(err);
         setIsError(true);
       } finally {
         setIsLoading(false);
