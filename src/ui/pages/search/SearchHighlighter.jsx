@@ -5,7 +5,7 @@ const replace = (text, keyword) =>
   !text ? "" : text.replace(keyword, "<mark>" + keyword + "</mark>");
 
 function SearchHighlighter({ link, keyword = "", style, data }) {
-  return !!link ? (
+  return link ? (
     <Link to={{ pathname: link }}>
       <span
         dangerouslySetInnerHTML={{

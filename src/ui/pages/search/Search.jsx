@@ -1,7 +1,8 @@
 import * as React from "react";
+import "./Search.css";
 import SearchResults from "./SearchResults";
 import SearchResult from "./SearchResult";
-import "./Search.css";
+import SearchHeaderFilters from "./SearchHeaderFilters";
 import InfiniteScroll from "react-infinite-scroll-component";
 import WS from "@/tools/WS";
 import SearchHeader from "./SearchHeader";
@@ -12,7 +13,6 @@ import KeyCode from "eam-components/dist/enums/KeyCode";
 import useSnackbarStore from "@/state/useSnackbarStore";
 import useSearchResources from "./useSearchResources";
 
-import SearchHeaderFilters from "./SearchHeaderFilters";
 
 
 
@@ -119,7 +119,7 @@ function Search(props) {
     return <Redirect to={redirectRoute} />;
   }
 
-  const selectedItemCode = !!results?.[selectedItemIndex]
+  const selectedItemCode = results?.[selectedItemIndex]
     ? results[selectedItemIndex].code
     : null;
 
