@@ -1,6 +1,12 @@
-# Version (2025-02-11)
+# Version (2025-02-25)
 
 ## Features
+### 3.23.0 
+* Update eam-wshub-core. Support vm arguments if environment variable is not defined. ([1d7734](https://github.com/cern-eam/eam-light-backend/commit/1d773441901795946126ca75b36d25a47a69ba79))
+* Add endpoint to create part association ([6431da](https://github.com/cern-eam/eam-light-backend/commit/6431daa3f0ec5f5ff6e9d5ea526cfc01ad39cd94))
+* Add name property to returned exceptions ([4df0bc](https://github.com/cern-eam/eam-light-backend/commit/4df0bc0cadf614f56d460995e3b95f987ce6c1c9))
+* Improve Part Usage for multiorg setups ([c816e2](https://github.com/cern-eam/eam-light-backend/commit/c816e2da32d15998540773d21efee4b91ba6082d))
+* Provide generic endpoint to read grid data ([e5d281](https://github.com/cern-eam/eam-light-backend/commit/e5d281ccc7ab1623b14531e080242e2770b85581))
 ### 3.22.0 
 * Revert unreleased eam-wshub-core ([57ef82](https://github.com/cern-eam/eam-light-backend/commit/57ef823b85e69d0bfdbab7ac93b8f857a484b248))
 * fix(EAM-4241) introduce generic functions to perform actions on gridrequest results ([15ae71](https://github.com/cern-eam/eam-light-backend/commit/15ae715bc851f8b7f6f4de654bd7961ed1fd0399))
@@ -1035,4 +1041,16 @@
 ###  
 * Add fallback NCRs for WO Equipment (#227) ([c7c0b0](https://github.com/cern-eam/eam-light-frontend/commit/c7c0b02468a26e189c9824e6996c72ffe81eeda2))
 * Build lock file ([99549c](https://github.com/cern-eam/eam-light-frontend/commit/99549c426c9933ce4046b9e3baff6a4f54b4f71b))
+* Include organization in links from search grids ([b2bfb4](https://github.com/cern-eam/eam-light-frontend/commit/b2bfb40de49dceb58a3461cfc0c270c85e72aef4))
+* Use EAM session after logging in in STD mode ([df4aa6](https://github.com/cern-eam/eam-light-frontend/commit/df4aa61f1bcd8c1351da7096b65ce39060cfd56c))
+* Improve Part Usage for multiorg setups ([258e63](https://github.com/cern-eam/eam-light-frontend/commit/258e63f34b71ea174dde3a4edc68fd560201fe4b))
+* Avoid calling encodeURIComponent twice ([84c928](https://github.com/cern-eam/eam-light-frontend/commit/84c92845a87b1246dd308d752538d8fe190c545a))
+* Provide possibility to reuse credentials in opensource mode ([874b6a](https://github.com/cern-eam/eam-light-frontend/commit/874b6a98ee8ef66efeb524b6b753c7b782409686))
+* Change one of the labels in the login screen ([34e169](https://github.com/cern-eam/eam-light-frontend/commit/34e169e13a564f8f314ba1edb1df14b0478f4836))
+* Provide correct organization for Part Usage ([b3bf55](https://github.com/cern-eam/eam-light-frontend/commit/b3bf55ee2cbb00e533905022a6e97077747ad1a1))
+* Use genericLov to fetch possible class values ([bfeaa2](https://github.com/cern-eam/eam-light-frontend/commit/bfeaa2e2e0914da95f27fa8c0dc3d42e66e93116))
+* Use generic WS to fetch status LOV ([35d64e](https://github.com/cern-eam/eam-light-frontend/commit/35d64e83cbc1d8a761dfc6fcd588e860ab70b69b))
+* Read data directly from grids instead of specific method on the backend ([cf1b1c](https://github.com/cern-eam/eam-light-frontend/commit/cf1b1c44462b83a9b779559b5844273932304683))
+* Show asset history only in CERN mode ([d426e9](https://github.com/cern-eam/eam-light-frontend/commit/d426e926547de7052a1a9cfed49511b676920176))
+* Clean up WSGrids.js ([19f028](https://github.com/cern-eam/eam-light-frontend/commit/19f028ecdf1a6b8c749de918a6c6022e4b41f2a5))
 
