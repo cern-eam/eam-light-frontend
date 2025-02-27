@@ -1,37 +1,27 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 
-export default class SearchHighlighter extends React.Component {
-  render() {
-    return !!this.props.link ? (
-      <Link to={{ pathname: this.props.link }}>
-        <span
-          dangerouslySetInnerHTML={{
-            __html: this.replace(
-              this.props.data,
-              this.props.keyword.toUpperCase()
-            ),
-          }}
-          style={this.props.style}
-        />
-      </Link>
-    ) : (
-      <td
-        dangerouslySetInnerHTML={{
-          __html: this.replace(
-            this.props.data,
-            this.props.keyword.toUpperCase()
-          ),
-        }}
-        style={this.props.style}
-      ></td>
-    );
-  }
+const replace = (text, keyword) =>
+  !text ? "" : text.replace(keyword, "<mark>" + keyword + "</mark>");
 
-  replace(text, keyword) {
-    if (!text) {
-      return "";
-    }
-    return text.replace(keyword, "<mark>" + keyword + "</mark>");
-  }
+function SearchHighlighter({ link, keyword = "", style, data }) {
+  return link ? (
+    <Link to={{ pathname: link }}>
+      <span
+        dangerouslySetInnerHTML={{
+          __html: replace(data, keyword.toUpperCase()),
+        }}
+        style={style}
+      />
+    </Link>
+  ) : (
+    <td
+      dangerouslySetInnerHTML={{
+        __html: replace(data, keyword.toUpperCase()),
+      }}
+      style={style}
+    ></td>
+  );
 }
+
+export default SearchHighlighter;

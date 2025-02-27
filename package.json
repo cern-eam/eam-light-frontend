@@ -64,6 +64,7 @@
     "regenerator-runtime": "0.13.3",
     "sanitize-html": "2.11.0",
     "set-value": "3.0.3",
+    "use-debounce": "^10.0.4",
     "zustand": "5.0.1"
   },
   "devDependencies": {
