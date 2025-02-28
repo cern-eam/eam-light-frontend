@@ -8,8 +8,8 @@ import useSnackbarStore from '@/state/useSnackbarStore';
 
 function PartUsage(props) {
 
-    let headers = ['Transaction', 'Part', 'Activity', 'Store', 'Quantity'];
-    let propCodes = ['transType', 'partCode', 'activityDesc', 'storeCode', 'quantity'];
+    let headers = ['Transaction', 'Part', 'Part Description', 'Activity', 'Store', 'Quantity'];
+    let propCodes = ['transType', 'partCode', 'partDesc', 'activityDesc', 'storeCode', 'quantity'];
     let linksMap = new Map([['partCode', {linkType: 'fixed', linkValue: 'part/', linkPrefix: '/'}]]);
 
     let [data, setData] = useState([]);
