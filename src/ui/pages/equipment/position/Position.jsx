@@ -112,9 +112,7 @@ const Position = () => {
   }
 
   function postRead(equipment) {
-    if (!showEqpTree) {
-      updateEquipmentTreeData({equipment})
-    }
+    updateEquipmentTreeData({equipment})
   }
 
   const getRegions = () => {
