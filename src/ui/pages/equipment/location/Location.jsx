@@ -99,9 +99,7 @@ export default Location = (props) => {
   }
 
   function postRead(location) {
-    if (!showEqpTree) {
-      updateEquipmentTreeData({equipment: location});
-    }
+    updateEquipmentTreeData({equipment: location});
   }
 
   function postCreate(location) {
