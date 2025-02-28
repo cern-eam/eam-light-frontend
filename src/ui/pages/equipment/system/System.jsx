@@ -108,9 +108,7 @@ const System = () => {
   }
 
   function postRead(equipment) {
-    if (!showEqpTree) {
-      updateEquipmentTreeData({equipment});
-    }
+    updateEquipmentTreeData({equipment});
   }
 
   const getEDMSObjectType = (equipment) => {
