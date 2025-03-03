@@ -1,6 +1,8 @@
-# Version (2025-02-28)
+# Version (2025-03-03)
 
 ## Features
+### 3.23.1 
+* feat(EAM-3632): update part fields in work order ([234242](https://github.com/cern-eam/eam-light-frontend/commit/2342425e2c8d36f0f81caaa860a875ce511412b9))
 ### 3.23.0 
 * Add fallback NCRs for WO Equipment (#227) ([c7c0b0](https://github.com/cern-eam/eam-light-frontend/commit/c7c0b02468a26e189c9824e6996c72ffe81eeda2))
 * Build lock file ([99549c](https://github.com/cern-eam/eam-light-frontend/commit/99549c426c9933ce4046b9e3baff6a4f54b4f71b))
@@ -1052,5 +1054,5 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* feat(EAM-3632): update part fields in work order ([234242](https://github.com/cern-eam/eam-light-frontend/commit/2342425e2c8d36f0f81caaa860a875ce511412b9))
+* [EAM-3866] save isEqpTree open in the localStorage ([9c8f34](https://github.com/cern-eam/eam-light-frontend/commit/9c8f346060ae00786625653a74bd9908daaba27d))
 
