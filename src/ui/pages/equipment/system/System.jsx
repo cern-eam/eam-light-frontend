@@ -22,6 +22,7 @@ import {
   getTabInitialVisibility,
   getTabGridRegions,
   renderLoading,
+  getCustomTabRegions,
 } from "../../EntityTools";
 import useEntity from "@/hooks/useEntity";
 import {
@@ -42,7 +43,6 @@ import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import Variables from "../components/Variables";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
-import { eq } from "lodash";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -363,6 +363,13 @@ const System = () => {
         customTabGridParamNames,
         screenCode,
         equipment.code
+      ),
+      ...getCustomTabRegions(
+        systemLayout.customTabs,
+        screenCode,
+        equipment,
+        userData,
+        systemLayoutPropertiesMap
       ),
     ];
   };
