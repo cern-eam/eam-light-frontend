@@ -8,6 +8,9 @@ import { get } from "lodash";
 import GridOnIcon from "@mui/icons-material/GridOn";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import BlockUi from "react-block-ui";
+import { Launch, Web } from "@mui/icons-material";
+import { equipmentLayoutPropertiesMap } from "./equipment/EquipmentTools";
+import ResizableIFrame from "../components/iframes/ResizableIframe";
 
 // clones an entity deeply
 export const cloneEntity = (entity) => ({
@@ -411,3 +414,80 @@ export const getTabGridRegions = (
     };
   });
 };
+
+const getCustomTabUrl = (customTab, tabId, screenCode, equipment, userData, layoutPropertiesMap) => {
+  const { value, urlParams = [] } = customTab;
+  const systemParams = {
+    "CURRENT_TAB_NAME": tabId,
+    "SYSTEM_FUNCTION_NAME": screenCode
+  }
+  const params = urlParams
+  .reduce((acc, { paramName, paramValue, system, useFieldValue }) => {
+    if (paramName) {
+      const systemValue = systemParams[paramName];
+      if (systemValue) {
+        acc[paramName] = systemValue;
+      } else {
+        acc[paramName] = (system || useFieldValue) ? equipment[layoutPropertiesMap[paramName] || ''] : paramValue;
+      }
+    }
+    return acc;
+  }, {});
+
+  return `${value.replace(":user", userData.eamAccount?.userCode)}${value.includes('?') ? '&' : '?'}${queryString.stringify(params)}`;
+}
+
+export const getCustomTabRegions = (
+  customTabs,
+  screenCode,
+  equipment,
+  userData,
+  layoutPropertiesMap = equipmentLayoutPropertiesMap
+) => Object.entries(customTabs).map(([tabId, tab], index) => {
+    const url = getCustomTabUrl(tab, tabId, screenCode, equipment, userData, layoutPropertiesMap);
+    return {
+      id: tabId,
+      label: tab.tabDescription,
+      isVisibleWhenNewEntity: true,
+      maximizable: true,
+      render: ({isMaximized}) => (
+        <ResizableIFrame
+          style={{
+            width: "100%",
+            height: isMaximized
+              ? `${document.getElementById("entityContent").offsetHeight - 220}px`
+              : "400px",
+            minWidth: "100%",
+            border: "none"
+          }}
+          iframeResizerOptions={{
+            scrolling: false,
+            checkOrigin: false,
+          }}
+          src={url}
+        />
+      ),
+      column: 1,
+      order: 40 + 5 * index,
+      summaryIcon: Web,
+      ignore: !tab.tabAvailable,
+      initialVisibility: tab.alwaysDisplayed,
+      RegionPanelProps: {
+        detailsStyle: { padding: 0 },
+        customHeadingBar: 
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+              marginLeft: "4px"
+            }}
+          >
+            <Link to={{ pathname: url }} target="_blank">
+              <Launch fontSize="small" />
+            </Link>
+          </div>
+      }
+    };
+  });
