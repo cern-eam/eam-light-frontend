@@ -118,9 +118,7 @@ const Asset = () => {
   }
 
   function postRead(equipment) {
-    if (!showEqpTree) {
-      updateEquipmentTreeData({equipment});
-    }
+    updateEquipmentTreeData({equipment});
   }
 
   const getRegions = () => {
