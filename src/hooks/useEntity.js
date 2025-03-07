@@ -343,8 +343,21 @@ const useEntity = (params) => {
   };
 
   const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
-    valueKey = screenLayout.fields[layoutKey].xpath.replace(/^EAMID_[^_]+_/, '').replace(/_/g, '.')
     
+    if (layoutPropertiesMap[layoutKey]) {
+      if (!valueKey) {
+        valueKey = layoutPropertiesMap[layoutKey].value;
+      }
+
+      if (!descKey) {
+        descKey = layoutPropertiesMap[layoutKey].desc;
+      }
+
+      if (!orgKey) {
+        orgKey = layoutPropertiesMap[layoutKey].org;
+      }
+  }
+
     let data = processElementInfo(
       screenLayout.fields[layoutKey] ??
         getElementInfoFromCustomFields(layoutKey, entity.customField)
