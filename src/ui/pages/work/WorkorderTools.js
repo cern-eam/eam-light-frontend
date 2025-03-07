@@ -2,7 +2,7 @@ import { assignCustomFieldFromCustomField, AssignmentType, assignUserDefinedFiel
 import { get } from "lodash";
 
 // MAPPING BETWEEN ENTITY KEYS AND LAYOUT ID
-export const layoutPropertiesMap =  {
+export const layoutPropertiesMapOld =  {
         description: "description",
         equipment: "equipmentCode",
         location: "locationCode",
@@ -68,6 +68,37 @@ export const layoutPropertiesMap =  {
         udfnum09:	"userDefinedFields.udfnum09",
         udfnum10:	"userDefinedFields.udfnum10"
     }
+
+export const layoutPropertiesMap = {
+    equipment: {
+        value: "EQUIPMENTID.EQUIPMENTCODE",
+        desc: "EQUIPMENTID.DESCRIPTION",
+        org: "EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE"
+    },
+
+    location: {
+        value: "LOCATIONID.LOCATIONCODE",
+        desc: "LOCATIONID.DESCRIPTION",
+        org: "LOCATIONID.ORGANIZATIONID.ORGANIZATIONCODE"
+    },
+
+    department: {
+        value: "DEPARTMENTID.DEPARTMENTCODE",
+        desc: "DEPARTMENTID.DESCRIPTION",
+        org: "DEPARTMENTID.ORGANIZATIONID.ORGANIZATIONCODE"
+    },
+
+    workordertype: {
+        value: "TYPE.TYPECODE",
+        desc: "TYPE.DESCRIPTION"
+    },
+
+    workorderstatus: {
+        value: "STATUS.STATUSCODE",
+        desc: "STATUS.DESCRIPTION"
+    }
+
+}
 
 export function isReadOnlyCustomHandler(workOrder) {
     return workOrder.systemStatusCode === 'C' || !workOrder.jtAuthCanUpdate;
