@@ -181,18 +181,18 @@ const useEntity = (params) => {
         resetErrorMessages();
         setIsModified(false);
         setNewEntity(false);
-
-        const readEntity = response.body.data;
+        console.log(response)
+        const readEntity = response.body.Result.ResultData.WorkOrder;
         setEntity(readEntity);
 
         document.title = entityDesc + " " + readEntity[entityCodeProperty];
 
         // Render as read-only depending on screen rights, department security or custom handler
-        setReadOnly(
-          !screenPermissions.updateAllowed ||
-            isDepartmentReadOnly(readEntity.departmentCode, userData) ||
-            isReadOnlyCustomHandler?.(readEntity)
-        );
+        // setReadOnly(
+        //   !screenPermissions.updateAllowed ||
+        //     isDepartmentReadOnly(readEntity.departmentCode, userData) ||
+        //     isReadOnlyCustomHandler?.(readEntity)
+        // );
 
         // Invoke entity specific logic
         postActions.read(readEntity);
@@ -343,6 +343,8 @@ const useEntity = (params) => {
   };
 
   const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
+    valueKey = screenLayout.fields[layoutKey].xpath.replace(/^EAMID_[^_]+_/, '').replace(/_/g, '.')
+    
     let data = processElementInfo(
       screenLayout.fields[layoutKey] ??
         getElementInfoFromCustomFields(layoutKey, entity.customField)
