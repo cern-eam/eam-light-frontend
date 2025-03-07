@@ -15,7 +15,7 @@ class WSWorkorders {
     }
 
     getWorkOrder(number, config = {}) {
-        return WS._get('/workorders/' + number, config);
+        return WS._get('/proxy/workorders/' + number + '%23%2A', config);
     }
 
     createWorkOrder(workOrder, config = {}) {
@@ -23,7 +23,7 @@ class WSWorkorders {
     }
 
     updateWorkOrder(workOrder, config = {}) {
-        return WS._put('/workorders/', workOrder, config);
+        return WS._put('/proxy/workorders/', workOrder, config);
     }
 
     deleteWorkOrder(number, config = {}) {

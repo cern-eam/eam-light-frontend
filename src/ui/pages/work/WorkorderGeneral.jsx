@@ -54,7 +54,7 @@ function WorkorderGeneral(props) {
         />
       )}
 
-      <EAMTextField {...register("description", "description")} />
+      <EAMTextField {...register("description", "WORKORDERID.DESCRIPTION")} />
 
       <EAMAutocomplete
         {...register(
@@ -88,7 +88,7 @@ function WorkorderGeneral(props) {
       />
 
       <EAMAutocomplete
-        {...register("department", "departmentCode", "departmentDesc")}
+        {...register("department", "DEPARTMENTID.DEPARTMENTCODE", "DEPARTMENTID.DESCRIPTION")}
         autocompleteHandler={WS.autocompleteDepartment}
         validate
       />
@@ -102,7 +102,7 @@ function WorkorderGeneral(props) {
       />
 
       <EAMSelect
-        {...register("workorderstatus", "statusCode", "statusDesc")}
+        {...register("workorderstatus", "STATUS.STATUSCODE", "STATUS.DESCRIPTION")}
         disabled={
           isDepartmentReadOnly(workorder.departmentCode, userData) ||
           !screenPermissions.updateAllowed ||
