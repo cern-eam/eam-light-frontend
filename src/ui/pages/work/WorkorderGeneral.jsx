@@ -58,10 +58,7 @@ function WorkorderGeneral(props) {
 
       <EAMAutocomplete
         {...register(
-          "equipment",
-          "equipmentCode",
-          "equipmentDesc",
-          "equipmentOrganization"
+          "equipment"
         )}
         barcodeScanner
         autocompleteHandler={WS.autocompleteEquipment}
@@ -83,18 +80,18 @@ function WorkorderGeneral(props) {
       />
 
       <EAMAutocomplete
-        {...register("location", "locationCode", "locationDesc")}
+        {...register("location")}
         autocompleteHandler={WS.autocompleteLocation}
       />
 
       <EAMAutocomplete
-        {...register("department", "DEPARTMENTID.DEPARTMENTCODE", "DEPARTMENTID.DESCRIPTION")}
+        {...register("department")}
         autocompleteHandler={WS.autocompleteDepartment}
         validate
       />
 
       <EAMSelect
-        {...register("workordertype", "typeCode", "typeDesc")}
+        {...register("workordertype")}
         renderSuggestion={(suggestion) => suggestion.desc}
         renderValue={(value) => value.desc || value.code}
         autocompleteHandler={WSWorkorders.getWorkOrderTypeValues}
@@ -102,11 +99,11 @@ function WorkorderGeneral(props) {
       />
 
       <EAMSelect
-        {...register("workorderstatus", "STATUS.STATUSCODE", "STATUS.DESCRIPTION")}
+        {...register("workorderstatus")}
         disabled={
-          isDepartmentReadOnly(workorder.departmentCode, userData) ||
-          !screenPermissions.updateAllowed ||
-          !workorder.jtAuthCanUpdate
+          isDepartmentReadOnly(workorder.DEPARTMENTID.DEPARTMENTCODE, userData) ||
+          !screenPermissions.updateAllowed 
+          //!workorder.jtAuthCanUpdate
         }
         renderSuggestion={(suggestion) => suggestion.desc}
         renderValue={(value) => value.desc || value.code}
