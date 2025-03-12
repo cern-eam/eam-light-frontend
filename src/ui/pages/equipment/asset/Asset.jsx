@@ -19,7 +19,7 @@ import WSParts from "../../../../tools/WSParts";
 import EquipmentGraphIframe from "../../../components/iframes/EquipmentGraphIframe";
 import { isCernMode } from "../../../components/CERNMode";
 import { TAB_CODES } from "../../../components/entityregions/TabCodeMapping";
-import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions, renderLoading } from "../../EntityTools";
+import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions, renderLoading, getCustomTabRegions } from "../../EntityTools";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer";
 import useEntity from "@/hooks/useEntity";
 import { isClosedEquipment, assetLayoutPropertiesMap } from "../EquipmentTools";
@@ -118,9 +118,7 @@ const Asset = () => {
   }
 
   function postRead(equipment) {
-    if (!showEqpTree) {
-      updateEquipmentTreeData({equipment});
-    }
+    updateEquipmentTreeData({equipment});
   }
 
   const getRegions = () => {
@@ -409,6 +407,13 @@ const Asset = () => {
         screenCode,
         equipment.code
       ),
+      ...getCustomTabRegions(
+        assetLayout.customTabs,
+        screenCode,
+        equipment,
+        userData,
+        assetLayoutPropertiesMap
+      )
     ];
   };
 

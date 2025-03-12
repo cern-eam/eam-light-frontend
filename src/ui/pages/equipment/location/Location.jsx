@@ -356,6 +356,13 @@ export default Location = (props) => {
         screenCode,
         location.code
       ),
+      ...getCustomTabRegions(
+        locationLayout.customTabs,
+        screenCode,
+        location,
+        userData,
+        locationLayoutPropertiesMap
+      )
     ];
   };
 
