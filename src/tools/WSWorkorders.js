@@ -1,4 +1,6 @@
+import GridRequest, { GridTypes } from './entities/GridRequest';
 import WS from './WS';
+import { getGridData, transformResponse } from './WSGrids';
 
 /**
  * Handles all calls to REST Api
@@ -285,6 +287,45 @@ class WSWorkorders {
     getWOEquipToOtherIdMapping(workorder, config={}) {
         return WS._get(`/workordersmisc/otherid/${workorder}`, config);
     }
+
+    myWorkOrderMapper = {
+        number: "workordernum",
+        desc: "description",
+        status: "workorderstatus_display",
+        object: "equipment",
+        mrc: "department",
+        type: "woclass",
+        schedulingStartDate:  (wo) => wo.schedstartdate ? new Date(wo.schedstartdate).getTime() : null,
+        schedulingEndDate: (wo) => wo.schedenddate ? new Date(wo.schedenddate).getTime() : null
+    }
+
+    scheduledWorkOrderMapper = {
+        number: "workordernum",
+        desc: "acsactivity_display",
+        schedulingEndDate: (wo) => wo.actenddate ? new Date(wo.actenddate).getTime() : null
+    }
+
+    getMyOpenWorkOrders(employee) {
+        let gridRequest = new GridRequest("WSJOBS", GridTypes.LIST)
+        gridRequest.rowCount = 100
+        gridRequest.addFilter("assignedto", employee, "=", "AND")
+        gridRequest.addFilter("evt_rstatus", "R", "=", "AND")
+        return getGridData(gridRequest).then(response => transformResponse(response, this.myWorkOrderMapper));
+    }
+
+    getMyTeamWorkOrders(userDepartments) {
+        let gridRequest = new GridRequest("WSJOBS", GridTypes.LIST)
+        gridRequest.rowCount = 100
+        gridRequest.addFilter("department", userDepartments, "IN", "AND")
+        gridRequest.addFilter("evt_rstatus", "R", "=", "AND")
+        return getGridData(gridRequest).then(response => transformResponse(response, this.myWorkOrderMapper));
+    }
+
+    getScheduledWorkOrders() {
+        let gridRequest = new GridRequest("WUSCHE", GridTypes.LIST)
+        return getGridData(gridRequest).then(response => transformResponse(response, this.scheduledWorkOrderMapper));
+    }
+
 }
 
 export default new WSWorkorders();

@@ -9,7 +9,7 @@ export function transformResponse(response, keyMap, additionalData = []) {
         body: {
             data: [
                 ...response.body.data.map(item => 
-                    Object.fromEntries(Object.entries(keyMap).map(([newKey, oldKey]) => [newKey, item[oldKey]]))
+                    Object.fromEntries(Object.entries(keyMap).map(([newKey, oldKey]) => [newKey, typeof oldKey === 'function' ? oldKey(item) : item[oldKey]]))
                 ),
                 ...additionalData
             ]
