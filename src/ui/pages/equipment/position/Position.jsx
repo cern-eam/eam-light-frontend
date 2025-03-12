@@ -366,6 +366,13 @@ const Position = () => {
         screenCode,
         equipment.code
       ),
+      ...getCustomTabRegions(
+        positionLayout.customTabs,
+        screenCode,
+        equipment,
+        userData,
+        positionLayoutPropertiesMap
+      ),
     ];
   };
 
