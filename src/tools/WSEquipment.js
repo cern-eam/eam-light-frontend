@@ -1,4 +1,7 @@
+import GridRequest, { GridTypes } from './entities/GridRequest';
 import WS from './WS';
+import { getGridData, transformResponse } from './WSGrids';
+import WSWorkorders from './WSWorkorders';
 
 /**
  * Handles all calls to REST Api
@@ -12,8 +15,12 @@ class WSEquipment {
         return WS._get('/equipment/history?c=' + equipmentCode, config);
     }
 
-    getEquipmentWorkOrders(equipmentCode, config = {}) {
-        return WS._get('/equipment/workorders?c=' + equipmentCode, config);
+    getEquipmentWorkOrders(equipmentCode) {
+        let gridRequest = new GridRequest("WSJOBS", GridTypes.LIST)
+        gridRequest.rowCount = 2000
+        gridRequest.addFilter("equipment", equipmentCode, "=")
+        gridRequest.sortBy("datecreated", "DESC")
+        return getGridData(gridRequest).then(response => transformResponse(response, WSWorkorders.myWorkOrderMapper));
     }
 
     getEquipmentEvents(equipmentCode, equipmentType, config = {}) {

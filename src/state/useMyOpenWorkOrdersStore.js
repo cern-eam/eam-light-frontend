@@ -8,14 +8,14 @@ const useMyOpenWorkOrdersStore = create((set) => ({
         try {
             const userData = useUserDataStore.getState().userData;
             
-            const [myOpenWorkOrders, scheduledWorkOrders] = await Promise.allSettled([
-                WSWorkorders.getMyOpenWorkOrders(userData.eamAccount.employeeCode),
+            const [scheduledWorkOrders, assignedWorkOrders] = await Promise.allSettled([
                 WSWorkorders.getScheduledWorkOrders(),
+                WSWorkorders.getAssignedWorkOrders(userData.eamAccount.employeeCode)
             ]);
 
             const combinedWorkOrders = [
-                ...(myOpenWorkOrders.status === 'fulfilled' ? myOpenWorkOrders.value.body.data : []),
-                ...(scheduledWorkOrders.status === 'fulfilled' ? scheduledWorkOrders.value.body.data : [])
+                ...(scheduledWorkOrders.status === 'fulfilled' ? scheduledWorkOrders.value.body.data : []),
+                ...(assignedWorkOrders.status === 'fulfilled' ? assignedWorkOrders.value.body.data : [])
             ]
 
             //TODO remove possible duplicates 
