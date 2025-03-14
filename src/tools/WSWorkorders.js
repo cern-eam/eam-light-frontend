@@ -120,7 +120,9 @@ class WSWorkorders {
     }
 
     getWorkOrderPriorities(config = {}) {
-        return WS._get('/wolists/prioritycodes', config);
+        let gridRequest = new GridRequest("LVJBPR", GridTypes.LOV)
+        gridRequest.addFilter("description", "Tou", "NOTCONTAINS");
+        return getGridData(gridRequest).then(response => transformResponse(response, {code: "priority", desc: "description"}));
     }
 
     //
@@ -294,7 +296,9 @@ class WSWorkorders {
         status: "workorderstatus_display",
         object: "equipment",
         mrc: "department",
-        type: "woclass",
+        type: "workordertype_display",
+        priority: "priority_display",
+        createdDate: "datecreated",
         schedulingStartDate:  (wo) => wo.schedstartdate ? new Date(wo.schedstartdate).getTime() : null,
         schedulingEndDate: (wo) => wo.schedenddate ? new Date(wo.schedenddate).getTime() : null
     }
@@ -302,14 +306,17 @@ class WSWorkorders {
     scheduledWorkOrderMapper = {
         number: "workordernum",
         desc: "acsactivity_display",
+        object: "equipment",
+        mrc: "department",
         schedulingEndDate: (wo) => wo.actenddate ? new Date(wo.actenddate).getTime() : null
     }
 
-    getMyOpenWorkOrders(employee) {
+    getAssignedWorkOrders(employee) {
         let gridRequest = new GridRequest("WSJOBS", GridTypes.LIST)
         gridRequest.rowCount = 100
         gridRequest.addFilter("assignedto", employee, "=", "AND")
         gridRequest.addFilter("evt_rstatus", "R", "=", "AND")
+        gridRequest.sortBy("schedenddate")
         return getGridData(gridRequest).then(response => transformResponse(response, this.myWorkOrderMapper));
     }
 
@@ -325,6 +332,7 @@ class WSWorkorders {
         let gridRequest = new GridRequest("WUSCHE", GridTypes.LIST)
         return getGridData(gridRequest).then(response => transformResponse(response, this.scheduledWorkOrderMapper));
     }
+    
 
 }
 

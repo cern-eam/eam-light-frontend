@@ -18,18 +18,18 @@ const MyWorkordersMenu = () => {
         return myOpenWorkOrders.filter(MenuTools.daysFilterFunctions[days]);
     }, [myOpenWorkOrders, days]);
 
-    const sortedWorkOrders = useMemo(() => {
-        return filteredWorkOrders.sort((wo1, wo2) => {
-            if (
-                wo1.schedulingEndDate === null &&
-                wo2.schedulingEndDate === null
-            )
-                return 0;
-            if (wo1.schedulingEndDate === null) return 1;
-            if (wo2.schedulingEndDate === null) return -1;
-            return wo1.schedulingEndDate - wo2.schedulingEndDate;
-        });
-    }, [filteredWorkOrders]);
+    // const sortedWorkOrders = useMemo(() => {
+    //     return filteredWorkOrders.sort((wo1, wo2) => {
+    //         if (
+    //             wo1.schedulingEndDate === null &&
+    //             wo2.schedulingEndDate === null
+    //         )
+    //             return 0;
+    //         if (wo1.schedulingEndDate === null) return 1;
+    //         if (wo2.schedulingEndDate === null) return -1;
+    //         return wo1.schedulingEndDate - wo2.schedulingEndDate;
+    //     });
+    // }, [filteredWorkOrders]);
 
     return (
         <ul className="layout-tab-submenu">
@@ -41,7 +41,7 @@ const MyWorkordersMenu = () => {
                     onChange={(_, value) => setDays(value)}
                 />
                 <ul>
-                    {sortedWorkOrders.map((wo) => (
+                    {filteredWorkOrders.map((wo) => (
                         <MenuWorkorder key={wo.number} wo={wo} />
                     ))}
                 </ul>
