@@ -1,7 +1,10 @@
-# Version (2025-03-12)
+# Version (2025-03-17)
 
 ## Features
+### 3.24.1 
+* [EAM-3969] Display custom HTML tabs for equipment entities ([032a76](https://github.com/cern-eam/eam-light-backend/commit/032a768133ee8aa8cbebba61fb0f279ba4b96830))
 ### 3.24.0 
+* [EAM-3969] Display custom HTML tabs for equipment entities ([67ed47](https://github.com/cern-eam/eam-light-frontend/commit/67ed472c8dfc38ea3e22fe517577ab412092cf46))
 * Updated eam-whsub-core ([b5138b](https://github.com/cern-eam/eam-light-backend/commit/b5138b8f21ab3a0ad5fe7753e2ccb0926e9daf16))
 ### 3.23.3 
 * [EAM-3866] Remove asset eq tree if condition ([a1c654](https://github.com/cern-eam/eam-light-frontend/commit/a1c654c21003f27fd7f074ee9312ee973282918f))
@@ -1060,5 +1063,6 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* [EAM-3969] Display custom HTML tabs for equipment entities ([67ed47](https://github.com/cern-eam/eam-light-frontend/commit/67ed472c8dfc38ea3e22fe517577ab412092cf46))
+* [EAM-4179] Display scheduled WOs in my open WOs view ([07a4cc](https://github.com/cern-eam/eam-light-frontend/commit/07a4cc5f14f22a4e42faca6b419fcc7779c2fac4))
+* [EAM-3969] Solve missing getCustomTabRegions imports ([7e4efa](https://github.com/cern-eam/eam-light-frontend/commit/7e4efa47ea89c9fcf7c752362903b4632b0d558b))
 
