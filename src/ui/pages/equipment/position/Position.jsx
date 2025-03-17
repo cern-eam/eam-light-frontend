@@ -22,6 +22,7 @@ import {
   getTabInitialVisibility,
   getTabGridRegions,
   renderLoading,
+  getCustomTabRegions,
 } from "../../EntityTools";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer";
 import useEntity from "@/hooks/useEntity";
