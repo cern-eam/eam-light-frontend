@@ -18,6 +18,7 @@ import {
   getTabInitialVisibility,
   getTabGridRegions,
   renderLoading,
+  getCustomTabRegions,
 } from "../../EntityTools";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
