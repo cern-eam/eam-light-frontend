@@ -31,7 +31,7 @@ import TuneIcon from "@mui/icons-material/Tune";
 import { IconSlash } from "eam-components/dist/ui/components/icons/index";
 import { isCernMode } from "../../components/CERNMode";
 import { TAB_CODES } from "../../components/entityregions/TabCodeMapping";
-import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions, renderLoading } from "../EntityTools";
+import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions, renderLoading, getCustomTabRegions } from "../EntityTools";
 import WSParts from "../../../tools/WSParts";
 import WSWorkorders from "../../../tools/WSWorkorders";
 import useEntity from "@/hooks/useEntity";
@@ -570,6 +570,13 @@ const Workorder = () => {
         customTabGridParamNames,
         screenCode,
         workorder.number
+      ),
+      ...getCustomTabRegions(
+        workOrderLayout.customTabs,
+        screenCode,
+        workorder,
+        userData,
+        layoutPropertiesMap
       ),
     ];
   };

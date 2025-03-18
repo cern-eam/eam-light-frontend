@@ -19,6 +19,7 @@ import {
   getTabInitialVisibility,
   getTabGridRegions,
   renderLoading,
+  getCustomTabRegions,
 } from "../EntityTools";
 import useEntity from "@/hooks/useEntity";
 
@@ -266,6 +267,13 @@ const Part = () => {
         customTabGridParamNames,
         screenCode,
         part.code
+      ),
+      ...getCustomTabRegions(
+        partLayout.customTabs,
+        screenCode,
+        part,
+        userData,
+        layoutPropertiesMap
       ),
     ];
   };
