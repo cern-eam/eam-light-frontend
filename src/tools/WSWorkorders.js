@@ -308,7 +308,7 @@ class WSWorkorders {
         desc: "acsactivity_display",
         object: "equipment",
         mrc: "department",
-        schedulingEndDate: (wo) => wo.actenddate ? new Date(wo.actenddate).getTime() : null
+        schedulingEndDate: (wo) => wo.acssched ? new Date(wo.acssched).getTime() : null
     }
 
     getAssignedWorkOrders(employee) {
@@ -330,6 +330,7 @@ class WSWorkorders {
 
     getScheduledWorkOrders() {
         let gridRequest = new GridRequest("WUSCHE", GridTypes.LIST)
+        gridRequest.sortBy("acssched")
         return getGridData(gridRequest).then(response => transformResponse(response, this.scheduledWorkOrderMapper));
     }
     
