@@ -1,8 +1,12 @@
 import useUserDataStore from '../state/useUserDataStore';
+import { transformNativeResponse } from './GridTools';
 import WS from './WS';
-import GridRequest, {GridTypes} from './entities/GridRequest';
+import GridRequest from './entities/GridRequest';
+import { GridTypes } from './entities/GridRequest';
 
-export const getGridData = (gridRequest, config = {}) => WS._post('/grids/datamap', gridRequest, config);
+export const getGridDataNative = (gridRequest, config = {}) => WS._post('/proxy/gridheaders', gridRequest, config);
+
+export const getGridData = (gridRequest, config = {}) => getGridDataNative(gridRequest, config).then(transformNativeResponse);
 
 export function transformResponse(response, keyMap, additionalData = []) {
     return {
@@ -52,4 +56,22 @@ export const autocompleteDepartment = (organization, hint) => {
     gridRequest.sortBy("department")
     gridRequest.addParam("control.org", organization)
     return getGridData(gridRequest).then(response => transformResponse(response, {code: "department", desc: "des_text"}));
+}
+
+export const getPartUsageList = (workorder, config = {}) => {
+    let gridRequest = new GridRequest("WSJOBS_PAR", GridTypes.LIST, "WSJOBS")
+    gridRequest.addParam("param.workordernum", workorder);
+    gridRequest.addParam("param.headeractivity", "0");
+    gridRequest.addParam("param.headerjob", "0");
+
+    return getGridData(gridRequest).then(response => transformResponse(response, {
+        partCode: "partcode",
+        partDesc: "partdescription",
+        plannedQty: "plannedqty",
+        usedQty: "usedqty",
+        activityDesc: "activity_display",
+        storeCode: "storecode",
+        partUoM: "partuom"
+      }));
+
 }
