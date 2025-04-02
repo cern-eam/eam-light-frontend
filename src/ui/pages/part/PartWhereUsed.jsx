@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import EISTable from 'eam-components/dist/ui/components/table';
 import GridRequest from '../../../tools/entities/GridRequest';
 import { getGridData, transformResponse } from '../../../tools/WSGrids';
@@ -23,7 +23,7 @@ function PartWhereUsed(props) {
 
     let headers = ['Entity', 'Code', 'Description', 'Quantity'];
     let propCodes = ['entity', 'code', 'description', 'quantity'];
-    let linksMap = new Map([['code', {linkType: 'prop', linkValue: 'link', linkPrefix: '/'}]]);
+    let linksMap = new Map([['code', {linkType: 'prop', linkValue: 'redirectLink', linkPrefix: '/'}]]);
     let [data, setData] = useState([]);
 
     useEffect(() => {
@@ -34,7 +34,11 @@ function PartWhereUsed(props) {
         if (partCode) {
             getPartsAssociated(partCode, partOrganization)
              .then(response => {
-                setData(response.body.data);
+                        let modifiedData = response.body.data.map(item => ({
+                    ...item,
+                    redirectLink: item.entity ? `${item.entity.toLowerCase()}/${item.code}`: item.code
+                }));
+                setData(modifiedData);
             }).catch(error => {
                 console.log('Error loading data', error);
             });
