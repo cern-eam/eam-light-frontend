@@ -151,16 +151,16 @@ class WSWorkorders {
         return WS._post('/partusage/transaction', partUsage, config);
     }
 
-    getPartUsageList(workorder, config = {}) {
-        return WS._get('/partusage/transactions/' + workorder, config);
-    }
-
     getInitNewPartUsage(workorder, config = {}) {
         return WS._post('/partusage/init', workorder, config);
     }
 
     getPartUsageStores(config = {}) {
-        return WS._get('/partusage/stores', config);
+        let gridRequest = new GridRequest("LVIRSTOR", GridTypes.LOV, "SSISSU")
+        gridRequest.addParam("param.storefield", "IR")
+        gridRequest.addParam("parameter.r5role", "")
+        gridRequest.sortBy("storecode")
+        return getGridData(gridRequest).then(response => transformResponse(response, {code: "storecode", desc: "des_text"}));
     }
 
     getPartUsagePart(workorder, store, code, config = {}) {

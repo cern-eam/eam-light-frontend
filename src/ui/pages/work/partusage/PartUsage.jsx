@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import WSWorkorders from "../../../../tools/WSWorkorders";
+import {getPartUsageList} from "../../../../tools/WSGrids";
 import EISTable from 'eam-components/dist/ui/components/table';
 import Button from '@mui/material/Button';
 import PartUsageDialog from "./PartUsageDialog";
@@ -23,15 +24,27 @@ function PartUsage(props) {
     }, [props.workorder.number])
 
     let formatQuantity = (data) => {
-        data.forEach(part =>
+        data.forEach(part => {
+            part.transType =
+                part.plannedQty > 0 ? "Planned" :
+                part.usedQty > 0 ? "Issue" :
+                part.usedQty < 0 ? "Return" :
+                null;
+
+            part.quantity =
+            part.plannedQty > 0 ? part.plannedQty :
+                part.usedQty !== 0 && part.usedQty != null ? Math.abs(part.usedQty) :
+                null;
+
             part.quantity = part.quantity ? part.quantity + (part.partUoM ? " " + part.partUoM : "") : ""
+        }
         )
     }
 
     let fetchData = (workorder) => {
         setIsLoading(true)
         if (workorder) {
-            WSWorkorders.getPartUsageList(workorder).then(response => {
+            getPartUsageList(workorder).then(response => {
                 formatQuantity(response.body.data);
                 setData(response.body.data);
                 setIsLoading(false);
