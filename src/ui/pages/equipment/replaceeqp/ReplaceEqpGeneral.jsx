@@ -34,8 +34,11 @@ const ReplaceEqpGeneral = (props) => {
     equipmentLayout,
     onChangeNewEquipment,
     onChangeOldEquipment,
+    onChangeSelectedSuggestion,
+    selectedSuggestion,
     replaceEquipmentHandler,
     replaceEquipment,
+    eqpSuggestions,
     stateList,
     statusList,
     showError,
@@ -203,6 +206,14 @@ const ReplaceEqpGeneral = (props) => {
             updateProperty
           )}
         />
+
+        {eqpSuggestions && eqpSuggestions.length > 0 ? (<EAMSelect
+          label={"New Equipment suggestion"}
+          disabled={!eqpSuggestions || eqpSuggestions.length === 0}
+          options={eqpSuggestions}
+          value={selectedSuggestion}
+          onChange={onChangeSelectedSuggestion}
+        />) : null }
 
         <EAMAutocomplete
           {...processElementInfo(equipmentLayout.fields["equipmentno"])}
