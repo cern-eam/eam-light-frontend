@@ -32,6 +32,9 @@ const ReplaceEqp = (props) => {
     const [oldEquipment, setOldEquipment] = useState(undefined);
     const [replaceEquipment, setReplaceEquipment] = useState(initEqpReplacement);
     const [stateList, setStateList] = useState([]);
+    const [eqpSuggestions, setEqpSuggestions] = useState([]);
+    const [selectedSuggestion, setSelectedSuggestion] = useState(null);
+
     const [statusList, setStatusList] = useState([]);
     const { userData } = useUserDataStore();
     const { applicationData } = useApplicationDataStore();
@@ -103,6 +106,8 @@ const ReplaceEqp = (props) => {
     };
 
     const onChangeOldEquipment = (value) => {
+        setEqpSuggestions([]);
+        setSelectedSuggestion(null);
         if (value) {
             loadEquipmentData(value, 'oldEquipment');
         } else {
@@ -119,6 +124,20 @@ const ReplaceEqp = (props) => {
         }
     };
 
+    const onChangeSelectedSuggestion = (value) => {
+        setSelectedSuggestion(value);
+        const suggestion = eqpSuggestions.find(x => value.code === x.equipmentno);
+        updateEqpReplacementProp('newEquipment', value.code);
+        updateEqpReplacementProp('newEquipmentDesc', suggestion ? suggestion.equipmentdesc : value.desc);
+        updateEqpReplacementProp('newEquipmentStatus', suggestion ? suggestion.assetstatus : '');
+        onChangeNewEquipment(value.code);
+    }
+
+    const getDescription = (value) => {
+        return `${value.equipmentdesc} - ${value.location} - ${value.bin} - ${value.assetstatus_display}`
+    };
+
+
     /**
      * Load the equipment data when it is selected
      * @param code the equipment code
@@ -130,6 +149,9 @@ const ReplaceEqp = (props) => {
             const response = await WSEquipment.getEquipment(code);
 
             if (destination === 'oldEquipment') {
+                WSEquipment.getSparePart(response.body.data).then((x) => setEqpSuggestions(x.map((eqp)=> {
+                    return {code: eqp.equipmentno, desc: getDescription(eqp)}
+                })));
                 setOldEquipment(response.body.data);
 
                 // Set status/state for old equipment
@@ -189,9 +211,12 @@ const ReplaceEqp = (props) => {
                                                 updateProperty={updateEqpReplacementProp}
                                                 onChangeOldEquipment={onChangeOldEquipment}
                                                 onChangeNewEquipment={onChangeNewEquipment}
+                                                onChangeSelectedSuggestion={onChangeSelectedSuggestion}
+                                                selectedSuggestion={selectedSuggestion}
                                                 equipmentLayout={equipmentLayout}
                                                 statusList={statusList}
                                                 stateList={stateList}
+                                                eqpSuggestions={eqpSuggestions}
                                                 replaceEquipmentHandler={replaceEquipmentHandler}
                                                 showError={showError}
                                                 handleError={handleError}
