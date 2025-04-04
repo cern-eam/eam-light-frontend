@@ -44,6 +44,7 @@ const WO_FILTERS = {
 }
 
 const LOCAL_STORAGE_FILTER_KEY = 'filters:workorders';
+const LOCAL_STORAGE_SYSTEM_STATUS_KEY = 'systemstatus';
 
 function EquipmentWorkOrders(props) {
     const { defaultFilter: initialFilter, equipmentcode, equipmenttype } = props;
@@ -51,14 +52,16 @@ function EquipmentWorkOrders(props) {
 
     let [events, setEvents] = useState([]);
     let [workorders, setWorkorders] = useState([]);
-    const [loadingData, setLoadingData] = useState(true);
 
+    const [loadingData, setLoadingData] = useState(true);
     const [workOrderFilter, setWorkOrderFilter] = useLocalStorage(LOCAL_STORAGE_FILTER_KEY, WO_FILTER_TYPES.ALL, defaultFilter);
-    let headers = ['Work Order', 'Equipment', 'Description', 'Status', 'Creation Date'];
+
+    const [systemStatuses, setSystemStatuses] = useLocalStorage(LOCAL_STORAGE_SYSTEM_STATUS_KEY, []);
+    let headers = ['Work Order', 'Equipment', 'Description', 'Status', 'Date'];
     let propCodes = ['number', 'object','desc', 'status', 'createdDate'];
 
     if (workOrderFilter === WO_FILTER_TYPES.THIS) {
-        headers = ['Work Order', 'Description', 'Status', 'Creation Date'];
+        headers = ['Work Order', 'Description', 'Status', 'Date'];
         propCodes = ['number', 'desc', 'status', 'createdDate'];
     }
 
@@ -93,20 +96,46 @@ function EquipmentWorkOrders(props) {
     }
 
     useEffect(() => {
-        if (equipmentcode) {
-            fetchData(equipmentcode, equipmenttype);
-        } else {
+        if (!equipmentcode) {
             setWorkorders([]);
             setEvents([]);
+            return;
         }
-    }, [equipmentcode, equipmenttype])
 
-    const fetchData = (equipmentCode, equipmentType) => {
+        if (systemStatuses.length > 0) {
+            fetchData(equipmentcode, equipmenttype, systemStatuses);
+        } else {
+            WSEquipment.getSystemStatus().then((response) => {
+                setSystemStatuses(response)
+                fetchData(equipmentcode, equipmenttype, response);
+            });
+        }
+    }, [equipmentcode, equipmenttype]);
+
+    const fetchData = (equipmentCode, equipmentType, systemStatues) => {
         Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode, equipmentType)])
             .then(responses => {
+                const getDateLabel = (element) => {
+                   const fallbackDateLabel = element.createdDate
+                      ? `${format(new Date(element.createdDate), "dd-MMM-yyyy")} (created date)`
+                      : "-";
+                    const systemCode = systemStatues.find((status)=> status.userCode === element.status || status.description === element.status);
+                    const elementIsClosed = systemCode.systemCode === 'C';
+
+                    // closed/cancelled element
+                   if (elementIsClosed)
+                      return element.completedDate
+                        ? `${format(new Date(element.completedDate), "dd-MMM-yyyy")} (completed date)`
+                        : fallbackDateLabel;
+
+                    // open element
+                    return element.schedulingStartDate
+                      ? `${format(new Date(element.schedulingStartDate), "dd-MMM-yyyy")} (scheduling start date)`
+                      : fallbackDateLabel;
+                  };
                 const formatResponse = response => response.body.data.map(element => ({
                     ...element,
-                    createdDate: element.createdDate && format(new Date(element.createdDate),'dd-MMM-yyyy'),
+                    createdDate: `${getDateLabel(element)}`,
                     objectUrl: `equipment/${encodeURIComponent(element?.object || '')}`
                 }));
 
