@@ -48,6 +48,8 @@ const AssetDetails = (props) => {
         autocompleteHandlerParams={["OBCR"]}
       />
 
+      <EAMTextField {...register("equipmentvalue", "equipmentValue")} />
+
       <EAMAutocomplete
         {...register("manufacturer", "manufacturerCode", "manufacturerDesc")}
         autocompleteHandler={WSEquipment.autocompleteManufacturer}

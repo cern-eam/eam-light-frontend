@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => {
         },
         "/apis": {
           target: `http://localhost:${env.VITE_BACKEND_PORT ?? '8080'}/`,
-          // target: "http://ammtools.cern.ch:10880/",
+          //target: "http://ammtools.cern.ch:10880/",
         },
         "/SSO": {
           target: `http://localhost:${env.VITE_BACKEND_PORT ?? '8080'}/`,

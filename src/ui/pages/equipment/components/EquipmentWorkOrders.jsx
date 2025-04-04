@@ -8,6 +8,7 @@ import BlockUi from 'react-block-ui';
 import { isCernMode } from '../../../components/CERNMode';
 import Constants from 'eam-components/dist/enums/Constants';
 import useLocalStorage from '../../../../hooks/useLocalStorage';
+import { readUserCodes } from '../../../../tools/WSGrids';
 
 const WO_FILTER_TYPES = {
     ALL: 'All',
@@ -44,7 +45,7 @@ const WO_FILTERS = {
 }
 
 const LOCAL_STORAGE_FILTER_KEY = 'filters:workorders';
-const LOCAL_STORAGE_SYSTEM_STATUS_KEY = 'systemstatus';
+const LOCAL_STORAGE_SYSTEM_STATUS_KEY = 'wosystemstatus';
 
 function EquipmentWorkOrders(props) {
     const { defaultFilter: initialFilter, equipmentcode, equipmenttype } = props;
@@ -57,11 +58,11 @@ function EquipmentWorkOrders(props) {
     const [workOrderFilter, setWorkOrderFilter] = useLocalStorage(LOCAL_STORAGE_FILTER_KEY, WO_FILTER_TYPES.ALL, defaultFilter);
 
     const [systemStatuses, setSystemStatuses] = useLocalStorage(LOCAL_STORAGE_SYSTEM_STATUS_KEY, []);
-    let headers = ['Work Order', 'Equipment', 'Description', 'Status', 'Date'];
+    let headers = ['Work Order', 'Equipment', 'Description', 'Status', 'Relevant Date'];
     let propCodes = ['number', 'object','desc', 'status', 'createdDate'];
 
     if (workOrderFilter === WO_FILTER_TYPES.THIS) {
-        headers = ['Work Order', 'Description', 'Status', 'Date'];
+        headers = ['Work Order', 'Description', 'Status', 'Relevant Date'];
         propCodes = ['number', 'desc', 'status', 'createdDate'];
     }
 
@@ -104,9 +105,9 @@ function EquipmentWorkOrders(props) {
 
         if (systemStatuses.length > 0) {
             fetchData(equipmentcode, equipmenttype, systemStatuses);
-        } else {
-            WSEquipment.getSystemStatus().then((response) => {
-                setSystemStatuses(response)
+        } else { 
+            readUserCodes("EVST").then((response) => {
+                setSystemStatuses(response.body.data)
                 fetchData(equipmentcode, equipmenttype, response);
             });
         }
@@ -117,20 +118,20 @@ function EquipmentWorkOrders(props) {
             .then(responses => {
                 const getDateLabel = (element) => {
                    const fallbackDateLabel = element.createdDate
-                      ? `${format(new Date(element.createdDate), "dd-MMM-yyyy")} (created date)`
+                      ? `${format(new Date(element.createdDate), "dd-MMM-yyyy")}`
                       : "-";
-                    const systemCode = systemStatues.find((status)=> status.userCode === element.status || status.description === element.status);
+                    const systemCode = systemStatues.find((status)=> status.code === element.status || status.desc === element.status);
                     const elementIsClosed = systemCode.systemCode === 'C';
 
                     // closed/cancelled element
                    if (elementIsClosed)
                       return element.completedDate
-                        ? `${format(new Date(element.completedDate), "dd-MMM-yyyy")} (completed date)`
+                        ? `${format(new Date(element.completedDate), "dd-MMM-yyyy")}`
                         : fallbackDateLabel;
 
                     // open element
                     return element.schedulingStartDate
-                      ? `${format(new Date(element.schedulingStartDate), "dd-MMM-yyyy")} (scheduling start date)`
+                      ? `${format(new Date(element.schedulingStartDate), "dd-MMM-yyyy")}`
                       : fallbackDateLabel;
                   };
                 const formatResponse = response => response.body.data.map(element => ({

@@ -44,7 +44,7 @@ export const readStatuses = (entity, newEntity, oldStatus) => {
 export const readUserCodes = (entity) => {
     let gridRequest = new GridRequest("BSUCOD_HDR")
     gridRequest.addParam("param.entitycode", entity)
-    return getGridData(gridRequest).then(response => transformResponse(response, {code: "usercode", desc: "usercodedescription"}));
+    return getGridData(gridRequest).then(response => transformResponse(response, {code: "usercode", systemCode: "systemcode", desc: "usercodedescription"}));
 }
 
 export const autocompleteDepartment = (organization, hint) => {
