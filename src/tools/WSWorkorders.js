@@ -178,11 +178,11 @@ class WSWorkorders {
     getPartUsageLotIssue(lot, bin, part, store, requireAvailableQty = true, config = {}) {
         return WS._get(`/partusage/lots/issue?lot=${lot}&bin=${bin}&part=${part}&store=${store}&requireAvailableQty=${requireAvailableQty}`, config);
     }
-    
+
     getPartUsageLotReturn(lot, part, config = {}) {
         return WS._get(`/partusage/lots/return?lot=${lot}&part=${part}`, config);
     }
-    
+
     //
     // ACTIVITIES AND BOOKED LABOURS
     //
@@ -290,6 +290,12 @@ class WSWorkorders {
         return WS._get(`/workordersmisc/otherid/${workorder}`, config);
     }
 
+    mySystemStatusesMapper = {
+      userCode: "usercode",
+      description: "usercodedescription",
+      systemCode: "systemcode",
+    };
+
     myWorkOrderMapper = {
         number: "workordernum",
         desc: "description",
@@ -333,7 +339,7 @@ class WSWorkorders {
         gridRequest.sortBy("acssched")
         return getGridData(gridRequest).then(response => transformResponse(response, this.scheduledWorkOrderMapper));
     }
-    
+
 
 }
 
