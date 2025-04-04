@@ -290,12 +290,6 @@ class WSWorkorders {
         return WS._get(`/workordersmisc/otherid/${workorder}`, config);
     }
 
-    mySystemStatusesMapper = {
-      userCode: "usercode",
-      description: "usercodedescription",
-      systemCode: "systemcode",
-    };
-
     myWorkOrderMapper = {
         number: "workordernum",
         desc: "description",

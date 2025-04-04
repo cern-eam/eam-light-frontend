@@ -17,23 +17,9 @@ class WSEquipment {
 
     getEquipmentWorkOrders(equipmentCode) {
         let gridRequest = new GridRequest("WSJOBS", GridTypes.LIST)
-        gridRequest.rowCount = 2000
         gridRequest.addFilter("equipment", equipmentCode, "=")
         gridRequest.sortBy("datecreated", "DESC")
         return getGridData(gridRequest).then(response => transformResponse(response, WSWorkorders.myWorkOrderMapper));
-    }
-
-    getSystemStatus() {
-      let gridRequest = new GridRequest("BSUCOD_HDR", GridTypes.LOV);
-      gridRequest.rowCount = 2000;
-      gridRequest.addParam("param.entitycode", "EVST");
-      return getGridData(gridRequest).then((response) => {
-        const data = transformResponse(
-          response,
-          WSWorkorders.mySystemStatusesMapper
-        );
-        return data ? data.body?.data : null;
-      });
     }
 
     getEquipmentEvents(equipmentCode, equipmentType, config = {}) {
