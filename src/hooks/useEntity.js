@@ -183,6 +183,7 @@ const useEntity = (params) => {
         setIsModified(false);
         setNewEntity(false);
         const readEntity = response.body.Result.ResultData[entityProperty];
+
         setEntity(readEntity);
 
         document.title = entityDesc + " " + readEntity[entityCodeProperty];
