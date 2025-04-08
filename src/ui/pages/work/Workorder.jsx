@@ -7,7 +7,6 @@ import BlockUi from "react-block-ui";
 import WSEquipment from "../../../tools/WSEquipment";
 import WSWorkorder from "../../../tools/WSWorkorders";
 import { ENTITY_TYPE } from "../../components/Toolbar";
-import CustomFields from "eam-components/dist/ui/components/customfields/CustomFields";
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
 import NCRIframeContainer from "../../components/iframes/NCRIframeContainer";
 import Activities from "./activities/Activities";
@@ -59,6 +58,7 @@ import EamlightToolbar from "../../components/EamlightToolbar";
 import useWorkOrderStore from "../../../state/useWorkOrderStore";
 import { isLocalAdministrator } from "../../../state/utils";
 import AssetNCRs from '../../pages/equipment/components/EquipmentNCRs';
+import CustomFields from "../../components/customfields/CustomFields";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -134,7 +134,8 @@ const Workorder = () => {
     entityCode: "EVNT",
     entityDesc: "Work Order",
     entityURL: "/workorder/",
-    entityCodeProperty: "number",
+    entityCodeProperty: "WORKORDERID.JOBNUM",
+    entityProperty: "WorkOrder",
     screenProperty: "workOrderScreen",
     layoutPropertiesMap,
     onMountHandler: mountHandler,
@@ -490,7 +491,7 @@ const Workorder = () => {
             entityCode="EVNT"
             entityKeyCode={workorder.number}
             classCode={workorder.classCode}
-            customFields={workorder.customField}
+            customFields={workorder.USERDEFINEDAREA.CUSTOMFIELD}
             register={register}
           />
         ),
@@ -625,11 +626,11 @@ const Workorder = () => {
   function postRead(workorder) {
     updateEquipmentTreeData({
       equipment: {
-        code: workorder.equipmentCode,
-        organization: workorder.equipmentOrganization
+        code: workorder.EQUIPMENTID.EQUIPMENTCODE,
+        organization: workorder.EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE
       }
     });
-    setCurrentWorkOrder(workorder.number);
+    setCurrentWorkOrder(workorder.WORKORDERID.JOBNUM);
     readStatuses(workorder.statusCode, workorder.typeCode, false);
     readOtherIdMapping(workorder.number);
   }
@@ -698,8 +699,8 @@ const Workorder = () => {
           newEntity={newEntity}
           entityScreen={screenPermissions}
           entityName="Work Order"
-          entityKeyCode={workorder.number}
-          organization={workorder.organization}
+          entityKeyCode={workorder.WORKORDERID.JOBNUM}
+          organization={workorder.WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE}
           saveHandler={saveHandler}
           newHandler={newHandler}
           deleteHandler={deleteHandler}

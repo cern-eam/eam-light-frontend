@@ -21,8 +21,8 @@ const UserDefinedFields = (props) => {
           key={prop}
           {...register(
             prop,
-            `userDefinedFields.${prop}`,
-            prop.includes("Desc") ? `userDefinedFields.${prop}Desc` : undefined
+            `UserDefinedFields.${prop.toUpperCase()}`,
+            //prop.includes("Desc") ? `userDefinedFields.${prop}Desc` : undefined
           )}
         />
       ));

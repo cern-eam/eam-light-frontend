@@ -270,14 +270,14 @@ const format = (date, dateFormat) => {
 };
 
 export const getElementInfoFromCustomFields = (layoutKey, customFields) => {
-  let customField = customFields.find((cf) => cf.code === layoutKey);
+  let customField = customFields.find((cf) => cf.PROPERTYCODE === layoutKey);
 
   return getElementInfoForCustomField(customField);
 };
 
 export const getElementInfoForCustomField = (customField) => {
   return {
-    text: customField?.label,
+    text: customField?.PROPERTYLABEL,
     xpath: "EAMID_" + customField?.code,
     fieldType: customField?.type === "NUM" ? "number" : "text",
   };

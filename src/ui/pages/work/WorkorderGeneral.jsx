@@ -61,8 +61,6 @@ function WorkorderGeneral(props) {
           "equipment"
         )}
         barcodeScanner
-        autocompleteHandler={WS.autocompleteEquipment}
-        autocompleteHandlerParams={[false]}
         link={() =>
           workorder.equipmentCode
             ? "/equipment/" + workorder.equipmentCode
