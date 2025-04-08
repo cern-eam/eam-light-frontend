@@ -43,6 +43,7 @@ const useEntity = (params) => {
     entityDesc,
     entityURL,
     entityCodeProperty,
+    entityProperty,
     screenProperty,
     layoutPropertiesMap,
     isReadOnlyCustomHandler,
@@ -181,8 +182,7 @@ const useEntity = (params) => {
         resetErrorMessages();
         setIsModified(false);
         setNewEntity(false);
-        console.log(response)
-        const readEntity = response.body.Result.ResultData.WorkOrder;
+        const readEntity = response.body.Result.ResultData[entityProperty];
         setEntity(readEntity);
 
         document.title = entityDesc + " " + readEntity[entityCodeProperty];
@@ -218,9 +218,7 @@ const useEntity = (params) => {
         setIsModified(false);
 
         commentsComponent.current?.createCommentForNewEntity(entityCode);
-        showNotification(
-          `${entityDesc} ${entity[entityCodeProperty]} has been successfully updated.`
-        );
+        showNotification(response.body.Result.InfoAlert.Message);
         readEntity(code);
       })
       .catch((error) => {
@@ -360,7 +358,7 @@ const useEntity = (params) => {
 
     let data = processElementInfo(
       screenLayout.fields[layoutKey] ??
-        getElementInfoFromCustomFields(layoutKey, entity.customField)
+        getElementInfoFromCustomFields(layoutKey, entity.USERDEFINEDAREA.CUSTOMFIELD)
     );
 
     data.onChange = createOnChangeHandler(
