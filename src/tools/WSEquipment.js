@@ -122,6 +122,10 @@ class WSEquipment {
         return WS._get(`/equipment/partsassociated/${parentScreen}/${equipment}`, config);
     }
 
+    createPartAssociated(part, config = {}) {
+        return WS._post('/equipment/partsassociated', part, config);
+    }
+
     getCategory(categoryCode, config = {}) {
         return WS._get(`/autocomplete/eqp/categorydata/${categoryCode}`, config);
     }

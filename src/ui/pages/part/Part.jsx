@@ -33,7 +33,7 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import PlaceIcon from "@mui/icons-material/Place";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import { isCernMode } from "@/ui/components/CERNMode";
-import getPartsAssociated from "../PartsAssociated";
+import getPartsAssociated from "../partsAssociated/PartsAssociated";
 import EamlightToolbar from "../../components/EamlightToolbar";
 
 const customTabGridParamNames = [
