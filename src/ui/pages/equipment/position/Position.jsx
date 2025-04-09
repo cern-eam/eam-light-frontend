@@ -45,7 +45,7 @@ import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import Variables from "../components/Variables";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
-import getPartsAssociated from "@/ui/pages/PartsAssociated";
+import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 
 const customTabGridParamNames = [

@@ -39,7 +39,7 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import HardwareIcon from "@mui/icons-material/Hardware";
 import WarningIcon from "@mui/icons-material/Warning";
 import Variables from "../components/Variables";
-import getPartsAssociated from "@/ui/pages/PartsAssociated";
+import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
@@ -96,6 +96,8 @@ const Asset = () => {
     layoutProperty: "assetLayout",
     layoutPropertiesMap: assetLayoutPropertiesMap,
   });
+
+
   useEffect(() => {
     // Part input is cleared
     if (equipment?.partCode === "") {
@@ -123,7 +125,6 @@ const Asset = () => {
 
   const getRegions = () => {
     const tabs = assetLayout.tabs;
-
     const commonProps = {
       equipment,
       newEntity,
