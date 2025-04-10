@@ -11,7 +11,7 @@ class WSWorkorders {
     // WORK ORDERS
     //
     initWorkOrder(config = {}) {
-        return WS._get(`/workorders/init`, config);
+        return WS._post(`/proxy/workorderdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": "*"}}, config);
     }
 
     getWorkOrder(number, config = {}) {
