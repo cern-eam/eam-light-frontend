@@ -99,7 +99,7 @@ function WorkorderGeneral(props) {
       <EAMSelect
         {...register("workorderstatus")}
         disabled={
-          isDepartmentReadOnly(workorder.DEPARTMENTID.DEPARTMENTCODE, userData) ||
+          isDepartmentReadOnly(workorder.DEPARTMENTID?.DEPARTMENTCODE, userData) ||
           !screenPermissions.updateAllowed 
           //!workorder.jtAuthCanUpdate
         }
@@ -114,7 +114,7 @@ function WorkorderGeneral(props) {
       />
 
       <EAMAutocomplete
-        {...register("woclass", "classCode", "classDesc")}
+        {...register("woclass")}
       />
 
       <EAMAutocomplete

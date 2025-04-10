@@ -106,33 +106,26 @@ export const assignCustomFieldFromObject = (
 // assigns the custom fields from the customField object to the entity, merging old values
 export const assignCustomFieldFromCustomField = (
   entity,
-  customField = [],
-  assignmentType
+  newCustomFields = []
 ) => {
-  throwIfInvalidAssignmentType(assignmentType);
-  const { sourceNotEmpty, destinationEmpty } = assignmentType;
+  const currentCustomFields = entity?.USERDEFINEDAREA?.CUSTOMFIELD || [];
 
-  const newEntity = cloneEntity(entity);
-  const oldCustomField = newEntity.customField;
-  newEntity.customField = customField.map((cf) => ({ ...cf })); // ensure custom field is not modified
+  const mergedAndSortedFields = newCustomFields
+    .map(field => {
+      const matchingField = currentCustomFields.find(
+        existing => existing.PROPERTYCODE === field.PROPERTYCODE
+      );
+      return matchingField ?? field;
+    })
+    .sort((a, b) => Number(a.index ?? 0) - Number(b.index ?? 0));
 
-  let expr = newEntity.customField;
-
-  if (sourceNotEmpty) {
-    expr = expr.filter((cf) => !cf.value);
-  }
-
-  const getOldCustomFieldValue = ({ code }) => {
-    const field = oldCustomField.find((cf) => code === cf.code);
-    return field ? field.value : undefined;
+  return {
+    ...entity,
+    USERDEFINEDAREA: {
+      ...entity.USERDEFINEDAREA,
+      CUSTOMFIELD: mergedAndSortedFields
+    }
   };
-
-  if (destinationEmpty) {
-    expr = expr.filter((cf) => getOldCustomFieldValue(cf));
-  }
-
-  expr.forEach((cf) => (cf.value = getOldCustomFieldValue(cf)));
-  return newEntity;
 };
 
 // assigns the values in values to the entity
@@ -491,3 +484,95 @@ export const getCustomTabRegions = (
       }
     };
   });
+
+
+  export const toEAMNumber = (input) => {
+    const num = Number(input);
+  
+    if (isNaN(num)) {
+      return {
+        VALUE: null,
+        NUMOFDEC: 0,
+        SIGN: "+",
+        UOM: "default",
+        qualifier: "OTHER"
+      };
+    }
+  
+    const numOfDec = num.toString().includes('.')
+      ? num.toString().split('.')[1].length
+      : 0;
+  
+    const value = Math.round(Math.abs(num) * Math.pow(10, numOfDec));
+  
+    return {
+      VALUE: value,
+      NUMOFDEC: numOfDec,
+      SIGN: num >= 0 ? "+" : "-",
+      UOM: "default",
+      qualifier: "OTHER"
+    };
+  }
+  
+  export const fromEAMNumber = (input) => {
+    if (!input || input.VALUE == null || isNaN(input.VALUE)) {
+      return null;
+    }
+  
+    const raw = input.VALUE / Math.pow(10, input.NUMOFDEC || 0);
+    const number = input.SIGN === '-' ? -raw : raw;
+  
+    return number.toString();
+  };
+
+  export const fromEAMDate = (data) => {
+    if (!data) {
+      return null;
+    }
+
+    const { YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, SUBSECOND, TIMEZONE } = data;
+
+    // Get actual year from epoch timestamp (which is in the given timezone)
+    const baseDate = new Date(YEAR);
+    const year = new Date(YEAR + parseInt(TIMEZONE) * 60 * 10).getUTCFullYear();
+  
+    // Construct the date in UTC
+    const utcDate = new Date(Date.UTC(year, MONTH - 1, DAY, HOUR, MINUTE, SECOND, SUBSECOND));
+  
+    // Return ISO string in UTC (with 'Z')
+    return utcDate.toISOString();
+  }
+
+
+  export const toEAMDate = (isoString, timezone = "+0000") => {
+    // Parse the UTC ISO string
+    const utcDate = new Date(isoString);
+  
+    // Parse timezone offset
+    const sign = timezone[0] === '+' ? 1 : -1;
+    const hours = parseInt(timezone.slice(1, 3), 10);
+    const minutes = parseInt(timezone.slice(3, 5), 10);
+    const offsetMinutes = sign * (hours * 60 + minutes);
+  
+    // Adjust to local time by applying offset
+    const localTime = new Date(utcDate.getTime() + offsetMinutes * 60 * 1000);
+  
+    // Compute the start of the year in local time
+    const localYearStart = new Date(Date.UTC(localTime.getUTCFullYear(), 0, 1, 0, 0, 0, 0) - offsetMinutes * 60 * 1000);
+    const yearEpoch = localYearStart.getTime();
+  
+    return {
+      YEAR: yearEpoch,
+      MONTH: localTime.getUTCMonth() + 1,
+      DAY: localTime.getUTCDate(),
+      HOUR: localTime.getUTCHours(),
+      MINUTE: localTime.getUTCMinutes(),
+      SECOND: localTime.getUTCSeconds(),
+      SUBSECOND: localTime.getUTCMilliseconds(),
+      TIMEZONE: timezone,
+      qualifier: "OTHER"
+    };
+  }
+  
+  
+  

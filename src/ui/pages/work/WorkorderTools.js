@@ -96,7 +96,19 @@ export const layoutPropertiesMap = {
     workorderstatus: {
         value: "STATUS.STATUSCODE",
         desc: "STATUS.DESCRIPTION"
+    },
+
+    woclass: {
+        value: "CLASSID.CLASSCODE",
+        desc: "CLASSID.DESCRIPTION"
+    },
+
+    reqstartdate: {
+        value: "REQUESTEDSTART"
     }
+    //reqenddate: "requestedEndDate",
+    //schedstartdate: "scheduledStartDate",
+    //schedenddate: "scheduledEndDate",
 
 }
 

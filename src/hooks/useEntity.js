@@ -33,6 +33,8 @@ import {
 import { TABS } from "../ui/components/entityregions/TabCodeMapping";
 import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
 import useSnackbarStore from "../state/useSnackbarStore";
+import { getCustomFields } from "../tools/WSCustomFields";
+import { fromEAMDate, fromEAMNumber, toEAMDate } from "../ui/pages/EntityTools";
 
 const useEntity = (params) => {
   const {
@@ -223,7 +225,8 @@ const useEntity = (params) => {
         readEntity(code);
       })
       .catch((error) => {
-        generateErrorMessagesFromException(error?.response?.body?.errors);
+        console.log('error', error)
+        generateErrorMessagesFromException(error?.response?.body?.ErrorAlert[0].Message);
         handleError(error);
       })
       .finally(() => setLoading(false));
@@ -251,18 +254,20 @@ const useEntity = (params) => {
 
     WS.new()
       .then((response) => {
+        
         resetErrorMessages();
         setNewEntity(true);
         setIsModified(false);
         setReadOnly(!screenPermissions.creationAllowed);
 
-        let newEntity = response.body.data;
-        newEntity = assignDefaultValues(
-          newEntity,
-          screenLayout,
-          layoutPropertiesMap
-        );
-        newEntity = assignQueryParamValues(newEntity);
+        let newEntity = response.body.Result.ResultData;
+        console.log('response', newEntity)
+        // newEntity = assignDefaultValues(
+        //   newEntity,
+        //   screenLayout,
+        //   layoutPropertiesMap
+        // );
+        // newEntity = assignQueryParamValues(newEntity);
         setEntity(newEntity);
         fireHandlers(newEntity, getHandlers());
         document.title = "New " + entityDesc;
@@ -306,33 +311,15 @@ const useEntity = (params) => {
   // HELPER METHODS
   //
   const onChangeClass = (newClass) => {
-    return WSCustomFields.getCustomFields(entityCode, newClass)
-      .then((response) => {
-        setEntity((prevEntity) => {
-          const newCustomFields = response.body.data;
-          let entity = assignCustomFieldFromCustomField(
-            prevEntity,
-            newCustomFields,
-            AssignmentType.SOURCE_NOT_EMPTY
-          );
-
-          // replace custom fields with ones in query parameters if we have just created the entity
-          if (newEntity) {
-            const queryParams = queryString.parse(window.location.search);
-            entity = assignCustomFieldFromObject(
-              entity,
-              queryParams,
-              AssignmentType.SOURCE_NOT_EMPTY
-            );
-          }
-          return entity;
-        });
+     getCustomFields(entityCode, newClass)
+     .then((response) => {
+        setEntity((prevEntity) => assignCustomFieldFromCustomField(prevEntity, response.body.data.CUSTOMFIELD));
       })
-      .catch(console.error);
+     .catch(console.error);
   };
 
-  const updateEntityProperty = (key, value) => {
-    setEntity((prevEntity) => set({ ...prevEntity }, key, value));
+  const updateEntityProperty = (key, value, type) => {
+    setEntity((prevEntity) => set({ ...prevEntity }, key, convertValue(value, type)));
     // Fire handler for the 'key'
     getHandlers()[key]?.(value);
     //
@@ -340,6 +327,15 @@ const useEntity = (params) => {
       setIsModified(true);
     }
   };
+
+  const convertValue = (value, type) => {
+    switch(type) {
+      case "date":
+        return toEAMDate(value)
+      default:
+        return value;
+    }
+  }
 
   const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
     
@@ -366,7 +362,7 @@ const useEntity = (params) => {
       valueKey,
       descKey,
       orgKey,
-      updateEntityProperty,
+      (key, value) => updateEntityProperty(key, value, data.type),
       onChange
     );
 
@@ -374,7 +370,18 @@ const useEntity = (params) => {
     data.elementInfo = screenLayout.fields[layoutKey]; // Return elementInfo as it is still needed in some cases (for example for UDFs)
 
     // Value
-    data.value = get(entity, valueKey);
+    switch (data.type) {
+      case "number":
+        data.value = fromEAMNumber(get(entity, valueKey));
+        break;
+      case "date":
+        data.value = fromEAMDate(get(entity, valueKey))
+        break;
+      default:
+        data.value = get(entity, valueKey);
+    }
+
+    
 
     // Description
     if (descKey) {
@@ -429,7 +436,7 @@ const useEntity = (params) => {
     return data;
   };
 
-  const getHandlers = () => ({ ...handlers, classCode: onChangeClass });
+  const getHandlers = () => ({ ...handlers, "CLASSID.CLASSCODE": onChangeClass });
 
   //
   //

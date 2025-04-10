@@ -424,8 +424,8 @@ const Workorder = () => {
         maximizable: true,
         render: ({ panelQueryParams }) => (
           <Checklists
-            workorder={workorder.number}
-            version={workorder.updateCount}
+            workorder={workorder.WORKORDERID.JOBNUM}
+            version={workorder.recordid}
             eqpToOtherId={otherIdMapping}
             printingChecklistLinkToAIS={applicationData.EL_PRTCL}
             maxExpandedChecklistItems={Math.abs(parseInt(applicationData.EL_MCHLS)) || 50}
@@ -699,8 +699,8 @@ const Workorder = () => {
           newEntity={newEntity}
           entityScreen={screenPermissions}
           entityName="Work Order"
-          entityKeyCode={workorder.WORKORDERID.JOBNUM}
-          organization={workorder.WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE}
+          entityKeyCode={workorder.JOBNUM ?? workorder.WORKORDERID.JOBNUM}
+          organization={workorder.ORGANIZATIONID?.ORGANIZATIONCODE ?? workorder.WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE}
           saveHandler={saveHandler}
           newHandler={newHandler}
           deleteHandler={deleteHandler}

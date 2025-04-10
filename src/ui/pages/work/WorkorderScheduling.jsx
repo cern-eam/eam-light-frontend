@@ -47,7 +47,7 @@ const WorkorderScheduling = (props) => {
         autocompleteHandler={WS.autocompleteSupervisor}
       />
 
-      <EAMDatePicker {...register("reqstartdate", "requestedStartDate")} />
+      <EAMDatePicker {...register("reqstartdate")} />
 
       <EAMDatePicker {...register("reqenddate", "requestedEndDate")} />
 
