@@ -1,6 +1,6 @@
 import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import React from 'react';
-import WSCustomFields from "../../../../tools/WSCustomFields";
+import { autocompleteCustomFieldRENT } from '../../../../tools/WSCustomFields';
 
 function CustomFieldRENT({customField, register, index}) {
     
@@ -8,7 +8,7 @@ function CustomFieldRENT({customField, register, index}) {
         <EAMAutocomplete {...register(customField.PROPERTYCODE, 
                                      `USERDEFINEDAREA.CUSTOMFIELD.${index}.ENTITYCODEFIELD.CODEVALUE`, 
                                      `USERDEFINEDAREA.CUSTOMFIELD.${index}.ENTITYCODEFIELD.DESCRIPTION`)}
-                         autocompleteHandler={WSCustomFields.autocompleteCustomFieldRENT}
+                         autocompleteHandler={autocompleteCustomFieldRENT}
                          autocompleteHandlerParams={[customField.entity, customField.ENTITYCODEFIELD.entity, customField.PROPERTYCODE]}
         />
     )

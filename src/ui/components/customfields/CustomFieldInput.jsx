@@ -24,7 +24,6 @@ function CustomFieldInput(props) {
             register,
             customField,
             index,
-            lookupValues,
             validate
         };
 

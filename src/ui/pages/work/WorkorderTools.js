@@ -70,32 +70,28 @@ export const layoutPropertiesMapOld =  {
     }
 
 export const layoutPropertiesMap = {
+
     equipment: {
-        value: "EQUIPMENTID.EQUIPMENTCODE",
         desc: "EQUIPMENTID.DESCRIPTION",
-        org: "EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE"
+        org: "EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE",
+        autocompleteHandlerData: { 
+            resultMap: {
+                code: "equipmentcode",
+                desc: "equipmentdesc",
+                org: "equiporganization"
+            }, 
+            searchKeys: ["equipmentcode", "equipmentdesc"]
+        }
     },
 
     location: {
-        value: "LOCATIONID.LOCATIONCODE",
         desc: "LOCATIONID.DESCRIPTION",
         org: "LOCATIONID.ORGANIZATIONID.ORGANIZATIONCODE"
     },
 
     department: {
-        value: "DEPARTMENTID.DEPARTMENTCODE",
         desc: "DEPARTMENTID.DESCRIPTION",
         org: "DEPARTMENTID.ORGANIZATIONID.ORGANIZATIONCODE"
-    },
-
-    workordertype: {
-        value: "TYPE.TYPECODE",
-        desc: "TYPE.DESCRIPTION"
-    },
-
-    workorderstatus: {
-        value: "STATUS.STATUSCODE",
-        desc: "STATUS.DESCRIPTION"
     },
 
     woclass: {
@@ -103,12 +99,11 @@ export const layoutPropertiesMap = {
         desc: "CLASSID.DESCRIPTION"
     },
 
-    reqstartdate: {
-        value: "REQUESTEDSTART"
+    problemcode: {
+        autocompleteHandlerData: { 
+            resultMap: {code: "problemcode", desc: "description"}
+        }
     }
-    //reqenddate: "requestedEndDate",
-    //schedstartdate: "scheduledStartDate",
-    //schedenddate: "scheduledEndDate",
 
 }
 

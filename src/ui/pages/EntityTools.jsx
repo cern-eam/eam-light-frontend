@@ -269,10 +269,16 @@ export const getElementInfoFromCustomFields = (layoutKey, customFields) => {
 };
 
 export const getElementInfoForCustomField = (customField) => {
+  const mapper = {
+    NUM:  "number",
+    DATE: "date",
+    DATI: "datetime"
+  }
+
   return {
     text: customField?.PROPERTYLABEL,
-    xpath: "EAMID_" + customField?.code,
-    fieldType: customField?.type === "NUM" ? "number" : "text",
+    xpath: "EAMID_" + customField?.PROPERTYCODE,
+    fieldType: mapper[customField?.type] ?? "text"
   };
 };
 
@@ -545,6 +551,7 @@ export const getCustomTabRegions = (
 
 
   export const toEAMDate = (isoString, timezone = "+0000") => {
+    console.log("to", isoString)
     // Parse the UTC ISO string
     const utcDate = new Date(isoString);
   

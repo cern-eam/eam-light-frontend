@@ -4,11 +4,12 @@ import WS from './WS';
 import GridRequest from './entities/GridRequest';
 import { GridTypes } from './entities/GridRequest';
 
-export const getGridDataNative = (gridRequest, config = {}) => WS._post('/proxy/gridheaders', gridRequest, config);
+export const getGridDataNative = (gridRequest, config = {}) => WS._post('/proxy/grids', gridRequest, config);
 
 export const getGridData = (gridRequest, config = {}) => getGridDataNative(gridRequest, config).then(transformNativeResponse);
 
 export function transformResponse(response, keyMap, additionalData = []) {
+    console.log('r', response, keyMap)
     return {
         body: {
             data: [

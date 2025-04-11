@@ -49,17 +49,17 @@ const WorkorderScheduling = (props) => {
 
       <EAMDatePicker {...register("reqstartdate")} />
 
-      <EAMDatePicker {...register("reqenddate", "requestedEndDate")} />
+      <EAMDatePicker {...register("reqenddate")} />
 
-      <EAMDatePicker {...register("schedstartdate", "scheduledStartDate")} />
+      <EAMDatePicker {...register("schedstartdate")} />
 
-      <EAMDatePicker {...register("schedenddate", "scheduledEndDate")} />
+      <EAMDatePicker {...register("schedenddate")} />
 
-      <EAMDateTimePicker {...register("startdate", "startDate")} />
+      <EAMDateTimePicker {...register("startdate")} />
 
-      <EAMDateTimePicker {...register("datecompleted", "completedDate")} />
+      <EAMDateTimePicker {...register("datecompleted")} />
 
-      <EAMDateTimePicker {...register("datereported", "reportedDate")} />
+      <EAMDateTimePicker {...register("datereported")} />
 
       <EAMUDF
         {...register(

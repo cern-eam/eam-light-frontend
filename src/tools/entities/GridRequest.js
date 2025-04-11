@@ -22,6 +22,11 @@ export default class GridRequest {
       DATASPY_ID: dataspyId
     };
   }
+  
+  setRowCount(rowCount) {
+    this.GRID.NUMBER_OF_ROWS_FIRST_RETURNED = rowCount;
+    this.GRID.WSGRIDSZ_OVERRIDE = rowCount;
+  }
 
   addParam(alias, value) {
     if (!this.LOV) {

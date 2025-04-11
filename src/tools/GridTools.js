@@ -60,30 +60,37 @@ const replaceUrlParam = (key, val) => {
 const getURLParameterByName = name => queryString.parse(window.location.search)[name] || '';
 
 export const transformNativeResponse = (response) => {
-    const fields = response.body.Result.ResultData.GRID.FIELDS.FIELD;
-    const rows = response.body.Result.ResultData.GRID.DATA.ROW;
-  
-    const aliasToField = Object.fromEntries(fields.map(f => [f.aliasnum, f]));
-  
-    return {
-      body: {
-        data: rows.map(row => {
-          const obj = {};
-          row.D.forEach(d => {
-            const field = aliasToField[d.n];
-            if (field) {
-              let value = d.value;
-              if (field.type === "DECIMAL" || field.type === "NUMBER") {
-                value = value === "" ? null : Number(value);
-              }
-              obj[field.name] = value;
-            }
-          });
-          return obj;
-        }),
-      },
-    };
+  const records = response.body.Result.ResultData.DATARECORD;
+
+  return {
+    body: {
+      data: records.map(record => {
+        const obj = {};
+        for (const field of record.DATAFIELD) {
+          let value = field.FIELDVALUE;
+
+          // Normalize types
+          switch (field.DATATYPE) {
+            case 'DECIMAL':
+            case 'NUMBER':
+              value = value === '' ? null : Number(value);
+              break;
+            case 'CHKBOOLEAN':
+              value = value === '' ? null : value === '1';
+              break;
+            default:
+              // Keep VARCHAR, MIXVARCHAR, DATE, etc. as-is
+              break;
+          }
+
+          obj[field.FIELDNAME] = value;
+        }
+        return obj;
+      }),
+    },
   };
+};
+
 
 export default {
     parseGridFilters,

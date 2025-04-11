@@ -3,16 +3,11 @@ import tools from '../CustomFieldTools'
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import { cfCodeDesc } from '../../../../tools/WSCustomFields';
+import { useCustomFieldOptions } from '../tools/useCustomFieldOptions';
 
 function CustomFieldCODE({customField, register, index, validate}) {
     const extraProps = register(customField.PROPERTYCODE, `USERDEFINEDAREA.CUSTOMFIELD.${index}.CODEDESCFIELD.CODEVALUE`);
-    const [options, setOptions] = useState([])  
-
-    useEffect(() => {
-        cfCodeDesc(customField.PROPERTYCODE).then((response) => {
-        setOptions(response.body.data);
-      });
-    }, [])
+    const options = useCustomFieldOptions(cfCodeDesc, customField.PROPERTYCODE)
 
     if (tools.isLookupCustomField(customField)) {
         return <EAMSelect {...extraProps}
