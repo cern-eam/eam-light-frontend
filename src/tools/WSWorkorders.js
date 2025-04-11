@@ -229,8 +229,8 @@ class WSWorkorders {
     }
 
 
-    autocompleteBOOEmployee = (data, config = {}) => {
-        return WS._get("/autocomplete/boo/employee/" + data, config);
+    autocompleteBOOEmployee = (workOrder, activity, trade, typeOfHours) => (data, config = {}) => {
+        return WS._get(`/autocomplete/boo/event/${workOrder}/activity/${activity}/trade/${trade}/octype/${typeOfHours}/employee/${data}`, config);
     };
 
     autocompleteBOODepartment = (data, config = {}) => {
