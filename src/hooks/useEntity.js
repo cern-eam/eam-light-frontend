@@ -15,8 +15,6 @@ import {
   getElementInfoFromCustomFields,
   prepareDataForFieldsValidator,
 } from "@/ui/pages/EntityTools";
-import WSCustomFields from "eam-components/dist/tools/WSCustomFields";
-import WSS from "../tools/WS";
 import {
   createOnChangeHandler,
   processElementInfo,
@@ -35,6 +33,7 @@ import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
 import useSnackbarStore from "../state/useSnackbarStore";
 import { getCustomFields } from "../tools/WSCustomFields";
 import { fromEAMDate, fromEAMNumber, toEAMDate } from "../ui/pages/EntityTools";
+import { convertValue, createAutocompleteHandler } from "./tools";
 
 const useEntity = (params) => {
   const {
@@ -188,7 +187,7 @@ const useEntity = (params) => {
 
         setEntity(readEntity);
 
-        document.title = entityDesc + " " + readEntity[entityCodeProperty];
+        document.title = entityDesc + " " + get(readEntity, entityCodeProperty);
 
         // Render as read-only depending on screen rights, department security or custom handler
         // setReadOnly(
@@ -328,15 +327,6 @@ const useEntity = (params) => {
     }
   };
 
-  const convertValue = (value, type) => {
-    switch(type) {
-      case "date":
-        return toEAMDate(value)
-      default:
-        return value;
-    }
-  }
-
   const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
     
     if (layoutPropertiesMap[layoutKey]) {
@@ -351,7 +341,11 @@ const useEntity = (params) => {
       if (!orgKey) {
         orgKey = layoutPropertiesMap[layoutKey].org;
       }
-  }
+    }
+
+    if (!valueKey) {
+      valueKey = screenLayout.fields[layoutKey].xpath
+    }
 
     let data = processElementInfo(
       screenLayout.fields[layoutKey] ??
@@ -375,13 +369,12 @@ const useEntity = (params) => {
         data.value = fromEAMNumber(get(entity, valueKey));
         break;
       case "date":
+      case "datetime":
         data.value = fromEAMDate(get(entity, valueKey))
         break;
       default:
         data.value = get(entity, valueKey);
     }
-
-    
 
     // Description
     if (descKey) {
@@ -391,47 +384,7 @@ const useEntity = (params) => {
     // Errors
     data.errorText = errorMessages[valueKey];
 
-    // Autocomplete handlers
-    if (
-      data.elementInfo &&
-      data.elementInfo.onLookup &&
-      data.elementInfo.onLookup !== "{}" // TODO !== '{}'
-    ) {
-      try {
-        const { lovName, inputVars, inputFields, returnFields } = JSON.parse(
-          data.elementInfo.onLookup
-        );
-        const inputParams = {
-          ...inputVars,
-          ...Object.entries(inputFields ?? {})
-            .map(([key, val]) => ({
-              [key]: entity?.[layoutPropertiesMap[val]],
-            }))
-            .reduce((acc, el) => ({ ...acc, ...el }), {}),
-          "param.pagemode": "view",
-          //...extraParams,
-        };
-        let genericLov = {
-          inputParams,
-          returnFields,
-          lovName,
-          exact: false,
-          rentity: screenCode,
-        };
-
-        // hint might be of type signal (due to an autocomplete hook) which brakes the API, so for now make it a string if it's not
-        data.autocompleteHandler = (hint, config) =>
-          WSS.getLov(
-            { ...genericLov, hint: typeof hint === "string" ? hint : "" },
-            config
-          );
-      } catch (err) {
-        console.error(
-          `Error when setting autocompleteHandler on ${layoutKey}`,
-          err
-        );
-      }
-    }
+    data.autocompleteHandler = createAutocompleteHandler(screenLayout.fields[layoutKey], screenLayout.fields, entity, layoutPropertiesMap[layoutKey]?.autocompleteHandlerData)
 
     return data;
   };

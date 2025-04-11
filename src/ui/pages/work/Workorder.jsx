@@ -491,7 +491,7 @@ const Workorder = () => {
             entityCode="EVNT"
             entityKeyCode={workorder.number}
             classCode={workorder.classCode}
-            customFields={workorder.USERDEFINEDAREA.CUSTOMFIELD}
+            customFields={workorder.USERDEFINEDAREA?.CUSTOMFIELD}
             register={register}
           />
         ),

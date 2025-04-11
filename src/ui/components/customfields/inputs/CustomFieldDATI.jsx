@@ -2,16 +2,20 @@ import React from 'react';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect'
 import EAMDateTimePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDateTimePicker'
 import tools from '../CustomFieldTools'
+import { cfDateTime } from '../../../../tools/WSCustomFields';
+import { useCustomFieldOptions } from '../tools/useCustomFieldOptions';
 
-function CustomFieldDATI({customField, lookupValues, register, index, validate}) {
+function CustomFieldDATI({customField, register, index, validate}) {
+    const extraProps = register(customField.PROPERTYCODE, `USERDEFINEDAREA.CUSTOMFIELD.${index}.DATETIMEFIELD`);
+    const options = useCustomFieldOptions(cfDateTime, customField.PROPERTYCODE)
 
     if (tools.isLookupCustomField(customField)) {
-        return <EAMSelect {...register(customField.PROPERTYCODE, `customField.${index}.value`)}     
-                          options={lookupValues && lookupValues[customField.code]}
+        return <EAMSelect {...extraProps}     
+                          options={options}
                           validate={validate}/>
     } else {
         return (
-            <EAMDateTimePicker {...register(customField.code, `customField.${index}.value`)}/>
+            <EAMDateTimePicker {...extraProps}/>
         )
     }
 

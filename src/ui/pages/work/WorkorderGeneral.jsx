@@ -31,15 +31,13 @@ function WorkorderGeneral(props) {
     [];
   const rpawLink = applicationData && applicationData.EL_TRPAW;
 
-  
-
   const treeButtonClickHandler = (code) => {
 
     useEquipmentTreeStore.getState().updateEquipmentTreeData({
       showEqpTree: true,
       equipment: {
-        code: workorder.equipmentCode,
-        organization: workorder.equipmentOrganization
+        code: workorder.EQUIPMENTID?.EQUIPMENTCODE,
+        organization: workorder.EQUIPMENTID?.ORGANIZATIONID.ORGNIZATIONCODE
       }
     });
   };
@@ -48,13 +46,13 @@ function WorkorderGeneral(props) {
     <React.Fragment>
       {isMultiOrg && newEntity && (
         <EAMSelect
-          {...register("organization", "organization")}
+          {...register("organization")}
           autocompleteHandler={WS.getOrganizations}
           autocompleteHandlerParams={[screenCode]}
         />
       )}
 
-      <EAMTextField {...register("description", "WORKORDERID.DESCRIPTION")} />
+      <EAMTextField {...register("description")} />
 
       <EAMAutocomplete
         {...register(
@@ -63,14 +61,14 @@ function WorkorderGeneral(props) {
         barcodeScanner
         link={() =>
           workorder.equipmentCode
-            ? "/equipment/" + workorder.equipmentCode
+            ? "/equipment/" + workorder.EQUIPMENTID?.EQUIPMENTCODE
             : null
         }
         endAdornment={
           <IconButton
             size="small"
             onClick={treeButtonClickHandler}
-            disabled={!workorder.equipmentCode}
+            disabled={!workorder.EQUIPMENTID?.EQUIPMENTCODE}
           >
             <FileTree />
           </IconButton>
@@ -109,8 +107,7 @@ function WorkorderGeneral(props) {
       />
 
       <EAMSelect
-        {...register("priority", "priorityCode", "priorityDesc")}
-        autocompleteHandler={WSWorkorders.getWorkOrderPriorities}
+        {...register("priority")} autocompleteHandler={WSWorkorders.getWorkOrderPriorities}
       />
 
       <EAMAutocomplete
@@ -118,7 +115,7 @@ function WorkorderGeneral(props) {
       />
 
       <EAMAutocomplete
-        {...register("standardwo", "standardWO", "standardWODesc")}
+        {...register("standardwo")}
         autocompleteHandler={WSWorkorders.autocompleteStandardWorkOrder}
         autocompleteHandlerParams={[
           userGroup,
@@ -128,14 +125,14 @@ function WorkorderGeneral(props) {
       />
 
       <EAMAutocomplete
-        {...register("costcode", "costCode", "costCodeDesc")}
+        {...register("costcode")}
         autocompleteHandler={WSWorkorders.autocompleteCostCode}
       />
 
-      <EAMTextField {...register("targetvalue", "targetValue")} />
+      <EAMTextField {...register("targetvalue")} />
 
       <EAMTextField
-        {...register("parentwo", "parentWO")}
+        {...register("parentwo")}
         link={() =>
           workorder.parentWO && rpawClassesList.includes(workorder.classCode)
             ? rpawLink + workorder.parentWO
@@ -144,11 +141,7 @@ function WorkorderGeneral(props) {
       />
 
       <EAMTextField
-        {...register(
-          "udfchar01",
-          "userDefinedFields.udfchar01",
-          "userDefinedFields.udfchar01Desc"
-        )}
+        {...register("udfchar01")}
         link={() =>
           workorder.userDefinedFields?.udfchar01
             ? "https://cern.service-now.com/task.do?sysparm_query=number=" +
@@ -158,19 +151,11 @@ function WorkorderGeneral(props) {
       />
 
       <EAMTextField
-        {...register(
-          "udfchar20",
-          "userDefinedFields.udfchar20",
-          "userDefinedFields.udfchar20Desc"
-        )}
+        {...register("udfchar20")}
       />
 
       <EAMTextField
-        {...register(
-          "udfchar24",
-          "userDefinedFields.udfchar24",
-          "userDefinedFields.udfchar24Desc"
-        )}
+        {...register("udfchar24")}
         link={() =>
           workorder.userDefinedFields?.udfchar24
             ? "https://its.cern.ch/jira/browse/" +

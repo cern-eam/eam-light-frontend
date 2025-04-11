@@ -18,22 +18,23 @@ const WorkorderClosingCodes = props => {
     return (
         <React.Fragment>
             <EAMSelect 
-                {...register('problemcode', 'problemCode')}
-                autocompleteHandler={WSWorkorders.getWorkOrderProblemCodeValues}
-                autocompleteHandlerParams={[workorder.classCode, equipment?.classCode, workorder.equipmentCode]}/>
+                {...register('problemcode')}
+                // autocompleteHandler={WSWorkorders.getWorkOrderProblemCodeValues}
+                // autocompleteHandlerParams={[workorder.classCode, equipment?.classCode, workorder.equipmentCode]}
+                />
 
             <EAMSelect 
-                {...register('failurecode', 'failureCode')}
+                {...register('failurecode')}
                 autocompleteHandler={WSWorkorders.getWorkOrderFailureCodeValues}
                 autocompleteHandlerParams={[equipment?.classCode, workorder.problemCode, workorder.equipmentCode]}/>
 
             <EAMSelect 
-                {...register('causecode', 'causeCode')}
+                {...register('causecode')}
                 autocompleteHandler={WSWorkorders.getWorkOrderCauseCodeValues}
                 autocompleteHandlerParams={[equipment?.classCode, workorder.failureCode, workorder.problemCode, workorder.equipmentCode]}/>
 
             <EAMSelect 
-                {...register('actioncode', 'actionCode')}
+                {...register('actioncode')}
                 autocompleteHandler={WSWorkorders.getWorkOrderActionCodeValues}
                 autocompleteHandlerParams={[equipment?.classCode,  workorder.failureCode, workorder.problemCode, workorder.causeCode, workorder.equipmentCode]}/>
 
