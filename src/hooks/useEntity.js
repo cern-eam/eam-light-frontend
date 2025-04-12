@@ -260,7 +260,7 @@ const useEntity = (params) => {
         setReadOnly(!screenPermissions.creationAllowed);
 
         let newEntity = response.body.Result.ResultData;
-        console.log('response', newEntity)
+
         // newEntity = assignDefaultValues(
         //   newEntity,
         //   screenLayout,
@@ -328,7 +328,7 @@ const useEntity = (params) => {
   };
 
   const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
-    
+
     if (layoutPropertiesMap[layoutKey]) {
       if (!valueKey) {
         valueKey = layoutPropertiesMap[layoutKey].value;
@@ -384,7 +384,7 @@ const useEntity = (params) => {
     // Errors
     data.errorText = errorMessages[valueKey];
 
-    data.autocompleteHandler = createAutocompleteHandler(screenLayout.fields[layoutKey], screenLayout.fields, entity, layoutPropertiesMap[layoutKey]?.autocompleteHandlerData)
+    Object.assign(data, createAutocompleteHandler(screenLayout.fields[layoutKey], screenLayout.fields, entity, layoutPropertiesMap[layoutKey]?.autocompleteHandlerData))
 
     return data;
   };

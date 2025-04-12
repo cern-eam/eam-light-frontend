@@ -21,12 +21,14 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
         return;
     } 
 
-    return (hint, config) => {
-        const { lovName, inputVars, inputFields, returnFields } = JSON.parse(elementInfo.onLookup)
+    const { lovName, inputVars, inputFields, returnFields } = JSON.parse(elementInfo.onLookup)
 
-        const gridRequest = new GridRequest(lovName, GridTypes.LOV)
+    const autocompleteHandler = (hint, config) => {
+
+        try {
+        
+        const gridRequest = new GridRequest(lovName, autocompleteHandlerData?.gridType ?? GridTypes.LOV)
         gridRequest.setRowCount(10)
-
         Object.entries(inputFields ?? {}).forEach(([key, value]) => { 
             gridRequest.addParam(key, get(entity, fields[value]?.xpath))
         });
@@ -34,11 +36,20 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
         Object.entries(inputVars ?? {}).forEach(([key, value]) => { 
             gridRequest.addParam(key, value)
         });
+        
+        gridRequest.addParam("param.pagemode", "view")
 
-        //gridRequest.addParam("param.pagemode", "view")
-
-        (autocompleteHandlerData?.searchKeys ?? Object.keys(returnFields)).forEach(returnField => gridRequest.addFilter(returnField, typeof hint === "string" ? hint : "", "BEGINS", "OR"))
-        console.log('firing', gridRequest, autocompleteHandlerData)
-        return getGridData(gridRequest).then(response => transformResponse(response, autocompleteHandlerData.resultMap));
+        const searchFields = autocompleteHandlerData?.searchKeys ?? Object.keys(returnFields ?? {});
+        searchFields.forEach(searchField => gridRequest.addFilter(searchField, typeof hint === "string" ? hint : "", "BEGINS", "OR"))
+        
+        return getGridData(gridRequest, config).then(response => transformResponse(response, autocompleteHandlerData.resultMap));
+    } catch (error) {
+        console.error('error', error)
     }
+    }
+
+    const renderDependencies = Object.values(inputFields ?? {}).map(inputField => get(entity, fields[inputField]?.xpath))
+
+    return {autocompleteHandler, renderDependencies}
+
 }

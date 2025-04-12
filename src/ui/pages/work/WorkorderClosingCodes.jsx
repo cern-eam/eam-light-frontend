@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import WSWorkorders from "../../../tools/WSWorkorders";
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
-import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 
 const WorkorderClosingCodes = props => {
 
@@ -21,6 +20,7 @@ const WorkorderClosingCodes = props => {
                 {...register('problemcode')}
                 // autocompleteHandler={WSWorkorders.getWorkOrderProblemCodeValues}
                 // autocompleteHandlerParams={[workorder.classCode, equipment?.classCode, workorder.equipmentCode]}
+                renderDependencies = { [workorder.EQUIPMENTID.EQUIPMENTCODE]}
                 />
 
             <EAMSelect 
