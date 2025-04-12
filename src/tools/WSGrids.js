@@ -9,7 +9,6 @@ export const getGridDataNative = (gridRequest, config = {}) => WS._post('/proxy/
 export const getGridData = (gridRequest, config = {}) => getGridDataNative(gridRequest, config).then(transformNativeResponse);
 
 export function transformResponse(response, keyMap, additionalData = []) {
-    console.log('r', response, keyMap)
     return {
         body: {
             data: [

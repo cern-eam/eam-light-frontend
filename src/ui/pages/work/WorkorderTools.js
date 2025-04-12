@@ -1,3 +1,4 @@
+import { GridTypes } from "../../../tools/entities/GridRequest";
 import { assignCustomFieldFromCustomField, AssignmentType, assignUserDefinedFields, assignValues } from "../EntityTools";
 import { get } from "lodash";
 
@@ -77,10 +78,11 @@ export const layoutPropertiesMap = {
         autocompleteHandlerData: { 
             resultMap: {
                 code: "equipmentcode",
-                desc: "equipmentdesc",
+                desc: "description_obj",
                 org: "equiporganization"
             }, 
-            searchKeys: ["equipmentcode", "equipmentdesc"]
+            searchKeys: ["equipmentcode"],
+            gridType: GridTypes.LIST
         }
     },
 
