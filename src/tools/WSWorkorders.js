@@ -68,57 +68,6 @@ class WSWorkorders {
         return WS._get(`/wolists/typecodes?userGroup=${encodeURIComponent(userGroup)}`, config)
     }
 
-     getWorkOrderProblemCodeValues(woclass, objclass, equipment, config = {}) {
-        return WS._get('/wolists/problemcodes', {
-            ...config,
-            params: {
-                ...config.params,
-                woclass,
-                objclass,
-                equipment
-            }
-        });
-    }
-
-    getWorkOrderActionCodeValues(objclass, failurecode, problemcode, causecode, equipment, config = {}) {
-        return WS._get('/wolists/actioncodes', {
-            ...config,
-            params: {
-                ...config.params,
-                objclass,
-                failurecode,
-                problemcode,
-                causecode,
-                equipment
-            }
-        });
-    }
-
-    getWorkOrderCauseCodeValues(objclass, failurecode, problemcode, equipment, config = {}) {
-        return WS._get('/wolists/causecodes', {
-            ...config,
-            params: {
-                ...config.params,
-                objclass,
-                failurecode,
-                problemcode,
-                equipment
-            }
-        });
-    }
-
-    getWorkOrderFailureCodeValues(objclass, problemcode, equipment, config = {}) {
-        return WS._get('/wolists/failurecodes', {
-            ...config,
-            params: {
-                ...config.params,
-                objclass,
-                problemcode,
-                equipment
-            }
-        });
-    }
-
     getWorkOrderPriorities(config = {}) {
         let gridRequest = new GridRequest("LVJBPR", GridTypes.LOV)
         gridRequest.addFilter("description", "Tou", "NOTCONTAINS");
@@ -333,7 +282,6 @@ class WSWorkorders {
         gridRequest.sortBy("acssched")
         return getGridData(gridRequest).then(response => transformResponse(response, this.scheduledWorkOrderMapper));
     }
-
 
 }
 

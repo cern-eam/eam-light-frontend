@@ -80,8 +80,8 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
             gridRequest.addParam(key, value)
         });
         
-        gridRequest.addParam("param.pagemode", "view")
-
+        gridRequest.addParam("param.pagemode", "display")
+        gridRequest.addParam("param.group", 'R5CERN') // TODO remove
         //
         //
         //
