@@ -103,13 +103,9 @@ function WorkorderGeneral(props) {
         options={statuses}
       />
 
-      <EAMSelect
-        {...register("priority")} autocompleteHandler={WSWorkorders.getWorkOrderPriorities}
-      />
+      <EAMSelect {...register("priority")} autocompleteHandler={WSWorkorders.getWorkOrderPriorities}/>
 
-      <EAMAutocomplete
-        {...register("woclass")}
-      />
+      <EAMAutocomplete {...register("woclass")} />
 
       <EAMAutocomplete
         {...register("standardwo")}
@@ -123,7 +119,7 @@ function WorkorderGeneral(props) {
 
       <EAMAutocomplete
         {...register("costcode")}
-        autocompleteHandler={WSWorkorders.autocompleteCostCode}
+        //autocompleteHandler={WSWorkorders.autocompleteCostCode}
       />
 
       <EAMTextField {...register("targetvalue")} />
