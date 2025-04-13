@@ -244,8 +244,11 @@ const useEntity = (params) => {
   const initNewEntity = () => {
     setLoading(true);
 
-    WS.new()
-      .then((response) => {
+    Promise.all([
+      WS.new(), 
+      getCustomFields(entityCode, "*")
+    ])
+      .then(([response, customFields]) => {
         
         resetErrorMessages();
         setNewEntity(true);
@@ -253,6 +256,7 @@ const useEntity = (params) => {
         setReadOnly(!screenPermissions.creationAllowed);
 
         let newEntity = response.body.Result.ResultData;
+        newEntity.USERDEFINEDAREA = customFields.body.data;
         newEntity = assignDefaultValues(newEntity, screenLayout);
         newEntity = assignQueryParamValues(newEntity, screenLayout);
         
