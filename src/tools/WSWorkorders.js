@@ -31,26 +31,12 @@ class WSWorkorders {
     }
 
     getStandardWorkOrder(code, config = {}) {
-        return WS._get('/stdworkorders/' + code, config);
+        return WS._get('/proxy/standardworkorders/' + code, config);
     }
 
     autocompleteCostCode = (filter, config = {}) => {
         filter = encodeURIComponent(filter);
         return WS._get('/autocomplete/wo/costcode/' + filter, config);
-    };
-
-    autocompleteStandardWorkOrder = (userGroup, equipmentClass, equipmentCategory, filter, config = {}) => {
-        filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/standardworkorder?s=${filter}`, {
-            ...config,
-            params: {
-                ...config.params,
-                userGroup,
-                equipmentClass,
-                equipmentCategory
-            }
-        }
-        );
     };
 
     autocompleteUsersWithAccess = (wo, hint = null, config = {}) => {

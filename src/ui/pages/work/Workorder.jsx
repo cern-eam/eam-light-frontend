@@ -18,7 +18,6 @@ import WorkorderClosingCodes from "./WorkorderClosingCodes";
 import WorkorderGeneral from "./WorkorderGeneral";
 import WorkorderScheduling from "./WorkorderScheduling";
 import {
-  assignStandardWorkOrderValues,
   isReadOnlyCustomHandler,
   isRegionAvailable,
   layoutPropertiesMap,
@@ -59,7 +58,6 @@ import useWorkOrderStore from "../../../state/useWorkOrderStore";
 import { isLocalAdministrator } from "../../../state/utils";
 import AssetNCRs from '../../pages/equipment/components/EquipmentNCRs';
 import CustomFields from "../../components/customfields/CustomFields";
-import { set } from "lodash";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -129,7 +127,7 @@ const Workorder = () => {
     },
     handlers: {
       "STANDARDWO.STDWOCODE": onChangeStandardWorkOrder,
-      equipmentCode: onChangeEquipment,
+      "EQUIPMENTID.EQUIPMENTCODE": onChangeEquipment,
       "WORKORDERID.DESCRIPTION": onChangeDescription
     },
     isReadOnlyCustomHandler: isReadOnlyCustomHandler,
@@ -169,6 +167,7 @@ const Workorder = () => {
   }, [workorder?.equipmentCode]);
 
   function onChangeEquipment(equipmentCode) {
+    console.log('eqp', equipmentCode, workorder)
     if (!equipmentCode) {
       return;
     }
@@ -199,8 +198,11 @@ const Workorder = () => {
   function onChangeStandardWorkOrder(standardWorkOrderCode) {
     if (standardWorkOrderCode) {
       WSWorkorder.getStandardWorkOrder(standardWorkOrderCode)
-        .then((response) =>
-          setWorkOrder((oldWorkOrder) => assignStandardWorkOrderValues(oldWorkOrder, response.body.data))
+        .then((response) => {
+          console.log(response.body.Result.ResultData.StandardWorkOrder)
+          setWorkOrder(response.body.Result.ResultData.StandardWorkOrder ?? {})
+        }
+          //setWorkOrder((oldWorkOrder) => assignStandardWorkOrderValues(oldWorkOrder, response.body.data))
         )
         .catch(console.error);
     }
@@ -707,8 +709,8 @@ const Workorder = () => {
           newEntity={newEntity}
           entityScreen={screenPermissions}
           entityName="Work Order"
-          entityKeyCode={workorder.JOBNUM ?? workorder.WORKORDERID.JOBNUM}
-          organization={workorder.ORGANIZATIONID?.ORGANIZATIONCODE ?? workorder.WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE}
+          entityKeyCode={workorder.WORKORDERID?.JOBNUM ?? ""}
+          organization={workorder.WORKORDERID?.ORGANIZATIONID?.ORGANIZATIONCODE}
           saveHandler={saveHandler}
           newHandler={newHandler}
           deleteHandler={deleteHandler}
