@@ -37,6 +37,17 @@ export const assignDefaultValues = (entity, layout) => {
     return entity;
 };
 
+
+export const fireHandlers = (entity, layout, handlers) => {
+    let queryParams = queryString.parse(window.location.search);
+    Object.entries(queryParams).forEach(([key, value]) => {
+        const elementInfo = layout.fields[key]
+        if (elementInfo && elementInfo.xpath && value) {
+          handlers?.[elementInfo.xpath]?.(value);
+        }
+      })
+  };
+
  const generateResultMap = (returnFields = {}) => ({
         code: Object.values(returnFields).find(value => value.includes('code')),
         desc: Object.values(returnFields).find(value => value.includes('desc')) ?? "des_text",

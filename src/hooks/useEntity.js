@@ -5,7 +5,6 @@ import queryString from "query-string";
 import set from "set-value";
 import {
   assignCustomFieldFromCustomField,
-  fireHandlers,
   isDepartmentReadOnly,
   isMultiOrg,
   getElementInfoFromCustomFields,
@@ -29,7 +28,7 @@ import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
 import useSnackbarStore from "../state/useSnackbarStore";
 import { getCustomFields } from "../tools/WSCustomFields";
 import { fromEAMDate, fromEAMNumber, toEAMDate } from "../ui/pages/EntityTools";
-import { assignDefaultValues, assignQueryParamValues, convertValue, createAutocompleteHandler } from "./tools";
+import { assignDefaultValues, assignQueryParamValues, convertValue, createAutocompleteHandler, fireHandlers } from "./tools";
 
 const useEntity = (params) => {
   const {
@@ -40,8 +39,10 @@ const useEntity = (params) => {
     entityDesc,
     entityURL,
     entityCodeProperty,
+    entityOrgProperty,
     entityProperty,
     screenProperty,
+    resultDataCodeProperty,
     layoutPropertiesMap,
     isReadOnlyCustomHandler,
     onMountHandler,
@@ -143,10 +144,8 @@ const useEntity = (params) => {
 
     WS.create(entityToCreate)
       .then((response) => {
-        const entityCode = response.body.data;
-        showNotification(
-          entityDesc + " " + entityCode + " has been successfully created."
-        );
+        const entityCode = response.body.Result.ResultData[resultDataCodeProperty];
+        showNotification(response.body.Result.InfoAlert.Message);
         commentsComponent.current?.createCommentForNewEntity(entityCode);
         // Read after the creation (and append the organization in multi-org mode)
         history.push(
@@ -229,12 +228,10 @@ const useEntity = (params) => {
 
   const deleteEntity = () => {
     setLoading(true);
-
-    WS.delete(code)
+    
+    WS.delete(get(entity,entityCodeProperty), get(entity,entityOrgProperty))
       .then((response) => {
-        showNotification(
-          `${entityDesc} ${entity[entityCodeProperty]} has been successfully deleted.`
-        );
+        showNotification(response.body.Result.InfoAlert.Message);
         history.push(process.env.PUBLIC_URL + entityURL);
       })
       .catch((error) => {
@@ -260,7 +257,7 @@ const useEntity = (params) => {
         newEntity = assignQueryParamValues(newEntity, screenLayout);
         
         setEntity(newEntity);
-        fireHandlers(newEntity, getHandlers());
+        fireHandlers(newEntity, screenLayout, getHandlers());
         document.title = "New " + entityDesc;
         postActions.new(newEntity);
       })
