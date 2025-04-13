@@ -4,11 +4,7 @@ import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
 import {
-  assignDefaultValues,
-  assignQueryParamValues,
   assignCustomFieldFromCustomField,
-  assignCustomFieldFromObject,
-  AssignmentType,
   fireHandlers,
   isDepartmentReadOnly,
   isMultiOrg,
@@ -33,7 +29,7 @@ import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
 import useSnackbarStore from "../state/useSnackbarStore";
 import { getCustomFields } from "../tools/WSCustomFields";
 import { fromEAMDate, fromEAMNumber, toEAMDate } from "../ui/pages/EntityTools";
-import { convertValue, createAutocompleteHandler } from "./tools";
+import { assignDefaultValues, assignQueryParamValues, convertValue, createAutocompleteHandler } from "./tools";
 
 const useEntity = (params) => {
   const {
@@ -260,13 +256,9 @@ const useEntity = (params) => {
         setReadOnly(!screenPermissions.creationAllowed);
 
         let newEntity = response.body.Result.ResultData;
-
-        // newEntity = assignDefaultValues(
-        //   newEntity,
-        //   screenLayout,
-        //   layoutPropertiesMap
-        // );
-        // newEntity = assignQueryParamValues(newEntity);
+        newEntity = assignDefaultValues(newEntity, screenLayout);
+        newEntity = assignQueryParamValues(newEntity, screenLayout);
+        
         setEntity(newEntity);
         fireHandlers(newEntity, getHandlers());
         document.title = "New " + entityDesc;

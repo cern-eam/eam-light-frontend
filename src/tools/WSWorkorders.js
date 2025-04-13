@@ -19,7 +19,7 @@ class WSWorkorders {
     }
 
     createWorkOrder(workOrder, config = {}) {
-        return WS._post('/workorders/', workOrder, config);
+        return WS._post('/proxy/workorders/', workOrder, config);
     }
 
     updateWorkOrder(workOrder, config = {}) {

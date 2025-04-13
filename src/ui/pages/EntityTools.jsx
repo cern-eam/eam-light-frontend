@@ -78,30 +78,6 @@ export const assignUserDefinedFields = (
   return newEntity;
 };
 
-// assigns the custom fields from an object to the ones that are present in the entity
-// if the specified custom fields are not present in the entity, nothing is done
-export const assignCustomFieldFromObject = (
-  entity,
-  object = {},
-  assignmentType
-) => {
-  throwIfInvalidAssignmentType(assignmentType);
-  const { sourceNotEmpty, destinationEmpty } = assignmentType;
-
-  const newEntity = cloneEntity(entity);
-  let expr = newEntity.customField.filter((cf) => object[cf.code]);
-
-  if (sourceNotEmpty) {
-    expr = expr.filter((cf) => object[cf.code]);
-  }
-
-  if (destinationEmpty) {
-    expr = expr.filter((cf) => !cf.value);
-  }
-
-  expr.forEach((cf) => (cf.value = object[cf.code]));
-  return newEntity;
-};
 
 // assigns the custom fields from the customField object to the entity, merging old values
 export const assignCustomFieldFromCustomField = (
@@ -150,32 +126,6 @@ export const assignValues = (entity, values = {}, assignmentType) => {
   return newEntity;
 };
 
-export const assignQueryParamValues = (
-  entity,
-  assignmentType = AssignmentType.FORCED
-) => {
-  throwIfInvalidAssignmentType(assignmentType);
-  let queryParams = queryString.parse(window.location.search);
-
-  const caseSensitiveQueryParams = toSensitive(entity, queryParams);
-
-  // delete values that we cannot touch
-  delete caseSensitiveQueryParams.userDefinedFields;
-  delete caseSensitiveQueryParams.customField;
-
-  entity = assignValues(entity, caseSensitiveQueryParams, assignmentType);
-  entity = assignCustomFieldFromObject(entity, queryParams, assignmentType);
-
-  const userDefinedFields = Object.assign(
-    {},
-    ...Object.entries(queryParams)
-      .filter(([key]) => key.toLowerCase().startsWith("udf")) // only include keys prepended with udf
-      .map(([key, value]) => ({ [key.toLowerCase()]: value }))
-  ); // remove udf substring at the beginning from key
-
-  return assignUserDefinedFields(entity, userDefinedFields, assignmentType);
-};
-
 export const fireHandlers = (entity, handlers) => {
   let queryParams = queryString.parse(window.location.search);
   const caseSensitiveQueryParams = toSensitive(entity, queryParams);
@@ -196,42 +146,6 @@ export const toSensitive = (target, insensitive) => {
       .map(([key, value]) => [mapping[key.toLowerCase()], value])
       .filter(([key]) => key !== undefined)
   );
-};
-
-export const assignDefaultValues = (
-  entity,
-  layout,
-  layoutPropertiesMap,
-  assignmentType = AssignmentType.FORCED
-) => {
-  throwIfInvalidAssignmentType(assignmentType);
-
-  // Create an entity-like object with the default values from the screen's layout
-  let defaultValues = {};
-
-  if (layout && layoutPropertiesMap) {
-    defaultValues = Object.values(layout.fields)
-      .filter(
-        (field) => field.defaultValue && layoutPropertiesMap[field.elementId]
-      )
-      .reduce(
-        (result, field) =>
-          set(
-            result,
-            layoutPropertiesMap[field.elementId],
-            field.defaultValue === "NULL" ? "" : field.defaultValue
-          ),
-        {}
-      );
-  }
-
-  const userDefinedFields = defaultValues.userDefinedFields;
-  delete defaultValues.userDefinedFields;
-
-  entity = assignValues(entity, defaultValues, assignmentType);
-  entity = assignUserDefinedFields(entity, userDefinedFields, assignmentType);
-
-  return entity;
 };
 
 export const getTabAvailability = (tabs, tabCode) => {
@@ -493,6 +407,7 @@ export const getCustomTabRegions = (
 
 
   export const toEAMNumber = (input) => {
+    console.log('to number', input)
     const num = Number(input);
   
     if (isNaN(num)) {
@@ -551,7 +466,6 @@ export const getCustomTabRegions = (
 
 
   export const toEAMDate = (isoString, timezone = "+0000") => {
-    console.log("to", isoString)
     // Parse the UTC ISO string
     const utcDate = new Date(isoString);
   

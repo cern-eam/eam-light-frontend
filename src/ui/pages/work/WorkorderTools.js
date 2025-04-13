@@ -79,7 +79,7 @@ export const layoutPropertiesMap = {
             resultMap: {
                 code: "equipmentcode",
                 desc: "description_obj",
-                org: "equiporganization"
+                organization: "equiporganization"
             }, 
             searchKeys: ["equipmentcode"],
             gridType: GridTypes.LIST
@@ -88,7 +88,16 @@ export const layoutPropertiesMap = {
 
     location: {
         desc: "LOCATIONID.DESCRIPTION",
-        org: "LOCATIONID.ORGANIZATIONID.ORGANIZATIONCODE"
+        org: "LOCATIONID.ORGANIZATIONID.ORGANIZATIONCODE",
+        autocompleteHandlerData: { 
+            resultMap: {
+                code: "equipmentcode",
+                desc: "equipmentdesc",
+                organization: "equiporganization"
+            }, 
+            searchKeys: ["equipmentcode"],
+            gridType: GridTypes.LIST
+        }
     },
 
     department: {
