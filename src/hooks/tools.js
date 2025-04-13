@@ -2,6 +2,8 @@ import { get } from "lodash";
 import { toEAMDate, toEAMNumber } from "../ui/pages/EntityTools";
 import GridRequest, { GridTypes } from "../tools/entities/GridRequest";
 import { getGridData, transformResponse } from "../tools/WSGrids";
+import queryString from "query-string";
+import set from "set-value";
 
 export const convertValue = (value, type) => {
     switch(type) {
@@ -15,7 +17,33 @@ export const convertValue = (value, type) => {
     }
 }
 
-export const createAutocompleteHandler = (elementInfo, fields, entity, autocompleteHandlerData) => {
+export const assignQueryParamValues = (entity, screenLayout) => {
+    let queryParams = queryString.parse(window.location.search, screenLayout);
+    Object.entries(queryParams).forEach(([key, value]) => {
+      const elementInfo = screenLayout.fields[key]
+      if (elementInfo && elementInfo.xpath && value) {
+        set(entity, elementInfo.xpath, convertValue(value, elementInfo.fieldType))
+      }
+    })
+    // TODO: custom fields, date and numbers
+    return entity
+};
+
+export const assignDefaultValues = (entity, layout) => {
+    const exclusions = ['esthrs', 'pplreq']
+    Object.values(layout.fields)
+        .filter(field => field.defaultValue && field.xpath && !exclusions.includes(field.elementId))
+        .forEach(field => set(entity, field.xpath, field.defaultValue === "NULL" ? null : field.defaultValue))
+    return entity;
+};
+
+ const generateResultMap = (returnFields = {}) => ({
+        code: Object.values(returnFields).find(value => value.includes('code')),
+        desc: Object.values(returnFields).find(value => value.includes('desc')),
+        organization: Object.values(returnFields).find(value => value.includes('organization'))
+    })
+
+export const createAutocompleteHandler = (elementInfo, fields, entity, autocompleteHandlerData = {}) => {
 
     if (!elementInfo || !elementInfo.onLookup || elementInfo.onLookup == "{}" ) {
         return;
@@ -29,6 +57,10 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
         
         const gridRequest = new GridRequest(lovName, autocompleteHandlerData?.gridType ?? GridTypes.LOV)
         gridRequest.setRowCount(10)
+        
+        //
+        // Parameters 
+        //
         Object.entries(inputFields ?? {}).forEach(([key, value]) => { 
             gridRequest.addParam(key, get(entity, fields[value]?.xpath))
         });
@@ -39,10 +71,13 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
         
         gridRequest.addParam("param.pagemode", "view")
 
-        const searchFields = autocompleteHandlerData?.searchKeys ?? Object.keys(returnFields ?? {});
+        //
+        //
+        //
+        const searchFields = autocompleteHandlerData?.searchKeys ?? Object.values(returnFields ?? {});
         searchFields.forEach(searchField => gridRequest.addFilter(searchField, typeof hint === "string" ? hint : "", "BEGINS", "OR"))
         
-        return getGridData(gridRequest, config).then(response => transformResponse(response, autocompleteHandlerData.resultMap));
+        return getGridData(gridRequest, config).then(response => transformResponse(response, autocompleteHandlerData.resultMap ?? generateResultMap(returnFields)));
     } catch (error) {
         console.error('error', error)
     }

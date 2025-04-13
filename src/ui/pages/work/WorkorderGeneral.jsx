@@ -75,10 +75,7 @@ function WorkorderGeneral(props) {
         }
       />
 
-      <EAMAutocomplete
-        {...register("location")}
-        autocompleteHandler={WS.autocompleteLocation}
-      />
+      <EAMAutocomplete {...register("location")}/>
 
       <EAMAutocomplete
         {...register("department")}

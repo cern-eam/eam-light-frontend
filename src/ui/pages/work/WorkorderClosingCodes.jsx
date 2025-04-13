@@ -1,5 +1,4 @@
-import React, {Component} from 'react';
-import WSWorkorders from "../../../tools/WSWorkorders";
+import React from 'react';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 
 const WorkorderClosingCodes = props => {
@@ -16,27 +15,13 @@ const WorkorderClosingCodes = props => {
 
     return (
         <React.Fragment>
-            <EAMSelect 
-                {...register('problemcode')}
-                // autocompleteHandler={WSWorkorders.getWorkOrderProblemCodeValues}
-                // autocompleteHandlerParams={[workorder.classCode, equipment?.classCode, workorder.equipmentCode]}
-                renderDependencies = { [workorder.EQUIPMENTID.EQUIPMENTCODE]}
-                />
+            <EAMSelect {...register('problemcode')} />
 
-            <EAMSelect 
-                {...register('failurecode')}
-                autocompleteHandler={WSWorkorders.getWorkOrderFailureCodeValues}
-                autocompleteHandlerParams={[equipment?.classCode, workorder.problemCode, workorder.equipmentCode]}/>
+            <EAMSelect {...register('failurecode')} />
 
-            <EAMSelect 
-                {...register('causecode')}
-                autocompleteHandler={WSWorkorders.getWorkOrderCauseCodeValues}
-                autocompleteHandlerParams={[equipment?.classCode, workorder.failureCode, workorder.problemCode, workorder.equipmentCode]}/>
+            <EAMSelect {...register('causecode')} />
 
-            <EAMSelect 
-                {...register('actioncode')}
-                autocompleteHandler={WSWorkorders.getWorkOrderActionCodeValues}
-                autocompleteHandlerParams={[equipment?.classCode,  workorder.failureCode, workorder.problemCode, workorder.causeCode, workorder.equipmentCode]}/>
+            <EAMSelect {...register('actioncode')} />
 
         </React.Fragment>
     )
