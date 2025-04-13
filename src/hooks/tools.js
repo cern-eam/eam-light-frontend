@@ -39,7 +39,7 @@ export const assignDefaultValues = (entity, layout) => {
 
  const generateResultMap = (returnFields = {}) => ({
         code: Object.values(returnFields).find(value => value.includes('code')),
-        desc: Object.values(returnFields).find(value => value.includes('desc')),
+        desc: Object.values(returnFields).find(value => value.includes('desc')) ?? "des_text",
         organization: Object.values(returnFields).find(value => value.includes('organization'))
     })
 
@@ -55,7 +55,7 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
 
         try {
         
-        const gridRequest = new GridRequest(lovName, autocompleteHandlerData?.gridType ?? GridTypes.LOV)
+        const gridRequest = new GridRequest(lovName, autocompleteHandlerData.gridType ?? GridTypes.LOV)
         gridRequest.setRowCount(10)
         
         //
@@ -74,7 +74,7 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
         //
         //
         //
-        const searchFields = autocompleteHandlerData?.searchKeys ?? Object.values(returnFields ?? {});
+        const searchFields = autocompleteHandlerData.searchKeys ?? Object.values(returnFields ?? {});
         searchFields.forEach(searchField => gridRequest.addFilter(searchField, typeof hint === "string" ? hint : "", "BEGINS", "OR"))
         
         return getGridData(gridRequest, config).then(response => transformResponse(response, autocompleteHandlerData.resultMap ?? generateResultMap(returnFields)));
