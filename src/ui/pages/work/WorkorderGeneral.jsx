@@ -107,15 +107,7 @@ function WorkorderGeneral(props) {
 
       <EAMAutocomplete {...register("woclass")} />
 
-      <EAMAutocomplete
-        {...register("standardwo")}
-        autocompleteHandler={WSWorkorders.autocompleteStandardWorkOrder}
-        autocompleteHandlerParams={[
-          userGroup,
-          equipment?.classCode,
-          equipment?.categoryCode,
-        ]}
-      />
+      <EAMAutocomplete {...register("standardwo")} />
 
       <EAMAutocomplete
         {...register("costcode")}

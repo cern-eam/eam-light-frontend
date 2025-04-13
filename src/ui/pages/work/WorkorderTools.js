@@ -118,9 +118,11 @@ export const layoutPropertiesMap = {
         }
     },
 
-    problemcode: {
+    standardwo: {
         autocompleteHandlerData: { 
-            resultMap: {code: "problemcode", desc: "description"}
+            searchKeys: ["standardwo"],
+            resultMap: {code: "standardwo", desc: "standardwodesc", organization: "standardwoorg"},
+            gridType: GridTypes.LIST
         }
     }
 

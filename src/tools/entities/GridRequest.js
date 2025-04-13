@@ -37,6 +37,9 @@ export default class GridRequest {
       };
     }
 
+    this.LOV.LOV_PARAMETERS.LOV_PARAMETER = this.LOV.LOV_PARAMETERS.LOV_PARAMETER
+    .filter(param => param.ALIAS_NAME !== alias);
+    
     this.LOV.LOV_PARAMETERS.LOV_PARAMETER.push({
       ALIAS_NAME: alias,
       VALUE: value

@@ -128,7 +128,7 @@ const Workorder = () => {
       copy: postCopy,
     },
     handlers: {
-      standardWO: onChangeStandardWorkOrder,
+      "STANDARDWO.STDWOCODE": onChangeStandardWorkOrder,
       equipmentCode: onChangeEquipment,
       "WORKORDERID.DESCRIPTION": onChangeDescription
     },
