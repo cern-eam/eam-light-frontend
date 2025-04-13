@@ -26,8 +26,8 @@ class WSWorkorders {
         return WS._put('/proxy/workorders/', workOrder, config);
     }
 
-    deleteWorkOrder(number, config = {}) {
-        return WS._delete('/workorders/' + number, config);
+    deleteWorkOrder(number, organization, config = {}) {
+        return WS._delete('/proxy/workorders/' + number+ '%23' + organization, config);
     }
 
     getStandardWorkOrder(code, config = {}) {

@@ -126,13 +126,6 @@ export const assignValues = (entity, values = {}, assignmentType) => {
   return newEntity;
 };
 
-export const fireHandlers = (entity, handlers) => {
-  let queryParams = queryString.parse(window.location.search);
-  const caseSensitiveQueryParams = toSensitive(entity, queryParams);
-  for (const param in caseSensitiveQueryParams) {
-    handlers?.[param]?.(caseSensitiveQueryParams[param]);
-  }
-};
 
 // this function converts an object with case insensitive keys to an object with
 // case sensitive keys, based on a target object

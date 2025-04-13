@@ -59,6 +59,7 @@ import useWorkOrderStore from "../../../state/useWorkOrderStore";
 import { isLocalAdministrator } from "../../../state/utils";
 import AssetNCRs from '../../pages/equipment/components/EquipmentNCRs';
 import CustomFields from "../../components/customfields/CustomFields";
+import { set } from "lodash";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -129,13 +130,16 @@ const Workorder = () => {
     handlers: {
       standardWO: onChangeStandardWorkOrder,
       equipmentCode: onChangeEquipment,
+      "WORKORDERID.DESCRIPTION": onChangeDescription
     },
     isReadOnlyCustomHandler: isReadOnlyCustomHandler,
     entityCode: "EVNT",
     entityDesc: "Work Order",
     entityURL: "/workorder/",
     entityCodeProperty: "WORKORDERID.JOBNUM",
+    entityOrgProperty: "WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE",
     entityProperty: "WorkOrder",
+    resultDataCodeProperty: "JOBNUM",
     screenProperty: "workOrderScreen",
     layoutPropertiesMap,
     onMountHandler: mountHandler,
@@ -200,6 +204,10 @@ const Workorder = () => {
         )
         .catch(console.error);
     }
+  }
+
+  function onChangeDescription() {
+    updateWorkorderProperty('WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE', '*')
   }
 
   const getRegions = () => {
