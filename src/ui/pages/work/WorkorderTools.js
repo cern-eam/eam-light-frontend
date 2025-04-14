@@ -79,11 +79,13 @@ export const layoutPropertiesMap = {
             resultMap: {
                 code: "equipmentcode",
                 desc: "description_obj",
-                organization: "equiporganization"
+                organization: "equiporganization",
+                equipmentType: "equipmentrtype"
             }, 
             searchKeys: ["equipmentcode"],
             gridType: GridTypes.LIST
-        }
+        },
+        //onChange: (v1, v2) => console.log(v1, v2)
     },
 
     location: {
