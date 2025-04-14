@@ -22,6 +22,21 @@ class WSEquipment {
         return getGridData(gridRequest).then(response => transformResponse(response, WSWorkorders.myWorkOrderMapper));
     }
 
+    getSparePart(originalEquipment) {
+       let gridRequest = new GridRequest("OSOBJA", GridTypes.LIST); //we only display 100 records per default
+        if(!originalEquipment.partCode) {
+            return;
+        }
+        gridRequest.addFilter("equipmentno", originalEquipment.code, "!=");
+        gridRequest.addFilter("part", originalEquipment.partCode, "=");
+        gridRequest.addFilter("statusrcode", 'C', "!=");
+        gridRequest.addFilter("position", '', "IS EMPTY");
+        gridRequest.addFilter("parentasset", '', "IS EMPTY");
+        gridRequest.addFilter("outofservice", '-', "NOT_SELECTED");
+
+        return getGridData(gridRequest).then(response => response.body.data);
+    }
+
     getEquipmentEvents(equipmentCode, equipmentType, config = {}) {
         return WS._get(`/equipment/events?c=${equipmentCode}&t=${equipmentType}`, config);
     }
