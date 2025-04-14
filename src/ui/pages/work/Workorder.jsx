@@ -127,7 +127,7 @@ const Workorder = () => {
     },
     handlers: {
       "STANDARDWO.STDWOCODE": onChangeStandardWorkOrder,
-      "EQUIPMENTID.EQUIPMENTCODE": onChangeEquipment,
+      "EQUIPMENTID.EQUIPMENTCODE,EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE": onChangeEquipment,
       "WORKORDERID.DESCRIPTION": onChangeDescription
     },
     isReadOnlyCustomHandler: isReadOnlyCustomHandler,
@@ -167,32 +167,32 @@ const Workorder = () => {
   }, [workorder?.equipmentCode]);
 
   function onChangeEquipment(equipmentCode) {
-    console.log('eqp', equipmentCode, workorder)
-    if (!equipmentCode) {
-      return;
-    }
+    console.log('eqp', equipmentCode)
+    // if (!equipmentCode) {
+    //   return;
+    // }
 
-    Promise.all([WSEquipment.getEquipment(equipmentCode), WSWorkorders.getWOEquipLinearDetails(equipmentCode)])
-      .then((response) => {
-        const equipment = response[0].body.data;
-        const linearDetails = response[1].body.data;
+    // Promise.all([WSEquipment.getEquipment(equipmentCode), WSWorkorders.getWOEquipLinearDetails(equipmentCode)])
+    //   .then((response) => {
+    //     const equipment = response[0].body.data;
+    //     const linearDetails = response[1].body.data;
 
-        setWorkOrder((oldWorkOrder) => ({
-          ...oldWorkOrder,
-          departmentCode: equipment.departmentCode,
-          departmentDesc: equipment.departmentDesc,
-          locationCode: equipment.hierarchyLocationCode,
-          locationDesc: equipment.hierarchyLocationDesc,
-          costCode: equipment.costCode,
-          costCodeDesc: equipment.costCodeDesc,
-          warranty: linearDetails.ISWARRANTYACTIVE,
-        }));
+    //     setWorkOrder((oldWorkOrder) => ({
+    //       ...oldWorkOrder,
+    //       departmentCode: equipment.departmentCode,
+    //       departmentDesc: equipment.departmentDesc,
+    //       locationCode: equipment.hierarchyLocationCode,
+    //       locationDesc: equipment.hierarchyLocationDesc,
+    //       costCode: equipment.costCode,
+    //       costCodeDesc: equipment.costCodeDesc,
+    //       warranty: linearDetails.ISWARRANTYACTIVE,
+    //     }));
 
-        if (linearDetails.ISWARRANTYACTIVE === "true") {
-          showWarning("This equipment is currently under warranty.");
-        }
-      })
-      .catch(console.error);
+    //     if (linearDetails.ISWARRANTYACTIVE === "true") {
+    //       showWarning("This equipment is currently under warranty.");
+    //     }
+    //   })
+    //   .catch(console.error);
   }
 
   function onChangeStandardWorkOrder(standardWorkOrderCode) {
