@@ -28,7 +28,7 @@ import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
 import useSnackbarStore from "../state/useSnackbarStore";
 import { getCustomFields } from "../tools/WSCustomFields";
 import { fromEAMDate, fromEAMNumber, toEAMDate } from "../ui/pages/EntityTools";
-import { assignDefaultValues, assignQueryParamValues, convertValue, createAutocompleteHandler, fireHandlers } from "./tools";
+import { assignDefaultValues, assignQueryParamValues, convertValue, createAutocompleteHandler } from "./tools";
 
 const useEntity = (params) => {
   const {
@@ -62,6 +62,8 @@ const useEntity = (params) => {
   const history = useHistory();
   const abortController = useRef(null);
   const commentsComponent = useRef(null);
+
+  const pendingMultiKeyHandlersRef = useRef({});
 
   const { showNotification, showError, showWarning, handleError } =
     useSnackbarStore();
@@ -258,10 +260,10 @@ const useEntity = (params) => {
         let newEntity = response.body.Result.ResultData;
         newEntity.USERDEFINEDAREA = customFields.body.data;
         newEntity = assignDefaultValues(newEntity, screenLayout);
-        newEntity = assignQueryParamValues(newEntity, screenLayout);
-        
         setEntity(newEntity);
-        fireHandlers(newEntity, screenLayout, getHandlers());
+
+        assignQueryParamValues(screenLayout, updateEntityProperty);
+        //fireHandlers(newEntity, screenLayout, getHandlers());
         document.title = "New " + entityDesc;
         postActions.new(newEntity);
       })
@@ -311,12 +313,29 @@ const useEntity = (params) => {
   };
 
   const updateEntityProperty = (key, value, type) => {
+    
     setEntity((prevEntity) => set({ ...prevEntity }, key, convertValue(value, type)));
-    // Fire handler for the 'key'
-    getHandlers()[key]?.(value);
-    //
-    if (!key.endsWith("Desc")) {
-      setIsModified(true);
+
+    //getHandlers()[key]?.(value);
+
+    const pendingMultiKeyHandlers = pendingMultiKeyHandlersRef.current;
+
+    for (const handlerKey in handlers) {
+      const keys = handlerKey.split(",");
+
+      if (!keys.includes(key)) continue;
+  
+      if (keys.length === 1) {
+        handlers[handlerKey](value);
+      } else {
+        pendingMultiKeyHandlers[handlerKey] ??= {};
+        pendingMultiKeyHandlers[handlerKey][key] = value;
+  
+        if (keys.every(k => pendingMultiKeyHandlers[handlerKey][k] !== undefined)) {
+          handlers[handlerKey](pendingMultiKeyHandlers[handlerKey]);
+          pendingMultiKeyHandlers[handlerKey] = {}; // Reset
+        }
+      }
     }
   };
 

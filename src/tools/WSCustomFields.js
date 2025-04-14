@@ -2,7 +2,7 @@ import GridRequest, { GridTypes } from './entities/GridRequest';
 import WS from './WS';
 import { getGridData, transformResponse } from './WSGrids';
 
-export const autocompleteCustomFieldRENT = (entityCode, rentCodeValue, cfcode, filter, config = {}) => {
+export const autocompleteCustomFieldRENT = ({handlerParams: [entityCode, rentCodeValue, cfcode],filter}, config = {}) => {
     let gridRequest = new GridRequest("LVCFE", GridTypes.LOV)
     gridRequest.setRowCount(10)
     gridRequest.addParam("param.fieldid", cfcode);

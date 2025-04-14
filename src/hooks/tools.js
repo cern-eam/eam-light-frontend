@@ -17,12 +17,12 @@ export const convertValue = (value, type) => {
     }
 }
 
-export const assignQueryParamValues = (entity, screenLayout) => {
+export const assignQueryParamValues = (screenLayout, updateEntityProperty) => {
     let queryParams = queryString.parse(window.location.search, screenLayout);
     Object.entries(queryParams).forEach(([key, value]) => {
       const elementInfo = screenLayout.fields[key]
       if (elementInfo && elementInfo.xpath && value) {
-        set(entity, elementInfo.xpath, convertValue(value, elementInfo.fieldType))
+        updateEntityProperty(elementInfo.xpath, convertValue(value, elementInfo.fieldType))
       }
     })
     // TODO: custom fields, date and numbers
@@ -37,18 +37,7 @@ export const assignDefaultValues = (entity, layout) => {
     return entity;
 };
 
-
-export const fireHandlers = (entity, layout, handlers) => {
-    let queryParams = queryString.parse(window.location.search);
-    Object.entries(queryParams).forEach(([key, value]) => {
-        const elementInfo = layout.fields[key]
-        if (elementInfo && elementInfo.xpath && value) {
-          handlers?.[elementInfo.xpath]?.(value);
-        }
-      })
-  };
-
- const generateResultMap = (returnFields = {}) => ({
+const generateResultMap = (returnFields = {}) => ({
         code: Object.values(returnFields).find(value => value.includes('code')),
         desc: Object.values(returnFields).find(value => value.includes('desc')) ?? "des_text",
         organization: Object.values(returnFields).find(value => value.includes('organization'))
@@ -62,36 +51,29 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
 
     const { lovName, inputVars, inputFields, returnFields } = JSON.parse(elementInfo.onLookup)
 
-    const autocompleteHandler = (hint, config) => {
-
+    const autocompleteHandler = (options, config) => {
         try {
-        
-        const gridRequest = new GridRequest(lovName, autocompleteHandlerData.gridType ?? GridTypes.LOV)
-        gridRequest.setRowCount(10)
-        
-        //
-        // Parameters 
-        //
-        Object.entries(inputFields ?? {}).forEach(([key, value]) => { 
-            gridRequest.addParam(key, get(entity, fields[value]?.xpath))
-        });
-
-        Object.entries(inputVars ?? {}).forEach(([key, value]) => { 
-            gridRequest.addParam(key, value)
-        });
-        
-        gridRequest.addParam("param.pagemode", "display")
-        gridRequest.addParam("param.group", 'R5CERN') // TODO remove
-        //
-        //
-        //
-        const searchFields = autocompleteHandlerData.searchKeys ?? Object.values(returnFields ?? {});
-        searchFields.forEach(searchField => gridRequest.addFilter(searchField, typeof hint === "string" ? hint : "", "BEGINS", "OR"))
-        
-        return getGridData(gridRequest, config).then(response => transformResponse(response, autocompleteHandlerData.resultMap ?? generateResultMap(returnFields)));
-    } catch (error) {
-        console.error('error', error)
-    }
+            const {operator = "BEGINS", filter} = options;
+            const gridRequest = new GridRequest(lovName, autocompleteHandlerData.gridType ?? GridTypes.LOV)
+            gridRequest.setRowCount(10)
+            
+            // Parameters 
+            Object.entries(inputFields ?? {}).forEach(([key, value]) => { 
+                gridRequest.addParam(key, get(entity, fields[value]?.xpath))
+            });
+            Object.entries(inputVars ?? {}).forEach(([key, value]) => { 
+                gridRequest.addParam(key, value)
+            });
+            gridRequest.addParam("param.pagemode", "display")
+            gridRequest.addParam("param.group", 'R5CERN') // TODO 
+            
+            const searchFields = autocompleteHandlerData.searchKeys ?? Object.values(returnFields ?? {});
+            searchFields.forEach(searchField => gridRequest.addFilter(searchField, typeof filter === "string" ? filter : "", operator, "OR"))
+            
+            return getGridData(gridRequest, config).then(response => transformResponse(response, autocompleteHandlerData.resultMap ?? generateResultMap(returnFields)));
+        } catch (error) {
+            console.error('error', error)
+        }
     }
 
     const renderDependencies = Object.values(inputFields ?? {}).map(inputField => get(entity, fields[inputField]?.xpath))
