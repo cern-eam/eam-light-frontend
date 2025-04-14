@@ -166,11 +166,14 @@ const Workorder = () => {
       .catch(console.error);
   }, [workorder?.equipmentCode]);
 
-  function onChangeEquipment(equipmentCode) {
-    console.log('eqp', equipmentCode)
-    // if (!equipmentCode) {
-    //   return;
-    // }
+  function onChangeEquipment(equipmentData) {
+    const equipmentCode = equipmentData["EQUIPMENTID.EQUIPMENTCODE"]
+    const equipmentOrg = equipmentData["EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE"]
+    console.log("fire", equipmentCode, equipmentOrg)
+    
+    if (!equipmentCode) {
+      return;
+    }
 
     // Promise.all([WSEquipment.getEquipment(equipmentCode), WSWorkorders.getWOEquipLinearDetails(equipmentCode)])
     //   .then((response) => {
@@ -629,7 +632,8 @@ const Workorder = () => {
   //
   // CALLBACKS FOR ENTITY CLASS
   //
-  function postInit() {
+  function postInit(wo) {
+    console.log('wo', wo)
     readStatuses("", "", true);
   }
 

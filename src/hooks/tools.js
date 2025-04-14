@@ -17,17 +17,28 @@ export const convertValue = (value, type) => {
     }
 }
 
-export const assignQueryParamValues = (screenLayout, updateEntityProperty) => {
-    let queryParams = queryString.parse(window.location.search, screenLayout);
+export const assignQueryParamValues = (entity, screenLayout) => {
+    let queryParams = queryString.parse(window.location.search);
     Object.entries(queryParams).forEach(([key, value]) => {
       const elementInfo = screenLayout.fields[key]
       if (elementInfo && elementInfo.xpath && value) {
-        updateEntityProperty(elementInfo.xpath, convertValue(value, elementInfo.fieldType))
+        set(entity, elementInfo.xpath, convertValue(value, elementInfo.fieldType))
       }
     })
     // TODO: custom fields, date and numbers
-    return entity
+    return entity;
 };
+
+export const fireHandlersForQueryParamValues = (screenLayout, fireHandler) => {
+    let queryParams = queryString.parse(window.location.search);
+    Object.entries(queryParams).forEach(([key, value]) => {
+      const elementInfo = screenLayout.fields[key]
+      if (elementInfo && elementInfo.xpath && value) {
+        fireHandler(elementInfo.xpath, value)
+      }
+    }) 
+}
+
 
 export const assignDefaultValues = (entity, layout) => {
     const exclusions = ['esthrs', 'pplreq']

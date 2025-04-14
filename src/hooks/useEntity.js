@@ -28,7 +28,7 @@ import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
 import useSnackbarStore from "../state/useSnackbarStore";
 import { getCustomFields } from "../tools/WSCustomFields";
 import { fromEAMDate, fromEAMNumber, toEAMDate } from "../ui/pages/EntityTools";
-import { assignDefaultValues, assignQueryParamValues, convertValue, createAutocompleteHandler } from "./tools";
+import { assignDefaultValues, assignQueryParamValues, convertValue, createAutocompleteHandler, fireHandlersForQueryParamValues } from "./tools";
 
 const useEntity = (params) => {
   const {
@@ -260,15 +260,15 @@ const useEntity = (params) => {
         let newEntity = response.body.Result.ResultData;
         newEntity.USERDEFINEDAREA = customFields.body.data;
         newEntity = assignDefaultValues(newEntity, screenLayout);
+        newEntity = assignQueryParamValues(newEntity, screenLayout)
         setEntity(newEntity);
 
-        assignQueryParamValues(screenLayout, updateEntityProperty);
-        //fireHandlers(newEntity, screenLayout, getHandlers());
+        fireHandlersForQueryParamValues(screenLayout, fireHandler)
         document.title = "New " + entityDesc;
         postActions.new(newEntity);
       })
       .catch((error) => {
-        handleError(error);
+        handleError('init error', error);
       })
       .finally(() => setLoading(false));
   };
@@ -312,13 +312,14 @@ const useEntity = (params) => {
      .catch(console.error);
   };
 
-  const updateEntityProperty = (key, value, type) => {
-    
+  const updateEntityProperty = (key, value, type) => { 
     setEntity((prevEntity) => set({ ...prevEntity }, key, convertValue(value, type)));
+    fireHandler(key, value);
+  };
 
-    //getHandlers()[key]?.(value);
-
-    const pendingMultiKeyHandlers = pendingMultiKeyHandlersRef.current;
+  const fireHandler = (key, value) => {
+    const pendingMultiKeyHandlers = pendingMultiKeyHandlersRef.current
+    const handlers = getHandlers()
 
     for (const handlerKey in handlers) {
       const keys = handlerKey.split(",");
@@ -337,7 +338,8 @@ const useEntity = (params) => {
         }
       }
     }
-  };
+
+  }
 
   const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
 
@@ -369,7 +371,7 @@ const useEntity = (params) => {
       descKey,
       orgKey,
       (key, value) => updateEntityProperty(key, value, data.type),
-      onChange
+      onChange ?? layoutPropertiesMap[layoutKey]?.onChange
     );
 
     data.disabled = data.disabled || readOnly; // It should remain disabled
