@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import React, { useEffect, useState, useRef } from "react";
 import { createPortal } from 'react-dom';
 import BlockUi from "react-block-ui";
-import WSEquipment from "../../../tools/WSEquipment";
+import WSEquipment, { getEquipment } from "../../../tools/WSEquipment";
 import WSWorkorder from "../../../tools/WSWorkorders";
 import { ENTITY_TYPE } from "../../components/Toolbar";
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
@@ -175,7 +175,7 @@ const Workorder = () => {
       return;
     }
 
-    WSEquipment.getEquipment(equipmentCode, equipmentOrg)
+    getEquipment(equipmentCode, equipmentOrg)
     .then(console.log)
 
     // Promise.all([WSEquipment.getEquipment(equipmentCode), WSWorkorders.getWOEquipLinearDetails(equipmentCode)])

@@ -174,4 +174,34 @@ class WSEquipment {
     }
 }
 
+export const getEquipment = async (equipmentCode, organization, config = {}) => {
+    const equipmentType = await getEquipmentType(equipmentCode, organization);
+
+    switch(equipmentType) {
+        case "A":
+            return getAsset(equipmentCode, organization, config)
+        case "P":
+            return getPosition(equipmentCode, organization, config)
+    }
+}
+
+export const getAsset = async (equipmentCode, organization, config = {}) => {
+    return WS._get(`/proxy/assets/${encodeURIComponent(equipmentCode + '#' + organization)}`, config)
+}
+
+export const getPosition = async (equipmentCode, organization, config = {}) => {
+    return WS._get(`/proxy/positions/${encodeURIComponent(equipmentCode + '#' + organization)}`, config)
+}
+
+export const getEquipmentType = async (equipmentCode, organization, config = {}) => {
+    console.log('eqp', equipmentCode, organization)
+    let gridRequest = new GridRequest("OCOBJC", GridTypes.LIST)
+    gridRequest.addFilter("obj_code", equipmentCode, "=", "AND");
+    gridRequest.addFilter("obj_org", organization, "=");
+    gridRequest.addParam("parameter.lastupdated", "31-JAN-1970");
+    return getGridData(gridRequest).then(response => response.body.data[0]?.obj_obrtype)
+}
+
+
+
 export default new WSEquipment();
