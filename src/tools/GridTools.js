@@ -62,6 +62,10 @@ const getURLParameterByName = name => queryString.parse(window.location.search)[
 export const transformNativeResponse = (response) => {
   const records = response.body.Result.ResultData.DATARECORD;
 
+  if (!records) {
+    return
+  }
+
   return {
     body: {
       data: records.map(record => {

@@ -175,6 +175,9 @@ const Workorder = () => {
       return;
     }
 
+    WSEquipment.getEquipment(equipmentCode, equipmentOrg)
+    .then(console.log)
+
     // Promise.all([WSEquipment.getEquipment(equipmentCode), WSWorkorders.getWOEquipLinearDetails(equipmentCode)])
     //   .then((response) => {
     //     const equipment = response[0].body.data;

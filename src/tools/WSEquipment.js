@@ -26,8 +26,17 @@ class WSEquipment {
         return WS._get(`/equipment/events?c=${equipmentCode}&t=${equipmentType}`, config);
     }
 
-    getEquipment(equipmentCode, config = {}) {
-        return WS._get('/equipment?c=' + equipmentCode, config);
+    async getEquipment(equipmentCode, organization, config = {}) {
+        const equipmentType = await this.getEquipmentType(equipmentCode, organization);
+        
+        const codeorg = encodeURIComponent(equipmentCode + '#' + organization)
+
+        switch(equipmentType) {
+            case "A":
+                return WS._get(`/proxy/assets/${codeorg}`, config)
+            case "P":
+                return WS._get(`/proxy/positions/${codeorg}`, config)
+        }
     }
 
     updateEquipment(equipment, config = {}) {
@@ -42,8 +51,13 @@ class WSEquipment {
         return WS._delete('/equipment/' + equipment, config);
     }
 
-    getEquipmentType(equipmentCode, config = {}) {
-        return WS._get('/equipment/type', { ...config, params: { c: equipmentCode }});
+    getEquipmentType(equipmentCode, organization, config = {}) {
+        console.log('eqp', equipmentCode, organization)
+        let gridRequest = new GridRequest("OCOBJC", GridTypes.LIST)
+        gridRequest.addFilter("obj_code", equipmentCode, "=", "AND");
+        gridRequest.addFilter("obj_org", organization, "=");
+        gridRequest.addParam("parameter.lastupdated", "31-JAN-1970");
+        return getGridData(gridRequest).then(response => response.body.data[0]?.obj_obrtype)
     }
 
     initEquipment(eqpType, config = {}) {
