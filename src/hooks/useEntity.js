@@ -263,7 +263,7 @@ const useEntity = (params) => {
         newEntity = assignQueryParamValues(newEntity, screenLayout)
         setEntity(newEntity);
 
-        fireHandlersForQueryParamValues(screenLayout, fireHandler)
+        //fireHandlersForQueryParamValues(screenLayout, fireHandler)
         document.title = "New " + entityDesc;
         postActions.new(newEntity);
       })

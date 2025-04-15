@@ -186,7 +186,22 @@ export const getEquipment = async (equipmentCode, organization, config = {}) => 
 }
 
 export const getAsset = async (equipmentCode, organization, config = {}) => {
-    return WS._get(`/proxy/assets/${encodeURIComponent(equipmentCode + '#' + organization)}`, config)
+    const assetResponse = await WS._get(`/proxy/assets/${encodeURIComponent(equipmentCode + '#' + organization)}`, config)
+    const hierarchyResponse = await getAssetHierarchy(equipmentCode, organization, config);
+    assetResponse.body.Result.ResultData.AssetEquipment.AssetParentHierarchy = hierarchyResponse.body.Result.ResultData.AssetParentHierarchy;
+    return assetResponse;
+}
+
+export const getAssetHierarchy = async (equipmentCode, organization, config = {}) => {
+    const request = {
+        "ASSETID": {
+          "EQUIPMENTCODE": equipmentCode,
+          "ORGANIZATIONID": {
+            "ORGANIZATIONCODE": organization
+          }
+        }
+      }
+    return WS._post(`/proxy/assetparenthierarchy`, request, config)
 }
 
 export const getPosition = async (equipmentCode, organization, config = {}) => {
