@@ -384,7 +384,7 @@ const Workorder = () => {
           <Comments
             ref={(comments) => (commentsComponent.current = comments)}
             entityCode="EVNT"
-            entityKeyCode={!newEntity ? workorder.number : undefined}
+            entityKeyCode={!newEntity ? workorder.WORKORDERID.JOBNUM : undefined}
             userCode={userData.eamAccount.userCode}
             handleError={handleError}
             allowHtml={true}
@@ -690,7 +690,6 @@ const Workorder = () => {
         icon: <ContentPasteIcon />,
         handler: (rowInfo) => {
           updateWorkorderProperty("EQUIPMENTID.EQUIPMENTCODE", rowInfo.node.id);
-          //updateWorkorderProperty("equipmentDesc", rowInfo.node.name);
         },
       },
     ]});

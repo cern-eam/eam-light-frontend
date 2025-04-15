@@ -60,11 +60,7 @@ const replaceUrlParam = (key, val) => {
 const getURLParameterByName = name => queryString.parse(window.location.search)[name] || '';
 
 export const transformNativeResponse = (response) => {
-  const records = response.body.Result.ResultData.DATARECORD;
-
-  if (!records) {
-    return
-  }
+  const records = response.body.Result.ResultData.DATARECORD ?? []
 
   return {
     body: {

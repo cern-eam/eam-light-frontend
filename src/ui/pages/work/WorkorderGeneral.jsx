@@ -80,7 +80,6 @@ function WorkorderGeneral(props) {
       <EAMAutocomplete
         {...register("department")}
         autocompleteHandler={WS.autocompleteDepartment}
-        validate
       />
 
       <EAMSelect
