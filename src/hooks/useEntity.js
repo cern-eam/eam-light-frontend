@@ -82,19 +82,22 @@ const useEntity = (params) => {
   } = useLayoutStore();
   const screenPermissions = userData.screens[screenCode];
 
+  
+
   const {
     errorMessages,
     validateFields,
     generateErrorMessagesFromException,
     resetErrorMessages,
-  } = useFieldsValidator(
-    //useMemo( // TODO!!!
-    () =>
-      prepareDataForFieldsValidator(entity, screenLayout, layoutPropertiesMap),
-    [screenCode, entity?.customField],
-    //),
-    entity
-  );
+  } = useFieldsValidator(screenLayout?.fields, entity)
+  //   //useMemo( // TODO!!!
+  //   () =>
+  //     prepareDataForFieldsValidator(entity, screenLayout, layoutPropertiesMap),
+  //   [screenCode, entity?.customField],
+  //   //),
+  //   entity
+  // );
+
 
   const userCode = useMemo(() => userData.eamAccount.userCode, [userData]);
 
@@ -162,7 +165,7 @@ const useEntity = (params) => {
         );
       })
       .catch((error) => {
-        generateErrorMessagesFromException(error?.response?.body?.errors);
+        //TODO generateErrorMessagesFromException(error?.response?.body?.errors);
         handleError(error);
       })
       .finally(() => setLoading(false));
@@ -222,7 +225,7 @@ const useEntity = (params) => {
       })
       .catch((error) => {
         console.log('error', error)
-        generateErrorMessagesFromException(error?.response?.body?.ErrorAlert[0].Message);
+        //TODO: generateErrorMessagesFromException(error?.response?.body?.ErrorAlert[0].Message);
         handleError(error);
       })
       .finally(() => setLoading(false));
@@ -237,7 +240,7 @@ const useEntity = (params) => {
         history.push(process.env.PUBLIC_URL + entityURL);
       })
       .catch((error) => {
-        generateErrorMessagesFromException(error?.response?.body?.errors);
+        //TODO: generateErrorMessagesFromException(error?.response?.body?.errors);
         handleError(error);
       })
       .finally(() => setLoading(false));
@@ -396,7 +399,7 @@ const useEntity = (params) => {
     }
 
     // Errors
-    data.errorText = errorMessages[valueKey];
+    data.errorText = errorMessages[layoutKey];
 
     Object.assign(data, createAutocompleteHandler(screenLayout.fields[layoutKey], screenLayout.fields, entity, layoutPropertiesMap[layoutKey]?.autocompleteHandlerData))
 
