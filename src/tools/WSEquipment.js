@@ -1,6 +1,8 @@
 import GridRequest, { GridTypes } from './entities/GridRequest';
 import WS from './WS';
+import { getAsset } from './WSAssets';
 import { getGridData, transformResponse } from './WSGrids';
+import { getPosition } from './WSPositions';
 import WSWorkorders from './WSWorkorders';
 
 /**
@@ -69,11 +71,6 @@ class WSEquipment {
         return WS._get('/autocomplete/eqp/manufacturer/' + filter, config);
     }
 
-    autocompleteEquipmentPart(filter, config = {}) {
-        filter = encodeURIComponent(filter);
-        return WS._get('/autocomplete/eqp/part/' + filter, config);
-    }
-
     autocompleteEquipmentStore(filter, config = {}) {
         filter = encodeURIComponent(filter);
         return WS._get('/autocomplete/eqp/store/' + filter, config);
@@ -82,27 +79,6 @@ class WSEquipment {
     autocompleteEquipmentBin(store, filter, config = {}) {
         return WS._get(`/autocomplete/eqp/bin?code=${filter}&store=${store}`, config);
     }
-
-    autocompleteEquipmentCategory(eqpClass, filter, config = {}) {
-        filter = encodeURIComponent(filter);
-        eqpClass = eqpClass === null ? '' : eqpClass;
-        return WS._get(`/autocomplete/eqp/category/${filter}`, {
-            ...config,
-            params: {
-                class: eqpClass,
-                ...config.params
-            }
-        });
-    }
-
-    autocompleteEquipmentDepartment(filter, config = {}) {
-        filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/department/${filter}`, config);
-    }
-    autocompleteCostCode = (filter, config = {}) => {
-        filter = encodeURIComponent(filter);
-        return WS._get('/autocomplete/equipment/costcode/' + filter, config);
-    };
 
     //
     // HIERARCHY
@@ -185,29 +161,6 @@ export const getEquipment = async (equipmentCode, organization, config = {}) => 
     }
 }
 
-export const getAsset = async (equipmentCode, organization, config = {}) => {
-    const assetResponse = await WS._get(`/proxy/assets/${encodeURIComponent(equipmentCode + '#' + organization)}`, config)
-    const hierarchyResponse = await getAssetHierarchy(equipmentCode, organization, config);
-    assetResponse.body.Result.ResultData.AssetEquipment.AssetParentHierarchy = hierarchyResponse.body.Result.ResultData.AssetParentHierarchy;
-    return assetResponse;
-}
-
-export const getAssetHierarchy = async (equipmentCode, organization, config = {}) => {
-    const request = {
-        "ASSETID": {
-          "EQUIPMENTCODE": equipmentCode,
-          "ORGANIZATIONID": {
-            "ORGANIZATIONCODE": organization
-          }
-        }
-      }
-    return WS._post(`/proxy/assetparenthierarchy`, request, config)
-}
-
-export const getPosition = async (equipmentCode, organization, config = {}) => {
-    return WS._get(`/proxy/positions/${encodeURIComponent(equipmentCode + '#' + organization)}`, config)
-}
-
 export const getEquipmentType = async (equipmentCode, organization, config = {}) => {
     console.log('eqp', equipmentCode, organization)
     let gridRequest = new GridRequest("OCOBJC", GridTypes.LIST)
@@ -216,7 +169,5 @@ export const getEquipmentType = async (equipmentCode, organization, config = {})
     gridRequest.addParam("parameter.lastupdated", "31-JAN-1970");
     return getGridData(gridRequest).then(response => response.body.data[0]?.obj_obrtype)
 }
-
-
 
 export default new WSEquipment();

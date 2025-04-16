@@ -130,7 +130,8 @@ export const layoutPropertiesMap = {
 }
 
 export function isReadOnlyCustomHandler(workOrder) {
-    return workOrder.systemStatusCode === 'C' || !workOrder.jtAuthCanUpdate;
+    return false
+    //TODO return workOrder.systemStatusCode === 'C' || !workOrder.jtAuthCanUpdate;
 }
 
 export function isRegionAvailable(regionCode, workOrderLayout) {

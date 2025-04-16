@@ -62,9 +62,11 @@ const useSnackbarStore = create((set, get) => ({
 
       case ErrorTypes.SERVER_ERROR:
         if (error.response && error.response.body) {
-          const errors = error.response.body.errors;
+          const errors = error.response.body.errors ?? error.response.body.ErrorAlert;
           if (errors && errors.length > 0) {
-            const errorMessages = errors.reduce((acc, value) => acc + '\n' + value.message, '');
+            const errorMessages = errors
+                                  .map(e => '• ' + (e.message ?? e.Message))
+                                  .join('\n');
 
             if (errors.some(error => error.name === "com.dstm.mp.businessprocess.NoSessionException")) {
               setInforContext(null)

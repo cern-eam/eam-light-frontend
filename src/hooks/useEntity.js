@@ -173,29 +173,26 @@ const useEntity = (params) => {
 
   const readEntity = (code) => {
     setLoading(true);
-
     // Cancel the old request in the case it was still active
     abortController.current?.abort();
     abortController.current = new AbortController();
     //
-    WS.read(code, { signal: abortController.current.signal })
+    WS.read(code, '*', { signal: abortController.current.signal })
       .then((response) => {
         resetErrorMessages();
         setIsModified(false);
         setNewEntity(false);
-        const readEntity = response.body.Result.ResultData[entityProperty];
-
+        const readEntity = response.body.Result.ResultData[entityProperty]
         setEntity(readEntity);
-
+        
         document.title = entityDesc + " " + get(readEntity, entityCodeProperty);
 
-        // Render as read-only depending on screen rights, department security or custom handler
-        // setReadOnly(
-        //   !screenPermissions.updateAllowed ||
-        //     isDepartmentReadOnly(readEntity.departmentCode, userData) ||
-        //     isReadOnlyCustomHandler?.(readEntity)
-        // );
-
+        //Render as read-only depending on screen rights, department security or custom handler
+        setReadOnly(
+          !screenPermissions.updateAllowed ||
+            isDepartmentReadOnly(readEntity.DEPARTMENTID.DEPARTMENTCODE, userData) ||
+            isReadOnlyCustomHandler?.(readEntity)
+        );
         // Invoke entity specific logic
         postActions.read(readEntity);
       })
@@ -208,9 +205,9 @@ const useEntity = (params) => {
   };
 
   const updateEntity = () => {
-    if (!validateFields()) {
-      return;
-    }
+    // if (!validateFields()) {
+    //   return;
+    // } //TODO
 
     setLoading(true);
 

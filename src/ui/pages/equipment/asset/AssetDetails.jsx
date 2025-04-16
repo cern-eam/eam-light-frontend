@@ -13,34 +13,17 @@ const AssetDetails = (props) => {
 
   return (
     <React.Fragment>
-      <EAMAutocomplete
-        {...register("class", "classCode", "classDesc")}
-      />
+      <EAMAutocomplete {...register("class")}/>
+
+      <EAMAutocomplete {...register("category")}/>
 
       <EAMAutocomplete
-        {...register(
-          "category",
-          "categoryCode",
-          "categoryDesc",
-          null,
-          (categoryCode) =>
-            onCategoryChange(categoryCode, updateEquipmentProperty)
-        )}
-        autocompleteHandler={WSEquipment.autocompleteEquipmentCategory}
-        autocompleteHandlerParams={[equipment.classCode]}
+        {...register("costcode")}
       />
 
-      <EAMAutocomplete
-        {...register("costcode", "costCode", "costCodeDesc")}
-        autocompleteHandler={WSEquipment.autocompleteCostCode}
-      />
+      <EAMDatePicker {...register("commissiondate")} />
 
-      <EAMDatePicker {...register("commissiondate", "comissionDate")} />
-
-      <EAMAutocomplete
-        {...register("assignedto", "assignedTo", "assignedToDesc")}
-        autocompleteHandler={WS.autocompleteEmployee}
-      />
+      <EAMAutocomplete {...register("assignedto")} />
 
       <EAMSelect
         {...register("criticality", "criticality")}
@@ -48,11 +31,10 @@ const AssetDetails = (props) => {
         autocompleteHandlerParams={["OBCR"]}
       />
 
-      <EAMTextField {...register("equipmentvalue", "equipmentValue")} />
+      <EAMTextField {...register("equipmentvalue")} />
 
       <EAMAutocomplete
-        {...register("manufacturer", "manufacturerCode", "manufacturerDesc")}
-        autocompleteHandler={WSEquipment.autocompleteManufacturer}
+        {...register("manufacturer")}
       />
 
       <EAMTextField {...register("serialnumber", "serialNumber")} />
@@ -60,8 +42,7 @@ const AssetDetails = (props) => {
       <EAMTextField {...register("model", "model")} />
 
       <EAMAutocomplete
-        {...register("part", "partCode", "partDesc")}
-        autocompleteHandler={WSEquipment.autocompleteEquipmentPart}
+        {...register("part")}
         link={() => (equipment.partCode ? "/part/" + equipment.partCode : null)}
       />
 

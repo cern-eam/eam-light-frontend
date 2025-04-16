@@ -43,6 +43,7 @@ import getPartsAssociated from "@/ui/pages/PartsAssociated";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
+import { getAsset, getAssetHierarchy, updateAsset } from "../../../../tools/WSAssets.js";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -78,8 +79,8 @@ const Asset = () => {
   } = useEntity({
     WS: {
       create: WSEquipment.createEquipment,
-      read: WSEquipment.getEquipment,
-      update: WSEquipment.updateEquipment,
+      read: getAsset,
+      update: updateAsset,
       delete: WSEquipment.deleteEquipment,
       new: WSEquipment.initEquipment.bind(null, "A"), // TODO: again we have extra arguments. What to do?
     },
@@ -87,11 +88,17 @@ const Asset = () => {
       read: postRead,
       new: postInit,
     },
+    handlers: {
+      "CATEGORYID.CATEGORYCODE": (category) => console.log('category changed', category)
+    },
     isReadOnlyCustomHandler: isClosedEquipment,
     entityCode: "OBJ",
     entityDesc: "Asset",
     entityURL: "/asset/",
-    entityCodeProperty: "code",
+    entityCodeProperty: "ASSETID.EQUIPMENTCODE",
+    entityOrgProperty: "ASSETID.ORGANIZATIONID.ORGANIZATIONCODE",
+    entityProperty: "AssetEquipment",
+    resultDataCodeProperty: "JOBNUM",
     screenProperty: "assetScreen",
     layoutProperty: "assetLayout",
     layoutPropertiesMap: assetLayoutPropertiesMap,
@@ -428,8 +435,8 @@ const Asset = () => {
         newEntity={newEntity}
         entityScreen={screenPermissions}
         entityName="Asset" // TODO:
-        entityKeyCode={equipment.code}
-        organization={equipment.organization}
+        entityKeyCode={equipment.ASSETID?.EQUIPMENTCODE}
+        organization={equipment.ASSETID?.ORGANIZATIONID.ORGANIZATIONCODE}
         saveHandler={saveHandler}
         newHandler={newHandler}
         deleteHandler={deleteHandler}

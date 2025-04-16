@@ -634,7 +634,7 @@ const Workorder = () => {
   //
   function postInit(wo) {
     //console.log('wo', wo)
-    readStatuses("", "", true);
+    readStatuses("", true);
   }
 
   function postRead(workorder) {
@@ -645,12 +645,12 @@ const Workorder = () => {
       }
     });
     setCurrentWorkOrder(workorder.WORKORDERID.JOBNUM);
-    readStatuses(workorder.statusCode, workorder.typeCode, false);
+    readStatuses(workorder.STATUS.STATUSCODE, false);
     readOtherIdMapping(workorder.number);
   }
 
   function postCopy() {
-    readStatuses("", "", true);
+    readStatuses("", true);
     let fields = workOrderLayout.fields;
     isCernMode &&
       updateWorkorderProperty(
@@ -666,8 +666,8 @@ const Workorder = () => {
   //
   // DROP DOWN VALUES
   //
-  const readStatuses = (status, type, newwo) => {
-    WSWorkorder.getWorkOrderStatusValues(userData.eamAccount.userGroup, status, type, newwo)
+  const readStatuses = (status, newwo) => {
+    WSWorkorder.getWorkOrderStatusValues(status, newwo)
       .then((response) => setStatuses(response.body.data))
       .catch(console.error);
   };

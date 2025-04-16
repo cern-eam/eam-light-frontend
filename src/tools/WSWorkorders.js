@@ -1,3 +1,4 @@
+import { Description } from '@mui/icons-material';
 import GridRequest, { GridTypes } from './entities/GridRequest';
 import WS from './WS';
 import { getGridData, transformResponse } from './WSGrids';
@@ -14,8 +15,8 @@ class WSWorkorders {
         return WS._post(`/proxy/workorderdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": "*"}}, config);
     }
 
-    getWorkOrder(number, config = {}) {
-        return WS._get('/proxy/workorders/' + number + '%23%2A', config);
+    getWorkOrder(number, organization, config = {}) {
+        return WS._get(`/proxy/workorders/${encodeURIComponent(number + '#' + organization)}`, config);
     }
 
     createWorkOrder(workOrder, config = {}) {
@@ -46,12 +47,25 @@ class WSWorkorders {
     //
     // DROP DOWN VALUES FOR WOS
     //
-    getWorkOrderStatusValues(userGroup, status, type, newWorkOrder, config = {}) {
-        return WS._get(`/wolists/statuscodes?wostatus=${status}&wotype=${type}&newwo=${newWorkOrder}&userGroup=${encodeURIComponent(userGroup)}`, config)
+    getWorkOrderStatusValues(oldStatus, newWorkOrder, config = {}) {
+        let gridRequest = new GridRequest("LVWRSTDRP", GridTypes.LOV)
+        if (newWorkOrder) {
+            gridRequest.addParam("param.poldstat", "-");
+			gridRequest.addParam("param.pexcclause", "C");
+        } else {
+			gridRequest.addParam("param.poldstat", oldStatus);
+			gridRequest.addParam("param.pexcclause", "A");
+        }
+        gridRequest.addParam("param.pfunrentity", "EVNT");
+        return getGridData(gridRequest).then(response => transformResponse(response, {code: "code", desc: "description"}));
+    
     }
 
-    getWorkOrderTypeValues(userGroup, config = {}) {
-        return WS._get(`/wolists/typecodes?userGroup=${encodeURIComponent(userGroup)}`, config)
+    getWorkOrderTypeValues(options, config = {}) {
+        let gridRequest = new GridRequest("LVGROUPWOTYPE", GridTypes.LOV)
+        gridRequest.addParam("parameter.pagemode", null);
+		gridRequest.addParam("parameter.usergroup", options.handlerParams[0]);
+        return getGridData(gridRequest).then(response => transformResponse(response, {code: "typecode", desc: "codedescription"}));
     }
 
     getWorkOrderPriorities(config = {}) {

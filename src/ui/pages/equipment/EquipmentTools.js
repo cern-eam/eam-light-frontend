@@ -107,8 +107,30 @@ export const equipmentLayoutPropertiesMap = {
   alias: "alias",
   assetstatus: "statusCode",
   assignedto: "assignedTo",
-  category: "categoryCode",
-  class: "classCode",
+  category: {
+    autocompleteHandlerData: { 
+        resultMap: {
+            code: "category",
+            desc: "categorydesc",
+            class: "categoryclass",
+            manufacturer: "manufacturer"
+        }
+    }
+  },
+  
+  class: {
+    value: "CLASSID.CLASSCODE",
+    desc: "CLASSID.DESCRIPTION",
+    org: "CLASSID.ORGANIZATIONID.ORGANIZATIONCODE",
+    autocompleteHandlerData: { 
+        resultMap: {
+            code: "class",
+            desc: "des_text",
+            organization: "classorganization"
+        }
+    }
+},
+
   commissiondate: "comissionDate",
   criticality: "criticality",
   department: "departmentCode",
@@ -210,7 +232,19 @@ export const equipmentLayoutPropertiesMap = {
 export const assetLayoutPropertiesMap = {
   ...equipmentLayoutPropertiesMap,
   bin: "bin",
-  costcode: "costCode",
+
+  costcode: {
+    value: "COSTCODEID.COSTCODE",
+    desc: "COSTCODEID.DESCRIPTION",
+    autocompleteHandlerData: { 
+        resultMap: {
+            code: "costcode",
+            desc: "costcodedescription",
+            organization: "costcodeorg"
+        }
+    }
+},
+
   parentasset: "hierarchyAssetCode",
   part: "partCode",
   position: "hierarchyPositionCode",
