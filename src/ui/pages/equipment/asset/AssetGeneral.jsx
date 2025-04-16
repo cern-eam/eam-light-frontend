@@ -7,7 +7,7 @@ import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAuto
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import { isDepartmentReadOnly, isMultiOrg } from "@/ui/pages/EntityTools";
 import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
-import { readStatuses, readUserCodes } from "../../../../tools/WSGrids";
+import { autocompleteDepartment, readStatuses, readUserCodes } from "../../../../tools/WSGrids";
 
 const AssetGeneral = (props) => {
   const {
@@ -28,31 +28,32 @@ const AssetGeneral = (props) => {
         />
       )}
 
-      {newEntity && <EAMTextField {...register("equipmentno", "code")} />}
+      {newEntity && <EAMTextField {...register("equipmentno")} />}
 
-      <EAMTextField {...register("alias", "alias")} barcodeScanner />
+      <EAMTextField {...register("alias")} barcodeScanner />
 
-      <EAMUDF {...register("udfchar45", "userDefinedFields.udfchar45")} />
+      <EAMUDF {...register("udfchar45")} />
 
-      <EAMTextField {...register("equipmentdesc", "description")} />
+      <EAMTextField {...register("equipmentdesc")} />
 
       <EAMAutocomplete
-        {...register("department", "departmentCode", "departmentDesc")}
-        autocompleteHandler={WSEquipment.autocompleteEquipmentDepartment}
+        {...register("department")}
+        autocompleteHandler={autocompleteDepartment}
+        autocompleteHandlerParams={["*"]}
       />
 
       <EAMSelect
-        {...register("assetstatus", "statusCode")}
+        {...register("assetstatus")}
         disabled={
           isDepartmentReadOnly(equipment.departmentCode, userData) ||
           !screenPermissions.updateAllowed
         }
         autocompleteHandler={readStatuses}
-        autocompleteHandlerParams={["OBJ", newEntity, equipment.statusCode]}
+        autocompleteHandlerParams={["OBJ", newEntity, equipment.STATUS.STATUSCODE]}
       />
 
       <EAMSelect
-        {...register("state", "stateCode")}
+        {...register("state")}
         autocompleteHandler={readUserCodes}
         autocompleteHandlerParams={["OBSA"]}
       />

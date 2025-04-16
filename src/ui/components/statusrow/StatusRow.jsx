@@ -74,7 +74,7 @@ const safetyConformity = {
 };
 
 const getSafetyConformity = (entity) => {
-  return safetyConformity[entity.userDefinedFields.udfchar30];
+  return safetyConformity[entity.UserDefinedFields.UDFCHAR30];
 };
 
 const STATUSES = [
@@ -91,7 +91,7 @@ const STATUSES = [
     shouldRender: (entity, entityType) =>
       isCernMode &&
       entityType === "equipment" &&
-      entity.userDefinedFields.udfchkbox01 === "true",
+      entity.UserDefinedFields.UDFCHKBOX01 === "true",
     getIcon: () => <EISIcon style={{ color: "blue", ...iconStyle }} />,
     getDescription: () => "EIS",
     getTooltip: () => "Élément Important pour la Sécurité",
@@ -101,7 +101,7 @@ const STATUSES = [
     shouldRender: (entity, entityType) =>
       isCernMode &&
       entityType === "equipment" &&
-      entity.userDefinedFields.udfchar04 === "Radioactive",
+      entity.UserDefinedFields.UDFCHKBOX04 === "Radioactive",
     getIcon: () => <RadioactiveWarningIcon style={iconStyle} />,
     getDescription: () => "Radioactive",
     getTooltip: () => "Radioactive",
@@ -129,7 +129,7 @@ const STATUSES = [
     shouldRender: (entity, entityType) =>
       isCernMode &&
       entityType === "equipment" &&
-      entity.userDefinedFields.udfchkbox08 === "true",
+      entity.UserDefinedFields.UDFCHKBOX08 === "true",
     getIcon: () => <LockIcon style={{ color: "green", ...iconStyle }} />,
     getDescription: () => "Equipment Locked-out",
     getTooltip: () => "Equipment Locked-out",

@@ -78,7 +78,7 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
             gridRequest.addParam("param.pagemode", "display")
             gridRequest.addParam("param.group", 'R5CERN') // TODO 
             
-            const searchFields = autocompleteHandlerData.searchKeys ?? Object.values(returnFields ?? {});
+            const searchFields = autocompleteHandlerData.searchKeys ?? [returnFields[elementInfo.elementId]] ?? [];
             searchFields.forEach(searchField => gridRequest.addFilter(searchField, typeof filter === "string" ? filter : "", operator, "OR"))
             
             return getGridData(gridRequest, config).then(response => transformResponse(response, autocompleteHandlerData.resultMap ?? generateResultMap(returnFields)));

@@ -21,7 +21,11 @@ export function transformResponse(response, keyMap, additionalData = []) {
     };
 }
 
-export const readStatuses = (entity, newEntity, oldStatus) => {
+export const readStatuses = (options) => {
+    let entity = options.handlerParams[0]
+    let newEntity = options.handlerParams[1]
+    let oldStatus = options.handlerParams[2]
+    console.log('data', entity, newEntity, oldStatus)
     let userData = useUserDataStore.getState().userData
 
     let gridRequest = new GridRequest("BSAUTH_HDR")
@@ -41,20 +45,20 @@ export const readStatuses = (entity, newEntity, oldStatus) => {
 
 }
 
-export const readUserCodes = (entity) => {
+export const readUserCodes = (options) => {
     let gridRequest = new GridRequest("BSUCOD_HDR")
-    gridRequest.addParam("param.entitycode", entity)
+    gridRequest.addParam("param.entitycode", options.handlerParams[0])
     return getGridData(gridRequest).then(response => transformResponse(response, {code: "usercode", systemCode: "systemcode", desc: "usercodedescription"}));
 }
 
-export const autocompleteDepartment = (organization, hint) => {
+export const autocompleteDepartment = (options) => {
     let gridRequest = new GridRequest("LVMRCS", GridTypes.LOV)
     gridRequest.rowCount = 10
     gridRequest.addParam("param.showstardepartment", null)
     gridRequest.addParam("param.bypassdeptsecurity", null)
-    gridRequest.addFilter("department", hint?.toUpperCase(), "CONTAINS")
+    gridRequest.addFilter("department", options.filter, "CONTAINS")
     gridRequest.sortBy("department")
-    gridRequest.addParam("control.org", organization)
+    gridRequest.addParam("control.org", options.handlerParams[0])
     return getGridData(gridRequest).then(response => transformResponse(response, {code: "department", desc: "des_text"}));
 }
 

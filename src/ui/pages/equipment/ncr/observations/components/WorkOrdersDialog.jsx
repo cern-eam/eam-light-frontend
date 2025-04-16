@@ -30,7 +30,7 @@ const WorkOrdersDialog = ({
     const {userData} = useUserDataStore();
 
     const readStatuses = (status, type, newwo) => {
-        WSWorkorders.getWorkOrderStatusValues(userData.eamAccount.userGroup, status, type, newwo)
+        WSWorkorders.getWorkOrderStatusValues(status, newwo)
         .then((response) => setStatuses(response.body.data))
         .catch(console.error);
     };

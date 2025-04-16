@@ -10,6 +10,7 @@ import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
 import { IconButton } from "@mui/material";
 import { FileTree } from "mdi-material-ui";
 import useEquipmentTreeStore from "../../../state/useEquipmentTreeStore";
+import { autocompleteDepartment } from "../../../tools/WSGrids";
 
 function WorkorderGeneral(props) {
   const {
@@ -79,7 +80,8 @@ function WorkorderGeneral(props) {
 
       <EAMAutocomplete
         {...register("department")}
-        autocompleteHandler={WS.autocompleteDepartment}
+        autocompleteHandler={autocompleteDepartment}
+        autocompleteHandlerParams={['*']}
       />
 
       <EAMSelect
