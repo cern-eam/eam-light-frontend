@@ -25,7 +25,6 @@ export const readStatuses = (options) => {
     let entity = options.handlerParams[0]
     let newEntity = options.handlerParams[1]
     let oldStatus = options.handlerParams[2]
-    console.log('data', entity, newEntity, oldStatus)
     let userData = useUserDataStore.getState().userData
 
     let gridRequest = new GridRequest("BSAUTH_HDR")

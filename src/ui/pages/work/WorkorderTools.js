@@ -110,14 +110,7 @@ export const layoutPropertiesMap = {
     woclass: {
         value: "CLASSID.CLASSCODE",
         desc: "CLASSID.DESCRIPTION",
-        org: "CLASSID.ORGANIZATIONID.ORGANIZATIONCODE",
-        autocompleteHandlerData: { 
-            resultMap: {
-                code: "class",
-                desc: "des_text",
-                organization: "classorganization"
-            }
-        }
+        org: "CLASSID.ORGANIZATIONID.ORGANIZATIONCODE"
     },
 
     standardwo: {

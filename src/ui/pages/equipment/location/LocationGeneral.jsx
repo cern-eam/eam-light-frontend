@@ -11,12 +11,12 @@ const AssetGeneral = (props) => {
     <React.Fragment>
       {newEntity && <EAMTextField {...register("equipmentno", "code")} />}
 
-      <EAMTextField {...register("udfchar45", "userDefinedFields.udfchar45")} />
+      <EAMTextField {...register("udfchar45")} />
 
-      <EAMTextField {...register("equipmentdesc", "description")} />
+      <EAMTextField {...register("equipmentdesc")} />
 
       <EAMAutocomplete
-        {...register("department", "departmentCode", "departmentDesc")}
+        {...register("department")}
         autocompleteHandler={WS.autocompleteDepartment}
       />
 

@@ -76,7 +76,7 @@ export default Location = (props) => {
   } = useEntity({
     WS: {
       create: WSLocation.create,
-      read: WSLocation.get,
+      read: WSLocation.getLocation,
       update: WSLocation.update,
       delete: WSLocation.remove,
       new: WSLocation.init,
@@ -89,7 +89,9 @@ export default Location = (props) => {
     entityCode: "LOC",
     entityDesc: "Location",
     entityURL: "/location/",
-    entityCodeProperty: "code",
+    entityCodeProperty: "LOCATIONID.LOCATIONCODE",
+    entityOrgProperty: "LOCATIONID.ORGANIZATIONID.ORGANIZATIONCODE",
+    entityProperty: "Location",
     screenProperty: "locationScreen",
     layoutProperty: "locationLayout",
     layoutPropertiesMap: locationLayoutPropertiesMap,

@@ -4,7 +4,6 @@ import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import WSEquipment from "../../../../tools/WSEquipment";
 import { ENTITY_TYPE } from "../../../components/Toolbar.jsx";
-import CustomFields from "eam-components/dist/ui/components/customfields/CustomFields";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
@@ -43,7 +42,8 @@ import getPartsAssociated from "@/ui/pages/PartsAssociated";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
-import { getAsset, getAssetHierarchy, updateAsset } from "../../../../tools/WSAssets.js";
+import { createAsset, deleteAsset, getAsset, getAssetDefault, getAssetHierarchy, updateAsset } from "../../../../tools/WSAssets.js";
+import CustomFields from "../../../components/customfields/CustomFields.jsx";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -78,11 +78,11 @@ const Asset = () => {
     handleError,
   } = useEntity({
     WS: {
-      create: WSEquipment.createEquipment,
+      create: createAsset,
       read: getAsset,
       update: updateAsset,
-      delete: WSEquipment.deleteEquipment,
-      new: WSEquipment.initEquipment.bind(null, "A"), // TODO: again we have extra arguments. What to do?
+      delete: deleteAsset,
+      new: getAssetDefault
     },
     postActions: {
       read: postRead,
@@ -98,7 +98,7 @@ const Asset = () => {
     entityCodeProperty: "ASSETID.EQUIPMENTCODE",
     entityOrgProperty: "ASSETID.ORGANIZATIONID.ORGANIZATIONCODE",
     entityProperty: "AssetEquipment",
-    resultDataCodeProperty: "JOBNUM",
+    resultDataCodeProperty: "ASSETID.EQUIPMENTCODE",
     screenProperty: "assetScreen",
     layoutProperty: "assetLayout",
     layoutPropertiesMap: assetLayoutPropertiesMap,
@@ -347,9 +347,9 @@ const Asset = () => {
         render: () => (
           <CustomFields
             entityCode="OBJ"
-            entityKeyCode={equipment.code}
-            classCode={equipment.classCode}
-            customFields={equipment.customField}
+            entityKeyCode={equipment.ASSETID?.EQUIPMENTCODE}
+            classCode={equipment.CLASSID?.CLASSCODE}
+            customFields={equipment.USERDEFINEDAREA?.CUSTOMFIELD}
             register={register}
           />
         ),

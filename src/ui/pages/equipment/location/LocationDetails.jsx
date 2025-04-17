@@ -10,14 +10,14 @@ const LocationDetails = (props) => {
   return (
     <React.Fragment>
       <EAMAutocomplete
-        {...register("class", "classCode", "classDesc")}
+        {...register("class")}
       />
 
-      <EAMTextField {...register("costcode", "costCode")} />
+      <EAMTextField {...register("costcode")} />
 
-      <EAMCheckbox {...register("safety", "safety")} />
+      <EAMCheckbox {...register("safety")} />
 
-      <EAMCheckbox {...register("outofservice", "outOfService")} />
+      <EAMCheckbox {...register("outofservice")} />
     </React.Fragment>
   );
 };
