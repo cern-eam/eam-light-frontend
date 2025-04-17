@@ -48,8 +48,8 @@ export const assignDefaultValues = (entity, layout) => {
     return entity;
 };
 
-const generateResultMap = (returnFields = {}) => ({
-        code: Object.values(returnFields).find(value => value.includes('code')),
+const generateResultMap = (returnFields = {}, elementInfo) => ({
+        code: returnFields[elementInfo.elementId] ?? Object.values(returnFields).find(value => value.includes('code')),
         desc: Object.values(returnFields).find(value => value.includes('desc')) ?? "des_text",
         organization: Object.values(returnFields).find(value => value.includes('organization'))
     })
@@ -80,8 +80,8 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
             
             const searchFields = autocompleteHandlerData.searchKeys ?? [returnFields[elementInfo.elementId]] ?? [];
             searchFields.forEach(searchField => gridRequest.addFilter(searchField, typeof filter === "string" ? filter : "", operator, "OR"))
-            
-            return getGridData(gridRequest, config).then(response => transformResponse(response, autocompleteHandlerData.resultMap ?? generateResultMap(returnFields)));
+
+            return getGridData(gridRequest, config).then(response => transformResponse(response, autocompleteHandlerData.resultMap ?? generateResultMap(returnFields, elementInfo)));
         } catch (error) {
             console.error('error', error)
         }

@@ -6,12 +6,12 @@ const Variables = (props) => {
 
   return (
     <React.Fragment>
-      <EAMTextField {...register("variable1", "variable1")} />
-      <EAMTextField {...register("variable2", "variable2")} />
-      <EAMTextField {...register("variable3", "variable3")} />
-      <EAMTextField {...register("variable4", "variable4")} />
-      <EAMTextField {...register("variable5", "variable5")} />
-      <EAMTextField {...register("variable6", "variable6")} />
+      <EAMTextField {...register("variable1")} />
+      <EAMTextField {...register("variable2")} />
+      <EAMTextField {...register("variable3")} />
+      <EAMTextField {...register("variable4")} />
+      <EAMTextField {...register("variable5")} />
+      <EAMTextField {...register("variable6")} />
     </React.Fragment>
   );
 };

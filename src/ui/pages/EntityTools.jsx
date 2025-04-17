@@ -8,7 +8,7 @@ import { get } from "lodash";
 import GridOnIcon from "@mui/icons-material/GridOn";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import BlockUi from "react-block-ui";
-import { Launch, Web } from "@mui/icons-material";
+import { Launch, Numbers, Web } from "@mui/icons-material";
 import { equipmentLayoutPropertiesMap } from "./equipment/EquipmentTools";
 import ResizableIFrame from "../components/iframes/ResizableIframe";
 
@@ -400,17 +400,17 @@ export const getCustomTabRegions = (
 
 
   export const toEAMNumber = (input) => {
-    console.log('to number', input)
     const num = Number(input);
   
-    if (isNaN(num)) {
-      return {
-        VALUE: null,
-        NUMOFDEC: 0,
-        SIGN: "+",
-        UOM: "default",
-        qualifier: "OTHER"
-      };
+    if (isNaN(num) || !num) {
+      return null
+      // return {
+      //   VALUE: null,
+      //   NUMOFDEC: 0,
+      //   SIGN: "+",
+      //   UOM: "default",
+      //   qualifier: "OTHER"
+      // };
     }
   
     const numOfDec = num.toString().includes('.')

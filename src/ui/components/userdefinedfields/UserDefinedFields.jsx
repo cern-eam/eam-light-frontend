@@ -6,6 +6,7 @@ const UserDefinedFields = (props) => {
   const { entityLayout, exclusions, register } = props;
 
   const renderUdfs = () => {
+    console.log('ent', entityLayout)
     return Object.keys(entityLayout)
       .filter((key) => key.startsWith("udf"))
       .filter((prop) => !prop.includes("Desc") && !exclusions.includes(prop))

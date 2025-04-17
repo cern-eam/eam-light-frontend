@@ -149,7 +149,7 @@ const useEntity = (params) => {
 
     WS.create(entityToCreate)
       .then((response) => {
-        const entityCode = response.body.Result.ResultData[resultDataCodeProperty];
+        const entityCode = get(response.body.Result.ResultData, resultDataCodeProperty);
         showNotification(response.body.Result.InfoAlert.Message);
         commentsComponent.current?.createCommentForNewEntity(entityCode);
         // Read after the creation (and append the organization in multi-org mode)
@@ -179,6 +179,7 @@ const useEntity = (params) => {
     //
     WS.read(code, '*', { signal: abortController.current.signal })
       .then((response) => {
+        console.log('read', response)
         resetErrorMessages();
         setIsModified(false);
         setNewEntity(false);
@@ -205,9 +206,9 @@ const useEntity = (params) => {
   };
 
   const updateEntity = () => {
-    // if (!validateFields()) {
-    //   return;
-    // } //TODO
+    if (!validateFields()) {
+      return;
+    } //TODO
 
     setLoading(true);
 
@@ -257,7 +258,7 @@ const useEntity = (params) => {
         setIsModified(false);
         setReadOnly(!screenPermissions.creationAllowed);
 
-        let newEntity = response.body.Result.ResultData;
+        let newEntity = response.body.Result.ResultData[entityProperty] ?? response.body.Result.ResultData
         newEntity.USERDEFINEDAREA = customFields.body.data;
         newEntity = assignDefaultValues(newEntity, screenLayout);
         newEntity = assignQueryParamValues(newEntity, screenLayout)
