@@ -2,7 +2,6 @@ import Comments from "eam-components/dist/ui/components/comments/Comments";
 import React, { useEffect, useState } from "react";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
-import WSEquipment from "../../../../tools/WSEquipment";
 import { ENTITY_TYPE } from "../../../components/Toolbar.jsx";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
@@ -346,8 +345,6 @@ const Asset = () => {
         render: () => (
           <CustomFields
             entityCode="OBJ"
-            entityKeyCode={equipment.ASSETID?.EQUIPMENTCODE}
-            classCode={equipment.CLASSID?.CLASSCODE}
             customFields={equipment.USERDEFINEDAREA?.CUSTOMFIELD}
             register={register}
           />

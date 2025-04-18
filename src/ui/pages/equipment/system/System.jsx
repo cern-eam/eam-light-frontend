@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
-import CustomFields from "eam-components/dist/ui/components/customfields/CustomFields";
-import WSEquipment from "../../../../tools/WSEquipment";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import SystemGeneral from "./SystemGeneral";
@@ -43,6 +41,8 @@ import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import Variables from "../components/Variables";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
+import { createSystem, deleteSystem, getSystem, getSystemDefault, updateSystem } from "../../../../tools/WSSystems.js";
+import CustomFields from "../../../components/customfields/CustomFields.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -83,21 +83,27 @@ const System = () => {
     showNotification,
   } = useEntity({
     WS: {
-      create: WSEquipment.createEquipment,
-      read: WSEquipment.getEquipment,
-      update: WSEquipment.updateEquipment,
-      delete: WSEquipment.deleteEquipment,
-      new: WSEquipment.initEquipment.bind(null, "S"), // TODO: again we have extra arguments, does it perform basic functions without them?
+      create: createSystem,
+      read: getSystem,
+      update: updateSystem,
+      delete: deleteSystem,
+      new: getSystemDefault, // TODO: again we have extra arguments, does it perform basic functions without them?
     },
     postActions: {
       read: postRead,
       new: postInit,
     },
+    handlers: {
+      "CATEGORYID.CATEGORYCODE": (category) => console.log('category changed', category)
+    },
     isReadOnlyCustomHandler: isClosedEquipment,
     entityCode: "OBJ",
     entityDesc: "System",
     entityURL: "/system/",
-    entityCodeProperty: "code",
+    entityCodeProperty: "SYSTEMID.EQUIPMENTCODE",
+    entityOrgProperty: "SYSTEMID.ORGANIZATIONID.ORGANIZATIONCODE",
+    entityProperty: "SystemEquipment",
+    resultDataCodeProperty: "SYSTEMID.EQUIPMENTCODE",
     screenProperty: "systemScreen",
     layoutProperty: "systemLayout",
     layoutPropertiesMap: systemLayoutPropertiesMap,
@@ -320,9 +326,7 @@ const System = () => {
         render: () => (
           <CustomFields
             entityCode="OBJ"
-            entityKeyCode={equipment.code}
-            classCode={equipment.classCode}
-            customFields={equipment.customField}
+            customFields={equipment.USERDEFINEDAREA?.CUSTOMFIELD}
             register={register}
           />
         ),

@@ -41,18 +41,6 @@ class WSEquipment {
         }
     }
 
-    updateEquipment(equipment, config = {}) {
-        return WS._put('/equipment/', equipment, config);
-    }
-
-    createEquipment(equipment, config = {}) {
-        return WS._post('/equipment/', equipment, config);
-    }
-
-    deleteEquipment(equipment, config = {}) {
-        return WS._delete('/equipment/' + equipment, config);
-    }
-
     getEquipmentType(equipmentCode, organization, config = {}) {
         console.log('eqp', equipmentCode, organization)
         let gridRequest = new GridRequest("OCOBJC", GridTypes.LIST)
@@ -60,10 +48,6 @@ class WSEquipment {
         gridRequest.addFilter("obj_org", organization, "=");
         gridRequest.addParam("parameter.lastupdated", "31-JAN-1970");
         return getGridData(gridRequest).then(response => response.body.data[0]?.obj_obrtype)
-    }
-
-    initEquipment(eqpType, config = {}) {
-        return WS._get(`/equipment/init/${eqpType}`, config);
     }
 
     autocompleteEquipmentStore(filter, config = {}) {
