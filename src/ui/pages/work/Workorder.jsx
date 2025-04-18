@@ -147,22 +147,31 @@ const Workorder = () => {
     setEquipment(null);
     setEquipmentPart(null);
 
-    if (!workorder?.equipmentCode) {
+    console.log('use effect', workorder)
+
+    if (!workorder?.EQUIPMENTID.EQUIPMENTCODE) {
+      console.log("kura")
       return;
     }
 
-    WSEquipment.getEquipment(workorder.equipmentCode)
+
+
+    getEquipment(workorder?.EQUIPMENTID?.EQUIPMENTCODE, '*')
       .then((response) => {
-        const equipmentResponse = response.body.data;
-        setEquipment(equipmentResponse);
-        if (equipmentResponse.partCode) {
-          WSParts.getPart(equipmentResponse.partCode)
-            .then((response) => setEquipmentPart(response.body.data))
-            .catch(console.error);
-        }
+        const equipment = response.body.Result.ResultData.AssetEquipment ??
+                          response.body.Result.ResultData.PositionEquipment ??
+                          response.body.Result.ResultData.SystemEquipment
+
+        setEquipment(equipment);
+        console.log('eqp', equipment)
+        // if (equipmentResponse.partCode) {
+        //   WSParts.getPart(equipmentResponse.partCode)
+        //     .then((response) => setEquipmentPart(response.body.data))
+        //     .catch(console.error);
+        // }
       })
       .catch(console.error);
-  }, [workorder?.equipmentCode]);
+  }, [workorder?.EQUIPMENTID?.EQUIPMENTCODE]);
 
   function onChangeEquipment(equipmentData) {
     const equipmentCode = equipmentData["EQUIPMENTID.EQUIPMENTCODE"]
@@ -178,8 +187,8 @@ const Workorder = () => {
                           response[0].body.Result.ResultData.PositionEquipment ??
                           response[0].body.Result.ResultData.SystemEquipment
         const linearDetails = response[1].body.data;
-
-        //console.log('eq', equipment, response)
+        
+        console.log('eq', equipment, response)
         setWorkOrder((oldWorkOrder) => ({
           ...oldWorkOrder,
           DEPARTMENTID: equipment.DEPARTMENTID,
@@ -520,9 +529,7 @@ const Workorder = () => {
         render: () => (
           <CustomFields
             entityCode="OBJ"
-            entityKeyCode={equipment?.code}
-            classCode={equipment?.classCode}
-            customFields={equipment?.customField}
+            customFields={equipment?.USERDEFINEDAREA.CUSTOMFIELD}
             register={registerCustomField(equipment)}
           />
         ),
