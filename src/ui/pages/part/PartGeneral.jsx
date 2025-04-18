@@ -1,12 +1,12 @@
 import * as React from "react";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
-import WSParts from "../../../tools/WSParts";
 import EAMCheckbox from "eam-components/dist/ui/components/inputs-ng/EAMCheckbox";
 import WS from "../../../tools/WS";
 import StatusRow from "../../components/statusrow/StatusRow";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import { isMultiOrg } from "../EntityTools";
+import { getPartTrackingMethods } from "../../../tools/WSParts";
 
 const PartGeneral = (props) => {
   const { part, newEntity, register, screenCode } = props;
@@ -21,37 +21,25 @@ const PartGeneral = (props) => {
         />
       )}
 
-      {newEntity && <EAMTextField {...register("partcode", "code")} />}
+      {newEntity && <EAMTextField {...register("partcode")} />}
 
-      <EAMTextField {...register("description", "description")} />
+      <EAMTextField {...register("description")} />
 
-      <EAMAutocomplete
-        {...register("class", "classCode", "classDesc")}
-      />
+      <EAMAutocomplete {...register("class")} />
 
-      <EAMAutocomplete
-        {...register("category", "categoryCode", "categoryDesc")}
-        autocompleteHandler={WSParts.autocompletePartCategory}
-      />
+      <EAMAutocomplete {...register("category")} />
 
-      <EAMAutocomplete
-        {...register("uom", "uom", "uomdesc")}
-        autocompleteHandler={WSParts.autocompletePartUOM}
-      />
+      <EAMAutocomplete {...register("uom")} />
 
-      <EAMSelect
-        {...register("trackingtype", "trackingMethod")}
-        autocompleteHandler={WSParts.getPartTrackingMethods}
-      />
+      <EAMSelect {...register("trackingtype")} autocompleteHandler={getPartTrackingMethods}/>
 
       <EAMAutocomplete
-        {...register("commoditycode", "commodityCode", "commodityDesc")}
-        autocompleteHandler={WSParts.autocompletePartCommodity}
+        {...register("commoditycode")}
       />
 
-      <EAMCheckbox {...register("trackbyasset", "trackByAsset")} />
+      <EAMCheckbox {...register("trackbyasset")} />
 
-      <EAMCheckbox {...register("repairablespare", "trackCores")} />
+      <EAMCheckbox {...register("repairablespare")} />
 
       <StatusRow
         entity={part}

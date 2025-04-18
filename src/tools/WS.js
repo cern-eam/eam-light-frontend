@@ -113,9 +113,6 @@ class WS {
     return this._get("/autocomplete/employee/" + filter, config);
   };
 
-  autocompleteSupervisor = (filter, config = {}) => {
-    return this._get("/autocomplete/supervisor/" + filter, config);
-  };
 
   autocompleteUsers = (filter, config = {}) => {
     return this._get(`/autocomplete/users/${filter}`, config);
@@ -143,10 +140,6 @@ class WS {
     );
   };
 
-  autocompleteEquipmentSelected = (filter, config) => {
-    filter = encodeURIComponent(filter);
-    return this._get("/autocomplete/eqp/selected?code=" + filter, config);
-  };
 
   //
   //

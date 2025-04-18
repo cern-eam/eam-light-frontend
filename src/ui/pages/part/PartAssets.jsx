@@ -2,7 +2,7 @@ import React from 'react'
 import EAMTable from "eam-components/dist/ui/components/eamtable/EAMTable";
 import EAMTableDataAdapter from "eam-components/dist/ui/components/eamtable/EAMTableDataAdapter";
 import { Link } from 'react-router-dom';
-import WSParts from "../../../tools/WSParts";
+import { getAssetsList } from "../../../tools/WSParts";
 
 
 const customCellRenderer = ({ row, columnMetadata, getDisplayValue, CellComponent }) => {
@@ -66,7 +66,7 @@ const PartAssets = (props) => {
 
     return (
         <EAMTableDataAdapter
-            fetchData={async () => WSParts.getAssetsList(partCode)}
+            fetchData={async () => getAssetsList(partCode)}
             convertRowData={convertRowData}
             convertColumnMetadata={convertColumnMetadata}>
             {({ loading, requestError, rows, columnsMetadata }) =>

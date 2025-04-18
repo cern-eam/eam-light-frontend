@@ -10,7 +10,6 @@ import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import useFieldsValidator from "eam-components/dist/ui/components/inputs-ng/hooks/useFieldsValidator";
-import WSParts from "../../../../tools/WSParts";
 import makeStyles from "@mui/styles/makeStyles";
 import EAMRadio from "eam-components/dist/ui/components/inputs-ng/EAMRadio";
 import {

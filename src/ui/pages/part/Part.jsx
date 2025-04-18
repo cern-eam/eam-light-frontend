@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
-import WSParts from "../../../tools/WSParts";
+import { createPart, deletePart, getPart, initPart, updatePart } from "../../../tools/WSParts";
 import PartGeneral from "./PartGeneral";
 import UserDefinedFields from "../../components/userdefinedfields/UserDefinedFields";
 import PartStock from "./PartStock";
 import Comments from "eam-components/dist/ui/components/comments/Comments";
-import CustomFields from "eam-components/dist/ui/components/customfields/CustomFields";
 import PartWhereUsed from "./PartWhereUsed";
 import PartAssets from "./PartAssets";
 import PartTools, { layoutPropertiesMap } from "./PartTools";
@@ -35,6 +34,7 @@ import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import { isCernMode } from "@/ui/components/CERNMode";
 import getPartsAssociated from "../PartsAssociated";
 import EamlightToolbar from "../../components/EamlightToolbar";
+import CustomFields from "../../components/customfields/CustomFields";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -75,11 +75,11 @@ const Part = () => {
     showNotification,
   } = useEntity({
     WS: {
-      create: WSParts.createPart,
-      read: WSParts.getPart,
-      update: WSParts.updatePart,
-      delete: WSParts.deletePart,
-      new: WSParts.initPart,
+      create: createPart,
+      read: getPart,
+      update: updatePart,
+      delete: deletePart,
+      new: initPart,
     },
     postActions: {
       create: postCreate,
@@ -87,7 +87,10 @@ const Part = () => {
     entityCode: "PART",
     entityDesc: "Part",
     entityURL: "/part/",
-    entityCodeProperty: "code",
+    entityCodeProperty: "PARTID.PARTCODE",
+    entityOrgProperty: "PARTID.ORGANIZATIONID.ORGANIZATIONCODE",
+    entityProperty: "Part",
+    resultDataCodeProperty: "PARTID.PARTCODE",
     screenProperty: "partScreen",
     layoutProperty: "partLayout",
     layoutPropertiesMap,
@@ -178,7 +181,7 @@ const Part = () => {
         label: "Assets",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <PartAssets partCode={part.code} />,
+        render: () => <PartAssets partCode={part.PARTID?.PARTCODE} />,
         column: 1,
         order: 5,
         summaryIcon: AssetIcon,
@@ -240,9 +243,7 @@ const Part = () => {
         render: () => (
           <CustomFields
             entityCode="PART"
-            entityKeyCode={part.code}
-            classCode={part.classCode}
-            customFields={part.customField}
+            customFields={part.USERDEFINEDAREA?.CUSTOMFIELD}
             updateEntityProperty={updateEquipmentProperty}
             register={register}
           />
@@ -294,8 +295,8 @@ const Part = () => {
           newEntity={newEntity}
           entityScreen={screenPermissions}
           entityName="Part" // TODO: hardcoded (following Location example)
-          entityKeyCode={part.code}
-          organization={part.organization}
+          entityKeyCode={part.PARTID?.PARTCODE}
+          organization={part.PARTID?.ORGANIZATIONID?.ORGANIZATIONCODE}
           saveHandler={saveHandler}
           newHandler={newHandler}
           deleteHandler={deleteHandler}

@@ -2,7 +2,6 @@ import Checklists from "eam-components/dist/ui/components/checklists/Checklists"
 import Comments from "eam-components/dist/ui/components/comments/Comments";
 import { useHistory } from "react-router-dom";
 import React, { useEffect, useState, useRef } from "react";
-import { createPortal } from 'react-dom';
 import BlockUi from "react-block-ui";
 import WSEquipment, { getEquipment } from "../../../tools/WSEquipment";
 import WSWorkorder from "../../../tools/WSWorkorders";
@@ -30,7 +29,6 @@ import { IconSlash } from "eam-components/dist/ui/components/icons/index";
 import { isCernMode } from "../../components/CERNMode";
 import { TAB_CODES } from "../../components/entityregions/TabCodeMapping";
 import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions, renderLoading, getCustomTabRegions } from "../EntityTools";
-import WSParts from "../../../tools/WSParts";
 import WSWorkorders from "../../../tools/WSWorkorders";
 import useEntity from "@/hooks/useEntity";
 import UserDefinedFields from "@/ui/components/userdefinedfields/UserDefinedFields";
@@ -359,12 +357,12 @@ const Workorder = () => {
           applicationData.EL_TBURL 
             ? <NCRIframeContainer
                 objectType="J"
-                objectID={workorder.number}
+                objectID={workorder.WORKORDERID?.JOBNUM}
                 mode="NCR"
                 url={`${applicationData.EL_TBURL}/ncr`}
                 edmsDocListLink={applicationData.EL_EDMSL}
             />
-            : <AssetNCRs equipment={workorder.equipmentCode} />
+            : <AssetNCRs equipment={workorder.EQUIPMENTID?.EQUIPMENTCODE} />
         ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },

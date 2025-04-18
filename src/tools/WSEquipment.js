@@ -153,7 +153,6 @@ export const getEquipment = async (equipmentCode, organization, config = {}) => 
 }
 
 export const getEquipmentType = async (equipmentCode, organization, config = {}) => {
-    console.log('eqp', equipmentCode, organization)
     let gridRequest = new GridRequest("OCOBJC", GridTypes.LIST)
     gridRequest.addFilter("obj_code", equipmentCode, "=", "AND");
     gridRequest.addFilter("obj_org", organization, "=");
