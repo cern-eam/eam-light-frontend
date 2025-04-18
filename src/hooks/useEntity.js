@@ -308,7 +308,6 @@ const useEntity = (params) => {
   const onChangeClass = (newClass) => {
      getCustomFields(entityCode, newClass)
      .then((response) => {
-      console.log('class change', response)
         setEntity((prevEntity) => assignCustomFieldFromCustomField(prevEntity, response.body.data.CUSTOMFIELD));
       })
      .catch(console.error);

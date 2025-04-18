@@ -33,9 +33,7 @@ const AssetDetails = (props) => {
 
       <EAMTextField {...register("equipmentvalue")} />
 
-      <EAMAutocomplete
-        {...register("manufacturer")}
-      />
+      <EAMAutocomplete {...register("manufacturer")} />
 
       <EAMTextField {...register("serialnumber", "serialNumber")} />
 

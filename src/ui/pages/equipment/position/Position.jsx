@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
-import CustomFields from "eam-components/dist/ui/components/customfields/CustomFields";
 import WSEquipment from "../../../../tools/WSEquipment";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
@@ -47,6 +46,8 @@ import Variables from "../components/Variables";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import getPartsAssociated from "@/ui/pages/PartsAssociated";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
+import { createPosition, deletePosition, getPosition, getPositionsDefault, updatePosition } from "../../../../tools/WSPositions.js";
+import CustomFields from "../../../components/customfields/CustomFields.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -88,21 +89,27 @@ const Position = () => {
     showWarning,
   } = useEntity({
     WS: {
-      create: WSEquipment.createEquipment,
-      read: WSEquipment.getEquipment,
-      update: WSEquipment.updateEquipment,
-      delete: WSEquipment.deleteEquipment,
-      new: WSEquipment.initEquipment.bind(null, "P"), // TODO: again we have extra arguments. What to do?
+      create: createPosition,
+      read: getPosition,
+      update: updatePosition,
+      delete: deletePosition,
+      new: getPositionsDefault, 
     },
     postActions: {
       read: postRead,
       new: postInit,
     },
+    handlers: {
+      "CATEGORYID.CATEGORYCODE": (category) => console.log('category changed', category)
+    },
     isReadOnlyCustomHandler: isClosedEquipment,
     entityCode: "OBJ",
     entityDesc: "Position",
     entityURL: "/position/",
-    entityCodeProperty: "code",
+    entityCodeProperty: "POSITIONID.EQUIPMENTCODE",
+    entityOrgProperty: "POSITIONID.ORGANIZATIONID.ORGANIZATIONCODE",
+    entityProperty: "PositionEquipment",
+    resultDataCodeProperty: "POSITIONID.EQUIPMENTCODE",
     screenProperty: "positionScreen",
     layoutProperty: "positionLayout",
     layoutPropertiesMap: positionLayoutPropertiesMap,
@@ -323,9 +330,7 @@ const Position = () => {
         render: () => (
           <CustomFields
             entityCode="OBJ"
-            entityKeyCode={equipment.code}
-            classCode={equipment.classCode}
-            customFields={equipment.customField}
+            customFields={equipment.USERDEFINEDAREA?.CUSTOMFIELD}
             register={register}
           />
         ),

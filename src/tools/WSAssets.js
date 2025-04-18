@@ -31,6 +31,6 @@ export const deleteAsset = (assetCode, organization, config = {}) => {
   return WS._delete(`/proxy/assets/${encodeURIComponent(assetCode + '#' + organization)}`, config)
 }
 
-export const getAssetDefault = (asset, config = {}) => {
-  return WS._post(`/proxy/assetdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": "*"}}, config)
+export const getAssetDefault = (organization = '*', config = {}) => {
+  return WS._post(`/proxy/assetdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": organization}}, config)
 }

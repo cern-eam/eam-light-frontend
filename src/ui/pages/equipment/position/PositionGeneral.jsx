@@ -6,7 +6,7 @@ import WSEquipment from "../../../../tools/WSEquipment";
 import WS from "../../../../tools/WS";
 import StatusRow from "../../../components/statusrow/StatusRow";
 import { isDepartmentReadOnly, isMultiOrg } from "@/ui/pages/EntityTools";
-import { readStatuses } from "../../../../tools/WSGrids";
+import { autocompleteDepartment, readStatuses } from "../../../../tools/WSGrids";
 
 const PositionGeneral = (props) => {
   const {
@@ -28,21 +28,22 @@ const PositionGeneral = (props) => {
         />
       )}
 
-      {newEntity && <EAMTextField {...register("equipmentno", "code")} />}
+      {newEntity && <EAMTextField {...register("equipmentno")} />}
 
-      <EAMTextField {...register("alias", "alias")} />
+      <EAMTextField {...register("alias")} />
 
-      <EAMTextField {...register("udfchar45", "userDefinedFields.udfchar45")} />
+      <EAMTextField {...register("udfchar45")} />
 
-      <EAMTextField {...register("equipmentdesc", "description")} />
+      <EAMTextField {...register("equipmentdesc")} />
 
       <EAMAutocomplete
-        {...register("department", "departmentCode", "departmentDesc")}
-        autocompleteHandler={WSEquipment.autocompleteEquipmentDepartment}
+        {...register("department")}
+          autocompleteHandler={autocompleteDepartment}
+          autocompleteHandlerParams={["*"]}
       />
 
       <EAMSelect
-        {...register("assetstatus", "statusCode")}
+        {...register("assetstatus")}
         disabled={
           isDepartmentReadOnly(equipment.departmentCode, userData) ||
           !screenPermissions.updateAllowed
