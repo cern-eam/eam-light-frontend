@@ -14,7 +14,6 @@ import AssetHierarchy from "./AssetHierarchy";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { Link } from "react-router-dom";
-import WSParts from "../../../../tools/WSParts";
 import EquipmentGraphIframe from "../../../components/iframes/EquipmentGraphIframe";
 import { isCernMode } from "../../../components/CERNMode";
 import { TAB_CODES } from "../../../components/entityregions/TabCodeMapping";

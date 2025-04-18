@@ -27,7 +27,7 @@ function PartWhereUsed(props) {
     let [data, setData] = useState([]);
 
     useEffect(() => {
-        fetchData(props.part.code, props.part.organization);
+        fetchData(props.part.PARTID?.PARTCODE, props.part.PARTID?.ORGANIZATIONID?.ORGANIZATIONCODE);
     }, [props.part.code])
 
     let fetchData = (partCode, partOrganization) => {

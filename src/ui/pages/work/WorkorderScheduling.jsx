@@ -31,21 +31,11 @@ const WorkorderScheduling = (props) => {
         <EAMDatePicker {...register("datecreated", "createdDate")} />
       </div>
 
-      <EAMAutocomplete
-        {...register("reportedby", "reportedBy", "reportedByDesc")}
-        autocompleteHandler={WS.autocompleteEmployee}
-      />
+      <EAMAutocomplete {...register("reportedby")} />
 
-      <EAMAutocomplete
-        {...register("assignedto", "assignedTo", "assignedToDesc")}
-        barcodeScanner
-      />
+      <EAMAutocomplete {...register("assignedto")} barcodeScanner/>
 
-      <EAMAutocomplete
-        {...register("schedgroup", "assignedBy")}
-        barcodeScanner
-        autocompleteHandler={WS.autocompleteSupervisor}
-      />
+      <EAMAutocomplete {...register("schedgroup", "assignedBy")} barcodeScanner />
 
       <EAMDatePicker {...register("reqstartdate")} />
 
@@ -61,21 +51,10 @@ const WorkorderScheduling = (props) => {
 
       <EAMDateTimePicker {...register("datereported")} />
 
-      <EAMUDF
-        {...register(
-          "udfchar17",
-          `userDefinedFields.udfchar17`,
-          `userDefinedFields.udfchar17Desc`
-        )}
-      />
+      <EAMUDF {...register("udfchar17")}/>
 
-      <EAMUDF
-        {...register(
-          "udfchar19",
-          `userDefinedFields.udfchar19`,
-          `userDefinedFields.udfchar19Desc`
-        )}
-      />
+      <EAMUDF {...register("udfchar19")}/>
+
     </React.Fragment>
   );
 };
