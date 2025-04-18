@@ -191,8 +191,9 @@ export const getElementInfoForCustomField = (customField) => {
 
 export const registerCustomField =
   (entity) => (layoutKey, valueKey, descKey) => {
+    console.log('cf', layoutKey, valueKey, descKey)
     let data = processElementInfo(
-      getElementInfoFromCustomFields(layoutKey, entity.customField)
+      getElementInfoFromCustomFields(layoutKey, entity.USERDEFINEDAREA.CUSTOMFIELD)
     );
     data.value = get(entity, valueKey);
     if (descKey) {
