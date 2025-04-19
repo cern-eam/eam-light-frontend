@@ -55,7 +55,7 @@ const useEntity = (params) => {
   const [newEntity, setNewEntity] = useState(true);
   const [readOnly, setReadOnly] = useState(false);
   const [isModified, setIsModified] = useState(false);
-  const { code } = useParams();
+  const { code: codeFromRoute } = useParams();
   const codeQueryParam = queryString.parse(window.location.search)[
     codeQueryParamName
   ]; //TODO add equipment and part identifiers
@@ -118,7 +118,7 @@ const useEntity = (params) => {
       return;
     }
 
-    if (!code && codeQueryParam) {
+    if (!codeFromRoute && codeQueryParam) {
       history.push(
         process.env.PUBLIC_URL +
           entityURL +
@@ -127,10 +127,10 @@ const useEntity = (params) => {
       );
       return;
     }
-    code ? readEntity(code) : initNewEntity();
+    codeFromRoute ? readEntity() : initNewEntity();
     // Reset window title when unmounting
     return () => (document.title = "EAM Light");
-  }, [code, screenLayout]);
+  }, [codeFromRoute, screenLayout]);
 
   // Provide mount and unmount handlers to the client
   useEffect(() => {
@@ -171,15 +171,15 @@ const useEntity = (params) => {
       .finally(() => setLoading(false));
   };
 
-  const readEntity = (code) => {
+  const readEntity = () => {
     setLoading(true);
+    const [code, organization = "*"] = decodeURIComponent(codeFromRoute).split("#");
     // Cancel the old request in the case it was still active
     abortController.current?.abort();
     abortController.current = new AbortController();
     //
-    WS.read(code, '*', { signal: abortController.current.signal })
+    WS.read(code, organization, { signal: abortController.current.signal })
       .then((response) => {
-        console.log('read', response)
         resetErrorMessages();
         setIsModified(false);
         setNewEntity(false);
@@ -219,7 +219,7 @@ const useEntity = (params) => {
 
         commentsComponent.current?.createCommentForNewEntity(entityCode);
         showNotification(response.body.Result.InfoAlert.Message);
-        readEntity(code);
+        readEntity();
       })
       .catch((error) => {
         console.log('error', error)

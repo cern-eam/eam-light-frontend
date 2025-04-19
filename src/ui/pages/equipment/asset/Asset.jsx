@@ -19,7 +19,7 @@ import { TAB_CODES } from "../../../components/entityregions/TabCodeMapping";
 import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions, renderLoading, getCustomTabRegions } from "../../EntityTools";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer";
 import useEntity from "@/hooks/useEntity";
-import { isClosedEquipment, assetLayoutPropertiesMap } from "../EquipmentTools";
+import { isClosedEquipment, assetLayoutPropertiesMap, onCategoryChange } from "../EquipmentTools";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import { AssetIcon, PartIcon } from "eam-components/dist/ui/components/icons";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
@@ -87,7 +87,7 @@ const Asset = () => {
       new: postInit,
     },
     handlers: {
-      "CATEGORYID.CATEGORYCODE": (category) => console.log('category changed', category)
+      "CATEGORYID.CATEGORYCODE": (category) => onCategoryChange(category)
     },
     isReadOnlyCustomHandler: isClosedEquipment,
     entityCode: "OBJ",

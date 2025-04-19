@@ -37,27 +37,28 @@ class EquipmentTools {
 export default new EquipmentTools();
 
 export const onCategoryChange = (category, updateProperty) => {
-  if (!category) {
-    return;
-  }
+  console.log('category', category)
+  // if (!category) {
+  //   return;
+  // }
 
-  WSEquipment.getCategory(category)
-    .then((response) => {
-      const category = response.body.data;
+  // WSEquipment.getCategory(category)
+  //   .then((response) => {
+  //     const category = response.body.data;
 
-      if (category.classCode) {
-        updateProperty("classCode", category.classCode);
-        updateProperty("classDesc", category.classDesc); // TODO: this does not appear to be included in the response
-      }
+  //     if (category.classCode) {
+  //       updateProperty("classCode", category.classCode);
+  //       updateProperty("classDesc", category.classDesc); // TODO: this does not appear to be included in the response
+  //     }
 
-      if (category.manufacturerCode) {
-        updateProperty("manufacturerCode", category.manufacturerCode);
-        updateProperty("manufacturerDesc", category.manufacturerDesc);
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  //     if (category.manufacturerCode) {
+  //       updateProperty("manufacturerCode", category.manufacturerCode);
+  //       updateProperty("manufacturerDesc", category.manufacturerDesc);
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //   });
 };
 
 // Used in hierarchies to handle dependency-related behavior
