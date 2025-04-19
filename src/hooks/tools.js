@@ -4,6 +4,7 @@ import GridRequest, { GridTypes } from "../tools/entities/GridRequest";
 import { getGridData, transformResponse } from "../tools/WSGrids";
 import queryString from "query-string";
 import set from "set-value";
+import useUserDataStore from "../state/useUserDataStore";
 
 export const convertValue = (value, type) => {
     switch(type) {
@@ -39,7 +40,6 @@ export const fireHandlersForQueryParamValues = (screenLayout, fireHandler) => {
     }) 
 }
 
-
 export const assignDefaultValues = (entity, layout) => {
     const exclusions = ['esthrs', 'pplreq']
     Object.values(layout.fields)
@@ -49,10 +49,10 @@ export const assignDefaultValues = (entity, layout) => {
 };
 
 const generateResultMap = (returnFields = {}, elementInfo) => ({
-        code: returnFields[elementInfo.elementId] ?? Object.values(returnFields).find(value => value.includes('code')),
-        desc: Object.values(returnFields).find(value => value.includes('desc')) ?? "des_text",
-        organization: Object.values(returnFields).find(value => value.includes('organization'))
-    })
+    code: returnFields[elementInfo.elementId] ?? Object.values(returnFields).find(value => value.includes('code')),
+    desc: Object.values(returnFields).find(value => value.includes('desc')) ?? "des_text",
+    organization: Object.values(returnFields).find(value => value.includes('organization'))
+})
 
 export const createAutocompleteHandler = (elementInfo, fields, entity, autocompleteHandlerData = {}) => {
 
@@ -70,20 +70,23 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
             
             // Parameters 
             Object.entries(inputFields ?? {}).forEach(([key, value]) => { 
-                gridRequest.addParam(key, get(entity, fields[value]?.xpath))
+                if (key === 'param.group') {
+                    gridRequest.addParam(key, useUserDataStore.getState().userData.eamAccount.userGroup)
+                } else {
+                    gridRequest.addParam(key, get(entity, fields[value]?.xpath))
+                }
             });
             Object.entries(inputVars ?? {}).forEach(([key, value]) => { 
                 gridRequest.addParam(key, value)
             });
             gridRequest.addParam("param.pagemode", "display")
-            gridRequest.addParam("param.group", 'R5CERN') // TODO 
             
             const searchFields = autocompleteHandlerData.searchKeys ?? [returnFields[elementInfo.elementId]] ?? [];
             searchFields.forEach(searchField => gridRequest.addFilter(searchField, typeof filter === "string" ? filter : "", operator, "OR"))
 
             return getGridData(gridRequest, config).then(response => transformResponse(response, autocompleteHandlerData.resultMap ?? generateResultMap(returnFields, elementInfo)));
         } catch (error) {
-            console.error('error', error)
+            console.error('autocompleteHandler error', error)
         }
     }
 

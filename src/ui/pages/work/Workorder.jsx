@@ -3,7 +3,7 @@ import Comments from "eam-components/dist/ui/components/comments/Comments";
 import { useHistory } from "react-router-dom";
 import React, { useEffect, useState, useRef } from "react";
 import BlockUi from "react-block-ui";
-import WSEquipment, { getEquipment } from "../../../tools/WSEquipment";
+import { getEquipment } from "../../../tools/WSEquipment";
 import WSWorkorder from "../../../tools/WSWorkorders";
 import { ENTITY_TYPE } from "../../components/Toolbar";
 import EDMSDoclightIframeContainer from "../../components/iframes/EDMSDoclightIframeContainer";
@@ -56,6 +56,7 @@ import useWorkOrderStore from "../../../state/useWorkOrderStore";
 import { isLocalAdministrator } from "../../../state/utils";
 import AssetNCRs from '../../pages/equipment/components/EquipmentNCRs';
 import CustomFields from "../../components/customfields/CustomFields";
+import { getPart } from "../../../tools/WSParts";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -147,15 +148,9 @@ const Workorder = () => {
     setEquipment(null);
     setEquipmentPart(null);
 
-    console.log('use effect', workorder)
-
     if (!workorder?.EQUIPMENTID.EQUIPMENTCODE) {
-      console.log("kura")
       return;
     }
-
-
-
     getEquipment(workorder?.EQUIPMENTID?.EQUIPMENTCODE, '*')
       .then((response) => {
         const equipment = response.body.Result.ResultData.AssetEquipment ??
@@ -163,12 +158,11 @@ const Workorder = () => {
                           response.body.Result.ResultData.SystemEquipment
 
         setEquipment(equipment);
-        console.log('eqp', equipment)
-        // if (equipmentResponse.partCode) {
-        //   WSParts.getPart(equipmentResponse.partCode)
-        //     .then((response) => setEquipmentPart(response.body.data))
-        //     .catch(console.error);
-        // }
+        if (equipment.PartAssociation?.PARTID) {
+          getPart(equipment.PartAssociation?.PARTID.PARTCODE, equipment.PartAssociation?.PARTID.ORGANIZATIONID.ORGANIZATIONCODE)
+            .then((response) => setEquipmentPart(response.body.Result.ResultData.Part))
+            .catch(console.error);
+        }
       })
       .catch(console.error);
   }, [workorder?.EQUIPMENTID?.EQUIPMENTCODE]);
@@ -547,9 +541,7 @@ const Workorder = () => {
         render: () => (
           <CustomFields
             entityCode="PART"
-            entityKeyCode={equipmentPart?.Code}
-            classCode={equipmentPart?.classCode}
-            customFields={equipmentPart?.customField}
+            customFields={equipmentPart?.USERDEFINEDAREA.CUSTOMFIELD}
             register={registerCustomField(equipmentPart)}
           />
         ),
