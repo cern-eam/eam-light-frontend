@@ -42,7 +42,6 @@ class WSEquipment {
     }
 
     getEquipmentType(equipmentCode, organization, config = {}) {
-        console.log('eqp', equipmentCode, organization)
         let gridRequest = new GridRequest("OCOBJC", GridTypes.LIST)
         gridRequest.addFilter("obj_code", equipmentCode, "=", "AND");
         gridRequest.addFilter("obj_org", organization, "=");
@@ -58,9 +57,17 @@ class WSEquipment {
     //
     // HIERARCHY
     //
-    autocompleteAssetParent(filter, config = {}) {
-        filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/eqp/parent/A?code=${filter}`, config);
+    autocompleteAssetParent({handlerParams, filter, operator = "BEGINS"}, config = {}) {
+        let gridRequest = new GridRequest( "LVOBJL_EQ")
+        gridRequest.setRowCount(10)
+        gridRequest.addParam("param.objectrtype", handlerParams[0])
+        gridRequest.addParam("param.bypassdeptsecurity", null)
+        gridRequest.addParam("param.objectcode", "")
+        gridRequest.addParam("param.objectorg", "*")
+        gridRequest.addParam("control.org", "*")
+        gridRequest.addFilter("equipmentcode", filter, operator)
+        gridRequest.sortBy("equipmentcode")
+        return getGridData(gridRequest).then(response => transformResponse(response, {code: "equipmentcode", desc: "description_obj", org: "equiporganization"}));
     }
 
     autocompletePositionParent(filter, config = {}) {
