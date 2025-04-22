@@ -183,7 +183,6 @@ const Workorder = () => {
                           response[0].body.Result.ResultData.SystemEquipment
         const linearDetails = response[1].body.data;
         
-        console.log('eq', equipment, response)
         setWorkOrder((oldWorkOrder) => ({
           ...oldWorkOrder,
           DEPARTMENTID: equipment.DEPARTMENTID,
@@ -201,16 +200,23 @@ const Workorder = () => {
   }
 
   function onChangeStandardWorkOrder(standardWorkOrderCode) {
-    if (standardWorkOrderCode) {
-      WSWorkorder.getStandardWorkOrder(standardWorkOrderCode)
-        .then((response) => {
-          console.log(response.body.Result.ResultData.StandardWorkOrder)
-          setWorkOrder(response.body.Result.ResultData.StandardWorkOrder ?? {})
-        }
-          //setWorkOrder((oldWorkOrder) => assignStandardWorkOrderValues(oldWorkOrder, response.body.data))
-        )
-        .catch(console.error);
+    if (!standardWorkOrderCode) {
+      return
     }
+
+    WSWorkorder.getStandardWorkOrder(standardWorkOrderCode)
+      .then((response) => {
+        const standardWorkOrder = response.body.Result.ResultData.StandardWorkOrder
+        updateWorkorderProperty('CLASSID.CLASSCODE', standardWorkOrder.WORKORDERCLASSID?.CLASSCODE)
+        updateWorkorderProperty('TYPE', standardWorkOrder.WORKORDERTYPE)
+        updateWorkorderProperty('PRIORITY', standardWorkOrder.PRIORITY)
+        updateWorkorderProperty('PROBLEMCODEID', standardWorkOrder.PROBLEMCODEID)
+        updateWorkorderProperty('WORKORDERID.DESCRIPTION', standardWorkOrder.STANDARDWO.DESCRIPTION)
+        console.log(response.body.Result.ResultData.StandardWorkOrder)
+      }
+      )
+      .catch(console.error);
+    
   }
 
   function onChangeDescription() {
