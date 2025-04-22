@@ -10,16 +10,12 @@ import Location from "./location/Location";
 import Workorder from "../work/Workorder";
 import InstallEqp from "./installeqp/InstallEqp";
 import useEquipmentTreeStore from "../../../state/useEquipmentTreeStore";
-import useUserDataStore from "../../../state/useUserDataStore";
-import useApplicationDataStore from "../../../state/useApplicationDataStore";
 
 const Equipment = () => {
-  const { userData } = useUserDataStore();
-  const {equipmentTreeData: {showEqpTree, equipment}, initializeStore, updateEquipmentTreeData} = useEquipmentTreeStore();
+  const {equipmentTreeData: {showEqpTree, equipment}, updateEquipmentTreeData} = useEquipmentTreeStore();
   const renderEqpTree = equipment && showEqpTree;
 
   useEffect(() => {
-    initializeStore(userData.eamAccount.userCode);
     return () => {
       updateEquipmentTreeData({
         equipment: null,
