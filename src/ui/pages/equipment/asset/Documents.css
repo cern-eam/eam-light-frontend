@@ -34,7 +34,7 @@
     width: calc(100% - 10px);
     cursor: pointer;
     padding: 4px;
-    border-radius: 6px;
+    border-radius: 4px;
     border: 2px solid transparent;
     transition: border-color 0.2s ease;
   }
@@ -103,7 +103,7 @@
   }
   
   .doc-thumb-label {
-    margin-top: 6px;
+    margin: 6px;
     font-size: 12px;
     color: #333;
     text-align: center;
