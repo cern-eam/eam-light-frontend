@@ -58,6 +58,7 @@ const System = () => {
   const {
     screenLayout: systemLayout,
     entity: equipment,
+    id,
     loading,
     readOnly,
     isModified,
@@ -204,7 +205,7 @@ const System = () => {
         maximizable: true,
         render: ({ panelQueryParams }) => (
           <EquipmentWorkOrders
-            equipmentcode={equipment.code}
+            equipmentcode={id.code}
             defaultFilter={panelQueryParams.defaultFilter}
             equipmenttype="S"
           />
@@ -220,7 +221,7 @@ const System = () => {
         label: "History",
         isVisibleWhenNewEntity: false,
         maximizable: false,
-        render: () => <EquipmentHistory equipmentcode={equipment.code} />,
+        render: () => <EquipmentHistory equipmentcode={id.code} />,
         column: 1,
         order: 25,
         summaryIcon: ManageHistoryIcon,
@@ -234,7 +235,7 @@ const System = () => {
         maximizable: false,
         render: () => (
           <EquipmentPartsAssociated
-            equipmentcode={equipment.code}
+            equipmentcode={id.code}
             parentScreen={screenPermissions.parentScreen}
           />
         ),
@@ -255,7 +256,7 @@ const System = () => {
         render: () => (
           <EDMSDoclightIframeContainer
             objectType={getEDMSObjectType(equipment)}
-            objectID={equipment.code}
+            objectID={id.code}
             url={applicationData.EL_DOCLI}
           />
         ),
@@ -282,11 +283,11 @@ const System = () => {
           <Comments
             ref={(comments) => (commentsComponent.current = comments)}
             entityCode="OBJ"
-            entityKeyCode={!newEntity ? equipment.code : undefined}
+            entityKeyCode={id.code}
+            entityOrganization={id.organization}
             userCode={userData.eamAccount.userCode}
             handleError={handleError}
             allowHtml={true}
-            entityOrganization={equipment.organization}
             disabled={readOnly}
           />
         ),
@@ -343,7 +344,7 @@ const System = () => {
         maximizable: true,
         render: () => (
           <EquipmentGraphIframe
-            equipmentCode={equipment.code}
+            equipmentCode={id.code}
             equipmentGraphURL={applicationData.EL_EQGRH}
           />
         ),
@@ -366,7 +367,7 @@ const System = () => {
         systemLayout.customGridTabs,
         customTabGridParamNames,
         screenCode,
-        equipment.code
+        id.code
       ),
       ...getCustomTabRegions(
         systemLayout.customTabs,
@@ -393,8 +394,8 @@ const System = () => {
         newEntity={newEntity}
         entityScreen={screenPermissions}
         entityName="System"
-        entityKeyCode={equipment.code}
-        organization={equipment.organization}
+        entityKeyCode={id.code}
+        organization={id.organization}
         saveHandler={saveHandler}
         newHandler={newHandler}
         deleteHandler={deleteHandler}

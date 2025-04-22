@@ -84,6 +84,7 @@ const Workorder = () => {
   const {
     screenLayout: workOrderLayout,
     entity: workorder,
+    id,
     setEntity: setWorkOrder,
     loading,
     readOnly,
@@ -110,7 +111,7 @@ const Workorder = () => {
     showWarning,
     createEntity,
     setLoading,
-    setReadOnly,
+    setReadOnly
   } = useEntity({
     WS: {
       create: WSWorkorder.createWorkOrder,
@@ -148,7 +149,7 @@ const Workorder = () => {
     setEquipment(null);
     setEquipmentPart(null);
 
-    if (!workorder?.EQUIPMENTID.EQUIPMENTCODE) {
+    if (!workorder?.EQUIPMENTID?.EQUIPMENTCODE) {
       return;
     }
     getEquipment(workorder?.EQUIPMENTID?.EQUIPMENTCODE, '*')
@@ -360,7 +361,7 @@ const Workorder = () => {
           applicationData.EL_TBURL 
             ? <NCRIframeContainer
                 objectType="J"
-                objectID={workorder.WORKORDERID?.JOBNUM}
+                objectID={id.code}
                 mode="NCR"
                 url={`${applicationData.EL_TBURL}/ncr`}
                 edmsDocListLink={applicationData.EL_EDMSL}
@@ -385,7 +386,7 @@ const Workorder = () => {
           <Comments
             ref={(comments) => (commentsComponent.current = comments)}
             entityCode="EVNT"
-            entityKeyCode={!newEntity ? workorder.WORKORDERID.JOBNUM : undefined}
+            entityKeyCode={id.code}
             userCode={userData.eamAccount.userCode}
             handleError={handleError}
             allowHtml={true}
@@ -438,7 +439,7 @@ const Workorder = () => {
         maximizable: true,
         render: ({ panelQueryParams }) => (
           <Checklists
-            workorder={workorder.WORKORDERID.JOBNUM}
+            workorder={id.code}
             version={workorder.recordid}
             eqpToOtherId={otherIdMapping}
             printingChecklistLinkToAIS={applicationData.EL_PRTCL}
@@ -709,8 +710,8 @@ const Workorder = () => {
           newEntity={newEntity}
           entityScreen={screenPermissions}
           entityName="Work Order"
-          entityKeyCode={workorder.WORKORDERID?.JOBNUM ?? ""}
-          organization={workorder.WORKORDERID?.ORGANIZATIONID?.ORGANIZATIONCODE}
+          entityKeyCode={id.code}
+          organization={id.organization}
           saveHandler={saveHandler}
           newHandler={newHandler}
           deleteHandler={deleteHandler}

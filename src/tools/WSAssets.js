@@ -9,7 +9,6 @@ export const updateAsset = (asset, config = {}) => {
 }
 
 export const getAsset = async (assetCode, organization, config = {}) => {
-  console.log('ac', assetCode, organization)
     const assetResponse = await WS._get(`/proxy/assets/${encodeURIComponent(assetCode + '#' + organization)}`, config)
     const hierarchyResponse = await getAssetHierarchy(assetCode, organization, config);
     assetResponse.body.Result.ResultData.AssetEquipment.AssetParentHierarchy = hierarchyResponse.body.Result.ResultData.AssetParentHierarchy;

@@ -3,7 +3,7 @@ import WS from './WS';
 import { getGridData, transformResponse } from './WSGrids';
 
 export const initPart = (config = {}) => {
-    return WS._post(`/proxy/partdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": "*"}}, config);
+    return WS._post(`/proxy/partdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": "*"}}, config)
 }
 
 export const getPart = (number, organization, config = {}) => {
@@ -11,6 +11,7 @@ export const getPart = (number, organization, config = {}) => {
 }
 
 export const createPart = (part, config = {}) => {
+    console.log('create part', part)
     return WS._post('/proxy/parts/', part, config);
 }
 
