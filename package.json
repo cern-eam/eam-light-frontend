@@ -47,7 +47,7 @@
     "react-dropzone": "7.0.1",
     "react-event-listener": "0.6.3",
     "react-grid-layout": "0.16.6",
-    "react-image-gallery": "^1.4.0",
+    "react-image-gallery": "1.4.0",
     "react-infinite-scroll-component": "3.0.2",
     "react-jss": "10.0.0",
     "react-markdown": "8.0.7",
