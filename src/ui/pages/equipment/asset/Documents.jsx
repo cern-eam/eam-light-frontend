@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { getEquipmentDocuments } from "../../../../tools/WSEquipment";
+import { getEquipmentDocuments, getWorkOrderDocuments } from "../../../../tools/WSEquipment";
 import { getDocumentAttachment } from "../../../../tools/WSDocuments";
 import "./Documents.css";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
-const Documents = ({ code, organization }) => {
+const Documents = ({ code, organization, entity }) => {
   const [files, setFiles] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -12,11 +12,22 @@ const Documents = ({ code, organization }) => {
   useEffect(() => {
     if (!code) return;
 
+    const fetchDocuments =
+      entity === "OBJ"
+        ? getEquipmentDocuments
+        : entity === "EVNT"
+        ? getWorkOrderDocuments
+        : null;
+
+    if (!fetchDocuments) return;
+    
     setLoading(true);
-    getEquipmentDocuments(code, organization)
+    fetchDocuments(code, organization)
       .then(async (response) => {
         const documentList = response.body.data || [];
 
+
+        
         const filteredDocs = documentList.filter((doc) => {
           const name = doc.doc_filename?.toLowerCase();
           return name && (name.endsWith(".jpg") || name.endsWith(".pdf"));

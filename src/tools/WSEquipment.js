@@ -137,4 +137,13 @@ export const getEquipmentDocuments = async (code, organization, config = {}) => 
     return getGridData(gridRequest)
 }
 
+export const getWorkOrderDocuments = async (code, organization = '*', config = {}) => {
+    let gridRequest = new GridRequest("BCDOCWO_IPAD", GridTypes.LIST)
+    //gridRequest.addParam("parameter.code1", code)
+    
+    gridRequest.addFilter("doc_entitycode", code, "=");
+    gridRequest.addParam("parameter.lastupdated", "31-JAN-1970");
+    return getGridData(gridRequest)
+}
+
 export default new WSEquipment();

@@ -44,7 +44,7 @@ import SpeedIcon from "@mui/icons-material/Speed";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import MonetizationOnRoundedIcon from "@mui/icons-material/MonetizationOnRounded";
 import SegmentRoundedIcon from "@mui/icons-material/SegmentRounded";
-import { PendingActions } from "@mui/icons-material";
+import { Article, PendingActions } from "@mui/icons-material";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import { PartIcon } from "eam-components/dist/ui/components/icons";
@@ -57,6 +57,7 @@ import { isLocalAdministrator } from "../../../state/utils";
 import AssetNCRs from '../../pages/equipment/components/EquipmentNCRs';
 import CustomFields from "../../components/customfields/CustomFields";
 import { getPart } from "../../../tools/WSParts";
+import Documents from "../equipment/asset/Documents";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -357,6 +358,20 @@ const Workorder = () => {
         summaryIcon: FunctionsRoundedIcon,
         ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
+      },
+      {
+        id: "DOCUMENTS",
+        label: "Documents",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => <Documents objectType="A" code={id.code} organization={id.organization} entity="EVNT"/>,
+        RegionPanelProps: {
+          detailsStyle: { padding: 0 },
+        },
+        column: 2,
+        order: 7,
+        summaryIcon: Article,
+        ignore: !isCernMode // ?? true
       },
       {
         id: "NCRS",
