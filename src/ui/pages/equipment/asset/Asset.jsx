@@ -30,6 +30,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
+import Article from "@mui/icons-material/Article";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
@@ -42,6 +43,7 @@ import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
 import { createAsset, deleteAsset, getAsset, getAssetDefault, getAssetHierarchy, updateAsset } from "../../../../tools/WSAssets.js";
 import CustomFields from "../../../components/customfields/CustomFields.jsx";
+import Documents from "./Documents.jsx";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -265,6 +267,20 @@ const Asset = () => {
         summaryIcon: FunctionsRoundedIcon,
         ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
+      },
+      {
+        id: "DOCUMENTS",
+        label: "Documents",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => <Documents objectType="A" code={id.code} organization={id.organization} entity="OBJ"/>,
+        RegionPanelProps: {
+          detailsStyle: { padding: 0 },
+        },
+        column: 2,
+        order: 7,
+        summaryIcon: Article,
+        ignore: !isCernMode // ?? true
       },
       {
         id: "NCRS",

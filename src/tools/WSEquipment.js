@@ -28,27 +28,6 @@ class WSEquipment {
         return WS._get(`/equipment/events?c=${equipmentCode}&t=${equipmentType}`, config);
     }
 
-    async getEquipment(equipmentCode, organization, config = {}) {
-        const equipmentType = await this.getEquipmentType(equipmentCode, organization);
-        
-        const codeorg = encodeURIComponent(equipmentCode + '#' + organization)
-
-        switch(equipmentType) {
-            case "A":
-                return WS._get(`/proxy/assets/${codeorg}`, config)
-            case "P":
-                return WS._get(`/proxy/positions/${codeorg}`, config)
-        }
-    }
-
-    getEquipmentType(equipmentCode, organization, config = {}) {
-        let gridRequest = new GridRequest("OCOBJC", GridTypes.LIST)
-        gridRequest.addFilter("obj_code", equipmentCode, "=", "AND");
-        gridRequest.addFilter("obj_org", organization, "=");
-        gridRequest.addParam("parameter.lastupdated", "31-JAN-1970");
-        return getGridData(gridRequest).then(response => response.body.data[0]?.obj_obrtype)
-    }
-
     autocompleteEquipmentStore(filter, config = {}) {
         filter = encodeURIComponent(filter);
         return WS._get('/autocomplete/eqp/store/' + filter, config);
@@ -149,6 +128,13 @@ export const getEquipmentType = async (equipmentCode, organization, config = {})
     gridRequest.addFilter("obj_org", organization, "=");
     gridRequest.addParam("parameter.lastupdated", "31-JAN-1970");
     return getGridData(gridRequest).then(response => response.body.data[0]?.obj_obrtype)
+}
+
+export const getEquipmentDocuments = async (code, organization, config = {}) => {
+    let gridRequest = new GridRequest("BCDOCOBJ_IPAD", GridTypes.LIST)
+    gridRequest.addParam("parameter.code1", code)
+    gridRequest.addParam("parameter.lastupdated", "31-JAN-1970");
+    return getGridData(gridRequest)
 }
 
 export default new WSEquipment();
