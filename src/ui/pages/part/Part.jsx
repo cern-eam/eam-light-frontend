@@ -19,6 +19,7 @@ import {
   getTabGridRegions,
   renderLoading,
   getCustomTabRegions,
+  isMultiOrg,
 } from "../EntityTools";
 import useEntity from "@/hooks/useEntity";
 
@@ -51,6 +52,7 @@ const Part = () => {
   const {
     screenLayout: partLayout,
     entity: part,
+    id,
     loading,
     readOnly,
     isModified,
@@ -68,7 +70,7 @@ const Part = () => {
     saveHandler,
     deleteHandler,
     copyHandler,
-    updateEntityProperty: updateEquipmentProperty,
+    updateEntityProperty: updatePartProperty,
     register,
     handleError,
     showError,
@@ -84,6 +86,9 @@ const Part = () => {
     postActions: {
       create: postCreate,
     },
+    handlers: {
+      "PARTID.DESCRIPTION": onChangeDescription
+    },
     entityCode: "PART",
     entityDesc: "Part",
     entityURL: "/part/",
@@ -91,6 +96,7 @@ const Part = () => {
     entityOrgProperty: "PARTID.ORGANIZATIONID.ORGANIZATIONCODE",
     entityProperty: "Part",
     resultDataCodeProperty: "PARTID.PARTCODE",
+    resultDefaultDataProperty: "PartDefault",
     screenProperty: "partScreen",
     layoutProperty: "partLayout",
     layoutPropertiesMap,
@@ -108,6 +114,10 @@ const Part = () => {
     commentsComponent.current.createCommentForNewEntity();
   }
 
+  function onChangeDescription() {
+    !isMultiOrg && updatePartProperty('PARTID.ORGANIZATIONID.ORGANIZATIONCODE', '*')
+  }
+
   const getRegions = () => {
     const tabs = partLayout.tabs;
 
@@ -116,7 +126,7 @@ const Part = () => {
       newEntity,
       partLayout,
       userData,
-      updatePartProperty: updateEquipmentProperty,
+      updatePartProperty: updatePartProperty,
       register,
     };
 
@@ -181,7 +191,7 @@ const Part = () => {
         label: "Assets",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <PartAssets partCode={part.PARTID?.PARTCODE} />,
+        render: () => <PartAssets partCode={id.code} />,
         column: 1,
         order: 5,
         summaryIcon: AssetIcon,
@@ -194,7 +204,7 @@ const Part = () => {
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
-          <EDMSDoclightIframeContainer objectType="PART" objectID={part.code} url={applicationData.EL_DOCLI} />
+          <EDMSDoclightIframeContainer objectType="PART" objectID={id.code} url={applicationData.EL_DOCLI} />
         ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
@@ -219,10 +229,10 @@ const Part = () => {
           <Comments
             ref={(comments) => (commentsComponent.current = comments)}
             entityCode="PART"
-            entityKeyCode={!partLayout.newEntity ? part.code : undefined}
+            entityKeyCode={id.code}
+            entityOrganization={id.organization}
             userCode={userData.eamAccount.userCode}
             handleError={handleError}
-            entityOrganization={part.organization}
             allowHtml={true}
           />
         ),
@@ -244,7 +254,7 @@ const Part = () => {
           <CustomFields
             entityCode="PART"
             customFields={part.USERDEFINEDAREA?.CUSTOMFIELD}
-            updateEntityProperty={updateEquipmentProperty}
+            updateEntityProperty={updatePartProperty}
             register={register}
           />
         ),
@@ -255,8 +265,8 @@ const Part = () => {
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
       },
       getPartsAssociated(
-        part.code,
-        part.organization,
+        id.code,
+        id.organization,
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         2,
@@ -267,7 +277,7 @@ const Part = () => {
         partLayout.customGridTabs,
         customTabGridParamNames,
         screenCode,
-        part.code
+        id.code
       ),
       ...getCustomTabRegions(
         partLayout.customTabs,
@@ -295,8 +305,8 @@ const Part = () => {
           newEntity={newEntity}
           entityScreen={screenPermissions}
           entityName="Part" // TODO: hardcoded (following Location example)
-          entityKeyCode={part.PARTID?.PARTCODE}
-          organization={part.PARTID?.ORGANIZATIONID?.ORGANIZATIONCODE}
+          entityKeyCode={id.code}
+          organization={id.organization}
           saveHandler={saveHandler}
           newHandler={newHandler}
           deleteHandler={deleteHandler}

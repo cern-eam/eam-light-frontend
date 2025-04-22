@@ -43,6 +43,7 @@ const useEntity = (params) => {
     entityProperty,
     screenProperty,
     resultDataCodeProperty,
+    resultDefaultDataProperty,
     layoutPropertiesMap,
     isReadOnlyCustomHandler,
     onMountHandler,
@@ -55,6 +56,7 @@ const useEntity = (params) => {
   const [newEntity, setNewEntity] = useState(true);
   const [readOnly, setReadOnly] = useState(false);
   const [isModified, setIsModified] = useState(false);
+  const [id, setId] = useState({})
   const { code: codeFromRoute } = useParams();
   const codeQueryParam = queryString.parse(window.location.search)[
     codeQueryParamName
@@ -137,13 +139,14 @@ const useEntity = (params) => {
     onMountHandler?.();
     return () => onUnmountHandler?.();
   }, []);
-
+  
   //
   // CRUD
   //
   const createEntity = (entityToCreate = entity) => {
     if (!validateFields()) {
       return;
+      
     }
     setLoading(true);
 
@@ -187,6 +190,8 @@ const useEntity = (params) => {
         setEntity(readEntity);
         
         document.title = entityDesc + " " + get(readEntity, entityCodeProperty);
+
+        setId({code: get(readEntity, entityCodeProperty), organization: get(entity, entityOrgProperty)})
 
         //Render as read-only depending on screen rights, department security or custom handler
         setReadOnly(
@@ -252,13 +257,13 @@ const useEntity = (params) => {
       getCustomFields(entityCode, "*")
     ])
       .then(([response, customFields]) => {
-        
         resetErrorMessages();
         setNewEntity(true);
         setIsModified(false);
         setReadOnly(!screenPermissions.creationAllowed);
+        setId({})
 
-        let newEntity = response.body.Result.ResultData[entityProperty] ?? response.body.Result.ResultData
+        let newEntity = response.body.Result.ResultData[resultDefaultDataProperty ?? entityProperty] ?? response.body.Result.ResultData
         newEntity.USERDEFINEDAREA = customFields.body.data;
         newEntity = assignDefaultValues(newEntity, screenLayout);
         newEntity = assignQueryParamValues(newEntity, screenLayout)
@@ -281,6 +286,7 @@ const useEntity = (params) => {
     setNewEntity(true);
     setIsModified(false);
     setReadOnly(!screenPermissions.creationAllowed);
+    setId({})
 
     setEntity((oldEntity) => ({
       ...assignDefaultValues(oldEntity, screenLayout, layoutPropertiesMap),
@@ -414,6 +420,7 @@ const useEntity = (params) => {
     screenLayout,
     screenPermissions,
     entity,
+    id,
     newEntity,
     setEntity,
     loading,

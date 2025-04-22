@@ -63,6 +63,7 @@ const Position = () => {
   const {
     screenLayout: positionLayout,
     entity: equipment,
+    id,
     loading,
     readOnly,
     isModified,
@@ -201,7 +202,7 @@ const Position = () => {
         maximizable: true,
         render: ({ panelQueryParams }) => (
           <EquipmentWorkOrders
-            equipmentcode={equipment.code}
+            equipmentcode={id.code}
             defaultFilter={panelQueryParams.defaultFilter}
             equipmenttype="P"
           />
@@ -217,7 +218,7 @@ const Position = () => {
         label: "History",
         isVisibleWhenNewEntity: false,
         maximizable: false,
-        render: () => <EquipmentHistory equipmentcode={equipment.code} />,
+        render: () => <EquipmentHistory equipmentcode={id.code} />,
         column: 1,
         order: 25,
         summaryIcon: ManageHistoryIcon,
@@ -225,8 +226,8 @@ const Position = () => {
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS),
       },
       getPartsAssociated(
-        equipment.code,
-        equipment.organization,
+        id.code,
+        id.organization,
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         1,
@@ -240,7 +241,7 @@ const Position = () => {
         render: () => (
           <EDMSDoclightIframeContainer
             objectType="S"
-            objectID={equipment.code}
+            objectID={id.code}
             url={applicationData.EL_DOCLI}
           />
         ),
@@ -264,7 +265,7 @@ const Position = () => {
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
-          <NCRIframeContainer objectType="S" objectID={equipment.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
+          <NCRIframeContainer objectType="S" objectID={id.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
         ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
@@ -289,10 +290,10 @@ const Position = () => {
           <Comments
             ref={(comments) => (commentsComponent.current = comments)}
             entityCode="OBJ"
-            entityKeyCode={!newEntity ? equipment.code : undefined}
+            entityKeyCode={id.code}
+            entityOrganization={id.organization}
             userCode={userData.eamAccount.userCode}
             allowHtml={true}
-            entityOrganization={equipment.organization}
             disabled={readOnly}
           />
         ),
@@ -347,7 +348,7 @@ const Position = () => {
         maximizable: true,
         render: () => (
           <EquipmentGraphIframe
-            equipmentCode={equipment.code}
+            equipmentCode={id.code}
             equipmentGraphURL={applicationData.EL_EQGRH}
           />
         ),
@@ -370,7 +371,7 @@ const Position = () => {
         positionLayout.customGridTabs,
         customTabGridParamNames,
         screenCode,
-        equipment.code
+        id.code
       ),
       ...getCustomTabRegions(
         positionLayout.customTabs,
@@ -397,8 +398,8 @@ const Position = () => {
         newEntity={newEntity}
         entityScreen={screenPermissions}
         entityName="Position"
-        entityKeyCode={equipment.code}
-        organization={equipment.organization}
+        entityKeyCode={id.code}
+        organization={id.organization}
         saveHandler={saveHandler}
         newHandler={newHandler}
         deleteHandler={deleteHandler}
