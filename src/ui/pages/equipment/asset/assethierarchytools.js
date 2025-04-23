@@ -1,12 +1,4 @@
 import { get } from "lodash";
-import set from "set-value";
-
-const assetProps = ['AssetDependency.DEPENDENTASSET.ASSETID',
-                    'PositionDependency.NONDEPENDENTASSET.ASSETID',
-                    'SystemDependency.NONDEPENDENTASSET.ASSETID',
-                    'PrimarySystemDependency.NONDEPENDENTASSET.ASSETID',
-                    'LocationDependency.NONDEPENDENTASSET.ASSETID',
-                    'NonDependentParents.NONDEPENDENTASSET.ASSETID']
 
 export const getAssetHierarchyCode = (equipment) => (
             get(equipment, 'AssetParentHierarchy.AssetDependency.DEPENDENTASSET.ASSETID.EQUIPMENTCODE') ??
@@ -32,14 +24,6 @@ export const getPrimarySystemHierarchyCode = (equipment) => (
             get(equipment, 'AssetParentHierarchy.SystemDependency.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE') ??
             get(equipment, 'AssetParentHierarchy.LocationDependency.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE') ??
             get(equipment, 'AssetParentHierarchy.NonDependentParents.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE'))
-
-export const getAssetHierarchyAssetDependent = (equipment) => {
-    console.log('eq', equipment)
-  return get(equipment, 'AssetParentHierarchy.AssetDependency.DEPENDENTASSET') !== undefined
-}
-
-
-
 
 export const ParentDependencyTypes = Object.freeze({
     ASSET: "AssetDependency",
