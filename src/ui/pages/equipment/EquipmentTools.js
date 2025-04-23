@@ -1,4 +1,5 @@
 import WSEquipment from "@/tools/WSEquipment";
+import { GridTypes } from "../../../tools/entities/GridRequest";
 
 class EquipmentTools {
   isRegionAvailable(regionCode, equipmentLayout, equipmentType) {
@@ -130,13 +131,23 @@ export const equipmentLayoutPropertiesMap = {
             organization: "classorganization"
         }
     }
-},
+  },
+
+  location: {
+    autocompleteHandlerData: { 
+        resultMap: {
+            code: "equipmentcode",
+            desc: "description_obj",
+            organization: "equiporganization"
+        },
+        gridType: GridTypes.LIST
+    }
+  },
 
   commissiondate: "comissionDate",
   criticality: "criticality",
   department: "departmentCode",
   equipmentdesc: "description",
-  location: "hierarchyLocationCode",
   manufacturer: "manufacturerCode",
   model: "model",
   primarysystem: "hierarchyPrimarySystemCode",

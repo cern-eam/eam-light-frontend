@@ -59,11 +59,6 @@ class WSEquipment {
         return WS._get(`/autocomplete/eqp/parent/S?code=${filter}`, config);
     }
 
-    autocompleteLocation = (filter, config = {}) => {
-        filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/eqp/location/?s=${filter}`, config);
-    };
-
     //
     //
     //
