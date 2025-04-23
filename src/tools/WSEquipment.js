@@ -49,20 +49,6 @@ class WSEquipment {
         return getGridData(gridRequest).then(response => transformResponse(response, {code: "equipmentcode", desc: "description_obj", org: "equiporganization"}));
     }
 
-    autocompletePositionParent(filter, config = {}) {
-        filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/eqp/parent/P?code=${filter}`, config);
-    }
-
-    autocompletePrimarySystemParent(filter, config = {}) {
-        filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/eqp/parent/S?code=${filter}`, config);
-    }
-
-    //
-    //
-    //
-
     getEquipmentPartsAssociated(equipment, parentScreen, config = {}) {
         equipment = encodeURIComponent(equipment);
         return WS._get(`/equipment/partsassociated/${parentScreen}/${equipment}`, config);
