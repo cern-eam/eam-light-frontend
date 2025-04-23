@@ -46,47 +46,20 @@ const IconSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 const Dependency = (props) => {
-  const { value, valueKey, updateProperty, disabled, dependencyKeysMap } =
+  const { value, disabled, onChangeHandler } =
     props;
 
   const theme = useTheme();
 
-  const isTrue = (value) => {
-    const checkedTextValue = value || "";
-    return checkedTextValue.toLowerCase() === true.toString();
-  };
-
-  const unsetRelatedDependencies = () => {
-    const relatedDependencies = Object.values(dependencyKeysMap).filter(
-      (depKey) => {
-        return depKey !== valueKey;
-      }
-    );
-
-    relatedDependencies.forEach((relatedDependency) => {
-      updateProperty(relatedDependency, false.toString());
-    });
-  };
-
-  const onChangeHandler = () => {
-    // A 'value' of 'false' means the dependency will be set to 'true' afterwards
-    if (dependencyKeysMap && value === "false") {
-      unsetRelatedDependencies();
-    }
-
-    isTrue(value)
-      ? updateProperty(valueKey, "false")
-      : updateProperty(valueKey, "true");
-  };
 
   return (
     <>
-      <Tooltip title={isTrue(value) ? "Remove dependency" : "Add dependency"}>
+      <Tooltip title={value ? "Remove dependency" : "Add dependency"}>
         <IconSwitch
           style={{ height: "100%", margin: "1px 0.5em" }}
           disabled={disabled}
           onChange={onChangeHandler}
-          checked={isTrue(value)}
+          checked={value}
           icon={
             disabled ? (
               <CircleIcon
