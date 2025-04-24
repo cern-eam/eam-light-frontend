@@ -133,6 +133,7 @@ const System = () => {
 
     let commonProps = {
       equipment,
+      id,
       newEntity,
       systemLayout,
       userGroup: userData.eamAccount.userGroup,
@@ -284,7 +285,7 @@ const System = () => {
             ref={(comments) => (commentsComponent.current = comments)}
             entityCode="OBJ"
             entityKeyCode={id.code}
-            entityOrganization={id.organization}
+            entityOrganization={id.org}
             userCode={userData.eamAccount.userCode}
             handleError={handleError}
             allowHtml={true}
@@ -395,7 +396,7 @@ const System = () => {
         entityScreen={screenPermissions}
         entityName="System"
         entityKeyCode={id.code}
-        organization={id.organization}
+        organization={id.org}
         saveHandler={saveHandler}
         newHandler={newHandler}
         deleteHandler={deleteHandler}

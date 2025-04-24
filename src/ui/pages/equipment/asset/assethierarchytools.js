@@ -1,29 +1,29 @@
 import { get } from "lodash";
 
-export const getAssetHierarchyCode = (equipment) => (
-            get(equipment, 'AssetParentHierarchy.AssetDependency.DEPENDENTASSET.ASSETID.EQUIPMENTCODE') ??
-            get(equipment, 'AssetParentHierarchy.PositionDependency.NONDEPENDENTASSET.ASSETID.EQUIPMENTCODE') ??
-            get(equipment, 'AssetParentHierarchy.SystemDependency.NONDEPENDENTASSET.ASSETID.EQUIPMENTCODE') ??
-            get(equipment, 'AssetParentHierarchy.PrimarySystemDependency.NONDEPENDENTASSET.ASSETID.EQUIPMENTCODE') ??
-            get(equipment, 'AssetParentHierarchy.LocationDependency.NONDEPENDENTASSET.ASSETID.EQUIPMENTCODE') ??
-            get(equipment, 'AssetParentHierarchy.NonDependentParents.NONDEPENDENTASSET.ASSETID.EQUIPMENTCODE'));
+export const getParentAssetCode = (hierarchyKey, equipment) => (
+            get(equipment, `${hierarchyKey}.AssetDependency.DEPENDENTASSET.ASSETID.EQUIPMENTCODE`) ??
+            get(equipment, `${hierarchyKey}.PositionDependency.NONDEPENDENTASSET.ASSETID.EQUIPMENTCODE`) ??
+            get(equipment, `${hierarchyKey}.SystemDependency.NONDEPENDENTASSET.ASSETID.EQUIPMENTCODE`) ??
+            get(equipment, `${hierarchyKey}.PrimarySystemDependency.NONDEPENDENTASSET.ASSETID.EQUIPMENTCODE`) ??
+            get(equipment, `${hierarchyKey}.LocationDependency.NONDEPENDENTASSET.ASSETID.EQUIPMENTCODE`) ??
+            get(equipment, `${hierarchyKey}.NonDependentParents.NONDEPENDENTASSET.ASSETID.EQUIPMENTCODE`));
 
 
-export const getPositionHierarchyCode = (equipment) => (
-            get(equipment, 'AssetParentHierarchy.PositionDependency.DEPENDENTPOSITION.POSITIONID.EQUIPMENTCODE') ??
-            get(equipment, 'AssetParentHierarchy.AssetDependency.NONDEPENDENTPOSITION.POSITIONID.EQUIPMENTCODE') ??
-            get(equipment, 'AssetParentHierarchy.SystemDependency.NONDEPENDENTPOSITION.POSITIONID.EQUIPMENTCODE') ??
-            get(equipment, 'AssetParentHierarchy.PrimarySystemDependency.NONDEPENDENTPOSITION.POSITIONID.EQUIPMENTCODE') ??
-            get(equipment, 'AssetParentHierarchy.LocationDependency.NONDEPENDENTPOSITION.POSITIONID.EQUIPMENTCODE') ??
-            get(equipment, 'AssetParentHierarchy.NonDependentParents.NONDEPENDENTPOSITION.POSITIONID.EQUIPMENTCODE'))
+export const getParentPositionCode = (hierarchyKey, equipment) => (
+            get(equipment, `${hierarchyKey}.PositionDependency.DEPENDENTPOSITION.POSITIONID.EQUIPMENTCODE`) ??
+            get(equipment, `${hierarchyKey}.AssetDependency.NONDEPENDENTPOSITION.POSITIONID.EQUIPMENTCODE`) ??
+            get(equipment, `${hierarchyKey}.SystemDependency.NONDEPENDENTPOSITION.POSITIONID.EQUIPMENTCODE`) ??
+            get(equipment, `${hierarchyKey}.PrimarySystemDependency.NONDEPENDENTPOSITION.POSITIONID.EQUIPMENTCODE`) ??
+            get(equipment, `${hierarchyKey}.LocationDependency.NONDEPENDENTPOSITION.POSITIONID.EQUIPMENTCODE`) ??
+            get(equipment, `${hierarchyKey}.NonDependentParents.NONDEPENDENTPOSITION.POSITIONID.EQUIPMENTCODE`))
 
-export const getPrimarySystemHierarchyCode = (equipment) => (
-            get(equipment, 'AssetParentHierarchy.PrimarySystemDependency.DEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE') ??
-            get(equipment, 'AssetParentHierarchy.AssetDependency.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE') ??
-            get(equipment, 'AssetParentHierarchy.PositionDependency.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE') ??
-            get(equipment, 'AssetParentHierarchy.SystemDependency.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE') ??
-            get(equipment, 'AssetParentHierarchy.LocationDependency.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE') ??
-            get(equipment, 'AssetParentHierarchy.NonDependentParents.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE'))
+export const getParentPrimarySystemCode = (hierarchyKey, equipment) => (
+            get(equipment, `${hierarchyKey}.PrimarySystemDependency.DEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE`) ??
+            get(equipment, `${hierarchyKey}.AssetDependency.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE`) ??
+            get(equipment, `${hierarchyKey}.PositionDependency.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE`) ??
+            get(equipment, `${hierarchyKey}.SystemDependency.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE`) ??
+            get(equipment, `${hierarchyKey}.LocationDependency.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE`) ??
+            get(equipment, `${hierarchyKey}.NonDependentParents.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE`))
 
 export const ParentDependencyTypes = Object.freeze({
     ASSET: "AssetDependency",
@@ -37,13 +37,13 @@ export const ParentDependencyTypes = Object.freeze({
 
 export const convert = (currentParents, dependent, dependentProp, nonDependentProp, parentCode, parentOrg, parentProp) => {
     if (!currentParents[dependentProp] && !currentParents[nonDependentProp] && !parentCode) {
-        return
+        return false
     }
 
     if (parentCode === '' && parentOrg === '') {
         delete currentParents[dependentProp]
         delete currentParents[nonDependentProp]
-        return 
+        return dependent
     }
 
     let parent = null;
@@ -54,7 +54,7 @@ export const convert = (currentParents, dependent, dependentProp, nonDependentPr
         }
     }
 
-    console.log('data', currentParents, dependent, dependentProp, nonDependentProp, parentCode, parentOrg)
+    //console.log('data', currentParents, dependent, dependentProp, nonDependentProp, parentCode, parentOrg)
 
     currentParents[dependent ? dependentProp : nonDependentProp] = {
         ...currentParents[dependentProp],
@@ -62,6 +62,8 @@ export const convert = (currentParents, dependent, dependentProp, nonDependentPr
         ...(parent ? { [parentProp]: parent } : {})
     } 
     delete currentParents[dependent ? nonDependentProp : dependentProp]
+
+    return false
     
 }
 
@@ -74,8 +76,8 @@ export const getDependencyType = (currentAssetParentHierarchy) =>
         { path: "LocationDependency.DEPENDENTLOCATION", type: ParentDependencyTypes.LOCATION },
       ].find(({ path }) => get(currentAssetParentHierarchy, path))?.type || ParentDependencyTypes.NONE);
 
-export const getAssetHierarchyObject = (hierarchyProps, currentAssetParentHierarchy = {}) => {
-    const {assetCode, assetOrg, 
+export const getHierarchyObject = (hierarchyProps, currentAssetParentHierarchy = {}) => {
+    let {assetCode, assetOrg, 
         dependencyType = getDependencyType(currentAssetParentHierarchy),
         parentAssetCode, parentAssetOrg,
         parentPositionCode, parentPositionOrg,
@@ -83,7 +85,7 @@ export const getAssetHierarchyObject = (hierarchyProps, currentAssetParentHierar
         parentSystemCode, parentSystemOrg,
         parentLocationCode, parentLocationOrg
         } = hierarchyProps;
-
+        
     const currentParents = {
         ...currentAssetParentHierarchy.AssetDependency,
         ...currentAssetParentHierarchy.PositionDependency,
@@ -93,19 +95,29 @@ export const getAssetHierarchyObject = (hierarchyProps, currentAssetParentHierar
         ...currentAssetParentHierarchy.NonDependentParents,
     }
 
-    convert(currentParents, dependencyType === ParentDependencyTypes.ASSET, "DEPENDENTASSET", "NONDEPENDENTASSET", parentAssetCode, parentAssetOrg, "ASSETID")
-    convert(currentParents, dependencyType === ParentDependencyTypes.POSITION, "DEPENDENTPOSITION", "NONDEPENDENTPOSITION", parentPositionCode, parentPositionOrg, "POSITIONID")
-    convert(currentParents, dependencyType === ParentDependencyTypes.PRIMARYSYSTEM, "DEPENDENTPRIMARYSYSTEM", "NONDEPENDENTPRIMARYSYSTEM", parentPrimarySystemCode, parentPrimarySystemOrg, "SYSTEMID")
-    convert(currentParents, dependencyType === ParentDependencyTypes.SYSTEM, "DEPENDENTSYSTEM", "NONDDEPENDENTSYSTEM", parentSystemCode, parentSystemOrg, "SYSTEMID")
-    convert(currentParents, dependencyType === ParentDependencyTypes.LOCATION, "DEPENDENTLOCATION", "NONDDEPENDENTLOCATION", parentLocationCode, parentLocationOrg, "LOCATIONID")
+    if (convert(currentParents, dependencyType === ParentDependencyTypes.ASSET, "DEPENDENTASSET", "NONDEPENDENTASSET", parentAssetCode, parentAssetOrg, "ASSETID")) {
+        dependencyType = ParentDependencyTypes.NONE;
+    }
+    if (convert(currentParents, dependencyType === ParentDependencyTypes.POSITION, "DEPENDENTPOSITION", "NONDEPENDENTPOSITION", parentPositionCode, parentPositionOrg, "POSITIONID")) {
+        dependencyType = ParentDependencyTypes.NONE;
+    }
+    if (convert(currentParents, dependencyType === ParentDependencyTypes.PRIMARYSYSTEM, "DEPENDENTPRIMARYSYSTEM", "NONDEPENDENTPRIMARYSYSTEM", parentPrimarySystemCode, parentPrimarySystemOrg, "SYSTEMID")) {
+        dependencyType = ParentDependencyTypes.NONE;
+    }
+    if (convert(currentParents, dependencyType === ParentDependencyTypes.SYSTEM, "DEPENDENTSYSTEM", "NONDDEPENDENTSYSTEM", parentSystemCode, parentSystemOrg, "SYSTEMID")) {
+        dependencyType = ParentDependencyTypes.NONE;
+    }
+    if (convert(currentParents, dependencyType === ParentDependencyTypes.LOCATION, "DEPENDENTLOCATION", "NONDDEPENDENTLOCATION", parentLocationCode, parentLocationOrg, "LOCATIONID")) {
+        dependencyType = ParentDependencyTypes.NONE;
+    }
 
     const assetParentHierarchy = {
         ASSETID: currentAssetParentHierarchy.ASSETID,
-        LOCATIONID: currentAssetParentHierarchy.LOCATIONID,
+        POSITIONID: currentAssetParentHierarchy.POSITIONID,
+        //LOCATIONID: currentAssetParentHierarchy.LOCATIONID,
         [dependencyType]: currentParents
     }
     
-    console.log('return', assetParentHierarchy)
     return assetParentHierarchy
 }
 

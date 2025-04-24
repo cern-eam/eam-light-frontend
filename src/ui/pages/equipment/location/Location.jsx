@@ -114,6 +114,7 @@ export default Location = (props) => {
 
     const commonProps = {
       location,
+      id,
       newEntity,
       locationLayout,
       updateEquipmentProperty,

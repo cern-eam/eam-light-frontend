@@ -176,12 +176,12 @@ const useEntity = (params) => {
 
   const readEntity = () => {
     setLoading(true);
-    const [code, organization = "*"] = decodeURIComponent(codeFromRoute).split("#");
+    const [code, org = "*"] = decodeURIComponent(codeFromRoute).split("#");
     // Cancel the old request in the case it was still active
     abortController.current?.abort();
     abortController.current = new AbortController();
     //
-    WS.read(code, organization, { signal: abortController.current.signal })
+    WS.read(code, org, { signal: abortController.current.signal })
       .then((response) => {
         resetErrorMessages();
         setIsModified(false);
@@ -191,7 +191,7 @@ const useEntity = (params) => {
         
         document.title = entityDesc + " " + get(readEntity, entityCodeProperty);
 
-        setId({code: get(readEntity, entityCodeProperty), organization: get(entity, entityOrgProperty)})
+        setId({code: get(readEntity, entityCodeProperty), org: get(entity, entityOrgProperty)})
 
         //Render as read-only depending on screen rights, department security or custom handler
         setReadOnly(

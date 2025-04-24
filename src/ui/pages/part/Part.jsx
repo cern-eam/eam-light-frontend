@@ -123,6 +123,7 @@ const Part = () => {
 
     const commonProps = {
       part,
+      id,
       newEntity,
       partLayout,
       userData,
@@ -230,7 +231,7 @@ const Part = () => {
             ref={(comments) => (commentsComponent.current = comments)}
             entityCode="PART"
             entityKeyCode={id.code}
-            entityOrganization={id.organization}
+            entityOrganization={id.org}
             userCode={userData.eamAccount.userCode}
             handleError={handleError}
             allowHtml={true}
@@ -266,7 +267,7 @@ const Part = () => {
       },
       getPartsAssociated(
         id.code,
-        id.organization,
+        id.org,
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         2,
@@ -306,7 +307,7 @@ const Part = () => {
           entityScreen={screenPermissions}
           entityName="Part" // TODO: hardcoded (following Location example)
           entityKeyCode={id.code}
-          organization={id.organization}
+          organization={id.org}
           saveHandler={saveHandler}
           newHandler={newHandler}
           deleteHandler={deleteHandler}

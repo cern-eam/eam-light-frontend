@@ -228,6 +228,7 @@ const Workorder = () => {
     const { tabs } = workOrderLayout;
     const commonProps = {
       workorder,
+      id,
       newEntity,
       workOrderLayout,
       userGroup: userData.eamAccount.userGroup,
@@ -364,7 +365,7 @@ const Workorder = () => {
         label: "Documents",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <Documents objectType="A" code={id.code} organization={id.organization} entity="EVNT"/>,
+        render: () => <Documents objectType="A" code={id.code} organization={id.org} entity="EVNT"/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -732,7 +733,7 @@ const Workorder = () => {
           entityScreen={screenPermissions}
           entityName="Work Order"
           entityKeyCode={id.code}
-          organization={id.organization}
+          organization={id.org}
           saveHandler={saveHandler}
           newHandler={newHandler}
           deleteHandler={deleteHandler}

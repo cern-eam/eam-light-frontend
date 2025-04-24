@@ -134,6 +134,7 @@ const Asset = () => {
 
     const commonProps = {
       equipment,
+      id,
       newEntity,
       assetLayout,
       updateEquipmentProperty,
@@ -240,7 +241,7 @@ const Asset = () => {
             gridName={"OSOBJA_ESF"}
             objectCode={id.code}
             additionalParams={Object.fromEntries([
-              ["parameter.objorganization", id.organization ?? "*"],
+              ["parameter.objorganization", id.org ?? "*"],
               ["parameter.object", id.code],
             ])}
             paramNames={["equipmentno"]}
@@ -273,7 +274,7 @@ const Asset = () => {
         label: "Documents",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <Documents objectType="A" code={id.code} organization={id.organization} entity="OBJ"/>,
+        render: () => <Documents objectType="A" code={id.code} organization={id.org} entity="OBJ"/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -326,7 +327,7 @@ const Asset = () => {
             ref={(comments) => (commentsComponent.current = comments)}
             entityCode="OBJ"
             entityKeyCode={id.code}
-            entityOrganization={id.organization}
+            entityOrganization={id.org}
             handleError={handleError}
             userCode={userData.eamAccount.userCode}
             allowHtml={true}
@@ -414,7 +415,7 @@ const Asset = () => {
       },
      getPartsAssociated(
         id.code,
-        id.organization,
+        id.org,
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         2,

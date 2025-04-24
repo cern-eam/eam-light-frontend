@@ -81,7 +81,7 @@ const STATUSES = [
   {
     key: STATUS_KEYS.OUT_OF_SERVICE,
     shouldRender: (entity, entityType) =>
-      entity.outOfService === "true" || entity.outOfService === true,
+      entity.OUTOFSERVICE === "true",
     getIcon: () => <BlockIcon style={{ color: "red", ...iconStyle }} />,
     getDescription: () => "Out of Service",
     getTooltip: () => "Out of Service",
@@ -137,10 +137,10 @@ const STATUSES = [
 ];
 
 const StatusRow = (props) => {
-  const generateCells = (entity, entityType, screenCode) => {
+  const generateCells = (entity, entityType, screenCode, code, org) => {
     const [hasHazards, setHasHazards] = useState(false);
     useEffect(() => {
-      const safetyData = doEquipmentGridRequest(entity.code, screenCode, "ESF", entity.organization);
+      const safetyData = doEquipmentGridRequest(code, screenCode, "ESF", org);
       safetyData.then((data) => setHasHazards(data.records !== "0"));
     }, [entity.code]);
 
@@ -160,7 +160,7 @@ const StatusRow = (props) => {
     });
   };
 
-  const icons = generateCells(props.entity, props.entityType, props.screenCode);
+  const icons = generateCells(props.entity, props.entityType, props.screenCode, props.code, props.org);
   return (
     icons.length && (
       <div style={{ width: "100%", display: "flex", ...props.style }}>

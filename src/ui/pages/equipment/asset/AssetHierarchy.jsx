@@ -5,7 +5,7 @@ import Dependency from "../components/Dependency";
 import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { get } from "lodash";
-import { getAssetHierarchyCode, getPositionHierarchyCode, getAssetHierarchyObject, ParentDependencyTypes, getDependencyType, getPrimarySystemHierarchyCode } from "./assethierarchytools";
+import { getHierarchyObject, ParentDependencyTypes, getDependencyType, getParentAssetCode, getParentPositionCode, getParentPrimarySystemCode } from "./assethierarchytools";
 
 
 const AssetHierarchy = (props) => {
@@ -19,6 +19,58 @@ const AssetHierarchy = (props) => {
   } = props;
 
 
+  const onChangeAsset = (value) => {
+    const hierarchy = getHierarchyObject({
+      parentAssetCode: value?.code || '',
+      parentAssetOrg:  value?.org  || ''
+    }, equipment.AssetParentHierarchy);
+  
+    updateEquipmentProperty("AssetParentHierarchy", hierarchy);
+  };
+  
+  const onChangeAssetDependency = (event) => {
+    const hierarchy = getHierarchyObject({
+      dependencyType: event.target.checked ? ParentDependencyTypes.ASSET : ParentDependencyTypes.NONE
+    }, equipment.AssetParentHierarchy);
+  
+    updateEquipmentProperty("AssetParentHierarchy", hierarchy);
+  };
+  
+  const onChangePosition = (value) => {
+    const hierarchy = getHierarchyObject({
+      parentPositionCode: value?.code || '',
+      parentPositionOrg:  value?.org  || ''
+    }, equipment.AssetParentHierarchy);
+  
+    updateEquipmentProperty("AssetParentHierarchy", hierarchy);
+  };
+  
+  const onChangePositionDependency = (event) => {
+    const hierarchy = getHierarchyObject({
+      dependencyType: event.target.checked ? ParentDependencyTypes.POSITION : ParentDependencyTypes.NONE
+    }, equipment.AssetParentHierarchy);
+  
+    updateEquipmentProperty("AssetParentHierarchy", hierarchy);
+  };
+  
+  const onChangeSystem = (value) => {
+    const hierarchy = getHierarchyObject({
+      parentPrimarySystemCode: value?.code || '',
+      parentPrimarySystemOrg:  value?.org  || ''
+    }, equipment.AssetParentHierarchy);
+  
+    updateEquipmentProperty("AssetParentHierarchy", hierarchy);
+  };
+  
+  const onChangeSystemDependency = (event) => {
+    const hierarchy = getHierarchyObject({
+      dependencyType: event.target.checked ? ParentDependencyTypes.PRIMARYSYSTEM : ParentDependencyTypes.NONE
+    }, equipment.AssetParentHierarchy);
+  
+    updateEquipmentProperty("AssetParentHierarchy", hierarchy);
+  };
+
+  
   return (
     <React.Fragment>
       <EAMUDF {...register("udfchar13")} />
@@ -26,27 +78,17 @@ const AssetHierarchy = (props) => {
       <EAMUDF {...register("udfchar11")} />
 
       <EAMAutocomplete
-      {...processElementInfo(assetLayout.fields.parentasset)}
-      value={getAssetHierarchyCode(equipment)
-      }
-
+        {...processElementInfo(assetLayout.fields.parentasset)}
+        value={getParentAssetCode('AssetParentHierarchy', equipment)}
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
         autocompleteHandlerParams={["A"]}
-        onSelect={value => {
-          console.log("select asset")
-          let hierarchy = getAssetHierarchyObject({parentAssetCode: value?.code ? value.code : '', 
-                                                  parentAssetOrg: value?.org ? value.org : ''}, equipment.AssetParentHierarchy)
-          updateEquipmentProperty("AssetParentHierarchy", hierarchy)
-        }}
+        onSelect={onChangeAsset}
         barcodeScanner
         endAdornment={
           <Dependency
-            onChangeHandler={(event) => {
-              let hierarchy = getAssetHierarchyObject({dependencyType: event.target.checked ? ParentDependencyTypes.ASSET : ParentDependencyTypes.NONE}, equipment.AssetParentHierarchy);
-              updateEquipmentProperty("AssetParentHierarchy", hierarchy);
-            }}
+            onChangeHandler={onChangeAssetDependency}
             value={getDependencyType(equipment.AssetParentHierarchy) === ParentDependencyTypes.ASSET}
-            disabled={!getAssetHierarchyCode(equipment)}
+            disabled={!getParentAssetCode('AssetParentHierarchy', equipment)}
           />
         }
         renderDependencies={[equipment.AssetParentHierarchy]}
@@ -54,52 +96,34 @@ const AssetHierarchy = (props) => {
 
       <EAMAutocomplete
         {...processElementInfo(assetLayout.fields.position)}
-        value = {getPositionHierarchyCode(equipment) }
+        value = {getParentPositionCode('AssetParentHierarchy', equipment) }
         barcodeScanner
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
         autocompleteHandlerParams={["P"]}
         renderDependencies={[equipment.AssetParentHierarchy]}
-
-        onSelect={value => {
-          let hierarchy = getAssetHierarchyObject({parentPositionCode:  value?.code ? value.code : '', 
-                                                  parentPositionOrg: value?.org ? value.org : ''}, equipment.AssetParentHierarchy)
-          updateEquipmentProperty("AssetParentHierarchy", hierarchy)
-        }}
-        
+        onSelect={onChangePosition}
         endAdornment={
           <Dependency
-            onChangeHandler={(event) => {
-              let hierarchy = getAssetHierarchyObject({dependencyType: event.target.checked ? ParentDependencyTypes.POSITION : ParentDependencyTypes.NONE}, equipment.AssetParentHierarchy);
-              updateEquipmentProperty("AssetParentHierarchy", hierarchy);
-            }}
+            onChangeHandler={onChangePositionDependency}
             value={getDependencyType(equipment.AssetParentHierarchy) === ParentDependencyTypes.POSITION}
-            disabled={!getPositionHierarchyCode(equipment)}
+            disabled={!getParentPositionCode('AssetParentHierarchy', equipment)}
           />
         }
       />
 
       <EAMAutocomplete
         {...processElementInfo(assetLayout.fields.primarysystem)}
-        value = {getPrimarySystemHierarchyCode(equipment)}
+        value = {getParentPrimarySystemCode('AssetParentHierarchy', equipment)}
         barcodeScanner
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
         autocompleteHandlerParams={["S"]}
         renderDependencies={[equipment.AssetParentHierarchy]}
-        
-        onSelect={value => {
-          let hierarchy = getAssetHierarchyObject({parentPrimarySystemCode:  value?.code ? value.code : '', 
-                                                  parentPrimarySystemOrg: value?.org ? value.org : ''}, equipment.AssetParentHierarchy)
-          updateEquipmentProperty("AssetParentHierarchy", hierarchy)
-        }}
-
+        onSelect={onChangeSystem}
         endAdornment={
           <Dependency
-            onChangeHandler={(event) => {
-              let hierarchy = getAssetHierarchyObject({dependencyType: event.target.checked ? ParentDependencyTypes.PRIMARYSYSTEM : ParentDependencyTypes.NONE}, equipment.AssetParentHierarchy);
-              updateEquipmentProperty("AssetParentHierarchy", hierarchy);
-            }}
+            onChangeHandler={onChangeSystemDependency}
             value={getDependencyType(equipment.AssetParentHierarchy) === ParentDependencyTypes.PRIMARYSYSTEM}
-            disabled={!getPrimarySystemHierarchyCode(equipment)}
+            disabled={!getParentPrimarySystemCode('AssetParentHierarchy', equipment)}
           />
         }
       />
@@ -113,9 +137,11 @@ const AssetHierarchy = (props) => {
           getDependencyType(equipment.AssetParentHierarchy) !== ParentDependencyTypes.LOCATION
         }
         onSelect={value => {
-          console.log("on select")
-          let hierarchy = getAssetHierarchyObject({parentLocationCode: value.code, parentLocationOrg: value.org, dependencyType: ParentDependencyTypes.LOCATION}, equipment.AssetParentHierarchy)
-          updateEquipmentProperty("AssetParentHierarchy", hierarchy)
+          let hierarchy = getHierarchyObject({parentLocationCode:  value?.code ? value.code : '', 
+            parentLocationOrg: value?.org ? value.org : '', 
+            dependencyType: value?.code ? ParentDependencyTypes.LOCATION : ParentDependencyTypes.NONE}, 
+            equipment.AssetParentHierarchy)
+            updateEquipmentProperty("AssetParentHierarchy", hierarchy)
         }}
         renderDependencies={[equipment.AssetParentHierarchy]}
       />

@@ -10,6 +10,7 @@ import { autocompleteDepartment, readStatuses } from "../../../../tools/WSGrids"
 const SystemGeneral = (props) => {
   const {
     equipment,
+    id,
     newEntity,
     register,
     userData,
@@ -55,6 +56,8 @@ const SystemGeneral = (props) => {
         entity={equipment}
         entityType={"equipment"}
         screenCode={screenCode}
+        code={id.code}
+        org={id.org}
         style={{ marginTop: "10px", marginBottom: "-10px" }}
       />
     </React.Fragment>
