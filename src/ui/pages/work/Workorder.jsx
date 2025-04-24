@@ -432,10 +432,10 @@ const Workorder = () => {
         maximizable: true,
         render: () => (
           <Activities
-            workorder={workorder.number}
+            workorder={id.code}
             version={workorder.updateCount}
-            department={workorder.departmentCode}
-            departmentDesc={workorder.departmentDesc}
+            department={workorder?.DEPARTMENTID?.DEPARTMENTCODE}
+            departmentDesc={workorder?.DEPARTMENTID?.DEPARTMENTCODE}
             layout={tabs}
             defaultEmployee={userData.eamAccount.employeeCode}
             defaultEmployeeDesc={userData.eamAccount.employeeDesc}

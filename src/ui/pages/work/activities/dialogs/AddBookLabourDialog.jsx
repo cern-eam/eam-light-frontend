@@ -18,6 +18,7 @@ import {
 import LightDialog from "@/ui/components/LightDialog";
 import EAMTimePicker from "eam-components/dist/ui/components/inputs-ng/EAMTimePicker";
 import useSnackbarStore from "@/state/useSnackbarStore";
+import { autocompleteDepartment } from "../../../../../tools/WSGrids";
 
 /**
  * Display detail of an activity
@@ -70,24 +71,23 @@ function AddBookLabourDialog(props) {
 
     setLoading(true);
     WSWorkorders.createBookingLabour(bookingLabour)
-      .then(WSWorkorders.getWorkOrder.bind(null, props.workorderNumber))
+      .then(WSWorkorders.getWorkOrder.bind(null, props.workorderNumber, '*')) //TODO
       .then((result) => {
         setLoading(false);
-
-        const workorder = result.body.data;
-        if (
-          props.updateCount + 1 === workorder.updateCount &&
-          props.startDate === null
-        ) {
-          props.updateEntityProperty("startDate", workorder.startDate);
-          props.updateEntityProperty("updateCount", props.updateCount + 1);
-        } else if (
-          props.updateCount !== workorder.updateCount ||
-          props.startDate !== workorder.startDate
-        ) {
-          // an unexpected situation has happened, reload the page
-          window.location.reload();
-        }
+         const workorder = result.Result.ResulData.WorkOrder;
+        // if (
+        //   props.updateCount + 1 === workorder.updateCount &&
+        //   props.startDate === null
+        // ) {
+        //   props.updateEntityProperty("startDate", workorder.startDate);
+        //   props.updateEntityProperty("updateCount", props.updateCount + 1);
+        // } else if (
+        //   props.updateCount !== workorder.updateCount ||
+        //   props.startDate !== workorder.startDate
+        // ) {
+        //   // an unexpected situation has happened, reload the page
+        //   window.location.reload();
+        // }
 
         showNotification("Booking labour successfully created");
         handleClose();
@@ -216,7 +216,7 @@ function AddBookLabourDialog(props) {
               />
 
               <EAMAutocomplete
-                autocompleteHandler={WSWorkorders.autocompleteBOODepartment}
+                autocompleteHandler={autocompleteDepartment}
                 {...processElementInfo(props.layout.department)}
                 value={formValues["departmentCode"] || ""}
                 desc={formValues["departmentDesc"]}
