@@ -294,7 +294,8 @@ const Workorder = () => {
         customVisibility: () => isRegionAvailable("PAR", commonProps.workOrderLayout),
         render: () => (
           <PartUsage
-            workorder={workorder}
+            workOrderCode={id.code}
+            workOrder={workorder}
             tabLayout={tabs.PAR}
             equipmentMEC={equipmentMEC}
             disabled={readOnly}

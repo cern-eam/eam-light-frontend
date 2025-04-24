@@ -19,6 +19,9 @@ import {
 } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import WSEquipment from "@/tools/WSEquipment";
 import { getPartStock } from "../../part/PartStock";
+import { getPart } from "../../../../tools/WSParts";
+import { getEquipment } from "../../../../tools/WSEquipment";
+import { get } from "lodash";
 
 const overflowStyle = {
   overflowY: "visible",
@@ -62,7 +65,8 @@ function PartUsageDialog(props) {
     handleCancel,
     isLoading,
     tabLayout,
-    workorder,
+    workOrderCode,
+    workOrder
   } = props;
 
   const [binList, setBinList] = useState([]);
@@ -138,7 +142,11 @@ function PartUsageDialog(props) {
   const initNewPartUsage = async () => {
     try {
       // Fetch the part usage object
-      const response = await WSWorkorders.getInitNewPartUsage(workorder);
+      const response = await WSWorkorders.getInitNewPartUsage({
+        number: workOrderCode,
+        departmentCode: workOrder.DEPARTMENTID.DEPARTMENTCODE,
+        equipmentCode: workOrder.EQUIPMENTID.EQUIPMENTCODE
+      });
       const defaultTransactionData = response.body.data;
       setInitPartUsageWSData(defaultTransactionData);
       assignInitialFormState(defaultTransactionData);
@@ -152,7 +160,7 @@ function PartUsageDialog(props) {
   const loadLists = async () => {
     try {
       const response = await WSWorkorders.getWorkOrderActivities(
-        workorder.number
+        workOrderCode
       );
       setActivityList(transformActivities(response.body.data));
     } catch (error) {
@@ -198,9 +206,10 @@ function PartUsageDialog(props) {
    *    (so we need to update the related state: part, bin and lot).
    * 3) There was already a part selected (so we only need to update the bin and lot states).
    */
-  const handleAssetChange = async (assetIDCode) => {
+  const handleAssetChange = async (assetIDCode, asset) => {
     const { transactionType, partCode } = formData;
-
+    
+    
     // Reset related fields
     updateFormDataProperty(FORM.BIN, "");
     if (transactionType === ISSUE) {
@@ -217,7 +226,7 @@ function PartUsageDialog(props) {
     }
 
     try {
-      const assetData = await getAssetData(assetIDCode);
+      const assetData = await getAssetData(assetIDCode, asset.org);
 
       // Explicitly reset asset field since the selected asset was not valid
       if (!assetData) {
@@ -237,18 +246,18 @@ function PartUsageDialog(props) {
     }
   };
 
-  const getAssetData = async (assetIDCode) => {
+  const getAssetData = async (assetIDCode, org) => {
     try {
-      const response = await WSEquipment.getEquipment(assetIDCode);
-      const equipmentData = response.body.data;
-
-      const responseStoreCode = equipmentData.storeCode;
+      const response = await getEquipment(assetIDCode, org);
+      
+      const equipmentData = response.body.Result.ResultData.AssetEquipment;
+      const responseStoreCode = get(equipmentData, 'PartAssociation.STORELOCATION.STOREID.STORECODE')
       const assetData = {
-        bin: equipmentData.bin,
-        partCode: equipmentData.partCode,
-        lot: equipmentData.lot,
+        bin: get(equipmentData, 'PartAssociation.STORELOCATION.BIN'),
+        partCode: get(equipmentData, 'PartAssociation.PARTID.PARTCODE'),
+        lot: get(equipmentData, 'equipmentData.PartAssociation.STORELOCATION.LOT')
       };
-
+      
       // Can happen if user un-focuses the input with an unexpected equipment selected (e.g. "A")
       if (Object.values(assetData).includes(null)) {
         showError("Unexpected asset selected.");
@@ -339,6 +348,7 @@ function PartUsageDialog(props) {
   };
 
   const handlePartChange = async (partCode, part) => {
+
     // We should in principle clear related state because of data loads/field changes that come as side effects (such as the automatic selection of
     // a bin when there is only one possible) and because the user might have already filled related fields and afterwards change the selected part.
     resetFieldWithDesc(FORM.ASSET, FORM.ASSET_DESC);
@@ -358,7 +368,6 @@ function PartUsageDialog(props) {
     if (transactionType === ISSUE) {
       try {
         const partStockResponse = await getPartStock(partCode, part.organization);
-        console.log('part stock', partStockResponse)
         const partStock = partStockResponse.body.data;
 
         // If not in the selected store, explicitly reset the part field since the part code will not be valid in that case.
@@ -374,7 +383,7 @@ function PartUsageDialog(props) {
       }
     }
 
-    const partData = await loadPartData(partCode + "#" + part.organization);
+    const partData = await loadPartData(partCode, part.organization);
 
     if (partData?.trackByAsset === "true") {
       showNotification(`Selected part "${partCode}" is tracked by asset.`);
@@ -462,17 +471,17 @@ function PartUsageDialog(props) {
     }
   };
 
-  const loadPartData = async (partCode) => {
+  const loadPartData = async (partCode, org) => {
     if (!partCode || partCode.trim() === "") {
       return;
     }
-
+    
     try {
-      const response = await WSParts.getPart(encodeURIComponent(partCode));
-      const partData = response.body.data;
+      const response = await getPart(partCode, org);
+      const partData = response.body.Result.ResultData.Part;
 
-      setIsTrackedByAsset(partData?.trackByAsset === "true");
-      setUoM(partData?.uom);
+      setIsTrackedByAsset(partData?.BYASSET === "+");
+      setUoM(partData?.UOMID?.UOMCODE);
 
       return partData;
     } catch (error) {
@@ -485,7 +494,7 @@ function PartUsageDialog(props) {
       return;
     }
 
-    const relatedWorkOrder = equipmentMEC?.length > 0 ? workorder.number : null;
+    const relatedWorkOrder = equipmentMEC?.length > 0 ? workOrderCode : null;
 
     // Extract state properties modifiable through user interaction
     const {
@@ -614,7 +623,7 @@ function PartUsageDialog(props) {
                 desc={formData.partDesc}
                 autocompleteHandler={WSWorkorders.getPartUsagePart}
                 autocompleteHandlerParams={[
-                  workorder.number,
+                  workOrderCode,
                   formData.storeCode,
                 ]}
                 onChange={createOnChangeHandler(
@@ -649,8 +658,8 @@ function PartUsageDialog(props) {
                   FORM.ASSET_DESC,
                   null,
                   updateFormDataProperty,
-                  (asset) =>
-                    runUiBlockingFunction(() => handleAssetChange(asset))
+                  (assetCode, asset) =>
+                    runUiBlockingFunction(() => handleAssetChange(assetCode, asset))
                 )}
                 barcodeScanner
                 renderDependencies={[formData.partCode]}
