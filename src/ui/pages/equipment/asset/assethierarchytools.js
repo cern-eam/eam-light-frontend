@@ -40,15 +40,21 @@ export const convert = (currentParents, dependent, dependentProp, nonDependentPr
         return
     }
 
+    if (parentCode === '' && parentOrg === '') {
+        delete currentParents[dependentProp]
+        delete currentParents[nonDependentProp]
+        return 
+    }
+
     let parent = null;
     if (parentCode && parentOrg) {
         parent = {
-            EQUIPMENTCODE: parentCode,
+            [parentProp === 'LOCATIONID' ? 'LOCATIONCODE' : 'EQUIPMENTCODE']: parentCode,
             ORGANIZATIONID: {ORGANIZATIONCODE: parentOrg}
         }
     }
 
-    //console.log('data', currentParents, dependent, dependentProp, nonDependentProp, parentCode, parentOrg)
+    console.log('data', currentParents, dependent, dependentProp, nonDependentProp, parentCode, parentOrg)
 
     currentParents[dependent ? dependentProp : nonDependentProp] = {
         ...currentParents[dependentProp],
@@ -85,16 +91,17 @@ export const getAssetHierarchyObject = (hierarchyProps, currentAssetParentHierar
         ...currentAssetParentHierarchy.SystemDependency,
         ...currentAssetParentHierarchy.LocationDependency,
         ...currentAssetParentHierarchy.NonDependentParents,
-        ...currentAssetParentHierarchy.LocationDependency,
     }
 
     convert(currentParents, dependencyType === ParentDependencyTypes.ASSET, "DEPENDENTASSET", "NONDEPENDENTASSET", parentAssetCode, parentAssetOrg, "ASSETID")
     convert(currentParents, dependencyType === ParentDependencyTypes.POSITION, "DEPENDENTPOSITION", "NONDEPENDENTPOSITION", parentPositionCode, parentPositionOrg, "POSITIONID")
     convert(currentParents, dependencyType === ParentDependencyTypes.PRIMARYSYSTEM, "DEPENDENTPRIMARYSYSTEM", "NONDEPENDENTPRIMARYSYSTEM", parentPrimarySystemCode, parentPrimarySystemOrg, "SYSTEMID")
     convert(currentParents, dependencyType === ParentDependencyTypes.SYSTEM, "DEPENDENTSYSTEM", "NONDDEPENDENTSYSTEM", parentSystemCode, parentSystemOrg, "SYSTEMID")
+    convert(currentParents, dependencyType === ParentDependencyTypes.LOCATION, "DEPENDENTLOCATION", "NONDDEPENDENTLOCATION", parentLocationCode, parentLocationOrg, "LOCATIONID")
 
     const assetParentHierarchy = {
         ASSETID: currentAssetParentHierarchy.ASSETID,
+        LOCATIONID: currentAssetParentHierarchy.LOCATIONID,
         [dependencyType]: currentParents
     }
     

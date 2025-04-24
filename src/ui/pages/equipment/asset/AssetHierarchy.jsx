@@ -3,19 +3,10 @@ import WSEquipment from "../../../../tools/WSEquipment";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import Dependency from "../components/Dependency";
 import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
-import {
-  isDependencySet,
-} from "../EquipmentTools";
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { get } from "lodash";
 import { getAssetHierarchyCode, getPositionHierarchyCode, getAssetHierarchyObject, ParentDependencyTypes, getDependencyType, getPrimarySystemHierarchyCode } from "./assethierarchytools";
 
-
-const DEPENDENCY_KEYS = {
-  asset: "hierarchyAssetDependent",
-  position: "hierarchyPositionDependent",
-  primarySystem: "hierarchyPrimarySystemDependent",
-};
 
 const AssetHierarchy = (props) => {
   const {
@@ -27,12 +18,7 @@ const AssetHierarchy = (props) => {
     assetLayout
   } = props;
 
-  const renderDependenciesForDependencyInputs = [
-    equipment[DEPENDENCY_KEYS.asset],
-    equipment[DEPENDENCY_KEYS.position],
-    equipment[DEPENDENCY_KEYS.primarySystem],
-  ];
-  
+
   return (
     <React.Fragment>
       <EAMUDF {...register("udfchar13")} />
@@ -47,7 +33,9 @@ const AssetHierarchy = (props) => {
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
         autocompleteHandlerParams={["A"]}
         onSelect={value => {
-          let hierarchy = getAssetHierarchyObject({parentAssetCode: value.code, parentAssetOrg: value.org}, equipment.AssetParentHierarchy)
+          console.log("select asset")
+          let hierarchy = getAssetHierarchyObject({parentAssetCode: value?.code ? value.code : '', 
+                                                  parentAssetOrg: value?.org ? value.org : ''}, equipment.AssetParentHierarchy)
           updateEquipmentProperty("AssetParentHierarchy", hierarchy)
         }}
         barcodeScanner
@@ -73,7 +61,8 @@ const AssetHierarchy = (props) => {
         renderDependencies={[equipment.AssetParentHierarchy]}
 
         onSelect={value => {
-          let hierarchy = getAssetHierarchyObject({parentPositionCode: value.code, parentPositionOrg: value.org}, equipment.AssetParentHierarchy)
+          let hierarchy = getAssetHierarchyObject({parentPositionCode:  value?.code ? value.code : '', 
+                                                  parentPositionOrg: value?.org ? value.org : ''}, equipment.AssetParentHierarchy)
           updateEquipmentProperty("AssetParentHierarchy", hierarchy)
         }}
         
@@ -98,7 +87,8 @@ const AssetHierarchy = (props) => {
         renderDependencies={[equipment.AssetParentHierarchy]}
         
         onSelect={value => {
-          let hierarchy = getAssetHierarchyObject({parentPrimarySystemCode: value.code, parentPrimarySystemOrg: value.org}, equipment.AssetParentHierarchy)
+          let hierarchy = getAssetHierarchyObject({parentPrimarySystemCode:  value?.code ? value.code : '', 
+                                                  parentPrimarySystemOrg: value?.org ? value.org : ''}, equipment.AssetParentHierarchy)
           updateEquipmentProperty("AssetParentHierarchy", hierarchy)
         }}
 
@@ -116,7 +106,18 @@ const AssetHierarchy = (props) => {
 
       <EAMAutocomplete
         {...register( "location")}
-        disabled={readOnly || getDependencyType(equipment.AssetParentHierarchy) !== ParentDependencyTypes.NONE}
+        value={get(equipment, 'AssetParentHierarchy.LOCATIONID.LOCATIONCODE')}
+        disabled={
+          readOnly || 
+          getDependencyType(equipment.AssetParentHierarchy) !== ParentDependencyTypes.NONE &&
+          getDependencyType(equipment.AssetParentHierarchy) !== ParentDependencyTypes.LOCATION
+        }
+        onSelect={value => {
+          console.log("on select")
+          let hierarchy = getAssetHierarchyObject({parentLocationCode: value.code, parentLocationOrg: value.org, dependencyType: ParentDependencyTypes.LOCATION}, equipment.AssetParentHierarchy)
+          updateEquipmentProperty("AssetParentHierarchy", hierarchy)
+        }}
+        renderDependencies={[equipment.AssetParentHierarchy]}
       />
     </React.Fragment>
   );
