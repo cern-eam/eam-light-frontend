@@ -82,6 +82,7 @@ function AddActivityDialog(props) {
   };
 
   let handleSave = () => {
+    console.log('test', fieldsData, formValues)
     if (!validateFields()) {
       return;
     }

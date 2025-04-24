@@ -178,24 +178,20 @@ class WSWorkorders {
     }
 
 
-    autocompleteBOOEmployee = (data, config = {}) => {
-        return WS._get("/autocomplete/boo/employee/" + data, config);
+    autocompleteBOOEmployee = ({filter}, config = {}) => {
+        return WS._get("/autocomplete/boo/employee/" + filter, config);
     };
 
-    autocompleteBOODepartment = (data, config = {}) => {
-        return WS._get("/autocomplete/boo/department/" + data, config);
+    autocompleteACTTrade = ({filter}, config = {}) => {
+        return WS._get("/autocomplete/act/trade/" + filter, config);
     };
 
-    autocompleteACTTrade = (data, config = {}) => {
-        return WS._get("/autocomplete/act/trade/" + data, config);
+    autocompleteACTTask = ({filter}, config = {}) => {
+        return WS._get("/autocomplete/act/task/" + filter, config);
     };
 
-    autocompleteACTTask = (data, config = {}) => {
-        return WS._get("/autocomplete/act/task/" + data, config);
-    };
-
-    autocompleteACTMatList = (data, config = {}) => {
-        return WS._get("/autocomplete/act/matlist/" + data, config);
+    autocompleteACTMatList = ({filter}, config = {}) => {
+        return WS._get("/autocomplete/act/matlist/" + filter, config);
     };
 
 
