@@ -1,5 +1,7 @@
 export const GridTypes = Object.freeze({ LIST: "LIST", LOV: "LOV" });
 
+export const GridFilterJoiner = Object.freeze({ AND: "AND", OR: "OR" });
+
 export default class GridRequest {
   constructor(gridName, gridType = GridTypes.LIST, userFunctionName) {
     this.GRID = {

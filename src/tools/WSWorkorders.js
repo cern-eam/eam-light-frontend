@@ -1,5 +1,5 @@
 import { Description } from '@mui/icons-material';
-import GridRequest, { GridTypes } from './entities/GridRequest';
+import GridRequest, { GridFilterJoiner, GridTypes } from './entities/GridRequest';
 import WS from './WS';
 import { getGridData, transformResponse } from './WSGrids';
 
@@ -112,12 +112,34 @@ class WSWorkorders {
         return getGridData(gridRequest).then(response => transformResponse(response, {code: "storecode", desc: "des_text"}));
     }
 
-    getPartUsagePart(workorder, store, code, config = {}) {
+    getPartUsagePart(options, config = {}) {
+        const [workorder, store] = options.handlerParams
+        const code = options.filter
         return WS._get(`/autocomplete/partusage/part/${workorder}/${store}/${code}`, config);
     }
 
-    getPartUsageAsset(transaction, store, part, code, config = {}) {
-        return WS._get(`/autocomplete/partusage/asset?transaction=${transaction}&store=${store}&part=${part}&code=${code}`, config);
+    getPartUsageAsset(options, config = {}) {
+        const [transaction, store, part] = options.handlerParams
+        const code = options.filter
+
+		let gridRequest = new GridRequest("OSOBJA", GridTypes.LIST);
+		gridRequest.addFilter("equipmentno", code, "CONTAINS", GridFilterJoiner.AND);
+
+		if (part) {
+			gridRequest.addFilter("part", part, "=", GridFilterJoiner.AND);
+		}
+
+		if (transaction === "ISSUE") {
+			gridRequest.addFilter("store", store, "=");
+		} else if (transaction ==="RETURN") {
+			gridRequest.addFilter("store", "", "IS EMPTY");
+		}
+
+        return getGridData(gridRequest).then(response => transformResponse(response, {
+            code: "equipmentno",
+            desc: "equipmentdesc",
+            org: "organization"
+        }));
     }
 
     getPartUsageBin(transaction, bin, part, store, config = {}) {

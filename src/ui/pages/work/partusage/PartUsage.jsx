@@ -20,8 +20,8 @@ function PartUsage(props) {
     const {showError, showWarning, showNotification, handleError} = useSnackbarStore();
 
     useEffect(() => {
-        fetchData(props.workorder.number)
-    }, [props.workorder.number])
+        fetchData(props.workOrderCode)
+    }, [props.workOrderCode])
 
     let formatQuantity = (data) => {
         data.forEach(part => {
@@ -60,7 +60,7 @@ function PartUsage(props) {
         //Close dialog
         setIsDialogOpen(false);
         //Init the list of part usage again
-        fetchData(props.workorder.number);
+        fetchData(props.workOrderCode);
     }
 
     return (
@@ -91,7 +91,8 @@ function PartUsage(props) {
                 handleCancel={() => setIsDialogOpen(false)}
                 tabLayout={props.tabLayout.fields}
                 isDialogOpen={isDialogOpen}
-                workorder={props.workorder}
+                workOrderCode={props.workOrderCode}
+                workOrder={props.workOrder}
                 isLoading={isLoading}
                 successHandler={successHandler}
                 equipmentMEC={props.equipmentMEC}/>
