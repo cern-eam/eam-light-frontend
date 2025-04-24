@@ -9,7 +9,7 @@ import { isMultiOrg } from "../EntityTools";
 import { getPartTrackingMethods } from "../../../tools/WSParts";
 
 const PartGeneral = (props) => {
-  const { part, newEntity, register, screenCode } = props;
+  const { part, newEntity, register, screenCode, id } = props;
 
   return (
     <React.Fragment>
@@ -45,6 +45,8 @@ const PartGeneral = (props) => {
         entity={part}
         entityType={"part"}
         screenCode={screenCode}
+        code={id.code}
+        org={id.org}
         style={{ marginTop: "10px", marginBottom: "-10px" }}
       />
     </React.Fragment>

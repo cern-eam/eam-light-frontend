@@ -1,164 +1,141 @@
+import * as React from "react";
+import { get } from "lodash";
+import WSEquipment from "../../../../tools/WSEquipment";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
-import * as React from "react";
-import WSEquipment from "../../../../tools/WSEquipment";
 import Dependency from "../components/Dependency";
+import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import {
-  onChangeDependentInput,
-  isDependencySet,
-  COST_ROLL_UP_CODES,
-  updateCostRollUpProperty,
-} from "../EquipmentTools";
+  getHierarchyObject,
+  ParentDependencyTypes,
+  getDependencyType,
+  getParentAssetCode,
+  getParentPositionCode,
+  getParentPrimarySystemCode,
+} from "../asset/assethierarchytools";
 
-const DEPENDENCY_KEYS = {
-  asset: "hierarchyAssetDependent",
-  position: "hierarchyPositionDependent",
-  primarySystem: "hierarchyPrimarySystemDependent",
-};
+const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readOnly, showWarning, positionLayout }) => {
+  
+  const onChangeAsset = (value) => {
+    const hierarchy = getHierarchyObject({
+      parentAssetCode: value?.code || '',
+      parentAssetOrg:  value?.org  || ''
+    }, equipment.PositionParentHierarchy);
+    updateEquipmentProperty("PositionParentHierarchy", hierarchy);
+  };
 
-const PositionHierarchy = (props) => {
-  const {
-    equipment,
-    updateEquipmentProperty,
-    register,
-    readOnly,
-    showWarning,
-  } = props;
+  const onChangeAssetDependency = (event) => {
+    const hierarchy = getHierarchyObject({
+      dependencyType: event.target.checked ? ParentDependencyTypes.ASSET : ParentDependencyTypes.NONE
+    }, equipment.PositionParentHierarchy);
+    updateEquipmentProperty("PositionParentHierarchy", hierarchy);
+  };
 
-  const renderDependenciesForDependencyInputs = [
-    equipment[DEPENDENCY_KEYS.asset],
-    equipment[DEPENDENCY_KEYS.position],
-    equipment[DEPENDENCY_KEYS.primarySystem],
-  ];
+  const onChangePosition = (value) => {
+    const hierarchy = getHierarchyObject({
+      parentPositionCode: value?.code || '',
+      parentPositionOrg:  value?.org  || ''
+    }, equipment.PositionParentHierarchy);
+    updateEquipmentProperty("PositionParentHierarchy", hierarchy);
+  };
+
+  const onChangePositionDependency = (event) => {
+    const hierarchy = getHierarchyObject({
+      dependencyType: event.target.checked ? ParentDependencyTypes.POSITION : ParentDependencyTypes.NONE
+    }, equipment.PositionParentHierarchy);
+    updateEquipmentProperty("PositionParentHierarchy", hierarchy);
+  };
+
+  const onChangeSystem = (value) => {
+    const hierarchy = getHierarchyObject({
+      parentPrimarySystemCode: value?.code || '',
+      parentPrimarySystemOrg:  value?.org  || ''
+    }, equipment.PositionParentHierarchy);
+    updateEquipmentProperty("PositionParentHierarchy", hierarchy);
+  };
+
+  const onChangeSystemDependency = (event) => {
+    const hierarchy = getHierarchyObject({
+      dependencyType: event.target.checked ? ParentDependencyTypes.PRIMARYSYSTEM : ParentDependencyTypes.NONE
+    }, equipment.PositionParentHierarchy);
+    updateEquipmentProperty("PositionParentHierarchy", hierarchy);
+  };
+
+  const onChangeLocation = (value) => {
+    const hierarchy = getHierarchyObject({
+      parentLocationCode:  value?.code || '',
+      parentLocationOrg:   value?.org  || '',
+      dependencyType:      value?.code ? ParentDependencyTypes.LOCATION : ParentDependencyTypes.NONE
+    }, equipment.PositionParentHierarchy);
+    updateEquipmentProperty("PositionParentHierarchy", hierarchy);
+  };
 
   return (
     <React.Fragment>
-      <EAMTextField
-        {...register("udfchar13", "userDefinedFields.udfchar13")}
-        readonly={true}
-      />
-
-      <EAMTextField
-        {...register("udfchar11", "userDefinedFields.udfchar11")}
-        readonly={true}
-      />
+      <EAMTextField {...register("udfchar13", "userDefinedFields.udfchar13")} readonly />
+      <EAMTextField {...register("udfchar11", "userDefinedFields.udfchar11")} readonly />
 
       <EAMAutocomplete
-        {...register(
-          "asset",
-          "hierarchyAssetCode",
-          "hierarchyAssetDesc",
-          "hierarchyAssetOrg",
-          (value) => {
-            onChangeDependentInput(
-              value,
-              DEPENDENCY_KEYS.asset,
-              DEPENDENCY_KEYS,
-              equipment,
-              updateEquipmentProperty,
-              showWarning
-            );
-            updateCostRollUpProperty(
-              COST_ROLL_UP_CODES.asset,
-              value,
-              updateEquipmentProperty
-            );
-          }
-        )}
+        {...processElementInfo(positionLayout.fields.asset)}
+        value={getParentAssetCode('PositionParentHierarchy', equipment)}
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
-        renderDependencies={renderDependenciesForDependencyInputs}
+        autocompleteHandlerParams={["A"]}
+        onSelect={onChangeAsset}
+        barcodeScanner
         endAdornment={
           <Dependency
-            updateProperty={updateEquipmentProperty}
-            value={equipment[DEPENDENCY_KEYS.asset]}
-            valueKey={DEPENDENCY_KEYS.asset}
-            disabled={!equipment.hierarchyAssetCode}
-            dependencyKeysMap={DEPENDENCY_KEYS}
+            onChangeHandler={onChangeAssetDependency}
+            value={getDependencyType(equipment.PositionParentHierarchy) === ParentDependencyTypes.ASSET}
+            disabled={!getParentAssetCode('PositionParentHierarchy', equipment)}
           />
         }
-        barcodeScanner
+        renderDependencies={[equipment.PositionParentHierarchy]}
       />
 
       <EAMAutocomplete
-        {...register(
-          "parentasset",
-          "hierarchyPositionCode",
-          "hierarchyPositionDesc",
-          "hierarchyPositionOrg",
-          (value) => {
-            onChangeDependentInput(
-              value,
-              DEPENDENCY_KEYS.position,
-              DEPENDENCY_KEYS,
-              equipment,
-              updateEquipmentProperty,
-              showWarning
-            );
-            updateCostRollUpProperty(
-              COST_ROLL_UP_CODES.position,
-              value,
-              updateEquipmentProperty
-            );
-          }
-        )}
-        autocompleteHandler={WSEquipment.autocompletePositionParent}
-        renderDependencies={renderDependenciesForDependencyInputs}
+        {...processElementInfo(positionLayout.fields.parentasset)}
+        value={getParentPositionCode('PositionParentHierarchy', equipment)}
+        barcodeScanner
+        autocompleteHandler={WSEquipment.autocompleteAssetParent}
+        autocompleteHandlerParams={["P"]}
+        onSelect={onChangePosition}
+        renderDependencies={[equipment.PositionParentHierarchy]}
         endAdornment={
           <Dependency
-            updateProperty={updateEquipmentProperty}
-            value={equipment[DEPENDENCY_KEYS.position]}
-            valueKey={DEPENDENCY_KEYS.position}
-            disabled={!equipment.hierarchyPositionCode}
-            dependencyKeysMap={DEPENDENCY_KEYS}
+            onChangeHandler={onChangePositionDependency}
+            value={getDependencyType(equipment.PositionParentHierarchy) === ParentDependencyTypes.POSITION}
+            disabled={!getParentPositionCode('PositionParentHierarchy', equipment)}
           />
         }
-        barcodeScanner
       />
 
       <EAMAutocomplete
-        {...register(
-          "primarysystem",
-          "hierarchyPrimarySystemCode",
-          "hierarchyPrimarySystemDesc",
-          "hierarchyPrimarySystemOrg",
-          (value) => {
-            onChangeDependentInput(
-              value,
-              DEPENDENCY_KEYS.primarySystem,
-              DEPENDENCY_KEYS,
-              equipment,
-              updateEquipmentProperty,
-              showWarning
-            );
-            updateCostRollUpProperty(
-              COST_ROLL_UP_CODES.primarySystem,
-              value,
-              updateEquipmentProperty
-            );
-          }
-        )}
-        autocompleteHandler={WSEquipment.autocompletePrimarySystemParent}
-        renderDependencies={renderDependenciesForDependencyInputs}
+        {...processElementInfo(positionLayout.fields.primarysystem)}
+        value={getParentPrimarySystemCode('PositionParentHierarchy', equipment)}
+        barcodeScanner
+        autocompleteHandler={WSEquipment.autocompleteAssetParent}
+        autocompleteHandlerParams={["S"]}
+        onSelect={onChangeSystem}
+        renderDependencies={[equipment.PositionParentHierarchy]}
         endAdornment={
           <Dependency
-            updateProperty={updateEquipmentProperty}
-            value={equipment[DEPENDENCY_KEYS.primarySystem]}
-            valueKey={DEPENDENCY_KEYS.primarySystem}
-            disabled={!equipment.hierarchyPrimarySystemCode}
-            dependencyKeysMap={DEPENDENCY_KEYS}
+            onChangeHandler={onChangeSystemDependency}
+            value={getDependencyType(equipment.PositionParentHierarchy) === ParentDependencyTypes.PRIMARYSYSTEM}
+            disabled={!getParentPrimarySystemCode('PositionParentHierarchy', equipment)}
           />
         }
-        barcodeScanner
       />
 
       <EAMAutocomplete
-        {...register(
-          "location",
-          "hierarchyLocationCode",
-          "hierarchyLocationDesc"
-        )}
-        autocompleteHandler={WSEquipment.autocompleteLocation}
-        disabled={readOnly || isDependencySet(equipment, DEPENDENCY_KEYS)}
+        {...register("location")}
+        value={get(equipment, 'PositionParentHierarchy.LOCATIONID.LOCATIONCODE')}
+        disabled={
+          readOnly ||
+          (getDependencyType(equipment.PositionParentHierarchy) !== ParentDependencyTypes.NONE &&
+           getDependencyType(equipment.PositionParentHierarchy) !== ParentDependencyTypes.LOCATION)
+        }
+        onSelect={onChangeLocation}
+        renderDependencies={[equipment.PositionParentHierarchy]}
       />
     </React.Fragment>
   );

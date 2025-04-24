@@ -129,6 +129,7 @@ const Position = () => {
 
     const commonProps = {
       equipment,
+      id,
       newEntity,
       positionLayout,
       userGroup: userData.eamAccount.userGroup,
@@ -227,7 +228,7 @@ const Position = () => {
       },
       getPartsAssociated(
         id.code,
-        id.organization,
+        id.org,
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         1,
@@ -291,7 +292,7 @@ const Position = () => {
             ref={(comments) => (commentsComponent.current = comments)}
             entityCode="OBJ"
             entityKeyCode={id.code}
-            entityOrganization={id.organization}
+            entityOrganization={id.org}
             userCode={userData.eamAccount.userCode}
             allowHtml={true}
             disabled={readOnly}
@@ -399,7 +400,7 @@ const Position = () => {
         entityScreen={screenPermissions}
         entityName="Position"
         entityKeyCode={id.code}
-        organization={id.organization}
+        organization={id.org}
         saveHandler={saveHandler}
         newHandler={newHandler}
         deleteHandler={deleteHandler}

@@ -62,7 +62,7 @@ export const onCategoryChange = (category, updateProperty) => {
   //   });
 };
 
-// Used in hierarchies to handle dependency-related behavior
+// Used in hierarchies to handle dependency-related behavior // TODO
 export const onChangeDependentInput = (
   value,
   dependencyKey,
@@ -92,12 +92,6 @@ export const onChangeDependentInput = (
   }
 };
 
-// Check whether there is at least one dependency set
-export const isDependencySet = (equipment, dependencyKeysMap) => {
-  return Object.values(dependencyKeysMap)
-    .map((depKey) => equipment[depKey])
-    .includes("true");
-};
 
 export function isClosedEquipment(equipment) {
   return equipment.systemStatusCode === "D";
@@ -138,7 +132,7 @@ export const equipmentLayoutPropertiesMap = {
         resultMap: {
             code: "equipmentcode",
             desc: "description_obj",
-            organization: "equiporganization"
+            org: "equiporganization"
         },
         gridType: GridTypes.LIST
     }
@@ -197,16 +191,3 @@ export const locationLayoutPropertiesMap = {
   outofservice: "outOfService",
 };
 
-export const COST_ROLL_UP_CODES = {
-  asset: "hierarchyAssetCostRollUp",
-  position: "hierarchyPositionCostRollUp",
-  primarySystem: "hierarchyPrimarySystemCostRollUp",
-};
-
-export const updateCostRollUpProperty = (
-  costRollUpCode,
-  equipmentCode,
-  updatingFunction
-) => {
-  updatingFunction(costRollUpCode, equipmentCode ? true : false);
-};

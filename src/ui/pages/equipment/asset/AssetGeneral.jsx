@@ -12,6 +12,7 @@ import { autocompleteDepartment, readStatuses, readUserCodes } from "../../../..
 const AssetGeneral = (props) => {
   const {
     equipment,
+    id,
     newEntity,
     register,
     userData,
@@ -61,6 +62,8 @@ const AssetGeneral = (props) => {
         entity={equipment}
         entityType={"equipment"}
         screenCode={screenCode}
+        code={id.code}
+        org={id.org}
         style={{ marginTop: "10px", marginBottom: "-10px" }}
       />
     </React.Fragment>
