@@ -315,7 +315,7 @@ const Workorder = () => {
         customVisibility: () => isRegionAvailable("ACO", commonProps.workOrderLayout),
         render: () => (
           <AdditionalCosts
-            workorder={workorder}
+            workOrderNumber={id.code}
             tabLayout={tabs.ACO}
             equipmentMEC={equipmentMEC}
             disabled={readOnly}
@@ -333,7 +333,7 @@ const Workorder = () => {
         isVisibleWhenNewEntity: false,
         maximizable: false,
         customVisibility: () => isRegionAvailable("CWO", commonProps.workOrderLayout),
-        render: () => <WorkorderChildren workorder={workorder.number} />,
+        render: () => <WorkorderChildren workorder={id.code} />,
         column: 1,
         order: 4,
         summaryIcon: SegmentRoundedIcon,
@@ -348,7 +348,7 @@ const Workorder = () => {
         render: () => (
             <EDMSDoclightIframeContainer
                 objectType="J"
-                objectID={workorder.number}
+                objectID={id.code}
                 url={applicationData.EL_DOCLI}
             />
         ),

@@ -1,8 +1,9 @@
-import GridRequest, { GridTypes } from './entities/GridRequest';
+import GridRequest, { GridFilterJoiner, GridTypes } from './entities/GridRequest';
 import WS from './WS';
 import { getAsset } from './WSAssets';
 import { getGridData, transformResponse } from './WSGrids';
 import { getPosition } from './WSPositions';
+import { getSystem } from './WSSystems';
 import WSWorkorders from './WSWorkorders';
 
 /**
@@ -46,7 +47,7 @@ class WSEquipment {
         gridRequest.addParam("control.org", "*")
         gridRequest.addFilter("equipmentcode", filter, operator)
         gridRequest.sortBy("equipmentcode")
-        return getGridData(gridRequest).then(response => transformResponse(response, {code: "equipmentcode", desc: "description_obj", org: "equiporganization"}));
+        return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "equipmentcode", desc: "description_obj", org: "equiporganization"}));
     }
 
     getEquipmentPartsAssociated(equipment, parentScreen, config = {}) {
@@ -100,15 +101,32 @@ export const getEquipment = async (equipmentCode, organization, config = {}) => 
             return getAsset(equipmentCode, organization, config)
         case "P":
             return getPosition(equipmentCode, organization, config)
+        case "S":
+            return getSystem(equipmentCode, organization, config)
     }
 }
 
-export const getEquipmentType = async (equipmentCode, organization, config = {}) => {
+export const getEquipmentType = async (equipmentCode, organization = '*', config = {}) => {
     let gridRequest = new GridRequest("OCOBJC", GridTypes.LIST)
     gridRequest.addFilter("obj_code", equipmentCode, "=", "AND");
     gridRequest.addFilter("obj_org", organization, "=");
     gridRequest.addParam("parameter.lastupdated", "31-JAN-1970");
-    return getGridData(gridRequest).then(response => response.body.data[0]?.obj_obrtype)
+    let equipmentType = await getGridData(gridRequest).then(response => response.body.data[0]?.obj_obrtype)
+
+    if (equipmentType) {
+        return equipmentType
+    }
+
+    let gridRequestLocation = new GridRequest("OSOBJL", GridTypes.LIST);
+    gridRequestLocation.addFilter("equipmentno", equipmentCode, "=", GridFilterJoiner.AND);
+    gridRequestLocation.addFilter("organization", organization, "=");
+    let gridRequestLocationResponse = await getGridData(gridRequestLocation).then(response => response.body.data)
+    console.log("kura", gridRequestLocationResponse)
+    if (gridRequestLocationResponse.length == 1) {
+        return "L"
+    }
+
+    return null;
 }
 
 export const getEquipmentDocuments = async (code, organization, config = {}) => {

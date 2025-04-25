@@ -24,8 +24,8 @@ const AdditionalCosts = (props) => {
     const {showError, showNotification, handleError} = useSnackbarStore();
 
     useEffect(() => {
-        fetchData(props.workorder.number);
-    }, [props.workorder.number]);
+        fetchData(props.workOrderNumber);
+    }, [props.workOrderNumber]);
 
     const adjustData = (data) => {
         return data.map((additionalCost) => ({
@@ -35,10 +35,10 @@ const AdditionalCosts = (props) => {
         }));
     };
 
-    const fetchData = (workorder) => {
+    const fetchData = (workOrderNumber) => {
         setIsLoading(true)
-        if (workorder) {
-            WSWorkorders.getAdditionalCostsList(workorder).then((response) => {
+        if (workOrderNumber) {
+            WSWorkorders.getAdditionalCostsList(workOrderNumber).then((response) => {
                 const data = adjustData(response.body.data);
                 setData(data);
                 setIsLoading(false);
@@ -52,7 +52,7 @@ const AdditionalCosts = (props) => {
     const successHandler = () => {
         showNotification('Additional cost created successfully');
         setIsDialogOpen(false);
-        fetchData(props.workorder.number);
+        fetchData(props.workOrderNumber);
     }
 
     return (
@@ -79,7 +79,7 @@ const AdditionalCosts = (props) => {
                 handleCancel={() => setIsDialogOpen(false)}
                 tabLayout={props.tabLayout.fields}
                 isDialogOpen={isDialogOpen}
-                workorder={props.workorder}
+                workOrderNumber={props.workOrderNumber}
                 isLoading={isLoading}
                 successHandler={successHandler}/>
         </>

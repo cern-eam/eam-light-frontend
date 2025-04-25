@@ -439,54 +439,58 @@ export const getCustomTabRegions = (
     return number.toString();
   };
 
+  const pad = (num) => String(num).padStart(2, '0');
+
   export const fromEAMDate = (data) => {
-    if (!data) {
-      return null;
-    }
+    if (!data?.YEAR) return null;
+  
+    const {
+      YEAR, MONTH = 1, DAY = 1,
+      HOUR = 0, MINUTE = 0, SECOND = 0,
+      TIMEZONE = 'Z',
+    } = data;
+  
+    // Use TIMEZONE only to determine correct year
+    const offsetMinutes = TIMEZONE === 'Z'
+      ? 0
+      : (parseInt(TIMEZONE.slice(1, 3)) * 60 + parseInt(TIMEZONE.slice(3))) * (TIMEZONE[0] === '-' ? -1 : 1);
+  
+    const adjusted = new Date(YEAR + offsetMinutes * 60000);
+    const year = adjusted.getUTCFullYear();
+  
+    // Build local ISO string (without milliseconds)
+    const localISO = `${year}-${pad(MONTH)}-${pad(DAY)}T${pad(HOUR)}:${pad(MINUTE)}:${pad(SECOND)}`;
+  
+    // Parse as local time, convert to UTC
+    return new Date(localISO).toISOString();
+  };
 
-    const { YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, SUBSECOND, TIMEZONE } = data;
 
-    // Get actual year from epoch timestamp (which is in the given timezone)
-    const baseDate = new Date(YEAR);
-    const year = new Date(YEAR + parseInt(TIMEZONE) * 60 * 10).getUTCFullYear();
+  export const toEAMDate = (iso) => {
+    
+    if (!iso) return null;
   
-    // Construct the date in UTC
-    const utcDate = new Date(Date.UTC(year, MONTH - 1, DAY, HOUR, MINUTE, SECOND, SUBSECOND));
+    const local = new Date(iso);
+    const yearEpoch = new Date(`${local.getFullYear()}-01-02T00:00:00`).getTime();
   
-    // Return ISO string in UTC (with 'Z')
-    return utcDate.toISOString();
-  }
-
-
-  export const toEAMDate = (isoString, timezone = "+0000") => {
-    // Parse the UTC ISO string
-    const utcDate = new Date(isoString);
-  
-    // Parse timezone offset
-    const sign = timezone[0] === '+' ? 1 : -1;
-    const hours = parseInt(timezone.slice(1, 3), 10);
-    const minutes = parseInt(timezone.slice(3, 5), 10);
-    const offsetMinutes = sign * (hours * 60 + minutes);
-  
-    // Adjust to local time by applying offset
-    const localTime = new Date(utcDate.getTime() + offsetMinutes * 60 * 1000);
-  
-    // Compute the start of the year in local time
-    const localYearStart = new Date(Date.UTC(localTime.getUTCFullYear(), 0, 1, 0, 0, 0, 0) - offsetMinutes * 60 * 1000);
-    const yearEpoch = localYearStart.getTime();
-  
-    return {
+    let eamDate = {
       YEAR: yearEpoch,
-      MONTH: localTime.getUTCMonth() + 1,
-      DAY: localTime.getUTCDate(),
-      HOUR: localTime.getUTCHours(),
-      MINUTE: localTime.getUTCMinutes(),
-      SECOND: localTime.getUTCSeconds(),
-      SUBSECOND: localTime.getUTCMilliseconds(),
-      TIMEZONE: timezone,
-      qualifier: "OTHER"
+      MONTH: local.getMonth() + 1,
+      DAY: local.getDate(),
+      HOUR: local.getHours(),
+      MINUTE: local.getMinutes(),
+      SECOND: local.getSeconds(),
+      SUBSECOND: local.getMilliseconds(),
+      TIMEZONE: '+0000',
+      qualifier: 'OTHER'
     };
-  }
+
+    console.log('to', iso, eamDate)
+
+    return eamDate
+
+  };
+  
   
   
   
