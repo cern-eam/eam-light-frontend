@@ -1,7 +1,7 @@
 import queryString from "query-string";
 import { useEffect, useState } from "react";
 import BlockUi from "react-block-ui";
-import WSEquipment from "../../../tools/WSEquipment";
+import { getEquipmentType } from "../../../tools/WSEquipment";
 import InfoPage from "../../components/infopage/InfoPage";
 import { useParams } from "react-router-dom";
 
@@ -37,14 +37,13 @@ function EquipmentRedirect(props) {
 
             setIsLoading(true);
             //Fetch the equipment
-            WSEquipment.getEquipmentType(code)
+            getEquipmentType(code)
                 .then((response) => {
-                    const equipmentType = response.body.data;
                     //Valid code
                     setIsLoading(false);
                     setIsValidCode(true);
                     //Redirect according to the typeCode
-                    switch (equipmentType) {
+                    switch (response) {
                         case "A":
                             props.history.replace(`/asset/${code}`);
                             break;

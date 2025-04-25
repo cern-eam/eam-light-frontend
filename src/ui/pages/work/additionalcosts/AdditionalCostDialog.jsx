@@ -20,12 +20,12 @@ const AdditionalCostDialog = (props) => {
 
     useEffect(() => {
         if (props.isDialogOpen) {
-            loadActivities(props.workorder);
+            loadActivities(props.workOrderNumber);
         }
     }, [props.isDialogOpen]);
 
-    const loadActivities = (workorder) => {
-        WSWorkorders.getWorkOrderActivities(workorder.number).then((response) => {
+    const loadActivities = (workOrderNumber) => {
+        WSWorkorders.getWorkOrderActivities(workOrderNumber).then((response) => {
             setActivityList(transformActivities(response.body.data));
         }).catch((error) => {
             props.handleError(error);
@@ -48,7 +48,7 @@ const AdditionalCostDialog = (props) => {
 
     const handleSave = () => {
         setLoading(true);
-        WSWorkorders.createAdditionalCost({...additionalCost }, props.workorder.number)
+        WSWorkorders.createAdditionalCost({...additionalCost }, props.workOrderNumber)
             .then(props.successHandler)
             .catch(props.handleError)
             .finally(() => setLoading(false));

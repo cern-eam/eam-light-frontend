@@ -54,6 +54,7 @@ export default Location = (props) => {
   const {
     screenLayout: locationLayout,
     entity: location,
+    id,
     loading,
     readOnly,
     isModified,

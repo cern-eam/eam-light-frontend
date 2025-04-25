@@ -51,7 +51,7 @@ const Dependency = (props) => {
 
   const theme = useTheme();
 
-
+  
   return (
     <>
       <Tooltip title={value ? "Remove dependency" : "Add dependency"}>

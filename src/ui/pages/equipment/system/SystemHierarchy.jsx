@@ -4,7 +4,7 @@ import * as React from "react";
 import WSEquipment from "../../../../tools/WSEquipment";
 import Dependency from "../components/Dependency";
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
-import { getDependencyType, getHierarchyObject, getParentPrimarySystemCode, ParentDependencyTypes } from "../asset/assethierarchytools";
+import { getDependencyType, getHierarchyObject, ParentDependencyTypes } from "../asset/assethierarchytools";
 import { get } from "lodash";
 
 const SystemHierarchy = (props) => {
@@ -17,19 +17,69 @@ const SystemHierarchy = (props) => {
     systemLayout
   } = props;
 
-  console.log("kura", get(equipment, 'SystemParentHierarchy.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE'), equipment)
-
 
   const onChangePrimarySystem = (value) => {
-      let hierarchy = {
+    if (!value) {
+      updateEquipmentProperty("SystemParentHierarchy", {
+        ...equipment.SystemParentHierarchy,
+        NONDEPENDENTPRIMARYSYSTEM: null,
+        DEPENDENTPRIMARYSYSTEM: null
+      })
+      return
+    }
+
+    updateEquipmentProperty("SystemParentHierarchy", {
+      ...equipment.SystemParentHierarchy,
+      NONDEPENDENTPRIMARYSYSTEM: {
         SYSTEMID: {
           EQUIPMENTCODE:  value.code,
           ORGANIZATIONID: {ORGANIZATIONCODE: value.org}
         }
-    }
-      
-    updateEquipmentProperty("SystemParentHierarchy.NONDEPENDENTPRIMARYSYSTEM", hierarchy)
+      }
+    })
+
   }
+
+  const onChangePrimarySystemDependency = (event) => {
+    console.log('ch', event.target.checked, equipment.SystemParentHierarchy)
+    if (event.target.checked) {
+      updateEquipmentProperty('SystemParentHierarchy', {
+        ...equipment.SystemParentHierarchy,
+        DEPENDENTPRIMARYSYSTEM: equipment.SystemParentHierarchy.NONDEPENDENTPRIMARYSYSTEM,
+        NONDEPENDENTPRIMARYSYSTEM: null,
+        DEPENDENTLOCATION: null
+      })
+    } else {
+      updateEquipmentProperty('SystemParentHierarchy', {
+        ...equipment.SystemParentHierarchy,
+        NONDEPENDENTPRIMARYSYSTEM: equipment.SystemParentHierarchy.DEPENDENTPRIMARYSYSTEM,
+        DEPENDENTPRIMARYSYSTEM: null
+      })
+    }
+
+  }
+
+  const onChangeLocation = (value) => {
+    if (!value) {
+      updateEquipmentProperty("SystemParentHierarchy", {
+        ...equipment.SystemParentHierarchy,
+        DEPENDENTLOCATION: null
+      })
+      return
+    }
+
+    updateEquipmentProperty("SystemParentHierarchy", {
+      ...equipment.SystemParentHierarchy,
+      DEPENDENTLOCATION: {
+        LOCATIONID: {
+          LOCATIONCODE:  value.code,
+          ORGANIZATIONID: {ORGANIZATIONCODE: value.org}
+        }
+      }
+    })
+
+  }
+
 
   return (
     <React.Fragment>
@@ -58,12 +108,10 @@ const SystemHierarchy = (props) => {
 
         endAdornment={
           <Dependency
-            onChangeHandler={(event) => {
-              let hierarchy = getHierarchyObject({dependencyType: event.target.checked ? ParentDependencyTypes.PRIMARYSYSTEM : ParentDependencyTypes.NONE}, equipment.AssetParentHierarchy);
-              updateEquipmentProperty("SystemParentHierarchy", hierarchy);
-            }}
-            value={getDependencyType(equipment.SystemParentHierarchy) === ParentDependencyTypes.PRIMARYSYSTEM}
-            disabled={!getParentPrimarySystemCode('SystemParentHierarchy', equipment)}
+            onChangeHandler={onChangePrimarySystemDependency}
+            value={!!get(equipment, 'SystemParentHierarchy.DEPENDENTPRIMARYSYSTEM.SYSTEMID')}
+            disabled={!get(equipment, 'SystemParentHierarchy.DEPENDENTPRIMARYSYSTEM.SYSTEMID') && 
+                      !get(equipment, 'SystemParentHierarchy.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID')}
           />
         }
       />
@@ -71,19 +119,12 @@ const SystemHierarchy = (props) => {
 
       <EAMAutocomplete
         {...register( "location")}
-        value={get(equipment, 'SystemParentHierarchy.LOCATIONID.LOCATIONCODE')}
+        value={get(equipment, 'SystemParentHierarchy.DEPENDENTLOCATION.LOCATIONID.LOCATIONCODE') ??
+               get(equipment, 'SystemParentHierarchy.LOCATIONID.LOCATIONCODE')}
         disabled={
-          readOnly || 
-          getDependencyType(equipment.SystemParentHierarchy) !== ParentDependencyTypes.NONE &&
-          getDependencyType(equipment.SystemParentHierarchy) !== ParentDependencyTypes.LOCATION
+          readOnly || get(equipment, 'SystemParentHierarchy.DEPENDENTPRIMARYSYSTEM.SYSTEMID')
         }
-        onSelect={value => {
-          let hierarchy = getHierarchyObject({parentLocationCode:  value?.code ? value.code : '', 
-            parentLocationOrg: value?.org ? value.org : '', 
-            dependencyType: value?.code ? ParentDependencyTypes.LOCATION : ParentDependencyTypes.NONE}, 
-            equipment.SystemParentHierarchy)
-            updateEquipmentProperty("SystemParentHierarchy", hierarchy)
-        }}
+        onSelect={onChangeLocation}
         renderDependencies={[equipment.SystemParentHierarchy]}
       />
     </React.Fragment>
