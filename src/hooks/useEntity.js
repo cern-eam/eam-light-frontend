@@ -190,8 +190,7 @@ const useEntity = (params) => {
         setEntity(readEntity);
         
         document.title = entityDesc + " " + get(readEntity, entityCodeProperty);
-
-        setId({code: get(readEntity, entityCodeProperty), org: get(entity, entityOrgProperty)})
+        setId({code: get(readEntity, entityCodeProperty), org: get(readEntity, entityOrgProperty)})
 
         //Render as read-only depending on screen rights, department security or custom handler
         setReadOnly(

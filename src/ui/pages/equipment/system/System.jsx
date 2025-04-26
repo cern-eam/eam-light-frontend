@@ -236,7 +236,8 @@ const System = () => {
         maximizable: false,
         render: () => (
           <EquipmentPartsAssociated
-            equipmentcode={id.code}
+            code={id.code}
+            org={id.org}
             parentScreen={screenPermissions.parentScreen}
           />
         ),

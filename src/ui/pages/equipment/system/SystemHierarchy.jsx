@@ -41,7 +41,6 @@ const SystemHierarchy = (props) => {
   }
 
   const onChangePrimarySystemDependency = (event) => {
-    console.log('ch', event.target.checked, equipment.SystemParentHierarchy)
     if (event.target.checked) {
       updateEquipmentProperty('SystemParentHierarchy', {
         ...equipment.SystemParentHierarchy,

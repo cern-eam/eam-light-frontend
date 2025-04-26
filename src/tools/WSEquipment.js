@@ -50,9 +50,18 @@ class WSEquipment {
         return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "equipmentcode", desc: "description_obj", org: "equiporganization"}));
     }
 
-    getEquipmentPartsAssociated(equipment, parentScreen, config = {}) {
-        equipment = encodeURIComponent(equipment);
-        return WS._get(`/equipment/partsassociated/${parentScreen}/${equipment}`, config);
+    getEquipmentPartsAssociated(equipment, organization, config = {}) {
+        let gridRequest = new GridRequest("BSPARA");
+
+        gridRequest.addParam("param.entity", "OBJ");
+        gridRequest.addParam("param.valuecode", equipment + "#" + organization);
+
+        return getGridData(gridRequest, config).then(response => transformResponse(response, {
+            partCode: "papartcode",
+            partDesc: "description",
+            quantity: "quantity",
+            uom: "partuom"
+        }));
     }
 
     getCategory(categoryCode, config = {}) {
