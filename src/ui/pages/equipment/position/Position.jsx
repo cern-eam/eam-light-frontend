@@ -7,7 +7,6 @@ import PositionGeneral from "./PositionGeneral";
 import PositionDetails from "./PositionDetails";
 import PositionHierarchy from "./PositionHierarchy";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
-import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import { ENTITY_TYPE } from "../../../components/Toolbar";

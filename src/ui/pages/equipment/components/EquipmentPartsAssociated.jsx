@@ -19,9 +19,10 @@ export default class EquipmentPartsAssociated extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.equipmentcode && nextProps.equipmentcode !== this.props.equipmentcode)
+        console.log('props', nextProps)
+        if (nextProps.code && nextProps.code !== this.props.code)
             this.fetchData(nextProps);
-        else if (!nextProps.equipmentcode) {
+        else if (!nextProps.code) {
             this.setState(() => ({
                 data: []
             }));
@@ -30,7 +31,7 @@ export default class EquipmentPartsAssociated extends Component {
 
     fetchData = (props) => {
         this.setState({ blocking: true });
-        WSEquipment.getEquipmentPartsAssociated(props.equipmentcode, props.parentScreen)
+        WSEquipment.getEquipmentPartsAssociated(props.code, props.org)
             .then(response => {
                 this.setState(() => ({
                     data: response.body.data
