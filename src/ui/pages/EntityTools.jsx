@@ -93,7 +93,7 @@ export const assignCustomFieldFromCustomField = (
       );
       return matchingField ?? field;
     })
-    .sort((a, b) => Number(a.index ?? 0) - Number(b.index ?? 0));
+    .sort((cf1, cf2) => (cf1.index ?? 0) - (cf2.index ?? 0));
 
   return {
     ...entity,

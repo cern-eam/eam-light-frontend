@@ -73,7 +73,7 @@ export const transformNativeResponse = (response) => {
           switch (field.DATATYPE) {
             case 'DECIMAL':
             case 'NUMBER':
-              value = value === '' ? null : Number(value);
+              value = value === '' ? null : Number(value?.replace(/,/g, ""));
               break;
             case 'CHKBOOLEAN':
               value = value === '' ? null : value === '1';

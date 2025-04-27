@@ -187,11 +187,13 @@ const useEntity = (params) => {
         setIsModified(false);
         setNewEntity(false);
         const readEntity = response.body.Result.ResultData[entityProperty]
+        // Sort custom based on the index prop
+        readEntity.USERDEFINEDAREA?.CUSTOMFIELD?.sort((cf1, cf2) => (cf1.index ?? 0) - (cf2.index ?? 0))
+        
         setEntity(readEntity);
+        setId({code: get(readEntity, entityCodeProperty), org: get(readEntity, entityOrgProperty)})
         
         document.title = entityDesc + " " + get(readEntity, entityCodeProperty);
-        setId({code: get(readEntity, entityCodeProperty), org: get(readEntity, entityOrgProperty)})
-
         //Render as read-only depending on screen rights, department security or custom handler
         setReadOnly(
           !screenPermissions.updateAllowed ||
@@ -263,7 +265,7 @@ const useEntity = (params) => {
         setId({})
 
         let newEntity = response.body.Result.ResultData[resultDefaultDataProperty ?? entityProperty] ?? response.body.Result.ResultData
-        newEntity.USERDEFINEDAREA = customFields.body.data;
+        newEntity.USERDEFINEDAREA = customFields.body.Result;
         newEntity = assignDefaultValues(newEntity, screenLayout);
         newEntity = assignQueryParamValues(newEntity, screenLayout)
         setEntity(newEntity);
@@ -313,7 +315,7 @@ const useEntity = (params) => {
   const onChangeClass = (newClass) => {
      getCustomFields(entityCode, newClass)
      .then((response) => {
-        setEntity((prevEntity) => assignCustomFieldFromCustomField(prevEntity, response.body.data.CUSTOMFIELD));
+        setEntity((prevEntity) => assignCustomFieldFromCustomField(prevEntity, response.body.Result.CUSTOMFIELD));
       })
      .catch(console.error);
   };

@@ -16,6 +16,7 @@ import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import { isDepartmentReadOnly } from "@/ui/pages/EntityTools";
 import { useEffect, useState } from "react";
 import useUserDataStore from "../../../../../../state/useUserDataStore";
+import { autocompleteDepartment } from "../../../../../../tools/WSGrids";
 
 const WorkOrdersDialog = ({
     handleSuccess,
@@ -130,7 +131,8 @@ const WorkOrdersDialog = ({
                             null,
                             handleUpdate
                         )}
-                        autocompleteHandler={WS.autocompleteDepartment}
+                        autocompleteHandler={autocompleteDepartment}
+                        autocompleteHandlerParams={["*"]}
                         validate
                     />
 
