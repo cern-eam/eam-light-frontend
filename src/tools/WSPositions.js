@@ -12,8 +12,7 @@ export const getPosition = async (positionCode, organization, config = {}) => {
     const positionResponse = await WS._get(`/proxy/positions/${encodeURIComponent(positionCode + '#' + organization)}`, config)
     const hierarchyResponse = await getPositionHierarchy(positionCode, organization, config);
     // TODO still using SOAP
-    //positionResponse.body.Result.ResultData.PositionEquipment.PositionParentHierarchy = hierarchyResponse.body.Result.ResultData.PositionParentHierarchy; 
-    positionResponse.body.Result.ResultData.PositionEquipment.PositionParentHierarchy = hierarchyResponse.body.data.ResultData.PositionParentHierarchy; 
+    positionResponse.body.Result.ResultData.PositionEquipment.PositionParentHierarchy = hierarchyResponse.body.Result.ResultData.PositionParentHierarchy; 
     return positionResponse;
 }
 

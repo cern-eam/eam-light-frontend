@@ -118,11 +118,6 @@ class WS {
     return this._get(`/autocomplete/users/${filter}`, config);
   };
 
-  autocompleteDepartment = ({filter}, config = {}) => {
-    filter = encodeURIComponent(filter);
-    return this._get(`/autocomplete/department/${filter}`, config);
-  };
-
   autocompleteLocation = (filter, config = {}) => {
     filter = encodeURIComponent(filter);
     return this._get(`/autocomplete/location?s=${filter}`, config);
