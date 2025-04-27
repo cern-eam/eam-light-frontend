@@ -14,12 +14,11 @@ const SystemDetails = (props) => {
 
       <EAMAutocomplete {...register("category")} />
 
-      <EAMDatePicker {...register("commissiondate", "comissionDate")} />
+      <EAMDatePicker {...register("commissiondate")} />
 
       <EAMAutocomplete {...register("assignedto")} />
 
-      <EAMSelect
-        {...register("criticality", "criticality")}
+      <EAMSelect {...register("criticality")}
         autocompleteHandler={readUserCodes}
         autocompleteHandlerParams={["OBCR"]}
       />

@@ -25,8 +25,7 @@ const AssetDetails = (props) => {
 
       <EAMAutocomplete {...register("assignedto")} />
 
-      <EAMSelect
-        {...register("criticality", "criticality")}
+      <EAMSelect  {...register("criticality")}
         autocompleteHandler={readUserCodes}
         autocompleteHandlerParams={["OBCR"]}
       />
@@ -35,23 +34,20 @@ const AssetDetails = (props) => {
 
       <EAMAutocomplete {...register("manufacturer")} />
 
-      <EAMTextField {...register("serialnumber", "serialNumber")} />
+      <EAMTextField {...register("serialnumber")} />
 
       <EAMTextField {...register("model", "model")} />
 
-      <EAMAutocomplete
-        {...register("part")}
+      <EAMAutocomplete {...register("part")}
         link={() => (equipment.partCode ? "/part/" + equipment.partCode : null)}
       />
 
-      <EAMAutocomplete
-        {...register("store", "storeCode", "storeDesc")}
+      <EAMAutocomplete {...register("store")}
         autocompleteHandler={WSEquipment.autocompleteEquipmentStore}
         disabled={true}
       />
 
-      <EAMAutocomplete
-        {...register("bin", "bin", "binDesc")}
+      <EAMAutocomplete {...register("bin")}
         autocompleteHandler={WSEquipment.autocompleteEquipmentBin}
         autocompleteHandlerParams={[equipment.storeCode]}
         disabled={true}

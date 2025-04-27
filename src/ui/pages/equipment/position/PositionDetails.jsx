@@ -18,19 +18,18 @@ const PositionDetails = (props) => {
 
             <EAMDatePicker {...register('commissiondate')} />
 
-            <EAMAutocomplete {...register('assignedto', 'assignedTo', 'assignedToDesc')} />
+            <EAMAutocomplete {...register('assignedto')} />
 
-            <EAMSelect
-                {...register('criticality', 'criticality')}
+            <EAMSelect {...register('criticality')}
                 autocompleteHandler={readUserCodes}
                 autocompleteHandlerParams={["OBCR"]}
             />
 
             <EAMAutocomplete {...register('manufacturer')} />
 
-            <EAMTextField {...register('serialnumber', 'serialNumber')} />
+            <EAMTextField {...register('serialnumber')} />
 
-            <EAMTextField {...register('model', 'model')} />
+            <EAMTextField {...register('model')} />
 
         </React.Fragment>
     );

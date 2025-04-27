@@ -82,11 +82,10 @@ export const assignUserDefinedFields = (
 // assigns the custom fields from the customField object to the entity, merging old values
 export const assignCustomFieldFromCustomField = (
   entity,
-  newCustomFields = []
+  newCustomFields
 ) => {
   const currentCustomFields = entity?.USERDEFINEDAREA?.CUSTOMFIELD || [];
-
-  const mergedAndSortedFields = newCustomFields
+  const mergedAndSortedFields = (newCustomFields ?? [])
     .map(field => {
       const matchingField = currentCustomFields.find(
         existing => existing.PROPERTYCODE === field.PROPERTYCODE
