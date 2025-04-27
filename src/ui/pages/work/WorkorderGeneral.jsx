@@ -110,10 +110,7 @@ function WorkorderGeneral(props) {
 
       <EAMAutocomplete {...register("standardwo")} />
 
-      <EAMAutocomplete
-        {...register("costcode")}
-        //autocompleteHandler={WSWorkorders.autocompleteCostCode}
-      />
+      <EAMAutocomplete {...register("costcode")}  />
 
       <EAMTextField {...register("targetvalue")} />
 
@@ -150,19 +147,19 @@ function WorkorderGeneral(props) {
         }
       />
 
-      <EAMUDF {...register("udfchkbox01", `userDefinedFields.udfchkbox01`)} />
+      <EAMUDF {...register("udfchkbox01")} />
 
-      <EAMUDF {...register("udfchkbox02", `userDefinedFields.udfchkbox02`)} />
+      <EAMUDF {...register("udfchkbox02")} />
 
-      <EAMUDF {...register("udfchkbox03", `userDefinedFields.udfchkbox03`)} />
+      <EAMUDF {...register("udfchkbox03")} />
 
-      <EAMUDF {...register("udfchkbox04", `userDefinedFields.udfchkbox04`)} />
+      <EAMUDF {...register("udfchkbox04")} />
 
-      <EAMUDF {...register("udfchkbox05", `userDefinedFields.udfchkbox05`)} />
+      <EAMUDF {...register("udfchkbox05")} />
 
-      <EAMCheckbox {...register("warranty", "warranty")} />
+      <EAMCheckbox {...register("warranty")} />
 
-      <EAMTextField {...register("downtimehours", "downtimeHours")} />
+      <EAMTextField {...register("downtimehours")} />
     </React.Fragment>
   );
 }

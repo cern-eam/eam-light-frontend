@@ -8,16 +8,9 @@ const LocationHierarchy = (props) => {
 
   return (
     <React.Fragment>
-      <EAMAutocomplete
-        {...register(
-          "parentlocation",
-          "hierarchyLocationCode",
-          "hierarchyLocationDesc"
-        )}
-        autocompleteHandler={WS.autocompleteLocation}
-      />
+      <EAMAutocomplete {...register("parentlocation", "ParentLocationID.LOCATIONCODE")} />
 
-      <EAMUDF {...register("udfchar11", "userDefinedFields.udfchar11")} />
+      <EAMUDF {...register("udfchar11")} />
     </React.Fragment>
   );
 };

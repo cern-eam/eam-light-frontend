@@ -9,9 +9,7 @@ const LocationDetails = (props) => {
 
   return (
     <React.Fragment>
-      <EAMAutocomplete
-        {...register("class")}
-      />
+      <EAMAutocomplete {...register("class")} />
 
       <EAMTextField {...register("costcode")} />
 

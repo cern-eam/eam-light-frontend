@@ -4,7 +4,7 @@ import useEntity from "@/hooks/useEntity";
 import * as React from "react";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
-import WSLocation from "../../../../tools/WSLocation";
+import WSLocation, { getLocation, updateLocation } from "../../../../tools/WSLocation";
 import { isCernMode } from "../../../components/CERNMode";
 import CustomFields from "eam-components/dist/ui/components/customfields/CustomFields";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
@@ -77,15 +77,15 @@ export default Location = (props) => {
   } = useEntity({
     WS: {
       create: WSLocation.create,
-      read: WSLocation.getLocation,
-      update: WSLocation.update,
+      read: getLocation,
+      update: updateLocation,
       delete: WSLocation.remove,
       new: WSLocation.init,
     },
     postActions: {
       create: postCreate,
       read: postRead,
-      new: postInit,
+      new: postInit
     },
     entityCode: "LOC",
     entityDesc: "Location",
