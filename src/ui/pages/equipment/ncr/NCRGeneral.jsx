@@ -11,44 +11,43 @@ const NCRGeneral = (props) => {
 
     return (
         <React.Fragment>
-            <EAMTextField {...register("description", "description")} />
+            <EAMTextField {...register("description")} />
+
             <EAMAutocomplete
-                {...register("equipment", "equipmentCode")}
+                {...register("equipment")}
                 link={() =>
                     ncr.equipmentCode ? "/equipment/" + ncr.equipmentCode : null
                 }
             />
 
-            <EAMAutocomplete
-                {...register("location", "locationCode", "locationDesc")}
-            />
+            <EAMAutocomplete {...register("location")} />
 
-            <EAMAutocomplete {...register("department", "department")} />
+            <EAMAutocomplete {...register("department")} />
 
             <EAMSelect {...register("type", "typeCode")} />
 
             <EAMSelect 
-                {...register("status", "statusCode")} 
+                {...register("status")} 
                 autocompleteHandler={readStatuses}
                 autocompleteHandlerParams={["NOCF", newEntity, ncr.statusCode]}
             />
 
-            <EAMAutocomplete {...register("class", "classCode")} />
+            <EAMAutocomplete {...register("class")} />
 
             <EAMSelect
-                {...register("severity", "severity")}
+                {...register("severity")}
                 autocompleteHandler={WS.getCodeLov}
                 autocompleteHandlerParams={["SEVE"]}
             />
 
             <EAMSelect
-                {...register("importance", "importance")}
+                {...register("importance")}
                 autocompleteHandler={WS.getCodeLov}
                 autocompleteHandlerParams={["IMPT"]}
             />
 
             <EAMTextField
-                {...register("nonconformitynote", "nonConformityNote")}
+                {...register("nonconformitynote")}
                 textarea={true}
             />
         </React.Fragment>
