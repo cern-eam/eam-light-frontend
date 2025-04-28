@@ -1,5 +1,4 @@
 import GridRequest, { GridTypes } from './entities/GridRequest';
-import WS from './WS';
 import { getGridData, transformResponse } from './WSGrids';
 
 /**
@@ -19,7 +18,7 @@ class WSUDF {
         gridRequest.addParam("control.org", '*');
         gridRequest.addFilter("userdefinedfieldvalue", filter, "BEGINS", "OR")
         gridRequest.addFilter("description", filter, "BEGINS")
-        return getGridData(gridRequest).then(response => transformResponse(response, {code: "userdefinedfieldvalue", desc: "description"}));
+        return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "userdefinedfieldvalue", desc: "description"}));
     };
 
     getUDFCodeValues(options, config = {}) {
@@ -30,7 +29,7 @@ class WSUDF {
 		gridRequest.addParam("param.fieldid", field);
 		gridRequest.addParam("param.rentity", entity);
 		gridRequest.addParam("param.associatedrentity", entity);
-        return getGridData(gridRequest).then(response => transformResponse(response, {code: "userdefinedfieldvalue", desc: "description"}));
+        return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "userdefinedfieldvalue", desc: "description"}));
     }
 
     getUDFCodeDescValues(options, config = {}) {
@@ -41,7 +40,7 @@ class WSUDF {
 		gridRequest.addParam("param.fieldid", field);
 		gridRequest.addParam("param.rentity", entity);
 		gridRequest.addParam("param.associatedrentity", entity);
-        return getGridData(gridRequest).then(response => transformResponse(response, {code: "userdefinedfieldvalue", desc: "description"}));
+        return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "userdefinedfieldvalue", desc: "description"}));
     }
 
 }

@@ -8,7 +8,7 @@ const UserDefinedFields = (props) => {
   const renderUdfs = () => {
     return Object.keys(entityLayout)
       .filter((key) => key.startsWith("udf"))
-      .filter((prop) => !prop.includes("Desc") && !exclusions.includes(prop))
+      .filter((prop) => !exclusions.includes(prop))
       .sort(
         (udf1, udf2) =>
           entityLayout[udf1].fieldGroup - entityLayout[udf2].fieldGroup ||
