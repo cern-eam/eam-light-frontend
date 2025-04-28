@@ -17,9 +17,7 @@ const AssetDetails = (props) => {
 
       <EAMAutocomplete {...register("category")}/>
 
-      <EAMAutocomplete
-        {...register("costcode")}
-      />
+      <EAMAutocomplete {...register("costcode")}/>
 
       <EAMDatePicker {...register("commissiondate")} />
 
@@ -36,11 +34,9 @@ const AssetDetails = (props) => {
 
       <EAMTextField {...register("serialnumber")} />
 
-      <EAMTextField {...register("model", "model")} />
+      <EAMTextField {...register("model")} />
 
-      <EAMAutocomplete {...register("part")}
-        link={() => (equipment.partCode ? "/part/" + equipment.partCode : null)}
-      />
+      <EAMAutocomplete {...register("part")} />
 
       <EAMAutocomplete {...register("store")}
         autocompleteHandler={WSEquipment.autocompleteEquipmentStore}

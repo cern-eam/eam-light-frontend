@@ -19,7 +19,6 @@ export default class EquipmentPartsAssociated extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('props', nextProps)
         if (nextProps.code && nextProps.code !== this.props.code)
             this.fetchData(nextProps);
         else if (!nextProps.code) {

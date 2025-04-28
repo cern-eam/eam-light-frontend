@@ -25,6 +25,24 @@ export const getParentPrimarySystemCode = (hierarchyKey, equipment) => (
             get(equipment, `${hierarchyKey}.LocationDependency.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE`) ??
             get(equipment, `${hierarchyKey}.NonDependentParents.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE`))
 
+export const getParentAssetCostRollUp = (hierarchyKey, equipment) => [
+            get(equipment, `${hierarchyKey}.AssetDependency.DEPENDENTASSET.COSTROLLUP`),
+            get(equipment, `${hierarchyKey}.PositionDependency.NONDEPENDENTASSET.COSTROLLUP`),
+            get(equipment, `${hierarchyKey}.SystemDependency.NONDEPENDENTASSET.COSTROLLUP`),
+            get(equipment, `${hierarchyKey}.PrimarySystemDependency.NONDEPENDENTASSET.COSTROLLUP`),
+            get(equipment, `${hierarchyKey}.LocationDependency.NONDEPENDENTASSET.COSTROLLUP`),
+            get(equipment, `${hierarchyKey}.NonDependentParents.NONDEPENDENTASSET.COSTROLLUP`),
+            ].some(value => value === "true");
+
+export const getParentPositionCostRollUp = (hierarchyKey, equipment) => [
+            get(equipment, `${hierarchyKey}.PositionDependency.DEPENDENTPOSITION.COSTROLLUP`),
+            get(equipment, `${hierarchyKey}.AssetDependency.NONDEPENDENTPOSITION.COSTROLLUP`),
+            get(equipment, `${hierarchyKey}.SystemDependency.NONDEPENDENTPOSITION.COSTROLLUP`),
+            get(equipment, `${hierarchyKey}.PrimarySystemDependency.NONDEPENDENTPOSITION.COSTROLLUP`),
+            get(equipment, `${hierarchyKey}.LocationDependency.NONDEPENDENTPOSITION.COSTROLLUP`),
+            get(equipment, `${hierarchyKey}.NonDependentParents.NONDEPENDENTPOSITION.COSTROLLUP`),
+            ].some(value => value === "true");
+
 export const ParentDependencyTypes = Object.freeze({
     ASSET: "AssetDependency",
     POSITION: "PositionDependency",

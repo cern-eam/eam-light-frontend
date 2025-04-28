@@ -123,10 +123,7 @@ class WS {
     return this._get(`/autocomplete/location?s=${filter}`, config);
   };
 
-  autocompleteEquipment = (
-    hideLocations = false,
-    filter,
-    config = { timeout: 0 }
+  autocompleteEquipment = ({filter, handlerParams: [hideLocations]}, config = { timeout: 0 }
   ) => {
     filter = encodeURIComponent(filter);
     return this._get(

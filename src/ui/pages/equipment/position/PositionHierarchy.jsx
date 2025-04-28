@@ -13,6 +13,8 @@ import {
   getParentPositionCode,
   getParentPrimarySystemCode,
 } from "../asset/assethierarchytools";
+import { positionLayoutPropertiesMap } from "../EquipmentTools";
+import { createAutocompleteHandler } from "../../../../hooks/tools";
 
 const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readOnly, showWarning, positionLayout }) => {
   
@@ -127,8 +129,10 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
       />
 
       <EAMAutocomplete
-        {...register("location")}
-        value={get(equipment, 'PositionParentHierarchy.LOCATIONID.LOCATIONCODE')}
+        {...processElementInfo(positionLayout.fields.location)}
+        {...createAutocompleteHandler(positionLayout.fields.location, positionLayout.fields, equipment, positionLayoutPropertiesMap.location?.autocompleteHandlerData)}
+        value={get(equipment, 'PositionParentHierarchy.LocationDependency.DEPENDENTLOCATION.LOCATIONID.LOCATIONCODE') ??
+               get(equipment, 'PositionParentHierarchy.LOCATIONID.LOCATIONCODE')}
         disabled={
           readOnly ||
           (getDependencyType(equipment.PositionParentHierarchy) !== ParentDependencyTypes.NONE &&

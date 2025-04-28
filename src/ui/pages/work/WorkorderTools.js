@@ -45,6 +45,7 @@ export const layoutPropertiesMap = {
             searchKeys: ["equipmentcode"],
             gridType: GridTypes.LIST
         },
+        link: "/equipment"
         //onChange: (v1, v2) => console.log(v1, v2)
     },
 
