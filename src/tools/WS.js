@@ -1,4 +1,6 @@
 import ajax from "eam-components/dist/tools/ajax";
+import GridRequest, { GridTypes } from "./entities/GridRequest";
+import { getGridData, transformResponse } from "./WSGrids";
 
 /**
  * Handles all calls to REST Api
@@ -30,12 +32,10 @@ class WS {
     return this._get("/application/refreshCache", config);
   }
 
-  getLov = (genericLov, config = {}) => {
-    return this._post("/application/lov", genericLov, config);
-  }
-
-  getCodeLov = (code, config = {}) => {
-    return this._get(`/application/codelov/${code}`, config);
+  getCodeLov = ({handlerParams: [code]}, config = {}) => {
+		let gridRequest = new GridRequest("LVALLCODES", GridTypes.LOV, "LVALLCODES");
+		gridRequest.addParam("parameter.rtype", code);
+    return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "code", desc: "description"}));
   }
 
   getScreenLayout(

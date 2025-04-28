@@ -35,11 +35,6 @@ class WSWorkorders {
         return WS._get('/proxy/standardworkorders/' + code, config);
     }
 
-    autocompleteCostCode = (filter, config = {}) => {
-        filter = encodeURIComponent(filter);
-        return WS._get('/autocomplete/wo/costcode/' + filter, config);
-    };
-
     autocompleteUsersWithAccess = (wo, hint = null, config = {}) => {
         return WS._get(`/autocomplete/workorders/${wo}/users/search?hint=${hint}`, config);
     };
