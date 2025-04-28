@@ -32,6 +32,7 @@ const NCR = () => {
     const {
         screenLayout: ncrLayout,
         entity: ncr,
+        id,
         setEntity: setNCR,
         loading,
         readOnly,
@@ -74,7 +75,9 @@ const NCR = () => {
         entityCode: "OBJ",
         entityDesc: "NCR",
         entityURL: "/ncr/",
-        entityCodeProperty: "code",
+        entityCodeProperty: "NONCONFORMITYID.STANDARDENTITYCODE",
+        entityOrgProperty: "NONCONFORMITYID.ORGANIZATIONID.ORGANIZATIONCODE",
+        entityProperty: "Nonconformity",
         screenProperty: "ncrScreen",
         layoutProperty: "ncrLayout",
         layoutPropertiesMap: layoutPropertiesMap,
@@ -262,8 +265,8 @@ const NCR = () => {
                 newEntity={newEntity}
                 entityScreen={screenPermissions}
                 entityName="NCR"
-                entityKeyCode={ncr.code}
-                organization={ncr.organizationCode}
+                entityKeyCode={id.code}
+                organization={id.org}
                 saveHandler={saveHandler}
                 newHandler={newHandler}
                 deleteHandler={deleteHandler}

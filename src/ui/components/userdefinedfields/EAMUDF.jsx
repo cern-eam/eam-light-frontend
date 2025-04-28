@@ -15,7 +15,7 @@ const RENT = "RENT";
 const EAMUDF = (props) => {
   const { udfLookupType, udfLookupEntity, elementId, fieldType, udfUom } =
     props.elementInfo;
-
+  console.log('test', props)
   if (fieldType === "checkbox") {
     return <EAMCheckbox {...props} />;
   }

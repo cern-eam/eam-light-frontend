@@ -1,24 +1,24 @@
 import WS from "./WS";
 
 class WSNCRs {
-    getNonConformity(code, config = {}) {
-        return WS._get(`/ncrs/${code}`, config);
-    }
-
-    updateNonConformity(ncr, config = {}) {
-        return WS._put("/ncrs/", ncr, config);
-    }
-
-    createNonConformity(ncr, config = {}) {
-        return WS._post("/ncrs/", ncr, config);
-    }
-
-    deleteNonConformity(code, config = {}) {
-        return WS._delete(`/ncrs/${code}`, config);
-    }
-
     initNonConformity(config = {}) {
-        return WS._get(`/ncrs/init`, config);
+        return WS._post(`/proxy/nonconformitydefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": "*"}}, config);
+    }
+
+    getNonConformity(number, organization, config = {}) {
+        return WS._get(`/proxy/nonconformities/${encodeURIComponent(number + '#' + organization)}`, config);
+    }
+
+    createNonConformity(workOrder, config = {}) {
+        return WS._post('/proxy/nonconformities/', workOrder, config);
+    }
+
+    updateNonConformity(workOrder, config = {}) {
+        return WS._put('/proxy/nonconformities/', workOrder, config);
+    }
+
+    deleteNonConformity(number, organization, config = {}) {
+        return WS._delete('/proxy/nonconformities/' + number+ '%23' + organization, config);
     }
 
     getNonConformityObservations(code, config = {}) {

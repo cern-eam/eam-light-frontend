@@ -17,14 +17,7 @@ const UserDefinedFields = (props) => {
           )
       )
       .map((prop) => (
-        <EAMUDF
-          key={prop}
-          {...register(
-            prop,
-            `UserDefinedFields.${prop.toUpperCase()}`,
-            //prop.includes("Desc") ? `userDefinedFields.${prop}Desc` : undefined
-          )}
-        />
+        <EAMUDF key={prop} {...register(prop)}/>
       ));
   };
 
