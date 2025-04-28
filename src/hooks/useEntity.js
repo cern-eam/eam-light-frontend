@@ -192,7 +192,7 @@ const useEntity = (params) => {
         
         setEntity(readEntity);
         setId({code: get(readEntity, entityCodeProperty), org: get(readEntity, entityOrgProperty)})
-        
+
         document.title = entityDesc + " " + get(readEntity, entityCodeProperty);
         //Render as read-only depending on screen rights, department security or custom handler
         setReadOnly(
@@ -401,6 +401,11 @@ const useEntity = (params) => {
     // Description
     if (descKey) {
       data.desc = get(entity, descKey);
+    }
+
+    // Link
+    if (layoutPropertiesMap[layoutKey]?.link) {
+      data.link = () => (data.value ? layoutPropertiesMap[layoutKey].link + "/" + data.value : null)
     }
 
     // Errors

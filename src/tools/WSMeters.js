@@ -30,14 +30,14 @@ class WSMeters {
         return WS._post('/meters/', meterReading);
     }
 
-    autocompleteMeterEquipment = (code, config = {}) => {
-        code = encodeURIComponent(code);
-        return WS._get(`/autocomplete/meters/equipment/${code}`, config);
+    autocompleteMeterEquipment = ({filter}, config = {}) => {
+        filter = encodeURIComponent(filter);
+        return WS._get(`/autocomplete/meters/equipment/${filter}`, config);
     };
 
-    autocompleteMeterCode = (code, config = {}) => {
-        code = encodeURIComponent(code);
-        return WS._get(`/autocomplete/meters/meter/${code}`, config);
+    autocompleteMeterCode = ({filter}, config = {}) => {
+        filter = encodeURIComponent(filter);
+        return WS._get(`/autocomplete/meters/meter/${filter}`, config);
     };
 }
 

@@ -6,6 +6,8 @@ import Dependency from "../components/Dependency";
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { getDependencyType, getHierarchyObject, ParentDependencyTypes } from "../asset/assethierarchytools";
 import { get } from "lodash";
+import { systemLayoutPropertiesMap } from "../EquipmentTools";
+import { createAutocompleteHandler } from "../../../../hooks/tools";
 
 const SystemHierarchy = (props) => {
   const {
@@ -117,7 +119,8 @@ const SystemHierarchy = (props) => {
 
 
       <EAMAutocomplete
-        {...register( "location")}
+        {...processElementInfo(systemLayout.fields.location)}
+        {...createAutocompleteHandler(systemLayout.fields.location, systemLayout.fields, equipment, systemLayoutPropertiesMap.location?.autocompleteHandlerData)}
         value={get(equipment, 'SystemParentHierarchy.DEPENDENTLOCATION.LOCATIONID.LOCATIONCODE') ??
                get(equipment, 'SystemParentHierarchy.LOCATIONID.LOCATIONCODE')}
         disabled={

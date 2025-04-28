@@ -3,7 +3,7 @@ import BlockUi from 'react-block-ui';
 import Grid from '@mui/material/Grid';
 import ReplaceEqpHierarchy from "./ReplaceEqpHierarchy";
 import ReplaceEqpGeneral from "./ReplaceEqpGeneral";
-import WSEquipment from "../../../../tools/WSEquipment";
+import WSEquipment, { getEquipment } from "../../../../tools/WSEquipment";
 import './ReplaceEqp.css';
 import queryString from "query-string";
 import useUserDataStore from '../../../../state/useUserDataStore';
@@ -58,7 +58,7 @@ const ReplaceEqp = (props) => {
         if (newEquipment) {
             updateEqpReplacementProp('newEquipment', newEquipment);
         }
-        readUserCodes("OBSA")
+        readUserCodes({handlerParams: ["OBSA"]})
         .then(resp => setStateList(resp.body.data))
         .catch(handleError)
     }, [])
@@ -87,7 +87,7 @@ const ReplaceEqp = (props) => {
         }
 
         //Load list of statuses
-        readStatuses("OBJ", false, oldEquipmentStatus)
+        readStatuses({handlerParams: ["OBJ", false, oldEquipmentStatus]})
             .then(response => {
                 const data = response.body.data;
                 data.sort(({desc: a}, {desc: b}) => a < b ? -1 : a > b ? 1 : 0);
@@ -127,21 +127,24 @@ const ReplaceEqp = (props) => {
     const loadEquipmentData = async (code, destination) => {
         setBlocking(true);
         try {
-            const response = await WSEquipment.getEquipment(code);
+            const response = await getEquipment(code, '*'); //TODO org
+            const equipment = response.body.Result.ResultData.AssetEquipment ?? 
+                              response.body.Result.ResultData.PositionEquipment ??
+                              response.body.Result.ResultData.SystemEquipment
 
             if (destination === 'oldEquipment') {
-                setOldEquipment(response.body.data);
+                setOldEquipment(equipment);
 
                 // Set status/state for old equipment
                 let oldEquipmentStatus;
                 let oldEquipmentState;
 
-                if ((cryoClasses || []).includes(response.body.data.classCode)) {
+                if ((cryoClasses || []).includes(equipment.CLASSID?.CLASSCODE)) {
                     oldEquipmentStatus = 'IRP';
                     oldEquipmentState = 'DEF';
                 } else {
-                    oldEquipmentStatus = response.body.data.statusCode;
-                    oldEquipmentState = response.body.data.stateCode;
+                    oldEquipmentStatus = equipment.STATUS.STATUSCODE;
+                    oldEquipmentState = equipment.EQUIPMENTSTATEID?.STATECODE;
                 }
                 setReplaceEquipment((prevState) => ({
                     ...prevState,
@@ -149,7 +152,7 @@ const ReplaceEqp = (props) => {
                     oldEquipmentState,
                 }));
             } else if (destination === 'newEquipment') {
-                setNewEquipment(response.body.data);
+                setNewEquipment(equipment);
             }
             setBlocking(false);
         } catch (error) {

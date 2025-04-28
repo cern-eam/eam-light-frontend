@@ -164,11 +164,9 @@ export const assetLayoutPropertiesMap = {
     }
 },
 
-  parentasset: "hierarchyAssetCode",
-  part: "partCode",
-  position: "hierarchyPositionCode",
-  state: "stateCode",
-  store: "storeCode",
+  part: {
+    link: "/part"
+  }
 };
 
 export const positionLayoutPropertiesMap = {

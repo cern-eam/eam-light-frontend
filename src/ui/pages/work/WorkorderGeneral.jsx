@@ -60,11 +60,6 @@ function WorkorderGeneral(props) {
           "equipment"
         )}
         barcodeScanner
-        link={() =>
-          workorder.equipmentCode
-            ? "/equipment/" + workorder.EQUIPMENTID?.EQUIPMENTCODE
-            : null
-        }
         endAdornment={
           <IconButton
             size="small"

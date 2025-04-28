@@ -5,6 +5,8 @@ import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox
 import WSEquipment from "../../../../tools/WSEquipment";
 import EISTable from 'eam-components/dist/ui/components/table';
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
+import { getDependencyType, getParentAssetCode, getParentAssetCostRollUp, getParentPositionCode, ParentDependencyTypes } from '../asset/assethierarchytools';
+import { get } from 'lodash';
 
 const ReplaceEqpHierarchy = (props) => {
     const {equipment, equipmentLayout, title} = props;
@@ -12,13 +14,13 @@ const ReplaceEqpHierarchy = (props) => {
     const headers = ['Type', 'Equipment', 'Dependent', 'Cost Roll Up'];
     const propCodes = ['childTypeDesc', 'childCode', 'dependent', 'costRollUp'];
     const linksMap = new Map([['childCode', {linkType: 'fixed', linkValue: 'equipment/', linkPrefix: '/'}]]);
-
+    const hierarchyKey = 'AssetParentHierarchy'
     const [children, setChildren] = useState([]);
 
     useEffect(() => {
         //Fetch equipment children
         if (equipment) {
-            WSEquipment.getEquipmentChildren(equipment.code).then(response => {
+            WSEquipment.getEquipmentChildren(equipment.ASSETID?.EQUIPMENTCODE ?? equipment.POSITIONID?.EQUIPMENTCODE).then(response => {
                 setChildren(response.body.data);
             }).catch(error => {
                 console.log(error); // TODO: should we be passing handleError as props and use it here instead?
@@ -27,7 +29,7 @@ const ReplaceEqpHierarchy = (props) => {
     }, [equipment]);
 
     const renderAssetData = () => {
-        if (!equipment.hierarchyAssetCode) {
+        if (!getParentAssetCode(hierarchyKey, equipment)) {
             return <div/>;
         }
         return (
@@ -35,28 +37,25 @@ const ReplaceEqpHierarchy = (props) => {
                 <EAMTextField 
                     {...processElementInfo(equipmentLayout.fields['parentasset'])}
                     disabled
-                    value={equipment.hierarchyAssetCode}
-                    valueKey="hierarchyAssetCode"
+                    value={getParentAssetCode(hierarchyKey, equipment)}
                 />
 
                 <EAMCheckbox
                     {...processElementInfo(equipmentLayout.fields['dependentonparentasset'])}
                     disabled
-                    value={equipment.hierarchyAssetDependent}
-                    valueKey="hierarchyAssetDependent"
+                    value={getDependencyType(equipment[hierarchyKey]) === ParentDependencyTypes.ASSET}
                 />
 
                 <EAMCheckbox
                     {...processElementInfo(equipmentLayout.fields['costrollupparentasset'])}
                     disabled
-                    value={equipment.hierarchyAssetCostRollUp}
-                    valueKey="hierarchyAssetCostRollUp"
+                    value={getParentAssetCostRollUp(hierarchyKey, equipment)}
                 />
             </div>);
     };
 
     const renderPositionData = () => {
-        if (!equipment.hierarchyPositionCode) {
+        if (!getParentPositionCode(hierarchyKey, equipment)) {
             return <div/>;
         }
         return (
@@ -64,22 +63,19 @@ const ReplaceEqpHierarchy = (props) => {
                 <EAMTextField
                     {...processElementInfo(equipmentLayout.fields['position'])}
                     disabled
-                    value={equipment.hierarchyPositionCode}
-                    valueKey="hierarchyPositionCode"
+                    value={getParentPositionCode(hierarchyKey, equipment)}
                 />
 
                 <EAMCheckbox 
                     {...processElementInfo(equipmentLayout.fields['dependentonposition'])}
                     disabled
-                    value={equipment.hierarchyPositionDependent}
-                    valueKey="hierarchyPositionDependent"
+                    value={getDependencyType(equipment[hierarchyKey]) === ParentDependencyTypes.POSITION}
                 />
 
                 <EAMCheckbox 
                     {...processElementInfo(equipmentLayout.fields['costrollupposition'])}
                     disabled
-                    value={equipment.hierarchyPositionCostRollUp}
-                    valueKey="hierarchyPositionCostRollUp"
+                    value={getParentPositionCode(hierarchyKey, equipment)}
                 />
             </div>);
     };
@@ -105,12 +101,11 @@ const ReplaceEqpHierarchy = (props) => {
                 {renderAssetData()}
                 {renderPositionData()}
 
-                {equipment.hierarchyLocationCode &&
+                {get(equipment, 'AssetParentHierarchy.LOCATIONID.LOCATIONCODE') &&
                     <EAMTextField
                         {...processElementInfo(equipmentLayout.fields['location'])}
                         disabled
-                        value={equipment.hierarchyLocationCode}
-                        valueKey="hierarchyLocationCode"
+                        value={get(equipment, 'AssetParentHierarchy.LOCATIONID.LOCATIONCODE')}
                     />
                 }
                 {renderChildren()}
