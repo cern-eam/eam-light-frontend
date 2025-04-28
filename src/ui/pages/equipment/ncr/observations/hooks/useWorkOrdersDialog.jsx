@@ -24,14 +24,34 @@ const useWorkOrdersDialog = (
         setWorkOrder((prev) => ({ ...prev, [key]: value }));
     }, []);
 
+    function transformToWorkOrder(input) {
+        return {
+          WORKORDERID: {
+            JOBNUM: "",
+            ORGANIZATIONID: {
+              ORGANIZATIONCODE: input.equipmentOrganization || "*"
+            },
+            ...(input.description && { DESCRIPTION: input.description })
+          },
+          ...(input.statusCode && { STATUS: { STATUSCODE: input.statusCode } }),
+          ...(input.typeCode && { TYPE: { TYPECODE: input.typeCode } }),
+          ...(input.equipmentCode && { EQUIPMENTID: { EQUIPMENTCODE: input.equipmentCode, ORGANIZATIONID: { ORGANIZATIONCODE: input.equipmentOrganization || "*" } } }),
+          ...(input.departmentCode && { DEPARTMENTID: { DEPARTMENTCODE: input.departmentCode, ORGANIZATIONID: { ORGANIZATIONCODE: "*" } } }),
+          ...(input.costCode && { COSTCODEID: { COSTCODE: input.costCode, ORGANIZATIONID: { ORGANIZATIONCODE: "*" } } }),
+          ...(input.locationCode && { LOCATIONID: { LOCATIONCODE: input.locationCode, ORGANIZATIONID: { ORGANIZATIONCODE: input.locationOrg || "*" } } }),
+          ...(input.assignedTo && { ASSIGNEDTO: { PERSONCODE: input.assignedTo } })
+        };
+      }
+      
+      
+
     const successHandler = useCallback(async () => {
         try {
-            console.log('wo', workOrder) //TODO
-            const response = await WSWorkorders.createWorkOrder(workOrder);
-            
+            const response = await WSWorkorders.createWorkOrder(transformToWorkOrder(workOrder));
+            console.log('resp', response)
             showNotification(SUCCESS_DIALOG_MESSAGE);
             await observationsDialogSuccessHandler({
-                jobNum: response.body.data,
+                jobNum: response.body.Result.ResultData.JOBNUM
             });
             setIsOpen(false);
         } catch (error) {
