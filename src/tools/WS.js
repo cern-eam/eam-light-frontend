@@ -105,23 +105,12 @@ class WS {
     );
   }
 
-  //
-  //COMMON AUTOCOMPLETES
-  //
 
-  autocompleteEmployee = (filter, config = {}) => {
-    return this._get("/autocomplete/employee/" + filter, config);
-  };
-
-
-  autocompleteUsers = (filter, config = {}) => {
+  autocompleteUsers = ({filter}, config = {}) => {
     return this._get(`/autocomplete/users/${filter}`, config);
   };
 
-  autocompleteLocation = (filter, config = {}) => {
-    filter = encodeURIComponent(filter);
-    return this._get(`/autocomplete/location?s=${filter}`, config);
-  };
+
 
   autocompleteEquipment = ({filter, handlerParams: [hideLocations]}, config = { timeout: 0 }
   ) => {

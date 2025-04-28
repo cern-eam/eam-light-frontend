@@ -17,6 +17,7 @@ import { isDepartmentReadOnly } from "@/ui/pages/EntityTools";
 import { useEffect, useState } from "react";
 import useUserDataStore from "../../../../../../state/useUserDataStore";
 import { autocompleteDepartment } from "../../../../../../tools/WSGrids";
+import { createAutocompleteHandler } from "../../../../../../hooks/tools";
 
 const WorkOrdersDialog = ({
     handleSuccess,
@@ -138,6 +139,7 @@ const WorkOrdersDialog = ({
 
                     <EAMAutocomplete
                         {...processElementInfo(fields["location"])}
+                        {...createAutocompleteHandler(fields.location, fields, {})}
                         value={workOrder.locationCode}
                         onChange={createOnChangeHandler(
                             "locationCode",
@@ -145,7 +147,6 @@ const WorkOrdersDialog = ({
                             null,
                             handleUpdate
                         )}
-                        autocompleteHandler={WS.autocompleteLocation}
                     />
 
                     <EAMAutocomplete
@@ -162,6 +163,7 @@ const WorkOrdersDialog = ({
 
                     <EAMAutocomplete
                         {...processElementInfo(fields["assignedto"])}
+                        {...createAutocompleteHandler(fields.assignedto, fields, {}, {resultMap: {code: "personcode", desc: "description"}})}
                         value={workOrder.assignedTo}
                         onChange={createOnChangeHandler(
                             "assignedTo",
@@ -169,7 +171,6 @@ const WorkOrdersDialog = ({
                             null,
                             handleUpdate
                         )}
-                        autocompleteHandler={WS.autocompleteEmployee}
                     />
                 </BlockUi>
             </DialogContent>

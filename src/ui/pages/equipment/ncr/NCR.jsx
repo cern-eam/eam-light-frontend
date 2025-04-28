@@ -230,7 +230,7 @@ const NCR = () => {
                     ),
                 render: () => (
                     <Observations
-                        ncrCode={ncr.code}
+                        ncrCode={id.code}
                         ncr={ncr}
                         handleError={handleError}
                         showNotification={showNotification}
