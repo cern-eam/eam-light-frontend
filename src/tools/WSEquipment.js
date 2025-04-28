@@ -15,7 +15,22 @@ class WSEquipment {
     // EQUIPMENT
     //
     getEquipmentHistory(equipmentCode, config = {}) {
-        return WS._get('/equipment/history?c=' + equipmentCode, config);
+        let gridRequest = new GridRequest("EUMLWH", GridTypes.LIST);
+        gridRequest.addFilter("woobject", equipmentCode, "=");
+        gridRequest.sortBy("wocompleted", "DESC");
+
+        const fieldMapping = {
+            number: "wocode",
+            desc: "wotypedescription",
+            object: "woobject",
+            relatedObject: "relatedobject",
+            completedDate: "wocompleted",
+            enteredBy: "woenteredby",
+            type: "wotype",
+            jobType: "wojobtype"
+          };
+
+        return getGridData(gridRequest).then(response => transformResponse(response, fieldMapping));
     }
 
     getEquipmentWorkOrders(equipmentCode) {

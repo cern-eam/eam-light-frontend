@@ -6,7 +6,14 @@ import { GridTypes } from './entities/GridRequest';
 
 export const getGridDataNative = (gridRequest, config = {}) => WS._post('/proxy/grids', gridRequest, config);
 
-export const getGridData = (gridRequest, config = {}) => getGridDataNative(gridRequest, config).then(transformNativeResponse);
+export const getGridData = (gridRequest, config = {}) => 
+    getGridDataNative(gridRequest, config)
+      .then(transformNativeResponse)
+      .catch((error) => {
+        console.error("Error when fetching / transforming", gridRequest, error)
+        return { body: { data: [] } }
+    });
+
 
 export function transformResponse(response, keyMap, additionalData = []) {
     return {

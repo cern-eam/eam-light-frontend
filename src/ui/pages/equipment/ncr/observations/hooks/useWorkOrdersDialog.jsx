@@ -26,7 +26,9 @@ const useWorkOrdersDialog = (
 
     const successHandler = useCallback(async () => {
         try {
+            console.log('wo', workOrder) //TODO
             const response = await WSWorkorders.createWorkOrder(workOrder);
+            
             showNotification(SUCCESS_DIALOG_MESSAGE);
             await observationsDialogSuccessHandler({
                 jobNum: response.body.data,

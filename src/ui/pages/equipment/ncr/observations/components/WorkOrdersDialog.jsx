@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import useUserDataStore from "../../../../../../state/useUserDataStore";
 import { autocompleteDepartment } from "../../../../../../tools/WSGrids";
 import { createAutocompleteHandler } from "../../../../../../hooks/tools";
+import { GridTypes } from "../../../../../../tools/entities/GridRequest";
 
 const WorkOrdersDialog = ({
     handleSuccess,
@@ -39,6 +40,16 @@ const WorkOrdersDialog = ({
 
     useEffect( () => readStatuses("", "", true), [])
 
+    let equipmentAutocompleteHandlerData = { 
+                resultMap: {
+                    code: "equipmentcode",
+                    desc: "description_obj",
+                    organization: "equiporganization"
+                }, 
+                searchKeys: ["equipmentcode"],
+                gridType: GridTypes.LIST
+            }
+
     return (
         <Dialog
             fullWidth
@@ -53,9 +64,8 @@ const WorkOrdersDialog = ({
                 <BlockUi tag="div" blocking={disabled}>
                     <EAMAutocomplete
                         {...processElementInfo(fields["equipment"])}
+                        {...createAutocompleteHandler(fields.equipment, fields, {}, equipmentAutocompleteHandlerData)}
                         barcodeScanner
-                        autocompleteHandler={WS.autocompleteEquipment}
-                        autocompleteHandlerParams={[false]}
                         value={workOrder.equipmentCode}
                         onChange={createOnChangeHandler(
                             "equipmentCode",
@@ -144,13 +154,14 @@ const WorkOrdersDialog = ({
                         onChange={createOnChangeHandler(
                             "locationCode",
                             "locationDesc",
-                            null,
+                            "locationOrg",
                             handleUpdate
                         )}
                     />
 
                     <EAMAutocomplete
                         {...processElementInfo(fields["costcode"])}
+                        {...createAutocompleteHandler(fields.costcode, fields, {})}
                         value={workOrder.costCode}
                         onChange={createOnChangeHandler(
                             "costCode",
@@ -158,7 +169,6 @@ const WorkOrdersDialog = ({
                             null,
                             handleUpdate
                         )}
-                        autocompleteHandler={WSWorkorders.autocompleteCostCode}
                     />
 
                     <EAMAutocomplete
