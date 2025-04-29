@@ -1,11 +1,9 @@
 import * as React from "react";
 import WSEquipment from "../../../../tools/WSEquipment";
-import WS from "../../../../tools/WS";
 import EAMDatePicker from "eam-components/dist/ui/components/inputs-ng/EAMDatePicker";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
-import { onCategoryChange } from "../EquipmentTools";
 import { readUserCodes } from "../../../../tools/WSGrids";
 
 const AssetDetails = (props) => {

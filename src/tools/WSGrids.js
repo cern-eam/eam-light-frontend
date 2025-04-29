@@ -10,8 +10,10 @@ export const getGridData = (gridRequest, config = {}) =>
     getGridDataNative(gridRequest, config)
       .then(transformNativeResponse)
       .catch((error) => {
-        console.error("Error when fetching / transforming", gridRequest, error)
-        return { body: { data: [] } }
+        if (!error?.type === "REQUEST_CANCELLED") {
+            console.error("Error when fetching / transforming", gridRequest, error)
+            return { body: { data: [] } }
+        }
     });
 
 

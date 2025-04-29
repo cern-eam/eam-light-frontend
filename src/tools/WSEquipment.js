@@ -80,7 +80,7 @@ class WSEquipment {
     }
 
     getCategory(categoryCode, config = {}) {
-        return WS._get(`/autocomplete/eqp/categorydata/${categoryCode}`, config);
+        return WS._get(`/proxy/category/${categoryCode}`, config);
     }
 
     //
@@ -145,7 +145,6 @@ export const getEquipmentType = async (equipmentCode, organization = '*', config
     gridRequestLocation.addFilter("equipmentno", equipmentCode, "=", GridFilterJoiner.AND);
     gridRequestLocation.addFilter("organization", organization, "=");
     let gridRequestLocationResponse = await getGridData(gridRequestLocation).then(response => response.body.data)
-    console.log("kura", gridRequestLocationResponse)
     if (gridRequestLocationResponse.length == 1) {
         return "L"
     }

@@ -90,7 +90,7 @@ const Asset = () => {
       new: postInit,
     },
     handlers: {
-      "CATEGORYID.CATEGORYCODE": (category) => onCategoryChange(category)
+      "CATEGORYID.CATEGORYCODE": (category) => onCategoryChange(category, updateEquipmentProperty)
     },
     isReadOnlyCustomHandler: isClosedEquipment,
     entityCode: "OBJ",
