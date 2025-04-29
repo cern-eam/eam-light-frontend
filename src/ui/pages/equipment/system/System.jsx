@@ -25,6 +25,7 @@ import {
 import useEntity from "@/hooks/useEntity";
 import {
   isClosedEquipment,
+  onCategoryChange,
   systemLayoutPropertiesMap,
 } from "../EquipmentTools";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
@@ -95,7 +96,7 @@ const System = () => {
       new: postInit,
     },
     handlers: {
-      "CATEGORYID.CATEGORYCODE": (category) => console.log('category changed', category)
+      "CATEGORYID.CATEGORYCODE": (category) => onCategoryChange(category, updateEquipmentProperty)
     },
     isReadOnlyCustomHandler: isClosedEquipment,
     entityCode: "OBJ",

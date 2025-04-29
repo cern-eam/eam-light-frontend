@@ -26,6 +26,7 @@ import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer";
 import useEntity from "@/hooks/useEntity";
 import {
   isClosedEquipment,
+  onCategoryChange,
   positionLayoutPropertiesMap,
 } from "../EquipmentTools";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
@@ -100,7 +101,7 @@ const Position = () => {
       new: postInit,
     },
     handlers: {
-      "CATEGORYID.CATEGORYCODE": (category) => console.log('category changed', category)
+      "CATEGORYID.CATEGORYCODE": (category) => onCategoryChange(category, updateEquipmentProperty)
     },
     isReadOnlyCustomHandler: isClosedEquipment,
     entityCode: "OBJ",

@@ -55,7 +55,6 @@ const generateResultMap = (returnFields = {}, elementInfo) => ({
 })
 
 export const createAutocompleteHandler = (elementInfo, fields, entity, autocompleteHandlerData = {}) => {
-
     if (!elementInfo || !elementInfo.onLookup || elementInfo.onLookup == "{}" ) {
         return;
     } 
@@ -80,7 +79,7 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
                 gridRequest.addParam(key, value)
             });
             gridRequest.addParam("param.pagemode", "display")
-            
+
             const searchFields = autocompleteHandlerData.searchKeys ?? [returnFields[elementInfo.elementId]] ?? [];
             searchFields.forEach(searchField => gridRequest.addFilter(searchField, typeof filter === "string" ? filter : "", operator, "OR"))
 
