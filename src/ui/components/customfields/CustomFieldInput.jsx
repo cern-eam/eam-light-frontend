@@ -5,6 +5,7 @@ import CustomFieldDATE from './inputs/CustomFieldDATE'
 import CustomFieldDATI from './inputs/CustomFieldDATI'
 import CustomFieldNUM from './inputs/CustomFieldNUM'
 import CustomFieldCODE from './inputs/CustomFieldCODE'
+import CustomFieldTools from './CustomFieldTools';
 
 const groupLabelStyle = {
     "marginTop": 17,
@@ -17,7 +18,7 @@ const groupLabelStyle = {
 }
 function CustomFieldInput(props) {
 
-    let {customField, index, lookupValues, register, validate} = props
+    let {customField, index, register, validate} = props
 
     let renderCustomFieldSpecificInput = () => {
         let props = {

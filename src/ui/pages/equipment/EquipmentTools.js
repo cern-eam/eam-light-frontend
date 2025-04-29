@@ -97,10 +97,7 @@ export function isClosedEquipment(equipment) {
 
 // MAPPING BETWEEN ENTITY KEYS AND LAYOUT ID
 export const equipmentLayoutPropertiesMap = {
-  equipmentno: "code",
-  alias: "alias",
-  assetstatus: "statusCode",
-  assignedto: "assignedTo",
+
   category: {
     autocompleteHandlerData: { 
         resultMap: {
@@ -134,16 +131,7 @@ export const equipmentLayoutPropertiesMap = {
         },
         gridType: GridTypes.LIST
     }
-  },
-
-  commissiondate: "comissionDate",
-  criticality: "criticality",
-  department: "departmentCode",
-  equipmentdesc: "description",
-  manufacturer: "manufacturerCode",
-  model: "model",
-  primarysystem: "hierarchyPrimarySystemCode",
-  serialnumber: "serialNumber"
+  }
 };
 
 export const assetLayoutPropertiesMap = {
@@ -169,8 +157,6 @@ export const assetLayoutPropertiesMap = {
 
 export const positionLayoutPropertiesMap = {
   ...equipmentLayoutPropertiesMap,
-  asset: "hierarchyAssetCode",
-  parentasset: "hierarchyPositionCode",
 };
 
 export const systemLayoutPropertiesMap = {
@@ -178,12 +164,6 @@ export const systemLayoutPropertiesMap = {
 };
 
 export const locationLayoutPropertiesMap = {
-  equipmentno: "code",
-  equipmentdesc: "description",
-  department: "departmentCode",
-  class: "classCode",
-  costcode: "costCode",
-  safety: "safety",
-  outofservice: "outOfService",
+
 };
 

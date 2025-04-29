@@ -373,7 +373,7 @@ const Workorder = () => {
         column: 2,
         order: 7,
         summaryIcon: Article,
-        ignore: !isCernMode // ?? true
+        ignore: !isCernMode // true
       },
       {
         id: "NCRS",

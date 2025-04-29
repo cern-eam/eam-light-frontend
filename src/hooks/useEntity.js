@@ -402,16 +402,16 @@ const useEntity = (params) => {
     if (descKey) {
       data.desc = get(entity, descKey);
     }
-
+    
     // Link
     if (layoutPropertiesMap[layoutKey]?.link) {
       data.link = () => (data.value ? layoutPropertiesMap[layoutKey].link + "/" + data.value : null)
     }
 
+    Object.assign(data, createAutocompleteHandler(screenLayout.fields[layoutKey], screenLayout.fields, entity, layoutPropertiesMap[layoutKey]?.autocompleteHandlerData))
+
     // Errors
     data.errorText = errorMessages[layoutKey];
-
-    Object.assign(data, createAutocompleteHandler(screenLayout.fields[layoutKey], screenLayout.fields, entity, layoutPropertiesMap[layoutKey]?.autocompleteHandlerData))
 
     return data;
   };
