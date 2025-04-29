@@ -11,6 +11,7 @@ import BlockUi from "react-block-ui";
 import { Launch, Numbers, Web } from "@mui/icons-material";
 import { equipmentLayoutPropertiesMap } from "./equipment/EquipmentTools";
 import ResizableIFrame from "../components/iframes/ResizableIframe";
+import CustomFieldTools from "../components/customfields/CustomFieldTools";
 
 // clones an entity deeply
 export const cloneEntity = (entity) => ({
@@ -182,7 +183,7 @@ export const getElementInfoForCustomField = (customField) => {
   }
 
   return {
-    text: customField?.PROPERTYLABEL,
+    text: CustomFieldTools.isCategoryValue(customField) ? customField?.PROPERTYLABEL + " (cat. value)" : customField?.PROPERTYLABEL,
     xpath: "EAMID_" + customField?.PROPERTYCODE,
     fieldType: mapper[customField?.type] ?? "text"
   };

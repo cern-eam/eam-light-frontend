@@ -1,9 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import CustomFieldInput from './CustomFieldInput';
 import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/SimpleEmptyState'
 
 function CustomFields(props) {
-    let [lookupValues, setLookupValues] = useState(null);
     let {customFields, register} = props;
 
     const isEmptyState = customFields && customFields.length === 0;
@@ -22,16 +21,10 @@ function CustomFields(props) {
                     if (customField.PROPERTYCODE.startsWith('MTFX')) return null;
                     return (
                         <CustomFieldInput
-                            register={(...props) => ({
-                                label: customField?.label,
-                                xpath: 'EAMID_' + customField?.code,
-                                fieldType: customField?.type === 'NUM' ? 'number' : 'text',
-                                ...register?.(...props) ?? {}
-                            })}
+                            register={register}
                             customField={customField}
                             index={index}
                             key={index}
-                            lookupValues={lookupValues}
                             validate={customField.lovValidate === '+'}
                         />
                     )

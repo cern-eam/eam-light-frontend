@@ -1,34 +1,5 @@
 import { GridTypes } from "../../../tools/entities/GridRequest";
-import { assignCustomFieldFromCustomField, AssignmentType, assignUserDefinedFields, assignValues } from "../EntityTools";
-import { get } from "lodash";
 
-// MAPPING BETWEEN ENTITY KEYS AND LAYOUT ID
-export const layoutPropertiesMapOld =  {
-        description: "description",
-        equipment: "equipmentCode",
-        location: "locationCode",
-        workorderstatus: "statusCode",
-        workordertype: "typeCode",
-        woclass: "classCode",
-        department: "departmentCode",
-        parentwo: "parentWO",
-        priority: "priorityCode",
-        downtimehours: "downtimeHours",
-        reportedby: "reportedBy",
-        assignedto: "assignedTo",
-        reqstartdate: "requestedStartDate",
-        reqenddate: "requestedEndDate",
-        schedstartdate: "scheduledStartDate",
-        schedenddate: "scheduledEndDate",
-        startdate: "startDate",
-        datecompleted: "completedDate",
-        problemcode: "problemCode",
-        failurecode: "failureCode",
-        causecode: "causeCode",
-        actioncode: "actionCode",
-        costcode: "costCode",
-
-    }
 
 export const layoutPropertiesMap = {
 

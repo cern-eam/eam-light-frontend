@@ -106,7 +106,7 @@ function EquipmentWorkOrders(props) {
         if (systemStatuses.length > 0) {
             fetchData(equipmentcode, equipmenttype, systemStatuses);
         } else { 
-            readUserCodes("EVST").then((response) => {
+            readUserCodes({handlerParams: ["EVST"]}).then((response) => {
                 setSystemStatuses(response.body.data)
                 fetchData(equipmentcode, equipmenttype, response);
             });
