@@ -5,12 +5,9 @@ import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/Simp
 function CustomFields(props) {
     let {customFields, register} = props;
 
-    const isEmptyState = customFields && customFields.length === 0;
-
     return (
-        isEmptyState
+        !customFields
         ? <SimpleEmptyState message="No Custom Fields to show." />
-        : !customFields ? <SimpleEmptyState message="Loading..." />
         : (
             <React.Fragment>
                 {customFields.map((customField, index) => {

@@ -58,6 +58,7 @@ import AssetNCRs from '../../pages/equipment/components/EquipmentNCRs';
 import CustomFields from "../../components/customfields/CustomFields";
 import { getPart } from "../../../tools/WSParts";
 import Documents from "../equipment/asset/Documents";
+import { getLocation } from "../../../tools/WSLocation";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -153,11 +154,15 @@ const Workorder = () => {
     if (!workorder?.EQUIPMENTID?.EQUIPMENTCODE) {
       return;
     }
-    getEquipment(workorder?.EQUIPMENTID?.EQUIPMENTCODE, '*')
+
+    Promise.any([getEquipment(workorder?.EQUIPMENTID?.EQUIPMENTCODE, workorder?.EQUIPMENTID?.ORGANIZATIONID.ORGANIZATIONCODE),
+                 getLocation(workorder?.EQUIPMENTID?.EQUIPMENTCODE, workorder?.EQUIPMENTID?.ORGANIZATIONID.ORGANIZATIONCODE)])
       .then((response) => {
+        
         const equipment = response.body.Result.ResultData.AssetEquipment ??
                           response.body.Result.ResultData.PositionEquipment ??
-                          response.body.Result.ResultData.SystemEquipment
+                          response.body.Result.ResultData.SystemEquipment ??
+                          response.body.Result.ResultData.Location
 
         setEquipment(equipment);
         if (equipment.PartAssociation?.PARTID) {
