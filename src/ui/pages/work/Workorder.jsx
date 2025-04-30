@@ -666,6 +666,8 @@ const Workorder = () => {
       }
     });
     setCurrentWorkOrder(workorder.WORKORDERID.JOBNUM);
+    
+    updateWorkorderProperty('Activities', null)
     readStatuses(workorder.STATUS.STATUSCODE, false);
     readOtherIdMapping(workorder.number);
   }
