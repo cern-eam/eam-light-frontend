@@ -50,6 +50,12 @@ export const layoutPropertiesMap = {
             searchKeys: ["standardwo"],
             resultMap: {code: "standardwo", desc: "standardwodesc", organization: "standardwoorg"}
         }
+    },
+
+    assignedto: {
+        autocompleteHandlerData: { 
+            searchKeys: ['personcode', 'description']
+        }
     }
 
 }
