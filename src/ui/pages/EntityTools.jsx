@@ -8,10 +8,11 @@ import { get } from "lodash";
 import GridOnIcon from "@mui/icons-material/GridOn";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import BlockUi from "react-block-ui";
-import { Launch, Numbers, Web } from "@mui/icons-material";
+import { Launch, Web } from "@mui/icons-material";
 import { equipmentLayoutPropertiesMap } from "./equipment/EquipmentTools";
 import ResizableIFrame from "../components/iframes/ResizableIframe";
 import CustomFieldTools from "../components/customfields/CustomFieldTools";
+import { fromEAMValue } from "../../hooks/tools";
 
 // clones an entity deeply
 export const cloneEntity = (entity) => ({
@@ -194,7 +195,8 @@ export const registerCustomField =
     let data = processElementInfo(
       getElementInfoFromCustomFields(layoutKey, entity.USERDEFINEDAREA.CUSTOMFIELD)
     );
-    data.value = get(entity, valueKey);
+    
+    data.value = fromEAMValue(get(entity, valueKey), data.type);
     if (descKey) {
       data.desc = get(entity, descKey);
     }

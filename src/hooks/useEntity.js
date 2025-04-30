@@ -28,7 +28,7 @@ import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
 import useSnackbarStore from "../state/useSnackbarStore";
 import { getCustomFields } from "../tools/WSCustomFields";
 import { fromEAMDate, fromEAMNumber, toEAMDate } from "../ui/pages/EntityTools";
-import { assignDefaultValues, assignQueryParamValues, convertValue, createAutocompleteHandler, fireHandlersForQueryParamValues } from "./tools";
+import { assignDefaultValues, assignQueryParamValues, toEAMValue, createAutocompleteHandler, fireHandlersForQueryParamValues, fromEAMValue } from "./tools";
 
 const useEntity = (params) => {
   const {
@@ -321,7 +321,7 @@ const useEntity = (params) => {
   };
 
   const updateEntityProperty = (key, value, type) => { 
-    setEntity((prevEntity) => set({ ...prevEntity }, key, convertValue(value, type)));
+    setEntity((prevEntity) => set({ ...prevEntity }, key, toEAMValue(value, type)));
     fireHandler(key, value);
   };
 
@@ -386,17 +386,7 @@ const useEntity = (params) => {
     data.elementInfo = screenLayout.fields[layoutKey]; // Return elementInfo as it is still needed in some cases (for example for UDFs)
 
     // Value
-    switch (data.type) {
-      case "number":
-        data.value = fromEAMNumber(get(entity, valueKey));
-        break;
-      case "date":
-      case "datetime":
-        data.value = fromEAMDate(get(entity, valueKey))
-        break;
-      default:
-        data.value = get(entity, valueKey);
-    }
+    data.value = fromEAMValue(get(entity, valueKey), data.type)
 
     // Description
     if (descKey) {

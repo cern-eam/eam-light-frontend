@@ -1,12 +1,12 @@
 import { get } from "lodash";
-import { toEAMDate, toEAMNumber } from "../ui/pages/EntityTools";
+import { fromEAMDate, fromEAMNumber, toEAMDate, toEAMNumber } from "../ui/pages/EntityTools";
 import GridRequest, { GridTypes } from "../tools/entities/GridRequest";
 import { getGridData, transformResponse } from "../tools/WSGrids";
 import queryString from "query-string";
 import set from "set-value";
 import useUserDataStore from "../state/useUserDataStore";
 
-export const convertValue = (value, type) => {
+export const toEAMValue = (value, type) => {
     switch(type) {
         case "date":
         case "datetime":
@@ -18,12 +18,24 @@ export const convertValue = (value, type) => {
     }
 }
 
+export const fromEAMValue = (value, type) => {
+    switch(type) {
+        case "date":
+        case "datetime":
+            return fromEAMDate(value)
+        case "number":
+            return fromEAMNumber(value)
+        default:
+            return value;
+    }
+}
+
 export const assignQueryParamValues = (entity, screenLayout) => {
     let queryParams = queryString.parse(window.location.search);
     Object.entries(queryParams).forEach(([key, value]) => {
       const elementInfo = screenLayout.fields[key]
       if (elementInfo && elementInfo.xpath && value) {
-        set(entity, elementInfo.xpath, convertValue(value, elementInfo.fieldType))
+        set(entity, elementInfo.xpath, toEAMValue(value, elementInfo.fieldType))
       }
     })
     // TODO: custom fields, date and numbers
