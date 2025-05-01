@@ -14,8 +14,9 @@ class WSUDF {
         let entity = options.handlerParams[0]
         let filter = options.filter
         let gridRequest = new GridRequest("LVUDFE", GridTypes.LOV)
-		gridRequest.addParam("param.rentity", entity);
-        gridRequest.addParam("control.org", '*');
+        gridRequest.setRowCount(10)
+		gridRequest.addParam("param.rentity", entity)
+        gridRequest.addParam("control.org", '*')
         gridRequest.addFilter("userdefinedfieldvalue", filter, "BEGINS", "OR")
         gridRequest.addFilter("description", filter, "BEGINS")
         return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "userdefinedfieldvalue", desc: "description"}));

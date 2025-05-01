@@ -27,7 +27,6 @@ import { TABS } from "../ui/components/entityregions/TabCodeMapping";
 import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
 import useSnackbarStore from "../state/useSnackbarStore";
 import { getCustomFields } from "../tools/WSCustomFields";
-import { fromEAMDate, fromEAMNumber, toEAMDate } from "../ui/pages/EntityTools";
 import { assignDefaultValues, assignQueryParamValues, toEAMValue, createAutocompleteHandler, fireHandlersForQueryParamValues, fromEAMValue } from "./tools";
 
 const useEntity = (params) => {

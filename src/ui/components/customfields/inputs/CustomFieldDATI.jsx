@@ -12,7 +12,8 @@ function CustomFieldDATI({customField, register, index, validate}) {
     if (tools.isLookupCustomField(customField)) {
         return <EAMSelect {...extraProps}     
                           options={options}
-                          validate={validate}/>
+                          validate={validate}
+                          renderValue={(value) => value.desc}/>
     } else {
         return (
             <EAMDateTimePicker {...extraProps}/>
