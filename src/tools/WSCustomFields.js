@@ -1,6 +1,9 @@
 import GridRequest, { GridTypes } from './entities/GridRequest';
 import WS from './WS';
 import { getGridData, transformResponse } from './WSGrids';
+import { parse } from 'date-fns'
+
+const toIsoUtc = (input, format = 'dd-MMM-yyyy') => new Date(parse(input, format, new Date())).toISOString()
 
 export const autocompleteCustomFieldRENT = ({handlerParams: [entityCode, rentCodeValue, cfcode], filter}, config = {}) => {
     let gridRequest = new GridRequest("LVCFE", GridTypes.LOV)
@@ -23,13 +26,19 @@ export const cfChar = (code) => {
 export const cfDate = (code) => {
     let gridRequest = new GridRequest("LVCFD", GridTypes.LOV)
     gridRequest.addParam("param.propcode", code)
-    return getGridData(gridRequest).then(response => transformResponse(response, {code: "customfieldvalue"}))
+    return getGridData(gridRequest).then(response => transformResponse(response, {
+        code: val => toIsoUtc(val.customfieldvalue),
+        desc: "customfieldvalue"
+    }))
 }
 
 export const cfDateTime = (code) => {
     let gridRequest = new GridRequest("LVCFDT", GridTypes.LOV)
     gridRequest.addParam("param.propcode", code)
-    return getGridData(gridRequest).then(response => transformResponse(response, {code: "customfieldvalue"}))
+    return getGridData(gridRequest).then(response => transformResponse(response, {
+        code: val => toIsoUtc(val.customfieldvalue, 'dd-MMM-yyyy HH:mm'),
+        desc: "customfieldvalue"
+    }))
 }
 
 export const cfNum = (code) => {

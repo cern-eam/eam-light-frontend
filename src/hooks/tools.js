@@ -75,9 +75,10 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
 
     const autocompleteHandler = (options, config) => {
         try {
-            const {operator = "BEGINS", filter} = options;
+            let {operator = "BEGINS", filter} = options;
+            filter = (typeof filter === "string") ? filter : ""
+
             const gridRequest = new GridRequest(lovName, autocompleteHandlerData.gridType ?? GridTypes.LOV)
-            gridRequest.setRowCount(10)
             
             // Parameters 
             Object.entries(inputFields ?? {}).forEach(([key, value]) => { 
@@ -93,7 +94,12 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
             gridRequest.addParam("param.pagemode", "display")
 
             const searchFields = autocompleteHandlerData.searchKeys ?? [returnFields[elementInfo.elementId]] ?? [];
-            searchFields.forEach(searchField => gridRequest.addFilter(searchField, typeof filter === "string" ? filter : "", operator, "OR"))
+
+            // filter implies autocomplete so limit the row count to 10
+            if (filter) {
+                searchFields.forEach(searchField => gridRequest.addFilter(searchField, filter, operator, "OR"))
+                gridRequest.setRowCount(10)
+            } 
 
             return getGridData(gridRequest, config).then(response => transformResponse(response, autocompleteHandlerData.resultMap ?? generateResultMap(returnFields, elementInfo)));
         } catch (error) {

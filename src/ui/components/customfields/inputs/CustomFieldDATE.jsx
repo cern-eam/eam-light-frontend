@@ -13,7 +13,8 @@ function CustomFieldDATE({customField, register, index, validate}) {
         return <EAMSelect {...extraProps}
                           options={options}
                           endTextAdornment={customField.UOM}
-                          validate={validate}/>
+                          validate={validate}
+                          renderValue={(value) => value.desc}/>
     } else {
         return (
             <EAMDatePicker {...extraProps} 

@@ -585,7 +585,7 @@ const Workorder = () => {
         label: "Meter Readings",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <MeterReadingWO equipment={workorder.equipmentCode} disabled={readOnly} />,
+        render: () => <MeterReadingWO equipment={workorder.EQUIPMENTID.EQUIPMENTCODE} disabled={readOnly} />,
         column: 2,
         order: 12,
         summaryIcon: SpeedIcon,
@@ -674,7 +674,7 @@ const Workorder = () => {
     
     updateWorkorderProperty('Activities', null)
     readStatuses(workorder.STATUS.STATUSCODE, false);
-    readOtherIdMapping(workorder.number);
+    readOtherIdMapping(id.code);
   }
 
   function postCopy() {
