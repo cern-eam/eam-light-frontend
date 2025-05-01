@@ -115,6 +115,7 @@ const useEntity = (params) => {
   }, [screenCode]);
 
   useEffect(() => {
+    console.log('code route', codeFromRoute)
     if (!screenLayout) {
       return;
     }
