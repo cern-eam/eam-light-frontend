@@ -487,8 +487,6 @@ export const getCustomTabRegions = (
       qualifier: 'OTHER'
     };
 
-    console.log('to', iso, eamDate)
-
     return eamDate
 
   };

@@ -680,15 +680,9 @@ const Workorder = () => {
   function postCopy() {
     readStatuses("", true);
     let fields = workOrderLayout.fields;
-    isCernMode &&
-      updateWorkorderProperty(
-        "statusCode",
-        fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R"
-      );
-    isCernMode && updateWorkorderProperty("systemStatusCode", "R");
-    isCernMode &&
-      updateWorkorderProperty("typeCode", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD");
-    isCernMode && updateWorkorderProperty("completedDate", "");
+    isCernMode && updateWorkorderProperty("STATUS.STATUSCODE", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R");
+    isCernMode && updateWorkorderProperty("TYPE.TYPECODE", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD");
+    isCernMode && updateWorkorderProperty("COMPLETEDDATE", null);
   }
 
   //

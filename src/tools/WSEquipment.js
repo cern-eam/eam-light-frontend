@@ -86,11 +86,6 @@ class WSEquipment {
     //
     //EQUIPMENT REPLACEMENT
     //
-    autocompleteEquipmentReplacement = (code, config = {}) => {
-        code = encodeURIComponent(code);
-        return WS._get(`/autocomplete/eqp/eqpreplace/${code}`, config);
-    };
-
     replaceEquipment(equipmentRpl, config = {}) {
         return WS._post('/equipment/replace', equipmentRpl, config);
     }
