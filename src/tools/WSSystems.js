@@ -32,5 +32,17 @@ export const deleteSystem = (positionCode, organization, config = {}) => {
 }
 
 export const getSystemDefault = (organization = '*', config = {}) => {
+  console.log("sys default")
   return WS._post(`/proxy/systemdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": organization}}, config)
+  .then(response => {
+    if (response.body.Result.ResultData.AssetEquipment) { // For the moment the REST WS returns wrong response that needs to be altered 
+      response.body.Result.ResultData.SystemEquipment = response.body.Result.ResultData.AssetEquipment
+      delete response.body.Result.ResultData.AssetEquipment
+      response.body.Result.ResultData.SystemEquipment.SYSTEMID = response.body.Result.ResultData.SystemEquipment.ASSETID
+      delete response.body.Result.ResultData.SystemEquipment.ASSETID
+      response.body.Result.ResultData.SystemEquipment.TYPE.TYPECODE = 'S'
+    }
+    response.body.Result.ResultData.SystemEquipment.SYSTEMID.EQUIPMENTCODE = null;
+    return response
+  })
 }

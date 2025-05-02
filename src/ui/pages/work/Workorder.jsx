@@ -58,7 +58,6 @@ import AssetNCRs from '../../pages/equipment/components/EquipmentNCRs';
 import CustomFields from "../../components/customfields/CustomFields";
 import { getPart } from "../../../tools/WSParts";
 import Documents from "../equipment/asset/Documents";
-import { getLocation } from "../../../tools/WSLocation";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -147,48 +146,20 @@ const Workorder = () => {
     codeQueryParamName: "workordernum",
   });
 
-  useEffect(() => {
-    setEquipment(null);
-    setEquipmentPart(null);
-
-    if (!workorder?.EQUIPMENTID?.EQUIPMENTCODE) {
-      return;
-    }
-
-    Promise.any([getEquipment(workorder?.EQUIPMENTID?.EQUIPMENTCODE, workorder?.EQUIPMENTID?.ORGANIZATIONID.ORGANIZATIONCODE),
-                 getLocation(workorder?.EQUIPMENTID?.EQUIPMENTCODE, workorder?.EQUIPMENTID?.ORGANIZATIONID.ORGANIZATIONCODE)])
-      .then((response) => {
-        
-        const equipment = response.body.Result.ResultData.AssetEquipment ??
-                          response.body.Result.ResultData.PositionEquipment ??
-                          response.body.Result.ResultData.SystemEquipment ??
-                          response.body.Result.ResultData.Location
-
-        setEquipment(equipment);
-        if (equipment.PartAssociation?.PARTID) {
-          getPart(equipment.PartAssociation?.PARTID.PARTCODE, equipment.PartAssociation?.PARTID.ORGANIZATIONID.ORGANIZATIONCODE)
-            .then((response) => setEquipmentPart(response.body.Result.ResultData.Part))
-            .catch(console.error);
-        }
-      })
-      .catch(console.error);
-  }, [workorder?.EQUIPMENTID?.EQUIPMENTCODE]);
 
   function onChangeEquipment(equipmentData) {
     const equipmentCode = equipmentData["EQUIPMENTID.EQUIPMENTCODE"]
     const equipmentOrg = equipmentData["EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE"]
-    
+
     if (!equipmentCode) {
-      return;
+      setEquipment(null)
+      return
     }
 
     Promise.all([getEquipment(equipmentCode, equipmentOrg), WSWorkorders.getWOEquipLinearDetails(equipmentCode)])
-      .then((response) => {
-        const equipment = response[0].body.Result.ResultData.AssetEquipment ??
-                          response[0].body.Result.ResultData.PositionEquipment ??
-                          response[0].body.Result.ResultData.SystemEquipment
-        const linearDetails = response[1].body.data;
+      .then(([equipment, linearDetails]) => {
         
+        setEquipment(equipment)
         setWorkOrder((oldWorkOrder) => ({
           ...oldWorkOrder,
           DEPARTMENTID: equipment.DEPARTMENTID,
@@ -198,7 +169,7 @@ const Workorder = () => {
         }));
 
 
-        if (linearDetails.ISWARRANTYACTIVE === "true") {
+        if (linearDetails.body?.data?.ISWARRANTYACTIVE === "true") {
           showWarning("This equipment is currently under warranty.");
         }
       })
@@ -659,11 +630,23 @@ const Workorder = () => {
   // CALLBACKS FOR ENTITY CLASS
   //
   function postInit(wo) {
-    //console.log('wo', wo)
     readStatuses("", true);
   }
 
   function postRead(workorder) {
+    getEquipment(workorder?.EQUIPMENTID?.EQUIPMENTCODE, workorder?.EQUIPMENTID?.ORGANIZATIONID?.ORGANIZATIONCODE)
+      .then((equipment) => {
+        setEquipment(equipment);
+    
+        const part = equipment?.PartAssociation?.PARTID;
+        if (part) {
+          getPart(part.PARTCODE, part.ORGANIZATIONID.ORGANIZATIONCODE)
+            .then((response) => setEquipmentPart(response.body.Result.ResultData.Part))
+            .catch(console.error);
+        }
+      })
+      .catch(console.error);
+    
     updateEquipmentTreeData({
       equipment: {
         code: workorder.EQUIPMENTID.EQUIPMENTCODE,
@@ -673,6 +656,7 @@ const Workorder = () => {
     setCurrentWorkOrder(workorder.WORKORDERID.JOBNUM);
     
     updateWorkorderProperty('Activities', null)
+    updateWorkorderProperty('confirmincompletechecklist', 'confirmed')
     readStatuses(workorder.STATUS.STATUSCODE, false);
     readOtherIdMapping(id.code);
   }
