@@ -12,21 +12,15 @@ import {
   HazardIcon
 } from "eam-components/dist/ui/components/icons/index";
 import { isCernMode } from "../CERNMode";
-import GridWS from "eam-components/dist/ui/components/eamgrid/lib/GridWS";
+import GridRequest, { GridTypes } from "../../../tools/entities/GridRequest";
+import { getGridData } from "../../../tools/WSGrids";
 
 async function doEquipmentGridRequest(equipmentCode, screenCode, tabName, organization) {
   if (equipmentCode && screenCode) {
-    const gridRequest = {
-      rowCount: 1,
-      params: {
-        //equipmentno: equipmentCode,
-        "parameter.object": equipmentCode,
-        "parameter.objorganization": organization ?? "*",
-      },
-      gridName: screenCode + "_" + tabName,
-      userFunctionName: screenCode,
-    };
-    const gridData = await GridWS.getGridData(gridRequest);
+    let gridRequest = new GridRequest(screenCode + "_" + tabName, GridTypes.LIST, screenCode)
+    gridRequest.addParam('parameter.object', equipmentCode)
+    gridRequest.addParam('parameter.objorganization', organization ?? "*")
+    const gridData = await getGridData (gridRequest)
     return gridData.body.data;
   }
 }

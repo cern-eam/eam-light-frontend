@@ -71,11 +71,12 @@ function AddBookLabourDialog(props) {
 
     setLoading(true);
     WSWorkorders.createBookingLabour(bookingLabour)
-      .then(WSWorkorders.getWorkOrder.bind(null, props.workorderNumber, '*')) //TODO
+      .then(WSWorkorders.getWorkOrder.bind(null, props.workorderNumber, '*')) //TODO do we really have to read the WO?
       .then((result) => {
         setLoading(false);
-         const workorder = result.Result.ResulData.WorkOrder;
-        // if (
+         const workorder = result.body.Result.ResultData.WorkOrder;
+        
+         // if (
         //   props.updateCount + 1 === workorder.updateCount &&
         //   props.startDate === null
         // ) {

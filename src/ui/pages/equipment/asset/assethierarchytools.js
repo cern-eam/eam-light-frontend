@@ -72,8 +72,6 @@ export const convert = (currentParents, dependent, dependentProp, nonDependentPr
         }
     }
 
-    //console.log('data', currentParents, dependent, dependentProp, nonDependentProp, parentCode, parentOrg)
-
     currentParents[dependent ? dependentProp : nonDependentProp] = {
         ...currentParents[dependentProp],
         ...currentParents[nonDependentProp],
@@ -86,31 +84,30 @@ export const convert = (currentParents, dependent, dependentProp, nonDependentPr
 }
 
 
-export const getDependencyType = (currentAssetParentHierarchy) => 
+export const getDependencyType = (currentParentHierarchy) => 
     ( [ { path: "AssetDependency.DEPENDENTASSET", type: ParentDependencyTypes.ASSET },
         { path: "PositionDependency.DEPENDENTPOSITION", type: ParentDependencyTypes.POSITION },
         { path: "PrimarySystemDependency.DEPENDENTPRIMARYSYSTEM", type: ParentDependencyTypes.PRIMARYSYSTEM },
         { path: "SystemDependency.DEPENDENTSYSTEM", type: ParentDependencyTypes.SYSTEM },
         { path: "LocationDependency.DEPENDENTLOCATION", type: ParentDependencyTypes.LOCATION },
-      ].find(({ path }) => get(currentAssetParentHierarchy, path))?.type || ParentDependencyTypes.NONE);
+      ].find(({ path }) => get(currentParentHierarchy, path))?.type || ParentDependencyTypes.NONE);
 
-export const getHierarchyObject = (hierarchyProps, currentAssetParentHierarchy = {}) => {
-    let {assetCode, assetOrg, 
-        dependencyType = getDependencyType(currentAssetParentHierarchy),
-        parentAssetCode, parentAssetOrg,
-        parentPositionCode, parentPositionOrg,
-        parentPrimarySystemCode, parentPrimarySystemOrg,
-        parentSystemCode, parentSystemOrg,
-        parentLocationCode, parentLocationOrg
+export const getHierarchyObject = (hierarchyProps, currentParentHierarchy = {}) => {
+    let {dependencyType = getDependencyType(currentParentHierarchy),
+            parentAssetCode, parentAssetOrg,
+            parentPositionCode, parentPositionOrg,
+            parentPrimarySystemCode, parentPrimarySystemOrg,
+            parentSystemCode, parentSystemOrg,
+            parentLocationCode, parentLocationOrg
         } = hierarchyProps;
         
     const currentParents = {
-        ...currentAssetParentHierarchy.AssetDependency,
-        ...currentAssetParentHierarchy.PositionDependency,
-        ...currentAssetParentHierarchy.PrimarySystemDependency,
-        ...currentAssetParentHierarchy.SystemDependency,
-        ...currentAssetParentHierarchy.LocationDependency,
-        ...currentAssetParentHierarchy.NonDependentParents,
+        ...currentParentHierarchy.AssetDependency,
+        ...currentParentHierarchy.PositionDependency,
+        ...currentParentHierarchy.PrimarySystemDependency,
+        ...currentParentHierarchy.SystemDependency,
+        ...currentParentHierarchy.LocationDependency,
+        ...currentParentHierarchy.NonDependentParents,
     }
 
     if (convert(currentParents, dependencyType === ParentDependencyTypes.ASSET, "DEPENDENTASSET", "NONDEPENDENTASSET", parentAssetCode, parentAssetOrg, "ASSETID")) {
@@ -130,9 +127,9 @@ export const getHierarchyObject = (hierarchyProps, currentAssetParentHierarchy =
     }
 
     const assetParentHierarchy = {
-        ASSETID: currentAssetParentHierarchy.ASSETID,
-        POSITIONID: currentAssetParentHierarchy.POSITIONID,
-        //LOCATIONID: currentAssetParentHierarchy.LOCATIONID,
+        ASSETID: currentParentHierarchy.ASSETID,
+        POSITIONID: currentParentHierarchy.POSITIONID,
+        //LOCATIONID: currentParentHierarchy.LOCATIONID,
         [dependencyType]: currentParents
     }
     
