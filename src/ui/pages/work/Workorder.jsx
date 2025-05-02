@@ -146,13 +146,19 @@ const Workorder = () => {
     codeQueryParamName: "workordernum",
   });
 
+  useEffect( () => {
+    if (!workorder?.EQUIPMENTID?.EQUIPMENTCODE) {
+      setEquipment(null)
+      setEquipmentPart(null)
+    }
+  }, [!workorder?.EQUIPMENTID?.EQUIPMENTCODE])
+
 
   function onChangeEquipment(equipmentData) {
     const equipmentCode = equipmentData["EQUIPMENTID.EQUIPMENTCODE"]
     const equipmentOrg = equipmentData["EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE"]
 
     if (!equipmentCode) {
-      setEquipment(null)
       return
     }
 
@@ -630,7 +636,8 @@ const Workorder = () => {
   // CALLBACKS FOR ENTITY CLASS
   //
   function postInit(wo) {
-    readStatuses("", true);
+    readStatuses("", true)
+    setCurrentWorkOrder(null)
   }
 
   function postRead(workorder) {
