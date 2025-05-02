@@ -355,6 +355,7 @@ const useEntity = (params) => {
           updateEntityProperty(elementInfo.xpath, value, elementInfo.fieldType)
         }
       })
+      // TODO custom fields
   };
 
   const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {

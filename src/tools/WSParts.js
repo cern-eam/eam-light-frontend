@@ -11,7 +11,6 @@ export const getPart = (number, organization, config = {}) => {
 }
 
 export const createPart = (part, config = {}) => {
-    console.log('create part', part)
     return WS._post('/proxy/parts/', part, config);
 }
 

@@ -45,7 +45,8 @@ export const getPositionsDefault = (organization = '*', config = {}) => {
       delete response.body.Result.ResultData.PositionEquipment.ASSETID
       response.body.Result.ResultData.PositionEquipment.TYPE.TYPECODE = 'P'
     }
-    response.body.Result.ResultData.PositionEquipment.POSITIONID.EQUIPMENTCODE = null;
+    response.body.Result.ResultData.PositionEquipment.POSITIONID.EQUIPMENTCODE = null
+    response.body.Result.ResultData.PositionEquipment.PositionParentHierarchy = {}
     return response
   })
 }

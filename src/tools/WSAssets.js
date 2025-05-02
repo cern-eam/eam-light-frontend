@@ -33,4 +33,9 @@ export const deleteAsset = (assetCode, organization, config = {}) => {
 
 export const getAssetDefault = (organization = '*', config = {}) => {
   return WS._post(`/proxy/assetdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": organization}}, config)
+  .then(response => {
+    response.body.Result.ResultData.AssetEquipment.ASSETID.EQUIPMENTCODE = null
+    response.body.Result.ResultData.AssetEquipment.AssetParentHierarchy = {}
+    return response
+  })
 }
