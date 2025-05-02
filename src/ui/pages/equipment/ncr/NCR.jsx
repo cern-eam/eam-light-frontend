@@ -96,8 +96,7 @@ const NCR = () => {
         }
 
         WSEquipment.getEquipment(equipmentCode)
-            .then((response) => {
-                const equipment = response.body.data;
+            .then((equipment) => {
 
                 setNCR((oldNCR) => ({
                     ...oldNCR,

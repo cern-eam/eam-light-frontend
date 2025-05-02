@@ -27,7 +27,7 @@ import { TABS } from "../ui/components/entityregions/TabCodeMapping";
 import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
 import useSnackbarStore from "../state/useSnackbarStore";
 import { getCustomFields } from "../tools/WSCustomFields";
-import { assignDefaultValues, assignQueryParamValues, toEAMValue, createAutocompleteHandler, fireHandlersForQueryParamValues, fromEAMValue } from "./tools";
+import { assignDefaultValues, toEAMValue, createAutocompleteHandler, fromEAMValue, getCodeOrg } from "./tools";
 
 const useEntity = (params) => {
   const {
@@ -175,7 +175,7 @@ const useEntity = (params) => {
 
   const readEntity = () => {
     setLoading(true);
-    const [code, org = "*"] = decodeURIComponent(codeFromRoute).split("#");
+    const {code, org} = getCodeOrg(codeFromRoute)
     // Cancel the old request in the case it was still active
     abortController.current?.abort();
     abortController.current = new AbortController();
@@ -227,7 +227,7 @@ const useEntity = (params) => {
         readEntity();
       })
       .catch((error) => {
-        console.log('error', error)
+        console.error('updateEntity error', error)
         //TODO: generateErrorMessagesFromException(error?.response?.body?.ErrorAlert[0].Message);
         handleError(error);
       })
@@ -266,14 +266,14 @@ const useEntity = (params) => {
         let newEntity = response.body.Result.ResultData[resultDefaultDataProperty ?? entityProperty] ?? response.body.Result.ResultData
         newEntity.USERDEFINEDAREA = customFields.body.Result;
         newEntity = assignDefaultValues(newEntity, screenLayout);
-        newEntity = assignQueryParamValues(newEntity, screenLayout)
-        setEntity(newEntity);
-
-        //fireHandlersForQueryParamValues(screenLayout, fireHandler)
+        setEntity(newEntity)
+        
+        assignQueryParamValues()
         document.title = "New " + entityDesc;
         postActions.new(newEntity);
       })
       .catch((error) => {
+        console.error('initNewEntity error', error)
         handleError('init error', error);
       })
       .finally(() => setLoading(false));
@@ -345,8 +345,17 @@ const useEntity = (params) => {
         }
       }
     }
-
   }
+
+  const assignQueryParamValues = () => {
+      let queryParams = queryString.parse(window.location.search);
+      Object.entries(queryParams).forEach(([key, value]) => {
+        const elementInfo = screenLayout.fields[key]
+        if (elementInfo && elementInfo.xpath && value) {
+          updateEntityProperty(elementInfo.xpath, value, elementInfo.fieldType)
+        }
+      })
+  };
 
   const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
 

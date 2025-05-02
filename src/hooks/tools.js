@@ -30,28 +30,6 @@ export const fromEAMValue = (value, type) => {
     }
 }
 
-export const assignQueryParamValues = (entity, screenLayout) => {
-    let queryParams = queryString.parse(window.location.search);
-    Object.entries(queryParams).forEach(([key, value]) => {
-      const elementInfo = screenLayout.fields[key]
-      if (elementInfo && elementInfo.xpath && value) {
-        set(entity, elementInfo.xpath, toEAMValue(value, elementInfo.fieldType))
-      }
-    })
-    // TODO: custom fields, date and numbers
-    return entity;
-};
-
-export const fireHandlersForQueryParamValues = (screenLayout, fireHandler) => {
-    let queryParams = queryString.parse(window.location.search);
-    Object.entries(queryParams).forEach(([key, value]) => {
-      const elementInfo = screenLayout.fields[key]
-      if (elementInfo && elementInfo.xpath && value) {
-        fireHandler(elementInfo.xpath, value)
-      }
-    }) 
-}
-
 export const assignDefaultValues = (entity, layout) => {
     const exclusions = ['esthrs', 'pplreq']
     Object.values(layout.fields)
@@ -111,4 +89,10 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
 
     return {autocompleteHandler, renderDependencies}
 
+}
+
+export const getCodeOrg = (codeorg) => {
+    const defaultOrg = '*'
+    let [code, org = defaultOrg] = decodeURIComponent(codeorg).split("#");
+    return {code, org}
 }

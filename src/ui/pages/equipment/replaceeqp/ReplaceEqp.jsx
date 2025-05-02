@@ -127,10 +127,7 @@ const ReplaceEqp = (props) => {
     const loadEquipmentData = async (code, destination) => {
         setBlocking(true);
         try {
-            const response = await getEquipment(code, '*'); //TODO org
-            const equipment = response.body.Result.ResultData.AssetEquipment ?? 
-                              response.body.Result.ResultData.PositionEquipment ??
-                              response.body.Result.ResultData.SystemEquipment
+            const equipment = await getEquipment(code, '*'); 
 
             if (destination === 'oldEquipment') {
                 setOldEquipment(equipment);

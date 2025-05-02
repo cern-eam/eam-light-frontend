@@ -56,9 +56,7 @@ function WorkorderGeneral(props) {
       <EAMTextField {...register("description")} />
 
       <EAMAutocomplete
-        {...register(
-          "equipment"
-        )}
+        {...register("equipment")}
         barcodeScanner
         endAdornment={
           <IconButton
