@@ -1,4 +1,6 @@
+import GridRequest, { GridTypes } from './entities/GridRequest';
 import WS from './WS';
+import { getGridData, transformResponse } from './WSGrids';
 
 /**
  * Handles all calls to REST Api related with the meter readings
@@ -31,13 +33,17 @@ class WSMeters {
     }
 
     autocompleteMeterEquipment = ({filter}, config = {}) => {
-        filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/meters/equipment/${filter}`, config);
+        let gridRequest = new GridRequest("OSMETE", GridTypes.LIST, "OSMETE");
+        gridRequest.setRowCount(10)
+		gridRequest.addFilter("equipment", filter, "BEGINS");
+        return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "equipment", desc: "meterunit"}));
     };
 
     autocompleteMeterCode = ({filter}, config = {}) => {
-        filter = encodeURIComponent(filter);
-        return WS._get(`/autocomplete/meters/meter/${filter}`, config);
+        let gridRequest = new GridRequest("OSMETE", GridTypes.LIST, "OSMETE");
+        gridRequest.setRowCount(10)
+		gridRequest.addFilter("metercode", filter, "BEGINS");
+        return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "metercode", desc: "meterunit"}));
     };
 }
 
