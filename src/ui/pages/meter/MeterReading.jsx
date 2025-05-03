@@ -51,7 +51,7 @@ class MeterReading extends React.Component {
       WSMeters.getReadingsByMeterCode(code)
         .then((response) => {
           //Set readings
-          this.setState(() => ({ meterReadings: response.body.data }));
+          this.setState(() => ({ meterReadings: [response] }));
           //Empty Equipment search criteria
           this.updateSearchProperty("equipmentCode", "");
           this.updateSearchProperty("equipmentDesc", "");
@@ -73,7 +73,7 @@ class MeterReading extends React.Component {
       WSMeters.getReadingsByEquipment(code)
         .then((response) => {
           //Set readings
-          this.setState(() => ({ meterReadings: response.body.data }));
+          this.setState(() => ({ meterReadings: response }));
           //Empty Meter search criteria
           this.updateSearchProperty("meterCode", "");
           this.updateSearchProperty("meterDesc", "");

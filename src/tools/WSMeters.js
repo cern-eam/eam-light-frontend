@@ -1,3 +1,5 @@
+import { get } from 'lodash';
+import { fromEAMNumber } from '../ui/pages/EntityTools';
 import GridRequest, { GridTypes } from './entities/GridRequest';
 import WS from './WS';
 import { getGridData, transformResponse } from './WSGrids';
@@ -12,14 +14,50 @@ class WSMeters {
         return WS._get(`/meters/read/wo/${workorder}`, config);
     }
 
-    getReadingsByEquipment(equipmentCode, config = {}) {
-        equipmentCode = encodeURIComponent(equipmentCode);
-        return WS._get(`/meters/read/eqp/${equipmentCode}`, config);
+    async getReadingsByEquipment(equipmentCode, config = {}) {
+		let gridRequest = new GridRequest("OSMETE", GridTypes.LIST, "OSOBJA");
+
+		gridRequest.addParam("parameter.organization", '*');
+		gridRequest.addParam("parameter.object", equipmentCode);
+
+        // TODO
+		// if (meterCode != null) {
+		// 	gridRequest.addFilter("metercode", meterCode, "=");
+		// } 
+
+		if (equipmentCode) {
+			gridRequest.addFilter("equipment", equipmentCode, "=");
+		}
+
+        let equipmentMeters = await getGridData(gridRequest, config).then(response => transformResponse(response, {equipment: "equipment", meter: "metercode"}));
+        
+        const readings = await Promise.all(
+            equipmentMeters.body.data.map(equipmentMeter =>
+                this.getReadingsByMeterCode(equipmentMeter.meter)
+            )
+        );
+    
+        return readings;
     }
 
-    getReadingsByMeterCode(meterCode, config = {}) {
-        meterCode = encodeURIComponent(meterCode);
-        return WS._get(`/meters/read/meter/${meterCode}`, config);
+     async getReadingsByMeterCode(meterCode, org = '*', config = {}) {
+        let meterResult = await WS._get(`/proxy/physicalmeters/${encodeURIComponent(meterCode + '#' + org)}`, config)
+        let meterData = meterResult.body.Result.ResultData.PhysicalMeter
+        
+        const result = {
+            lastUpdateDate: null,
+            lastValue: fromEAMNumber(get(meterData, 'LASTMETERREADING', null)),
+            rolloverValue: get(meterData, 'ROLLOVERPOINT', null),
+            uomDesc: get(meterData, 'METERUOM.DESCRIPTION', null),
+            uom: get(meterData, 'METERUOM.UOMCODE', null),
+            meterName: get(meterData, 'METERID.METERCODE', null),
+            equipmentCode:
+              get(meterData, 'ServicePoint.ASSETID.EQUIPMENTCODE') ??
+              get(meterData, 'ServicePoint.POSITIONID.EQUIPMENTCODE') ??
+              null,
+          };
+
+          return result
     }
 
     checkValueRollOver(equipment, uom, actualValue, config = {}) {
