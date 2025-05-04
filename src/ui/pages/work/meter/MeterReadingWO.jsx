@@ -88,7 +88,7 @@ class MeterReadingWO extends React.Component {
     WSMeters.getReadingsByEquipment(equipment)
       .then((response) => {
         //Readings
-        const meterReadings = response.body.data ? response.body.data : [];
+        const meterReadings = response ?? [];
         //Set readings
         this.setState(() => ({ meterReadings }));
         //Not Loading
