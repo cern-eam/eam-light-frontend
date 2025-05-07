@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -26,6 +26,16 @@ function AddBookLabourDialog(props) {
   let [loading, setLoading] = useState(false);
   let [formValues, setFormValues] = useState({});
   const {handleError, showNotification} = useSnackbarStore();
+  const { activityCode, typeOfHours } = formValues;
+  const tradeCode = useMemo(() => {
+    let filteredActivities = props.activities.filter(
+      (activity) => activity.activityCode === activityCode
+    );
+    if (filteredActivities.length === 1) {
+      return filteredActivities[0].tradeCode;
+    }
+  }, [activityCode]);
+    
   
   useEffect(() => {
     if (props.open) {
@@ -51,15 +61,6 @@ function AddBookLabourDialog(props) {
   };
 
   let handleSave = () => {
-    // Populate trade code
-    let tradeCode = "";
-    let filteredActivities = props.activities.filter(
-      (activity) => activity.activityCode === formValues.activityCode
-    );
-    if (filteredActivities.length === 1) {
-      tradeCode = filteredActivities[0].tradeCode;
-    }
-
     let bookingLabour = {
       ...formValues,
       startTime: convertTimeToSeconds(formValues["startTime"]),
@@ -201,86 +202,87 @@ function AddBookLabourDialog(props) {
                   updateFormValues
                 )}
               />
+              {activityCode && <>
+                <EAMAutocomplete
+                  autocompleteHandler={WSWorkorders.autocompleteBOOEmployee(props.workorderNumber, activityCode, tradeCode, typeOfHours)}
+                  {...processElementInfo(props.layout.employee)}
+                  value={formValues["employeeCode"] || ""}
+                  desc={formValues["employeeDesc"]}
+                  onChange={createOnChangeHandler(
+                    "employeeCode",
+                    "employeeDesc",
+                    null,
+                    updateFormValues
+                  )}
+                />
 
-              <EAMAutocomplete
-                autocompleteHandler={WSWorkorders.autocompleteBOOEmployee}
-                {...processElementInfo(props.layout.employee)}
-                value={formValues["employeeCode"] || ""}
-                desc={formValues["employeeDesc"]}
-                onChange={createOnChangeHandler(
-                  "employeeCode",
-                  "employeeDesc",
-                  null,
-                  updateFormValues
-                )}
-              />
+                <EAMAutocomplete
+                  autocompleteHandler={WSWorkorders.autocompleteBOODepartment}
+                  {...processElementInfo(props.layout.department)}
+                  value={formValues["departmentCode"] || ""}
+                  desc={formValues["departmentDesc"]}
+                  onChange={createOnChangeHandler(
+                    "departmentCode",
+                    "departmentDesc",
+                    null,
+                    updateFormValues
+                  )}
+                />
 
-              <EAMAutocomplete
-                autocompleteHandler={WSWorkorders.autocompleteBOODepartment}
-                {...processElementInfo(props.layout.department)}
-                value={formValues["departmentCode"] || ""}
-                desc={formValues["departmentDesc"]}
-                onChange={createOnChangeHandler(
-                  "departmentCode",
-                  "departmentDesc",
-                  null,
-                  updateFormValues
-                )}
-              />
+                <EAMDatePicker
+                  {...processElementInfo(props.layout.datework)}
+                  value={formValues["dateWorked"]}
+                  onChange={createOnChangeHandler(
+                    "dateWorked",
+                    null,
+                    null,
+                    updateFormValues
+                  )}
+                />
 
-              <EAMDatePicker
-                {...processElementInfo(props.layout.datework)}
-                value={formValues["dateWorked"]}
-                onChange={createOnChangeHandler(
-                  "dateWorked",
-                  null,
-                  null,
-                  updateFormValues
-                )}
-              />
+                <EAMSelect
+                  {...processElementInfo(props.layout.octype)}
+                  value={formValues["typeOfHours"] || ""}
+                  autocompleteHandler={WSWorkorders.getTypesOfHours}
+                  onChange={createOnChangeHandler(
+                    "typeOfHours",
+                    null,
+                    null,
+                    updateFormValues
+                  )}
+                />
 
-              <EAMSelect
-                {...processElementInfo(props.layout.octype)}
-                value={formValues["typeOfHours"] || ""}
-                autocompleteHandler={WSWorkorders.getTypesOfHours}
-                onChange={createOnChangeHandler(
-                  "typeOfHours",
-                  null,
-                  null,
-                  updateFormValues
-                )}
-              />
-
-              <EAMTextField
-                {...processElementInfo(props.layout.hrswork)}
-                value={formValues["hoursWorked"]}
-                onChange={createOnChangeHandler(
-                  "hoursWorked",
-                  null,
-                  null,
-                  updateHoursWorked
-                )}
-              />
-              <EAMTimePicker
-                {...processElementInfo(props.layout.actstarttime)}
-                value={formValues["startTime"] || null}
-                onChange={createOnChangeHandler(
-                  "startTime",
-                  null,
-                  null,
-                  updateStartTime
-                )}
-              />
-              <EAMTimePicker
-                {...processElementInfo(props.layout.actendtime)}
-                value={formValues["endTime"] || null}
-                onChange={createOnChangeHandler(
-                  "endTime",
-                  null,
-                  null,
-                  updateEndTime
-                )}
-              />
+                <EAMTextField
+                  {...processElementInfo(props.layout.hrswork)}
+                  value={formValues["hoursWorked"]}
+                  onChange={createOnChangeHandler(
+                    "hoursWorked",
+                    null,
+                    null,
+                    updateHoursWorked
+                  )}
+                />
+                <EAMTimePicker
+                  {...processElementInfo(props.layout.actstarttime)}
+                  value={formValues["startTime"] || null}
+                  onChange={createOnChangeHandler(
+                    "startTime",
+                    null,
+                    null,
+                    updateStartTime
+                  )}
+                />
+                <EAMTimePicker
+                  {...processElementInfo(props.layout.actendtime)}
+                  value={formValues["endTime"] || null}
+                  onChange={createOnChangeHandler(
+                    "endTime",
+                    null,
+                    null,
+                    updateEndTime
+                  )}
+                />
+              </>}
             </BlockUi>
           </div>
         </DialogContent>
