@@ -103,7 +103,11 @@ export default Location = (props) => {
   }
 
   function postRead(location) {
-    updateEquipmentTreeData({equipment: location});
+    updateEquipmentTreeData({equipment: {
+      code: location.LOCATIONID.LOCATIONCODE,
+      organization: location.LOCATIONID.ORGANIZATIONID.ORGANIZATIONCODE,
+      systemTypeCode: 'L'
+    }});
   }
 
   function postCreate(location) {
