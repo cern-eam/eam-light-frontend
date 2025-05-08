@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
@@ -91,10 +91,6 @@ const System = () => {
       delete: deleteSystem,
       new: getSystemDefault, // TODO: again we have extra arguments, does it perform basic functions without them?
     },
-    postActions: {
-      read: postRead,
-      new: postInit,
-    },
     handlers: {
       "CATEGORYID.CATEGORYCODE": (category) => onCategoryChange(category, updateEquipmentProperty)
     },
@@ -111,17 +107,17 @@ const System = () => {
     layoutPropertiesMap: systemLayoutPropertiesMap,
   });
 
-  function postInit() {
-    updateEquipmentTreeData({equipment: null});
-  }
-
-  function postRead(equipment) {
-    updateEquipmentTreeData({equipment: {
-      code: equipment.SYSTEMID.EQUIPMENTCODE,
-      organization: equipment.SYSTEMID.ORGANIZATIONID.ORGANIZATIONCODE,
-      systemTypeCode: 'S'
-    }});
-  }
+  useEffect( () => {
+    if (id) {
+      updateEquipmentTreeData({equipment: {
+        code: id.code,
+        organization: id.org,
+        systemTypeCode: 'S'
+      }});
+    } else {
+      updateEquipmentTreeData({equipment: null});
+    }
+  }, [id])
 
   const getEDMSObjectType = (equipment) => {
     if (
@@ -211,7 +207,7 @@ const System = () => {
         maximizable: true,
         render: ({ panelQueryParams }) => (
           <EquipmentWorkOrders
-            equipmentcode={id.code}
+            equipmentcode={id?.code}
             defaultFilter={panelQueryParams.defaultFilter}
             equipmenttype="S"
           />
@@ -227,7 +223,7 @@ const System = () => {
         label: "History",
         isVisibleWhenNewEntity: false,
         maximizable: false,
-        render: () => <EquipmentHistory equipmentcode={id.code} />,
+        render: () => <EquipmentHistory equipmentcode={id?.code} />,
         column: 1,
         order: 25,
         summaryIcon: ManageHistoryIcon,
@@ -241,8 +237,8 @@ const System = () => {
         maximizable: false,
         render: () => (
           <EquipmentPartsAssociated
-            code={id.code}
-            org={id.org}
+            code={id?.code}
+            org={id?.org}
             parentScreen={screenPermissions.parentScreen}
           />
         ),
@@ -263,7 +259,7 @@ const System = () => {
         render: () => (
           <EDMSDoclightIframeContainer
             objectType={getEDMSObjectType(equipment)}
-            objectID={id.code}
+            objectID={id?.code}
             url={applicationData.EL_DOCLI}
           />
         ),
@@ -290,8 +286,8 @@ const System = () => {
           <Comments
             ref={(comments) => (commentsComponent.current = comments)}
             entityCode="OBJ"
-            entityKeyCode={id.code}
-            entityOrganization={id.org}
+            entityKeyCode={id?.code}
+            entityOrganization={id?.org}
             userCode={userData.eamAccount.userCode}
             handleError={handleError}
             allowHtml={true}
@@ -351,7 +347,7 @@ const System = () => {
         maximizable: true,
         render: () => (
           <EquipmentGraphIframe
-            equipmentCode={id.code}
+            equipmentCode={id?.code}
             equipmentGraphURL={applicationData.EL_EQGRH}
           />
         ),
@@ -374,7 +370,7 @@ const System = () => {
         systemLayout.customGridTabs,
         customTabGridParamNames,
         screenCode,
-        id.code
+        id?.code
       ),
       ...getCustomTabRegions(
         systemLayout.customTabs,
@@ -401,14 +397,15 @@ const System = () => {
         newEntity={newEntity}
         entityScreen={screenPermissions}
         entityName="System"
-        entityKeyCode={id.code}
-        organization={id.org}
+        entityKeyCode={id?.code}
+        organization={id?.org}
         saveHandler={saveHandler}
         newHandler={newHandler}
         deleteHandler={deleteHandler}
         toolbarProps={{
           entityDesc: "System", // TODO:
           entity: equipment,
+          id,
           // postInit: this.postInit.bind(this),
           // setLayout: this.setLayout.bind(this),
           newEntity,

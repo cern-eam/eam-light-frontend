@@ -192,7 +192,7 @@ const Part = () => {
         label: "Assets",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <PartAssets partCode={id.code} />,
+        render: () => <PartAssets partCode={id?.code} />,
         column: 1,
         order: 5,
         summaryIcon: AssetIcon,
@@ -205,7 +205,7 @@ const Part = () => {
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
-          <EDMSDoclightIframeContainer objectType="PART" objectID={id.code} url={applicationData.EL_DOCLI} />
+          <EDMSDoclightIframeContainer objectType="PART" objectID={id?.code} url={applicationData.EL_DOCLI} />
         ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
@@ -230,8 +230,8 @@ const Part = () => {
           <Comments
             ref={(comments) => (commentsComponent.current = comments)}
             entityCode="PART"
-            entityKeyCode={id.code}
-            entityOrganization={id.org}
+            entityKeyCode={id?.code}
+            entityOrganization={id?.org}
             userCode={userData.eamAccount.userCode}
             handleError={handleError}
             allowHtml={true}
@@ -266,8 +266,8 @@ const Part = () => {
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
       },
       getPartsAssociated(
-        id.code,
-        id.org,
+        id?.code,
+        id?.org,
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         2,
@@ -278,7 +278,7 @@ const Part = () => {
         partLayout.customGridTabs,
         customTabGridParamNames,
         screenCode,
-        id.code
+        id?.code
       ),
       ...getCustomTabRegions(
         partLayout.customTabs,
@@ -306,14 +306,15 @@ const Part = () => {
           newEntity={newEntity}
           entityScreen={screenPermissions}
           entityName="Part" // TODO: hardcoded (following Location example)
-          entityKeyCode={id.code}
-          organization={id.org}
+          entityKeyCode={id?.code}
+          organization={id?.org}
           saveHandler={saveHandler}
           newHandler={newHandler}
           deleteHandler={deleteHandler}
           // TODO: check commented out props (following Location example)
           toolbarProps={{
             entity: part,
+            id,
             // postInit: this.postInit.bind(this),
             // setLayout: this.setLayout.bind(this),
             newEntity: newEntity,

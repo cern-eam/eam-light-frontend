@@ -57,8 +57,8 @@ const PositionGeneral = (props) => {
         entity={equipment}
         entityType={"equipment"}
         screenCode={screenCode}
-        code={id.code}
-        org={id.org}
+        code={id?.code}
+        org={id?.org}
         style={{ marginTop: "10px", marginBottom: "-10px" }}
       />
     </React.Fragment>

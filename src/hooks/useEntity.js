@@ -55,7 +55,7 @@ const useEntity = (params) => {
   const [newEntity, setNewEntity] = useState(true);
   const [readOnly, setReadOnly] = useState(false);
   const [isModified, setIsModified] = useState(false);
-  const [id, setId] = useState({})
+  const [id, setId] = useState(null)
   const { code: codeFromRoute } = useParams();
   const codeQueryParam = queryString.parse(window.location.search)[
     codeQueryParamName
@@ -261,7 +261,7 @@ const useEntity = (params) => {
         setNewEntity(true);
         setIsModified(false);
         setReadOnly(!screenPermissions.creationAllowed);
-        setId({})
+        setId(null)
 
         let newEntity = response.body.Result.ResultData[resultDefaultDataProperty ?? entityProperty] ?? response.body.Result.ResultData
         newEntity.USERDEFINEDAREA = customFields.body.Result;
@@ -286,7 +286,7 @@ const useEntity = (params) => {
     setNewEntity(true);
     setIsModified(false);
     setReadOnly(!screenPermissions.creationAllowed);
-    setId({})
+    setId(null)
 
     setEntity((oldEntity) => ({
       ...assignDefaultValues(oldEntity, screenLayout, layoutPropertiesMap),

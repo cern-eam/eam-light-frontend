@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
 import WSEquipment from "../../../../tools/WSEquipment";
 import BlockUi from "react-block-ui";
@@ -96,10 +96,6 @@ const Position = () => {
       delete: deletePosition,
       new: getPositionsDefault, 
     },
-    postActions: {
-      read: postRead,
-      new: postInit,
-    },
     handlers: {
       "CATEGORYID.CATEGORYCODE": (category) => onCategoryChange(category, updateEquipmentProperty)
     },
@@ -116,17 +112,17 @@ const Position = () => {
     layoutPropertiesMap: positionLayoutPropertiesMap,
   });
 
-  function postInit() {
-    updateEquipmentTreeData({equipment: null})
-  }
-
-  function postRead(equipment) {
-    updateEquipmentTreeData({equipment: {
-      code: equipment.POSITIONID.EQUIPMENTCODE,
-      organization: equipment.POSITIONID.ORGANIZATIONID.ORGANIZATIONCODE,
-      systemTypeCode: 'P'
-    }});
-  }
+  useEffect( () => {
+    if (id) {
+      updateEquipmentTreeData({equipment: {
+        code: id.code,
+        organization: id.org,
+        systemTypeCode: 'P'
+      }});
+    } else {
+      updateEquipmentTreeData({equipment: null});
+    }
+  }, [id])
 
   const getRegions = () => {
     const tabs = positionLayout.tabs;
@@ -207,7 +203,7 @@ const Position = () => {
         maximizable: true,
         render: ({ panelQueryParams }) => (
           <EquipmentWorkOrders
-            equipmentcode={id.code}
+            equipmentcode={id?.code}
             defaultFilter={panelQueryParams.defaultFilter}
             equipmenttype="P"
           />
@@ -223,7 +219,7 @@ const Position = () => {
         label: "History",
         isVisibleWhenNewEntity: false,
         maximizable: false,
-        render: () => <EquipmentHistory equipmentcode={id.code} />,
+        render: () => <EquipmentHistory equipmentcode={id?.code} />,
         column: 1,
         order: 25,
         summaryIcon: ManageHistoryIcon,
@@ -231,8 +227,8 @@ const Position = () => {
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS),
       },
       getPartsAssociated(
-        id.code,
-        id.org,
+        id?.code,
+        id?.org,
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         1,
@@ -246,7 +242,7 @@ const Position = () => {
         render: () => (
           <EDMSDoclightIframeContainer
             objectType="S"
-            objectID={id.code}
+            objectID={id?.code}
             url={applicationData.EL_DOCLI}
           />
         ),
@@ -270,7 +266,7 @@ const Position = () => {
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
-          <NCRIframeContainer objectType="S" objectID={id.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
+          <NCRIframeContainer objectType="S" objectID={id?.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
         ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
@@ -295,8 +291,8 @@ const Position = () => {
           <Comments
             ref={(comments) => (commentsComponent.current = comments)}
             entityCode="OBJ"
-            entityKeyCode={id.code}
-            entityOrganization={id.org}
+            entityKeyCode={id?.code}
+            entityOrganization={id?.org}
             userCode={userData.eamAccount.userCode}
             allowHtml={true}
             disabled={readOnly}
@@ -353,7 +349,7 @@ const Position = () => {
         maximizable: true,
         render: () => (
           <EquipmentGraphIframe
-            equipmentCode={id.code}
+            equipmentCode={id?.code}
             equipmentGraphURL={applicationData.EL_EQGRH}
           />
         ),
@@ -376,7 +372,7 @@ const Position = () => {
         positionLayout.customGridTabs,
         customTabGridParamNames,
         screenCode,
-        id.code
+        id?.code
       ),
       ...getCustomTabRegions(
         positionLayout.customTabs,
@@ -403,14 +399,15 @@ const Position = () => {
         newEntity={newEntity}
         entityScreen={screenPermissions}
         entityName="Position"
-        entityKeyCode={id.code}
-        organization={id.org}
+        entityKeyCode={id?.code}
+        organization={id?.org}
         saveHandler={saveHandler}
         newHandler={newHandler}
         deleteHandler={deleteHandler}
         toolbarProps={{
           entityDesc: "Position",
           entity: equipment,
+          id,
           // postInit: this.postInit.bind(this),
           // setLayout: this.setLayout.bind(this),
           newEntity,
