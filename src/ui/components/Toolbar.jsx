@@ -98,7 +98,8 @@ class Toolbar extends React.Component {
       screens,
       workorderScreencode,
       readOnly,
-      id
+      id,
+      entityType
     } = this.props;
 
     return {
@@ -113,7 +114,7 @@ class Toolbar extends React.Component {
       },
       [BUTTON_KEYS.EMAIL]: {
         isVisible: () => true,
-        getOnClick: (entityType, entity) => {
+        getOnClick: () => {
           const url = window.location.href.split("?")[0];
           return () =>
             window.open(`mailto:?Subject=${entityDesc} ${id?.code}` + `&body=${url}`);
@@ -127,8 +128,8 @@ class Toolbar extends React.Component {
       [BUTTON_KEYS.PRINT]: {
         isVisible: () => isCernMode && applicationData.EL_PRTWO,
         isDisabled: () => newEntity,
-        getOnClick: (entityType, entity) => {
-          const url = applicationData.EL_PRTWO + entity.number;
+        getOnClick: () => {
+          const url = applicationData.EL_PRTWO + id?.code;
           return () => {
             const w = window.open(url, "winLov", "Scrollbars=1,resizable=1");
             if (w.opener == null) {
@@ -145,17 +146,15 @@ class Toolbar extends React.Component {
       [BUTTON_KEYS.SHOW_ON_MAP]: {
         isVisible: () =>
           isCernMode && applicationData.EL_GISEQ && applicationData.EL_GISWO,
-        getOnClick: (entityType, entity) => {
+        getOnClick: () => {
           const LOCATION_URLS = {
             WORKORDER: applicationData.EL_GISWO,
             EQUIPMENT: applicationData.EL_GISEQ,
             LOCATION: applicationData.EL_GISEQ,
           };
 
-          const ID =
-            entityType === ENTITY_TYPE.WORKORDER ? entity.number : entity.code;
+          const URL = `${LOCATION_URLS[entityType]}${id?.code}`;
 
-          const URL = `${LOCATION_URLS[entityType]}${ID}`;
           return () => window.open(URL, "_blank");
         },
         isDisabled: () => newEntity,
@@ -169,7 +168,7 @@ class Toolbar extends React.Component {
           applicationData.EL_WOLIN &&
           applicationData.EL_LOCLI &&
           applicationData.EL_PARTL,
-        getOnClick: (entityType, id) => {
+        getOnClick: () => {
           let extendedLink;
           switch (entityType) {
             case ENTITY_TYPE.WORKORDER:
@@ -206,21 +205,21 @@ class Toolbar extends React.Component {
       },
       [BUTTON_KEYS.BARCODING]: {
         isVisible: () => isCernMode && applicationData.EL_BCUR,
-        getOnClick: (entityType, entity) => {
+        getOnClick: () => {
           let barcodingLink;
           switch (entityType) {
             case ENTITY_TYPE.PART:
               barcodingLink = applicationData.EL_BCUR.replace("&1", screencode)
                 .replace("&2", "partcode")
-                .replace("&3", entity.code);
+                .replace("&3", id?.code);
               break;
             case ENTITY_TYPE.WORKORDER:
-              barcodingLink = applicationData.EL_PRTWO + entity.number;
+              barcodingLink = applicationData.EL_PRTWO + id?.code;
               break;
             case ENTITY_TYPE.EQUIPMENT:
               barcodingLink = applicationData.EL_BCUR.replace("&1", screencode)
                 .replace("&2", "equipmentno")
-                .replace("&3", entity.code);
+                .replace("&3", id?.code);
               break;
           }
           return () => window.open(barcodingLink, "_blank");
@@ -233,10 +232,10 @@ class Toolbar extends React.Component {
       },
       [BUTTON_KEYS.OSVC]: {
         isVisible: () => applicationData.EL_OSVCU && isCernMode,
-        getOnClick: (entityType, entity) => {
+        getOnClick: () => {
           const osvcLink = applicationData.EL_OSVCU.replace(
             "{{workOrderId}}",
-            entity.number
+            id?.code
           );
           return () => window.open(osvcLink, "_blank");
         },
@@ -250,10 +249,10 @@ class Toolbar extends React.Component {
         isVisible: () =>
           applicationData.EL_DMUSG &&
           applicationData.EL_DMUSG.includes(userGroup),
-        getOnClick: (entityType, entity) => {
+        getOnClick: () => {
           const dismacLink = applicationData.EL_DMURL.replace(
             "{{workOrderId}}",
-            entity.number
+            id?.code
           );
           return () => window.open(dismacLink, "_blank");
         },
@@ -269,12 +268,12 @@ class Toolbar extends React.Component {
           return (
             isCernMode &&
             EL_TRWOC &&
-            EL_TRWOC.split(",").filter(Boolean).includes(entity.classCode)
+            EL_TRWOC.split(",").filter(Boolean).includes(entity.CLASSID?.CLASSCODE)
           );
         },
-        getOnClick: (entityType, entity) => {
+        getOnClick: () => {
           const { EL_TRWRU } = applicationData;
-          const trecLink = EL_TRWRU.replace("{{workOrderId}}", entity.number);
+          const trecLink = EL_TRWRU.replace("{{workOrderId}}", id?.code);
           return () => window.open(trecLink, "_blank");
         },
         isDisabled: () => newEntity,
@@ -295,8 +294,8 @@ class Toolbar extends React.Component {
           icon: <WorkorderIcon />,
           text: "Create New Work Order",
         },
-        getLinkTo: (entity, entityCode) => {
-          return `/workorder?equipmentCode=${entity.code}`;
+        getLinkTo: () => {
+          return `/workorder?equipment=${id?.code}`;
         },
       },
       [BUTTON_KEYS.WATCHLIST]: {
