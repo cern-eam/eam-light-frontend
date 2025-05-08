@@ -85,10 +85,6 @@ const Asset = () => {
       delete: deleteAsset,
       new: getAssetDefault
     },
-    postActions: {
-      read: postRead,
-      new: postInit,
-    },
     handlers: {
       "CATEGORYID.CATEGORYCODE": (category) => onCategoryChange(category, updateEquipmentProperty)
     },
@@ -104,6 +100,7 @@ const Asset = () => {
     layoutProperty: "assetLayout",
     layoutPropertiesMap: assetLayoutPropertiesMap,
   });
+
   useEffect(() => {
     // Part input is cleared
     if (equipment?.partCode === "") {
@@ -121,17 +118,17 @@ const Asset = () => {
     }
   }, [equipment?.partCode]);
 
-  function postInit() {
-    updateEquipmentTreeData({equipment: null});
-  }
-
-  function postRead(equipment) {
-    updateEquipmentTreeData({equipment: {
-      code: equipment.ASSETID.EQUIPMENTCODE,
-      organization: equipment.ASSETID.ORGANIZATIONID.ORGANIZATIONCODE,
-      systemTypeCode: 'A'
-    }});
-  }
+  useEffect( () => {
+    if (id) {
+      updateEquipmentTreeData({equipment: {
+        code: id.code,
+        organization: id.org,
+        systemTypeCode: 'A'
+      }});
+    } else {
+      updateEquipmentTreeData({equipment: null});
+    }
+  }, [id])
 
   const getRegions = () => {
     const tabs = assetLayout.tabs;
@@ -212,7 +209,7 @@ const Asset = () => {
         maximizable: true,
         render: ({ panelQueryParams }) => (
           <EquipmentWorkOrders
-            equipmentcode={id.code}
+            equipmentcode={id?.code}
             defaultFilter={panelQueryParams.defaultFilter}
             equipmenttype="A"
           />
@@ -228,7 +225,7 @@ const Asset = () => {
         label: "History",
         isVisibleWhenNewEntity: false,
         maximizable: false,
-        render: () => <EquipmentHistory equipmentcode={id.code} />,
+        render: () => <EquipmentHistory equipmentcode={id?.code} />,
         column: 1,
         order: 25,
         summaryIcon: ManageHistoryIcon,
@@ -243,10 +240,10 @@ const Asset = () => {
         render: () => (
           <EAMGridTab
             gridName={"OSOBJA_ESF"}
-            objectCode={id.code}
+            objectCode={id?.code}
             additionalParams={Object.fromEntries([
-              ["parameter.objorganization", id.org ?? "*"],
-              ["parameter.object", id.code],
+              ["parameter.objorganization", id?.org ?? "*"],
+              ["parameter.object", id?.code],
             ])}
             paramNames={["equipmentno"]}
             additionalAttributes={Object.fromEntries([["userFunctionName", "OSOBJA"]])}
@@ -263,7 +260,7 @@ const Asset = () => {
         label: "EDMS Documents",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <EDMSDoclightIframeContainer objectType="A" objectID={id.code} url={applicationData.EL_DOCLI}/>,
+        render: () => <EDMSDoclightIframeContainer objectType="A" objectID={id?.code} url={applicationData.EL_DOCLI}/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -278,7 +275,7 @@ const Asset = () => {
         label: "Documents",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <Documents objectType="A" code={id.code} organization={id.org} entity="OBJ"/>,
+        render: () => <Documents objectType="A" code={id?.code} organization={id?.org} entity="OBJ"/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -292,7 +289,7 @@ const Asset = () => {
         label: "NCRs",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <NCRIframeContainer objectType="A" objectID={id.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>,
+        render: () => <NCRIframeContainer objectType="A" objectID={id?.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -307,10 +304,10 @@ const Asset = () => {
         label: "Non Conformities",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <EquipmentNCRs equipment={id.code}/>,
+        render: () => <EquipmentNCRs equipment={id?.code}/>,
         RegionPanelProps: {
           customHeadingBar:  (
-              <Link to ={`/ncr?equipmentCode=${id.code}&description=NCR for ${id.code}`}
+              <Link to ={`/ncr?equipmentCode=${id?.code}&description=NCR for ${id?.code}`}
                     style={{padding: 10, display: "flex", alignItems: "center", justifyContent: "space-between", color: "#737373" }}>
                 <AddBoxIcon />
               </Link>
@@ -330,8 +327,8 @@ const Asset = () => {
           <Comments
             ref={(comments) => (commentsComponent.current = comments)}
             entityCode="OBJ"
-            entityKeyCode={id.code}
-            entityOrganization={id.org}
+            entityKeyCode={id?.code}
+            entityOrganization={id?.org}
             handleError={handleError}
             userCode={userData.eamAccount.userCode}
             allowHtml={true}
@@ -406,7 +403,7 @@ const Asset = () => {
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
-          <EquipmentGraphIframe equipmentCode={id.code} equipmentGraphURL={applicationData.EL_EQGRH} />
+          <EquipmentGraphIframe equipmentCode={id?.code} equipmentGraphURL={applicationData.EL_EQGRH} />
         ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
@@ -418,8 +415,8 @@ const Asset = () => {
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS),
       },
      getPartsAssociated(
-        id.code,
-        id.org,
+        id?.code,
+        id?.org,
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         2,
@@ -430,7 +427,7 @@ const Asset = () => {
         assetLayout.customGridTabs,
         customTabGridParamNames,
         screenCode,
-        id.code
+        id?.code
       ),
       ...getCustomTabRegions(
         assetLayout.customTabs,
@@ -453,14 +450,15 @@ const Asset = () => {
         newEntity={newEntity}
         entityScreen={screenPermissions}
         entityName="Asset" // TODO:
-        entityKeyCode={id.code}
-        organization={id.org}
+        entityKeyCode={id?.code}
+        organization={id?.org}
         saveHandler={saveHandler}
         newHandler={newHandler}
         deleteHandler={deleteHandler}
         toolbarProps={{
           entityDesc: "Asset", // TODO:
           entity: equipment,
+          id,
           // postInit: this.postInit.bind(this),
           // setLayout: this.setLayout.bind(this),
           newEntity,

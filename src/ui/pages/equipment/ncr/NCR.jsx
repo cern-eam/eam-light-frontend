@@ -229,7 +229,7 @@ const NCR = () => {
                     ),
                 render: () => (
                     <Observations
-                        ncrCode={id.code}
+                        ncrCode={id?.code}
                         ncr={ncr}
                         handleError={handleError}
                         showNotification={showNotification}
@@ -264,14 +264,15 @@ const NCR = () => {
                 newEntity={newEntity}
                 entityScreen={screenPermissions}
                 entityName="NCR"
-                entityKeyCode={id.code}
-                organization={id.org}
+                entityKeyCode={id?.code}
+                organization={id?.org}
                 saveHandler={saveHandler}
                 newHandler={newHandler}
                 deleteHandler={deleteHandler}
                 toolbarProps={{
                     entityDesc: "NCR",
                     entity: ncr,
+                    id,
                     // postInit: this.postInit.bind(this),
                     // setLayout: this.setLayout.bind(this),
                     newEntity,

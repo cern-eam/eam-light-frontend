@@ -276,7 +276,7 @@ const Workorder = () => {
         customVisibility: () => isRegionAvailable("PAR", commonProps.workOrderLayout),
         render: () => (
           <PartUsage
-            workOrderCode={id.code}
+            workOrderCode={id?.code}
             workOrder={workorder}
             tabLayout={tabs.PAR}
             equipmentMEC={equipmentMEC}
@@ -297,7 +297,7 @@ const Workorder = () => {
         customVisibility: () => isRegionAvailable("ACO", commonProps.workOrderLayout),
         render: () => (
           <AdditionalCosts
-            workOrderNumber={id.code}
+            workOrderNumber={id?.code}
             tabLayout={tabs.ACO}
             equipmentMEC={equipmentMEC}
             disabled={readOnly}
@@ -315,7 +315,7 @@ const Workorder = () => {
         isVisibleWhenNewEntity: false,
         maximizable: false,
         customVisibility: () => isRegionAvailable("CWO", commonProps.workOrderLayout),
-        render: () => <WorkorderChildren workorder={id.code} />,
+        render: () => <WorkorderChildren workorder={id?.code} />,
         column: 1,
         order: 4,
         summaryIcon: SegmentRoundedIcon,
@@ -330,7 +330,7 @@ const Workorder = () => {
         render: () => (
             <EDMSDoclightIframeContainer
                 objectType="J"
-                objectID={id.code}
+                objectID={id?.code}
                 url={applicationData.EL_DOCLI}
             />
         ),
@@ -348,7 +348,7 @@ const Workorder = () => {
         label: "Documents",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <Documents objectType="A" code={id.code} organization={id.org} entity="EVNT"/>,
+        render: () => <Documents objectType="A" code={id?.code} organization={id?.org} entity="EVNT"/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -366,7 +366,7 @@ const Workorder = () => {
           applicationData.EL_TBURL 
             ? <NCRIframeContainer
                 objectType="J"
-                objectID={id.code}
+                objectID={id?.code}
                 mode="NCR"
                 url={`${applicationData.EL_TBURL}/ncr`}
                 edmsDocListLink={applicationData.EL_EDMSL}
@@ -391,7 +391,7 @@ const Workorder = () => {
           <Comments
             ref={(comments) => (commentsComponent.current = comments)}
             entityCode="EVNT"
-            entityKeyCode={id.code}
+            entityKeyCode={id?.code}
             userCode={userData.eamAccount.userCode}
             handleError={handleError}
             allowHtml={true}
@@ -415,7 +415,7 @@ const Workorder = () => {
         maximizable: true,
         render: () => (
           <Activities
-            workorder={id.code}
+            workorder={id?.code}
             version={workorder.updateCount}
             department={workorder?.DEPARTMENTID?.DEPARTMENTCODE}
             departmentDesc={workorder?.DEPARTMENTID?.DEPARTMENTCODE}
@@ -444,7 +444,7 @@ const Workorder = () => {
         maximizable: true,
         render: ({ panelQueryParams }) => (
           <Checklists
-            workorder={id.code}
+            workorder={id?.code}
             version={workorder.recordid}
             eqpToOtherId={otherIdMapping}
             printingChecklistLinkToAIS={applicationData.EL_PRTCL}
@@ -665,7 +665,7 @@ const Workorder = () => {
     updateWorkorderProperty('Activities', null)
     updateWorkorderProperty('confirmincompletechecklist', 'confirmed')
     readStatuses(workorder.STATUS.STATUSCODE, false);
-    readOtherIdMapping(id.code);
+    readOtherIdMapping(workorder.WORKORDERID.JOBNUM);
   }
 
   function postCopy() {
@@ -725,8 +725,8 @@ const Workorder = () => {
           newEntity={newEntity}
           entityScreen={screenPermissions}
           entityName="Work Order"
-          entityKeyCode={id.code}
-          organization={id.org}
+          entityKeyCode={id?.code}
+          organization={id?.org}
           saveHandler={saveHandler}
           newHandler={newHandler}
           deleteHandler={deleteHandler}
@@ -734,6 +734,7 @@ const Workorder = () => {
           toolbarProps={{
             entity: workorder,
             equipment: equipment,
+            id,
             // postInit: this.postInit.bind(this),
             // setLayout: this.setLayout.bind(this),
             newEntity,

@@ -83,9 +83,7 @@ export default Location = (props) => {
       new: WSLocation.init,
     },
     postActions: {
-      create: postCreate,
-      read: postRead,
-      new: postInit
+      create: postCreate
     },
     entityCode: "LOC",
     entityDesc: "Location",
@@ -98,17 +96,17 @@ export default Location = (props) => {
     layoutPropertiesMap: locationLayoutPropertiesMap,
   });
 
-  function postInit() {
-    updateEquipmentTreeData({equipment: null});
-  }
-
-  function postRead(location) {
-    updateEquipmentTreeData({equipment: {
-      code: location.LOCATIONID.LOCATIONCODE,
-      organization: location.LOCATIONID.ORGANIZATIONID.ORGANIZATIONCODE,
-      systemTypeCode: 'L'
-    }});
-  }
+  React.useEffect( () => {
+    if (id) {
+      updateEquipmentTreeData({equipment: {
+        code: id.code,
+        organization: id.org,
+        systemTypeCode: 'L'
+      }});
+    } else {
+      updateEquipmentTreeData({equipment: null});
+    }
+  }, [id])
 
   function postCreate(location) {
     commentsComponent.current?.createCommentForNewEntity(location.code);
@@ -397,6 +395,7 @@ export default Location = (props) => {
         toolbarProps={{
           entityDesc: "Location",
           entity: location,
+          id,
           //postInit: this.postInit.bind(this),
           //setLayout: this.setLayout.bind(this),
           newEntity: newEntity,
