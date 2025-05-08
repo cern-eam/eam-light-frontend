@@ -430,7 +430,7 @@ export const getCustomTabRegions = (
     };
   }
   
-  export const fromEAMNumber = (input) => {
+  export const fromEAMNumber = (input, returnString = true) => {
     if (!input || input.VALUE == null || isNaN(input.VALUE)) {
       return null;
     }
@@ -438,7 +438,11 @@ export const getCustomTabRegions = (
     const raw = input.VALUE / Math.pow(10, input.NUMOFDEC || 0);
     const number = input.SIGN === '-' ? -raw : raw;
   
-    return number.toString();
+    if (returnString) {
+      return number.toString();
+    }
+
+    return number;
   };
 
   const pad = (num) => String(num).padStart(2, '0');

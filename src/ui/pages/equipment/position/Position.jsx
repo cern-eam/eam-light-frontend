@@ -121,7 +121,11 @@ const Position = () => {
   }
 
   function postRead(equipment) {
-    updateEquipmentTreeData({equipment})
+    updateEquipmentTreeData({equipment: {
+      code: equipment.POSITIONID.EQUIPMENTCODE,
+      organization: equipment.POSITIONID.ORGANIZATIONID.ORGANIZATIONCODE,
+      systemTypeCode: 'P'
+    }});
   }
 
   const getRegions = () => {

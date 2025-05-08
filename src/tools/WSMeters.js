@@ -46,8 +46,8 @@ class WSMeters {
         
         const result = {
             lastUpdateDate: null,
-            lastValue: fromEAMNumber(get(meterData, 'LASTMETERREADING', null)),
-            rolloverValue: get(meterData, 'ROLLOVERPOINT', null),
+            lastValue: fromEAMNumber(get(meterData, 'LASTMETERREADING', null), false),
+            rolloverValue: fromEAMNumber(get(meterData, 'ROLLOVERPOINT', null), false),
             uomDesc: get(meterData, 'METERUOM.DESCRIPTION', null),
             uom: get(meterData, 'METERUOM.UOMCODE', null),
             meterName: get(meterData, 'METERID.METERCODE', null),

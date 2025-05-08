@@ -126,7 +126,11 @@ const Asset = () => {
   }
 
   function postRead(equipment) {
-    updateEquipmentTreeData({equipment});
+    updateEquipmentTreeData({equipment: {
+      code: equipment.ASSETID.EQUIPMENTCODE,
+      organization: equipment.ASSETID.ORGANIZATIONID.ORGANIZATIONCODE,
+      systemTypeCode: 'A'
+    }});
   }
 
   const getRegions = () => {

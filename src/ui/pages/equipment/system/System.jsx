@@ -116,7 +116,11 @@ const System = () => {
   }
 
   function postRead(equipment) {
-    updateEquipmentTreeData({equipment});
+    updateEquipmentTreeData({equipment: {
+      code: equipment.SYSTEMID.EQUIPMENTCODE,
+      organization: equipment.SYSTEMID.ORGANIZATIONID.ORGANIZATIONCODE,
+      systemTypeCode: 'S'
+    }});
   }
 
   const getEDMSObjectType = (equipment) => {

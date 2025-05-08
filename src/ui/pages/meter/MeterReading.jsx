@@ -113,7 +113,7 @@ class MeterReading extends React.Component {
         this.showNotification("Meter Reading created successfully");
       })
       .catch((error) => {
-        this.props.handleError(error);
+        this.handleError(error);
         this.setState(() => ({ blocking: false }));
       });
   };
