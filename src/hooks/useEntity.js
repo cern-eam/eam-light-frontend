@@ -360,39 +360,43 @@ const useEntity = (params) => {
 
   const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
 
-    if (layoutPropertiesMap[layoutKey]) {
+    const layoutData = screenLayout.fields[layoutKey]
+    const extraData = layoutPropertiesMap[layoutKey];
+
+    if (extraData) {
       if (!valueKey) {
-        valueKey = layoutPropertiesMap[layoutKey].value;
+        valueKey = extraData.value;
       }
 
       if (!descKey) {
-        descKey = layoutPropertiesMap[layoutKey].desc;
+        descKey = extraData.desc;
       }
 
       if (!orgKey) {
-        orgKey = layoutPropertiesMap[layoutKey].org;
+        orgKey = extraData.org;
       }
     }
 
     if (!valueKey) {
-      valueKey = screenLayout.fields[layoutKey].xpath
+      valueKey = layoutData.xpath
     }
 
-    let data = processElementInfo(
-      screenLayout.fields[layoutKey] ??
-        getElementInfoFromCustomFields(layoutKey, entity.USERDEFINEDAREA.CUSTOMFIELD)
-    );
+    let data = processElementInfo(layoutData ?? getElementInfoFromCustomFields(layoutKey, entity.USERDEFINEDAREA.CUSTOMFIELD))
 
     data.onChange = createOnChangeHandler(
       valueKey,
       descKey,
       orgKey,
       (key, value) => updateEntityProperty(key, value, data.type),
-      onChange ?? layoutPropertiesMap[layoutKey]?.onChange
+      onChange ?? extraData?.onChange
     );
+    
+    if (extraData?.clear) {
+      data.onClear = () => updateEntityProperty(extraData.clear, null)
+    }
 
     data.disabled = data.disabled || readOnly; // It should remain disabled
-    data.elementInfo = screenLayout.fields[layoutKey]; // Return elementInfo as it is still needed in some cases (for example for UDFs)
+    data.elementInfo = layoutData; // Return elementInfo as it is still needed in some cases (for example for UDFs)
 
     // Value
     data.value = fromEAMValue(get(entity, valueKey), data.type)
@@ -403,11 +407,11 @@ const useEntity = (params) => {
     }
     
     // Link
-    if (layoutPropertiesMap[layoutKey]?.link) {
-      data.link = () => (data.value ? layoutPropertiesMap[layoutKey].link + "/" + data.value : null)
+    if (extraData?.link) {
+      data.link = () => (data.value ? extraData.link + "/" + data.value : null)
     }
 
-    Object.assign(data, createAutocompleteHandler(screenLayout.fields[layoutKey], screenLayout.fields, entity, layoutPropertiesMap[layoutKey]?.autocompleteHandlerData))
+    Object.assign(data, createAutocompleteHandler(layoutData, screenLayout.fields, entity, extraData?.autocompleteHandlerData))
 
     // Errors
     data.errorText = errorMessages[layoutKey];
