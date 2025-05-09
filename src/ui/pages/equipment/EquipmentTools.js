@@ -151,7 +151,11 @@ export const assetLayoutPropertiesMap = {
 },
 
   part: {
-    link: "/part"
+    link: "/part",
+    value: 'PartAssociation.PARTID.PARTCODE',
+    desc: 'PartAssociation.PARTID.DESCRIPTION',
+    org: 'PartAssociation.PARTID.ORGANIZATIONID.ORGANIZATIONCODE',
+    clear: 'PartAssociation.STORELOCATION'
   }
 };
 
