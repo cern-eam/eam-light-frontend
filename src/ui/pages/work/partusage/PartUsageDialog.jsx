@@ -383,10 +383,10 @@ function PartUsageDialog(props) {
 
     const partData = await loadPartData(partCode, part.organization);
 
-    if (partData?.trackByAsset === "true") {
+    if (partData?.BYASSET === "+") {
       showNotification(`Selected part "${partCode}" is tracked by asset.`);
       // Bin loading is done later when the user selects an asset.
-    } else if (partData?.trackByAsset === "false") {
+    } else if (partData?.BYASSET === "-") {
       await Promise.all([
         loadBinList("", partCode + "#" + part.organization),
         transactionType === RETURN
