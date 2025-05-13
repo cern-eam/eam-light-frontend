@@ -43,8 +43,7 @@ import AccountTreeRoundedIcon from "@mui/icons-material/AccountTreeRounded";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import Variables from "../components/Variables";
-import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
-import getPartsAssociated from "@/ui/pages/PartsAssociated";
+import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import { createPosition, deletePosition, getPosition, getPositionsDefault, updatePosition } from "../../../../tools/WSPositions.js";
 import CustomFields from "../../../components/customfields/CustomFields.jsx";
@@ -227,8 +226,8 @@ const Position = () => {
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS),
       },
       getPartsAssociated(
-        id?.code,
-        id?.org,
+        id?.code + '#' + id?.org,
+        'OBJ',
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         1,

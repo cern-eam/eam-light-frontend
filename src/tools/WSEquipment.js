@@ -66,22 +66,29 @@ class WSEquipment {
         return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "equipmentcode", desc: "description_obj", org: "equiporganization"}));
     }
 
-    getEquipmentPartsAssociated(equipment, organization, config = {}) {
+    autocompletePartsAssociated({filter}, config = {}) {
+        let gridRequest = new GridRequest( "SSPART")
+        gridRequest.addFilter('partcode', filter, "BEGINS")
+        gridRequest.setRowCount(10)
+        gridRequest.sortBy("partcode")
+        return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "partcode", desc: "description", org: "organization"}));
+    }
+
+    getEquipmentPartsAssociated(code, associationEntity, config = {}) {
         let gridRequest = new GridRequest("BSPARA");
 
-        gridRequest.addParam("param.entity", "OBJ");
-        gridRequest.addParam("param.valuecode", equipment + "#" + organization);
+        gridRequest.addParam("param.entity", associationEntity);
+        gridRequest.addParam("param.valuecode", code);
 
-        return getGridData(gridRequest, config).then(response => transformResponse(response, {
-            partCode: "papartcode",
-            partDesc: "description",
-            quantity: "quantity",
-            uom: "partuom"
-        }));
+        return getGridData(gridRequest, config)
     }
 
     getCategory(categoryCode, config = {}) {
         return WS._get(`/proxy/category/${categoryCode}`, config);
+    }
+
+    createPartAssociated(part, config = {}) {
+        return WS._post('/equipment/partsassociated', part, config);
     }
 
     //

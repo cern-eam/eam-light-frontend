@@ -7,7 +7,6 @@ import SystemDetails from "./SystemDetails";
 import SystemHierarchy from "./SystemHierarchy";
 import Comments from "eam-components/dist/ui/components/comments/Comments";
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
-import EquipmentPartsAssociated from "../components/EquipmentPartsAssociated";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import { ENTITY_TYPE } from "../../../components/Toolbar";
@@ -44,6 +43,7 @@ import Variables from "../components/Variables";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import { createSystem, deleteSystem, getSystem, getSystemDefault, updateSystem } from "../../../../tools/WSSystems.js";
 import CustomFields from "../../../components/customfields/CustomFields.jsx";
+import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -230,27 +230,14 @@ const System = () => {
         ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.WORKORDERS),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.WORKORDERS),
       },
-      {
-        id: "PARTS",
-        label: "Parts",
-        isVisibleWhenNewEntity: false,
-        maximizable: false,
-        render: () => (
-          <EquipmentPartsAssociated
-            code={id?.code}
-            org={id?.org}
-            parentScreen={screenPermissions.parentScreen}
-          />
-        ),
-        column: 1,
-        order: 30,
-        summaryIcon: PartIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
-        initialVisibility: getTabInitialVisibility(
-          tabs,
-          TAB_CODES.PARTS_ASSOCIATED
-        ),
-      },
+      getPartsAssociated(
+        id?.code + '#' + id?.org,
+        'OBJ',
+        !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
+        getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
+        1,
+        30
+      ),
       {
         id: "EDMSDOCUMENTS",
         label: "EDMS Documents",
