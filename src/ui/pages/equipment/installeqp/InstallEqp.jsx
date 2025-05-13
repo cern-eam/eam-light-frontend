@@ -14,11 +14,13 @@ import Stack from "@mui/material/Stack";
 import Panel from "@/ui/components/panel/Panel";
 import useEquipmentTreeStore from "../../../../state/useEquipmentTreeStore";
 import useSnackbarStore from "@/state/useSnackbarStore";
+import Dependency from "../components/Dependency";
 
 export default function InstallEqp(props) {
   const [parentEq, setParentEq] = useState("");
   const [childEq, setChildEq] = useState("");
   const [blocking, setBlocking] = useState(false);
+  const [dependent, setDependent] = useState(false)
   const {equipmentTreeData: {currentRoot}, updateEquipmentTreeData} = useEquipmentTreeStore();
   const {showNotification, handleError, showError} = useSnackbarStore();
   const idPrefix = "EAMID_InstallEqp_";
@@ -45,10 +47,11 @@ export default function InstallEqp(props) {
     };
   }, []);
 
-  const createInstallEquipmentStructure = (newParent, child) => {
+  const createInstallEquipmentStructure = (newParent, child, dependent) => {
     return {
       newParentCode: newParent,
       childCode: child,
+      dependent,
       costRollUp: true,
     };
   };
@@ -74,6 +77,7 @@ export default function InstallEqp(props) {
             `${childEq} was successfully attached to ${parentEq}`
           );
           setChildEq("");
+          setDependent(false)
           updateEquipmentTreeData({equipment: currentRoot});
           setBlocking(false);
         })
@@ -165,9 +169,16 @@ export default function InstallEqp(props) {
                     )}
                     autocompleteHandler={WS.autocompleteEquipment}
                     autocompleteHandlerParams={[true]}
+                    renderDependencies={[dependent]}
                     barcodeScanner
                     id={`${idPrefix}CHILD`}
                     endAdornment={
+                      <React.Fragment>
+                        <Dependency
+                          onChangeHandler={() => setDependent(!dependent)}
+                          value={dependent}
+                          disabled={!childEq}
+                        />
                       <IconButton
                         size="small"
                         onClick={() => treeButtonClickHandler(childEq)}
@@ -175,6 +186,7 @@ export default function InstallEqp(props) {
                       >
                         <FileTree />
                       </IconButton>
+                      </React.Fragment>
                     }
                   />
 
@@ -183,7 +195,7 @@ export default function InstallEqp(props) {
                       style={{ marginTop: 10 }}
                       onClick={() =>
                         installEqpHandler(
-                          createInstallEquipmentStructure(parentEq, childEq)
+                          createInstallEquipmentStructure(parentEq, childEq, dependent)
                         )
                       }
                       variant="outlined"
