@@ -58,6 +58,7 @@ import AssetNCRs from '../../pages/equipment/components/EquipmentNCRs';
 import CustomFields from "../../components/customfields/CustomFields";
 import { getPart } from "../../../tools/WSParts";
 import Documents from "../equipment/asset/Documents";
+import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -289,6 +290,15 @@ const Workorder = () => {
         ignore: !getTabAvailability(tabs, TAB_CODES.PART_USAGE),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PART_USAGE),
       },
+      getPartsAssociated(
+        id?.code,
+        'EVNT',
+        !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
+        getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
+        1,
+        30,
+        'EVNT'
+      ),
       {
         id: "ADDITIONALCOSTS",
         label: "Additional Costs",

@@ -37,7 +37,7 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import HardwareIcon from "@mui/icons-material/Hardware";
 import WarningIcon from "@mui/icons-material/Warning";
 import Variables from "../components/Variables";
-import getPartsAssociated from "@/ui/pages/PartsAssociated";
+import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
@@ -415,8 +415,8 @@ const Asset = () => {
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EQUIPMENT_GRAPH_ASSETS),
       },
      getPartsAssociated(
-        id?.code,
-        id?.org,
+        id?.code + '#' + id?.org,
+        'OBJ',
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         2,
