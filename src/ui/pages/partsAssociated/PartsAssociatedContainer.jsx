@@ -70,7 +70,7 @@ const PartsAssociatedContainer = (
       setLoading(false);
     }).catch((e) => {
       setLoading(false);
-      showError(e?.response?.body?.errors?.[0]?.message || "The association has failed");
+      showError(e?.response?.body?.errors?.[0]?.message ?? "The association has failed");
     })
   }
 

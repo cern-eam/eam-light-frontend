@@ -167,15 +167,20 @@ const Workorder = () => {
       .then(([equipment, linearDetails]) => {
         
         setEquipment(equipment)
-        setWorkOrder((oldWorkOrder) => ({
-          ...oldWorkOrder,
-          DEPARTMENTID: equipment.DEPARTMENTID,
-          LOCATIONID: equipment.AssetParentHierarchy?.LOCATIONID,
-          COSTCODEID: equipment.COSTCODEID,
-          // warranty: linearDetails.ISWARRANTYACTIVE,
-        }));
+        if (!workorder.DEPARTMENTID) {
+          updateWorkorderProperty('DEPARTMENTID', equipment.DEPARTMENTID)
+        }
 
+        if (!workorder.LOCATIONID) {
+          updateWorkorderProperty('LOCATIONID', equipment.LOCATIONID)
+        }
 
+        if (!workorder.COSTCODEID) {
+          updateWorkorderProperty('COSTCODEID', equipment.COSTCODEID)
+        }
+
+        //TODO warranty: linearDetails.ISWARRANTYACTIVE,
+     
         if (linearDetails.body?.data?.ISWARRANTYACTIVE === "true") {
           showWarning("This equipment is currently under warranty.");
         }
