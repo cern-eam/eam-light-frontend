@@ -61,6 +61,7 @@ class WSEquipment {
         gridRequest.addParam("param.objectcode", "")
         gridRequest.addParam("param.objectorg", "*")
         gridRequest.addParam("control.org", "*")
+        gridRequest.addParam('param.bypasstagoption', 'true')
         gridRequest.addFilter("equipmentcode", filter, operator)
         gridRequest.sortBy("equipmentcode")
         return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "equipmentcode", desc: "description_obj", org: "equiporganization"}));
