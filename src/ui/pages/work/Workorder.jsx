@@ -50,7 +50,6 @@ import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import { PartIcon } from "eam-components/dist/ui/components/icons";
 import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
 import HardwareIcon from "@mui/icons-material/Hardware";
-import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
 import EamlightToolbar from "../../components/EamlightToolbar";
 import useWorkOrderStore from "../../../state/useWorkOrderStore";
 import { isLocalAdministrator } from "../../../state/utils";
@@ -577,7 +576,7 @@ const Workorder = () => {
         label: "Meter Readings",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <MeterReadingWO equipment={workorder?.EQUIPMENTID?.EQUIPMENTCODE} disabled={readOnly} />,
+        render: () => <MeterReadingWO equipment={workorder.EQUIPMENTID.EQUIPMENTCODE} disabled={readOnly} />,
         column: 2,
         order: 12,
         summaryIcon: SpeedIcon,

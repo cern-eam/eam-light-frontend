@@ -3,7 +3,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import WSEquipment from "../../../tools/WSEquipment";
@@ -21,6 +21,7 @@ const PartsAssociatedDialog = ({
   isLoading,
   updatePartAssociatedProperty}) => {
     const { userData } = useUserDataStore();
+    const [ uom, setUom ] = useState(null)
 
     const {
         screenLayout: { BSPARA: partsAssociatedLayout },
@@ -49,6 +50,16 @@ const PartsAssociatedDialog = ({
     updatePartAssociatedProperty: PropTypes.func.isRequired,
   };
 
+  const onPartSelect = (part) => {
+    if (part && part?.uom) {
+      updatePartAssociatedProperty("part", part.code)
+      setUom(part.uom)
+    } else {
+      updatePartAssociatedProperty("part", "")
+      setUom(null)
+    }
+  }
+
   if (!partsAssociatedLayout) {
     return React.Fragment
   }
@@ -68,7 +79,7 @@ const PartsAssociatedDialog = ({
             {...processElementInfo(partsAssociatedLayout.fields.papartcode)}
             label="Part"
             value={partAssociated["part"]}
-            onChange={createOnChangeHandler("part", null, null, updatePartAssociatedProperty)}
+            onSelect={onPartSelect}
             autocompleteHandler={WSEquipment.autocompletePartsAssociated}
             />
         <EAMTextField
@@ -82,6 +93,8 @@ const PartsAssociatedDialog = ({
                 null,
                 updatePartAssociatedProperty
             )}
+            endTextAdornment={uom}
+            renderDependencies={uom}
         />
 
         </DialogContent>

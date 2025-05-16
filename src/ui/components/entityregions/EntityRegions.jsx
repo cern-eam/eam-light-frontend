@@ -39,7 +39,9 @@ const EntityRegions = (props) => {
   /**
    * Variables necessary on render.
    */
-  const regions = inputRegions.filter(region => !region.ignore);
+  const regions = inputRegions.filter(
+    region => !region.ignore && !(isNewEntity && region.isVisibleWhenNewEntity === false)
+  );
   const columns = regions.reduce((acc, region) => ({
     ...acc,
     [region.column]: [
@@ -54,7 +56,6 @@ const EntityRegions = (props) => {
     lg: regionMaximized ? 12 : 12 / Object.keys(columns).length,
   }
   const matchingRegion = regions.find(region => region.id === regionOnly);
-
   /**
    * Set Regions visibility Effect
    */

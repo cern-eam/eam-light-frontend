@@ -72,7 +72,7 @@ class WSEquipment {
         gridRequest.addFilter('partcode', filter, "BEGINS")
         gridRequest.setRowCount(10)
         gridRequest.sortBy("partcode")
-        return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "partcode", desc: "description", org: "organization"}));
+        return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "partcode", desc: "description", org: "organization", uom: "uom"}));
     }
 
     getEquipmentPartsAssociated(code, associationEntity, config = {}) {
