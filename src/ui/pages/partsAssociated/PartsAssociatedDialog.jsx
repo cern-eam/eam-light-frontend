@@ -60,6 +60,10 @@ const PartsAssociatedDialog = ({
     }
   }
 
+  const onQuantityChange = (quantity) => {
+    updatePartAssociatedProperty("quantity", quantity)
+  }
+
   if (!partsAssociatedLayout) {
     return React.Fragment
   }
@@ -87,12 +91,7 @@ const PartsAssociatedDialog = ({
             label="Quantity"
             valueKey="quantity"
             value={partAssociated["quantity"]}
-            onChange={createOnChangeHandler(
-                "quantity",
-                null,
-                null,
-                updatePartAssociatedProperty
-            )}
+            onChangeInput={onQuantityChange}
             endTextAdornment={uom}
             renderDependencies={uom}
         />
