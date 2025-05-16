@@ -11,7 +11,7 @@ const PartsAssociatedContainer = (
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const initState = {
     part: null,
-    quantity: 1,
+    quantity: null,
   };
   const {showError, showNotification} = useSnackbarStore();
   const [isLoading, setLoading] = useState(false);
