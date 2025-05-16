@@ -21,7 +21,7 @@ const PartsAssociatedDialog = ({
   isLoading,
   updatePartAssociatedProperty}) => {
     const { userData } = useUserDataStore();
-    const [ uom, setUom ] = useState(null)
+    const [ uom, setUom ] = useState("  ")
 
     const {
         screenLayout: { BSPARA: partsAssociatedLayout },
@@ -56,7 +56,7 @@ const PartsAssociatedDialog = ({
       setUom(part.uom)
     } else {
       updatePartAssociatedProperty("part", "")
-      setUom(null)
+      setUom("  ")
     }
   }
 
