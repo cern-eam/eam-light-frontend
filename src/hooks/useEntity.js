@@ -28,6 +28,7 @@ import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
 import useSnackbarStore from "../state/useSnackbarStore";
 import { getCustomFields } from "../tools/WSCustomFields";
 import { assignDefaultValues, toEAMValue, createAutocompleteHandler, fromEAMValue, getCodeOrg } from "./tools";
+import { applyTimezoneOffsetToYearField } from "../ui/pages/EntityTools";
 
 const useEntity = (params) => {
   const {
@@ -188,6 +189,9 @@ const useEntity = (params) => {
         const readEntity = response.body.Result.ResultData[entityProperty]
         // Sort custom based on the index prop
         readEntity.USERDEFINEDAREA?.CUSTOMFIELD?.sort((cf1, cf2) => (cf1.index ?? 0) - (cf2.index ?? 0))
+
+        // Temporary fix (SG-15959)
+        applyTimezoneOffsetToYearField(readEntity)
         
         setEntity(readEntity);
         setId({code: get(readEntity, entityCodeProperty), org: get(readEntity, entityOrgProperty)})
@@ -203,6 +207,7 @@ const useEntity = (params) => {
         postActions.read(readEntity);
       })
       .catch((error) => {
+        console.error('readEntity error', error)
         if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
           handleError(error);
         }
@@ -266,6 +271,10 @@ const useEntity = (params) => {
         let newEntity = response.body.Result.ResultData[resultDefaultDataProperty ?? entityProperty] ?? response.body.Result.ResultData
         newEntity.USERDEFINEDAREA = customFields.body.Result;
         newEntity = assignDefaultValues(newEntity, screenLayout);
+
+        // Temporary fix (SG-15959)
+        applyTimezoneOffsetToYearField(newEntity)
+
         setEntity(newEntity)
         
         assignQueryParamValues()

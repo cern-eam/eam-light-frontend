@@ -430,6 +430,13 @@ export const getCustomTabRegions = (
     };
   }
   
+  function convertTimezoneToMilliseconds(TIMEZONE) {
+    return TIMEZONE === 'Z'
+      ? 0
+      : (parseInt(TIMEZONE.slice(1, 3)) * 60 + parseInt(TIMEZONE.slice(3))) *
+        (TIMEZONE[0] === '-' ? -1 : 1) * 60_000;
+  }
+
   export const fromEAMNumber = (input, returnString = true) => {
     if (!input || input.VALUE == null || isNaN(input.VALUE)) {
       return null;
@@ -455,13 +462,8 @@ export const getCustomTabRegions = (
       HOUR = 0, MINUTE = 0, SECOND = 0,
       TIMEZONE = 'Z',
     } = data;
-  
-    // Use TIMEZONE only to determine correct year
-    const offsetMinutes = TIMEZONE === 'Z'
-      ? 0
-      : (parseInt(TIMEZONE.slice(1, 3)) * 60 + parseInt(TIMEZONE.slice(3))) * (TIMEZONE[0] === '-' ? -1 : 1);
-  
-    const adjusted = new Date(YEAR + offsetMinutes * 60000);
+    
+    const adjusted = new Date(YEAR + convertTimezoneToMilliseconds(TIMEZONE));
     const year = adjusted.getUTCFullYear();
   
     // Build local ISO string (without milliseconds)
@@ -494,6 +496,22 @@ export const getCustomTabRegions = (
     return eamDate
 
   };
+
+export const applyTimezoneOffsetToYearField = (obj) => { // bug in EAM 
+  function recurse(node) {
+    if (Array.isArray(node)) {
+      node.forEach(recurse);
+    } else if (node && typeof node === 'object') {
+      if (typeof node.YEAR === 'number' && typeof node.TIMEZONE === 'string') {
+        node.YEAR += convertTimezoneToMilliseconds(node.TIMEZONE);
+        node.TIMEZONE = '+0000';
+      }
+      Object.values(node).forEach(recurse);
+    }
+  }
+
+  recurse(obj);
+} 
   
   
   
