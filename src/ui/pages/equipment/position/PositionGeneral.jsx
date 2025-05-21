@@ -40,7 +40,6 @@ const PositionGeneral = (props) => {
       <EAMAutocomplete
         {...register("department")}
           autocompleteHandler={autocompleteDepartment}
-          autocompleteHandlerParams={["*"]}
       />
 
       <EAMSelect

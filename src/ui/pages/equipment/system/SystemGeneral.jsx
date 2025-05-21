@@ -39,7 +39,6 @@ const SystemGeneral = (props) => {
       <EAMAutocomplete
         {...register("department")}
                 autocompleteHandler={autocompleteDepartment}
-                autocompleteHandlerParams={["*"]}
       />
 
       <EAMSelect

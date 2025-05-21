@@ -143,7 +143,6 @@ const WorkOrdersDialog = ({
                             handleUpdate
                         )}
                         autocompleteHandler={autocompleteDepartment}
-                        autocompleteHandlerParams={["*"]}
                         validate
                     />
 

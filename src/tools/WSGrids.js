@@ -1,8 +1,10 @@
+import { ConsoleNetworkOutline } from 'mdi-material-ui';
 import useUserDataStore from '../state/useUserDataStore';
 import { transformNativeResponse } from './GridTools';
 import WS from './WS';
 import GridRequest from './entities/GridRequest';
 import { GridTypes } from './entities/GridRequest';
+import useInforContextStore from '../state/useInforContext';
 
 export const getGridDataNative = (gridRequest, config = {}) => WS._post('/proxy/grids', gridRequest, config);
 
@@ -60,13 +62,14 @@ export const readUserCodes = (options) => {
 }
 
 export const autocompleteDepartment = (options) => {
+    const {inforContext} = useInforContextStore.getState();
     let gridRequest = new GridRequest("LVMRCS", GridTypes.LOV)
     gridRequest.rowCount = 10
     gridRequest.addParam("param.showstardepartment", null)
     gridRequest.addParam("param.bypassdeptsecurity", null)
     gridRequest.addFilter("department", options.filter, "CONTAINS")
     gridRequest.sortBy("department")
-    gridRequest.addParam("control.org", options.handlerParams[0])
+    gridRequest.addParam("control.org", inforContext ? inforContext.INFOR_ORGANIZATION : '*')
     return getGridData(gridRequest).then(response => transformResponse(response, {code: "department", desc: "des_text"}));
 }
 
