@@ -52,8 +52,7 @@ class Login extends Component {
         let inforContext = {
           INFOR_ORGANIZATION: this.state.infor_organization,
           INFOR_USER: this.state.infor_user.toUpperCase(),
-          INFOR_TENANT: this.state.infor_tenant,
-          INFOR_SESSIONID: response.body.data,
+          INFOR_TENANT: this.state.infor_tenant
         };
 
         if (this.state.reuseCredentials) {
