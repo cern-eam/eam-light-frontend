@@ -97,7 +97,7 @@ class Login extends Component {
               required
               value={this.state.INFOR_USER}
               label="User ID"
-              onChange={(value) => {
+              onChangeInput={(value) => {
                 this.setState({ infor_user: value });
               }}
               disabled={this.state.loginInProgress}
@@ -110,7 +110,7 @@ class Login extends Component {
               autoComplete="current-password"
               value={this.state.INFOR_PASSWORD}
               label="Password"
-              onChange={(value) => {
+              onChangeInput={(value) => {
                 this.setState({ infor_password: value });
               }}
               disabled={this.state.loginInProgress}
@@ -122,7 +122,7 @@ class Login extends Component {
               label="Organization"
               uppercase
               value={this.state.INFOR_ORGANIZATION}
-              onChange={(value) => {
+              onChangeInput={(value) => {
                 this.setState({ infor_organization: value });
               }}
               disabled={this.state.loginInProgress}
@@ -133,7 +133,7 @@ class Login extends Component {
               required
               label="Tenant"
               value={this.state.INFOR_TENANT}
-              onChange={(value) => {
+              onChangeInput={(value) => {
                 this.setState({ infor_tenant: value });
               }}
               disabled={this.state.loginInProgress}
