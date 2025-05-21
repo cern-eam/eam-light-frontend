@@ -56,7 +56,7 @@ import { isLocalAdministrator } from "../../../state/utils";
 import AssetNCRs from '../../pages/equipment/components/EquipmentNCRs';
 import CustomFields from "../../components/customfields/CustomFields";
 import { getPart } from "../../../tools/WSParts";
-import Documents from "../equipment/asset/Documents";
+import Documents from "../../components/documents/Documents";
 import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
 import { getOrg } from "../../../hooks/tools";
 

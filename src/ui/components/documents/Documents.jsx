@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getEquipmentDocuments, getWorkOrderDocuments } from "../../../../tools/WSEquipment";
-import { getDocumentAttachment } from "../../../../tools/WSDocuments";
+import { getEquipmentDocuments, getWorkOrderDocuments } from "../../../tools/WSEquipment";
+import { getDocumentAttachment } from "../../../tools/WSDocuments";
 import "./Documents.css";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 

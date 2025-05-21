@@ -43,7 +43,7 @@ import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
 import { createAsset, deleteAsset, getAsset, getAssetDefault, getAssetHierarchy, updateAsset } from "../../../../tools/WSAssets.js";
 import CustomFields from "../../../components/customfields/CustomFields.jsx";
-import Documents from "./Documents.jsx";
+import Documents from "../../../components/documents/Documents.jsx";
 import { getOrg } from "../../../../hooks/tools.js";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
