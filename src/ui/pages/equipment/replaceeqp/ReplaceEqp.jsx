@@ -12,6 +12,7 @@ import useLayoutStore from '../../../../state/useLayoutStore';
 import { renderLoading } from '../../EntityTools';
 import useSnackbarStore from '../../../../state/useSnackbarStore';
 import { readStatuses, readUserCodes } from '../../../../tools/WSGrids';
+import { getOrg } from '../../../../hooks/tools';
 
 const MODE_STANDARD = 'Standard';
 
@@ -127,7 +128,7 @@ const ReplaceEqp = (props) => {
     const loadEquipmentData = async (code, destination) => {
         setBlocking(true);
         try {
-            const equipment = await getEquipment(code, '*'); 
+            const equipment = await getEquipment(code, getOrg()); 
 
             if (destination === 'oldEquipment') {
                 setOldEquipment(equipment);

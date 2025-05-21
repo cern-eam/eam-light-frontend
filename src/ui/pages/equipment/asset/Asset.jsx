@@ -44,6 +44,7 @@ import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
 import { createAsset, deleteAsset, getAsset, getAssetDefault, getAssetHierarchy, updateAsset } from "../../../../tools/WSAssets.js";
 import CustomFields from "../../../components/customfields/CustomFields.jsx";
 import Documents from "./Documents.jsx";
+import { getOrg } from "../../../../hooks/tools.js";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -242,7 +243,7 @@ const Asset = () => {
             gridName={"OSOBJA_ESF"}
             objectCode={id?.code}
             additionalParams={Object.fromEntries([
-              ["parameter.objorganization", id?.org ?? "*"],
+              ["parameter.objorganization", id?.org ?? getOrg()],
               ["parameter.object", id?.code],
             ])}
             paramNames={["equipmentno"]}

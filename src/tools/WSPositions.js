@@ -1,3 +1,4 @@
+import { getOrg } from '../hooks/tools';
 import WS from './WS';
 
 export const createPosition = (position, config = {}) => {
@@ -35,7 +36,7 @@ export const deletePosition = (positionCode, organization, config = {}) => {
   return WS._delete(`/proxy/positions/${encodeURIComponent(positionCode + '#' + organization)}`, config)
 }
 
-export const getPositionsDefault = (organization = '*', config = {}) => {
+export const getPositionsDefault = (organization = getOrg(), config = {}) => {
   return WS._post(`/proxy/positiondefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": organization}}, config)
   .then(response => {
     if (response.body.Result.ResultData.AssetEquipment) { // For the moment the REST WS returns wrong response that needs to be altered 
