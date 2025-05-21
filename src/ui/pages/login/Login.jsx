@@ -18,7 +18,7 @@ class Login extends Component {
     infor_password: "",
     infor_organization: "",
     infor_tenant: "",
-    reuseCredentials: false,
+    reuseCredentials: true,
     loginInProgress: false,
   };
 

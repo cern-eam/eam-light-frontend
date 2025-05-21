@@ -19,7 +19,6 @@ const AssetGeneral = (props) => {
       <EAMAutocomplete
         {...register("department")}
         autocompleteHandler={autocompleteDepartment}
-        autocompleteHandlerParams={["*"]}
       />
 
       <StatusRow
