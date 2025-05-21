@@ -55,6 +55,12 @@ const WorkorderMenu = ({ wo }) => {
                         {format(new Date(wo.schedulingEndDate), "dd-MMM-yyyy")}
                     </span>
                 )}
+                {wo.labourScheduledDate && (
+                    <span style={spanStyle}>
+                        Scheduled Labour:{" "}
+                        {format(new Date(wo.labourScheduledDate), "dd-MMM-yyyy")}
+                    </span>
+                )}
             </Link>
         </li>
     );
