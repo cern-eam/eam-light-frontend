@@ -19,6 +19,7 @@ import LightDialog from "@/ui/components/LightDialog";
 import EAMTimePicker from "eam-components/dist/ui/components/inputs-ng/EAMTimePicker";
 import useSnackbarStore from "@/state/useSnackbarStore";
 import { autocompleteDepartment } from "../../../../../tools/WSGrids";
+import { getOrg } from "../../../../../hooks/tools";
 
 /**
  * Display detail of an activity
@@ -71,7 +72,7 @@ function AddBookLabourDialog(props) {
 
     setLoading(true);
     WSWorkorders.createBookingLabour(bookingLabour)
-      .then(WSWorkorders.getWorkOrder.bind(null, props.workorderNumber, '*')) //TODO do we really have to read the WO?
+      .then(WSWorkorders.getWorkOrder.bind(null, props.workorderNumber, getOrg())) //TODO do we really have to read the WO?
       .then((result) => {
         setLoading(false);
          const workorder = result.body.Result.ResultData.WorkOrder;

@@ -2,7 +2,6 @@ import { get } from "lodash";
 import { fromEAMDate, fromEAMNumber, toEAMDate, toEAMNumber } from "../ui/pages/EntityTools";
 import GridRequest, { GridTypes } from "../tools/entities/GridRequest";
 import { getGridData, transformResponse } from "../tools/WSGrids";
-import queryString from "query-string";
 import set from "set-value";
 import useUserDataStore from "../state/useUserDataStore";
 import useInforContextStore from "../state/useInforContext";
@@ -93,7 +92,7 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
 }
 
 export const getCodeOrg = (codeorg) => {
-    const defaultOrg = '*'
+    const defaultOrg = getOrg()
     let [code, org = defaultOrg] = decodeURIComponent(codeorg).split("#");
     return {code, org}
 }

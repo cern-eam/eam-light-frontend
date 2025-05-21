@@ -1,3 +1,4 @@
+import { getOrg } from '../hooks/tools';
 import GridRequest, { GridFilterJoiner, GridTypes } from './entities/GridRequest';
 import WS from './WS';
 import { getAsset } from './WSAssets';
@@ -59,8 +60,8 @@ class WSEquipment {
         gridRequest.addParam("param.objectrtype", handlerParams[0])
         gridRequest.addParam("param.bypassdeptsecurity", null)
         gridRequest.addParam("param.objectcode", "")
-        gridRequest.addParam("param.objectorg", "*")
-        gridRequest.addParam("control.org", "*")
+        gridRequest.addParam("param.objectorg", getOrg())
+        gridRequest.addParam("control.org", getOrg())
         gridRequest.addParam('param.bypasstagoption', 'true')
         gridRequest.addFilter("equipmentcode", filter, operator)
         gridRequest.sortBy("equipmentcode")
@@ -121,7 +122,7 @@ class WSEquipment {
     }
 }
 
-export const getEquipment = async (equipmentCode, organization = '*', config = {}) => {
+export const getEquipment = async (equipmentCode, organization = getOrg(), config = {}) => {
     const equipmentType = await getEquipmentType(equipmentCode, organization);
   
     const extract = (response) => response.body.Result.ResultData;
@@ -170,7 +171,7 @@ export const getEquipmentDocuments = async (code, organization, config = {}) => 
     return getGridData(gridRequest)
 }
 
-export const getWorkOrderDocuments = async (code, organization = '*', config = {}) => {
+export const getWorkOrderDocuments = async (code, organization, config = {}) => {
     let gridRequest = new GridRequest("BCDOCWO_IPAD", GridTypes.LIST)
     //gridRequest.addParam("parameter.code1", code)
     

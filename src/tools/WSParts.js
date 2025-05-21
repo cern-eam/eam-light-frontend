@@ -1,9 +1,10 @@
+import { getOrg } from '../hooks/tools';
 import GridRequest, { GridTypes } from './entities/GridRequest';
 import WS from './WS';
 import { getGridData, transformResponse } from './WSGrids';
 
 export const initPart = (config = {}) => {
-    return WS._post(`/proxy/partdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": "*"}}, config)
+    return WS._post(`/proxy/partdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": getOrg()}}, config)
 }
 
 export const getPart = (number, organization, config = {}) => {

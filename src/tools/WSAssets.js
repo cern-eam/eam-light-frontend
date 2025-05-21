@@ -1,3 +1,4 @@
+import { getOrg } from '../hooks/tools';
 import WS from './WS';
 
 export const createAsset = (asset, config = {}) => {
@@ -31,7 +32,7 @@ export const deleteAsset = (assetCode, organization, config = {}) => {
   return WS._delete(`/proxy/assets/${encodeURIComponent(assetCode + '#' + organization)}`, config)
 }
 
-export const getAssetDefault = (organization = '*', config = {}) => {
+export const getAssetDefault = (organization = getOrg(), config = {}) => {
   return WS._post(`/proxy/assetdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": organization}}, config)
   .then(response => {
     response.body.Result.ResultData.AssetEquipment.ASSETID.EQUIPMENTCODE = null

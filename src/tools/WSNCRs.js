@@ -1,8 +1,9 @@
+import { getOrg } from "../hooks/tools";
 import WS from "./WS";
 
 class WSNCRs {
     initNonConformity(config = {}) {
-        return WS._post(`/proxy/nonconformitydefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": "*"}}, config);
+        return WS._post(`/proxy/nonconformitydefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": getOrg()}}, config);
     }
 
     getNonConformity(number, organization, config = {}) {

@@ -1,3 +1,4 @@
+import { getOrg } from '../hooks/tools';
 import GridRequest, { GridTypes } from './entities/GridRequest';
 import { getGridData, transformResponse } from './WSGrids';
 
@@ -16,7 +17,7 @@ class WSUDF {
         let gridRequest = new GridRequest("LVUDFE", GridTypes.LOV)
         gridRequest.setRowCount(10)
 		gridRequest.addParam("param.rentity", entity)
-        gridRequest.addParam("control.org", '*')
+        gridRequest.addParam("control.org", getOrg())
         gridRequest.addFilter("userdefinedfieldvalue", filter, "BEGINS", "OR")
         gridRequest.addFilter("description", filter, "BEGINS")
         return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "userdefinedfieldvalue", desc: "description"}));

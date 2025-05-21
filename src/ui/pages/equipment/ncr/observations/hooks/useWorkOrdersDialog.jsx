@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import WSWorkorders from "@/tools/WSWorkorders";
 import { SUCCESS_DIALOG_MESSAGE } from "../constants/workOrdersDialog";
+import { getOrg } from "../../../../../../hooks/tools";
 
 const useWorkOrdersDialog = (
     isObservationsLoading,
@@ -29,16 +30,16 @@ const useWorkOrdersDialog = (
           WORKORDERID: {
             JOBNUM: "",
             ORGANIZATIONID: {
-              ORGANIZATIONCODE: input.equipmentOrganization || "*"
+              ORGANIZATIONCODE: input.equipmentOrganization || getOrg()
             },
             ...(input.description && { DESCRIPTION: input.description })
           },
           ...(input.statusCode && { STATUS: { STATUSCODE: input.statusCode } }),
           ...(input.typeCode && { TYPE: { TYPECODE: input.typeCode } }),
-          ...(input.equipmentCode && { EQUIPMENTID: { EQUIPMENTCODE: input.equipmentCode, ORGANIZATIONID: { ORGANIZATIONCODE: input.equipmentOrganization || "*" } } }),
-          ...(input.departmentCode && { DEPARTMENTID: { DEPARTMENTCODE: input.departmentCode, ORGANIZATIONID: { ORGANIZATIONCODE: "*" } } }),
-          ...(input.costCode && { COSTCODEID: { COSTCODE: input.costCode, ORGANIZATIONID: { ORGANIZATIONCODE: "*" } } }),
-          ...(input.locationCode && { LOCATIONID: { LOCATIONCODE: input.locationCode, ORGANIZATIONID: { ORGANIZATIONCODE: input.locationOrg || "*" } } }),
+          ...(input.equipmentCode && { EQUIPMENTID: { EQUIPMENTCODE: input.equipmentCode, ORGANIZATIONID: { ORGANIZATIONCODE: input.equipmentOrganization || getOrg() } } }),
+          ...(input.departmentCode && { DEPARTMENTID: { DEPARTMENTCODE: input.departmentCode, ORGANIZATIONID: { ORGANIZATIONCODE: getOrg() } } }),
+          ...(input.costCode && { COSTCODEID: { COSTCODE: input.costCode, ORGANIZATIONID: { ORGANIZATIONCODE: getOrg() } } }),
+          ...(input.locationCode && { LOCATIONID: { LOCATIONCODE: input.locationCode, ORGANIZATIONID: { ORGANIZATIONCODE: input.locationOrg || getOrg() } } }),
           ...(input.assignedTo && { ASSIGNEDTO: { PERSONCODE: input.assignedTo } })
         };
       }

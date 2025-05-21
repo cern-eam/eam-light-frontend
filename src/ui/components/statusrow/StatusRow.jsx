@@ -14,12 +14,13 @@ import {
 import { isCernMode } from "../CERNMode";
 import GridRequest, { GridTypes } from "../../../tools/entities/GridRequest";
 import { getGridData } from "../../../tools/WSGrids";
+import { getOrg } from "../../../hooks/tools";
 
 async function doEquipmentGridRequest(equipmentCode, screenCode, tabName, organization) {
   if (equipmentCode && screenCode) {
     let gridRequest = new GridRequest(screenCode + "_" + tabName, GridTypes.LIST, screenCode)
     gridRequest.addParam('parameter.object', equipmentCode)
-    gridRequest.addParam('parameter.objorganization', organization ?? "*")
+    gridRequest.addParam('parameter.objorganization', organization ?? getOrg())
     const gridData = await getGridData (gridRequest)
     return gridData.body.data;
   }

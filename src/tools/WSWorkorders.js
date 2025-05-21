@@ -2,6 +2,7 @@ import { Description } from '@mui/icons-material';
 import GridRequest, { GridFilterJoiner, GridTypes } from './entities/GridRequest';
 import WS from './WS';
 import { getGridData, transformResponse } from './WSGrids';
+import { getOrg } from '../hooks/tools';
 
 /**
  * Handles all calls to REST Api
@@ -12,7 +13,7 @@ class WSWorkorders {
     // WORK ORDERS
     //
     initWorkOrder(config = {}) {
-        return WS._post(`/proxy/workorderdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": "*"}}, config);
+        return WS._post(`/proxy/workorderdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": getOrg()}}, config);
     }
 
     getWorkOrder(number, organization, config = {}) {
@@ -28,7 +29,7 @@ class WSWorkorders {
     }
 
     deleteWorkOrder(number, organization, config = {}) {
-        return WS._delete('/proxy/workorders/' + number+ '%23' + organization, config);
+        return WS._delete(`/proxy/workorders/${encodeURIComponent(number + '#' + organization)}`, config);
     }
 
     getStandardWorkOrder(code, config = {}) {

@@ -3,6 +3,7 @@ import { fromEAMNumber } from '../ui/pages/EntityTools';
 import GridRequest, { GridTypes } from './entities/GridRequest';
 import WS from './WS';
 import { getGridData, transformResponse } from './WSGrids';
+import { getOrg } from '../hooks/tools';
 
 /**
  * Handles all calls to REST Api related with the meter readings
@@ -17,7 +18,7 @@ class WSMeters {
     async getReadingsByEquipment(equipmentCode, config = {}) {
 		let gridRequest = new GridRequest("OSMETE", GridTypes.LIST, "OSOBJA");
 
-		gridRequest.addParam("parameter.organization", '*');
+		gridRequest.addParam("parameter.organization", getOrg());
 		gridRequest.addParam("parameter.object", equipmentCode);
 
         // TODO

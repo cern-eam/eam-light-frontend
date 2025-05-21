@@ -58,6 +58,7 @@ import CustomFields from "../../components/customfields/CustomFields";
 import { getPart } from "../../../tools/WSParts";
 import Documents from "../equipment/asset/Documents";
 import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
+import { getOrg } from "../../../hooks/tools";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -208,7 +209,7 @@ const Workorder = () => {
   }
 
   function onChangeDescription() {
-    updateWorkorderProperty('WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE', '*')
+    updateWorkorderProperty('WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE', getOrg())
   }
 
   const getRegions = () => {

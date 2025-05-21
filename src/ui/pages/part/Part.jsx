@@ -36,6 +36,7 @@ import { isCernMode } from "@/ui/components/CERNMode";
 import getPartsAssociated from "../PartsAssociated";
 import EamlightToolbar from "../../components/EamlightToolbar";
 import CustomFields from "../../components/customfields/CustomFields";
+import { getOrg } from "../../../hooks/tools";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -115,7 +116,7 @@ const Part = () => {
   }
 
   function onChangeDescription() {
-    !isMultiOrg && updatePartProperty('PARTID.ORGANIZATIONID.ORGANIZATIONCODE', '*')
+    !isMultiOrg && updatePartProperty('PARTID.ORGANIZATIONID.ORGANIZATIONCODE', getOrg())
   }
 
   const getRegions = () => {
