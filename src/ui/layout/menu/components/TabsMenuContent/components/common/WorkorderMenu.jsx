@@ -37,7 +37,7 @@ const WorkorderMenu = ({ wo }) => {
 
     return (
         <li>
-            <Link to={"/workorder/" + wo.number} style={linkStyle}>
+            <Link to={"/workorder/" + wo.number + "%23" + wo.org} style={linkStyle}>
                 <BellIcon style={iconStyle} />
                 <span
                     style={{ ...spanStyle, display: "inline", paddingLeft: 5 }}
