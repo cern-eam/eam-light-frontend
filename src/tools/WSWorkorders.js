@@ -254,6 +254,7 @@ class WSWorkorders {
 
     myWorkOrderMapper = {
         number: "workordernum",
+        org: 'organization',
         desc: "description",
         status: "workorderstatus_display",
         object: "equipment",
@@ -270,6 +271,7 @@ class WSWorkorders {
         desc: "acsactivity_display",
         object: "equipment",
         mrc: "department",
+        org: () => '*',
         schedulingEndDate: (wo) => wo.acssched ? new Date(wo.acssched).getTime() : null
     }
 
