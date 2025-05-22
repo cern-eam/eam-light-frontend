@@ -1,6 +1,4 @@
 import * as React from "react";
-import WSEquipment from "../../../../tools/WSEquipment";
-import WS from "../../../../tools/WS";
 import StatusRow from "../../../components/statusrow/StatusRow";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
@@ -21,13 +19,7 @@ const AssetGeneral = (props) => {
   } = props;
   return (
     <React.Fragment>
-      {isMultiOrg && newEntity && (
-        <EAMSelect
-          {...register("organization", "organization")}
-          autocompleteHandler={WS.getOrganizations}
-          autocompleteHandlerParams={[screenCode]}
-        />
-      )}
+      {isMultiOrg && newEntity && ( <EAMSelect {...register("organization")} /> )}
 
       {newEntity && <EAMTextField {...register("equipmentno")} />}
 

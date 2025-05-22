@@ -1,9 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
-import WSEquipment from "../../../../tools/WSEquipment";
-import WS from "../../../../tools/WS";
 import StatusRow from "../../../components/statusrow/StatusRow";
 import { isDepartmentReadOnly, isMultiOrg } from "@/ui/pages/EntityTools";
 import { autocompleteDepartment, readStatuses } from "../../../../tools/WSGrids";
@@ -21,13 +19,7 @@ const PositionGeneral = (props) => {
 
   return (
     <React.Fragment>
-      {isMultiOrg && newEntity && (
-        <EAMSelect
-          {...register("organization", "organization")}
-          autocompleteHandler={WS.getOrganizations}
-          autocompleteHandlerParams={[screenCode]}
-        />
-      )}
+      {isMultiOrg && newEntity && (<EAMSelect {...register("organization")} />)}
 
       {newEntity && <EAMTextField {...register("equipmentno")} />}
 

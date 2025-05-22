@@ -50,13 +50,14 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
     } 
 
     const { lovName, inputVars, inputFields, returnFields } = JSON.parse(elementInfo.onLookup)
+    const { gridType, searchKeys, resultMap, userFunctionName} = autocompleteHandlerData;
 
     const autocompleteHandler = (options, config) => {
         try {
             let {operator = "BEGINS", filter} = options;
             filter = (typeof filter === "string") ? filter : ""
 
-            const gridRequest = new GridRequest(lovName, autocompleteHandlerData.gridType ?? GridTypes.LOV)
+            const gridRequest = new GridRequest(lovName, gridType ?? GridTypes.LOV, userFunctionName)
             
             // Parameters 
             Object.entries(inputFields ?? {}).forEach(([key, value]) => { 
@@ -71,7 +72,7 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
             });
             gridRequest.addParam("param.pagemode", "display")
 
-            const searchFields = autocompleteHandlerData.searchKeys ?? [returnFields[elementInfo.elementId]] ?? [];
+            const searchFields = searchKeys ?? [returnFields[elementInfo.elementId]] ?? [];
 
             // filter implies autocomplete so limit the row count to 10
             if (filter) {
@@ -79,7 +80,7 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
                 gridRequest.setRowCount(10)
             } 
 
-            return getGridData(gridRequest, config).then(response => transformResponse(response, autocompleteHandlerData.resultMap ?? generateResultMap(returnFields, elementInfo)));
+            return getGridData(gridRequest, config).then(response => transformResponse(response, resultMap ?? generateResultMap(returnFields, elementInfo)));
         } catch (error) {
             console.error('autocompleteHandler error', error)
         }
