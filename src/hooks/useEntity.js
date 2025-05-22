@@ -144,10 +144,10 @@ const useEntity = (params) => {
   // CRUD
   //
   const createEntity = (entityToCreate = entity) => {
-    if (!validateFields()) {
-      return;
-      
-    }
+    // if (!validateFields()) {
+    //   return;
+    // }
+
     setLoading(true);
 
     WS.create(entityToCreate)
@@ -156,16 +156,7 @@ const useEntity = (params) => {
         showNotification(response.body.Result.InfoAlert.Message);
         commentsComponent.current?.createCommentForNewEntity(entityCode);
         // Read after the creation (and append the organization in multi-org mode)
-        history.push(
-          process.env.PUBLIC_URL +
-            entityURL +
-            encodeURIComponent(
-              entityCode +
-                (isMultiOrg && entityToCreate.organization
-                  ? "#" + entityToCreate.organization
-                  : "")
-            )
-        );
+        history.push(process.env.PUBLIC_URL +  entityURL + encodeURIComponent(entityCode + "#" +  get(entityToCreate, entityOrgProperty)));
       })
       .catch((error) => {
         //TODO generateErrorMessagesFromException(error?.response?.body?.errors);
@@ -216,9 +207,9 @@ const useEntity = (params) => {
   };
 
   const updateEntity = () => {
-    if (!validateFields()) {
-      return;
-    } //TODO
+    // if (!validateFields()) {
+    //   return;
+    // } 
 
     setLoading(true);
 
@@ -419,10 +410,11 @@ const useEntity = (params) => {
     
     // Link
     if (extraData?.link) {
-      data.link = () => (data.value ? extraData.link + "/" + data.value : null)
+      const orgLink = get(entity, orgKey) ? "%23" + get(entity, orgKey) : "";
+      data.link = () => (data.value ? extraData.link + "/" + data.value + orgLink : null)
     }
 
-    Object.assign(data, createAutocompleteHandler(layoutData, screenLayout.fields, entity, extraData?.autocompleteHandlerData))
+    Object.assign(data, createAutocompleteHandler(layoutData, screenLayout.fields, entity, {...extraData?.autocompleteHandlerData, userFunctionName: screenCode}))
 
     // Errors
     data.errorText = errorMessages[layoutKey];

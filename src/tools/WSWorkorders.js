@@ -274,7 +274,7 @@ class WSWorkorders {
         mrc: "department",
         org: () => '*',
         labourScheduledDate: (wo) => wo.acssched ? new Date(wo.acssched).getTime() : null,
-        schedulingEndDate: (wo) => wo.schedenddate ? new Date(wo.schedenddate).getTime() : null
+        schedulingEndDate: (wo) => wo.actenddate ? new Date(wo.actenddate).getTime() : null
     }
 
     getAssignedWorkOrders(employee) {

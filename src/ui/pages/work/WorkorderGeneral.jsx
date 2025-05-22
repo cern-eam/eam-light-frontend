@@ -1,6 +1,5 @@
 import * as React from "react";
 import EAMCheckbox from "eam-components/dist/ui/components/inputs-ng/EAMCheckbox";
-import WS from "../../../tools/WS";
 import WSWorkorders from "../../../tools/WSWorkorders";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
@@ -19,11 +18,9 @@ function WorkorderGeneral(props) {
     applicationData,
     statuses,
     userGroup,
-    equipment,
     userData,
     screenPermissions,
     newEntity,
-    screenCode,
   } = props;
   const rpawClassesList =
     (applicationData &&
@@ -45,13 +42,7 @@ function WorkorderGeneral(props) {
 
   return (
     <React.Fragment>
-      {isMultiOrg && newEntity && (
-        <EAMSelect
-          {...register("organization")}
-          autocompleteHandler={WS.getOrganizations}
-          autocompleteHandlerParams={[screenCode]}
-        />
-      )}
+      {isMultiOrg && newEntity && (<EAMSelect {...register("organization")} />)}
 
       <EAMTextField {...register("description")} />
 

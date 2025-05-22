@@ -6,14 +6,17 @@ export default class GridRequest {
   constructor(gridName, gridType = GridTypes.LIST, userFunctionName) {
     this.GRID = {
       GRID_NAME: gridName,
-      USER_FUNCTION_NAME: userFunctionName,
       NUMBER_OF_ROWS_FIRST_RETURNED: 1000,
       CURSOR_POSITION: 0
-    };
+    }
+
+    if (userFunctionName) {
+      this.GRID.USER_FUNCTION_NAME = userFunctionName
+    }
 
     this.GRID_TYPE = {
       TYPE: gridType
-    };
+    }
 
     this.REQUEST_TYPE = "LIST.HEAD_DATA.STORED";
     this.LOCALIZE_RESULT = "false"

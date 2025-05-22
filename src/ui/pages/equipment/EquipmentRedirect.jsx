@@ -4,12 +4,13 @@ import BlockUi from "react-block-ui";
 import { getEquipmentType } from "../../../tools/WSEquipment";
 import InfoPage from "../../components/infopage/InfoPage";
 import { useParams } from "react-router-dom";
+import { getCodeOrg } from "../../../hooks/tools";
 
 /**
  * This component will handle the redirection to the proper equipment page, according to the type of equipment
  */
 function EquipmentRedirect(props) {
-    const { code } = useParams();
+    const { code: codeFromRoute } = useParams();
 
     let blockUiStyle = {
         height: "100%",
@@ -28,16 +29,16 @@ function EquipmentRedirect(props) {
     let [isValidCode, setIsValidCode] = useState(false);
 
     useEffect(() => {
-        loadEquipmentData(code);
-    }, [code]);
+        loadEquipmentData(codeFromRoute);
+    }, [codeFromRoute]);
 
-    let loadEquipmentData = (code) => {
-        if (code) {
-            code = decodeURIComponent(code);
+    let loadEquipmentData = (codeFromRoute) => {
+        if (codeFromRoute) {
+            const {code, org} = getCodeOrg(codeFromRoute)
 
             setIsLoading(true);
             //Fetch the equipment
-            getEquipmentType(code)
+            getEquipmentType(code, org)
                 .then((response) => {
                     //Valid code
                     setIsLoading(false);
@@ -45,19 +46,19 @@ function EquipmentRedirect(props) {
                     //Redirect according to the typeCode
                     switch (response) {
                         case "A":
-                            props.history.replace(`/asset/${code}`);
+                            props.history.replace(`/asset/${codeFromRoute}`);
                             break;
                         case "N":
-                            props.history.replace(`/ncr/${code}`);
+                            props.history.replace(`/ncr/${codeFromRoute}`);
                             break;
                         case "P":
-                            props.history.replace(`/position/${code}`);
+                            props.history.replace(`/position/${codeFromRoute}`);
                             break;
                         case "S":
-                            props.history.replace(`/system/${code}`);
+                            props.history.replace(`/system/${codeFromRoute}`);
                             break;
                         case "L":
-                            props.history.replace(`/location/${code}`);
+                            props.history.replace(`/location/${codeFromRoute}`);
                             break;
                         default: /*Not supported*/
                             setIsValidCode(false);

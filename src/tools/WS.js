@@ -74,10 +74,6 @@ class WS {
     });
   }
 
-  getOrganizations = (userFunctionName, config = {}) => {
-    return this._get(`/users/organizations/${userFunctionName}`, config);
-  };
-
   //
   //
   //
