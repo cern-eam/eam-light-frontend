@@ -1,6 +1,6 @@
 const DocPreview = ({ file }) => (
   <div className="doc-preview">
-    {file.type === "jpg" ? (
+    {file.type !== "pdf" ? (
       <img src={file.src} alt={file.filename} className="doc-image" />
     ) : (
       <iframe src={file.src} title={file.filename} className="doc-pdf" />

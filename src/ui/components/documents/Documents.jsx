@@ -19,7 +19,12 @@ const Documents = ({ code, entity }) => {
 
         const filteredDocs = documentList.filter((doc) => {
           const name = doc.docfilepath?.toLowerCase();
-          return name && (name.endsWith(".jpg") || name.endsWith(".pdf"));
+          return name && (
+            name.endsWith(".jpg") ||
+            name.endsWith(".jpeg") ||
+            name.endsWith(".png") ||
+            name.endsWith(".pdf")
+          );
         });
 
         const withContent = await Promise.all(
@@ -30,10 +35,15 @@ const Documents = ({ code, entity }) => {
 
               if (!base64) return null;
 
-              const type = doc.docfilepath.toLowerCase().endsWith(".pdf") ? "pdf" : "jpg";
+              const lowerPath = doc.docfilepath.toLowerCase();
+              const type = lowerPath.endsWith(".pdf")
+                ? "pdf"
+                : lowerPath.endsWith(".png")
+                ? "png"
+                : "jpeg";
 
               return {
-                src: `data:application/${type === "pdf" ? "pdf" : "jpeg"};base64,${base64}`,
+                src: `data:${type === "pdf" ? "application/pdf" : `image/${type}`};base64,${base64}`,
                 filename: doc.docfilepath,
                 code: doc.doccode,
                 desc: doc.docdescription,
@@ -54,7 +64,7 @@ const Documents = ({ code, entity }) => {
   }, [code]);
 
   if (loading) return <div>Loading...</div>;
-  if (!files.length) return <div>No JPG or PDF documents found.</div>;
+  if (!files.length) return <div>No documents found.</div>;
 
   return (
     <div className="doc-layout">
