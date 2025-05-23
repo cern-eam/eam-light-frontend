@@ -26,9 +26,7 @@ const PartGeneral = (props) => {
 
       <EAMSelect {...register("trackingtype")} autocompleteHandler={getPartTrackingMethods}/>
 
-      <EAMAutocomplete
-        {...register("commoditycode")}
-      />
+      <EAMAutocomplete {...register("commoditycode")} />
 
       <EAMCheckbox {...register("trackbyasset")} />
 
