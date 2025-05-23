@@ -229,7 +229,7 @@ const Part = () => {
           label: "Documents",
           isVisibleWhenNewEntity: false,
           maximizable: true,
-          render: () => <Documents objectType="A" code={id?.code + '#' + id.org} entity="PART"/>,
+          render: () => <Documents objectType="A" code={id?.code + '#' + id.org}entity="PART"/>,
           RegionPanelProps: {
             detailsStyle: { padding: 0 },
           },
