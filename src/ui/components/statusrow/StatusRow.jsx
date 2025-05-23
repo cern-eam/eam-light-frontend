@@ -136,7 +136,8 @@ const StatusRow = (props) => {
     const [hasHazards, setHasHazards] = useState(false);
     useEffect(() => {
       const safetyData = doEquipmentGridRequest(code, screenCode, "ESF", org);
-      safetyData.then((data) => setHasHazards(data.records !== "0"));
+      safetyData.then((data) => setHasHazards(data.length > 0));
+      
     }, [entity.code]);
 
     return STATUSES.map((status) => {
