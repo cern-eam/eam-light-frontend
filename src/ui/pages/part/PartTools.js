@@ -1,13 +1,10 @@
 // MAPPING BETWEEN ENTITY KEYS AND LAYOUT ID
 export const layoutPropertiesMap =  {
-    partcode: "code",
-    category: "categoryCode",
     class: {
         value: "CLASSID.CLASSCODE",
         desc: "CLASSID.DESCRIPTION",
         org: "CLASSID.ORGANIZATIONID.ORGANIZATIONCODE"
     },
-    commoditycode: "commodityCode",
 
     uom: {
         autocompleteHandlerData: { 
@@ -16,7 +13,7 @@ export const layoutPropertiesMap =  {
                 desc: "description"
             }
         }
-    },
+    }
 }
 
 class PartTools {

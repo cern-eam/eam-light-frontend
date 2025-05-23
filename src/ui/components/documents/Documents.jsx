@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { getEquipmentDocuments, getWorkOrderDocuments } from "../../../tools/WSEquipment";
-import { getDocumentAttachment } from "../../../tools/WSDocuments";
+import { getDocumentAttachment, getEquipmentDocuments, getWorkOrderDocuments } from "../../../tools/WSDocuments";
+import DocFileList from "./DocFileList";
+import DocPreview from "./DocPreview";
 import "./Documents.css";
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
-const Documents = ({ code, organization, entity }) => {
+const Documents = ({ code, organization, entity, mrc }) => {
   const [files, setFiles] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -20,14 +20,12 @@ const Documents = ({ code, organization, entity }) => {
         : null;
 
     if (!fetchDocuments) return;
-    
+
     setLoading(true);
-    fetchDocuments(code, organization)
+    fetchDocuments(code, organization, mrc)
       .then(async (response) => {
         const documentList = response.body.data || [];
 
-
-        
         const filteredDocs = documentList.filter((doc) => {
           const name = doc.doc_filename?.toLowerCase();
           return name && (name.endsWith(".jpg") || name.endsWith(".pdf"));
@@ -47,6 +45,7 @@ const Documents = ({ code, organization, entity }) => {
                 src: `data:application/${type === "pdf" ? "pdf" : "jpeg"};base64,${base64}`,
                 filename: doc.doc_filename,
                 code: doc.doc_code,
+                desc: doc.doc_desc,
                 type,
               };
             } catch (err) {
@@ -63,46 +62,13 @@ const Documents = ({ code, organization, entity }) => {
       .finally(() => setLoading(false));
   }, [code, organization]);
 
-  const current = files[currentIndex];
-
   if (loading) return <div>Loading...</div>;
   if (!files.length) return <div>No JPG or PDF documents found.</div>;
 
   return (
     <div className="doc-layout">
-      <div className="doc-sidebar">
-      <ul className="doc-filelist">
-        {files.map((file, index) => (
-          <li
-            key={file.code}
-            className={`doc-thumb ${index === currentIndex ? "active" : ""}`}
-            onClick={() => setCurrentIndex(index)}
-          >
-              {file.type === "jpg" ? (
-                <img src={file.src} alt={file.filename} className="doc-thumb-img" />
-              ) : (
-                <div className="doc-thumb-icon">
-                  <PictureAsPdfIcon style={{ fontSize: 48, color: '#rgb(140 138 138)' }} />
-                </div>
-              )}
-            <div className="doc-thumb-label">{file.filename}</div>
-          </li>
-        ))}
-      </ul>
-
-      </div>
-
-      <div className="doc-preview">
-        {current.type === "jpg" ? (
-          <img src={current.src} alt={current.filename} className="doc-image" />
-        ) : (
-          <iframe
-            src={current.src}
-            title={current.filename}
-            className="doc-pdf"
-          />
-        )}
-      </div>
+      <DocFileList files={files} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
+      <DocPreview file={files[currentIndex]} />
     </div>
   );
 };
