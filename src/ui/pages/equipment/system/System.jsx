@@ -44,6 +44,8 @@ import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import { createSystem, deleteSystem, getSystem, getSystemDefault, updateSystem } from "../../../../tools/WSSystems.js";
 import CustomFields from "../../../components/customfields/CustomFields.jsx";
 import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
+import Documents from "../../../components/documents/Documents.jsx";
+import { Article } from "@mui/icons-material";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -263,6 +265,20 @@ const System = () => {
           tabs,
           TAB_CODES.EDMS_DOCUMENTS_SYSTEMS
         ),
+      },
+      {
+        id: "DOCUMENTS",
+        label: "Documents",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => <Documents objectType="A"code={id?.code + '#' + id.org}  entity="OBJ"/>,
+        RegionPanelProps: {
+          detailsStyle: { padding: 0 },
+        },
+        column: 2,
+        order: 7,
+        summaryIcon: Article,
+        ignore: isCernMode
       },
       {
         id: "COMMENTS",

@@ -276,7 +276,7 @@ const Asset = () => {
         label: "Documents",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <Documents objectType="A" code={id?.code} organization={id?.org} entity="OBJ"/>,
+        render: () => <Documents objectType="A"code={id?.code + '#' + id.org}  entity="OBJ"/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },

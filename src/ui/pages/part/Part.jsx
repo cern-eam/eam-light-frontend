@@ -37,6 +37,8 @@ import getPartsAssociated from "../PartsAssociated";
 import EamlightToolbar from "../../components/EamlightToolbar";
 import CustomFields from "../../components/customfields/CustomFields";
 import { getOrg } from "../../../hooks/tools";
+import { Article } from "@mui/icons-material";
+import Documents from "../../components/documents/Documents";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -222,6 +224,20 @@ const Part = () => {
           TAB_CODES.EDMS_DOCUMENTS_PARTS
         ),
       },
+        {
+          id: "DOCUMENTS",
+          label: "Documents",
+          isVisibleWhenNewEntity: false,
+          maximizable: true,
+          render: () => <Documents objectType="A" code={id?.code + '#' + id.org} entity="PART"/>,
+          RegionPanelProps: {
+            detailsStyle: { padding: 0 },
+          },
+          column: 2,
+          order: 7,
+          summaryIcon: Article,
+          ignore: isCernMode
+        },
       {
         id: "COMMENTS",
         label: "Comments",
