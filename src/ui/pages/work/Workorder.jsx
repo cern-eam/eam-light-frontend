@@ -363,7 +363,7 @@ const Workorder = () => {
         label: "Documents",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <Documents objectType="A" code={id?.code} organization={id?.org} entity="EVNT"/>,
+        render: () => <Documents objectType="A" code={id?.code} organization={id?.org} entity="EVNT" mrc={workorder?.DEPARTMENTID?.DEPARTMENTCODE}/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
