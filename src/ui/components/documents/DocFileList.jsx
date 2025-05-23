@@ -6,12 +6,12 @@ const DocFileList = ({ files, currentIndex, setCurrentIndex }) => (
   <div className="doc-sidebar">
     <Button
       variant="contained"
-      startIcon={<AddIcon  />}
+      startIcon={<AddIcon />}
       fullWidth
       onClick={() => alert("Add file action triggered")}
       style={{ marginBottom: '12px', color: "white" }}
     >
-       NEW DOCUMENT
+      NEW DOCUMENT
     </Button>
 
     <ul className="doc-filelist">
@@ -21,12 +21,12 @@ const DocFileList = ({ files, currentIndex, setCurrentIndex }) => (
           className={`doc-thumb ${index === currentIndex ? "active" : ""}`}
           onClick={() => setCurrentIndex(index)}
         >
-          {file.type === "jpg" ? (
-            <img src={file.src} alt={file.filename} className="doc-thumb-img" />
-          ) : (
+          {file.type === "pdf" ? (
             <div className="doc-thumb-icon">
               <PictureAsPdfIcon style={{ fontSize: 48, color: '#8c8a8a' }} />
             </div>
+          ) : (
+            <img src={file.src} alt={file.filename} className="doc-thumb-img" />
           )}
           <div className="doc-thumb-label">{file.code}</div>
         </li>
