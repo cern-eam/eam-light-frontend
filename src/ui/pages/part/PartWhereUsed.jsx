@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import EISTable from 'eam-components/dist/ui/components/table';
-import GridRequest from '../../../tools/entities/GridRequest';
+import GridRequest, { GridTypes } from '../../../tools/entities/GridRequest';
 import { getGridData, transformResponse } from '../../../tools/WSGrids';
 
 const keyMap = {
@@ -12,8 +12,7 @@ const keyMap = {
   }
 
  function getPartsAssociated(partCode, partOrganization) {
-    let gridRequest = new GridRequest("SSPART_EPA")
-    gridRequest.userFunctionName = "SSPART"
+    let gridRequest = new GridRequest("SSPART_EPA", GridTypes.LIST, "SSPART")
     gridRequest.addParam("partcode", partCode)
     gridRequest.addParam("partorg", partOrganization)
     return getGridData(gridRequest).then(response => transformResponse(response, keyMap))
@@ -27,8 +26,8 @@ function PartWhereUsed(props) {
     let [data, setData] = useState([]);
 
     useEffect(() => {
-        fetchData(props.part.PARTID?.PARTCODE, props.part.PARTID?.ORGANIZATIONID?.ORGANIZATIONCODE);
-    }, [props.part.code])
+        fetchData(props.id.code, props.id.org);
+    }, [props.id])
 
     let fetchData = (partCode, partOrganization) => {
         if (partCode) {

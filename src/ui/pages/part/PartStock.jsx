@@ -57,8 +57,8 @@ function PartStock(props) {
     };
 
     useEffect(() => {
-       fetchData(props.part.code, props.part.organization);
-    },[props.part.code])
+       fetchData(props.id.code, props.id.org);
+    },[props.id])
 
     //Do not render if there is no data
     if (data.length === 0)
