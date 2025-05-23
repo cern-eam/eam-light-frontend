@@ -400,6 +400,10 @@ export const getCustomTabRegions = (
     };
   });
 
+  export const fromEAMCheckbox = (value) => {
+    return value === '+' || value === '1' || value === true || value === 'true';
+  };
+
 
   export const toEAMNumber = (input) => {
     const num = Number(input);

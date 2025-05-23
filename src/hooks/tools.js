@@ -1,5 +1,5 @@
 import { get } from "lodash";
-import { fromEAMDate, fromEAMNumber, toEAMDate, toEAMNumber } from "../ui/pages/EntityTools";
+import { fromEAMDate, fromEAMNumber, fromEAMCheckbox, toEAMDate, toEAMNumber } from "../ui/pages/EntityTools";
 import GridRequest, { GridTypes } from "../tools/entities/GridRequest";
 import { getGridData, transformResponse } from "../tools/WSGrids";
 import set from "set-value";
@@ -25,6 +25,8 @@ export const fromEAMValue = (value, type) => {
             return fromEAMDate(value)
         case "number":
             return fromEAMNumber(value)
+        case "checkbox":
+            return fromEAMCheckbox(value)
         default:
             return value;
     }

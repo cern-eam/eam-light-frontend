@@ -137,7 +137,6 @@ const StatusRow = (props) => {
     useEffect(() => {
       const safetyData = doEquipmentGridRequest(code, screenCode, "ESF", org);
       safetyData.then((data) => setHasHazards(data.length > 0));
-      
     }, [entity.code]);
 
     return STATUSES.map((status) => {
