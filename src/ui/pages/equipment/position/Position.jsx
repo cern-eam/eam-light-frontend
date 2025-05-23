@@ -47,6 +47,8 @@ import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import { createPosition, deletePosition, getPosition, getPositionsDefault, updatePosition } from "../../../../tools/WSPositions.js";
 import CustomFields from "../../../components/customfields/CustomFields.jsx";
+import Documents from "../../../components/documents/Documents.jsx";
+import { Article } from "@mui/icons-material";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -258,6 +260,20 @@ const Position = () => {
           tabs,
           TAB_CODES.EDMS_DOCUMENTS_POSITIONS
         ),
+      },
+      {
+        id: "DOCUMENTS",
+        label: "Documents",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => <Documents objectType="A"code={id?.code + '#' + id.org}  entity="OBJ"/>,
+        RegionPanelProps: {
+          detailsStyle: { padding: 0 },
+        },
+        column: 2,
+        order: 7,
+        summaryIcon: Article,
+        ignore: isCernMode
       },
       {
         id: "NCRS",
