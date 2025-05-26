@@ -20,23 +20,53 @@ export const toBase64 = (file) =>
     reader.onerror = reject;
   });
 
-export const pickSingleFile = async () => {
-  const [fileHandle] = await window.showOpenFilePicker({
-    types: [
-      {
-        description: "Images and PDFs",
-        accept: {
-          "image/jpeg": [".jpg", ".jpeg"],
-          "image/png": [".png"],
-          "application/pdf": [".pdf"],
-        },
-      },
-    ],
-    multiple: false,
+export const pickSingleFile = () =>
+  new Promise((resolve, reject) => {
+    if ('showOpenFilePicker' in window) {
+      // Chromium-based browsers
+      window
+        .showOpenFilePicker({
+          types: [
+            {
+              description: "Images and PDFs",
+              accept: {
+                "image/jpeg": [".jpg", ".jpeg"],
+                "image/png": [".png"],
+                "application/pdf": [".pdf"],
+              },
+            },
+          ],
+          multiple: false,
+        })
+        .then(async ([handle]) => {
+          const file = await handle.getFile();
+          resolve(file);
+        })
+        .catch(reject);
+    } else {
+      // Fallback for Firefox/Safari
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".jpg,.jpeg,.png,.pdf";
+      input.style.display = "none";
+
+      input.onchange = () => {
+        if (input.files && input.files.length > 0) {
+          resolve(input.files[0]);
+        } else {
+          reject(new DOMException("No file selected", "AbortError"));
+        }
+      };
+
+      input.onerror = reject;
+
+      document.body.appendChild(input);
+      input.click();
+      // Clean up
+      setTimeout(() => document.body.removeChild(input), 0);
+    }
   });
 
-  return fileHandle.getFile();
-};
 
 export const uploadAndAttachDocument = async (file, entity, code) => {
   const base64 = await toBase64(file);
