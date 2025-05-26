@@ -3,11 +3,35 @@ import { getDocumentAttachment, getDocuments } from "../../../tools/WSDocuments"
 import DocFileList from "./DocFileList";
 import DocPreview from "./DocPreview";
 import "./Documents.css";
+import { getFileType } from "./tools";
+import useSnackbarStore from "../../../state/useSnackbarStore";
 
 const Documents = ({ code, entity }) => {
   const [files, setFiles] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(false);
+  const { showNotification, showError } = useSnackbarStore();
+
+  const onUploadSuccess = (newDoc) => {
+    const type = getFileType(newDoc.docfilepath);
+
+    const fileEntry = {
+      src: `data:${type === "pdf" ? "application/pdf" : `image/${type}`};base64,${newDoc.base64}`,
+      filename: newDoc.docfilepath,
+      code: newDoc.doccode,
+      desc: newDoc.docdescription,
+      type,
+    };
+
+    setFiles((prev) => [fileEntry, ...prev]);
+    setCurrentIndex(0);
+  };
+
+  const onDeleteSuccess = (deletedCode) => {
+    setFiles(prev => prev.filter(file => file.code !== deletedCode));
+    setCurrentIndex(0);
+    showNotification("Document successfully deleted")
+  };
 
   useEffect(() => {
     if (!code) return;
@@ -35,13 +59,7 @@ const Documents = ({ code, entity }) => {
 
               if (!base64) return null;
 
-              const lowerPath = doc.docfilepath.toLowerCase();
-              const type = lowerPath.endsWith(".pdf")
-                ? "pdf"
-                : lowerPath.endsWith(".png")
-                ? "png"
-                : "jpeg";
-
+              const type = getFileType(doc.docfilepath)
               return {
                 src: `data:${type === "pdf" ? "application/pdf" : `image/${type}`};base64,${base64}`,
                 filename: doc.docfilepath,
@@ -63,15 +81,32 @@ const Documents = ({ code, entity }) => {
       .finally(() => setLoading(false));
   }, [code]);
 
-  if (loading) return <div>Loading...</div>;
-  if (!files.length) return <div>No documents found.</div>;
-
   return (
     <div className="doc-layout">
-      <DocFileList files={files} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
-      <DocPreview file={files[currentIndex]} />
+      <DocFileList
+        files={files}
+        currentIndex={currentIndex}
+        setCurrentIndex={setCurrentIndex}
+        code={code}
+        entity={entity}
+        onUploadSuccess={onUploadSuccess}
+        onDeleteSuccess={onDeleteSuccess}
+        loading={loading}
+      />
+
+    <div className="doc-preview">
+      {files.length && !loading ? (
+        <DocPreview file={files[currentIndex]} />
+      ) : (
+        <div style={{ fontStyle: 'italic', color: '#888' }}>
+          {loading ? 'Loading Documents ...' : 'No documents found.'}
+        </div>
+      )}
+    </div>
     </div>
   );
+
+
 };
 
 export default Documents;
