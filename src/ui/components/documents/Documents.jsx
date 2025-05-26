@@ -9,8 +9,8 @@ import useSnackbarStore from "../../../state/useSnackbarStore";
 const Documents = ({ code, entity }) => {
   const [files, setFiles] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const { showNotification, showError } = useSnackbarStore();
+  const [loading, setLoading] = useState(true);
+  const { showNotification, showError, handleError } = useSnackbarStore();
 
   const onUploadSuccess = (newDoc) => {
     const type = getFileType(newDoc.docfilepath);
@@ -68,7 +68,7 @@ const Documents = ({ code, entity }) => {
                 type,
               };
             } catch (err) {
-              console.error("Failed to load attachment for", doc.doccode, err);
+              handleError(err)
               return null;
             }
           })

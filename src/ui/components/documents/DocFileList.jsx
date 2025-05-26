@@ -4,13 +4,14 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import UploadButton from './NewDocumentButton';
-import { detachDocument } from '../../../tools/WSDocuments'; // Adjust path as needed
+import { detachDocument } from '../../../tools/WSDocuments'; 
 import NewDocumentButton from './NewDocumentButton';
+import useSnackbarStore from '../../../state/useSnackbarStore';
 
 const DocFileList = ({ files, currentIndex, setCurrentIndex, code, entity, loading, onUploadSuccess, onDeleteSuccess }) => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [menuFileCode, setMenuFileCode] = useState(null);
+  const { showNotification, showError, handleError } = useSnackbarStore();
 
   const handleMenuOpen = (event, fileCode) => {
     setMenuAnchor(event.currentTarget);
@@ -27,7 +28,7 @@ const DocFileList = ({ files, currentIndex, setCurrentIndex, code, entity, loadi
       await detachDocument(code, menuFileCode, entity);
       onDeleteSuccess(menuFileCode); // Reload the list
     } catch (error) {
-      console.error(`Failed to delete ${menuFileCode}`, error);
+      handleError(error)
     } finally {
       handleMenuClose();
     }
