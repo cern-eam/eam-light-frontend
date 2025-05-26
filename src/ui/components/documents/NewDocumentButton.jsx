@@ -6,7 +6,7 @@ import useSnackbarStore from "../../../state/useSnackbarStore";
 const MAX_FILE_SIZE_MB = 5;
 
 const NewDocumentButton = ({ code, entity, onUploadSuccess, disabled }) => {
-  const { showNotification, showError } = useSnackbarStore();
+  const { showNotification, showError, handleError } = useSnackbarStore();
 
   const handleButtonClick = async () => {
     try {
@@ -19,11 +19,9 @@ const NewDocumentButton = ({ code, entity, onUploadSuccess, disabled }) => {
 
       const uploaded = await uploadAndAttachDocument(file, entity, code);
       onUploadSuccess(uploaded);
-    } catch (err) {
-      if (err.name !== "AbortError") {
-        console.error("Upload failed", err);
-        showError("Upload failed: " + err.message);
-      }
+    } catch (error) {
+      console.log('er', error)
+      handleError(error)
     }
   };
 
