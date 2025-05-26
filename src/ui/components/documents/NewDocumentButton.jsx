@@ -20,7 +20,6 @@ const NewDocumentButton = ({ code, entity, onUploadSuccess, disabled }) => {
       const uploaded = await uploadAndAttachDocument(file, entity, code);
       onUploadSuccess(uploaded);
     } catch (error) {
-      console.log('er', error)
       handleError(error)
     }
   };
