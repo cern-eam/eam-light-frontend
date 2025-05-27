@@ -279,7 +279,6 @@ class WSWorkorders {
 
     getAssignedWorkOrders(employee) {
         let gridRequest = new GridRequest("WSJOBS", GridTypes.LIST, "WSJOBS")
-        gridRequest.rowCount = 100
         gridRequest.addFilter("assignedto", employee, "=", "AND")
         gridRequest.addFilter("evt_rstatus", "R", "=", "AND")
         gridRequest.sortBy("schedenddate")
@@ -288,7 +287,6 @@ class WSWorkorders {
 
     getMyTeamWorkOrders(userDepartments) {
         let gridRequest = new GridRequest("WSJOBS", GridTypes.LIST, "WSJOBS")
-        gridRequest.rowCount = 100
         gridRequest.addFilter("department", userDepartments, "IN", "AND")
         gridRequest.addFilter("evt_rstatus", "R", "=", "AND")
         return getGridData(gridRequest).then(response => transformResponse(response, this.myWorkOrderMapper));
