@@ -59,6 +59,7 @@ const DocFileList = ({ files, currentIndex, setCurrentIndex, code, entity, loadi
               <IconButton
                 style={{marginRight: -8}}
                 size="small"
+                disabled={!(entity === "PART" || entity === "EVNT")}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleMenuOpen(e, file.code);
