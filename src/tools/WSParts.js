@@ -29,7 +29,7 @@ export const getPartTrackingMethods = (config = {}) => {
 }
 
 export const getAssetsList = (partCode, config = {}) => {
-    let gridRequest = new GridRequest("OSOBJA", GridTypes.LIST)
+    let gridRequest = new GridRequest("OSOBJA", GridTypes.LIST, "OSOBJA")
     gridRequest.addFilter("part", partCode, "=");
     return getGridData(gridRequest, config)
 }
