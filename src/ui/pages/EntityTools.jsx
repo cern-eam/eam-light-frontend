@@ -351,14 +351,17 @@ export const getCustomTabRegions = (
   equipment,
   userData,
   layoutPropertiesMap = equipmentLayoutPropertiesMap
-) => Object.entries(customTabs).map(([tabId, tab], index) => {
+) => {
+  return [] // TODO the custom tab regions should be not be visible by default 
+
+  return Object.entries(customTabs).map(([tabId, tab], index) => {
     const url = getCustomTabUrl(tab, tabId, screenCode, equipment, userData, layoutPropertiesMap);
     return {
       id: tabId,
       label: tab.tabDescription,
       isVisibleWhenNewEntity: true,
       maximizable: true,
-      render: ({isMaximized}) => (
+      render: ({ isMaximized }) => (
         <ResizableIFrame
           style={{
             width: "100%",
@@ -382,7 +385,7 @@ export const getCustomTabRegions = (
       initialVisibility: tab.alwaysDisplayed,
       RegionPanelProps: {
         detailsStyle: { padding: 0 },
-        customHeadingBar: 
+        customHeadingBar: (
           <div
             style={{
               display: "flex",
@@ -396,9 +399,13 @@ export const getCustomTabRegions = (
               <Launch fontSize="small" />
             </Link>
           </div>
+        )
       }
     };
   });
+
+};
+
 
   export const fromEAMCheckbox = (value) => {
     return value === '+' || value === '1' || value === true || value === 'true';
