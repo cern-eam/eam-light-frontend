@@ -36,7 +36,7 @@ class WSEquipment {
     }
 
     getEquipmentWorkOrders(equipmentCode) {
-        let gridRequest = new GridRequest("WSJOBS", GridTypes.LIST)
+        let gridRequest = new GridRequest("WSJOBS", GridTypes.LIST, "WSJOBS")
         gridRequest.addFilter("equipment", equipmentCode, "=")
         gridRequest.sortBy("datecreated", "DESC")
         return getGridData(gridRequest).then(response => transformResponse(response, WSWorkorders.myWorkOrderMapper));
