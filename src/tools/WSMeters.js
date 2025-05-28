@@ -15,33 +15,27 @@ class WSMeters {
         return WS._get(`/meters/read/wo/${workorder}`, config);
     }
 
-    async getReadingsByEquipment(equipmentCode, config = {}) {
+    async getReadingsByEquipment(equipmentCode, equipmentOrg, config = {}) {
 		let gridRequest = new GridRequest("OSMETE", GridTypes.LIST, "OSOBJA");
 
-		gridRequest.addParam("parameter.organization", getOrg());
+		gridRequest.addParam("parameter.organization", equipmentOrg);
 		gridRequest.addParam("parameter.object", equipmentCode);
 
-        // TODO
-		// if (meterCode != null) {
-		// 	gridRequest.addFilter("metercode", meterCode, "=");
-		// } 
-
-		if (equipmentCode) {
+        if (equipmentCode) {
 			gridRequest.addFilter("equipment", equipmentCode, "=");
 		}
 
-        let equipmentMeters = await getGridData(gridRequest, config).then(response => transformResponse(response, {equipment: "equipment", meter: "metercode"}));
-        
+        let equipmentMeters = await getGridData(gridRequest, config).then(response => transformResponse(response, {equipment: "equipment", meter: "metercode", org: "organization"}));
         const readings = await Promise.all(
             equipmentMeters.body.data.map(equipmentMeter =>
-                this.getReadingsByMeterCode(equipmentMeter.meter)
+                this.getReadingsByMeterCode(equipmentMeter.meter, equipmentMeter.org)
             )
         );
     
         return readings;
     }
 
-     async getReadingsByMeterCode(meterCode, org = '*', config = {}) {
+     async getReadingsByMeterCode(meterCode, org, config = {}) {
         let meterResult = await WS._get(`/proxy/physicalmeters/${encodeURIComponent(meterCode + '#' + org)}`, config)
         let meterData = meterResult.body.Result.ResultData.PhysicalMeter
         
@@ -55,6 +49,10 @@ class WSMeters {
             equipmentCode:
               get(meterData, 'ServicePoint.ASSETID.EQUIPMENTCODE') ??
               get(meterData, 'ServicePoint.POSITIONID.EQUIPMENTCODE') ??
+              null,
+            equipmentOrg:
+              get(meterData, 'ServicePoint.ASSETID.ORGANIZATIONID.ORGANIZATIONCODE') ??
+              get(meterData, 'ServicePoint.POSITIONID.ORGANIZATIONID.ORGANIZATIONCODE') ??
               null,
           };
 
@@ -75,14 +73,14 @@ class WSMeters {
         let gridRequest = new GridRequest("OSMETE", GridTypes.LIST, "OSMETE");
         gridRequest.setRowCount(10)
 		gridRequest.addFilter("equipment", filter, "BEGINS");
-        return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "equipment", desc: "meterunit"}));
+        return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "equipment", desc: "meterunit", org: "organization"}));
     };
 
     autocompleteMeterCode = ({filter}, config = {}) => {
         let gridRequest = new GridRequest("OSMETE", GridTypes.LIST, "OSMETE");
         gridRequest.setRowCount(10)
 		gridRequest.addFilter("metercode", filter, "BEGINS");
-        return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "metercode", desc: "meterunit"}));
+        return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "metercode", desc: "meterunit", org: "organization"}));
     };
 }
 
