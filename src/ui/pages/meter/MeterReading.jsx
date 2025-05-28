@@ -12,8 +12,7 @@ import useSnackbarStore from "../../../state/useSnackbarStore";
  * Meter Readings main class
  */
 const defaultMessageCreate = "Are you sure you want to create this reading?";
-const rollOverMessageCreate =
-  "Value is less than the Last Reading, which indicates the meter has rolled over. Is this correct?";
+const rollOverMessageCreate = "Value is less than the Last Reading, which indicates the meter has rolled over. Is this correct?";
 
 class MeterReading extends React.Component {
   constructor(props) {
@@ -26,9 +25,8 @@ class MeterReading extends React.Component {
     blocking: false,
     searchCriteria: {
       meterCode: "",
-      meterDesc: "",
       equipmentCode: "",
-      equipmentDesc: "",
+      org: ""
     },
     meterReadings: [],
     dialogOpen: false,
@@ -43,18 +41,19 @@ class MeterReading extends React.Component {
     }));
   };
 
-  onChangeMeterCode = (code) => {
+  onChangeMeterCode = (meter) => {
+    this.updateSearchProperty("meterCode", meter?.code);
+    this.updateSearchProperty("org", meter?.org);
     //Search meter readings for valid code
-    if (code) {
+    if (meter) {
       //Blocking
       this.setState(() => ({ blocking: true }));
-      WSMeters.getReadingsByMeterCode(code)
+      WSMeters.getReadingsByMeterCode(meter.code, meter.org)
         .then((response) => {
           //Set readings
           this.setState(() => ({ meterReadings: [response] }));
           //Empty Equipment search criteria
           this.updateSearchProperty("equipmentCode", "");
-          this.updateSearchProperty("equipmentDesc", "");
           //Not Loading
           this.setState(() => ({ blocking: false }));
         })
@@ -62,21 +61,22 @@ class MeterReading extends React.Component {
           this.handleError(error);
           this.setState(() => ({ blocking: false }));
         });
-    }
+    } 
   };
 
-  onChangeEquipmentCode = (code) => {
+  onChangeEquipmentCode = (equipment) => {
+    this.updateSearchProperty("equipmentCode", equipment?.code);
+    this.updateSearchProperty("org", equipment?.org);
     //Search meter readings for valid code
-    if (code) {
+    if (equipment) {
       //Blocking
       this.setState(() => ({ blocking: true }));
-      WSMeters.getReadingsByEquipment(code)
+      WSMeters.getReadingsByEquipment(equipment.code, equipment.org)
         .then((response) => {
           //Set readings
           this.setState(() => ({ meterReadings: response }));
           //Empty Meter search criteria
           this.updateSearchProperty("meterCode", "");
-          this.updateSearchProperty("meterDesc", "");
           //Not Loading
           this.setState(() => ({ blocking: false }));
         })
@@ -123,10 +123,10 @@ class MeterReading extends React.Component {
    */
   loadMeterReadings = () => {
     //Load according to the selected filter
-    if (this.state.searchCriteria.meterDesc) {
-      this.onChangeMeterCode(this.state.searchCriteria.meterCode);
+    if (this.state.searchCriteria.meterCode) {
+      this.onChangeMeterCode({code: this.state.searchCriteria.meterCode, org: this.state.searchCriteria.org});
     } else {
-      this.onChangeEquipmentCode(this.state.searchCriteria.equipmentCode);
+      this.onChangeEquipmentCode({code: this.state.searchCriteria.equipmentCode, org: this.state.searchCriteria.org});
     }
   };
 

@@ -18,14 +18,7 @@ class MeterReadingSearch extends React.Component {
             label={"Meter Code"}
             value={searchCriteria.meterCode}
             autocompleteHandler={WSMeters.autocompleteMeterCode}
-            onChange={createOnChangeHandler(
-              "meterCode",
-              "meterDesc",
-              null,
-              parentProps.updateSearchProperty,
-              parentProps.onChangeMeterCode
-            )}
-            desc={searchCriteria.meterDesc}
+            onSelect={parentProps.onChangeMeterCode}
             barcodeScanner
             id={`${idPrefix}METERCODE`}
           />
@@ -33,14 +26,7 @@ class MeterReadingSearch extends React.Component {
             label={"Equipment Code"}
             value={searchCriteria.equipmentCode}
             autocompleteHandler={WSMeters.autocompleteMeterEquipment}
-            onChange={createOnChangeHandler(
-              "equipmentCode",
-              "equipmentDesc",
-              null,
-              parentProps.updateSearchProperty,
-              parentProps.onChangeEquipmentCode
-            )}
-            desc={searchCriteria.equipmentDesc}
+            onSelect={parentProps.onChangeEquipmentCode}
             barcodeScanner
             id={`${idPrefix}EQUIPMENTCODE`}
           />

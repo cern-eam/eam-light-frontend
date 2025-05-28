@@ -23,12 +23,14 @@ function MeterReadingContent(props) {
     },[reading.lastValue])
 
     const createNewReading = () => {
+        console.log('reading', reading)
         const isRollover = reading.rolloverValue && reading.rolloverValue < readingValue;
         //Initialize meter reading object
         const newReading = {
             uom: reading.uom,
             equipmentCode: reading.equipmentCode,
-            actualValue: readingValue
+            actualValue: readingValue,
+            equipmentOrganization: reading.equipmentOrg
         };
         //Execute parent save handler
         parentProps.saveHandler(newReading, isRollover);
