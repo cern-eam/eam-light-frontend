@@ -1,5 +1,4 @@
 import * as React from "react";
-import WSEquipment from "../../../../tools/WSEquipment";
 import EAMDatePicker from "eam-components/dist/ui/components/inputs-ng/EAMDatePicker";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
@@ -7,7 +6,7 @@ import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import { readUserCodes } from "../../../../tools/WSGrids";
 
 const AssetDetails = (props) => {
-  const { equipment, updateEquipmentProperty, register } = props;
+  const { register } = props;
 
   return (
     <React.Fragment>
@@ -36,16 +35,10 @@ const AssetDetails = (props) => {
 
       <EAMAutocomplete {...register("part")} />
 
-      <EAMAutocomplete {...register("store")}
-        autocompleteHandler={WSEquipment.autocompleteEquipmentStore}
-        disabled={true}
-      />
+      <EAMTextField {...register("store")}  disabled={true} />
 
-      <EAMAutocomplete {...register("bin")}
-        autocompleteHandler={WSEquipment.autocompleteEquipmentBin}
-        autocompleteHandlerParams={[equipment.storeCode]}
-        disabled={true}
-      />
+      <EAMTextField {...register("bin")} disabled={true} />
+
     </React.Fragment>
   );
 };

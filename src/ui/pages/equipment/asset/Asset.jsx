@@ -284,7 +284,8 @@ const Asset = () => {
         column: 2,
         order: 7,
         summaryIcon: Article,
-        ignore: isCernMode
+        ignore: isCernMode || !getTabAvailability(tabs, TAB_CODES.DOCUMENTS),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.DOCUMENTS),
       },
       {
         id: "NCRS",
