@@ -99,14 +99,10 @@ class MeterReading extends React.Component {
    * This method will create the meter reading after the check of rollover
    */
   createMeterReadingHandler = () => {
-    //Blocking
     this.setState(() => ({ blocking: true }));
-
     //Call service to create the reading
     WSMeters.createMeterReading(this.meterReading)
       .then((response) => {
-        //Close the dialog
-        this.closeDialog();
         //Reload the data
         this.loadMeterReadings();
         //Message
@@ -114,8 +110,11 @@ class MeterReading extends React.Component {
       })
       .catch((error) => {
         this.handleError(error);
+      })
+      .finally( () => {
+        this.closeDialog();
         this.setState(() => ({ blocking: false }));
-      });
+      })
   };
 
   /**

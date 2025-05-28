@@ -23,7 +23,6 @@ function MeterReadingContent(props) {
     },[reading.lastValue])
 
     const createNewReading = () => {
-        console.log('reading', reading)
         const isRollover = reading.rolloverValue && reading.rolloverValue < readingValue;
         //Initialize meter reading object
         const newReading = {
