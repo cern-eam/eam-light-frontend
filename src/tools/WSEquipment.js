@@ -42,8 +42,6 @@ class WSEquipment {
         return getGridData(gridRequest).then(response => transformResponse(response, WSWorkorders.myWorkOrderMapper));
     }
 
-
-
     getEquipmentEvents(equipmentCode, equipmentOrg, screenCode, config = {}) {
         let gridRequest = new GridRequest("OSVEVT", GridTypes.LIST, screenCode)
         gridRequest.addParam("parameter.object", equipmentCode)
@@ -70,11 +68,6 @@ class WSEquipment {
             }
 
         return getGridData(gridRequest).then(response => transformResponse(response, equipmentEventsMapper));
-    }
-
-    autocompleteEquipmentStore(filter, config = {}) {
-        filter = encodeURIComponent(filter);
-        return WS._get('/autocomplete/eqp/store/' + filter, config);
     }
 
     //

@@ -136,7 +136,6 @@ export const equipmentLayoutPropertiesMap = {
 
 export const assetLayoutPropertiesMap = {
   ...equipmentLayoutPropertiesMap,
-  bin: "bin",
 
   costcode: {
     value: "COSTCODEID.COSTCODE",

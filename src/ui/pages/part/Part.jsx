@@ -224,20 +224,21 @@ const Part = () => {
           TAB_CODES.EDMS_DOCUMENTS_PARTS
         ),
       },
-        {
-          id: "DOCUMENTS",
-          label: "Documents",
-          isVisibleWhenNewEntity: false,
-          maximizable: true,
-          render: () => <Documents objectType="A" code={id?.code + '#' + id.org}entity="PART"/>,
-          RegionPanelProps: {
-            detailsStyle: { padding: 0 },
-          },
-          column: 2,
-          order: 7,
-          summaryIcon: Article,
-          ignore: isCernMode
+      {
+        id: "DOCUMENTS",
+        label: "Documents",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => <Documents objectType="A" code={id?.code + '#' + id.org}entity="PART"/>,
+        RegionPanelProps: {
+          detailsStyle: { padding: 0 },
         },
+        column: 2,
+        order: 7,
+        summaryIcon: Article,
+        ignore: isCernMode || !getTabAvailability(tabs, TAB_CODES.DOCUMENTS),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.DOCUMENTS),
+      },
       {
         id: "COMMENTS",
         label: "Comments",
