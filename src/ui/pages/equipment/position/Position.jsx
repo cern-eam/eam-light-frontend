@@ -205,8 +205,9 @@ const Position = () => {
         render: ({ panelQueryParams }) => (
           <EquipmentWorkOrders
             equipmentcode={id?.code}
+            equipmentorg={id?.org}
+            screencode={screenCode}
             defaultFilter={panelQueryParams.defaultFilter}
-            equipmenttype="P"
           />
         ),
         column: 1,

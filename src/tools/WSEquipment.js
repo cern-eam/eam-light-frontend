@@ -42,8 +42,34 @@ class WSEquipment {
         return getGridData(gridRequest).then(response => transformResponse(response, WSWorkorders.myWorkOrderMapper));
     }
 
-    getEquipmentEvents(equipmentCode, equipmentType, config = {}) {
-        return WS._get(`/equipment/events?c=${equipmentCode}&t=${equipmentType}`, config);
+
+
+    getEquipmentEvents(equipmentCode, equipmentOrg, screenCode, config = {}) {
+        let gridRequest = new GridRequest("OSVEVT", GridTypes.LIST, screenCode)
+        gridRequest.addParam("parameter.object", equipmentCode)
+        gridRequest.addParam("parameter.objorganization", equipmentOrg)
+        gridRequest.addFilter("wotype", "IS - ", "NOTCONTAINS")
+        gridRequest.addFilter("equipment", equipmentCode, "=")
+        gridRequest.sortBy("datecreated", "DESC")
+
+        const equipmentEventsMapper = {
+            "number": "eventno",
+            "desc": "description",
+            "status": "statusdisplay",
+            "statusCode": null,
+            "jobType": "wotype",
+            "object": "equipment",
+            "mrc": "organization",
+            "type": "eventtype",
+            "priority": null,
+            "schedulingEndDate": "schedenddate",
+            "schedulingStartDate": "schedstartdate",
+            "createdDate": "datecreated",
+            "completedDate": "completiondate",
+            "equipmentType": null
+            }
+
+        return getGridData(gridRequest).then(response => transformResponse(response, equipmentEventsMapper));
     }
 
     autocompleteEquipmentStore(filter, config = {}) {

@@ -211,8 +211,9 @@ const Asset = () => {
         render: ({ panelQueryParams }) => (
           <EquipmentWorkOrders
             equipmentcode={id?.code}
+            equipmentorg={id?.org}
+            screencode={screenCode}
             defaultFilter={panelQueryParams.defaultFilter}
-            equipmenttype="A"
           />
         ),
         column: 1,
