@@ -411,8 +411,9 @@ const useEntity = (params) => {
     // Link
     if (extraData?.link) {
       const orgLink = get(entity, orgKey) ? "%23" + get(entity, orgKey) : "";
-      data.link = () => (data.value ? extraData.link + "/" + data.value + orgLink : null)
+      data.link = () => (data.value ? extraData.link + data.value + orgLink : null)
     }
+
 
     Object.assign(data, createAutocompleteHandler(layoutData, screenLayout.fields, entity, {...extraData?.autocompleteHandlerData, userFunctionName: screenCode}))
 

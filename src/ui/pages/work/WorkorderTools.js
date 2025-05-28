@@ -16,7 +16,7 @@ export const layoutPropertiesMap = {
             searchKeys: ["equipmentcode"],
             gridType: GridTypes.LIST
         },
-        link: "/equipment",
+        link: "/equipment/",
         alias: "equipmentCode"
         //onChange: (v1, v2) => console.log(v1, v2)
     },
@@ -57,6 +57,14 @@ export const layoutPropertiesMap = {
         autocompleteHandlerData: { 
             searchKeys: ['personcode', 'description']
         }
+    },
+
+    udfchar01: {
+        link: 'https://cern.service-now.com/task.do?sysparm_query=number='
+    },
+
+    udfchar24: {
+        link: 'https://its.cern.ch/jira/browse/'
     }
 
 }

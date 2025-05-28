@@ -106,29 +106,11 @@ function WorkorderGeneral(props) {
         }
       />
 
-      <EAMTextField
-        {...register("udfchar01")}
-        link={() =>
-          workorder.userDefinedFields?.udfchar01
-            ? "https://cern.service-now.com/task.do?sysparm_query=number=" +
-              workorder.userDefinedFields.udfchar01
-            : null
-        }
-      />
+      <EAMTextField {...register("udfchar01")} />
 
-      <EAMTextField
-        {...register("udfchar20")}
-      />
+      <EAMTextField {...register("udfchar20")} />
 
-      <EAMTextField
-        {...register("udfchar24")}
-        link={() =>
-          workorder.userDefinedFields?.udfchar24
-            ? "https://its.cern.ch/jira/browse/" +
-              workorder.userDefinedFields.udfchar24
-            : null
-        }
-      />
+      <EAMTextField {...register("udfchar24")}  />
 
       <EAMUDF {...register("udfchkbox01")} />
 
