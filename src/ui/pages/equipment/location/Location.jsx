@@ -168,9 +168,10 @@ export default Location = (props) => {
         maximizable: true,
         render: ({ panelQueryParams }) => (
           <EquipmentWorkOrders
-            equipmentcode={location.code}
+            equipmentcode={id?.code}
+            equipmentorg={id?.org}
+            screencode={screenCode}
             defaultFilter={panelQueryParams.defaultFilter}
-            equipmenttype="L"
           />
         ),
         column: 1,

@@ -45,10 +45,9 @@ const WO_FILTERS = {
 }
 
 const LOCAL_STORAGE_FILTER_KEY = 'filters:workorders';
-const LOCAL_STORAGE_SYSTEM_STATUS_KEY = 'wosystemstatus';
 
 function EquipmentWorkOrders(props) {
-    const { defaultFilter: initialFilter, equipmentcode, equipmenttype } = props;
+    const { defaultFilter: initialFilter, equipmentcode, equipmentorg, screencode } = props;
     const defaultFilter = initialFilter ?? WO_FILTER_TYPES.THIS;
 
     let [events, setEvents] = useState([]);
@@ -57,7 +56,6 @@ function EquipmentWorkOrders(props) {
     const [loadingData, setLoadingData] = useState(true);
     const [workOrderFilter, setWorkOrderFilter] = useLocalStorage(LOCAL_STORAGE_FILTER_KEY, WO_FILTER_TYPES.ALL, defaultFilter);
 
-    const [systemStatuses, setSystemStatuses] = useLocalStorage(LOCAL_STORAGE_SYSTEM_STATUS_KEY, []);
     let headers = ['Work Order', 'Equipment', 'Description', 'Status', 'Relevant Date'];
     let propCodes = ['number', 'object','desc', 'status', 'createdDate'];
 
@@ -103,37 +101,30 @@ function EquipmentWorkOrders(props) {
             return;
         }
 
-        if (systemStatuses.length > 0) {
-            fetchData(equipmentcode, equipmenttype, systemStatuses);
-        } else { 
-            readUserCodes({handlerParams: ["EVST"]}).then((response) => {
-                setSystemStatuses(response.body.data)
-                fetchData(equipmentcode, equipmenttype, response);
-            });
-        }
-    }, [equipmentcode, equipmenttype]);
+        fetchData(equipmentcode, equipmentorg, screencode);
 
-    const fetchData = (equipmentCode, equipmentType, systemStatues) => {
-        Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode, equipmentType)])
+    }, [equipmentcode]);
+
+    const fetchData = (equipmentCode, equipmentOrg, screenCode) => {
+        Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode, equipmentOrg, screenCode)])
             .then(responses => {
                 const getDateLabel = (element) => {
                    const fallbackDateLabel = element.createdDate
                       ? `${format(new Date(element.createdDate), "dd-MMM-yyyy")}`
                       : "-";
-                    const systemCode = systemStatues.find((status)=> status.code === element.status || status.desc === element.status);
-                    const elementIsClosed = systemCode.systemCode === 'C';
 
-                    // closed/cancelled element
-                   if (elementIsClosed)
-                      return element.completedDate
-                        ? `${format(new Date(element.completedDate), "dd-MMM-yyyy")}`
-                        : fallbackDateLabel;
+                   if (element.completedDate) {
+                    return `${format(new Date(element.completedDate), "dd-MMM-yyyy")}`
+                   }
 
-                    // open element
-                    return element.schedulingStartDate
-                      ? `${format(new Date(element.schedulingStartDate), "dd-MMM-yyyy")}`
-                      : fallbackDateLabel;
+                   if (element.schedulingStartDate) {
+                    return `${format(new Date(element.schedulingStartDate), "dd-MMM-yyyy")}`
+                   }
+
+                   return fallbackDateLabel;
+
                   };
+
                 const formatResponse = response => response.body.data.map(element => ({
                     ...element,
                     createdDate: `${getDateLabel(element)}`,

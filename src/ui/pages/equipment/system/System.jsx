@@ -210,8 +210,9 @@ const System = () => {
         render: ({ panelQueryParams }) => (
           <EquipmentWorkOrders
             equipmentcode={id?.code}
+            equipmentorg={id?.org}
+            screencode={screenCode}
             defaultFilter={panelQueryParams.defaultFilter}
-            equipmenttype="S"
           />
         ),
         column: 1,
