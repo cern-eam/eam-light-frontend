@@ -129,8 +129,7 @@ const Workorder = () => {
     },
     handlers: {
       "STANDARDWO.STDWOCODE": onChangeStandardWorkOrder,
-      "EQUIPMENTID.EQUIPMENTCODE,EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE": onChangeEquipment,
-      "WORKORDERID.DESCRIPTION": onChangeDescription
+      "EQUIPMENTID.EQUIPMENTCODE,EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE": onChangeEquipment
     },
     isReadOnlyCustomHandler: isReadOnlyCustomHandler,
     entityCode: "EVNT",
@@ -206,10 +205,6 @@ const Workorder = () => {
       )
       .catch(console.error);
     
-  }
-
-  function onChangeDescription() {
-    updateWorkorderProperty('WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE', getOrg())
   }
 
   const getRegions = () => {
@@ -654,6 +649,7 @@ const Workorder = () => {
   function postInit(wo) {
     readStatuses("", true)
     setCurrentWorkOrder(null)
+    updateWorkorderProperty('WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE', getOrg())
   }
 
   function postRead(workorder) {

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { pickSingleFile, uploadAndAttachDocument } from "./tools";
@@ -7,8 +8,10 @@ const MAX_FILE_SIZE_MB = 5;
 
 const NewDocumentButton = ({ code, entity, onUploadSuccess, disabled }) => {
   const { showNotification, showError, handleError } = useSnackbarStore();
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleButtonClick = async () => {
+    setIsUploading(true);
     try {
       const file = await pickSingleFile();
 
@@ -20,7 +23,9 @@ const NewDocumentButton = ({ code, entity, onUploadSuccess, disabled }) => {
       const uploaded = await uploadAndAttachDocument(file, entity, code);
       onUploadSuccess(uploaded);
     } catch (error) {
-      handleError(error)
+      handleError(error);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -31,7 +36,7 @@ const NewDocumentButton = ({ code, entity, onUploadSuccess, disabled }) => {
       fullWidth
       onClick={handleButtonClick}
       style={{ marginBottom: "12px", color: "white" }}
-      disabled={disabled}
+      disabled={disabled || isUploading}
     >
       NEW DOCUMENT
     </Button>
