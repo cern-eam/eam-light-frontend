@@ -490,6 +490,11 @@ export const getCustomTabRegions = (
     if (!iso) return null;
   
     const local = new Date(iso);
+
+    if (isNaN(local.getTime()) || local.getFullYear() < 1970) {
+      return null;
+    }
+
     const yearEpoch = new Date(`${local.getFullYear()}-01-02T00:00:00`).getTime();
   
     let eamDate = {
