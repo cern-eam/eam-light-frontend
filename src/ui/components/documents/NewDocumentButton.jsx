@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { pickSingleFile, uploadAndAttachDocument } from "./tools";
 import useSnackbarStore from "../../../state/useSnackbarStore";
 
-const MAX_FILE_SIZE_MB = 5;
+const MAX_FILE_SIZE_MB = 20;
 
 const NewDocumentButton = ({ code, entity, onUploadSuccess, disabled }) => {
   const { showNotification, showError, handleError } = useSnackbarStore();
