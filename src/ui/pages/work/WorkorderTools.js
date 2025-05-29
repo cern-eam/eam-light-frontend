@@ -37,20 +37,23 @@ export const layoutPropertiesMap = {
 
     department: {
         desc: "DEPARTMENTID.DESCRIPTION",
-        org: "DEPARTMENTID.ORGANIZATIONID.ORGANIZATIONCODE"
+        org: "DEPARTMENTID.ORGANIZATIONID.ORGANIZATIONCODE",
+        alias: "departmentCode"
     },
 
     woclass: {
         value: "CLASSID.CLASSCODE",
         desc: "CLASSID.DESCRIPTION",
-        org: "CLASSID.ORGANIZATIONID.ORGANIZATIONCODE"
+        org: "CLASSID.ORGANIZATIONID.ORGANIZATIONCODE",
+        alias: "classCode"
     },
 
     standardwo: {
         autocompleteHandlerData: { 
             searchKeys: ["standardwo"],
             resultMap: {code: "standardwo", desc: "standardwodesc", organization: "standardwoorg"}
-        }
+        },
+        alias: "standardWO"
     },
 
     assignedto: {
