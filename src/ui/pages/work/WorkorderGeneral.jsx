@@ -10,6 +10,7 @@ import { IconButton } from "@mui/material";
 import { FileTree } from "mdi-material-ui";
 import useEquipmentTreeStore from "../../../state/useEquipmentTreeStore";
 import { autocompleteDepartment } from "../../../tools/WSGrids";
+import EAMInput from "../../components/EAMInput";
 
 function WorkorderGeneral(props) {
   const {
@@ -44,7 +45,7 @@ function WorkorderGeneral(props) {
     <React.Fragment>
       {isMultiOrg && newEntity && (<EAMSelect {...register("organization")} />)}
 
-      <EAMTextField {...register("description")} />
+      <EAMInput {...register("description")} />
 
       <EAMAutocomplete
         {...register("equipment")}
