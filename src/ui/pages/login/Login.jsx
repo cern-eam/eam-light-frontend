@@ -3,8 +3,8 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+import queryString from "query-string";
 import WS from "../../../tools/WS";
 import { Box, Container } from "@mui/material";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
@@ -24,6 +24,18 @@ class Login extends Component {
 
   constructor(props) {
     super(props);
+
+    const { organization = "", tenant = "" } = queryString.parse(window.location.search);
+
+    this.state = {
+      infor_user: "",
+      infor_password: "",
+      infor_organization: organization,
+      infor_tenant: tenant,
+      reuseCredentials: true,
+      loginInProgress: false,
+    };
+
     this.handleError = useSnackbarStore.getState().handleError;
     this.showError = useSnackbarStore.getState().showError;
     this.setInforContext = useInforContextStore.getState().setInforContext;
@@ -94,7 +106,7 @@ class Login extends Component {
             <EAMTextField
               fullWidth
               required
-              value={this.state.INFOR_USER}
+              value={this.state.infor_user}
               label="User ID"
               onChangeInput={(value) => {
                 this.setState({ infor_user: value });
@@ -107,7 +119,7 @@ class Login extends Component {
               required
               type="password"
               autoComplete="current-password"
-              value={this.state.INFOR_PASSWORD}
+              value={this.state.infor_password}
               label="Password"
               onChangeInput={(value) => {
                 this.setState({ infor_password: value });
@@ -120,7 +132,7 @@ class Login extends Component {
               required
               label="Organization"
               uppercase
-              value={this.state.INFOR_ORGANIZATION}
+              value={this.state.infor_organization}
               onChangeInput={(value) => {
                 this.setState({ infor_organization: value });
               }}
@@ -131,7 +143,7 @@ class Login extends Component {
               fullWidth
               required
               label="Tenant"
-              value={this.state.INFOR_TENANT}
+              value={this.state.infor_tenant}
               onChangeInput={(value) => {
                 this.setState({ infor_tenant: value });
               }}
