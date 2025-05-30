@@ -3,6 +3,10 @@ import { GridTypes } from "../../../tools/entities/GridRequest";
 
 export const layoutPropertiesMap = {
 
+    workorderstatus: {
+        alias: "statuscode"
+    },
+
     equipment: {
         desc: "EQUIPMENTID.DESCRIPTION",
         org: "EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE",
