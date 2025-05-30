@@ -2,7 +2,7 @@ import { ConsoleNetworkOutline } from 'mdi-material-ui';
 import useUserDataStore from '../state/useUserDataStore';
 import { transformNativeResponse } from './GridTools';
 import WS from './WS';
-import GridRequest from './entities/GridRequest';
+import GridRequest, { GridFilterJoiner } from './entities/GridRequest';
 import { GridTypes } from './entities/GridRequest';
 import useInforContextStore from '../state/useInforContext';
 import { getOrg } from '../hooks/tools';
@@ -78,6 +78,11 @@ export const getPartUsageList = (workorder, config = {}) => {
     gridRequest.addParam("param.workordernum", workorder);
     gridRequest.addParam("param.headeractivity", "0");
     gridRequest.addParam("param.headerjob", "0");
+
+    gridRequest.addFilter("plannedqty", "0", "!=", GridFilterJoiner.OR);
+    gridRequest.addFilter("reservedqty", "0", "!=", GridFilterJoiner.OR);
+    gridRequest.addFilter("allocatedqty", "0", "!=", GridFilterJoiner.OR);
+    gridRequest.addFilter("usedqty", "0", "!=", GridFilterJoiner.OR);
 
     return getGridData(gridRequest).then(response => transformResponse(response, {
         partCode: "partcode",
