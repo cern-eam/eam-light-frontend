@@ -351,7 +351,7 @@ const useEntity = (params) => {
       let queryParams = queryString.parse(window.location.search);
       Object.entries(queryParams).forEach(([key, value]) => {
         // Support wshub key values for backwards compatibility in addition to EAM element IDs
-        const altKey = Object.keys(layoutPropertiesMap ?? {}).find(k => layoutPropertiesMap?.[k].alias === key);
+        const altKey = Object.keys(layoutPropertiesMap ?? {}).find(k => layoutPropertiesMap?.[k].alias?.toLowerCase() === key.toLowerCase());
         const elementInfo = screenLayout.fields[key] ?? screenLayout.fields[altKey]
         if (elementInfo && elementInfo.xpath && value) {
           updateEntityProperty(elementInfo.xpath, value, elementInfo.fieldType)
