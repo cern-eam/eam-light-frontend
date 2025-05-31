@@ -324,28 +324,31 @@ const useEntity = (params) => {
     fireHandler(key, value);
   };
 
-  const fireHandler = (key, value) => {
-    const pendingMultiKeyHandlers = pendingMultiKeyHandlersRef.current
-    const handlers = getHandlers()
+const fireHandler = (key, value) => {
+  const handlers = getHandlers();
+  const pending = pendingMultiKeyHandlersRef.current;
 
-    for (const handlerKey in handlers) {
-      const keys = handlerKey.split(",");
+  for (const [keys, handler] of Object.entries(handlers)) {
+    const [k1, k2] = keys.split(",");
 
-      if (!keys.includes(key)) continue;
-  
-      if (keys.length === 1) {
-        handlers[handlerKey](value);
-      } else {
-        pendingMultiKeyHandlers[handlerKey] ??= {};
-        pendingMultiKeyHandlers[handlerKey][key] = value;
-  
-        if (keys.every(k => pendingMultiKeyHandlers[handlerKey][k] !== undefined)) {
-          handlers[handlerKey](pendingMultiKeyHandlers[handlerKey]);
-          pendingMultiKeyHandlers[handlerKey] = {}; // Reset
-        }
+    if (!k2 && k1 === key) {
+      handler(value);
+      continue;
+    }
+
+    if (key === k1) {
+      (pending[keys] ??= {})[k1] = value;
+    } else if (key === k2) {
+      if ((pending[keys] ?? {})[k1] !== undefined) {
+        pending[keys][k2] = value;
+        handler(pending[keys]);
+        pending[keys] = {};
       }
     }
   }
+};
+
+
 
   const assignQueryParamValues = () => {
       let queryParams = queryString.parse(window.location.search);
