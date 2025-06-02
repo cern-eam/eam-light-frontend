@@ -74,8 +74,8 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
 
   return (
     <React.Fragment>
-      <EAMTextField {...register("udfchar13", "userDefinedFields.udfchar13")} readonly />
-      <EAMTextField {...register("udfchar11", "userDefinedFields.udfchar11")} readonly />
+      <EAMTextField {...register("udfchar13")} readonly />
+      <EAMTextField {...register("udfchar11")} readonly />
 
       <EAMAutocomplete
         {...processElementInfo(positionLayout.fields.asset)}

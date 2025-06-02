@@ -26,16 +26,16 @@ const WorkorderScheduling = (props) => {
     <React.Fragment>
       <div style={{ display: "flex", flex: "1 1 auto" }}>
         <EAMAutocomplete
-          {...register("createdby", "createdBy", "createdByDesc")}
+          {...register("createdby")}
         />
-        <EAMDatePicker {...register("datecreated", "createdDate")} />
+        <EAMDatePicker {...register("datecreated")} />
       </div>
 
       <EAMAutocomplete {...register("reportedby")} />
 
       <EAMAutocomplete {...register("assignedto")} barcodeScanner/>
 
-      <EAMAutocomplete {...register("schedgroup", "assignedBy")} barcodeScanner />
+      <EAMAutocomplete {...register("schedgroup")} barcodeScanner />
 
       <EAMDatePicker {...register("reqstartdate")} />
 
