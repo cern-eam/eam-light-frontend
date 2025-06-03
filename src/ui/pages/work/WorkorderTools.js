@@ -36,7 +36,8 @@ export const layoutPropertiesMap = {
             }, 
             searchKeys: ["equipmentcode"],
             gridType: GridTypes.LIST
-        }
+        },
+        alias: "locationCode"
     },
 
     department: {
