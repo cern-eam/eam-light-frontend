@@ -49,10 +49,14 @@ export const cfNum = (code) => {
 
 export const cfCodeDesc = (code) => {
     let gridRequest = new GridRequest("LVCFCD", GridTypes.LOV)
-    gridRequest.addParam("param.propcode", code)
+    gridRequest.addParam("param.propcode", prepareCode(code))
     return getGridData(gridRequest).then(response => transformResponse(response, {code: "customfieldvalue", desc: "description"}))
 }
 
 export const getCustomFields = (entityCode, classCode, config = {}) => {
     return WS._get(`/proxy/customfields?entityCode=${entityCode}&classCode=${classCode ? encodeURIComponent(classCode) : ""}`, config)
+}
+
+const prepareCode = (code) => {
+    return code.split("-").join("-0045");
 }
