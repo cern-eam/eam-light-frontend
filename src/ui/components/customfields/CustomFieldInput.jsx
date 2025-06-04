@@ -53,7 +53,7 @@ function CustomFieldInput(props) {
                 break;
         }
         return <>
-            {customField.groupLabel && <div style={groupLabelStyle}>{customField.groupLabel}</div>}
+            {customField.GROUPLABEL && <div style={groupLabelStyle}>{customField.GROUPLABEL}</div>}
             {customFieldRender}
         </>
     }
