@@ -39,6 +39,7 @@ export default defineConfig(({ mode }) => {
       esbuildOptions: {
         plugins: [fixReactVirtualized],
       },
+      exclude: ["eam-components"],
     },
     define: {
       "process.env.PUBLIC_URL": JSON.stringify(env.VITE_PUBLIC_URL),
