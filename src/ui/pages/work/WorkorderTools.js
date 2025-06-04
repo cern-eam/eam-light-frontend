@@ -67,6 +67,12 @@ export const layoutPropertiesMap = {
         }
     },
 
+    reportedby: {
+        autocompleteHandlerData: { 
+            searchKeys: ['personcode', 'description']
+        }
+    },
+
     udfchar01: {
         link: 'https://cern.service-now.com/task.do?sysparm_query=number='
     },
