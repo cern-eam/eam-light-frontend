@@ -182,7 +182,7 @@ const useEntity = (params) => {
         readEntity.USERDEFINEDAREA?.CUSTOMFIELD?.sort((cf1, cf2) => (cf1.index ?? 0) - (cf2.index ?? 0))
 
         // Temporary fix (SG-15959)
-        applyTimezoneOffsetToYearField(readEntity)
+        //applyTimezoneOffsetToYearField(readEntity)
         
         setEntity(readEntity);
         setId({code: get(readEntity, entityCodeProperty), org: get(readEntity, entityOrgProperty)})
@@ -195,7 +195,7 @@ const useEntity = (params) => {
             isReadOnlyCustomHandler?.(readEntity)
         );
         // Invoke entity specific logic
-        postActions.read(readEntity);
+        postActions?.read(readEntity);
       })
       .catch((error) => {
         console.error('readEntity error', error)
@@ -264,13 +264,13 @@ const useEntity = (params) => {
         newEntity = assignDefaultValues(newEntity, screenLayout);
 
         // Temporary fix (SG-15959)
-        applyTimezoneOffsetToYearField(newEntity)
+        //applyTimezoneOffsetToYearField(newEntity)
 
         setEntity(newEntity)
         
         assignQueryParamValues()
         document.title = "New " + entityDesc;
-        postActions.new(newEntity);
+        postActions?.new(newEntity);
       })
       .catch((error) => {
         console.error('initNewEntity error', error)

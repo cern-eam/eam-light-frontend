@@ -51,7 +51,7 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
         return;
     } 
 
-    const { lovName, inputVars, inputFields, returnFields } = JSON.parse(elementInfo.onLookup)
+    const { lovName, inputVars, inputFields, returnFields = [] } = JSON.parse(elementInfo.onLookup)
     const { gridType, searchKeys, resultMap, userFunctionName} = autocompleteHandlerData;
 
     const autocompleteHandler = (options, config) => {
