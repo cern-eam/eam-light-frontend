@@ -35,6 +35,10 @@ const WorkorderMenu = ({ wo }) => {
         linkStyle.borderLeft = "3px solid rgb(40,40,40)";
     }
 
+    if (wo.labourScheduledDate) {
+        linkStyle.backgroundColor = "#575757";
+    }
+
     return (
         <li>
             <Link to={"/workorder/" + wo.number + "%23" + wo.org} style={linkStyle}>
@@ -56,7 +60,7 @@ const WorkorderMenu = ({ wo }) => {
                     </span>
                 )}
                 {wo.labourScheduledDate && (
-                    <span style={spanStyle}>
+                    <span style={{...spanStyle, fontWeight: 900, color: "white"}}>
                         Scheduled Labour:{" "}
                         {format(new Date(wo.labourScheduledDate), "dd-MMM-yyyy")}
                     </span>
