@@ -677,6 +677,8 @@ const Workorder = () => {
   function postCopy() {
     readStatuses("", true);
     updateWorkorderProperty("ENTEREDBY", null)
+    updateWorkorderProperty("CREATEDBY", null)
+    updateWorkorderProperty("CREATEDDATE", null)
     let fields = workOrderLayout.fields;
     isCernMode && updateWorkorderProperty("STATUS.STATUSCODE", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R");
     isCernMode && updateWorkorderProperty("TYPE.TYPECODE", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD");

@@ -4,6 +4,7 @@ import EAMDatePicker from "eam-components/dist/ui/components/inputs-ng/EAMDatePi
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import WS from "../../../tools/WS";
 import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
+import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 
 const WorkorderScheduling = (props) => {
   const { workOrderLayout, register } = props;
@@ -25,9 +26,7 @@ const WorkorderScheduling = (props) => {
   return (
     <React.Fragment>
       <div style={{ display: "flex", flex: "1 1 auto" }}>
-        <EAMAutocomplete
-          {...register("createdby")}
-        />
+        <EAMTextField {...register("createdby")} />
         <EAMDatePicker {...register("datecreated")} />
       </div>
 

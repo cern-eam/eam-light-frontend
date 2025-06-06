@@ -79,6 +79,10 @@ export const layoutPropertiesMap = {
 
     udfchar24: {
         link: 'https://its.cern.ch/jira/browse/'
+    },
+
+    createdby: {
+        desc: "CREATEDBY.DESCRIPTION"
     }
 
 }
