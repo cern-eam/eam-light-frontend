@@ -46,9 +46,7 @@ export const onCategoryChange = (category, updateProperty) => {
   WSEquipment.getCategory(category)
     .then((response) => {
       const category = response.body.Result.ResultData.EquipmentCategory;
-      console.log('cat', category)
-      upda
-      
+
       //TODO
     //   if (category.manufacturerCode) {
     //     updateProperty("manufacturerCode", category.manufacturerCode);
@@ -99,7 +97,7 @@ export function isClosedEquipment(equipment) {
 export const equipmentLayoutPropertiesMap = {
 
   category: {
-    autocompleteHandlerData: { 
+    autocompleteHandlerData: {
         resultMap: {
             code: "category",
             desc: "categorydesc",
@@ -108,12 +106,12 @@ export const equipmentLayoutPropertiesMap = {
         }
     }
   },
-  
+
   class: {
     value: "CLASSID.CLASSCODE",
     desc: "CLASSID.DESCRIPTION",
     org: "CLASSID.ORGANIZATIONID.ORGANIZATIONCODE",
-    autocompleteHandlerData: { 
+    autocompleteHandlerData: {
         resultMap: {
             code: "class",
             desc: "des_text",
@@ -123,7 +121,7 @@ export const equipmentLayoutPropertiesMap = {
   },
 
   location: {
-    autocompleteHandlerData: { 
+    autocompleteHandlerData: {
         resultMap: {
             code: "equipmentcode",
             desc: "description_obj",
@@ -140,7 +138,7 @@ export const assetLayoutPropertiesMap = {
   costcode: {
     value: "COSTCODEID.COSTCODE",
     desc: "COSTCODEID.DESCRIPTION",
-    autocompleteHandlerData: { 
+    autocompleteHandlerData: {
         resultMap: {
             code: "costcode",
             desc: "costcodedescription",
