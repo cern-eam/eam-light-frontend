@@ -28,7 +28,14 @@ import TuneIcon from "@mui/icons-material/Tune";
 import { IconSlash } from "eam-components/dist/ui/components/icons/index";
 import { isCernMode } from "../../components/CERNMode";
 import { TAB_CODES } from "../../components/entityregions/TabCodeMapping";
-import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions, renderLoading, getCustomTabRegions } from "../EntityTools";
+import {
+  getTabAvailability,
+  getTabInitialVisibility,
+  registerCustomField,
+  getTabGridRegions,
+  renderLoading,
+  getCustomTabRegions,
+} from "../EntityTools";
 import WSWorkorders from "../../../tools/WSWorkorders";
 import useEntity from "@/hooks/useEntity";
 import UserDefinedFields from "@/ui/components/userdefinedfields/UserDefinedFields";
@@ -53,7 +60,7 @@ import HardwareIcon from "@mui/icons-material/Hardware";
 import EamlightToolbar from "../../components/EamlightToolbar";
 import useWorkOrderStore from "../../../state/useWorkOrderStore";
 import { isLocalAdministrator } from "../../../state/utils";
-import AssetNCRs from '../../pages/equipment/components/EquipmentNCRs';
+import AssetNCRs from "../../pages/equipment/components/EquipmentNCRs";
 import CustomFields from "../../components/customfields/CustomFields";
 import { getPart } from "../../../tools/WSParts";
 import Documents from "../../components/documents/Documents";
@@ -64,7 +71,10 @@ const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
     return;
   }
-  const response = await WSWorkorder.getEquipmentStandardWOMaxStep(eqCode, swoCode);
+  const response = await WSWorkorder.getEquipmentStandardWOMaxStep(
+    eqCode,
+    swoCode
+  );
   return response.body.data;
 };
 
@@ -79,7 +89,7 @@ const Workorder = () => {
   const [otherIdMapping, setOtherIdMapping] = useState({});
   const [expandChecklistsOptions, setExpandChecklistsOptions] = useState(false);
   const checklists = useRef(null);
-  const {setCurrentWorkOrder} = useWorkOrderStore();
+  const { setCurrentWorkOrder } = useWorkOrderStore();
   //
   //
   //
@@ -113,7 +123,7 @@ const Workorder = () => {
     showWarning,
     createEntity,
     setLoading,
-    setReadOnly
+    setReadOnly,
   } = useEntity({
     WS: {
       create: WSWorkorder.createWorkOrder,
@@ -129,7 +139,8 @@ const Workorder = () => {
     },
     handlers: {
       "STANDARDWO.STDWOCODE": onChangeStandardWorkOrder,
-      "EQUIPMENTID.EQUIPMENTCODE,EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE": onChangeEquipment
+      "EQUIPMENTID.EQUIPMENTCODE,EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE":
+        onChangeEquipment,
     },
     isReadOnlyCustomHandler: isReadOnlyCustomHandler,
     entityCode: "EVNT",
@@ -147,33 +158,44 @@ const Workorder = () => {
   });
 
   function onChangeEquipment(equipmentData) {
-    const equipmentCode = equipmentData["EQUIPMENTID.EQUIPMENTCODE"]
-    const equipmentOrg = equipmentData["EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE"]
+    const equipmentCode = equipmentData["EQUIPMENTID.EQUIPMENTCODE"];
+    const equipmentOrg =
+      equipmentData["EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE"];
 
     if (!equipmentCode) {
-      setEquipment(null)
-      setEquipmentPart(null)
-      return
+      setEquipment(null);
+      setEquipmentPart(null);
+      return;
     }
 
-    Promise.all([getEquipment(equipmentCode, equipmentOrg), WSWorkorders.getWOEquipLinearDetails(equipmentCode)])
+    Promise.all([
+      getEquipment(equipmentCode, equipmentOrg),
+      WSWorkorders.getWOEquipLinearDetails(equipmentCode),
+    ])
       .then(([equipment, linearDetails]) => {
-        
-        setEquipment(equipment)
+        console.log(workorder.LOCATIONID);
+        console.log( equipment?.AssetParentHierarchy?.LOCATIONID ?? equipment?.PositionParentHierarchy?.LOCATIONID ?? equipment?.SystemParentHierarchy?.LOCATIONID);
+        setEquipment(equipment);
         if (!workorder.DEPARTMENTID) {
-          updateWorkorderProperty('DEPARTMENTID', equipment.DEPARTMENTID)
+          updateWorkorderProperty("DEPARTMENTID", equipment.DEPARTMENTID);
         }
 
-        if (!workorder.LOCATIONID) {
-          updateWorkorderProperty('LOCATIONID', equipment.LOCATIONID)
+        //TODO - Clear does not seem to work in teh followign scenario:
+        //  1) create a new workorder
+        //  2) must have a with a default location automatically assigned to it
+        //  3) Remove said location
+        //  4) Select an asset with a location
+        //  5) Confirm that the asset location does not get assigned to the work order
+        if (!workorder.LOCATIONID || !workorder.LOCATIONID.LOCATIONCODE) {
+          updateWorkorderProperty("LOCATIONID", equipment?.AssetParentHierarchy?.LOCATIONID ?? equipment?.PositionParentHierarchy?.LOCATIONID ?? equipment?.SystemParentHierarchy?.LOCATIONID);
         }
 
         if (!workorder.COSTCODEID) {
-          updateWorkorderProperty('COSTCODEID', equipment.COSTCODEID)
+          updateWorkorderProperty("COSTCODEID", equipment.COSTCODEID);
         }
 
         //TODO warranty: linearDetails.ISWARRANTYACTIVE,
-     
+
         if (linearDetails.body?.data?.ISWARRANTYACTIVE === "true") {
           showWarning("This equipment is currently under warranty.");
         }
@@ -183,22 +205,30 @@ const Workorder = () => {
 
   function onChangeStandardWorkOrder(standardWorkOrderCode) {
     if (!standardWorkOrderCode) {
-      return
+      return;
     }
 
     WSWorkorder.getStandardWorkOrder(standardWorkOrderCode)
       .then((response) => {
-        const standardWorkOrder = response.body.Result.ResultData.StandardWorkOrder
-        updateWorkorderProperty('CLASSID.CLASSCODE', standardWorkOrder.WORKORDERCLASSID?.CLASSCODE)
-        updateWorkorderProperty('TYPE', standardWorkOrder.WORKORDERTYPE)
-        updateWorkorderProperty('PRIORITY', standardWorkOrder.PRIORITY)
-        updateWorkorderProperty('PROBLEMCODEID', standardWorkOrder.PROBLEMCODEID)
-        updateWorkorderProperty('WORKORDERID.DESCRIPTION', standardWorkOrder.STANDARDWO.DESCRIPTION)
-        console.log(response.body.Result.ResultData.StandardWorkOrder)
-      }
-      )
+        const standardWorkOrder =
+          response.body.Result.ResultData.StandardWorkOrder;
+        updateWorkorderProperty(
+          "CLASSID.CLASSCODE",
+          standardWorkOrder.WORKORDERCLASSID?.CLASSCODE
+        );
+        updateWorkorderProperty("TYPE", standardWorkOrder.WORKORDERTYPE);
+        updateWorkorderProperty("PRIORITY", standardWorkOrder.PRIORITY);
+        updateWorkorderProperty(
+          "PROBLEMCODEID",
+          standardWorkOrder.PROBLEMCODEID
+        );
+        updateWorkorderProperty(
+          "WORKORDERID.DESCRIPTION",
+          standardWorkOrder.STANDARDWO.DESCRIPTION
+        );
+        console.log(response.body.Result.ResultData.StandardWorkOrder);
+      })
       .catch(console.error);
-    
   }
 
   const getRegions = () => {
@@ -242,7 +272,8 @@ const Workorder = () => {
         label: "Scheduling",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        customVisibility: () => isRegionAvailable("SCHEDULING", commonProps.workOrderLayout),
+        customVisibility: () =>
+          isRegionAvailable("SCHEDULING", commonProps.workOrderLayout),
         render: () => <WorkorderScheduling {...commonProps} />,
         column: 1,
         order: 2,
@@ -255,20 +286,27 @@ const Workorder = () => {
         label: "Closing Codes",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        customVisibility: () => isRegionAvailable("CLOSING_CODES", commonProps.workOrderLayout),
-        render: () => <WorkorderClosingCodes {...commonProps} equipment={equipment} />,
+        customVisibility: () =>
+          isRegionAvailable("CLOSING_CODES", commonProps.workOrderLayout),
+        render: () => (
+          <WorkorderClosingCodes {...commonProps} equipment={equipment} />
+        ),
         column: 1,
         order: 3,
         summaryIcon: SportsScoreIcon,
         ignore: !getTabAvailability(tabs, TAB_CODES.CLOSING_CODES),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.CLOSING_CODES),
+        initialVisibility: getTabInitialVisibility(
+          tabs,
+          TAB_CODES.CLOSING_CODES
+        ),
       },
       {
         id: "PARTUSAGE",
         label: "Part Usage",
         isVisibleWhenNewEntity: false,
         maximizable: false,
-        customVisibility: () => isRegionAvailable("PAR", commonProps.workOrderLayout),
+        customVisibility: () =>
+          isRegionAvailable("PAR", commonProps.workOrderLayout),
         render: () => (
           <PartUsage
             workOrderCode={id?.code}
@@ -286,19 +324,20 @@ const Workorder = () => {
       },
       getPartsAssociated(
         id?.code,
-        'EVNT',
+        "EVNT",
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         1,
         30,
-        'EVNT'
+        "EVNT"
       ),
       {
         id: "ADDITIONALCOSTS",
         label: "Additional Costs",
         isVisibleWhenNewEntity: false,
         maximizable: false,
-        customVisibility: () => isRegionAvailable("ACO", commonProps.workOrderLayout),
+        customVisibility: () =>
+          isRegionAvailable("ACO", commonProps.workOrderLayout),
         render: () => (
           <AdditionalCosts
             workOrderNumber={id?.code}
@@ -311,14 +350,18 @@ const Workorder = () => {
         order: 4,
         summaryIcon: MonetizationOnRoundedIcon,
         ignore: !getTabAvailability(tabs, TAB_CODES.ADDITIONAL_COSTS),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.ADDITIONAL_COSTS),
+        initialVisibility: getTabInitialVisibility(
+          tabs,
+          TAB_CODES.ADDITIONAL_COSTS
+        ),
       },
       {
         id: "CHILDRENWOS",
         label: "Child Work Orders",
         isVisibleWhenNewEntity: false,
         maximizable: false,
-        customVisibility: () => isRegionAvailable("CWO", commonProps.workOrderLayout),
+        customVisibility: () =>
+          isRegionAvailable("CWO", commonProps.workOrderLayout),
         render: () => <WorkorderChildren workorder={id?.code} />,
         column: 1,
         order: 4,
@@ -332,11 +375,11 @@ const Workorder = () => {
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
-            <EDMSDoclightIframeContainer
-                objectType="J"
-                objectID={id?.code}
-                url={applicationData.EL_DOCLI}
-            />
+          <EDMSDoclightIframeContainer
+            objectType="J"
+            objectID={id?.code}
+            url={applicationData.EL_DOCLI}
+          />
         ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
@@ -344,15 +387,22 @@ const Workorder = () => {
         column: 2,
         order: 5,
         summaryIcon: FunctionsRoundedIcon,
-        ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
+        ignore:
+          !isCernMode ||
+          !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
+        initialVisibility: getTabInitialVisibility(
+          tabs,
+          TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS
+        ),
       },
       {
         id: "DOCUMENTS",
         label: "Documents",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <Documents objectType="A" code={id?.code} entity="EVNT"/>,
+        render: () => (
+          <Documents objectType="A" code={id?.code} entity="EVNT" />
+        ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -367,25 +417,31 @@ const Workorder = () => {
         label: "NCRs",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => ( 
-          applicationData.EL_TBURL 
-            ? <NCRIframeContainer
-                objectType="J"
-                objectID={id?.code}
-                mode="NCR"
-                url={`${applicationData.EL_TBURL}/ncr`}
-                edmsDocListLink={applicationData.EL_EDMSL}
+        render: () =>
+          applicationData.EL_TBURL ? (
+            <NCRIframeContainer
+              objectType="J"
+              objectID={id?.code}
+              mode="NCR"
+              url={`${applicationData.EL_TBURL}/ncr`}
+              edmsDocListLink={applicationData.EL_EDMSL}
             />
-            : <AssetNCRs equipment={workorder.EQUIPMENTID?.EQUIPMENTCODE} />
-        ),
+          ) : (
+            <AssetNCRs equipment={workorder.EQUIPMENTID?.EQUIPMENTCODE} />
+          ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
         column: 2,
         order: 6,
         summaryIcon: BookmarkBorderRoundedIcon,
-        ignore: !isCernMode && !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
+        ignore:
+          !isCernMode &&
+          !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
+        initialVisibility: getTabInitialVisibility(
+          tabs,
+          TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS
+        ),
       },
       {
         id: "COMMENTS",
@@ -438,9 +494,12 @@ const Workorder = () => {
         column: 2,
         order: 8,
         summaryIcon: PendingActions,
-        ignore: !getTabAvailability(tabs, TAB_CODES.ACTIVITIES) && !getTabAvailability(tabs, TAB_CODES.BOOK_LABOR),
+        ignore:
+          !getTabAvailability(tabs, TAB_CODES.ACTIVITIES) &&
+          !getTabAvailability(tabs, TAB_CODES.BOOK_LABOR),
         initialVisibility:
-          getTabInitialVisibility(tabs, TAB_CODES.ACTIVITIES) || getTabInitialVisibility(tabs, TAB_CODES.BOOK_LABOR),
+          getTabInitialVisibility(tabs, TAB_CODES.ACTIVITIES) ||
+          getTabInitialVisibility(tabs, TAB_CODES.BOOK_LABOR),
       },
       {
         id: "CHECKLISTS",
@@ -453,7 +512,9 @@ const Workorder = () => {
             version={workorder.recordid}
             eqpToOtherId={otherIdMapping}
             printingChecklistLinkToAIS={applicationData.EL_PRTCL}
-            maxExpandedChecklistItems={Math.abs(parseInt(applicationData.EL_MCHLS)) || 50}
+            maxExpandedChecklistItems={
+              Math.abs(parseInt(applicationData.EL_MCHLS)) || 50
+            }
             getWoLink={(wo) => "/workorder/" + wo}
             ref={checklists}
             showSuccess={showNotification}
@@ -461,7 +522,9 @@ const Workorder = () => {
             handleError={handleError}
             userCode={userData.eamAccount.userCode}
             disabled={readOnly}
-            hideFollowUpProp={isHidden(commonProps.workOrderLayout.tabs.ACK.fields.createfollowupwo)}
+            hideFollowUpProp={isHidden(
+              commonProps.workOrderLayout.tabs.ACK.fields.createfollowupwo
+            )}
             expandChecklistsOptions={expandChecklistsOptions}
             showFilledItems={
               panelQueryParams.CHECKLISTSshowFilledItems === "true" ||
@@ -483,7 +546,11 @@ const Workorder = () => {
             >
               <IconButton
                 onClick={() =>
-                  window.open(applicationData.EL_PRTCL + workorder.number, "_blank", "noopener noreferrer")
+                  window.open(
+                    applicationData.EL_PRTCL + workorder.number,
+                    "_blank",
+                    "noopener noreferrer"
+                  )
                 }
               >
                 <PrintIcon fontSize="small" />
@@ -495,7 +562,9 @@ const Workorder = () => {
                 }}
               >
                 <TuneIcon fontSize="small" />{" "}
-                {expandChecklistsOptions ? <IconSlash backgroundColor="#fafafa" iconColor="#737373" /> : null}
+                {expandChecklistsOptions ? (
+                  <IconSlash backgroundColor="#fafafa" iconColor="#737373" />
+                ) : null}
               </IconButton>
             </div>
           ),
@@ -541,7 +610,10 @@ const Workorder = () => {
         column: 2,
         order: 11,
         summaryIcon: ConstructionIcon,
-        ignore: !isRegionAvailable("CUSTOM_FIELDS_EQP", commonProps.workOrderLayout),
+        ignore: !isRegionAvailable(
+          "CUSTOM_FIELDS_EQP",
+          commonProps.workOrderLayout
+        ),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
       },
       {
@@ -559,27 +631,46 @@ const Workorder = () => {
         column: 2,
         order: 12,
         summaryIcon: HardwareIcon,
-        ignore: !isRegionAvailable("CUSTOM_FIELDS_PART", commonProps.workOrderLayout),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
+        ignore: !isRegionAvailable(
+          "CUSTOM_FIELDS_PART",
+          commonProps.workOrderLayout
+        ),
+        initialVisibility: getTabInitialVisibility(
+          tabs,
+          TAB_CODES.PARTS_ASSOCIATED
+        ),
       },
       {
         id: "METERREADINGS",
         label: "Meter Readings",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <MeterReadingWO equipment={workorder.EQUIPMENTID.EQUIPMENTCODE} disabled={readOnly} />,
+        render: () => (
+          <MeterReadingWO
+            equipment={workorder.EQUIPMENTID.EQUIPMENTCODE}
+            disabled={readOnly}
+          />
+        ),
         column: 2,
         order: 12,
         summaryIcon: SpeedIcon,
         ignore: !getTabAvailability(tabs, TAB_CODES.METER_READINGS),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.METER_READINGS),
+        initialVisibility: getTabInitialVisibility(
+          tabs,
+          TAB_CODES.METER_READINGS
+        ),
       },
       {
         id: "USERDEFINEDFIELDS",
         label: "User Defined Fields",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        render: () => <UserDefinedFields {...commonProps} entityLayout={workOrderLayout.fields} />,
+        render: () => (
+          <UserDefinedFields
+            {...commonProps}
+            entityLayout={workOrderLayout.fields}
+          />
+        ),
         column: 2,
         order: 10,
         summaryIcon: AssignmentIndIcon,
@@ -603,17 +694,31 @@ const Workorder = () => {
     ];
   };
 
-  const getNextStep = (n) => (n ? (([integ, deci]) => +(integ + "." + (+(deci || 0) + 1)))(n.split(".")) : "");
+  const getNextStep = (n) =>
+    n
+      ? (([integ, deci]) => +(integ + "." + (+(deci || 0) + 1)))(n.split("."))
+      : "";
 
   const repeatStepHandler = async () => {
     setLoading(true);
     const fields = workOrderLayout.fields;
-    const { customField, number, equipmentCode, standardWO, parentWO, departmentCode, locationCode } = workorder;
+    const {
+      customField,
+      number,
+      equipmentCode,
+      standardWO,
+      parentWO,
+      departmentCode,
+      locationCode,
+    } = workorder;
     try {
       let value;
 
       try {
-        const maxSWO = await getEquipmentStandardWOMaxStep(equipmentCode, standardWO);
+        const maxSWO = await getEquipmentStandardWOMaxStep(
+          equipmentCode,
+          standardWO
+        );
         value = getNextStep(maxSWO.step);
       } catch (err) {
         value = "";
@@ -641,47 +746,66 @@ const Workorder = () => {
   // CALLBACKS FOR ENTITY CLASS
   //
   function postInit(wo) {
-    readStatuses("", true)
-    setCurrentWorkOrder(null)
-    updateWorkorderProperty('WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE', getOrg())
+    readStatuses("", true);
+    setCurrentWorkOrder(null);
+    updateWorkorderProperty(
+      "WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE",
+      getOrg()
+    );
   }
 
   function postRead(workorder) {
-    getEquipment(workorder?.EQUIPMENTID?.EQUIPMENTCODE, workorder?.EQUIPMENTID?.ORGANIZATIONID?.ORGANIZATIONCODE)
+    getEquipment(
+      workorder?.EQUIPMENTID?.EQUIPMENTCODE,
+      workorder?.EQUIPMENTID?.ORGANIZATIONID?.ORGANIZATIONCODE
+    )
       .then((equipment) => {
         setEquipment(equipment);
-    
+
         const part = equipment?.PartAssociation?.PARTID;
         if (part) {
           getPart(part.PARTCODE, part.ORGANIZATIONID.ORGANIZATIONCODE)
-            .then((response) => setEquipmentPart(response.body.Result.ResultData.Part))
+            .then((response) =>
+              setEquipmentPart(response.body.Result.ResultData.Part)
+            )
             .catch(console.error);
         }
       })
       .catch(console.error);
-    
+
     updateEquipmentTreeData({
       equipment: {
         code: workorder.EQUIPMENTID.EQUIPMENTCODE,
-        organization: workorder.EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE
-      }
+        organization: workorder.EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE,
+      },
     });
     setCurrentWorkOrder(workorder.WORKORDERID.JOBNUM);
-    
-    updateWorkorderProperty('Activities', null)
-    updateWorkorderProperty('confirmincompletechecklist', 'confirmed')
+
+    updateWorkorderProperty("Activities", null);
+    updateWorkorderProperty("confirmincompletechecklist", "confirmed");
     readStatuses(workorder.STATUS.STATUSCODE, false);
     readOtherIdMapping(workorder.WORKORDERID.JOBNUM);
   }
 
   function postCopy() {
     readStatuses("", true);
-    updateWorkorderProperty("ENTEREDBY", null)
+    updateWorkorderProperty("ENTEREDBY", null);
     let fields = workOrderLayout.fields;
-    isCernMode && updateWorkorderProperty("STATUS.STATUSCODE", fields.workorderstatus.defaultValue ? fields.workorderstatus.defaultValue : "R");
-    isCernMode && updateWorkorderProperty("TYPE.TYPECODE", fields.workordertype.defaultValue ? fields.workordertype.defaultValue : "CD");
+    isCernMode &&
+      updateWorkorderProperty(
+        "STATUS.STATUSCODE",
+        fields.workorderstatus.defaultValue
+          ? fields.workorderstatus.defaultValue
+          : "R"
+      );
+    isCernMode &&
+      updateWorkorderProperty(
+        "TYPE.TYPECODE",
+        fields.workordertype.defaultValue
+          ? fields.workordertype.defaultValue
+          : "CD"
+      );
     isCernMode && updateWorkorderProperty("COMPLETEDDATE", null);
-
   }
 
   //
@@ -705,29 +829,38 @@ const Workorder = () => {
   };
 
   function mountHandler() {
-    updateEquipmentTreeData({eqpTreeMenu: [
-      {
-        desc: "Use for this Work Order",
-        icon: <ContentPasteIcon />,
-        handler: (rowInfo) => {
-          updateWorkorderProperty("EQUIPMENTID.EQUIPMENTCODE", rowInfo.node.id);
+    updateEquipmentTreeData({
+      eqpTreeMenu: [
+        {
+          desc: "Use for this Work Order",
+          icon: <ContentPasteIcon />,
+          handler: (rowInfo) => {
+            updateWorkorderProperty(
+              "EQUIPMENTID.EQUIPMENTCODE",
+              rowInfo.node.id
+            );
+          },
         },
-      },
-    ]});
+      ],
+    });
   }
 
   function unmountHandler() {
-    updateEquipmentTreeData({eqpTreeMenu: null});
+    updateEquipmentTreeData({ eqpTreeMenu: null });
     setCurrentWorkOrder(null);
   }
 
   if (!workorder || !workOrderLayout) {
-    return renderLoading("Reading Work Order ...")
+    return renderLoading("Reading Work Order ...");
   }
 
   return (
     <div className="entityContainer">
-      <BlockUi tag="div" blocking={loading} style={{ height: "100%", width: "100%" }}>
+      <BlockUi
+        tag="div"
+        blocking={loading}
+        style={{ height: "100%", width: "100%" }}
+      >
         <EamlightToolbar
           isModified={isModified}
           newEntity={newEntity}

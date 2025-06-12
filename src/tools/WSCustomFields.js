@@ -8,7 +8,7 @@ const toIsoUtc = (input, format = 'dd-MMM-yyyy') => new Date(parse(input, format
 export const autocompleteCustomFieldRENT = ({handlerParams: [entityCode, rentCodeValue, cfcode], filter}, config = {}) => {
     let gridRequest = new GridRequest("LVCFE", GridTypes.LOV)
     gridRequest.setRowCount(10)
-    gridRequest.addParam("param.fieldid", cfcode);
+    gridRequest.addParam("param.fieldid", prepareCode(cfcode));
     gridRequest.addParam("param.associatedrentity", entityCode)
     gridRequest.addParam("param.lookuprentity", rentCodeValue)
     gridRequest.addParam("parameter.propentity", rentCodeValue)
@@ -19,13 +19,13 @@ export const autocompleteCustomFieldRENT = ({handlerParams: [entityCode, rentCod
 
 export const cfChar = (code) => {
     let gridRequest = new GridRequest("LVCFV", GridTypes.LOV)
-    gridRequest.addParam("param.propcode", code)
+    gridRequest.addParam("param.propcode", prepareCode(code))
     return getGridData(gridRequest).then(response => transformResponse(response, {code: "customfieldvalue"}))
 }
 
 export const cfDate = (code) => {
     let gridRequest = new GridRequest("LVCFD", GridTypes.LOV)
-    gridRequest.addParam("param.propcode", code)
+    gridRequest.addParam("param.propcode", prepareCode(code))
     return getGridData(gridRequest).then(response => transformResponse(response, {
         code: val => toIsoUtc(val.customfieldvalue),
         desc: "customfieldvalue"
@@ -34,7 +34,7 @@ export const cfDate = (code) => {
 
 export const cfDateTime = (code) => {
     let gridRequest = new GridRequest("LVCFDT", GridTypes.LOV)
-    gridRequest.addParam("param.propcode", code)
+    gridRequest.addParam("param.propcode", prepareCode(code))
     return getGridData(gridRequest).then(response => transformResponse(response, {
         code: val => toIsoUtc(val.customfieldvalue, 'dd-MMM-yyyy HH:mm'),
         desc: "customfieldvalue"
@@ -43,7 +43,7 @@ export const cfDateTime = (code) => {
 
 export const cfNum = (code) => {
     let gridRequest = new GridRequest("LVCFN", GridTypes.LOV)
-    gridRequest.addParam("param.propcode", code)
+    gridRequest.addParam("param.propcode", prepareCode(code))
     return getGridData(gridRequest).then(response => transformResponse(response, {code: "customfieldvalue"}))
 }
 
