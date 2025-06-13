@@ -99,7 +99,7 @@ export default Location = (props) => {
   React.useEffect( () => {
     if (id) {
       updateEquipmentTreeData({equipment: {
-        code: id.code,
+        code: id?.code,
         organization: id.org,
         systemTypeCode: 'L'
       }});
@@ -109,7 +109,7 @@ export default Location = (props) => {
   }, [id])
 
   function postCreate(location) {
-    commentsComponent.current?.createCommentForNewEntity(location.code);
+    commentsComponent.current?.createCommentForNewEntity(id?.code);
   }
 
   const getRegions = () => {
@@ -185,7 +185,7 @@ export default Location = (props) => {
         label: "History",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <EquipmentHistory equipmentcode={location.code} />,
+        render: () => <EquipmentHistory equipmentcode={id?.code} />,
         column: 1,
         order: 5,
         summaryIcon: ManageHistoryIcon,
@@ -200,7 +200,7 @@ export default Location = (props) => {
         render: () => (
           <EDMSDoclightIframeContainer
             objectType="L"
-            objectID={location.code}
+            objectID={id?.code}
             url={applicationData.EL_DOCLI}
           />
         ),
@@ -223,10 +223,10 @@ export default Location = (props) => {
         label: "Non Conformities",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <EquipmentNCRs equipment={location.code}/>,
+        render: () => <EquipmentNCRs equipment={id?.code}/>,
         RegionPanelProps: {
           customHeadingBar:  (
-              <Link to ={`/ncr?equipmentCode=${location.code}&description=NCR for ${location.code}`}
+              <Link to ={`/ncr?equipmentCode=${id?.code}&description=NCR for ${id?.code}`}
                     style={{padding: 10, display: "flex", alignItems: "center", justifyContent: "space-between", color: "#737373" }}>
                 <AddBoxIcon />
               </Link>
@@ -235,7 +235,11 @@ export default Location = (props) => {
         column: 2,
         order: 7,
         summaryIcon: BookmarkBorderRoundedIcon,
-        ignore: !isCernMode 
+        ignore: !getTabAvailability(tabs, TAB_CODES.NONCONFORMITIES),
+        initialVisibility: getTabInitialVisibility(
+          tabs,
+          TAB_CODES.NONCONFORMITIES
+        ),
       },
       // {
       //     id: 'NCRS',
@@ -244,7 +248,7 @@ export default Location = (props) => {
       //     maximizable: false,
       //     render: () =>
       //         <EDMSWidget
-      //             objectID={location.code}
+      //             objectID={id?.code}
       //             objectType="L"
       //             creationMode="NCR"
       //             edmsDocListLink={applicationData.EL_EDMSL}
@@ -254,28 +258,28 @@ export default Location = (props) => {
       //     column: 2,
       //     order: 7
       // },
-      {
-        id: "NCRS",
-        label: "NCRs",
-        isVisibleWhenNewEntity: false,
-        maximizable: true,
-        render: () => (
-          <NCRIframeContainer objectType="L" objectID={location.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
-        ),
-        RegionPanelProps: {
-          detailsStyle: { padding: 0 },
-        },
-        column: 2,
-        order: 8,
-        summaryIcon: BookmarkBorderRoundedIcon,
-        ignore:
-          !isCernMode ||
-          !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),
-        initialVisibility: getTabInitialVisibility(
-          tabs,
-          TAB_CODES.EDMS_DOCUMENTS_POSITIONS
-        ),
-      },
+      // {
+      //   id: "NCRS",
+      //   label: "NCRs",
+      //   isVisibleWhenNewEntity: false,
+      //   maximizable: true,
+      //   render: () => (
+      //     <NCRIframeContainer objectType="L" objectID={id?.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
+      //   ),
+      //   RegionPanelProps: {
+      //     detailsStyle: { padding: 0 },
+      //   },
+      //   column: 2,
+      //   order: 8,
+      //   summaryIcon: BookmarkBorderRoundedIcon,
+      //   ignore:
+      //     !isCernMode ||
+      //     !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),
+      //   initialVisibility: getTabInitialVisibility(
+      //     tabs,
+      //     TAB_CODES.EDMS_DOCUMENTS_POSITIONS
+      //   ),
+      // },
       {
         id: "COMMENTS",
         label: "Comments",
@@ -285,7 +289,7 @@ export default Location = (props) => {
           <Comments
             ref={(comments) => (commentsComponent.current = comments)}
             entityCode="LOC"
-            entityKeyCode={!newEntity ? location.code : undefined}
+            entityKeyCode={!newEntity ? id?.code : undefined}
             userCode={userData.eamAccount.userCode}
             allowHtml={true}
             disabled={readOnly}
@@ -325,7 +329,7 @@ export default Location = (props) => {
         render: () => (
           <CustomFields
             entityCode="LOC"
-            entityKeyCode={location.code}
+            entityKeyCode={id?.code}
             classCode={location.classCode}
             customFields={location.customField}
             updateEntityProperty={updateEquipmentProperty}
@@ -345,7 +349,7 @@ export default Location = (props) => {
       //     maximizable: true,
       //     render: () =>
       //         <EquipmentGraphIframe
-      //             equipmentCode={location.code}
+      //             equipmentCode={id?.code}
       //             equipmentGraphURL={applicationData.EL_EQGRH}
       //         />
       //     ,
@@ -362,7 +366,7 @@ export default Location = (props) => {
         locationLayout.customGridTabs,
         customTabGridParamNames,
         screenCode,
-        location.code
+        id?.code
       ),
       ...getCustomTabRegions(
         locationLayout.customTabs,
@@ -389,7 +393,7 @@ export default Location = (props) => {
         newEntity={newEntity}
         entityScreen={screenPermissions}
         entityName="Location"
-        entityKeyCode={location.code}
+        entityKeyCode={id?.code}
         saveHandler={saveHandler}
         newHandler={newHandler}
         deleteHandler={deleteHandler}

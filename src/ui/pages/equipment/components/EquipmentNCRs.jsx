@@ -8,7 +8,7 @@ function AssetNCRs({equipment}) {
     let headers = ['NCR', 'Description', 'Status', 'Severity'];
     let propCodes = ['nonconformity', 'description', 'status_display', 'severity_display'];
     let linksMap = new Map([['nonconformity', {linkType: 'fixed', linkValue: 'ncr/', linkPrefix: '/'}]]);
-    let [data, setData] = useState([]);
+    let [data, setData] = useState(null);
 
     useEffect(() => {
         fetchData(equipment);
@@ -24,9 +24,13 @@ function AssetNCRs({equipment}) {
         }
     };
 
-    //Do not render if there is no data
-    if (data.length === 0)
+    if (!data) {
+        return <SimpleEmptyState message="Loading..."/>;
+    }
+
+    if (data.length === 0) {
         return <SimpleEmptyState message="No NCRs to show."/>;
+    }
 
     return (
         <EISTable

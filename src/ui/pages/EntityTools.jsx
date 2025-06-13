@@ -195,7 +195,7 @@ export const registerCustomField =
     let data = processElementInfo(
       getElementInfoFromCustomFields(layoutKey, entity.USERDEFINEDAREA.CUSTOMFIELD)
     );
-    
+
     data.value = fromEAMValue(get(entity, valueKey), data.type);
     if (descKey) {
       data.desc = get(entity, descKey);
@@ -265,7 +265,7 @@ export const renderLoading = (message) => {
     justifyContent: "center",
     alignItems: "center",
   };
-  
+
   const blockUiStyleDiv = {
     display: "flex",
     height: 60,
@@ -277,7 +277,7 @@ export const renderLoading = (message) => {
       <div style={{blockUiStyleDiv}}>{message}</div>
     </BlockUi>
   )
-  
+
 }
 
 export const getTabGridRegions = (
@@ -352,7 +352,7 @@ export const getCustomTabRegions = (
   userData,
   layoutPropertiesMap = equipmentLayoutPropertiesMap
 ) => {
-  return [] // TODO the custom tab regions should be not be visible by default 
+  return [] // TODO the custom tab regions should be not be visible by default
 
   return Object.entries(customTabs).map(([tabId, tab], index) => {
     const url = getCustomTabUrl(tab, tabId, screenCode, equipment, userData, layoutPropertiesMap);
@@ -414,7 +414,7 @@ export const getCustomTabRegions = (
 
   export const toEAMNumber = (input) => {
     const num = Number(input);
-  
+
     if (isNaN(num) || !num) {
       return null
       // return {
@@ -425,13 +425,13 @@ export const getCustomTabRegions = (
       //   qualifier: "OTHER"
       // };
     }
-  
+
     const numOfDec = num.toString().includes('.')
       ? num.toString().split('.')[1].length
       : 0;
-  
+
     const value = Math.round(Math.abs(num) * Math.pow(10, numOfDec));
-  
+
     return {
       VALUE: value,
       NUMOFDEC: numOfDec,
@@ -440,7 +440,7 @@ export const getCustomTabRegions = (
       qualifier: "OTHER"
     };
   }
-  
+
   function convertTimezoneToMilliseconds(TIMEZONE) {
     return TIMEZONE === 'Z'
       ? 0
@@ -452,10 +452,10 @@ export const getCustomTabRegions = (
     if (!input || input.VALUE == null || isNaN(input.VALUE)) {
       return null;
     }
-  
+
     const raw = input.VALUE / Math.pow(10, input.NUMOFDEC || 0);
     const number = input.SIGN === '-' ? -raw : raw;
-  
+
     if (returnString) {
       return number.toString();
     }
@@ -467,28 +467,28 @@ export const getCustomTabRegions = (
 
   export const fromEAMDate = (data) => {
     if (!data?.YEAR) return null;
-  
+
     const {
       YEAR, MONTH = 1, DAY = 1,
       HOUR = 0, MINUTE = 0, SECOND = 0,
       TIMEZONE = 'Z',
     } = data;
-    
+
     const adjusted = new Date(YEAR + convertTimezoneToMilliseconds(TIMEZONE));
     const year = adjusted.getUTCFullYear();
-  
+
     // Build local ISO string (without milliseconds)
     const localISO = `${year}-${pad(MONTH)}-${pad(DAY)}T${pad(HOUR)}:${pad(MINUTE)}:${pad(SECOND)}`;
-  
+
     // Parse as local time, convert to UTC
     return new Date(localISO).toISOString();
   };
 
 
   export const toEAMDate = (iso) => {
-    
+
     if (!iso) return null;
-  
+
     const local = new Date(iso);
 
     if (isNaN(local.getTime()) || local.getFullYear() < 1970) {
@@ -496,7 +496,7 @@ export const getCustomTabRegions = (
     }
 
     const yearEpoch = new Date(`${local.getFullYear()}-01-02T00:00:00`).getTime();
-  
+
     let eamDate = {
       YEAR: yearEpoch,
       MONTH: local.getMonth() + 1,
@@ -513,7 +513,7 @@ export const getCustomTabRegions = (
 
   };
 
-export const applyTimezoneOffsetToYearField = (obj) => { // bug in EAM 
+export const applyTimezoneOffsetToYearField = (obj) => { // bug in EAM
   function recurse(node) {
     if (Array.isArray(node)) {
       node.forEach(recurse);
@@ -527,8 +527,7 @@ export const applyTimezoneOffsetToYearField = (obj) => { // bug in EAM
   }
 
   recurse(obj);
-} 
-  
-  
-  
-  
+}
+
+
+

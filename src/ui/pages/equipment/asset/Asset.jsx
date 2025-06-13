@@ -287,23 +287,23 @@ const Asset = () => {
         ignore: isCernMode || !getTabAvailability(tabs, TAB_CODES.DOCUMENTS),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.DOCUMENTS),
       },
+      // {
+      //   id: "NCRS",
+      //   label: "NCRs",
+      //   isVisibleWhenNewEntity: false,
+      //   maximizable: true,
+      //   render: () => <NCRIframeContainer objectType="A" objectID={id?.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>,
+      //   RegionPanelProps: {
+      //     detailsStyle: { padding: 0 },
+      //   },
+      //   column: 2,
+      //   order: 8,
+      //   summaryIcon: BookmarkBorderRoundedIcon,
+      //   ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
+      //   initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
+      // },
       {
         id: "NCRS",
-        label: "NCRs",
-        isVisibleWhenNewEntity: false,
-        maximizable: true,
-        render: () => <NCRIframeContainer objectType="A" objectID={id?.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>,
-        RegionPanelProps: {
-          detailsStyle: { padding: 0 },
-        },
-        column: 2,
-        order: 8,
-        summaryIcon: BookmarkBorderRoundedIcon,
-        ignore: !isCernMode || !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.EDMS_DOCUMENTS_ASSETS),
-      },
-      {
-        id: "LOCATIONNCRS",
         label: "Non Conformities",
         isVisibleWhenNewEntity: false,
         maximizable: true,
@@ -319,7 +319,11 @@ const Asset = () => {
         column: 2,
         order: 7,
         summaryIcon: BookmarkBorderRoundedIcon,
-        ignore: !isCernMode
+        ignore: !getTabAvailability(tabs, TAB_CODES.NONCONFORMITIES),
+        initialVisibility: getTabInitialVisibility(
+          tabs,
+          TAB_CODES.NONCONFORMITIES
+        ),
       },
       {
         id: "COMMENTS",
