@@ -184,7 +184,7 @@ const NCR = () => {
                         }
                         entityCode="NOCF"
                         entityKeyCode={!newEntity ? id?.code : undefined}
-                        entityOrganization={ncr.organizationCode}
+                        entityOrganization={id?.org}
                         handleError={handleError}
                         userCode={userData.eamAccount.userCode}
                         allowHtml={true}
