@@ -22,6 +22,10 @@ export const layoutPropertiesMap = {
         desc: "DEPARTMENTID.DESCRIPTION",
         alias: "departmentCode"
     },
+    type: {
+        org: "NONCONFORMITYTYPEID.ORGANIZATIONID.ORGANIZATIONCODE",
+        alias: "typeCode"
+    }
 };
 
 export function isRegionAvailable(regionCode, ncrLayout) {
