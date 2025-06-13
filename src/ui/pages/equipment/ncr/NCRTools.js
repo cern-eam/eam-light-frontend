@@ -1,7 +1,15 @@
 export const layoutPropertiesMap = {
     description: "description",
-    equipment: "equipmentCode",
-    organization: "organizationCode"
+    organization: "organizationCode",
+    equipment: {
+        value: "EQUIPMENTID.EQUIPMENTCODE",
+        desc: "EQUIPMENTID.DESCRIPTION",
+        alias: "equipmentCode"
+    },
+    location: {
+        org: 'LOCATIONID.ORGANIZATIONCODE',
+        alias: "locationCode"
+    }
 };
 
 export function isRegionAvailable(regionCode, ncrLayout) {

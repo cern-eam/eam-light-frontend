@@ -173,8 +173,6 @@ const Workorder = () => {
       WSWorkorders.getWOEquipLinearDetails(equipmentCode),
     ])
       .then(([equipment, linearDetails]) => {
-        console.log(workorder.LOCATIONID);
-        console.log( equipment?.AssetParentHierarchy?.LOCATIONID ?? equipment?.PositionParentHierarchy?.LOCATIONID ?? equipment?.SystemParentHierarchy?.LOCATIONID);
         setEquipment(equipment);
         if (!workorder.DEPARTMENTID) {
           updateWorkorderProperty("DEPARTMENTID", equipment.DEPARTMENTID);

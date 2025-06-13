@@ -5,9 +5,12 @@ import { isMultiOrg } from "@/ui/pages/EntityTools";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import WS from "../../../../tools/WS";
 import { readStatuses } from "../../../../tools/WSGrids";
+import { Consolidate } from "mdi-material-ui";
 
 const NCRGeneral = (props) => {
     const { register, ncr, userGroup, newEntity } = props;
+
+    const equipmentCode = ncr?.EQUIPMENTID?.EQUIPMENTCODE;
 
     return (
         <React.Fragment>
@@ -16,7 +19,7 @@ const NCRGeneral = (props) => {
             <EAMAutocomplete
                 {...register("equipment")}
                 link={() =>
-                    ncr.equipmentCode ? "/equipment/" + ncr.equipmentCode : null
+                    equipmentCode ? "/equipment/" + equipmentCode : null
                 }
             />
 
@@ -24,10 +27,10 @@ const NCRGeneral = (props) => {
 
             <EAMAutocomplete {...register("department")} />
 
-            <EAMSelect {...register("type", "typeCode")} />
+            <EAMSelect {...register("type")} />
 
-            <EAMSelect 
-                {...register("status")} 
+            <EAMSelect
+                {...register("status")}
                 autocompleteHandler={readStatuses}
                 autocompleteHandlerParams={["NOCF", newEntity, ncr.statusCode]}
             />
