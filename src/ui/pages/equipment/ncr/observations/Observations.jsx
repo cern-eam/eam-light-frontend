@@ -59,6 +59,9 @@ const Observations = ({
         ncrCode
     );
 
+
+    console.log(ncr?.EQUIPMENTID?.EQUIPMENTCODE);
+
     const {
         isOpen: isWorkOrdersDialogOpen,
         isDisabled: isWorkOrdersDialogDisabled,
@@ -77,7 +80,7 @@ const Observations = ({
             statusCode: "R",
             typeCode: "CD",
             assignedTo: userData?.eamAccount?.employeeCode,
-            equipmentCode: ncr?.equipmentCode,
+            equipmentCode: ncr?.EQUIPMENTID?.EQUIPMENTCODE,
         }
     );
 

@@ -159,7 +159,7 @@ const NCR = () => {
                 render: () => (
                     <EDMSDoclightIframeContainer
                         objectType="NOCF"
-                        objectID={ncr.code}
+                        objectID={id?.code}
                         url={applicationData.EL_DOCLI}
                     />
                 ),
@@ -183,7 +183,7 @@ const NCR = () => {
                             (commentsComponent.current = comments)
                         }
                         entityCode="NOCF"
-                        entityKeyCode={!newEntity ? ncr.code : undefined}
+                        entityKeyCode={!newEntity ? id?.code : undefined}
                         entityOrganization={ncr.organizationCode}
                         handleError={handleError}
                         userCode={userData.eamAccount.userCode}
