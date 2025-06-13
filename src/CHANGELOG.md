@@ -1,6 +1,18 @@
-# Version (2025-06-12)
+# Version (2025-06-13)
 
 ## Features
+### 4.0.8 
+* Make the alias for query params not case sensitive ([58cbd2](https://github.com/cern-eam/eam-light-frontend/commit/58cbd2317506579feb5f0cc66a91f3e5e7fbde21))
+* Add alias for the workorder status ([b2018e](https://github.com/cern-eam/eam-light-frontend/commit/b2018e92c34345f34037ad37d3158f15d80e167c))
+* Improve the handler engine in useEntity hook ([6e2c0a](https://github.com/cern-eam/eam-light-frontend/commit/6e2c0a8f61fc5bba3cb4fb2bdea44bda4232f4f9))
+* Remove obsolete arguments from the regiser method ([f11623](https://github.com/cern-eam/eam-light-frontend/commit/f116237d681c89d8d75f080421086eabaa9205e1))
+* Limit the number of fetched open/MRCs WOs to 200 ([0e4aee](https://github.com/cern-eam/eam-light-frontend/commit/0e4aee375134733ea5b0bdc3c5b87d3615ebe855))
+* Include alias for WO location ([23246b](https://github.com/cern-eam/eam-light-frontend/commit/23246b58356743c56d3118943a49f8ea3595ca93))
+* Fix custom field grouping ([7432c9](https://github.com/cern-eam/eam-light-frontend/commit/7432c94705fb8240bb1421ac6b8ab94f203a9536))
+* Add better filter for Reported By ([2da320](https://github.com/cern-eam/eam-light-frontend/commit/2da3208d0afdb7563cc79de45a1fcf6cda8fd2bb))
+* Support look up values for CF that have dash in the code ([d46bbb](https://github.com/cern-eam/eam-light-frontend/commit/d46bbb879a4dcbe1a26ef7870c27c8774ddb86b6))
+* Do not adjust the timezone for date values following the fixed from HxGN ([6325d2](https://github.com/cern-eam/eam-light-frontend/commit/6325d2bbe82dfdb40dc23b1576e6e641999bdf3d))
+* Assign workorder location when changing equipment. Fetch custom field LOVs. ([d14515](https://github.com/cern-eam/eam-light-frontend/commit/d1451538771d8e7945a350fb4dd9c26392320aa6))
 ### 4.0.0 
 * Fix mapping for My Open Work Orders ([604d0d](https://github.com/cern-eam/eam-light-frontend/commit/604d0d9e32fd24fc31cc4dc6e6a3989fb8d792fb))
 * [EAM-3969] Add custom tabs to Part and WorkOrder ([b91bc3](https://github.com/cern-eam/eam-light-frontend/commit/b91bc3163591d1c66aa97a516369ecf5cb8a55dc))
@@ -1169,15 +1181,7 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* Make the alias for query params not case sensitive ([58cbd2](https://github.com/cern-eam/eam-light-frontend/commit/58cbd2317506579feb5f0cc66a91f3e5e7fbde21))
-* Add alias for the workorder status ([b2018e](https://github.com/cern-eam/eam-light-frontend/commit/b2018e92c34345f34037ad37d3158f15d80e167c))
-* Improve the handler engine in useEntity hook ([6e2c0a](https://github.com/cern-eam/eam-light-frontend/commit/6e2c0a8f61fc5bba3cb4fb2bdea44bda4232f4f9))
-* Remove obsolete arguments from the regiser method ([f11623](https://github.com/cern-eam/eam-light-frontend/commit/f116237d681c89d8d75f080421086eabaa9205e1))
-* Limit the number of fetched open/MRCs WOs to 200 ([0e4aee](https://github.com/cern-eam/eam-light-frontend/commit/0e4aee375134733ea5b0bdc3c5b87d3615ebe855))
-* Include alias for WO location ([23246b](https://github.com/cern-eam/eam-light-frontend/commit/23246b58356743c56d3118943a49f8ea3595ca93))
-* Fix custom field grouping ([7432c9](https://github.com/cern-eam/eam-light-frontend/commit/7432c94705fb8240bb1421ac6b8ab94f203a9536))
-* Add better filter for Reported By ([2da320](https://github.com/cern-eam/eam-light-frontend/commit/2da3208d0afdb7563cc79de45a1fcf6cda8fd2bb))
-* Support look up values for CF that have dash in the code ([d46bbb](https://github.com/cern-eam/eam-light-frontend/commit/d46bbb879a4dcbe1a26ef7870c27c8774ddb86b6))
-* Do not adjust the timezone for date values following the fixed from HxGN ([6325d2](https://github.com/cern-eam/eam-light-frontend/commit/6325d2bbe82dfdb40dc23b1576e6e641999bdf3d))
-* Assign workorder location when changing equipment. Fetch custom field LOVs. ([d14515](https://github.com/cern-eam/eam-light-frontend/commit/d1451538771d8e7945a350fb4dd9c26392320aa6))
+* [EAM-4976] NCR Improvements ([910d40](https://github.com/cern-eam/eam-light-frontend/commit/910d400dd2b4b9b3be6c40aa16ef05c977a9a512))
+* [EAM-4976] Fix NCR creation ([25d1e1](https://github.com/cern-eam/eam-light-frontend/commit/25d1e1b2890bd00d956295c8eec2a35c378f6c44))
+* [EAM-4976] Updated observations panel. Added default equipment on work order creation. ([6ec5b1](https://github.com/cern-eam/eam-light-frontend/commit/6ec5b125e22adbd7be46b40d10e4f6821bfec94e))
 
