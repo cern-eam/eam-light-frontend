@@ -59,9 +59,6 @@ const Observations = ({
         ncrCode
     );
 
-
-    console.log(ncr?.EQUIPMENTID?.EQUIPMENTCODE);
-
     const {
         isOpen: isWorkOrdersDialogOpen,
         isDisabled: isWorkOrdersDialogDisabled,
