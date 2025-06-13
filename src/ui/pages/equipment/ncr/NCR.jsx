@@ -26,6 +26,7 @@ import Observations from "./observations/Observations";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import WSEquipment from "../../../../tools/WSEquipment.js";
 import { isCernMode } from "../../../components/CERNMode.js";
+import { getOrg } from "../../../../hooks/tools.js";
 
 const NCR = () => {
 
@@ -81,13 +82,18 @@ const NCR = () => {
         screenProperty: "ncrScreen",
         layoutProperty: "ncrLayout",
         layoutPropertiesMap: layoutPropertiesMap,
+        resultDataCodeProperty: "NONCONFORMITYID.STANDARDENTITYCODE",
     });
 
-    function postInit() {}
+    function postInit() {
+        updateNCRProperty(
+            "NONCONFORMITYID.ORGANIZATIONID.ORGANIZATIONCODE",
+            getOrg()
+        );
+    }
 
     function postRead() {
     }
-
 
 
     function onChangeEquipment(equipmentCode) {
