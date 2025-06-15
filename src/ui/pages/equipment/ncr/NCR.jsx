@@ -26,6 +26,7 @@ import Observations from "./observations/Observations";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import WSEquipment from "../../../../tools/WSEquipment.js";
 import { isCernMode } from "../../../components/CERNMode.js";
+import { getOrg } from "../../../../hooks/tools.js";
 
 const NCR = () => {
 
@@ -81,13 +82,18 @@ const NCR = () => {
         screenProperty: "ncrScreen",
         layoutProperty: "ncrLayout",
         layoutPropertiesMap: layoutPropertiesMap,
+        resultDataCodeProperty: "NONCONFORMITYID.STANDARDENTITYCODE",
     });
 
-    function postInit() {}
+    function postInit() {
+        updateNCRProperty(
+            "NONCONFORMITYID.ORGANIZATIONID.ORGANIZATIONCODE",
+            getOrg()
+        );
+    }
 
     function postRead() {
     }
-
 
 
     function onChangeEquipment(equipmentCode) {
@@ -153,7 +159,7 @@ const NCR = () => {
                 render: () => (
                     <EDMSDoclightIframeContainer
                         objectType="NOCF"
-                        objectID={ncr.code}
+                        objectID={id?.code}
                         url={applicationData.EL_DOCLI}
                     />
                 ),
@@ -177,8 +183,8 @@ const NCR = () => {
                             (commentsComponent.current = comments)
                         }
                         entityCode="NOCF"
-                        entityKeyCode={!newEntity ? ncr.code : undefined}
-                        entityOrganization={ncr.organizationCode}
+                        entityKeyCode={!newEntity ? id?.code : undefined}
+                        entityOrganization={id?.org}
                         handleError={handleError}
                         userCode={userData.eamAccount.userCode}
                         allowHtml={true}

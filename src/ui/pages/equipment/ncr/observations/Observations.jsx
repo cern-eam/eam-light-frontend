@@ -77,7 +77,7 @@ const Observations = ({
             statusCode: "R",
             typeCode: "CD",
             assignedTo: userData?.eamAccount?.employeeCode,
-            equipmentCode: ncr?.equipmentCode,
+            equipmentCode: ncr?.EQUIPMENTID?.EQUIPMENTCODE,
         }
     );
 

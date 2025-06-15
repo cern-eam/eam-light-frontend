@@ -84,7 +84,7 @@ const useEntity = (params) => {
   } = useLayoutStore();
   const screenPermissions = userData.screens[screenCode];
 
-  
+
 
   const {
     errorMessages,
@@ -139,7 +139,7 @@ const useEntity = (params) => {
     onMountHandler?.();
     return () => onUnmountHandler?.();
   }, []);
-  
+
   //
   // CRUD
   //
@@ -183,7 +183,7 @@ const useEntity = (params) => {
 
         // Temporary fix (SG-15959)
         //applyTimezoneOffsetToYearField(readEntity)
-        
+
         setEntity(readEntity);
         setId({code: get(readEntity, entityCodeProperty), org: get(readEntity, entityOrgProperty)})
 
@@ -209,7 +209,7 @@ const useEntity = (params) => {
   const updateEntity = () => {
     // if (!validateFields()) {
     //   return;
-    // } 
+    // }
 
     setLoading(true);
 
@@ -232,7 +232,7 @@ const useEntity = (params) => {
 
   const deleteEntity = () => {
     setLoading(true);
-    
+
     WS.delete(get(entity,entityCodeProperty), get(entity,entityOrgProperty))
       .then((response) => {
         showNotification(response.body.Result.InfoAlert.Message);
@@ -249,7 +249,7 @@ const useEntity = (params) => {
     setLoading(true);
 
     Promise.all([
-      WS.new(), 
+      WS.new(),
       getCustomFields(entityCode, "*")
     ])
       .then(([response, customFields]) => {
@@ -267,7 +267,7 @@ const useEntity = (params) => {
         //applyTimezoneOffsetToYearField(newEntity)
 
         setEntity(newEntity)
-        
+
         assignQueryParamValues()
         document.title = "New " + entityDesc;
         postActions?.new(newEntity);
@@ -319,7 +319,7 @@ const useEntity = (params) => {
      .catch(console.error);
   };
 
-  const updateEntityProperty = (key, value, type) => { 
+  const updateEntityProperty = (key, value, type) => {
     setEntity((prevEntity) => set({ ...prevEntity }, key, toEAMValue(value, type)));
     fireHandler(key, value);
   };
@@ -395,7 +395,7 @@ const fireHandler = (key, value) => {
       (key, value) => updateEntityProperty(key, value, data.type),
       onChange ?? extraData?.onChange
     );
-    
+
     if (extraData?.clear) {
       data.onClear = () => updateEntityProperty(extraData.clear, null)
     }
@@ -410,7 +410,7 @@ const fireHandler = (key, value) => {
     if (descKey) {
       data.desc = get(entity, descKey);
     }
-    
+
     // Link
     if (extraData?.link) {
       const orgLink = get(entity, orgKey) ? "%23" + get(entity, orgKey) : "";

@@ -1,19 +1,19 @@
 export const HEADERS = [
-    "Observation",
+    "",
+    "Note",
+    "Importance",
     "Severity",
-    "Condition Score",
-    "Condition Index",
-    "Recorded By",
+    // "Recorded By",
     "Date Recorded",
     "Work Order"
 ];
 
 export const PROP_CODES = [
     "observation",
+    "note",
+    "importance_display",
     "severity_display",
-    "conditionscore",
-    "conditionindex_display",
-    "recordedby",
+    // "recordedby",
     "daterecorded",
     "workordernum"
 ];
