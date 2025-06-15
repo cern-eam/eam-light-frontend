@@ -49,6 +49,9 @@ import { createPosition, deletePosition, getPosition, getPositionsDefault, updat
 import CustomFields from "../../../components/customfields/CustomFields.jsx";
 import Documents from "../../../components/documents/Documents.jsx";
 import { Article } from "@mui/icons-material";
+import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
+import { Link } from "react-router-dom";
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -95,7 +98,7 @@ const Position = () => {
       read: getPosition,
       update: updatePosition,
       delete: deletePosition,
-      new: getPositionsDefault, 
+      new: getPositionsDefault,
     },
     handlers: {
       "CATEGORYID.CATEGORYCODE": (category) => onCategoryChange(category, updateEquipmentProperty)
@@ -279,26 +282,46 @@ const Position = () => {
       },
       {
         id: "NCRS",
-        label: "NCRs",
+        label: "Non Conformities",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => (
-          <NCRIframeContainer objectType="S" objectID={id?.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
-        ),
+        render: () => <EquipmentNCRs equipment={id?.code}/>,
         RegionPanelProps: {
-          detailsStyle: { padding: 0 },
+          customHeadingBar:  (
+              <Link to ={`/ncr?equipmentCode=${id?.code}&description=NCR for ${id?.code}`}
+                    style={{padding: 10, display: "flex", alignItems: "center", justifyContent: "space-between", color: "#737373" }}>
+                <AddBoxIcon />
+              </Link>
+          ),
         },
         column: 2,
-        order: 8,
+        order: 7,
         summaryIcon: BookmarkBorderRoundedIcon,
-        ignore:
-          !isCernMode ||
-          !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),
-        initialVisibility: getTabInitialVisibility(
-          tabs,
-          TAB_CODES.EDMS_DOCUMENTS_POSITIONS
-        ),
+        ignore: !getTabAvailability(tabs, TAB_CODES.NONCONFORMITIES),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.NONCONFORMITIES),
       },
+      // {
+      //   id: "NCRS",
+      //   label: "NCRs",
+      //   isVisibleWhenNewEntity: false,
+      //   maximizable: true,
+      //   render: () => (
+      //     <NCRIframeContainer objectType="S" objectID={id?.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
+      //   ),
+      //   RegionPanelProps: {
+      //     detailsStyle: { padding: 0 },
+      //   },
+      //   column: 2,
+      //   order: 8,
+      //   summaryIcon: BookmarkBorderRoundedIcon,
+      //   ignore:
+      //     !isCernMode ||
+      //     !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),
+      //   initialVisibility: getTabInitialVisibility(
+      //     tabs,
+      //     TAB_CODES.EDMS_DOCUMENTS_POSITIONS
+      //   ),
+      // },
       {
         id: "COMMENTS",
         label: "Comments",

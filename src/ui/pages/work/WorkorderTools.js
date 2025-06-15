@@ -10,13 +10,13 @@ export const layoutPropertiesMap = {
     equipment: {
         desc: "EQUIPMENTID.DESCRIPTION",
         org: "EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE",
-        autocompleteHandlerData: { 
+        autocompleteHandlerData: {
             resultMap: {
                 code: "equipmentcode",
                 desc: "description_obj",
                 organization: "equiporganization",
                 equipmentType: "equipmentrtype"
-            }, 
+            },
             searchKeys: ["equipmentcode"],
             gridType: GridTypes.LIST
         },
@@ -28,16 +28,17 @@ export const layoutPropertiesMap = {
     location: {
         desc: "LOCATIONID.DESCRIPTION",
         org: "LOCATIONID.ORGANIZATIONID.ORGANIZATIONCODE",
-        autocompleteHandlerData: { 
+        autocompleteHandlerData: {
             resultMap: {
                 code: "equipmentcode",
                 desc: "equipmentdesc",
                 organization: "equiporganization"
-            }, 
+            },
             searchKeys: ["equipmentcode"],
             gridType: GridTypes.LIST
         },
-        alias: "locationCode"
+        alias: "locationCode",
+        clear: "LOCATIONID",
     },
 
     department: {
@@ -54,7 +55,7 @@ export const layoutPropertiesMap = {
     },
 
     standardwo: {
-        autocompleteHandlerData: { 
+        autocompleteHandlerData: {
             searchKeys: ["standardwo"],
             resultMap: {code: "standardwo", desc: "standardwodesc", organization: "standardwoorg"}
         },
@@ -62,13 +63,13 @@ export const layoutPropertiesMap = {
     },
 
     assignedto: {
-        autocompleteHandlerData: { 
+        autocompleteHandlerData: {
             searchKeys: ['personcode', 'description']
         }
     },
 
     reportedby: {
-        autocompleteHandlerData: { 
+        autocompleteHandlerData: {
             searchKeys: ['personcode', 'description']
         }
     },
