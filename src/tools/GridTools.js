@@ -91,10 +91,14 @@ export const transformNativeResponse = (response) => {
   };
 };
 
+export const extractSingleResult = (requestResponse, column) => {
+  return requestResponse.body?.data?.[0]?.[column]
+}
+
 
 export default {
     parseGridFilters,
     getURLParameterByName,
     replaceUrlParam,
-    stringifyGridFilters,
+    stringifyGridFilters
 }
