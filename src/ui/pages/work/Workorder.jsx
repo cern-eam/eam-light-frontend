@@ -66,6 +66,7 @@ import { getPart } from "../../../tools/WSParts";
 import Documents from "../../components/documents/Documents";
 import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
 import { getOrg } from "../../../hooks/tools";
+import { eq } from "lodash";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -106,6 +107,7 @@ const Workorder = () => {
     userData,
     applicationData,
     newEntity,
+    updateExtraData,
     commentsComponent,
     isHiddenRegion,
     getUniqueRegionID,
@@ -178,13 +180,7 @@ const Workorder = () => {
           updateWorkorderProperty("DEPARTMENTID", equipment.DEPARTMENTID);
         }
 
-        //TODO - Clear does not seem to work in teh followign scenario:
-        //  1) create a new workorder
-        //  2) must have a with a default location automatically assigned to it
-        //  3) Remove said location
-        //  4) Select an asset with a location
-        //  5) Confirm that the asset location does not get assigned to the work order
-        if (!workorder.LOCATIONID || !workorder.LOCATIONID.LOCATIONCODE) {
+        if (!workorder.LOCATIONID?.LOCATIONCODE) {
           updateWorkorderProperty("LOCATIONID", equipment?.AssetParentHierarchy?.LOCATIONID ?? equipment?.PositionParentHierarchy?.LOCATIONID ?? equipment?.SystemParentHierarchy?.LOCATIONID);
         }
 
@@ -208,26 +204,22 @@ const Workorder = () => {
 
     WSWorkorder.getStandardWorkOrder(standardWorkOrderCode)
       .then((response) => {
-        const standardWorkOrder =
-          response.body.Result.ResultData.StandardWorkOrder;
-        updateWorkorderProperty(
-          "CLASSID.CLASSCODE",
-          standardWorkOrder.WORKORDERCLASSID?.CLASSCODE
-        );
+        const standardWorkOrder = response.body.Result.ResultData.StandardWorkOrder;
+        updateWorkorderProperty("CLASSID.CLASSCODE", standardWorkOrder.WORKORDERCLASSID?.CLASSCODE);
         updateWorkorderProperty("TYPE", standardWorkOrder.WORKORDERTYPE);
         updateWorkorderProperty("PRIORITY", standardWorkOrder.PRIORITY);
-        updateWorkorderProperty(
-          "PROBLEMCODEID",
-          standardWorkOrder.PROBLEMCODEID
-        );
-        updateWorkorderProperty(
-          "WORKORDERID.DESCRIPTION",
-          standardWorkOrder.STANDARDWO.DESCRIPTION
-        );
-        console.log(response.body.Result.ResultData.StandardWorkOrder);
+        updateWorkorderProperty("PROBLEMCODEID", standardWorkOrder.PROBLEMCODEID);
+        updateWorkorderProperty("WORKORDERID.DESCRIPTION", standardWorkOrder.STANDARDWO.DESCRIPTION);
+        console.log(standardWorkOrder);
       })
       .catch(console.error);
   }
+
+  useEffect( () => {
+    updateExtraData("equipmentclass", equipment?.CLASSID?.CLASSCODE)
+    updateExtraData("equipmentclassorg", equipment?.CLASSID?.ORGANIZATIONID?.ORGANIZATIONCODE)
+    updateExtraData("equipmentcategory", equipment?.CATEGORYID?.CATEGORYCODE)
+  }, [equipment])
 
   const getRegions = () => {
     const { tabs } = workOrderLayout;
