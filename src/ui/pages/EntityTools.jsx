@@ -408,7 +408,7 @@ export const getCustomTabRegions = (
 
 
   export const fromEAMCheckbox = (value) => {
-    return value === '+' || value === '1' || value === true || value === 'true';
+    return value === '+' || value === '1' || value === '-1' || value === true || value === 'true';
   };
 
 
