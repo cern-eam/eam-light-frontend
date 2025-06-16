@@ -66,7 +66,6 @@ import { getPart } from "../../../tools/WSParts";
 import Documents from "../../components/documents/Documents";
 import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
 import { getOrg } from "../../../hooks/tools";
-import { eq } from "lodash";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {

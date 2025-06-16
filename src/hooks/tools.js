@@ -32,11 +32,21 @@ export const fromEAMValue = (value, type) => {
     }
 }
 
+export const fromEAMDefaultValue = (value, type) => {
+    // TODO support dates (format used by EAM: '06/17/2025 14:30')
+    switch(type) {
+        case "checkbox":
+            return fromEAMCheckbox(value)
+        default:
+            return value;
+    }
+}
+
 export const assignDefaultValues = (entity, layout) => {
     const exclusions = ['esthrs', 'pplreq']
     Object.values(layout.fields)
         .filter(field => field.defaultValue && field.xpath && !exclusions.includes(field.elementId))
-        .forEach(field => set(entity, field.xpath, field.defaultValue === "NULL" ? null : field.defaultValue))
+        .forEach(field => set(entity, field.xpath, field.defaultValue === "NULL" ? null : fromEAMDefaultValue(field.defaultValue, field.fieldType)))
     return entity;
 };
 
