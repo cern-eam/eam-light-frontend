@@ -45,6 +45,9 @@ import { createAsset, deleteAsset, getAsset, getAssetDefault, getAssetHierarchy,
 import CustomFields from "../../../components/customfields/CustomFields.jsx";
 import Documents from "../../../components/documents/Documents.jsx";
 import { getOrg } from "../../../../hooks/tools.js";
+import GridRequest, { GridTypes } from "../../../../tools/entities/GridRequest.js";
+import { getGridData } from "../../../../tools/WSGrids.js";
+import { extractSingleResult } from "../../../../tools/GridTools.js";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -77,6 +80,7 @@ const Asset = () => {
     register,
     showNotification,
     showWarning,
+    showError,
     handleError,
   } = useEntity({
     WS: {
@@ -87,7 +91,8 @@ const Asset = () => {
       new: getAssetDefault
     },
     handlers: {
-      "CATEGORYID.CATEGORYCODE": (category) => onCategoryChange(category, updateEquipmentProperty)
+      "CATEGORYID.CATEGORYCODE": (category) => onCategoryChange(category, updateEquipmentProperty),
+      "ASSETID.EQUIPMENTCODE": onCodeChange
     },
     isReadOnlyCustomHandler: isClosedEquipment,
     entityCode: "OBJ",
@@ -130,6 +135,34 @@ const Asset = () => {
       updateEquipmentTreeData({equipment: null});
     }
   }, [id])
+
+  function onCodeChange(code) {
+
+    if (!/^@.+/.test(code)) return;
+
+    const prefix = code.slice(1);
+
+    const gridRequest = new GridRequest(screenCode, GridTypes.LIST, screenCode);
+    gridRequest.setRowCount(1);
+    gridRequest.addFilter("equipmentno", prefix, "BEGINS");
+		gridRequest.sortBy("equipmentno", "DESC");
+
+    getGridData(gridRequest)
+      .then(response => {
+        const withoutPrefix = (extractSingleResult(response, "equipmentno") ?? "").slice(prefix.length);
+
+        if (!/^\d+$/.test(withoutPrefix)) {
+          throw new Error("Can't generate the code for " + prefix)
+        }
+
+        const newNumber = parseInt(withoutPrefix, 10) + 1;
+        const padded = String(newNumber).padStart(withoutPrefix.length, '0');
+        updateEquipmentProperty('ASSETID.EQUIPMENTCODE', prefix + padded)
+      })
+      .catch(error => {
+        showError(error.message)
+      })
+  }
 
   const getRegions = () => {
     const tabs = assetLayout.tabs;
