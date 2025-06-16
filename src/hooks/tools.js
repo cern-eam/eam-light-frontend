@@ -52,7 +52,7 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
     } 
 
     const { lovName, inputVars, inputFields, returnFields = [] } = JSON.parse(elementInfo.onLookup)
-    const { gridType, searchKeys, resultMap, userFunctionName} = autocompleteHandlerData;
+    const { gridType, searchKeys, resultMap, userFunctionName, extraData} = autocompleteHandlerData;
 
     const autocompleteHandler = (options, config) => {
         try {
@@ -66,7 +66,7 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
                 if (key === 'param.group') {
                     gridRequest.addParam(key, useUserDataStore.getState().userData.eamAccount.userGroup)
                 } else {
-                    gridRequest.addParam(key, get(entity, fields[value]?.xpath))
+                    gridRequest.addParam(key, get(entity, fields[value]?.xpath) ?? extraData?.[value])
                 }
             });
             Object.entries(inputVars ?? {}).forEach(([key, value]) => { 
@@ -88,7 +88,7 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
         }
     }
 
-    const renderDependencies = Object.values(inputFields ?? {}).map(inputField => get(entity, fields[inputField]?.xpath))
+    const renderDependencies = Object.values(inputFields ?? {}).map(inputField => get(entity, fields[inputField]?.xpath) ?? extraData?.[inputField])
 
     return {autocompleteHandler, renderDependencies}
 

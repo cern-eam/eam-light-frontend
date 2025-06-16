@@ -57,6 +57,7 @@ const useEntity = (params) => {
   const [readOnly, setReadOnly] = useState(false);
   const [isModified, setIsModified] = useState(false);
   const [id, setId] = useState(null)
+  const [extraData, setExtraData] = useState({});
   const { code: codeFromRoute } = useParams();
   const codeQueryParam = queryString.parse(window.location.search)[
     codeQueryParamName
@@ -366,19 +367,19 @@ const fireHandler = (key, value) => {
   const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
 
     const layoutData = screenLayout.fields[layoutKey]
-    const extraData = layoutPropertiesMap[layoutKey];
+    const layoutCustomData = layoutPropertiesMap[layoutKey];
 
-    if (extraData) {
+    if (layoutCustomData) {
       if (!valueKey) {
-        valueKey = extraData.value;
+        valueKey = layoutCustomData.value;
       }
 
       if (!descKey) {
-        descKey = extraData.desc;
+        descKey = layoutCustomData.desc;
       }
 
       if (!orgKey) {
-        orgKey = extraData.org;
+        orgKey = layoutCustomData.org;
       }
     }
 
@@ -393,11 +394,11 @@ const fireHandler = (key, value) => {
       descKey,
       orgKey,
       (key, value) => updateEntityProperty(key, value, data.type),
-      onChange ?? extraData?.onChange
+      onChange ?? layoutCustomData?.onChange
     );
 
-    if (extraData?.clear) {
-      data.onClear = () => updateEntityProperty(extraData.clear, null)
+    if (layoutCustomData?.clear) {
+      data.onClear = () => updateEntityProperty(layoutCustomData.clear, null)
     }
 
     data.disabled = data.disabled || readOnly; // It should remain disabled
@@ -412,13 +413,14 @@ const fireHandler = (key, value) => {
     }
 
     // Link
-    if (extraData?.link) {
+    if (layoutCustomData?.link) {
       const orgLink = get(entity, orgKey) ? "%23" + get(entity, orgKey) : "";
-      data.link = () => (data.value ? extraData.link + data.value + orgLink : null)
+      data.link = () => (data.value ? layoutCustomData.link + data.value + orgLink : null)
     }
 
 
-    Object.assign(data, createAutocompleteHandler(layoutData, screenLayout.fields, entity, {...extraData?.autocompleteHandlerData, userFunctionName: screenCode}))
+    Object.assign(data, createAutocompleteHandler(layoutData, screenLayout.fields, entity, 
+      {...layoutCustomData?.autocompleteHandlerData, userFunctionName: screenCode, extraData}))
 
     // Errors
     data.errorText = errorMessages[layoutKey];
@@ -428,6 +430,9 @@ const fireHandler = (key, value) => {
 
   const getHandlers = () => ({ ...handlers, "CLASSID.CLASSCODE": onChangeClass });
 
+  const updateExtraData = (key, value) => setExtraData(prev => ({ ...prev, [key]: value }));
+
+  const clearExtraData = () => setExtraData({});
   //
   //
   //
@@ -439,6 +444,8 @@ const fireHandler = (key, value) => {
     id,
     newEntity,
     setEntity,
+    updateExtraData,
+    clearExtraData,
     loading,
     readOnly,
     isModified,
