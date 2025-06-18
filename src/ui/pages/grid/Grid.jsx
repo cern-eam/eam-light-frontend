@@ -5,6 +5,8 @@ import Typography from "@mui/material/Typography";
 import SyncedQueryParamsEAMGridContext from "../../../tools/SyncedQueryParamsEAMGridContext";
 import EAMGrid from "eam-components/dist/ui/components/grids/eam/EAMGrid";
 import { EAMCellField } from "eam-components/dist/ui/components/grids/eam/utils";
+import useUserDataStore from "../../../state/useUserDataStore";
+import InfoPage from "../../components/infopage/InfoPage";
 
 const treatParamAsList = (param) =>
   param === undefined || param === null
@@ -55,11 +57,28 @@ const getLink = (path, val) => (
 
 const Grid = () => {
   const values = queryString.parse(window.location.search);
+  const { userData } = useUserDataStore();
+  const screen = userData.reports["Lists & Reports"].find(
+    (screen) => screen.screencode === values.gridName
+  );
+
+  if (!values?.gridName || !screen) {
+    const baseMessage = !values?.gridName ? "No grid name was provided." : "Could not find grid.";
+    
+    return (
+      <InfoPage
+        title="Error: Grid Fetching Failed"
+        message={`${baseMessage} If you clicked a link, it might be broken.`}
+        includeSupportButton
+      />
+    );
+  }
+
   return (
     <SyncedQueryParamsEAMGridContext
       gridName={values.gridName}
       cellRenderer={cellRenderer(values)}
-      searchOnMount
+      searchOnMount={screen?.startupmode_display !== "Pas d'action"}
       key={values.gridName}
     >
       <EAMGrid />
