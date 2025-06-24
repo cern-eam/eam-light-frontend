@@ -41,7 +41,7 @@ const PositionGeneral = (props) => {
           !screenPermissions.updateAllowed
         }
         autocompleteHandler={readStatuses}
-        autocompleteHandlerParams={["OBJ", newEntity, equipment.statusCode]}
+        autocompleteHandlerParams={["OBJ", newEntity, equipment.STATUS.STATUSCODE]}
       />
 
       <StatusRow
