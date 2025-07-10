@@ -1,20 +1,19 @@
-import React from 'react';
-import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect'
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker'
 import tools from '../CustomFieldTools'
 import { cfDate } from '../../../../tools/WSCustomFields';
-import { useCustomFieldOptions } from '../tools/useCustomFieldOptions';
+import EAMComboAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete';
 
 function CustomFieldDATE({customField, register, index, validate}) {
     const extraProps = register(customField.PROPERTYCODE, `USERDEFINEDAREA.CUSTOMFIELD.${index}.DATEFIELD`);
-    const options = useCustomFieldOptions(cfDate, customField.PROPERTYCODE)
-
+    
     if (tools.isLookupCustomField(customField)) {
-        return <EAMSelect {...extraProps}
-                          options={options}
+        return <EAMComboAutocomplete {...extraProps}
                           endTextAdornment={customField.UOM}
                           validate={validate}
-                          renderValue={(value) => value.desc}/>
+                          renderValue={(value) => value.desc}
+                          autocompleteHandler={cfDate}
+                          autocompleteHandlerParams={[customField.PROPERTYCODE]}
+                          selectMode={true}/>
     } else {
         return (
             <EAMDatePicker {...extraProps} 

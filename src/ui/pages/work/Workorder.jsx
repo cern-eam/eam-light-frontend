@@ -175,7 +175,7 @@ const Workorder = () => {
     ])
       .then(([equipment, linearDetails]) => {
         setEquipment(equipment);
-        if (!workorder.DEPARTMENTID) {
+        if (!workorder.DEPARTMENTID?.DEPARTMENTCODE) {
           updateWorkorderProperty("DEPARTMENTID", equipment.DEPARTMENTID);
         }
 

@@ -84,6 +84,22 @@ export const layoutPropertiesMap = {
 
     createdby: {
         desc: "CREATEDBY.DESCRIPTION"
+    },
+
+    problemcode: {
+        desc: "PROBLEMCODEID.DESCRIPTION"
+    },
+
+    failurecode: {
+        desc: "FAILURECODEID.DESCRIPTION"
+    },
+
+    causecode: {
+        desc: "CAUSECODEID.DESCRIPTION"
+    },
+
+    actioncode: {
+        desc: "ACTIONCODEID.DESCRIPTION"
     }
 
 }

@@ -2,6 +2,7 @@ import * as React from "react";
 import EAMCheckbox from "eam-components/dist/ui/components/inputs-ng/EAMCheckbox";
 import WSWorkorders from "../../../tools/WSWorkorders";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
+import EAMComboAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete';
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import { isDepartmentReadOnly, isMultiOrg } from "../EntityTools";
@@ -47,7 +48,7 @@ function WorkorderGeneral(props) {
 
       <EAMInput {...register("description")} />
 
-      <EAMAutocomplete
+      <EAMComboAutocomplete
         {...register("equipment")}
         barcodeScanner
         endAdornment={
@@ -61,9 +62,9 @@ function WorkorderGeneral(props) {
         }
       />
 
-      <EAMAutocomplete {...register("location")}/>
+      <EAMComboAutocomplete {...register("location")}/>
 
-      <EAMAutocomplete
+      <EAMComboAutocomplete
         {...register("department")}
         autocompleteHandler={autocompleteDepartment}
       />
@@ -88,13 +89,13 @@ function WorkorderGeneral(props) {
         options={statuses}
       />
 
-      <EAMSelect {...register("priority")} autocompleteHandler={WSWorkorders.getWorkOrderPriorities}/>
+      <EAMComboAutocomplete {...register("priority")} autocompleteHandler={WSWorkorders.getWorkOrderPriorities} selectMode={true}/>
 
-      <EAMAutocomplete {...register("woclass")} />
+      <EAMComboAutocomplete {...register("woclass")} />
 
-      <EAMAutocomplete {...register("standardwo")} />
+      <EAMComboAutocomplete {...register("standardwo")} />
 
-      <EAMAutocomplete {...register("costcode")}  />
+      <EAMComboAutocomplete {...register("costcode")}  />
 
       <EAMTextField {...register("targetvalue")} />
 
