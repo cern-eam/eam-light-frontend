@@ -1,19 +1,19 @@
 import React from 'react';
 import tools from '../CustomFieldTools'
-import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
-import { useCustomFieldOptions } from '../tools/useCustomFieldOptions';
 import { cfChar } from '../../../../tools/WSCustomFields';
+import EAMComboAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete';
 
 function CustomFieldCHAR({customField, register, index, validate}) {
     const extraProps = register(customField.PROPERTYCODE, `USERDEFINEDAREA.CUSTOMFIELD.${index}.TEXTFIELD`);
-    const options = useCustomFieldOptions(cfChar, customField.PROPERTYCODE)
 
     if (tools.isLookupCustomField(customField)) {
-        return <EAMSelect {...extraProps}
-                          options={options}
+        return <EAMComboAutocomplete {...extraProps}
                           endTextAdornment={customField.UOM}
+                          autocompleteHandler={cfChar}
+                          autocompleteHandlerParams={[customField.PROPERTYCODE]}
                           validate={validate}
+                          selectMode={true}
         />
     } else {
         return (

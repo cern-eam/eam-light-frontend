@@ -6,6 +6,7 @@ import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import * as React from "react";
 import WSUDF from "@/tools/WSUDF";
+import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 
 const NONE = "NONE";
 const CODE = "CODE";
@@ -31,18 +32,20 @@ const EAMUDF = (props) => {
   switch (udfLookupType) {
     case CODE:
       return (
-        <EAMSelect
+        <EAMComboAutocomplete
           {...props}
           autocompleteHandler={WSUDF.getUDFCodeValues}
           autocompleteHandlerParams={[udfLookupEntity, elementId]}
+          selectMode={true}
         />
       );
     case CODEDESC:
       return (
-        <EAMSelect
+        <EAMComboAutocomplete
           {...props}
           autocompleteHandler={WSUDF.getUDFCodeDescValues}
           autocompleteHandlerParams={[udfLookupEntity, elementId]}
+          selectMode={true}
         />
       );
     case RENT:

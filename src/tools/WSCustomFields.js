@@ -17,13 +17,13 @@ export const autocompleteCustomFieldRENT = ({handlerParams: [entityCode, rentCod
     return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "customfieldvalue", desc: "description"}))
 };
 
-export const cfChar = (code) => {
+export const cfChar = ({handlerParams: [code]}) => {
     let gridRequest = new GridRequest("LVCFV", GridTypes.LOV)
     gridRequest.addParam("param.propcode", prepareCode(code))
     return getGridData(gridRequest).then(response => transformResponse(response, {code: "customfieldvalue"}))
 }
 
-export const cfDate = (code) => {
+export const cfDate = ({handlerParams: [code]}) => {
     let gridRequest = new GridRequest("LVCFD", GridTypes.LOV)
     gridRequest.addParam("param.propcode", prepareCode(code))
     return getGridData(gridRequest).then(response => transformResponse(response, {
@@ -32,7 +32,7 @@ export const cfDate = (code) => {
     }))
 }
 
-export const cfDateTime = (code) => {
+export const cfDateTime = ({handlerParams: [code]}) => {
     let gridRequest = new GridRequest("LVCFDT", GridTypes.LOV)
     gridRequest.addParam("param.propcode", prepareCode(code))
     return getGridData(gridRequest).then(response => transformResponse(response, {
@@ -41,13 +41,13 @@ export const cfDateTime = (code) => {
     }))
 }
 
-export const cfNum = (code) => {
+export const cfNum = ({handlerParams: [code]}) => {
     let gridRequest = new GridRequest("LVCFN", GridTypes.LOV)
     gridRequest.addParam("param.propcode", prepareCode(code))
     return getGridData(gridRequest).then(response => transformResponse(response, {code: "customfieldvalue"}))
 }
 
-export const cfCodeDesc = (code) => {
+export const cfCodeDesc = ({handlerParams: [code]}) => {
     let gridRequest = new GridRequest("LVCFCD", GridTypes.LOV)
     gridRequest.addParam("param.propcode", prepareCode(code))
     return getGridData(gridRequest).then(response => transformResponse(response, {code: "customfieldvalue", desc: "description"}))

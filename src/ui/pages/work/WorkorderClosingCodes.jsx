@@ -1,5 +1,5 @@
 import React from 'react';
-import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
+import EAMComboAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete';
 
 const WorkorderClosingCodes = props => {
 
@@ -15,13 +15,13 @@ const WorkorderClosingCodes = props => {
 
     return (
         <React.Fragment>
-            <EAMSelect {...register('problemcode')} />
+            <EAMComboAutocomplete {...register('problemcode')} selectMode={true}/>
 
-            <EAMSelect {...register('failurecode')} />
+            <EAMComboAutocomplete {...register('failurecode')} selectMode={true} />
 
-            <EAMSelect {...register('causecode')} />
+            <EAMComboAutocomplete {...register('causecode')} selectMode={true} />
 
-            <EAMSelect {...register('actioncode')} />
+            <EAMComboAutocomplete {...register('actioncode')} selectMode={true} />
 
         </React.Fragment>
     )

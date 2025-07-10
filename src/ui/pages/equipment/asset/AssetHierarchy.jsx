@@ -1,6 +1,5 @@
 import * as React from "react";
 import WSEquipment from "../../../../tools/WSEquipment";
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import Dependency from "../components/Dependency";
 import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
 import { get } from "lodash";
@@ -8,6 +7,8 @@ import { getHierarchyObject, ParentDependencyTypes, getDependencyType, getParent
 import { assetLayoutPropertiesMap } from "../EquipmentTools";
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { createAutocompleteHandler } from "../../../../hooks/tools";
+import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
+import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 
 
 const AssetHierarchy = (props) => {
@@ -21,6 +22,7 @@ const AssetHierarchy = (props) => {
 
 
   const onChangeAsset = (value) => {
+    console.log('asset change', value)
     const hierarchy = getHierarchyObject({
       parentAssetCode: value?.code || '',
       parentAssetOrg:  value?.org  || ''
@@ -87,12 +89,12 @@ const AssetHierarchy = (props) => {
 
       <EAMUDF {...register("udfchar11")} />
 
-      <EAMAutocomplete
+      <EAMComboAutocomplete
         {...processElementInfo(assetLayout.fields.parentasset)}
         value={getParentAssetCode('AssetParentHierarchy', equipment)}
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
         autocompleteHandlerParams={["A"]}
-        onSelect={onChangeAsset}
+        onChange={onChangeAsset}
         barcodeScanner
         endAdornment={
           <Dependency
@@ -111,7 +113,7 @@ const AssetHierarchy = (props) => {
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
         autocompleteHandlerParams={["P"]}
         renderDependencies={[equipment.AssetParentHierarchy]}
-        onSelect={onChangePosition}
+        onChange={onChangePosition}
         endAdornment={
           <Dependency
             onChangeHandler={onChangePositionDependency}
@@ -121,14 +123,14 @@ const AssetHierarchy = (props) => {
         }
       />
 
-      <EAMAutocomplete
+      <EAMComboAutocomplete
         {...processElementInfo(assetLayout.fields.primarysystem)}
         value = {getParentPrimarySystemCode('AssetParentHierarchy', equipment)}
         barcodeScanner
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
         autocompleteHandlerParams={["S"]}
         renderDependencies={[equipment.AssetParentHierarchy]}
-        onSelect={onChangeSystem}
+        onChange={onChangeSystem}
         endAdornment={
           <Dependency
             onChangeHandler={onChangeSystemDependency}
@@ -138,7 +140,7 @@ const AssetHierarchy = (props) => {
         }
       />
 
-      <EAMAutocomplete
+      <EAMComboAutocomplete
         {...processElementInfo(assetLayout.fields.location)}
         {...createAutocompleteHandler(assetLayout.fields.location, assetLayout.fields, equipment, assetLayoutPropertiesMap.location?.autocompleteHandlerData)}
         value={get(equipment, 'AssetParentHierarchy.LocationDependency.DEPENDENTLOCATION.LOCATIONID.LOCATIONCODE') ??
