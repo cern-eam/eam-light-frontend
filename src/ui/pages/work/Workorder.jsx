@@ -205,7 +205,7 @@ const Workorder = () => {
     WSWorkorder.getStandardWorkOrder(standardWorkOrderCode)
       .then((response) => {
         const standardWorkOrder = response.body.Result.ResultData.StandardWorkOrder;
-        updateWorkorderProperty("CLASSID.CLASSCODE", standardWorkOrder.WORKORDERCLASSID?.CLASSCODE);
+        updateWorkorderProperty("CLASSID", standardWorkOrder.WORKORDERCLASSID);
         updateWorkorderProperty("TYPE", standardWorkOrder.WORKORDERTYPE);
         updateWorkorderProperty("PRIORITY", standardWorkOrder.PRIORITY);
         updateWorkorderProperty("PROBLEMCODEID", standardWorkOrder.PROBLEMCODEID);
