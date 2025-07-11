@@ -1,9 +1,8 @@
 import * as React from "react";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
-import WS from "../../../../tools/WS";
 import StatusRow from "../../../components/statusrow/StatusRow";
 import { autocompleteDepartment } from "../../../../tools/WSGrids";
+import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 
 const AssetGeneral = (props) => {
   const { location, locationLayout, newEntity, register, id } = props;
@@ -16,7 +15,7 @@ const AssetGeneral = (props) => {
 
       <EAMTextField {...register("equipmentdesc")} />
 
-      <EAMAutocomplete
+      <EAMComboAutocomplete
         {...register("department")}
         autocompleteHandler={autocompleteDepartment}
       />

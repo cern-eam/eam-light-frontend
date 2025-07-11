@@ -1,17 +1,15 @@
 import * as React from "react";
-import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import EAMCheckbox from "eam-components/dist/ui/components/inputs-ng/EAMCheckbox";
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
-import WS from "../../../../tools/WS";
+import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 
 const LocationDetails = (props) => {
   const { register } = props;
 
   return (
     <React.Fragment>
-      <EAMAutocomplete {...register("class")} />
+      <EAMComboAutocomplete {...register("class")} />
 
-      <EAMTextField {...register("costcode")} />
+      <EAMComboAutocomplete {...register("costcode")} />
 
       <EAMCheckbox {...register("safety")} />
 

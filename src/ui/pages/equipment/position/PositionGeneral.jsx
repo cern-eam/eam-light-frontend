@@ -1,10 +1,10 @@
 import React from "react";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import StatusRow from "../../../components/statusrow/StatusRow";
 import { isDepartmentReadOnly, isMultiOrg } from "@/ui/pages/EntityTools";
 import { autocompleteDepartment, readStatuses } from "../../../../tools/WSGrids";
+import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 
 const PositionGeneral = (props) => {
   const {
@@ -29,7 +29,7 @@ const PositionGeneral = (props) => {
 
       <EAMTextField {...register("equipmentdesc")} />
 
-      <EAMAutocomplete
+      <EAMComboAutocomplete
         {...register("department")}
           autocompleteHandler={autocompleteDepartment}
       />
