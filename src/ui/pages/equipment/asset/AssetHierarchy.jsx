@@ -8,7 +8,6 @@ import { assetLayoutPropertiesMap } from "../EquipmentTools";
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { createAutocompleteHandler } from "../../../../hooks/tools";
 import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 
 
 const AssetHierarchy = (props) => {
@@ -106,7 +105,7 @@ const AssetHierarchy = (props) => {
         renderDependencies={[equipment.AssetParentHierarchy]}
       />
 
-      <EAMAutocomplete
+      <EAMComboAutocomplete
         {...processElementInfo(assetLayout.fields.position)}
         value = {getParentPositionCode('AssetParentHierarchy', equipment) }
         barcodeScanner
@@ -150,7 +149,7 @@ const AssetHierarchy = (props) => {
           getDependencyType(equipment.AssetParentHierarchy) !== ParentDependencyTypes.NONE &&
           getDependencyType(equipment.AssetParentHierarchy) !== ParentDependencyTypes.LOCATION
         }
-        onSelect={onChangeLocation}
+        onChange={onChangeLocation}
         renderDependencies={[equipment.AssetParentHierarchy]}
       />
     </React.Fragment>

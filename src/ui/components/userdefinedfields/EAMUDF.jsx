@@ -1,8 +1,6 @@
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMCheckbox from "eam-components/dist/ui/components/inputs-ng/EAMCheckbox";
 import EAMDatePicker from "eam-components/dist/ui/components/inputs-ng/EAMDatePicker";
 import EAMDateTimePicker from "eam-components/dist/ui/components/inputs-ng/EAMDateTimePicker";
-import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import * as React from "react";
 import WSUDF from "@/tools/WSUDF";
@@ -50,7 +48,7 @@ const EAMUDF = (props) => {
       );
     case RENT:
       return (
-        <EAMAutocomplete
+        <EAMComboAutocomplete
           {...props}
           autocompleteHandler={WSUDF.autocompleteUserDefinedField}
           autocompleteHandlerParams={[udfLookupEntity]}
