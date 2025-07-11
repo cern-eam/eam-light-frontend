@@ -1,3 +1,5 @@
+import { GridTypes } from "../../../../tools/entities/GridRequest";
+
 export const layoutPropertiesMap = {
     description: "description",
     organization: "organizationCode",
@@ -5,7 +7,16 @@ export const layoutPropertiesMap = {
         value: "EQUIPMENTID.EQUIPMENTCODE",
         desc: "EQUIPMENTID.DESCRIPTION",
         org: 'EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE',
-        alias: "equipmentCode"
+        alias: "equipmentCode",
+        autocompleteHandlerData: {
+            resultMap: {
+                code: "equipmentcode",
+                desc: "description_obj",
+                organization: "equiporganization",
+                equipmentType: "equipmentrtype"
+            },
+            gridType: GridTypes.LIST
+        }
     },
     location: {
         org: 'LOCATIONID.ORGANIZATIONCODE',

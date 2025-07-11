@@ -1,10 +1,9 @@
 import * as React from "react";
 import EAMDateTimePicker from "eam-components/dist/ui/components/inputs-ng/EAMDateTimePicker";
 import EAMDatePicker from "eam-components/dist/ui/components/inputs-ng/EAMDatePicker";
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
-import WS from "../../../tools/WS";
 import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
+import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 
 const WorkorderScheduling = (props) => {
   const { workOrderLayout, register } = props;
@@ -30,11 +29,11 @@ const WorkorderScheduling = (props) => {
         <EAMDatePicker {...register("datecreated")} />
       </div>
 
-      <EAMAutocomplete {...register("reportedby")} />
+      <EAMComboAutocomplete {...register("reportedby")} />
 
-      <EAMAutocomplete {...register("assignedto")} barcodeScanner/>
+      <EAMComboAutocomplete {...register("assignedto")} barcodeScanner/>
 
-      <EAMAutocomplete {...register("schedgroup")} barcodeScanner />
+      <EAMComboAutocomplete {...register("schedgroup")} barcodeScanner />
 
       <EAMDatePicker {...register("reqstartdate")} />
 

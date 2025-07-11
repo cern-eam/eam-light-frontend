@@ -1,11 +1,9 @@
 import * as React from "react";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
-import { isMultiOrg } from "@/ui/pages/EntityTools";
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import WS from "../../../../tools/WS";
 import { readStatuses } from "../../../../tools/WSGrids";
-import { Consolidate } from "mdi-material-ui";
+import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 
 const NCRGeneral = (props) => {
     const { register, ncr, userGroup, newEntity } = props;
@@ -16,16 +14,16 @@ const NCRGeneral = (props) => {
         <React.Fragment>
             <EAMTextField {...register("description")} />
 
-            <EAMAutocomplete
+            <EAMComboAutocomplete
                 {...register("equipment")}
                 link={() =>
                     equipmentCode ? "/equipment/" + equipmentCode : null
                 }
             />
 
-            <EAMAutocomplete {...register("location")} />
+            <EAMComboAutocomplete {...register("location")} />
 
-            <EAMAutocomplete {...register("department")} />
+            <EAMComboAutocomplete {...register("department")} />
 
             <EAMSelect {...register("type")} />
 
@@ -35,7 +33,7 @@ const NCRGeneral = (props) => {
                 autocompleteHandlerParams={["NOCF", newEntity, ncr.statusCode]}
             />
 
-            <EAMAutocomplete {...register("class")} />
+            <EAMComboAutocomplete {...register("class")} />
 
             <EAMSelect
                 {...register("severity")}
