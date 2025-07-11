@@ -159,9 +159,9 @@ const Workorder = () => {
   });
 
   function onChangeEquipment(equipmentData) {
+    
     const equipmentCode = equipmentData["EQUIPMENTID.EQUIPMENTCODE"];
-    const equipmentOrg =
-      equipmentData["EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE"];
+    const equipmentOrg = equipmentData["EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE"];
 
     if (!equipmentCode) {
       setEquipment(null);
@@ -175,15 +175,16 @@ const Workorder = () => {
     ])
       .then(([equipment, linearDetails]) => {
         setEquipment(equipment);
-        if (!workorder.DEPARTMENTID?.DEPARTMENTCODE) {
+        
+        if (!workorder?.DEPARTMENTID?.DEPARTMENTCODE) {
           updateWorkorderProperty("DEPARTMENTID", equipment.DEPARTMENTID);
         }
 
-        if (!workorder.LOCATIONID?.LOCATIONCODE) {
+        if (!workorder?.LOCATIONID?.LOCATIONCODE) {
           updateWorkorderProperty("LOCATIONID", equipment?.AssetParentHierarchy?.LOCATIONID ?? equipment?.PositionParentHierarchy?.LOCATIONID ?? equipment?.SystemParentHierarchy?.LOCATIONID);
         }
 
-        if (!workorder.COSTCODEID) {
+        if (!workorder?.COSTCODEID) {
           updateWorkorderProperty("COSTCODEID", equipment.COSTCODEID);
         }
 

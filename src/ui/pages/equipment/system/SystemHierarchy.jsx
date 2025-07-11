@@ -1,13 +1,12 @@
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import * as React from "react";
 import WSEquipment from "../../../../tools/WSEquipment";
 import Dependency from "../components/Dependency";
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
-import { getDependencyType, getHierarchyObject, ParentDependencyTypes } from "../asset/assethierarchytools";
 import { get } from "lodash";
 import { systemLayoutPropertiesMap } from "../EquipmentTools";
 import { createAutocompleteHandler } from "../../../../hooks/tools";
+import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 
 const SystemHierarchy = (props) => {
   const {
@@ -94,7 +93,7 @@ const SystemHierarchy = (props) => {
         readonly={true}
       />
       
-      <EAMAutocomplete
+      <EAMComboAutocomplete
         {...processElementInfo(systemLayout.fields.primarysystem)}
         value = {
           get(equipment, 'SystemParentHierarchy.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE') ??
@@ -105,7 +104,7 @@ const SystemHierarchy = (props) => {
         autocompleteHandlerParams={["S"]}
         renderDependencies={[equipment.SystemParentHierarchy]}
         
-        onSelect={onChangePrimarySystem}
+        onChange={onChangePrimarySystem}
 
         endAdornment={
           <Dependency
@@ -118,7 +117,7 @@ const SystemHierarchy = (props) => {
       />
 
 
-      <EAMAutocomplete
+      <EAMComboAutocomplete
         {...processElementInfo(systemLayout.fields.location)}
         {...createAutocompleteHandler(systemLayout.fields.location, systemLayout.fields, equipment, systemLayoutPropertiesMap.location?.autocompleteHandlerData)}
         value={get(equipment, 'SystemParentHierarchy.DEPENDENTLOCATION.LOCATIONID.LOCATIONCODE') ??
@@ -126,7 +125,7 @@ const SystemHierarchy = (props) => {
         disabled={
           readOnly || get(equipment, 'SystemParentHierarchy.DEPENDENTPRIMARYSYSTEM.SYSTEMID')
         }
-        onSelect={onChangeLocation}
+        onChange={onChangeLocation}
         renderDependencies={[equipment.SystemParentHierarchy]}
       />
     </React.Fragment>

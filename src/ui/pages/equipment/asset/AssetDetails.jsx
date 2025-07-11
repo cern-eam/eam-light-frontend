@@ -1,24 +1,24 @@
 import * as React from "react";
 import EAMDatePicker from "eam-components/dist/ui/components/inputs-ng/EAMDatePicker";
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import { readUserCodes } from "../../../../tools/WSGrids";
+import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 
 const AssetDetails = (props) => {
   const { register } = props;
 
   return (
     <React.Fragment>
-      <EAMAutocomplete {...register("class")}/>
+      <EAMComboAutocomplete {...register("class")}/>
 
-      <EAMAutocomplete {...register("category")}/>
+      <EAMComboAutocomplete {...register("category")}/>
 
-      <EAMAutocomplete {...register("costcode")}/>
+      <EAMComboAutocomplete {...register("costcode")}/>
 
       <EAMDatePicker {...register("commissiondate")} />
 
-      <EAMAutocomplete {...register("assignedto")} />
+      <EAMComboAutocomplete {...register("assignedto")} />
 
       <EAMSelect  {...register("criticality")}
         autocompleteHandler={readUserCodes}
@@ -27,13 +27,13 @@ const AssetDetails = (props) => {
 
       <EAMTextField {...register("equipmentvalue")} />
 
-      <EAMAutocomplete {...register("manufacturer")} />
+      <EAMComboAutocomplete {...register("manufacturer")} />
 
       <EAMTextField {...register("serialnumber")} />
 
       <EAMTextField {...register("model")} />
 
-      <EAMAutocomplete {...register("part")} />
+      <EAMComboAutocomplete {...register("part")} />
 
       <EAMTextField {...register("store")}  disabled={true} />
 

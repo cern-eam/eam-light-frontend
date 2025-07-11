@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker'
-import EAMAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMAutocomplete';
 import { readUserCodes } from '../../../../tools/WSGrids';
+import EAMComboAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete';
 
 const PositionDetails = (props) => {
 
@@ -12,20 +12,21 @@ const PositionDetails = (props) => {
     return (
         <React.Fragment>
 
-            <EAMAutocomplete {...register('class')} />
+            <EAMComboAutocomplete {...register('class')} />
 
-            <EAMAutocomplete {...register('category')} />
+            <EAMComboAutocomplete {...register('category')} />
 
             <EAMDatePicker {...register('commissiondate')} />
 
-            <EAMAutocomplete {...register('assignedto')} />
+            <EAMComboAutocomplete {...register('assignedto')} />
 
-            <EAMSelect {...register('criticality')}
+            <EAMComboAutocomplete {...register('criticality')}
                 autocompleteHandler={readUserCodes}
                 autocompleteHandlerParams={["OBCR"]}
+                selectMode={true}
             />
 
-            <EAMAutocomplete {...register('manufacturer')} />
+            <EAMComboAutocomplete {...register('manufacturer')} />
 
             <EAMTextField {...register('serialnumber')} />
 

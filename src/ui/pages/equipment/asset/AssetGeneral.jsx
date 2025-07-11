@@ -1,11 +1,11 @@
 import * as React from "react";
 import StatusRow from "../../../components/statusrow/StatusRow";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import { isDepartmentReadOnly, isMultiOrg } from "@/ui/pages/EntityTools";
 import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
 import { autocompleteDepartment, readStatuses, readUserCodes } from "../../../../tools/WSGrids";
+import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 
 const AssetGeneral = (props) => {
   const {
@@ -29,7 +29,7 @@ const AssetGeneral = (props) => {
 
       <EAMTextField {...register("equipmentdesc")} />
 
-      <EAMAutocomplete
+      <EAMComboAutocomplete
         {...register("department")}
         autocompleteHandler={autocompleteDepartment}
       />

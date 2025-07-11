@@ -1,11 +1,11 @@
 import * as React from "react";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMCheckbox from "eam-components/dist/ui/components/inputs-ng/EAMCheckbox";
 import StatusRow from "../../components/statusrow/StatusRow";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import { isMultiOrg } from "../EntityTools";
 import { getPartTrackingMethods } from "../../../tools/WSParts";
+import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 
 const PartGeneral = (props) => {
   const { part, newEntity, register, screenCode, id } = props;
@@ -18,15 +18,15 @@ const PartGeneral = (props) => {
 
       <EAMTextField {...register("description")} />
 
-      <EAMAutocomplete {...register("class")} />
+      <EAMComboAutocomplete {...register("class")} />
 
-      <EAMAutocomplete {...register("category")} />
+      <EAMComboAutocomplete {...register("category")} />
 
-      <EAMAutocomplete {...register("uom")} />
+      <EAMComboAutocomplete {...register("uom")} />
 
       <EAMSelect {...register("trackingtype")} autocompleteHandler={getPartTrackingMethods}/>
 
-      <EAMAutocomplete {...register("commoditycode")} />
+      <EAMComboAutocomplete {...register("commoditycode")} />
 
       <EAMCheckbox {...register("trackbyasset")} />
 

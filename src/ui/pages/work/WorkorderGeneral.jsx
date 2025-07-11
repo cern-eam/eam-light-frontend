@@ -1,7 +1,6 @@
 import * as React from "react";
 import EAMCheckbox from "eam-components/dist/ui/components/inputs-ng/EAMCheckbox";
 import WSWorkorders from "../../../tools/WSWorkorders";
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMComboAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete';
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";

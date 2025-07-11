@@ -358,7 +358,14 @@ const fireHandler = (key, value) => {
         const altKey = Object.keys(layoutPropertiesMap ?? {}).find(k => layoutPropertiesMap?.[k].alias?.toLowerCase() === key.toLowerCase());
         const elementInfo = screenLayout.fields[key] ?? screenLayout.fields[altKey]
         if (elementInfo && elementInfo.xpath && value) {
-          updateEntityProperty(elementInfo.xpath, value, elementInfo.fieldType)
+          updateEntityProperty(elementInfo.xpath, getCodeOrg(value).code, elementInfo.fieldType)
+
+          // Check if organization shouold be assigned too
+          const elementCustomInfo = layoutPropertiesMap[key] ?? layoutPropertiesMap[altKey]
+          if (elementCustomInfo.org) {
+            updateEntityProperty(elementCustomInfo.org, getCodeOrg(value).org)
+          }
+
         }
       })
       // TODO custom fields
@@ -366,43 +373,43 @@ const fireHandler = (key, value) => {
 
   const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
 
-    const layoutData = screenLayout.fields[layoutKey]
-    const layoutCustomData = layoutPropertiesMap[layoutKey];
+    const elementInfo = screenLayout.fields[layoutKey]
+    const elementCustomInfo = layoutPropertiesMap[layoutKey];
 
-    if (layoutCustomData) {
+    if (elementCustomInfo) {
       if (!valueKey) {
-        valueKey = layoutCustomData.value;
+        valueKey = elementCustomInfo.value;
       }
 
       if (!descKey) {
-        descKey = layoutCustomData.desc;
+        descKey = elementCustomInfo.desc;
       }
 
       if (!orgKey) {
-        orgKey = layoutCustomData.org;
+        orgKey = elementCustomInfo.org;
       }
     }
 
     if (!valueKey) {
-      valueKey = layoutData.xpath
+      valueKey = elementInfo.xpath
     }
 
-    let data = processElementInfo(layoutData ?? getElementInfoFromCustomFields(layoutKey, entity.USERDEFINEDAREA.CUSTOMFIELD))
+    let data = processElementInfo(elementInfo ?? getElementInfoFromCustomFields(layoutKey, entity.USERDEFINEDAREA.CUSTOMFIELD))
 
     data.onChange = createOnChangeHandler(
       valueKey,
       descKey,
       orgKey,
       (key, value) => updateEntityProperty(key, value, data.type),
-      onChange ?? layoutCustomData?.onChange
+      onChange ?? elementCustomInfo?.onChange
     );
 
-    if (layoutCustomData?.clear) {
-      data.onClear = () => updateEntityProperty(layoutCustomData.clear, null)
+    if (elementCustomInfo?.clear) {
+      data.onClear = () => updateEntityProperty(elementCustomInfo.clear, null)
     }
 
     data.disabled = data.disabled || readOnly; // It should remain disabled
-    data.elementInfo = layoutData; // Return elementInfo as it is still needed in some cases (for example for UDFs)
+    data.elementInfo = elementInfo; // Return elementInfo as it is still needed in some cases (for example for UDFs)
 
     // Value
     data.value = fromEAMValue(get(entity, valueKey), data.type)
@@ -413,14 +420,14 @@ const fireHandler = (key, value) => {
     }
 
     // Link
-    if (layoutCustomData?.link) {
+    if (elementCustomInfo?.link) {
       const orgLink = get(entity, orgKey) ? "%23" + get(entity, orgKey) : "";
-      data.link = () => (data.value ? layoutCustomData.link + data.value + orgLink : null)
+      data.link = () => (data.value ? elementCustomInfo.link + data.value + orgLink : null)
     }
 
 
-    Object.assign(data, createAutocompleteHandler(layoutData, screenLayout.fields, entity, 
-      {...layoutCustomData?.autocompleteHandlerData, userFunctionName: screenCode, extraData}))
+    Object.assign(data, createAutocompleteHandler(elementInfo, screenLayout.fields, entity, 
+      {...elementCustomInfo?.autocompleteHandlerData, userFunctionName: screenCode, extraData}))
 
     // Errors
     data.errorText = errorMessages[layoutKey];
