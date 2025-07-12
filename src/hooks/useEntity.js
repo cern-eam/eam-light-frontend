@@ -66,8 +66,6 @@ const useEntity = (params) => {
   const abortController = useRef(null);
   const commentsComponent = useRef(null);
 
-  const pendingMultiKeyHandlersRef = useRef({});
-
   const { showNotification, showError, showWarning, handleError } =
     useSnackbarStore();
   const { userData } = useUserDataStore();
@@ -320,31 +318,30 @@ const useEntity = (params) => {
      .catch(console.error);
   };
 
-  const updateEntityProperty = (key, value, type) => {
-    setEntity((prevEntity) => set({ ...prevEntity }, key, toEAMValue(value, type)));
-    fireHandler(key, value);
-  };
+const updateEntityProperty = (key, value, type) => {
+
+  const keys = Array.isArray(key) ? key : [key];
+  const values = Array.isArray(value) ? value : [value];
+
+  setEntity(prevEntity => {
+    keys.forEach((k, i) => set(prevEntity, k, toEAMValue(values[i], type)));
+    return prevEntity;
+  });
+
+  fireHandler(keys, values);
+};
 
 const fireHandler = (key, value) => {
   const handlers = getHandlers();
-  const pending = pendingMultiKeyHandlersRef.current;
 
-  for (const [keys, handler] of Object.entries(handlers)) {
-    const [k1, k2] = keys.split(",");
-
-    if (!k2 && k1 === key) {
-      handler(value);
-      continue;
-    }
-
-    if (key === k1) {
-      (pending[keys] ??= {})[k1] = value;
-    } else if (key === k2) {
-      if ((pending[keys] ?? {})[k1] !== undefined) {
-        pending[keys][k2] = value;
-        handler(pending[keys]);
-        pending[keys] = {};
-      }
+  for (const [keys, handlerFunction] of Object.entries(handlers)) {
+    const handlerKeys = keys.split(',');
+    if (handlerKeys.every(k => key.includes(k))) {
+      const payload = handlerKeys.length === 1
+        ? value[key.indexOf(handlerKeys[0])]
+        : Object.fromEntries(handlerKeys.map(k => [k, value[key.indexOf(k)]]));
+        console.log('fire', payload)
+      handlerFunction(payload);
     }
   }
 };
@@ -359,13 +356,6 @@ const fireHandler = (key, value) => {
         const elementInfo = screenLayout.fields[key] ?? screenLayout.fields[altKey]
         if (elementInfo && elementInfo.xpath && value) {
           updateEntityProperty(elementInfo.xpath, getCodeOrg(value).code, elementInfo.fieldType)
-
-          // Check if organization shouold be assigned too
-          const elementCustomInfo = layoutPropertiesMap[key] ?? layoutPropertiesMap[altKey]
-          if (elementCustomInfo.org) {
-            updateEntityProperty(elementCustomInfo.org, getCodeOrg(value).org)
-          }
-
         }
       })
       // TODO custom fields
