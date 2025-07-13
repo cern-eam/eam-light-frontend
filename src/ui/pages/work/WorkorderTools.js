@@ -55,6 +55,7 @@ export const layoutPropertiesMap = {
     },
 
     standardwo: {
+        desc: "STANDARDWO.DESCRIPTION",
         autocompleteHandlerData: {
             searchKeys: ["standardwo"],
             resultMap: {code: "standardwo", desc: "standardwodesc", organization: "standardwoorg"}
@@ -100,6 +101,10 @@ export const layoutPropertiesMap = {
 
     actioncode: {
         desc: "ACTIONCODEID.DESCRIPTION"
+    },
+
+    priority: {
+        desc: "PRIORITY.DESCRIPTION"
     }
 
 }

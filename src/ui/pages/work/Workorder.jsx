@@ -139,7 +139,7 @@ const Workorder = () => {
       copy: postCopy,
     },
     handlers: {
-      "STANDARDWO.STDWOCODE": onChangeStandardWorkOrder,
+      "STANDARDWO.STDWOCODE,STANDARDWO.DESCRIPTION": onChangeStandardWorkOrder,
       "EQUIPMENTID.EQUIPMENTCODE,EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE":
         onChangeEquipment,
     },
@@ -197,7 +197,8 @@ const Workorder = () => {
       .catch(console.error);
   }
 
-  function onChangeStandardWorkOrder(standardWorkOrderCode) {
+  function onChangeStandardWorkOrder({ ['STANDARDWO.STDWOCODE']: standardWorkOrderCode }) {
+    console.log('std wo', standardWorkOrderCode)
     if (!standardWorkOrderCode) {
       return;
     }
