@@ -24,4 +24,4 @@ function CustomFieldCHAR({customField, register, index, validate}) {
 
 }
 
-export default React.memo(CustomFieldCHAR);
+export default CustomFieldCHAR;

@@ -310,7 +310,7 @@ const useEntity = (params) => {
   //
   // HELPER METHODS
   //
-  const onChangeClass = (newClass) => {
+  const onChangeClass = ({['CLASSID.CLASSCODE']: newClass}) => {
      getCustomFields(entityCode, newClass)
      .then((response) => {
         setEntity((prevEntity) => assignCustomFieldFromCustomField(prevEntity, response.body.Result.CUSTOMFIELD));
@@ -319,34 +319,29 @@ const useEntity = (params) => {
   };
 
 const updateEntityProperty = (key, value, type) => {
-
   const keys = Array.isArray(key) ? key : [key];
   const values = Array.isArray(value) ? value : [value];
 
   setEntity(prevEntity => {
     keys.forEach((k, i) => set(prevEntity, k, toEAMValue(values[i], type)));
-    return prevEntity;
+    return {...prevEntity};
   });
 
   fireHandler(keys, values);
 };
 
-const fireHandler = (key, value) => {
-  const handlers = getHandlers();
+  const fireHandler = (key, value) => {
+    const handlers = getHandlers();
 
-  for (const [keys, handlerFunction] of Object.entries(handlers)) {
-    const handlerKeys = keys.split(',');
-    if (handlerKeys.every(k => key.includes(k))) {
-      const payload = handlerKeys.length === 1
-        ? value[key.indexOf(handlerKeys[0])]
-        : Object.fromEntries(handlerKeys.map(k => [k, value[key.indexOf(k)]]));
-        console.log('fire', payload)
-      handlerFunction(payload);
+    for (const [keys, handlerFunction] of Object.entries(handlers)) {
+      const handlerKeys = keys.split(',');
+      if (handlerKeys.every(k => key.includes(k))) {
+        const payload = Object.fromEntries(key.map((k, i) => [k, value[i]]));
+        console.log('Firing handler', handlerKeys, payload);
+        handlerFunction(payload);
+      }
     }
-  }
-};
-
-
+  };
 
   const assignQueryParamValues = () => {
       let queryParams = queryString.parse(window.location.search);
@@ -425,7 +420,7 @@ const fireHandler = (key, value) => {
     return data;
   };
 
-  const getHandlers = () => ({ ...handlers, "CLASSID.CLASSCODE": onChangeClass });
+  const getHandlers = () => ({ ...handlers, "CLASSID.CLASSCODE,CLASSID.ORGANIZATIONID.ORGANIZATIONCODE": onChangeClass });
 
   const updateExtraData = (key, value) => setExtraData(prev => ({ ...prev, [key]: value }));
 
