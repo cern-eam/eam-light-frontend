@@ -1,10 +1,5 @@
 // MAPPING BETWEEN ENTITY KEYS AND LAYOUT ID
 export const layoutPropertiesMap =  {
-    class: {
-        value: "CLASSID.CLASSCODE",
-        desc: "CLASSID.DESCRIPTION",
-        org: "CLASSID.ORGANIZATIONID.ORGANIZATIONCODE"
-    },
 
     uom: {
         autocompleteHandlerData: { 

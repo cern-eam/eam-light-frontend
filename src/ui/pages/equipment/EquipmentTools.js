@@ -108,9 +108,6 @@ export const equipmentLayoutPropertiesMap = {
   },
 
   class: {
-    value: "CLASSID.CLASSCODE",
-    desc: "CLASSID.DESCRIPTION",
-    org: "CLASSID.ORGANIZATIONID.ORGANIZATIONCODE",
     autocompleteHandlerData: {
         resultMap: {
             code: "class",
@@ -136,8 +133,6 @@ export const assetLayoutPropertiesMap = {
   ...equipmentLayoutPropertiesMap,
 
   costcode: {
-    value: "COSTCODEID.COSTCODE",
-    desc: "COSTCODEID.DESCRIPTION",
     autocompleteHandlerData: {
         resultMap: {
             code: "costcode",
@@ -149,9 +144,6 @@ export const assetLayoutPropertiesMap = {
 
   part: {
     link: "/part/",
-    value: 'PartAssociation.PARTID.PARTCODE',
-    desc: 'PartAssociation.PARTID.DESCRIPTION',
-    org: 'PartAssociation.PARTID.ORGANIZATIONID.ORGANIZATIONCODE',
     clear: 'PartAssociation.STORELOCATION'
   }
 };

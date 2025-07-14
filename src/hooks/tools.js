@@ -50,6 +50,8 @@ export const assignDefaultValues = (entity, layout) => {
     return entity;
 };
 
+export const appendPath = (input, suffix) => /\./.test(input) ? input.replace(/\.[^.]+$/, `.${suffix}`) : null;
+
 const generateResultMap = (returnFields = {}, elementInfo) => ({
     code: returnFields[elementInfo.elementId] ?? Object.values(returnFields).find(value => value.includes('code')),
     desc: Object.values(returnFields).find(value => value.includes('desc')) ?? "des_text",

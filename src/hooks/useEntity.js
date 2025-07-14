@@ -27,7 +27,7 @@ import { TABS } from "../ui/components/entityregions/TabCodeMapping";
 import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
 import useSnackbarStore from "../state/useSnackbarStore";
 import { getCustomFields } from "../tools/WSCustomFields";
-import { assignDefaultValues, toEAMValue, createAutocompleteHandler, fromEAMValue, getCodeOrg } from "./tools";
+import { assignDefaultValues, toEAMValue, createAutocompleteHandler, fromEAMValue, getCodeOrg, appendPath } from "./tools";
 import { applyTimezoneOffsetToYearField } from "../ui/pages/EntityTools";
 
 const useEntity = (params) => {
@@ -361,22 +361,16 @@ const updateEntityProperty = (key, value, type) => {
     const elementInfo = screenLayout.fields[layoutKey]
     const elementCustomInfo = layoutPropertiesMap[layoutKey];
 
-    if (elementCustomInfo) {
-      if (!valueKey) {
-        valueKey = elementCustomInfo.value;
-      }
-
-      if (!descKey) {
-        descKey = elementCustomInfo.desc;
-      }
-
-      if (!orgKey) {
-        orgKey = elementCustomInfo.org;
-      }
-    }
-
     if (!valueKey) {
       valueKey = elementInfo.xpath
+    }
+
+    if (!descKey) {
+      descKey = appendPath(valueKey, 'DESCRIPTION')
+    }
+
+    if (!orgKey) {
+      orgKey = appendPath(valueKey, 'ORGANIZATIONID.ORGANIZATIONCODE')
     }
 
     let data = processElementInfo(elementInfo ?? getElementInfoFromCustomFields(layoutKey, entity.USERDEFINEDAREA.CUSTOMFIELD))
