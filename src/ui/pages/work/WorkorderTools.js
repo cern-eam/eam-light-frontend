@@ -8,8 +8,6 @@ export const layoutPropertiesMap = {
     },
 
     equipment: {
-        desc: "EQUIPMENTID.DESCRIPTION",
-        org: "EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE",
         autocompleteHandlerData: {
             resultMap: {
                 code: "equipmentcode",
@@ -26,8 +24,6 @@ export const layoutPropertiesMap = {
     },
 
     location: {
-        desc: "LOCATIONID.DESCRIPTION",
-        org: "LOCATIONID.ORGANIZATIONID.ORGANIZATIONCODE",
         autocompleteHandlerData: {
             resultMap: {
                 code: "equipmentcode",
@@ -42,20 +38,14 @@ export const layoutPropertiesMap = {
     },
 
     department: {
-        desc: "DEPARTMENTID.DESCRIPTION",
-        org: "DEPARTMENTID.ORGANIZATIONID.ORGANIZATIONCODE",
         alias: "departmentCode"
     },
 
     woclass: {
-        value: "CLASSID.CLASSCODE",
-        desc: "CLASSID.DESCRIPTION",
-        org: "CLASSID.ORGANIZATIONID.ORGANIZATIONCODE",
         alias: "classCode"
     },
 
     standardwo: {
-        desc: "STANDARDWO.DESCRIPTION",
         autocompleteHandlerData: {
             searchKeys: ["standardwo"],
             resultMap: {code: "standardwo", desc: "standardwodesc", organization: "standardwoorg"}
@@ -83,29 +73,6 @@ export const layoutPropertiesMap = {
         link: 'https://its.cern.ch/jira/browse/'
     },
 
-    createdby: {
-        desc: "CREATEDBY.DESCRIPTION"
-    },
-
-    problemcode: {
-        desc: "PROBLEMCODEID.DESCRIPTION"
-    },
-
-    failurecode: {
-        desc: "FAILURECODEID.DESCRIPTION"
-    },
-
-    causecode: {
-        desc: "CAUSECODEID.DESCRIPTION"
-    },
-
-    actioncode: {
-        desc: "ACTIONCODEID.DESCRIPTION"
-    },
-
-    priority: {
-        desc: "PRIORITY.DESCRIPTION"
-    }
 
 }
 
