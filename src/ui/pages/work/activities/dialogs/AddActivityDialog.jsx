@@ -82,7 +82,7 @@ function AddActivityDialog(props) {
   };
 
   let handleSave = () => {
-    console.log('test', fieldsData, formValues)
+    
     if (!validateFields()) {
       return;
     }
@@ -113,6 +113,7 @@ function AddActivityDialog(props) {
   };
 
   let updateFormValues = (key, value) => {
+    console.log('update', key, value)
     if (key === "taskCode" && value) {
       onTaskCodeChanged(value);
     }
