@@ -386,7 +386,7 @@ const updateEntityProperty = (key, value, type) => {
       descKey,
       orgKey,
       (key, value) => updateEntityProperty(key, value, data.type),
-      onChange ?? elementCustomInfo?.onChange
+      onChange ?? elementCustomInfo?.onChange, [], true
     );
 
     if (elementCustomInfo?.clear) {
