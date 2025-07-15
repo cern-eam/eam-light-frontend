@@ -96,7 +96,7 @@ const STATUSES = [
     shouldRender: (entity, entityType) =>
       isCernMode &&
       entityType === "equipment" &&
-      entity.UserDefinedFields.UDFCHKBOX04 === "Radioactive",
+      entity.UserDefinedFields.UDFCHAR04 === "Radioactive",
     getIcon: () => <RadioactiveWarningIcon style={iconStyle} />,
     getDescription: () => "Radioactive",
     getTooltip: () => "Radioactive",
