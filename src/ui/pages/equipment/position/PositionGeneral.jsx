@@ -44,6 +44,7 @@ const PositionGeneral = (props) => {
         autocompleteHandlerParams={["OBJ", newEntity, equipment.STATUS.STATUSCODE]}
       />
 
+      {!newEntity &&
       <StatusRow
         entity={equipment}
         entityType={"equipment"}
@@ -51,7 +52,8 @@ const PositionGeneral = (props) => {
         code={id?.code}
         org={id?.org}
         style={{ marginTop: "10px", marginBottom: "-10px" }}
-      />
+      />}
+      
     </React.Fragment>
   );
 };

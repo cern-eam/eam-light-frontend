@@ -32,6 +32,7 @@ const PartGeneral = (props) => {
 
       <EAMCheckbox {...register("repairablespare")} />
 
+      {!newEntity &&
       <StatusRow
         entity={part}
         entityType={"part"}
@@ -39,7 +40,8 @@ const PartGeneral = (props) => {
         code={id?.code}
         org={id?.org}
         style={{ marginTop: "10px", marginBottom: "-10px" }}
-      />
+      />}
+      
     </React.Fragment>
   );
 };

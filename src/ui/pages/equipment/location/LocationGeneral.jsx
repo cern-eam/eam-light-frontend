@@ -20,6 +20,7 @@ const AssetGeneral = (props) => {
         autocompleteHandler={autocompleteDepartment}
       />
 
+      {!newEntity &&
       <StatusRow
         entity={location}
         entityType={"equipment"}
@@ -27,7 +28,8 @@ const AssetGeneral = (props) => {
         code={id?.code}
         org={id?.org}
         style={{ marginTop: "10px", marginBottom: "-10px" }}
-      />
+      />}
+      
     </React.Fragment>
   );
 };

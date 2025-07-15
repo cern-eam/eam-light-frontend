@@ -1,5 +1,6 @@
 import WSEquipment from "@/tools/WSEquipment";
 import { GridTypes } from "../../../tools/entities/GridRequest";
+import { autocompleteDepartment } from "../../../tools/WSGrids";
 
 class EquipmentTools {
   isRegionAvailable(regionCode, equipmentLayout, equipmentType) {
@@ -96,6 +97,10 @@ export function isClosedEquipment(equipment) {
 // MAPPING BETWEEN ENTITY KEYS AND LAYOUT ID
 export const equipmentLayoutPropertiesMap = {
 
+  equipmentno: {
+    noOrgDescProps: true
+  },
+
   category: {
     autocompleteHandlerData: {
         resultMap: {
@@ -158,6 +163,6 @@ export const systemLayoutPropertiesMap = {
 };
 
 export const locationLayoutPropertiesMap = {
-
+  ...equipmentLayoutPropertiesMap
 };
 

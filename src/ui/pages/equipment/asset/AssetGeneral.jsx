@@ -49,6 +49,8 @@ const AssetGeneral = (props) => {
         autocompleteHandler={readUserCodes}
         autocompleteHandlerParams={["OBSA"]}
       />
+
+      {!newEntity &&
       <StatusRow
         entity={equipment}
         entityType={"equipment"}
@@ -56,7 +58,8 @@ const AssetGeneral = (props) => {
         code={id?.code}
         org={id?.org}
         style={{ marginTop: "10px", marginBottom: "-10px" }}
-      />
+      />}
+      
     </React.Fragment>
   );
 };

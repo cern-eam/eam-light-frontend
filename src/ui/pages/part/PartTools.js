@@ -1,6 +1,10 @@
 // MAPPING BETWEEN ENTITY KEYS AND LAYOUT ID
 export const layoutPropertiesMap =  {
 
+    partcode: {
+        noOrgDescProps: true
+    },
+
     uom: {
         autocompleteHandlerData: { 
             resultMap: {
