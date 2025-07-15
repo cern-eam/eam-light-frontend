@@ -18,7 +18,9 @@ import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EA
 
 const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readOnly, showWarning, positionLayout }) => {
   
-  const onChangeAsset = (value) => {
+  const onChangeAsset = (value, manualInput) => {
+    if (!manualInput) return
+
     const hierarchy = getHierarchyObject({
       parentAssetCode: value?.code || '',
       parentAssetOrg:  value?.org  || ''
@@ -33,7 +35,9 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
     updateEquipmentProperty("PositionParentHierarchy", hierarchy);
   };
 
-  const onChangePosition = (value) => {
+  const onChangePosition = (value, manualInput) => {
+    if (!manualInput) return
+
     const hierarchy = getHierarchyObject({
       parentPositionCode: value?.code || '',
       parentPositionOrg:  value?.org  || ''
@@ -48,7 +52,9 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
     updateEquipmentProperty("PositionParentHierarchy", hierarchy);
   };
 
-  const onChangeSystem = (value) => {
+  const onChangeSystem = (value, manualInput) => {
+    if (!manualInput) return
+
     const hierarchy = getHierarchyObject({
       parentPrimarySystemCode: value?.code || '',
       parentPrimarySystemOrg:  value?.org  || ''
@@ -63,7 +69,9 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
     updateEquipmentProperty("PositionParentHierarchy", hierarchy);
   };
 
-  const onChangeLocation = (value) => {
+  const onChangeLocation = (value, manualInput) => {
+    if (!manualInput) return
+    
     const hierarchy = getHierarchyObject({
       parentLocationCode:  value?.code || '',
       parentLocationOrg:   value?.org  || '',
