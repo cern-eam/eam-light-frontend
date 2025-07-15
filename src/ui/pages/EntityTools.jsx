@@ -92,7 +92,12 @@ export const assignCustomFieldFromCustomField = (
       const matchingField = currentCustomFields.find(
         existing => existing.PROPERTYCODE === field.PROPERTYCODE
       );
-      return matchingField ?? field;
+      if (matchingField) {
+        matchingField.CLASSID = field.CLASSID
+        return matchingField
+      }
+      
+      return field;
     })
     .sort((cf1, cf2) => (cf1.index ?? 0) - (cf2.index ?? 0));
 

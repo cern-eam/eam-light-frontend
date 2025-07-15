@@ -140,8 +140,7 @@ const Workorder = () => {
     },
     handlers: {
       "STANDARDWO.STDWOCODE,STANDARDWO.DESCRIPTION": onChangeStandardWorkOrder,
-      "EQUIPMENTID.EQUIPMENTCODE,EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE":
-        onChangeEquipment,
+      "EQUIPMENTID.EQUIPMENTCODE,EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE": onChangeEquipment,
     },
     isReadOnlyCustomHandler: isReadOnlyCustomHandler,
     entityCode: "EVNT",
