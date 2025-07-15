@@ -114,7 +114,8 @@ export const equipmentLayoutPropertiesMap = {
             desc: "des_text",
             organization: "classorganization"
         }
-    }
+    },
+    alias: "classcode"
   },
 
   location: {

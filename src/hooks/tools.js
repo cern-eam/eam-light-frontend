@@ -50,7 +50,14 @@ export const assignDefaultValues = (entity, layout) => {
     return entity;
 };
 
-export const appendPath = (input, suffix) => /\./.test(input) ? input.replace(/\.[^.]+$/, `.${suffix}`) : null;
+export const appendPath = (input, suffix) => {
+    const exclusions = ['UserDefinedFields']
+    if (exclusions.some(item => input?.includes(item))) {
+        return null;
+    }
+    // Replace the last segment of a dot-separated path with the given suffix (for example, transform 'x.y.z' into 'x.y.[suffix]'.
+    return /\./.test(input) ? input.replace(/\.[^.]+$/, `.${suffix}`) : null;
+}
 
 const generateResultMap = (returnFields = {}, elementInfo) => ({
     code: returnFields[elementInfo.elementId] ?? Object.values(returnFields).find(value => value.includes('code')),
