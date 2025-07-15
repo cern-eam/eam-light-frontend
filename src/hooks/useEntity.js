@@ -365,11 +365,11 @@ const updateEntityProperty = (key, value, type) => {
       valueKey = elementInfo.xpath
     }
 
-    if (!descKey) {
+    if (!descKey && !elementCustomInfo?.noOrgDescProps) {
       descKey = appendPath(valueKey, 'DESCRIPTION')
     }
 
-    if (!orgKey) {
+    if (!orgKey && !elementCustomInfo?.noOrgDescProps) {
       orgKey = appendPath(valueKey, 'ORGANIZATIONID.ORGANIZATIONCODE')
     }
 

@@ -51,7 +51,7 @@ export const assignDefaultValues = (entity, layout) => {
 };
 
 export const appendPath = (input, suffix) => {
-    const exclusions = ['UserDefinedFields']
+    const exclusions = ['UserDefinedFields', '.DESCRIPTION']
     if (exclusions.some(item => input?.includes(item))) {
         return null;
     }
