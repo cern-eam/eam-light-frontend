@@ -1,51 +1,55 @@
-import React, { useEffect, useState } from "react";
-import EquipmentHistory from "../components/EquipmentHistory.jsx";
+import useEntity from "@/hooks/useEntity";
+import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
+import { Article } from "@mui/icons-material";
+import AccountTreeRoundedIcon from "@mui/icons-material/AccountTreeRounded";
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
+import ClearAllIcon from "@mui/icons-material/ClearAll";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
+import DescriptionIcon from "@mui/icons-material/Description";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
+import ShareIcon from "@mui/icons-material/Share";
+import Comments from "eam-components/dist/ui/components/comments/Comments";
+import { SystemIcon } from "eam-components/dist/ui/components/icons";
+import { useEffect } from "react";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
-import SystemGeneral from "./SystemGeneral";
-import SystemDetails from "./SystemDetails";
-import SystemHierarchy from "./SystemHierarchy";
-import Comments from "eam-components/dist/ui/components/comments/Comments";
-import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
-import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
-import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
-import { ENTITY_TYPE } from "../../../components/Toolbar";
-import EntityRegions from "../../../components/entityregions/EntityRegions";
-import EquipmentGraphIframe from "../../../components/iframes/EquipmentGraphIframe";
+import { Link } from "react-router-dom";
+import { createSystem, deleteSystem, getSystem, getSystemDefault, updateSystem } from "../../../../tools/WSSystems.js";
 import { isCernMode } from "../../../components/CERNMode";
+import CustomFields from "../../../components/customfields/CustomFields.jsx";
+import Documents from "../../../components/documents/Documents.jsx";
+import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
+import EntityRegions from "../../../components/entityregions/EntityRegions";
 import { TAB_CODES } from "../../../components/entityregions/TabCodeMapping";
+import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
+import EquipmentGraphIframe from "../../../components/iframes/EquipmentGraphIframe";
+import { ENTITY_TYPE } from "../../../components/Toolbar";
+import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import {
-  getTabAvailability,
-  getTabInitialVisibility,
-  getTabGridRegions,
-  renderLoading,
   getCustomTabRegions,
+  getTabAvailability,
+  getTabGridRegions,
+  getTabInitialVisibility,
+  renderLoading,
 } from "../../EntityTools";
-import useEntity from "@/hooks/useEntity";
+import EquipmentHistory from "../components/EquipmentHistory.jsx";
+import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
+import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
+import Variables from "../components/Variables";
 import {
   isClosedEquipment,
   onCategoryChange,
   systemLayoutPropertiesMap,
 } from "../EquipmentTools";
-import ClearAllIcon from "@mui/icons-material/ClearAll";
-import { SystemIcon, PartIcon } from "eam-components/dist/ui/components/icons";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import DescriptionIcon from "@mui/icons-material/Description";
-import ContentPasteIcon from "@mui/icons-material/ContentPaste";
-import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
-import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import ShareIcon from "@mui/icons-material/Share";
-import AccountTreeRoundedIcon from "@mui/icons-material/AccountTreeRounded";
-import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-import Variables from "../components/Variables";
-import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
-import { createSystem, deleteSystem, getSystem, getSystemDefault, updateSystem } from "../../../../tools/WSSystems.js";
-import CustomFields from "../../../components/customfields/CustomFields.jsx";
-import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
-import Documents from "../../../components/documents/Documents.jsx";
-import { Article } from "@mui/icons-material";
+import SystemDetails from "./SystemDetails";
+import SystemGeneral from "./SystemGeneral";
+import SystemHierarchy from "./SystemHierarchy";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -281,6 +285,26 @@ const System = () => {
         summaryIcon: Article,
         ignore: isCernMode || !getTabAvailability(tabs, TAB_CODES.DOCUMENTS),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.DOCUMENTS),
+      },
+            {
+        id: "NCRS",
+        label: "Non Conformities",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => <EquipmentNCRs equipment={id?.code}/>,
+        RegionPanelProps: {
+          customHeadingBar:  (
+              <Link to ={`/ncr?equipmentCode=${id?.code}&description=NCR for ${id?.code}`}
+                    style={{padding: 10, display: "flex", alignItems: "center", justifyContent: "space-between", color: "#737373" }}>
+                <AddBoxIcon />
+              </Link>
+          ),
+        },
+        column: 2,
+        order: 7,
+        summaryIcon: BookmarkBorderRoundedIcon,
+        ignore: !getTabAvailability(tabs, TAB_CODES.NONCONFORMITIES),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.NONCONFORMITIES),
       },
       {
         id: "COMMENTS",
