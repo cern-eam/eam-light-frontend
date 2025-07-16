@@ -11,12 +11,13 @@ const MyWorkordersMenu = () => {
         useMyOpenWorkOrdersStore();
 
     useEffect(() => {
-        if (myOpenWorkOrders.length === 0) fetchMyOpenWorkOrders();
-    }, [fetchMyOpenWorkOrders]);
+        fetchMyOpenWorkOrders();
+    }, []);
 
-    const filteredWorkOrders = useMemo(() => {
-        return myOpenWorkOrders.filter(MenuTools.daysFilterFunctions[days]);
-    }, [myOpenWorkOrders, days]);
+    const filteredWorkOrders = useMemo(
+        () => myOpenWorkOrders.filter(MenuTools.daysFilterFunctions[days]),
+        [myOpenWorkOrders.length, days]
+    );
 
     // const sortedWorkOrders = useMemo(() => {
     //     return filteredWorkOrders.sort((wo1, wo2) => {
@@ -42,7 +43,10 @@ const MyWorkordersMenu = () => {
                 />
                 <ul>
                     {filteredWorkOrders.map((wo) => (
-                        <MenuWorkorder key={wo.number} wo={wo} />
+                        <MenuWorkorder
+                            key={`${wo.number}${wo.labourScheduledDate}${wo.schedulingEndDate}`}
+                            wo={wo}
+                        />
                     ))}
                 </ul>
             </li>
