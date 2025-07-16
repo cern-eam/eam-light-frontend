@@ -318,17 +318,17 @@ const useEntity = (params) => {
      .catch(console.error);
   };
 
-const updateEntityProperty = (key, value, type) => {
-  const keys = Array.isArray(key) ? key : [key];
-  const values = Array.isArray(value) ? value : [value];
+  const updateEntityProperty = (key, value, type) => {
+    const keys = Array.isArray(key) ? key : [key];
+    const values = Array.isArray(value) ? value : [value];
 
-  setEntity(prevEntity => {
-    keys.forEach((k, i) => set(prevEntity, k, toEAMValue(values[i], type)));
-    return {...prevEntity};
-  });
+    setEntity(prevEntity => {
+      keys.forEach((k, i) => set(prevEntity, k, toEAMValue(values[i], type)));
+      return {...prevEntity};
+    });
 
-  fireHandler(keys, values);
-};
+    fireHandler(keys, values);
+  };
 
   const fireHandler = (key, value) => {
     const handlers = getHandlers();
@@ -348,9 +348,9 @@ const updateEntityProperty = (key, value, type) => {
       Object.entries(queryParams).forEach(([key, value]) => {
         // Support wshub key values for backwards compatibility in addition to EAM element IDs
         const altKey = Object.keys(layoutPropertiesMap ?? {}).find(k => layoutPropertiesMap?.[k].alias?.toLowerCase() === key.toLowerCase());
-        const elementInfo = screenLayout.fields[key] ?? screenLayout.fields[altKey]
+        const elementInfo = screenLayout.fields[key.toLowerCase()] ?? screenLayout.fields[altKey]
         if (elementInfo && elementInfo.xpath && value) {
-          updateEntityProperty(elementInfo.xpath, getCodeOrg(value).code, elementInfo.fieldType)
+          updateEntityProperty(elementInfo.xpath, value, elementInfo.fieldType)
         }
       })
       // TODO custom fields

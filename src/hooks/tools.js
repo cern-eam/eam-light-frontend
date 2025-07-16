@@ -12,6 +12,7 @@ export const toEAMValue = (value, type) => {
         case "datetime":
             return toEAMDate(value)
         case "number":
+        case "currency":
             return toEAMNumber(value)
         default:
             return value;
@@ -24,6 +25,7 @@ export const fromEAMValue = (value, type) => {
         case "datetime":
             return fromEAMDate(value)
         case "number":
+        case "currency":
             return fromEAMNumber(value)
         case "checkbox":
             return fromEAMCheckbox(value)

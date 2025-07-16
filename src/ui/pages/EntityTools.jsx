@@ -101,6 +101,15 @@ export const assignCustomFieldFromCustomField = (
     })
     .sort((cf1, cf2) => (cf1.index ?? 0) - (cf2.index ?? 0));
 
+    // Assign query param values
+    let queryParams = queryString.parse(window.location.search);
+    mergedAndSortedFields.forEach(cf => {
+      const value = queryParams[cf.PROPERTYCODE];
+      if (value) {
+        saveCustomFieldValue(cf, value)
+      }
+    });
+
   return {
     ...entity,
     USERDEFINEDAREA: {
@@ -109,6 +118,25 @@ export const assignCustomFieldFromCustomField = (
     }
   };
 };
+
+const saveCustomFieldValue = (cf, value) => {
+  switch (cf.type) {
+    case "RENT":
+      set(cf, 'ENTITYCODEFIELD.CODEVALUE', value)
+      break
+    case "CHAR":
+      set(cf, 'TEXTFIELD', value)
+      break
+    case "CODE":
+      set(cf, 'CODEDESCFIELD.CODEVALUE', value)
+      break
+    case "NUM":
+      set(cf, 'NUMBERFIELD', toEAMNumber(value))
+      break
+    // TODO add dates
+  }
+  return cf;
+}
 
 // assigns the values in values to the entity
 // values that do not exist in the entity are not copied
