@@ -101,6 +101,14 @@ export const equipmentLayoutPropertiesMap = {
     noOrgDescProps: true
   },
 
+  equipmentdesc: {
+    alias: "description"
+  },
+
+  department: {
+    alias: "departmentcode"
+  },
+
   category: {
     autocompleteHandlerData: {
         resultMap: {
