@@ -109,6 +109,18 @@ export const equipmentLayoutPropertiesMap = {
     alias: "departmentcode"
   },
 
+  assetstatus: {
+    alias: "statuscode"
+  },
+
+  manufacturer: {
+    alias: "manufacturercode"
+  },
+
+  commissiondate: {
+    alias: "comissiondate" // backwards compatible because of the typo we had on our end 
+  }, 
+
   category: {
     autocompleteHandlerData: {
         resultMap: {
