@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import WSEquipment from "../../../../tools/WSEquipment";
 import Dependency from "../components/Dependency";
 import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
@@ -6,24 +6,50 @@ import { get } from "lodash";
 import { getHierarchyObject, ParentDependencyTypes, getDependencyType, getParentAssetCode, getParentPositionCode, getParentPrimarySystemCode } from "./assethierarchytools";
 import { assetLayoutPropertiesMap } from "../EquipmentTools";
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
-import { createAutocompleteHandler } from "../../../../hooks/tools";
+import { createAutocompleteHandler, getCodeOrg } from "../../../../hooks/tools";
 import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
+import queryString from "query-string";
 
 
 const AssetHierarchy = (props) => {
   const {
     equipment,
+    newEntity,
     updateEquipmentProperty,
     register,
     readOnly,
     assetLayout
   } = props;
 
+  useEffect( () => {
+    console.log('new', newEntity)
+    if (!newEntity) return
+
+    let queryParams = queryString.parse(window.location.search);
+
+    const dependencyType = queryParams['dependencytype'] ?? (queryParams['parentlocation'] ? 'LocationDependency' : ParentDependencyTypes.NONE);
+
+    const hierarchyProps = {
+      parentAssetCode: getCodeOrg(queryParams['parentasset'])?.code || '',
+      parentAssetOrg: getCodeOrg(queryParams['parentasset'])?.org || '',
+      parentPositionCode: getCodeOrg(queryParams['parentposition'])?.code || '',
+      parentPositionOrg: getCodeOrg(queryParams['parentposition'])?.org || '',
+      parentPrimarySystemCode: getCodeOrg(queryParams['parentsystem'])?.code || '',
+      parentPrimarySystemOrg: getCodeOrg(queryParams['parentsystem'])?.org || '',
+      parentLocationCode: getCodeOrg(queryParams['parentlocation'])?.code || '',
+      parentLocationOrg: getCodeOrg(queryParams['parentlocation'])?.org || '',
+      dependencyType
+    };
+
+    let hierarchy = getHierarchyObject(hierarchyProps, equipment.AssetParentHierarchy);
+
+    updateEquipmentProperty("AssetParentHierarchy", hierarchy)
+
+  }, [])
 
   const onChangeAsset = (value, manualInput) => {
     if (!manualInput) return
 
-    console.log('asset change', value)
     const hierarchy = getHierarchyObject({
       parentAssetCode: value?.code || '',
       parentAssetOrg:  value?.org  || ''
@@ -42,7 +68,7 @@ const AssetHierarchy = (props) => {
   
   const onChangePosition = (value, manualInput) => {
     if (!manualInput) return
-
+    console.log('on change position', value)
     const hierarchy = getHierarchyObject({
       parentPositionCode: value?.code || '',
       parentPositionOrg:  value?.org  || ''
