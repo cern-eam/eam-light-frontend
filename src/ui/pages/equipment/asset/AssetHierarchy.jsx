@@ -22,7 +22,6 @@ const AssetHierarchy = (props) => {
   } = props;
 
   useEffect( () => {
-    console.log('new', newEntity)
     if (!newEntity) return
 
     let queryParams = queryString.parse(window.location.search);
