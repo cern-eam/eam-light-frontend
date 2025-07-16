@@ -1,6 +1,21 @@
-# Version (2025-06-13)
+# Version (2025-07-16)
 
 ## Features
+### 4.1.37 
+* feat(backend): EAM-2831 use new checklist update method ([db3808](https://github.com/cern-eam/eam-light-backend/commit/db38083420ff5743b1d9467a9377bdfc26c9b6eb))
+* Prevent failure when updating checklist if taskplancode is not provided ([d0be59](https://github.com/cern-eam/eam-light-backend/commit/d0be590b713aa2488da3239543191a9d30a99c9f))
+* Update eam-wshub-core ([5bf099](https://github.com/cern-eam/eam-light-backend/commit/5bf0995397b2c5f1f4ee6d6dba451afc8aca6901))
+### 4.1.36 
+* Return fetched object directly in the ScreenLayoutService instead of fetching it again (but reusing the cached version) ([1bc697](https://github.com/cern-eam/eam-light-backend/commit/1bc697699a9db31414f4523c9d0de322762da30b))
+* Update caching mechanism to use Caffeine and restructure cache-related code ([31c87a](https://github.com/cern-eam/eam-light-backend/commit/31c87af5b466f459ef48cc02e843930be9c4bcd3))
+* [EAM-2831] Update activity checklist due to breaking changes ([c648a1](https://github.com/cern-eam/eam-light-backend/commit/c648a1e58aa7969a0e59de8e10e3ea5ecff52c89))
+* Update eam-wshub-core ([220bc0](https://github.com/cern-eam/eam-light-backend/commit/220bc08f0c6c57b6c7eb06dcfcd9ec7ff5c4e8d8))
+* [EAM-2783] Use getCacheKey tools method. Update eam-wshub-core ([66ac12](https://github.com/cern-eam/eam-light-backend/commit/66ac12336818a519a7a90b65fbf39ad7bccceb37))
+* [EAM-2783] Fetch user language on screenLayout read if not provided ([a381ba](https://github.com/cern-eam/eam-light-backend/commit/a381ba64fc143d67783ce9dbe5d37b0cede73bbd))
+### 4.1.0 
+* [EAM-4976] NCR Improvements ([910d40](https://github.com/cern-eam/eam-light-frontend/commit/910d400dd2b4b9b3be6c40aa16ef05c977a9a512))
+* [EAM-4976] Fix NCR creation ([25d1e1](https://github.com/cern-eam/eam-light-frontend/commit/25d1e1b2890bd00d956295c8eec2a35c378f6c44))
+* [EAM-4976] Updated observations panel. Added default equipment on work order creation. ([6ec5b1](https://github.com/cern-eam/eam-light-frontend/commit/6ec5b125e22adbd7be46b40d10e4f6821bfec94e))
 ### 4.0.8 
 * Make the alias for query params not case sensitive ([58cbd2](https://github.com/cern-eam/eam-light-frontend/commit/58cbd2317506579feb5f0cc66a91f3e5e7fbde21))
 * Add alias for the workorder status ([b2018e](https://github.com/cern-eam/eam-light-frontend/commit/b2018e92c34345f34037ad37d3158f15d80e167c))
@@ -12,6 +27,7 @@
 * Add better filter for Reported By ([2da320](https://github.com/cern-eam/eam-light-frontend/commit/2da3208d0afdb7563cc79de45a1fcf6cda8fd2bb))
 * Support look up values for CF that have dash in the code ([d46bbb](https://github.com/cern-eam/eam-light-frontend/commit/d46bbb879a4dcbe1a26ef7870c27c8774ddb86b6))
 * Do not adjust the timezone for date values following the fixed from HxGN ([6325d2](https://github.com/cern-eam/eam-light-frontend/commit/6325d2bbe82dfdb40dc23b1576e6e641999bdf3d))
+* Erase created by and created date when cloning a WO ([af3e97](https://github.com/cern-eam/eam-light-frontend/commit/af3e97f65be1a65ab209b5e388222e014cb44c56))
 * Assign workorder location when changing equipment. Fetch custom field LOVs. ([d14515](https://github.com/cern-eam/eam-light-frontend/commit/d1451538771d8e7945a350fb4dd9c26392320aa6))
 ### 4.0.0 
 * Fix mapping for My Open Work Orders ([604d0d](https://github.com/cern-eam/eam-light-frontend/commit/604d0d9e32fd24fc31cc4dc6e6a3989fb8d792fb))
@@ -1181,7 +1197,22 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* [EAM-4976] NCR Improvements ([910d40](https://github.com/cern-eam/eam-light-frontend/commit/910d400dd2b4b9b3be6c40aa16ef05c977a9a512))
-* [EAM-4976] Fix NCR creation ([25d1e1](https://github.com/cern-eam/eam-light-frontend/commit/25d1e1b2890bd00d956295c8eec2a35c378f6c44))
-* [EAM-4976] Updated observations panel. Added default equipment on work order creation. ([6ec5b1](https://github.com/cern-eam/eam-light-frontend/commit/6ec5b125e22adbd7be46b40d10e4f6821bfec94e))
+* [EAM-4976] Pass organization code on NCR comments ([a849c1](https://github.com/cern-eam/eam-light-frontend/commit/a849c1afd8f9fa7b667ab09386a3ce1aa8fc4660))
+* Provide more parameters for grid lookups ([e6986b](https://github.com/cern-eam/eam-light-frontend/commit/e6986b5d475f544cdfa29e71b51c380377be9b3a))
+* Convert default boolean values to format accepted by REST WS ([02fde0](https://github.com/cern-eam/eam-light-frontend/commit/02fde02c43c13a88d3974bfc4d8c817a34168f79))
+* First version of code generator (for Assets only) ([d051f5](https://github.com/cern-eam/eam-light-frontend/commit/d051f50f470cd3f2da0b980a9370d914ef2d1bf7))
+* Fix fetching statuses for Positions and Systems ([305fec](https://github.com/cern-eam/eam-light-frontend/commit/305fec8697e058301a33c20713635a0e8494c69b))
+* Start gradually using EAMComboAutocomplete ([32074c](https://github.com/cern-eam/eam-light-frontend/commit/32074cd9eb7a3e7a83af05e8017a73486b7bb2c7))
+* Continue migrating EAMAutocompletes to EAMComboAutocompletes ([318d2a](https://github.com/cern-eam/eam-light-frontend/commit/318d2afc544ef5593c0176145dca1949818b7dc1))
+* pass full CLASSID object when fetching standard WO definition ([cdfb10](https://github.com/cern-eam/eam-light-frontend/commit/cdfb105f5baf485eda5b0d94f25e6239a861c3f6))
+* Improvde handler handling ([45cf3d](https://github.com/cern-eam/eam-light-frontend/commit/45cf3d3e24007bf430a50ecdea3cebbf81753b0d))
+* Several improvements for handlers ([626be3](https://github.com/cern-eam/eam-light-frontend/commit/626be380cc6c443dd6e2e5b5507f076c1dbc3202))
+* Use input-tools in backward compatibility mode ([744b37](https://github.com/cern-eam/eam-light-frontend/commit/744b37b4384ae58a52cf1338d22f8c607e0bae78))
+* Update eam-components ([396dfa](https://github.com/cern-eam/eam-light-frontend/commit/396dfaa11f12b4a6a2020666844612692fe8ef96))
+* Assign default description and org key when registering new field ([a62930](https://github.com/cern-eam/eam-light-frontend/commit/a62930f4f630ca3059467d56b10038952234bce1))
+* Fix subtle bug that was ocurring when switching between different classes ([4053c9](https://github.com/cern-eam/eam-light-frontend/commit/4053c9f53ed90bb8a3bdae34aa1eea495feef0c9))
+* [EAM-4595] Add NCR panel to Systems ([abd963](https://github.com/cern-eam/eam-light-frontend/commit/abd963d0e26c3f951933a124c0f0aa0e601b4084))
+* Avoid generating Org and Desc key props where not necessery ([812c0c](https://github.com/cern-eam/eam-light-frontend/commit/812c0c9410529d3fc8d122923b2245727912a69f))
+* Adapt Eqp Hierarchy to EAMComboAutocomplete ([54d7d3](https://github.com/cern-eam/eam-light-frontend/commit/54d7d3fa5802a36a6825376a46ec3d0c177ef53f))
+* Fix Radioactive Hazard Indication ([a090d1](https://github.com/cern-eam/eam-light-frontend/commit/a090d1a8597c6f332caa735195304e8c1c49843d))
 
