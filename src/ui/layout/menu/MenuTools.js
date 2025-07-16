@@ -11,12 +11,12 @@ class MenuTools {
 
     daysFilterFunctions = {
         'ALL': () => true,
-        'TODAY': workOrder => workOrder.schedulingEndDate &&
-                              isToday(workOrder.schedulingEndDate),
-        'LATE': workOrder => workOrder.schedulingEndDate &&
-                             isBefore(workOrder.schedulingEndDate, startOfToday()),
-        'WEEK': workOrder =>  workOrder.schedulingEndDate &&
-                              isThisWeek(workOrder.schedulingEndDate, { weekStartsOn: 1 }),
+        'TODAY': workOrder => (workOrder.labourScheduledDate ?? workOrder.schedulingEndDate) &&
+                              isToday(workOrder.labourScheduledDate ?? workOrder.schedulingEndDate),
+        'LATE': workOrder => (workOrder.labourScheduledDate ?? workOrder.schedulingEndDate) &&
+                             isBefore(workOrder.labourScheduledDate ?? workOrder.schedulingEndDate, startOfToday()),
+        'WEEK': workOrder =>  (workOrder.labourScheduledDate ?? workOrder.schedulingEndDate) &&
+                              isThisWeek(workOrder.labourScheduledDate ?? workOrder.schedulingEndDate, { weekStartsOn: 1 }),
     }
 }
 
