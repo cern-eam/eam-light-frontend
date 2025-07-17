@@ -11,13 +11,16 @@ import {
   getParentAssetCode,
   getParentPositionCode,
   getParentPrimarySystemCode,
-} from "../asset/assethierarchytools";
+} from "../tools/hierarchyTools";
 import { positionLayoutPropertiesMap } from "../EquipmentTools";
 import { createAutocompleteHandler } from "../../../../hooks/tools";
 import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
+import { useInitHierarchyFromQueryParams } from "../tools/useInitHierarchyFromQueryParams";
 
-const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readOnly, showWarning, positionLayout }) => {
+const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readOnly, showWarning, positionLayout, newEntity }) => {
   
+  useInitHierarchyFromQueryParams({newEntity, equipment, updateEquipmentProperty, hierarchyKey: "PositionParentHierarchy"});
+
   const onChangeAsset = (value, manualInput) => {
     if (!manualInput) return
 
@@ -71,7 +74,7 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
 
   const onChangeLocation = (value, manualInput) => {
     if (!manualInput) return
-    
+
     const hierarchy = getHierarchyObject({
       parentLocationCode:  value?.code || '',
       parentLocationOrg:   value?.org  || '',

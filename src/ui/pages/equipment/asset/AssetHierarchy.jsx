@@ -3,12 +3,12 @@ import WSEquipment from "../../../../tools/WSEquipment";
 import Dependency from "../components/Dependency";
 import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
 import { get } from "lodash";
-import { getHierarchyObject, ParentDependencyTypes, getDependencyType, getParentAssetCode, getParentPositionCode, getParentPrimarySystemCode } from "./assethierarchytools";
+import { getHierarchyObject, ParentDependencyTypes, getDependencyType, getParentAssetCode, getParentPositionCode, getParentPrimarySystemCode } from "../tools/hierarchyTools";
 import { assetLayoutPropertiesMap } from "../EquipmentTools";
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { createAutocompleteHandler, getCodeOrg } from "../../../../hooks/tools";
 import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
-import queryString from "query-string";
+import { useInitHierarchyFromQueryParams } from "../tools/useInitHierarchyFromQueryParams";
 
 
 const AssetHierarchy = (props) => {
@@ -21,30 +21,7 @@ const AssetHierarchy = (props) => {
     assetLayout
   } = props;
 
-  useEffect( () => {
-    if (!newEntity) return
-
-    let queryParams = queryString.parse(window.location.search);
-
-    const dependencyType = queryParams['dependencytype'] ?? (queryParams['parentlocation'] ? 'LocationDependency' : ParentDependencyTypes.NONE);
-
-    const hierarchyProps = {
-      parentAssetCode: getCodeOrg(queryParams['parentasset'])?.code,
-      parentAssetOrg: getCodeOrg(queryParams['parentasset'])?.org,
-      parentPositionCode: getCodeOrg(queryParams['parentposition'])?.code,
-      parentPositionOrg: getCodeOrg(queryParams['parentposition'])?.org,
-      parentPrimarySystemCode: getCodeOrg(queryParams['parentsystem'])?.code,
-      parentPrimarySystemOrg: getCodeOrg(queryParams['parentsystem'])?.org ,
-      parentLocationCode: getCodeOrg(queryParams['parentlocation'])?.code,
-      parentLocationOrg: getCodeOrg(queryParams['parentlocation'])?.org,
-      dependencyType
-    };
-
-    let hierarchy = getHierarchyObject(hierarchyProps, equipment.AssetParentHierarchy);
-
-    updateEquipmentProperty("AssetParentHierarchy", hierarchy)
-
-  }, [])
+  useInitHierarchyFromQueryParams({newEntity, equipment, updateEquipmentProperty, hierarchyKey: "AssetParentHierarchy"});
 
   const onChangeAsset = (value, manualInput) => {
     if (!manualInput) return
