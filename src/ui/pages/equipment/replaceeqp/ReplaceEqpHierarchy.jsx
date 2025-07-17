@@ -5,7 +5,7 @@ import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox
 import WSEquipment from "../../../../tools/WSEquipment";
 import EISTable from 'eam-components/dist/ui/components/table';
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
-import { getDependencyType, getParentAssetCode, getParentAssetCostRollUp, getParentPositionCode, ParentDependencyTypes } from '../asset/assethierarchytools';
+import { getDependencyType, getParentAssetCode, getParentAssetCostRollUp, getParentPositionCode, ParentDependencyTypes } from '../tools/hierarchyTools';
 import { get } from 'lodash';
 
 const ReplaceEqpHierarchy = (props) => {

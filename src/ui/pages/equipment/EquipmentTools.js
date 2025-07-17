@@ -98,7 +98,8 @@ export function isClosedEquipment(equipment) {
 export const equipmentLayoutPropertiesMap = {
 
   equipmentno: {
-    noOrgDescProps: true
+    noOrgDescProps: true,
+    alias: 'code'
   },
 
   equipmentdesc: {
@@ -129,7 +130,8 @@ export const equipmentLayoutPropertiesMap = {
             class: "categoryclass",
             manufacturer: "manufacturer"
         }
-    }
+    },
+    alias: 'categorycode'
   },
 
   class: {
