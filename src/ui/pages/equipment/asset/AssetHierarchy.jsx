@@ -29,14 +29,14 @@ const AssetHierarchy = (props) => {
     const dependencyType = queryParams['dependencytype'] ?? (queryParams['parentlocation'] ? 'LocationDependency' : ParentDependencyTypes.NONE);
 
     const hierarchyProps = {
-      parentAssetCode: getCodeOrg(queryParams['parentasset'])?.code || '',
-      parentAssetOrg: getCodeOrg(queryParams['parentasset'])?.org || '',
-      parentPositionCode: getCodeOrg(queryParams['parentposition'])?.code || '',
-      parentPositionOrg: getCodeOrg(queryParams['parentposition'])?.org || '',
-      parentPrimarySystemCode: getCodeOrg(queryParams['parentsystem'])?.code || '',
-      parentPrimarySystemOrg: getCodeOrg(queryParams['parentsystem'])?.org || '',
-      parentLocationCode: getCodeOrg(queryParams['parentlocation'])?.code || '',
-      parentLocationOrg: getCodeOrg(queryParams['parentlocation'])?.org || '',
+      parentAssetCode: getCodeOrg(queryParams['parentasset'])?.code,
+      parentAssetOrg: getCodeOrg(queryParams['parentasset'])?.org,
+      parentPositionCode: getCodeOrg(queryParams['parentposition'])?.code,
+      parentPositionOrg: getCodeOrg(queryParams['parentposition'])?.org,
+      parentPrimarySystemCode: getCodeOrg(queryParams['parentsystem'])?.code,
+      parentPrimarySystemOrg: getCodeOrg(queryParams['parentsystem'])?.org ,
+      parentLocationCode: getCodeOrg(queryParams['parentlocation'])?.code,
+      parentLocationOrg: getCodeOrg(queryParams['parentlocation'])?.org,
       dependencyType
     };
 

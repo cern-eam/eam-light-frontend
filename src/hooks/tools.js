@@ -116,6 +116,9 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
 }
 
 export const getCodeOrg = (codeorg) => {
+    if (!codeorg) {
+        return {}
+    }
     const defaultOrg = getOrg()
     let [code, org = defaultOrg] = decodeURIComponent(codeorg).split("#");
     return {code, org}
