@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useDebouncedCallback } from "use-debounce";
+import { useDebouncedCallback } from "./useDebouncedCallback";
 
 const SearchHeaderInput = ({
   handleSearchInput,
@@ -25,8 +25,7 @@ const SearchHeaderInput = ({
     searchInput.current.focus();
   }, []);
 
-  const searchTextColor =
-    (value === searchText && isFetching) || value !== searchText
+  const searchTextColor = propagateChangeOfValue.isPending() || isFetching
       ? "#737373"
       : "unset";
 
