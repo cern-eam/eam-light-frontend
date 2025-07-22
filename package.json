@@ -2,7 +2,7 @@
   "name": "eamlight",
   "private": true,
   "sideEffects": false,
-  "version": "4.1.37",
+  "version": "4.1.39",
   "type": "module",
   "scripts": {
     "dev": "vite",
