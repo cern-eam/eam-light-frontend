@@ -10,11 +10,9 @@ const SearchHeaderInput = ({
 }) => {
   const [searchText, setSearchText] = useState(value);
   const propagateChangeOfValue = useDebouncedCallback(
-    () => handleSearchInput({ target: { value: searchText } }),
+    (value) => handleSearchInput({ target: { value } }),
     200
   );
-
-  useEffect(propagateChangeOfValue, [searchText]);
 
   useEffect(() => {
     setSearchText(value);
@@ -29,10 +27,15 @@ const SearchHeaderInput = ({
       ? "#737373"
       : "unset";
 
+  const onChange = (event) => {
+    setSearchText(event.target.value);
+    propagateChangeOfValue(event.target.value);
+  };
+
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
       <input
-        onChange={({ target: { value } }) => setSearchText(value)}
+        onChange={onChange}
         id="searchInputText"
         onKeyDown={onKeyDown}
         style={{
