@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useDebouncedCallback } from "./useDebouncedCallback";
+import React, { useEffect, useRef, useState, useMemo } from "react";
+import debounce from "lodash/debounce";
 
 const SearchHeaderInput = ({
   handleSearchInput,
@@ -9,9 +9,13 @@ const SearchHeaderInput = ({
   isFetching,
 }) => {
   const [searchText, setSearchText] = useState(value);
-  const propagateChangeOfValue = useDebouncedCallback(
-    (value) => handleSearchInput({ target: { value } }),
-    200
+  const propagateChangeOfValue = useMemo(
+    () =>
+      debounce((value) => handleSearchInput({ target: { value } }), 200, {
+        leading: false,
+        trailing: true,
+      }),
+    []
   );
 
   useEffect(() => {
@@ -23,10 +27,8 @@ const SearchHeaderInput = ({
     searchInput.current.focus();
   }, []);
 
-  const searchTextColor = propagateChangeOfValue.isPending() || isFetching
-      ? "#737373"
-      : "unset";
-
+  const searchTextColor =
+    isFetching || value !== searchText ? "#737373" : "unset";
   const onChange = (event) => {
     setSearchText(event.target.value);
     propagateChangeOfValue(event.target.value);
@@ -40,6 +42,7 @@ const SearchHeaderInput = ({
         onKeyDown={onKeyDown}
         style={{
           color: searchTextColor,
+          transition: "color 0.2s ease-in-out",
         }}
         placeholder="Search for Equipment, Work Orders, Parts, ..."
         value={searchText}
