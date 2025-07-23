@@ -14,9 +14,6 @@ function SearchHeader({
   isFetching,
   children,
 }) {
-  const handleSearchInput = (event) => {
-    setKeyword(event.target.value);
-  };
 
   return (
     <div
@@ -44,7 +41,7 @@ function SearchHeader({
             searchBoxUp={searchBoxUp}
             value={keyword}
             isFetching={isFetching}
-            handleSearchInput={handleSearchInput}
+            handleSearchInput={(event) => setKeyword(event.target.value)}
             onKeyDown={onKeyDown}
           >
             <EAMBarcodeScanner
