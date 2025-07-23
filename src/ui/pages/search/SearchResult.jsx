@@ -1,87 +1,68 @@
 import * as React from "react";
 import TableCell from "@mui/material/TableCell";
 import SearchHighlighter from "./SearchHighlighter";
-import EntityCode from "../../../enums/EntityCode";
+import EntityCode from "@/enums/EntityCode";
 
-export default class SearchResult extends React.Component {
-  getSearchItemLabel(code) {
-    switch (code) {
-      case EntityCode.ASSET: {
-        return "Asset:";
-      }
-      case EntityCode.POSITION: {
-        return "Position:";
-      }
-      case EntityCode.SYSTEM: {
-        return "System:";
-      }
-      case EntityCode.WORKORDER: {
-        return "Work Order:";
-      }
-      case EntityCode.PART: {
-        return "Part:";
-      }
-      case EntityCode.LOCATION: {
-        return "Location: ";
-      }
-      default: {
-        return "Equipment:";
-      }
-    }
-  }
+const entityLabels = {
+  [EntityCode.ASSET]: "Asset:",
+  [EntityCode.POSITION]: "Position:",
+  [EntityCode.SYSTEM]: "System:",
+  [EntityCode.WORKORDER]: "Work Order:",
+  [EntityCode.PART]: "Part:",
+  [EntityCode.LOCATION]: "Location:",
+};
 
-  render() {
-    return (
-      <TableCell>
-        <table
-          className={
-            this.props.selected
-              ? "searchResultTableCell selectedRow"
-              : "searchResultTableCell"
-          }
-        >
-          <tbody className="searchResultRowCell">
+const FALLBACK_ENTITY_LABEL = "Equipment";
+
+function SearchResult({ selected, data, keyword }) {
+  const searchItemLabel = entityLabels[data.type] ?? FALLBACK_ENTITY_LABEL;
+
+  return (
+    <TableCell>
+      <table
+        className={
+          selected
+            ? "searchResultTableCell selectedRow"
+            : "searchResultTableCell"
+        }
+      >
+        <tbody className="searchResultRowCell">
+          <tr>
+            <td>{searchItemLabel}</td>
+            <td>
+              <SearchHighlighter
+                style={{ color: "#1a0dab", fontWeight: "bold" }}
+                data={data.code}
+                keyword={keyword}
+                link={data.link}
+                type={data.type}
+              />
+            </td>
+          </tr>
+          {data.serial ? (
             <tr>
-              <td>{this.getSearchItemLabel(this.props.data.type)}</td>
-              <td>
-                <SearchHighlighter
-                  style={{ color: "#1a0dab", fontWeight: "bold" }}
-                  data={this.props.data.code}
-                  keyword={this.props.keyword}
-                  link={this.props.data.link}
-                  type={this.props.data.type}
-                />
-              </td>
+              <td>Serial number:</td>
+              <SearchHighlighter data={data.serial} keyword={keyword} />
             </tr>
-            {this.props.data.serial && (
-              <tr>
-                <td>Serial number:</td>
-                <SearchHighlighter
-                  data={this.props.data.serial}
-                  keyword={this.props.keyword}
-                />
-              </tr>
-            )}
-            {this.props.data.alias && (
-              <tr>
-                <td>Alias:</td>
-                <SearchHighlighter
-                  data={this.props.data.alias}
-                  keyword={this.props.keyword}
-                />
-              </tr>
-            )}
+          ) : null}
+          {data.alias ? (
             <tr>
-              <td>Description:</td>
-              <td>{this.props.data.description}</td>
+              <td>Alias:</td>
+              <SearchHighlighter data={data.alias} keyword={keyword} />
             </tr>
-            <tr>
-              <td>Department:</td>
-              <td>{this.props.data.mrc}</td>
-            </tr>
-          </tbody>
-        </table>
-      </TableCell>
-    );
-  }
+          ) : null}
+          <tr>
+            <td>Description:</td>
+            <td>{data.description}</td>
+          </tr>
+          <tr>
+            <td>Department:</td>
+            <td>{data.mrc}</td>
+          </tr>
+        </tbody>
+      </table>
+    </TableCell>
+  );
 }
+
+export default SearchResult;
