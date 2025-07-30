@@ -136,7 +136,7 @@ const Asset = () => {
     }
   }, [id])
 
-  function onCodeChange(code) {
+  function onCodeChange({ ["ASSETID.EQUIPMENTCODE"]: code }) {
 
     if (!/^@.+/.test(code)) return;
 
