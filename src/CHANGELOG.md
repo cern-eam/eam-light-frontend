@@ -1,7 +1,14 @@
-# Version (2025-07-22)
+# Version (2025-08-01)
 
 ## Features
 ### 4.1.39 
+* Filter WOs also based on the labour scheduled date ([b1063d](https://github.com/cern-eam/eam-light-frontend/commit/b1063d44867e4ac70c3c6b70dfef0773e86cb5ad))
+* Support propagation of query params to custom fields ([a5d361](https://github.com/cern-eam/eam-light-frontend/commit/a5d361aeb71a7acc2f7bce30859be91210114ea6))
+* fix(frontend): use unique keys and clean up ([537abd](https://github.com/cern-eam/eam-light-frontend/commit/537abd84d08fa57d6e1ec242f9803219ff2d407a))
+* Support hierarchy query params for assets ([334ea2](https://github.com/cern-eam/eam-light-frontend/commit/334ea2187795d37aa48550bf1935a5b5b4a93f6f))
+* Remove console.log in AssetHierarchy ([dbb5e4](https://github.com/cern-eam/eam-light-frontend/commit/dbb5e4d9d9e093b4d269eea7250f6a479b7abf07))
+* Fix query param assignment for asset hierarchy fields ([0cdeeb](https://github.com/cern-eam/eam-light-frontend/commit/0cdeeb32b64f430af09ed95b2b2f7b76e20a8905))
+* Tidy up hierarchy management helper tools ([d8a1fb](https://github.com/cern-eam/eam-light-frontend/commit/d8a1fb237bf4d42013f953b615a5175c8337630a))
 * Use tenant for application params cache. ([08eaeb](https://github.com/cern-eam/eam-light-backend/commit/08eaeb8909dbef1054c0ba2ebf7cc32bb74f52a7))
 ### 4.1.37 
 * [EAM-4976] Pass organization code on NCR comments ([a849c1](https://github.com/cern-eam/eam-light-frontend/commit/a849c1afd8f9fa7b667ab09386a3ce1aa8fc4660))
@@ -1217,11 +1224,7 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* Filter WOs also based on the labour scheduled date ([b1063d](https://github.com/cern-eam/eam-light-frontend/commit/b1063d44867e4ac70c3c6b70dfef0773e86cb5ad))
-* Support propagation of query params to custom fields ([a5d361](https://github.com/cern-eam/eam-light-frontend/commit/a5d361aeb71a7acc2f7bce30859be91210114ea6))
-* fix(frontend): use unique keys and clean up ([537abd](https://github.com/cern-eam/eam-light-frontend/commit/537abd84d08fa57d6e1ec242f9803219ff2d407a))
-* Support hierarchy query params for assets ([334ea2](https://github.com/cern-eam/eam-light-frontend/commit/334ea2187795d37aa48550bf1935a5b5b4a93f6f))
-* Remove console.log in AssetHierarchy ([dbb5e4](https://github.com/cern-eam/eam-light-frontend/commit/dbb5e4d9d9e093b4d269eea7250f6a479b7abf07))
-* Fix query param assignment for asset hierarchy fields ([0cdeeb](https://github.com/cern-eam/eam-light-frontend/commit/0cdeeb32b64f430af09ed95b2b2f7b76e20a8905))
-* Tidy up hierarchy management helper tools ([d8a1fb](https://github.com/cern-eam/eam-light-frontend/commit/d8a1fb237bf4d42013f953b615a5175c8337630a))
+* [EAM-4101] Homepage overhaul ([352b2d](https://github.com/cern-eam/eam-light-frontend/commit/352b2dd9030ff755c25298d18d5df952d359c140))
+* Fix the onCodeChange handler for Assets ([a324e0](https://github.com/cern-eam/eam-light-frontend/commit/a324e0ce77d857c163ea9a3d5770a56307985085))
+* [EAM-5157] Update equipment hierarchy when clearing parent field ([54273f](https://github.com/cern-eam/eam-light-frontend/commit/54273f75ffffe147747cd577bb6a65580fb39697))
 
