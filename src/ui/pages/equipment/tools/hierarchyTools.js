@@ -51,7 +51,7 @@ export const ParentDependencyTypes = Object.freeze({
     LOCATION: "LocationDependency",
     NONE: "NonDependentParents",
   });
-  
+
 
 export const convert = (currentParents, dependent, dependentProp, nonDependentProp, parentCode, parentOrg, parentProp) => {
     if (!currentParents[dependentProp] && !currentParents[nonDependentProp] && !parentCode) {
@@ -76,20 +76,21 @@ export const convert = (currentParents, dependent, dependentProp, nonDependentPr
         ...currentParents[dependentProp],
         ...currentParents[nonDependentProp],
         ...(parent ? { [parentProp]: parent } : {})
-    } 
+    }
     delete currentParents[dependent ? nonDependentProp : dependentProp]
 
     return false
-    
+
 }
 
 
-export const getDependencyType = (currentParentHierarchy) => 
+export const getDependencyType = (currentParentHierarchy) =>
     ( [ { path: "AssetDependency.DEPENDENTASSET", type: ParentDependencyTypes.ASSET },
         { path: "PositionDependency.DEPENDENTPOSITION", type: ParentDependencyTypes.POSITION },
         { path: "PrimarySystemDependency.DEPENDENTPRIMARYSYSTEM", type: ParentDependencyTypes.PRIMARYSYSTEM },
         { path: "SystemDependency.DEPENDENTSYSTEM", type: ParentDependencyTypes.SYSTEM },
         { path: "LocationDependency.DEPENDENTLOCATION", type: ParentDependencyTypes.LOCATION },
+        { path: "LocationDependency.NONDEPENDANTASSET", type: ParentDependencyTypes.ASSET },
       ].find(({ path }) => get(currentParentHierarchy, path))?.type || ParentDependencyTypes.NONE);
 
 export const getHierarchyObject = (hierarchyProps, currentParentHierarchy = {}) => {
@@ -100,7 +101,7 @@ export const getHierarchyObject = (hierarchyProps, currentParentHierarchy = {}) 
             parentSystemCode, parentSystemOrg,
             parentLocationCode, parentLocationOrg
         } = hierarchyProps;
-        
+
     const currentParents = {
         ...currentParentHierarchy.AssetDependency,
         ...currentParentHierarchy.PositionDependency,
@@ -132,7 +133,7 @@ export const getHierarchyObject = (hierarchyProps, currentParentHierarchy = {}) 
         //LOCATIONID: currentParentHierarchy.LOCATIONID,
         [dependencyType]: currentParents
     }
-    
+
     return assetParentHierarchy
 }
 
