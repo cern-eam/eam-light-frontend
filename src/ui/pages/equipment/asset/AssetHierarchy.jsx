@@ -24,59 +24,59 @@ const AssetHierarchy = (props) => {
   useInitHierarchyFromQueryParams({newEntity, equipment, updateEquipmentProperty, hierarchyKey: "AssetParentHierarchy"});
 
   const onChangeAsset = (value, manualInput) => {
-    if (value?.code && !manualInput) return
+    if (!manualInput) return
 
     const hierarchy = getHierarchyObject({
       parentAssetCode: value?.code || '',
       parentAssetOrg:  value?.org  || ''
     }, equipment.AssetParentHierarchy);
-
+  
     updateEquipmentProperty("AssetParentHierarchy", hierarchy);
   };
-
+  
   const onChangeAssetDependency = (event) => {
     const hierarchy = getHierarchyObject({
       dependencyType: event.target.checked ? ParentDependencyTypes.ASSET : ParentDependencyTypes.NONE
     }, equipment.AssetParentHierarchy);
-
+  
     updateEquipmentProperty("AssetParentHierarchy", hierarchy);
   };
-
+  
   const onChangePosition = (value, manualInput) => {
-    if (value?.code && !manualInput) return
+    if (!manualInput) return
     console.log('on change position', value)
     const hierarchy = getHierarchyObject({
       parentPositionCode: value?.code || '',
       parentPositionOrg:  value?.org  || ''
     }, equipment.AssetParentHierarchy);
-
+  
     updateEquipmentProperty("AssetParentHierarchy", hierarchy);
   };
-
+  
   const onChangePositionDependency = (event) => {
     const hierarchy = getHierarchyObject({
       dependencyType: event.target.checked ? ParentDependencyTypes.POSITION : ParentDependencyTypes.NONE
     }, equipment.AssetParentHierarchy);
-
+  
     updateEquipmentProperty("AssetParentHierarchy", hierarchy);
   };
-
+  
   const onChangeSystem = (value, manualInput) => {
-    if (value?.code && !manualInput) return
+    if (!manualInput) return
 
     const hierarchy = getHierarchyObject({
       parentPrimarySystemCode: value?.code || '',
       parentPrimarySystemOrg:  value?.org  || ''
     }, equipment.AssetParentHierarchy);
-
+  
     updateEquipmentProperty("AssetParentHierarchy", hierarchy);
   };
-
+  
   const onChangeSystemDependency = (event) => {
     const hierarchy = getHierarchyObject({
       dependencyType: event.target.checked ? ParentDependencyTypes.PRIMARYSYSTEM : ParentDependencyTypes.NONE
     }, equipment.AssetParentHierarchy);
-
+  
     updateEquipmentProperty("AssetParentHierarchy", hierarchy);
   };
 
@@ -91,7 +91,7 @@ const AssetHierarchy = (props) => {
     }, equipment.AssetParentHierarchy);
     updateEquipmentProperty("AssetParentHierarchy", hierarchy);
   };
-
+  
   return (
     <React.Fragment>
       <EAMUDF {...register("udfchar13")} />
@@ -155,7 +155,7 @@ const AssetHierarchy = (props) => {
         value={get(equipment, 'AssetParentHierarchy.LocationDependency.DEPENDENTLOCATION.LOCATIONID.LOCATIONCODE') ??
                get(equipment, 'AssetParentHierarchy.LOCATIONID.LOCATIONCODE')}
         disabled={
-          readOnly ||
+          readOnly || 
           getDependencyType(equipment.AssetParentHierarchy) !== ParentDependencyTypes.NONE &&
           getDependencyType(equipment.AssetParentHierarchy) !== ParentDependencyTypes.LOCATION
         }
