@@ -287,6 +287,11 @@ class WSWorkorders {
     }
 
     getMyTeamWorkOrders(userDepartments) {
+        // Return empty array if userDepartments is falsy
+        if (!userDepartments) {
+            return Promise.resolve({ body: { data: [] } });
+        }
+        
         let gridRequest = new GridRequest("WSJOBS", GridTypes.LIST, "WSJOBS")
         gridRequest.setRowCount(200)
         gridRequest.addFilter("department", userDepartments, "IN", "AND")
