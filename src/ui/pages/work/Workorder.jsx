@@ -537,7 +537,7 @@ const Workorder = () => {
               <IconButton
                 onClick={() =>
                   window.open(
-                    applicationData.EL_PRTCL + workorder.number,
+                    applicationData.EL_PRTCL + id?.code,
                     "_blank",
                     "noopener noreferrer"
                   )
@@ -572,9 +572,9 @@ const Workorder = () => {
         maximizable: false,
         render: () => (
           <CustomFields
-            entityCode="EVNT"
-            entityKeyCode={workorder.number}
-            classCode={workorder.classCode}
+            // entityCode="EVNT"
+            // entityKeyCode={workorder.number}
+            // classCode={workorder.classCode}
             customFields={workorder.USERDEFINEDAREA?.CUSTOMFIELD}
             register={register}
           />
@@ -811,7 +811,7 @@ const Workorder = () => {
 
   const postAddActivityHandler = () => {
     //Refresh the activities in the checklist
-    checklists.current && checklists.current.readActivities(workorder.number);
+    checklists.current?.readActivities(id?.code);
   };
 
   const readOtherIdMapping = (number) => {
