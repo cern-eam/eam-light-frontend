@@ -271,9 +271,7 @@ const Part = () => {
         maximizable: false,
         render: () => (
           <CustomFields
-            entityCode="PART"
             customFields={part.USERDEFINEDAREA?.CUSTOMFIELD}
-            updateEntityProperty={updatePartProperty}
             register={register}
           />
         ),
