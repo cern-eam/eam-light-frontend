@@ -78,7 +78,7 @@ const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   return response.body.data;
 };
 
-const customTabGridParamNames = ["evt_code", "EVENT", "WO_CODE"];
+const customTabGridParamNames = ["evt_code", "EVENT", "WO_CODE", "workordernumber"];
 
 const Workorder = () => {
   const history = useHistory();
@@ -158,7 +158,7 @@ const Workorder = () => {
   });
 
   function onChangeEquipment(equipmentData) {
-    
+
     const equipmentCode = equipmentData["EQUIPMENTID.EQUIPMENTCODE"];
     const equipmentOrg = equipmentData["EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE"];
 
@@ -174,7 +174,7 @@ const Workorder = () => {
     ])
       .then(([equipment, linearDetails]) => {
         setEquipment(equipment);
-        
+
         if (!workorder?.DEPARTMENTID?.DEPARTMENTCODE) {
           updateWorkorderProperty("DEPARTMENTID", equipment.DEPARTMENTID);
         }
@@ -672,7 +672,7 @@ const Workorder = () => {
         workOrderLayout.customGridTabs,
         customTabGridParamNames,
         screenCode,
-        workorder.number
+        id?.code
       ),
       ...getCustomTabRegions(
         workOrderLayout.customTabs,
