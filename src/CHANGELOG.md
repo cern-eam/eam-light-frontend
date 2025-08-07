@@ -1,6 +1,12 @@
-# Version (2025-08-01)
+# Version (2025-08-07)
 
 ## Features
+### 4.1.41 
+* Make alias case insensitive in index search ([519b94](https://github.com/cern-eam/eam-light-backend/commit/519b94aed770289014373307e8cb75484b18226d))
+### 4.1.40 
+* [EAM-4101] Homepage overhaul ([352b2d](https://github.com/cern-eam/eam-light-frontend/commit/352b2dd9030ff755c25298d18d5df952d359c140))
+* Fix the onCodeChange handler for Assets ([a324e0](https://github.com/cern-eam/eam-light-frontend/commit/a324e0ce77d857c163ea9a3d5770a56307985085))
+* [EAM-5157] Update equipment hierarchy when clearing parent field ([54273f](https://github.com/cern-eam/eam-light-frontend/commit/54273f75ffffe147747cd577bb6a65580fb39697))
 ### 4.1.39 
 * Filter WOs also based on the labour scheduled date ([b1063d](https://github.com/cern-eam/eam-light-frontend/commit/b1063d44867e4ac70c3c6b70dfef0773e86cb5ad))
 * Support propagation of query params to custom fields ([a5d361](https://github.com/cern-eam/eam-light-frontend/commit/a5d361aeb71a7acc2f7bce30859be91210114ea6))
@@ -1224,7 +1230,8 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* [EAM-4101] Homepage overhaul ([352b2d](https://github.com/cern-eam/eam-light-frontend/commit/352b2dd9030ff755c25298d18d5df952d359c140))
-* Fix the onCodeChange handler for Assets ([a324e0](https://github.com/cern-eam/eam-light-frontend/commit/a324e0ce77d857c163ea9a3d5770a56307985085))
-* [EAM-5157] Update equipment hierarchy when clearing parent field ([54273f](https://github.com/cern-eam/eam-light-frontend/commit/54273f75ffffe147747cd577bb6a65580fb39697))
+* Revert "[EAM-5157] Update equipment hierarchy when clearing parent field" ([ce545f](https://github.com/cern-eam/eam-light-frontend/commit/ce545f4ce4431c06079b9b8adfa07663922cdab5))
+* Upgrade the version of eam-components to v2.0.0 ([af44d0](https://github.com/cern-eam/eam-light-frontend/commit/af44d013b4a88124a0be0056aa1f8633c8d39e14))
+* Return empty team work orders when no departments defined for user ([d1b822](https://github.com/cern-eam/eam-light-frontend/commit/d1b8226dba763aa7f6fef77afb56ef0fbaa0dd12))
+* Pass pet to work order grid tabs ([953656](https://github.com/cern-eam/eam-light-frontend/commit/95365617dc0c3181299ff4e298a950402a0c3ef4))
 
