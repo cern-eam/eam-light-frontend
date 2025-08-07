@@ -572,9 +572,6 @@ const Workorder = () => {
         maximizable: false,
         render: () => (
           <CustomFields
-            // entityCode="EVNT"
-            // entityKeyCode={workorder.number}
-            // classCode={workorder.classCode}
             customFields={workorder.USERDEFINEDAREA?.CUSTOMFIELD}
             register={register}
           />

@@ -358,7 +358,6 @@ const System = () => {
         maximizable: false,
         render: () => (
           <CustomFields
-            entityCode="OBJ"
             customFields={equipment.USERDEFINEDAREA?.CUSTOMFIELD}
             register={register}
           />

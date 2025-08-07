@@ -403,7 +403,6 @@ const Asset = () => {
         maximizable: false,
         render: () => (
           <CustomFields
-            entityCode="OBJ"
             customFields={equipment.USERDEFINEDAREA?.CUSTOMFIELD}
             register={register}
           />

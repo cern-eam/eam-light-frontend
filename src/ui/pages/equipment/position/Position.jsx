@@ -371,7 +371,6 @@ const Position = () => {
         maximizable: false,
         render: () => (
           <CustomFields
-            entityCode="OBJ"
             customFields={equipment.USERDEFINEDAREA?.CUSTOMFIELD}
             register={register}
           />
