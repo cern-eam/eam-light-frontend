@@ -467,15 +467,13 @@ const Workorder = () => {
         render: () => (
           <Activities
             workorder={id?.code}
-            version={workorder.updateCount}
             department={workorder?.DEPARTMENTID?.DEPARTMENTCODE}
             departmentDesc={workorder?.DEPARTMENTID?.DEPARTMENTCODE}
             layout={tabs}
             defaultEmployee={userData.eamAccount.employeeCode}
             defaultEmployeeDesc={userData.eamAccount.employeeDesc}
             postAddActivityHandler={postAddActivityHandler}
-            updateEntityProperty={updateWorkorderProperty}
-            updateCount={workorder.updateCount}
+            updateWorkorderProperty={updateWorkorderProperty}
             startDate={workorder.startDate}
             disabled={readOnly}
             handleError={handleError}

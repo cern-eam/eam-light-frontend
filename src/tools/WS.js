@@ -74,16 +74,6 @@ class WS {
     });
   }
 
-  //
-  //
-  //
-  getMyOpenWorkOrders(config = {}) {
-    return this._get("/myworkorders/my", config);
-  }
-
-  getMyTeamWorkOrders(config = {}) {
-    return this._get("/myworkorders/myteam", config);
-  }
 
   getSearchData(keyword, entityTypes, config = {}) {
     keyword = encodeURIComponent(keyword);

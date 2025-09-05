@@ -337,7 +337,7 @@ const useEntity = (params) => {
       const handlerKeys = keys.split(',');
       if (handlerKeys.every(k => key.includes(k))) {
         const payload = Object.fromEntries(key.map((k, i) => [k, value[i]]));
-        console.log('Firing handler', handlerKeys, payload);
+        //console.log('Firing handler', handlerKeys, payload);
         handlerFunction(payload);
       }
     }
