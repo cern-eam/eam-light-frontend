@@ -113,7 +113,6 @@ function AddActivityDialog(props) {
   };
 
   let updateFormValues = (key, value) => {
-    console.log('update', key, value)
     if (key === "taskCode" && value) {
       onTaskCodeChanged(value);
     }

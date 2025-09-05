@@ -103,6 +103,9 @@ const Position = () => {
     handlers: {
       "CATEGORYID.CATEGORYCODE": (category) => onCategoryChange(category, updateEquipmentProperty)
     },
+    postActions: {
+      copy: postCopy
+    },
     isReadOnlyCustomHandler: isClosedEquipment,
     entityCode: "OBJ",
     entityDesc: "Position",
@@ -127,6 +130,10 @@ const Position = () => {
       updateEquipmentTreeData({equipment: null});
     }
   }, [id])
+
+  function postCopy() {
+    updateEquipmentProperty("GISOBJID", null)
+  }
 
   const getRegions = () => {
     const tabs = positionLayout.tabs;

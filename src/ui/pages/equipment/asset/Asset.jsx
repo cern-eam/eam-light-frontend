@@ -94,6 +94,9 @@ const Asset = () => {
       "CATEGORYID.CATEGORYCODE": (category) => onCategoryChange(category, updateEquipmentProperty),
       "ASSETID.EQUIPMENTCODE": onCodeChange
     },
+    postActions: {
+      copy: postCopy
+    },
     isReadOnlyCustomHandler: isClosedEquipment,
     entityCode: "OBJ",
     entityDesc: "Asset",
@@ -163,6 +166,11 @@ const Asset = () => {
         showError(error.message)
       })
   }
+
+  function postCopy() {
+    updateEquipmentProperty("GISOBJID", null)
+  }
+
 
   const getRegions = () => {
     const tabs = assetLayout.tabs;

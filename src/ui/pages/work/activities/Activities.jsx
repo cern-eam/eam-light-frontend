@@ -114,7 +114,7 @@ function Activities(props) {
                 defaultEmployee={props.defaultEmployee}
                 defaultEmployeeDesc={props.defaultEmployeeDesc}
                 updateCount={props.updateCount}
-                updateEntityProperty={props.updateEntityProperty}
+                updateWorkorderProperty={props.updateWorkorderProperty}
                 startDate={props.startDate}
                 onChange={() => readBookLabours(workorder)}
                 onClose={() => setIsBookLaborModalOpen(false)}/>

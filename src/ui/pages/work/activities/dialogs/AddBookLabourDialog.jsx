@@ -75,22 +75,8 @@ function AddBookLabourDialog(props) {
       .then(WSWorkorders.getWorkOrder.bind(null, props.workorderNumber, getOrg())) //TODO do we really have to read the WO?
       .then((result) => {
         setLoading(false);
-         const workorder = result.body.Result.ResultData.WorkOrder;
-        
-         // if (
-        //   props.updateCount + 1 === workorder.updateCount &&
-        //   props.startDate === null
-        // ) {
-        //   props.updateEntityProperty("startDate", workorder.startDate);
-        //   props.updateEntityProperty("updateCount", props.updateCount + 1);
-        // } else if (
-        //   props.updateCount !== workorder.updateCount ||
-        //   props.startDate !== workorder.startDate
-        // ) {
-        //   // an unexpected situation has happened, reload the page
-        //   window.location.reload();
-        // }
-
+        const workorder = result.body.Result.ResultData.WorkOrder;
+        props.updateWorkorderProperty("recordid", workorder.recordid);
         showNotification("Booking labour successfully created");
         handleClose();
         props.onChange();
