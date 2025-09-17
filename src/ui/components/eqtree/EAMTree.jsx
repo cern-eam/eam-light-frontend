@@ -18,12 +18,16 @@ const urlTypeMap = {
   P: "position",
   S: "system",
   L: "location",
+  LOT: "lot",
+  PART: "part"
 };
 
 const _getColorForType = (type) => {
   switch (type) {
     case "A":
       return "#B71C1C";
+    case "LOT":
+      return "#F5BE27";
     case "P":
       return "#0D47A1";
     default:
