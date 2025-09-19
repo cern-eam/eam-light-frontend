@@ -1,7 +1,13 @@
-# Version (2025-08-07)
+# Version (2025-09-19)
 
 ## Features
+### 4.1.52 
+* feat: EAM-5282 add lot to hierarchy tree ([f6f33b](https://github.com/cern-eam/eam-light-backend/commit/f6f33b7c8de553b55928249f662d0a6eef76c6d8))
 ### 4.1.41 
+* Revert "[EAM-5157] Update equipment hierarchy when clearing parent field" ([ce545f](https://github.com/cern-eam/eam-light-frontend/commit/ce545f4ce4431c06079b9b8adfa07663922cdab5))
+* Upgrade the version of eam-components to v2.0.0 ([af44d0](https://github.com/cern-eam/eam-light-frontend/commit/af44d013b4a88124a0be0056aa1f8633c8d39e14))
+* Return empty team work orders when no departments defined for user ([d1b822](https://github.com/cern-eam/eam-light-frontend/commit/d1b8226dba763aa7f6fef77afb56ef0fbaa0dd12))
+* Pass pet to work order grid tabs ([953656](https://github.com/cern-eam/eam-light-frontend/commit/95365617dc0c3181299ff4e298a950402a0c3ef4))
 * Make alias case insensitive in index search ([519b94](https://github.com/cern-eam/eam-light-backend/commit/519b94aed770289014373307e8cb75484b18226d))
 ### 4.1.40 
 * [EAM-4101] Homepage overhaul ([352b2d](https://github.com/cern-eam/eam-light-frontend/commit/352b2dd9030ff755c25298d18d5df952d359c140))
@@ -1230,8 +1236,8 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* Revert "[EAM-5157] Update equipment hierarchy when clearing parent field" ([ce545f](https://github.com/cern-eam/eam-light-frontend/commit/ce545f4ce4431c06079b9b8adfa07663922cdab5))
-* Upgrade the version of eam-components to v2.0.0 ([af44d0](https://github.com/cern-eam/eam-light-frontend/commit/af44d013b4a88124a0be0056aa1f8633c8d39e14))
-* Return empty team work orders when no departments defined for user ([d1b822](https://github.com/cern-eam/eam-light-frontend/commit/d1b8226dba763aa7f6fef77afb56ef0fbaa0dd12))
-* Pass pet to work order grid tabs ([953656](https://github.com/cern-eam/eam-light-frontend/commit/95365617dc0c3181299ff4e298a950402a0c3ef4))
+* Clean up workorder id reference ([c5be7b](https://github.com/cern-eam/eam-light-frontend/commit/c5be7b5fbe470b45549fb8e301b89c79b5288766))
+* Clean up custom fields obsolete props ([a49aaa](https://github.com/cern-eam/eam-light-frontend/commit/a49aaacdb223bbeea3177f0930b554ad6d4d9641))
+* Update r5events.updatecount (recordid) when booking labour ([5f07f3](https://github.com/cern-eam/eam-light-frontend/commit/5f07f3a2270ff14af399317f88ce0f7227b3d77d))
+* feat: EAM-5282 add lot to hierarchy tree ([0f2e00](https://github.com/cern-eam/eam-light-frontend/commit/0f2e004fc9a30d9c1bf8b3b0e0c2962fc75c510e))
 
