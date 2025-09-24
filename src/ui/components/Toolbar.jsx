@@ -389,7 +389,7 @@ class Toolbar extends React.Component {
         {buttonsRender}
         <EditWatchlistDialog
           open={this.state.watchlistOpen}
-          woCode={this.props.entity.number}
+          woCode={this.props.id?.code}
           userCode={this.props.userCode}
           handleError={console.log}
           handleClose={() => this.setState({ watchlistOpen: false })}
