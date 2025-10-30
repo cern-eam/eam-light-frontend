@@ -66,6 +66,9 @@ import { getPart } from "../../../tools/WSParts";
 import Documents from "../../components/documents/Documents";
 import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
 import { getOrg } from "../../../hooks/tools";
+import useUserDataStore from "../../../state/useUserDataStore";
+import GridTools from "../../../tools/GridTools";
+import { ConsoleLine } from "mdi-material-ui";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -90,6 +93,20 @@ const Workorder = () => {
   const [expandChecklistsOptions, setExpandChecklistsOptions] = useState(false);
   const checklists = useRef(null);
   const { setCurrentWorkOrder } = useWorkOrderStore();
+
+  const screen = GridTools.getURLParameterByName('screenCode');
+
+  const {
+      userData: { workOrderScreen, screens },
+      updateUserData,
+  } = useUserDataStore();
+
+  useEffect(() => {
+    if (screen && screen !== workOrderScreen && screens[screen]) {
+      updateUserData({ workOrderScreen: screen })
+    }
+  }, [])
+
   //
   //
   //
