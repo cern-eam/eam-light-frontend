@@ -16,7 +16,6 @@ function Activities(props) {
     let [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
     let [isBookLaborModalOpen, setIsBookLaborModalOpen] = useState(false);
     let [loading, setLoading] = useState(false);
-
     let {workorder, layout, disabled, handleError, updateCount} = props;
 
     useEffect(() => {
