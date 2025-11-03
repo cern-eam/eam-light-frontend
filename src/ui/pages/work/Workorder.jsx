@@ -491,7 +491,7 @@ const Workorder = () => {
             defaultEmployeeDesc={userData.eamAccount.employeeDesc}
             postAddActivityHandler={postAddActivityHandler}
             updateWorkorderProperty={updateWorkorderProperty}
-            startDate={workorder.startDate}
+            startDate={workorder.STARTDATE}
             disabled={readOnly}
             handleError={handleError}
           />
