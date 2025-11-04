@@ -28,7 +28,7 @@ function AddBookLabourDialog(props) {
   let [loading, setLoading] = useState(false);
   let [formValues, setFormValues] = useState({});
   const {handleError, showNotification} = useSnackbarStore();
-  
+
   useEffect(() => {
     if (props.open) {
       init();
@@ -77,6 +77,8 @@ function AddBookLabourDialog(props) {
         setLoading(false);
         const workorder = result.body.Result.ResultData.WorkOrder;
         props.updateWorkorderProperty("recordid", workorder.recordid);
+        props.updateWorkorderProperty("STARTDATE", workorder.STARTDATE);
+
         showNotification("Booking labour successfully created");
         handleClose();
         props.onChange();
