@@ -1,6 +1,8 @@
-# Version (2025-11-04)
+# Version (2025-11-05)
 
 ## Features
+### 4.1.54 
+* EAM-5523 pass the startDate in Activity ([83404c](https://github.com/cern-eam/eam-light-frontend/commit/83404ca99de34da6de23ccc152fd17f082aac8cb))
 ### 4.1.53 
 * [EAM-5381] Properly pass WO code to watchlist autocomplete ([0c1c21](https://github.com/cern-eam/eam-light-frontend/commit/0c1c218c2c8ae7dcdad5b73538a73c0dd4680f37))
 * [EAM-5511] Allow possibility to select the screen code ([3b536f](https://github.com/cern-eam/eam-light-frontend/commit/3b536f5176d7081723ebc899150c19cf7e370d5c))
@@ -1242,5 +1244,5 @@
 * Use native grid WS when fetching Activity Tasks ([ab6989](https://github.com/cern-eam/eam-light-backend/commit/ab6989513a5c5ef77c9ee61c2aee9f6aa185f4bb))
 * Detach meter readings from the DB ([4dc190](https://github.com/cern-eam/eam-light-backend/commit/4dc190e5f1a7bc559a70a306ced78c247438ca1d))
 ###  
-* EAM-5523 pass the startDate in Activity ([83404c](https://github.com/cern-eam/eam-light-frontend/commit/83404ca99de34da6de23ccc152fd17f082aac8cb))
+* fix: EAM-5523 update startdate after book labor ([3caf05](https://github.com/cern-eam/eam-light-frontend/commit/3caf05458b71ce8adba84395785cd440c721f4e7))
 
