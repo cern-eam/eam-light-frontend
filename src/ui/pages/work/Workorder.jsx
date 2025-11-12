@@ -757,6 +757,11 @@ const Workorder = () => {
   }
 
   function postRead(workorder) {
+    if (workorder?.STATUS?.STATUSCODE === 'A') {
+      setReadOnly(true)
+      showWarning("This is a PM Work Order. If you would like to release it, please do so in HxGN EAM.");
+    }
+
     getEquipment(
       workorder?.EQUIPMENTID?.EQUIPMENTCODE,
       workorder?.EQUIPMENTID?.ORGANIZATIONID?.ORGANIZATIONCODE
