@@ -80,7 +80,8 @@ function WorkorderGeneral(props) {
         {...register("workorderstatus")}
         disabled={
           isDepartmentReadOnly(workorder.DEPARTMENTID?.DEPARTMENTCODE, userData) ||
-          !screenPermissions.updateAllowed 
+          !screenPermissions.updateAllowed ||
+          workorder?.STATUS?.STATUSCODE === 'A'
           //!workorder.jtAuthCanUpdate
         }
         renderSuggestion={(suggestion) => suggestion.desc}
