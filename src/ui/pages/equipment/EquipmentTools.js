@@ -115,7 +115,16 @@ export const equipmentLayoutPropertiesMap = {
   },
 
   manufacturer: {
+    noOrgDescProps: true,
     alias: "manufacturercode"
+  },
+
+  serialnumber: {
+    noOrgDescProps: true
+  },
+
+  model: {
+    noOrgDescProps: true
   },
 
   commissiondate: {

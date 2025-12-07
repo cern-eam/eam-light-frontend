@@ -21,6 +21,7 @@ import {
   getTabGridRegions,
   renderLoading,
   getCustomTabRegions,
+  toEAMDate,
 } from "../../EntityTools";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer";
 import useEntity from "@/hooks/useEntity";
@@ -133,6 +134,7 @@ const Position = () => {
 
   function postCopy() {
     updateEquipmentProperty("GISOBJID", null)
+    updateEquipmentProperty("COMMISSIONDATE", toEAMDate((new Date()).toISOString()))
   }
 
   const getRegions = () => {
