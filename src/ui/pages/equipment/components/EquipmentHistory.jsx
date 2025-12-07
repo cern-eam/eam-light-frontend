@@ -48,7 +48,7 @@ function EquipmentHistory(props) {
   const isEmptyState = !blocking && historyData.length === 0;
 
   const keyMap = {
-    completedDate: TRANSFORM_KEYS.DATE_DD_MMM_YYYY_HH_MM,
+    completedDate: TRANSFORM_KEYS.NATIVE_DATE_PARSER,
   };
 
   return isEmptyState ? (

@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 import EquipmentGraphIframe from "../../../components/iframes/EquipmentGraphIframe";
 import { isCernMode } from "../../../components/CERNMode";
 import { TAB_CODES } from "../../../components/entityregions/TabCodeMapping";
-import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions, renderLoading, getCustomTabRegions } from "../../EntityTools";
+import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions, renderLoading, getCustomTabRegions, toEAMDate } from "../../EntityTools";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer";
 import useEntity from "@/hooks/useEntity";
 import { isClosedEquipment, assetLayoutPropertiesMap, onCategoryChange } from "../EquipmentTools";
@@ -169,6 +169,7 @@ const Asset = () => {
 
   function postCopy() {
     updateEquipmentProperty("GISOBJID", null)
+    updateEquipmentProperty("COMMISSIONDATE", toEAMDate((new Date()).toISOString()))
   }
 
 

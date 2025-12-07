@@ -37,6 +37,7 @@ import {
   getTabGridRegions,
   getTabInitialVisibility,
   renderLoading,
+  toEAMDate,
 } from "../../EntityTools";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
 import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
@@ -100,6 +101,9 @@ const System = () => {
     handlers: {
       "CATEGORYID.CATEGORYCODE": (category) => onCategoryChange(category, updateEquipmentProperty)
     },
+    postActions: {
+      copy: postCopy
+    },
     isReadOnlyCustomHandler: isClosedEquipment,
     entityCode: "OBJ",
     entityDesc: "System",
@@ -134,6 +138,10 @@ const System = () => {
     }
     return "X";
   };
+
+  function postCopy() {
+    updateEquipmentProperty("COMMISSIONDATE", toEAMDate((new Date()).toISOString()))
+  }
 
   const getRegions = () => {
     const tabs = systemLayout.tabs;
