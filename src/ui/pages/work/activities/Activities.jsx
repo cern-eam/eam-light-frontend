@@ -16,12 +16,12 @@ function Activities(props) {
     let [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
     let [isBookLaborModalOpen, setIsBookLaborModalOpen] = useState(false);
     let [loading, setLoading] = useState(false);
-    let {workorder, layout, disabled, handleError, updateCount} = props;
+    let {workOrder, workOrderNumber, layout, disabled, handleError, updateCount} = props;
 
     useEffect(() => {
-        readActivities(workorder);
-        readBookLabours(workorder);
-    }, [workorder, updateCount])
+        readActivities(workOrderNumber);
+        readBookLabours(workOrderNumber);
+    }, [workOrderNumber, updateCount])
 
     /**
      * Load all activities
@@ -62,7 +62,7 @@ function Activities(props) {
             .catch(console.error);
     }
 
-    if (loading || !workorder) {
+    if (loading || !workOrderNumber) {
         return (
             <div></div>
         );
@@ -97,17 +97,16 @@ function Activities(props) {
             <AddActivityDialog
                 layout={layout.ACT.fields}
                 open={isActivityModalOpen}
-                workorderNumber={workorder}
-                onChange={() => readActivities(workorder)}
+                workOrder={workOrder}
+                onChange={() => readActivities(workOrderNumber)}
                 onClose={() => setIsActivityModalOpen(false)}
-                postAddActivityHandler={props.postAddActivityHandler}
-                newActivityCode={activities[activities.length - 1] ? parseInt(activities[activities.length - 1].activityCode) + 5 : 5} />
+                postAddActivityHandler={props.postAddActivityHandler} />
 
             <AddBookLabourDialog
                 layout={layout.BOO.fields}
                 open={isBookLaborModalOpen}
                 activities={activities}
-                workorderNumber={workorder}
+                workorderNumber={workOrderNumber}
                 department={props.department}
                 departmentDesc={props.departmentDesc}
                 defaultEmployee={props.defaultEmployee}
@@ -115,7 +114,7 @@ function Activities(props) {
                 updateCount={props.updateCount}
                 updateWorkorderProperty={props.updateWorkorderProperty}
                 startDate={props.startDate}
-                onChange={() => readBookLabours(workorder)}
+                onChange={() => readBookLabours(workOrderNumber)}
                 onClose={() => setIsBookLaborModalOpen(false)}/>
         </div>
     )

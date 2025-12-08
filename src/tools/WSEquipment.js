@@ -1,4 +1,4 @@
-import { getOrg } from '../hooks/tools';
+import { getCodeOrg, getOrg } from '../hooks/tools';
 import GridRequest, { GridFilterJoiner, GridTypes } from './entities/GridRequest';
 import WS from './WS';
 import { getAsset } from './WSAssets';
@@ -141,27 +141,28 @@ class WSEquipment {
     }
 }
 
-export const getEquipment = async (equipmentCode, organization = getOrg(), config = {}) => {
-    const equipmentType = await getEquipmentType(equipmentCode, organization);
+export const getEquipment = async (equipmentIdentifier, config = {}) => {
+    const equipmentType = await getEquipmentType(equipmentIdentifier);
   
     const extract = (response) => response.body.Result.ResultData;
   
     switch (equipmentType) {
       case "A":
-        return extract(await getAsset(equipmentCode, organization, config)).AssetEquipment;
+        return extract(await getAsset(equipmentIdentifier, config)).AssetEquipment;
       case "P":
-        return extract(await getPosition(equipmentCode, organization, config)).PositionEquipment;
+        return extract(await getPosition(equipmentIdentifier, config)).PositionEquipment;
       case "S":
-        return extract(await getSystem(equipmentCode, organization, config)).SystemEquipment;
+        return extract(await getSystem(equipmentIdentifier, config)).SystemEquipment;
       case "L":
-        return extract(await getLocation(equipmentCode, organization, config)).Location;
+        return extract(await getLocation(equipmentIdentifier, config)).Location;
       default:
         return null;
     }
   };
   
 
-export const getEquipmentType = async (equipmentCode, organization, config = {}) => {
+export const getEquipmentType = async (equipmentIdentifier, config = {}) => {
+    const {code: equipmentCode, org: organization} = getCodeOrg(equipmentIdentifier)
     let gridRequest = new GridRequest("OCOBJC", GridTypes.LIST)
     gridRequest.addFilter("obj_code", equipmentCode, "=", "AND");
     gridRequest.addFilter("obj_org", organization, "=");

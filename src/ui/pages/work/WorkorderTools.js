@@ -2,6 +2,28 @@ import { Description } from "@mui/icons-material";
 import { GridTypes } from "../../../tools/entities/GridRequest";
 
 
+export const activityPropertiesMap = {
+    matlcode: {
+        autocompleteHandlerData: {
+            resultMap: {
+                code: "matlist",
+                desc: "matlistdesc",
+                organization: "matlistorg"
+            }
+        }
+    },
+
+    trade: {
+        autocompleteHandlerData: {
+            resultMap: {
+                code: "trade",
+                desc: "tradedesc",
+                organization: "tradeorganization"
+            }
+        }
+    }
+}
+
 export const layoutPropertiesMap = {
 
     workorderstatus: {

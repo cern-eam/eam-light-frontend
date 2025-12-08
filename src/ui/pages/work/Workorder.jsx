@@ -174,6 +174,7 @@ const Workorder = () => {
     codeQueryParamName: "workordernum",
   });
 
+
   function onChangeEquipment(equipmentData) {
 
     const equipmentCode = equipmentData["EQUIPMENTID.EQUIPMENTCODE"];
@@ -186,7 +187,7 @@ const Workorder = () => {
     }
 
     Promise.all([
-      getEquipment(equipmentCode, equipmentOrg),
+      getEquipment(equipmentCode + "#" + equipmentOrg),
       WSWorkorders.getWOEquipLinearDetails(equipmentCode),
     ])
       .then(([equipment, linearDetails]) => {
@@ -483,7 +484,8 @@ const Workorder = () => {
         maximizable: true,
         render: () => (
           <Activities
-            workorder={id?.code}
+            workOrderNumber={id?.code}
+            workOrder={workorder}
             department={workorder?.DEPARTMENTID?.DEPARTMENTCODE}
             departmentDesc={workorder?.DEPARTMENTID?.DEPARTMENTCODE}
             layout={tabs}
@@ -762,10 +764,7 @@ const Workorder = () => {
       showWarning("This is a PM Work Order. If you would like to release it, please do so in HxGN EAM.");
     }
 
-    getEquipment(
-      workorder?.EQUIPMENTID?.EQUIPMENTCODE,
-      workorder?.EQUIPMENTID?.ORGANIZATIONID?.ORGANIZATIONCODE
-    )
+    getEquipment(workorder?.EQUIPMENTID?.EQUIPMENTCODE + "#" + workorder?.EQUIPMENTID?.ORGANIZATIONID?.ORGANIZATIONCODE)
       .then((equipment) => {
         setEquipment(equipment);
 
@@ -827,6 +826,7 @@ const Workorder = () => {
   };
 
   const postAddActivityHandler = () => {
+    console.log('refresh catviit')
     //Refresh the activities in the checklist
     checklists.current?.readActivities(id?.code);
   };

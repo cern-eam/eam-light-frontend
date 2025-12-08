@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo, createElement } from "react";
-import { useParams, useHistory, useLocation } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes";
 import queryString from "query-string";
 import set from "set-value";
@@ -44,11 +44,13 @@ const useEntity = (params) => {
     screenProperty,
     resultDataCodeProperty,
     resultDefaultDataProperty,
-    layoutPropertiesMap,
+    layoutPropertiesMap = {},
     isReadOnlyCustomHandler,
     onMountHandler,
     onUnmountHandler,
     codeQueryParamName,
+    tabCode,
+    explicitIdentifier
   } = params;
 
   const [loading, setLoading] = useState(false);
@@ -59,6 +61,9 @@ const useEntity = (params) => {
   const [id, setId] = useState(null)
   const [extraData, setExtraData] = useState({});
   const { code: codeFromRoute } = useParams();
+  const entityIdentifier = params.hasOwnProperty("explicitIdentifier") ? explicitIdentifier : codeFromRoute;
+
+
   const codeQueryParam = queryString.parse(window.location.search)[
     codeQueryParamName
   ]; //TODO add equipment and part identifiers
@@ -78,9 +83,13 @@ const useEntity = (params) => {
 
   const screenCode = userData[screenProperty];
   const {
-    screenLayout: { [screenCode]: screenLayout },
+    screenLayout: allLayouts,
     fetchScreenLayout,
   } = useLayoutStore();
+
+  const screenLayout = tabCode
+    ? allLayouts?.[screenCode]?.tabs?.[tabCode]
+    : allLayouts?.[screenCode];
   const screenPermissions = userData.screens[screenCode];
 
 
@@ -119,7 +128,7 @@ const useEntity = (params) => {
       return;
     }
 
-    if (!codeFromRoute && codeQueryParam) {
+    if (!entityIdentifier && codeQueryParam) {
       history.push(
         process.env.PUBLIC_URL +
           entityURL +
@@ -128,10 +137,10 @@ const useEntity = (params) => {
       );
       return;
     }
-    codeFromRoute ? readEntity() : initNewEntity();
+    entityIdentifier ? readEntity() : initNewEntity();
     // Reset window title when unmounting
     return () => (document.title = "EAM Light");
-  }, [codeFromRoute, screenLayout]);
+  }, [entityIdentifier, screenLayout]);
 
   // Provide mount and unmount handlers to the client
   useEffect(() => {
@@ -154,8 +163,9 @@ const useEntity = (params) => {
         const entityCode = get(response.body.Result.ResultData, resultDataCodeProperty);
         showNotification(response.body.Result.InfoAlert.Message);
         commentsComponent.current?.createCommentForNewEntity(entityCode);
-        // Read after the creation (and append the organization in multi-org mode)
-        history.push(process.env.PUBLIC_URL +  entityURL + encodeURIComponent(entityCode + "#" +  get(entityToCreate, entityOrgProperty)));
+        postActions?.create?.(entityToCreate)
+        // Read after the creation 
+        entityURL && history.push(process.env.PUBLIC_URL +  entityURL + encodeURIComponent(entityCode + "#" +  get(entityToCreate, entityOrgProperty)));
       })
       .catch((error) => {
         //TODO generateErrorMessagesFromException(error?.response?.body?.errors);
@@ -166,12 +176,12 @@ const useEntity = (params) => {
 
   const readEntity = () => {
     setLoading(true);
-    const {code, org} = getCodeOrg(codeFromRoute)
+    //const {code, org} = getCodeOrg(entityIdentifier)
     // Cancel the old request in the case it was still active
     abortController.current?.abort();
     abortController.current = new AbortController();
     //
-    WS.read(code, org, { signal: abortController.current.signal })
+    WS.read(entityIdentifier, { signal: abortController.current.signal })
       .then((response) => {
         resetErrorMessages();
         setIsModified(false);
@@ -235,7 +245,7 @@ const useEntity = (params) => {
     WS.delete(get(entity,entityCodeProperty), get(entity,entityOrgProperty))
       .then((response) => {
         showNotification(response.body.Result.InfoAlert.Message);
-        history.push(process.env.PUBLIC_URL + entityURL);
+        entityURL && history.push(process.env.PUBLIC_URL + entityURL);
       })
       .catch((error) => {
         //TODO: generateErrorMessagesFromException(error?.response?.body?.errors);
@@ -259,7 +269,7 @@ const useEntity = (params) => {
         setId(null)
 
         let newEntity = response.body.Result.ResultData[resultDefaultDataProperty ?? entityProperty] ?? response.body.Result.ResultData
-        newEntity.USERDEFINEDAREA = customFields.body.Result;
+        //newEntity.USERDEFINEDAREA = customFields.body.Result;
         newEntity = assignDefaultValues(newEntity, screenLayout);
 
         // Temporary fix (SG-15959)
@@ -291,7 +301,7 @@ const useEntity = (params) => {
       ...assignDefaultValues(oldEntity, screenLayout, layoutPropertiesMap),
       copyFrom: code,
     }));
-    window.history.pushState({}, "", process.env.PUBLIC_URL + entityURL);
+    entityURL && window.history.pushState({}, "", process.env.PUBLIC_URL + entityURL);
     document.title = "New " + entityDesc;
     postActions?.copy?.();
   };
@@ -301,7 +311,7 @@ const useEntity = (params) => {
   //
   const saveHandler = () => (newEntity ? createEntity() : updateEntity());
 
-  const newHandler = () => history.push(entityURL);
+  const newHandler = () => entityURL && history.push(entityURL);
 
   const deleteHandler = () => deleteEntity();
 

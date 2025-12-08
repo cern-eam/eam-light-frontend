@@ -248,7 +248,7 @@ function PartUsageDialog(props) {
 
   const getAssetData = async (assetIDCode, org) => {
     try {
-      const equipmentData = await getEquipment(assetIDCode, org);
+      const equipmentData = await getEquipment(assetIDCode + '#' + org);
       const responseStoreCode = get(equipmentData, 'PartAssociation.STORELOCATION.STOREID.STORECODE')
       const assetData = {
         bin: get(equipmentData, 'PartAssociation.STORELOCATION.BIN'),

@@ -128,7 +128,7 @@ const ReplaceEqp = (props) => {
     const loadEquipmentData = async (code, destination) => {
         setBlocking(true);
         try {
-            const equipment = await getEquipment(code, getOrg()); 
+            const equipment = await getEquipment(code + "#" + getOrg()); 
 
             if (destination === 'oldEquipment') {
                 setOldEquipment(equipment);
