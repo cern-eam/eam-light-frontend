@@ -1,4 +1,4 @@
-import { getOrg } from '../hooks/tools';
+import { getCodeOrg, getOrg } from '../hooks/tools';
 import WS from './WS';
 
 export const createPosition = (position, config = {}) => {
@@ -9,7 +9,8 @@ export const updatePosition = (position, config = {}) => {
   return WS._put(`/proxy/positions`, position, config)
 }
 
-export const getPosition = async (positionCode, organization, config = {}) => {
+export const getPosition = async (equipmentIdentifier, config = {}) => {
+    const {code: positionCode, org: organization} = getCodeOrg(equipmentIdentifier)
     const positionResponse = await WS._get(`/proxy/positions/${encodeURIComponent(positionCode + '#' + organization)}`, config)
     const hierarchyResponse = await getPositionHierarchy(positionCode, organization, config);
     positionResponse.body.Result.ResultData.PositionEquipment.PositionParentHierarchy = hierarchyResponse.body.Result.ResultData.PositionParentHierarchy; 

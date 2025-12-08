@@ -1,4 +1,4 @@
-import { getOrg } from '../hooks/tools';
+import { getCodeOrg, getOrg } from '../hooks/tools';
 import WS from './WS';
 
 export const createAsset = (asset, config = {}) => {
@@ -9,7 +9,8 @@ export const updateAsset = (asset, config = {}) => {
   return WS._put(`/proxy/assets`, asset, config)
 }
 
-export const getAsset = async (assetCode, organization, config = {}) => {
+export const getAsset = async (equipmentIdentifier, config = {}) => {
+    const {code: assetCode, org: organization} = getCodeOrg(equipmentIdentifier)
     const assetResponse = await WS._get(`/proxy/assets/${encodeURIComponent(assetCode + '#' + organization)}`, config)
     const hierarchyResponse = await getAssetHierarchy(assetCode, organization, config);
     assetResponse.body.Result.ResultData.AssetEquipment.AssetParentHierarchy = hierarchyResponse.body.Result.ResultData.AssetParentHierarchy;

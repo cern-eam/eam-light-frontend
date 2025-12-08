@@ -10,141 +10,94 @@ import KeyCode from "eam-components/dist/enums/KeyCode";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMDatePicker from "eam-components/dist/ui/components/inputs-ng/EAMDatePicker";
-import useFieldsValidator from "eam-components/dist/ui/components/inputs-ng/hooks/useFieldsValidator";
-import {
-  createOnChangeHandler,
-  processElementInfo,
-} from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import LightDialog from "@/ui/components/LightDialog";
-import useSnackbarStore from "../../../../../state/useSnackbarStore";
+import useEntity from "../../../../../hooks/useEntity";
+import { fromEAMNumber } from "../../../EntityTools";
+import { activityPropertiesMap } from "../../WorkorderTools";
+import { ProjectorScreenVariantOutline } from "mdi-material-ui";
 
 /**
  * Display detail of an activity
  */
 function AddActivityDialog(props) {
-  let [loading, setLoading] = useState(false);
-  let [formValues, setFormValues] = useState({});
-  const {handleError, showNotification} = useSnackbarStore();
+  const { activityToEdit, layout, workOrder, open } = props;
 
-  // Passing an 'activityToEdit' object indicates that we are editing an existing activity
-  const { activityToEdit, layout } = props;
-  
-  const fieldsData = {
-    activityCode: layout.activity,
-    activityNote: layout.activitynote,
-    taskCode: layout.task,
-    materialList: layout.matlcode,
-    tradeCode: layout.trade,
-    peopleRequired: layout.personsreq,
-    estimatedHours: layout.esthrs,
-    startDate: layout.actstartdate,
-    endDate: layout.actenddate,
-  };
-
-  const { errorMessages, validateFields, resetErrorMessages } =
-    useFieldsValidator(fieldsData, formValues);
-
-  useEffect(() => {
-    if (props.open) {
-      if (activityToEdit) {
-        setFormValues(activityToEdit);
-      } else {
-        init();
-      }
-    } else {
-      resetErrorMessages();
+  if (!open) {
+      return null; 
     }
-  }, [props.open]);
 
-  let init = () => {
-    setLoading(true);
-    WSWorkorders.initWorkOrderActivity(props.workorderNumber)
-      .then((response) => {
-        setFormValues({
-          ...response.body.data,
-          workOrderNumber: props.workorderNumber,
-          activityCode: props.newActivityCode,
-          peopleRequired: 1,
-          estimatedHours: 1,
-          startDate: new Date(),
-          endDate: new Date(),
-        });
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-        handleError(error);
-      });
-  };
+  const {
+    screenLayout: activityLayout,
+    loading,
+    saveHandler,
+    updateEntityProperty: updateActivityProperty,
+    register,
+    setLoading,
+  } = useEntity({
+    WS: {
+      create: WSWorkorders.createWorkOrderActivity,
+      read: WSWorkorders.readWorkOrderActivity,
+      update: WSWorkorders.updateWorkOrder,
+      delete: WSWorkorders.deleteWorkOrder,
+      new: () => WSWorkorders.initWorkOrderActivity(workOrder?.WORKORDERID?.JOBNUM),
+    },
+    postActions: {
+      new: postInit,
+      create: postCreate,
+    },
+    handlers: {
+      "TASKSID.TASKCODE": onTaskCodeChanged
+    },
+    entityCode: "EVNT",
+    tabCode: "ACT",
+    entityDesc: "Activity",
+    entityURL: "",
+    entityCodeProperty: "ACTIVITYID.ACTIVITYCODE.value",
+    entityOrgProperty: "WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE",
+    entityProperty: "Activity",
+    resultDataCodeProperty: "JOBNUM",
+    resultDefaultDataProperty: "ActivityDefault",
+    screenProperty: "workOrderScreen",
+    explicitIdentifier: activityToEdit ? `${activityToEdit.workOrderNumber}#*#${activityToEdit.activityCode}`: ``,
+    layoutPropertiesMap: activityPropertiesMap
+  });
+
+  activityLayout.fields.esthrs.fieldType = "text"  
+
+  function postInit(activity) {
+    updateActivityProperty("ACTIVITYID.ACTIVITYCODE", activity.ACTIVITYCODE)
+    updateActivityProperty("ACTIVITYID.WORKORDERID", workOrder?.WORKORDERID)
+    updateActivityProperty("ESTIMATEDHOURS", 1);
+    updateActivityProperty("PERSONS", 1);
+  }
 
   let handleClose = () => {
     props.onClose();
   };
 
-  let handleSave = () => {
-    
-    if (!validateFields()) {
+  function postCreate() {
+    props.postAddActivityHandler();
+    props.onChange();
+    handleClose();
+  }
+
+  function onTaskCodeChanged(task) {
+    const taskCode = task['TASKSID.TASKCODE']
+
+    if (!taskCode) {
       return;
     }
 
-    let activity = { ...formValues };
-    delete activity.taskDesc;
-    delete activity.tradeDesc;
-    delete activity.materialListDesc;
-
     setLoading(true);
-    (activityToEdit
-      ? WSWorkorders.updateWorkOrderActivity(activity)
-      : WSWorkorders.createWorkOrderActivity(activity)
-    )
-      .then(() => {
-        props.postAddActivityHandler();
-        setLoading(false);
-        showNotification(
-          `Activity successfully ${activityToEdit ? "updated" : "created"}`
-        );
-        handleClose();
-        props.onChange();
-      })
-      .catch((error) => {
-        setLoading(false);
-        handleError(error);
-      });
-  };
-
-  let updateFormValues = (key, value) => {
-    if (key === "taskCode" && value) {
-      onTaskCodeChanged(value);
-    }
-    setFormValues((prevFormValues) => ({
-      ...prevFormValues,
-      [key]: value,
-    }));
-  };
-
-  let onTaskCodeChanged = (taskcode) => {
-    setLoading(true);
-    WSWorkorders.getTaskPlan(taskcode)
+    WSWorkorders.getTaskPlan(taskCode)
       .then((response) => {
-        const taskPlan = response.body.data;
-        updateFormValues("taskDesc", taskPlan.description);
-        updateFormValues("activityNote", taskPlan.description);
-
-        if (taskPlan.peopleRequired) {
-          updateFormValues("peopleRequired", taskPlan.peopleRequired);
-        }
-
-        if (taskPlan.estimatedHours) {
-          updateFormValues("estimatedHours", taskPlan.estimatedHours);
-        }
-
-        if (taskPlan.materialList) {
-          updateFormValues("materialList", taskPlan.materialList);
-        }
-
-        if (taskPlan.tradeCode) {
-          updateFormValues("tradeCode", taskPlan.tradeCode);
-        }
+        const taskPlan = response.body?.Result?.ResultData?.Task;
+        updateActivityProperty("ACTIVITYID.ACTIVITYNOTE", taskPlan.TASKLISTID.DESCRIPTION);
+        updateActivityProperty("TASKSID", taskPlan.TASKLISTID);
+        updateActivityProperty("ESTIMATEDHOURS", fromEAMNumber(taskPlan.HOURSREQUESTED));
+        updateActivityProperty("PERSONS", taskPlan.PERSONS);
+        updateActivityProperty("TRADEID", taskPlan.TRADEID);
+        updateActivityProperty("MATLIST", taskPlan.MATERIALLISTID);
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -172,123 +125,25 @@ function AddActivityDialog(props) {
           <div>
             <BlockUi tag="div" blocking={loading}>
               <EAMTextField
-                {...processElementInfo(layout.activity)}
-                value={formValues["activityCode"]}
-                onChange={createOnChangeHandler(
-                  "activityCode",
-                  null,
-                  null,
-                  updateFormValues
-                )}
-                disabled={activityToEdit}
-                errorText={errorMessages?.activityCode}
+              {...register('activity')} disabled={activityToEdit} />
+
+              <EAMTextField {...register('activitynote')} />
+
+              <EAMAutocomplete {...register('task')} />
+
+              <EAMAutocomplete {...register('matlcode')} 
+                // maxHeight={200}
               />
 
-              <EAMTextField
-                {...processElementInfo(layout.activitynote)}
-                value={formValues["activityNote"]}
-                onChange={createOnChangeHandler(
-                  "activityNote",
-                  null,
-                  null,
-                  updateFormValues
-                )}
-                errorText={errorMessages?.activityNote}
-              />
+              <EAMAutocomplete {...register('trade')}  />
 
-              <EAMAutocomplete
-                autocompleteHandler={WSWorkorders.autocompleteACTTask}
-                {...processElementInfo(layout.task)}
-                value={formValues["taskCode"]}
-                desc={formValues["taskDesc"]}
-                onChange={createOnChangeHandler(
-                  "taskCode",
-                  "taskDesc",
-                  null,
-                  updateFormValues
-                )}
-                errorText={errorMessages?.taskCode}
-              />
+              <EAMTextField {...register('personsreq')} />
 
-              <EAMAutocomplete
-                autocompleteHandler={WSWorkorders.autocompleteACTMatList}
-                {...processElementInfo(layout.matlcode)}
-                value={formValues["materialList"]}
-                desc={formValues["materialListDesc"]}
-                onChange={createOnChangeHandler(
-                  "materialList",
-                  "materialListDesc",
-                  null,
-                  updateFormValues
-                )}
-                maxHeight={200}
-                errorText={errorMessages?.materialList}
-              />
+              <EAMTextField {...register('esthrs')} />
 
-              <EAMAutocomplete
-                autocompleteHandler={WSWorkorders.autocompleteACTTrade}
-                {...processElementInfo(layout.trade)}
-                value={formValues["tradeCode"]}
-                desc={formValues["tradeDesc"]}
-                onChange={createOnChangeHandler(
-                  "tradeCode",
-                  "tradeDesc",
-                  null,
-                  updateFormValues
-                )}
-                errorText={errorMessages?.tradeCode}
-              />
+              <EAMDatePicker {...register('actstartdate')}  />
 
-              <EAMTextField
-                {...processElementInfo(layout.personsreq)}
-                value={formValues["peopleRequired"]}
-                onChange={createOnChangeHandler(
-                  "peopleRequired",
-                  null,
-                  null,
-                  updateFormValues
-                )}
-                errorText={errorMessages?.peopleRequired}
-              />
-
-              <EAMTextField
-                {...processElementInfo(layout.esthrs)}
-                valueKey="estimatedHours"
-                value={formValues["estimatedHours"]}
-                onChange={createOnChangeHandler(
-                  "estimatedHours",
-                  null,
-                  null,
-                  updateFormValues
-                )}
-                errorText={errorMessages?.estimatedHours}
-              />
-
-              <EAMDatePicker
-                {...processElementInfo(layout.actstartdate)}
-                valueKey="startDate"
-                value={formValues["startDate"]}
-                onChange={createOnChangeHandler(
-                  "startDate",
-                  null,
-                  null,
-                  updateFormValues
-                )}
-                errorText={errorMessages?.startDate}
-              />
-
-              <EAMDatePicker
-                {...processElementInfo(layout.actenddate)}
-                valueKey="endDate"
-                value={formValues["endDate"]}
-                onChange={createOnChangeHandler(
-                  "endDate",
-                  null,
-                  null,
-                  updateFormValues
-                )}
-                errorText={errorMessages?.endDate}
-              />
+              <EAMDatePicker {...register('actenddate')} />
             </BlockUi>
           </div>
         </DialogContent>
@@ -299,7 +154,7 @@ function AddActivityDialog(props) {
               Cancel
             </Button>
             <Button
-              onClick={handleSave}
+              onClick={saveHandler}
               color="primary"
               disabled={loading}
               autoFocus

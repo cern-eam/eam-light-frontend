@@ -2,7 +2,7 @@ import { Description } from '@mui/icons-material';
 import GridRequest, { GridFilterJoiner, GridTypes } from './entities/GridRequest';
 import WS from './WS';
 import { getGridData, transformResponse } from './WSGrids';
-import { getOrg } from '../hooks/tools';
+import { getCodeOrg, getOrg } from '../hooks/tools';
 
 /**
  * Handles all calls to REST Api
@@ -16,8 +16,9 @@ class WSWorkorders {
         return WS._post(`/proxy/workorderdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": getOrg()}}, config);
     }
 
-    getWorkOrder(number, organization, config = {}) {
-        return WS._get(`/proxy/workorders/${encodeURIComponent(number + '#' + organization)}`, config);
+    getWorkOrder(entityIdentifier, config = {}) {
+        const {code, org} = getCodeOrg(entityIdentifier)
+        return WS._get(`/proxy/workorders/${encodeURIComponent(code + '#' + org)}`, config);
     }
 
     createWorkOrder(workOrder, config = {}) {
@@ -159,20 +160,31 @@ class WSWorkorders {
 
     // Get default values for next activity for one work order
     initWorkOrderActivity(workorderNumber, config = {}) {
-        return WS._get('/activities/init/' + workorderNumber, config);
+        const payload = {
+            "WORKORDERID": {
+                "JOBNUM": workorderNumber,
+                "ORGANIZATIONID": {
+                "ORGANIZATIONCODE": "*"
+                }
+            }
+            }
+        return WS._post('/proxy/workorders/activitydefaults', payload, config);
     }
 
-    // Create a new activity for one workorder
     createWorkOrderActivity(activity, config = {}) {
-        return WS._post('/activities', activity, config);
+        return WS._post('/proxy/workorders/activities', activity, config);
     }
 
-    // Update an activity
+    readWorkOrderActivity(activityIdentifier, config = {}) {
+        console.log('id', activityIdentifier)
+        const [workorder, org, activity] = activityIdentifier.split('#');
+        return WS._get(`/proxy/workorders/${workorder}%23${org}/activities/${activity}`, config);
+    }
+
     updateWorkOrderActivity(activity, config = {}) {
         return WS._put('/activities', activity, config);
     }
 
-    // Delete an activity
     deleteWorkOrderActivity(config = {}) {
         return WS._delete(`/activities`, config);
     }
@@ -200,23 +212,9 @@ class WSWorkorders {
         return WS._get("/autocomplete/boo/employee/" + filter, config);
     };
 
-    autocompleteACTTrade = ({filter}, config = {}) => {
-        return WS._get("/autocomplete/act/trade/" + filter, config);
-    };
-
-    autocompleteACTTask = ({filter}, config = {}) => {
-        return WS._get("/autocomplete/act/task/" + filter, config);
-    };
-
-    autocompleteACTMatList = ({filter}, config = {}) => {
-        return WS._get("/autocomplete/act/matlist/" + filter, config);
-    };
-
-
     //
     //CHECKLIST
     //
-
     updateChecklistItem(checklistItem, config = {}) {
         return WS._put('/checklists/', checklistItem, config);
     }
@@ -225,7 +223,7 @@ class WSWorkorders {
     //TaskPlans
     //
     getTaskPlan(taskCode, config={}) {
-        return WS._get('/taskplan/' + taskCode, config);
+        return WS._get('/proxy/tasks/' + taskCode + '%230%23*', config);
     }
 
     //
