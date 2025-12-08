@@ -77,7 +77,7 @@ function Activities(props) {
                     bookLabours={bookLaboursByActivity[activity.activityCode]}
                     layout={layout}
                     postAddActivityHandler={props.postAddActivityHandler}
-                    readActivities={() => readActivities(workorder)}
+                    readActivities={() => readActivities(workOrderNumber)}
                     handleError={handleError}
                     />
             })}
