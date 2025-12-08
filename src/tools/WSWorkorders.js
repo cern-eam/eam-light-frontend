@@ -29,8 +29,9 @@ class WSWorkorders {
         return WS._put('/proxy/workorders/', workOrder, config);
     }
 
-    deleteWorkOrder(number, organization, config = {}) {
-        return WS._delete(`/proxy/workorders/${encodeURIComponent(number + '#' + organization)}`, config);
+    deleteWorkOrder(entityIdentifier, config = {}) {
+        const {code, org} = getCodeOrg(entityIdentifier)
+        return WS._delete(`/proxy/workorders/${encodeURIComponent(code + '#' + org)}`, config);
     }
 
     getStandardWorkOrder(code, config = {}) {
@@ -176,17 +177,17 @@ class WSWorkorders {
     }
 
     readWorkOrderActivity(activityIdentifier, config = {}) {
-        console.log('id', activityIdentifier)
         const [workorder, org, activity] = activityIdentifier.split('#');
         return WS._get(`/proxy/workorders/${workorder}%23${org}/activities/${activity}`, config);
     }
 
     updateWorkOrderActivity(activity, config = {}) {
-        return WS._put('/activities', activity, config);
+        return WS._put('/proxy/workorders/activities', activity, config);
     }
 
-    deleteWorkOrderActivity(config = {}) {
-        return WS._delete(`/activities`, config);
+    deleteWorkOrderActivity(activityIdentifier, config = {}) {
+        const [workorder, org, activity] = activityIdentifier.split('#');
+        return WS._delete(`/proxy/workorders/${workorder}%23${org}/activities/${activity}`, config);
     }
 
     // Get default values for next activity for one work order

@@ -204,7 +204,7 @@ const useEntity = (params) => {
             isReadOnlyCustomHandler?.(readEntity)
         );
         // Invoke entity specific logic
-        postActions?.read(readEntity);
+        postActions?.read?.(readEntity);
       })
       .catch((error) => {
         console.error('readEntity error', error)
@@ -229,6 +229,7 @@ const useEntity = (params) => {
 
         commentsComponent.current?.createCommentForNewEntity(entityCode);
         showNotification(response.body.Result.InfoAlert.Message);
+        postActions?.update?.(entityToCreate)
         readEntity();
       })
       .catch((error) => {
@@ -242,9 +243,10 @@ const useEntity = (params) => {
   const deleteEntity = () => {
     setLoading(true);
 
-    WS.delete(get(entity,entityCodeProperty), get(entity,entityOrgProperty))
+    WS.delete(entityIdentifier)
       .then((response) => {
         showNotification(response.body.Result.InfoAlert.Message);
+        postActions?.delete?.()
         entityURL && history.push(process.env.PUBLIC_URL + entityURL);
       })
       .catch((error) => {

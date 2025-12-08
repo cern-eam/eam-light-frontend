@@ -37,13 +37,15 @@ function AddActivityDialog(props) {
     WS: {
       create: WSWorkorders.createWorkOrderActivity,
       read: WSWorkorders.readWorkOrderActivity,
-      update: WSWorkorders.updateWorkOrder,
-      delete: WSWorkorders.deleteWorkOrder,
+      update: WSWorkorders.updateWorkOrderActivity,
+      delete: WSWorkorders.deleteWorkOrderActivity,
       new: () => WSWorkorders.initWorkOrderActivity(workOrder?.WORKORDERID?.JOBNUM),
     },
     postActions: {
       new: postInit,
       create: postCreate,
+      update: postCreate,
+      delete: postCreate
     },
     handlers: {
       "TASKSID.TASKCODE": onTaskCodeChanged

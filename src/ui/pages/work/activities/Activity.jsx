@@ -71,9 +71,10 @@ function Activity(props) {
     handleOptionsClose();
     try {
       setLoading(true);
-      await WSWorkorders.deleteWorkOrderActivity({ data: activity });
+      await WSWorkorders.deleteWorkOrderActivity(activity.workOrderNumber + "#*#" + activity.activityCode);
       readActivities();
     } catch (error) {
+      console.error('handleDelete', error)
       handleError(error);
     } finally {
       setLoading(false);
