@@ -1,4 +1,4 @@
-import { getOrg } from "../hooks/tools";
+import { encodeCodeOrg, getOrg } from "../hooks/tools";
 import WS from "./WS";
 
 class WSNCRs {
@@ -6,8 +6,8 @@ class WSNCRs {
         return WS._post(`/proxy/nonconformitydefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": getOrg()}}, config);
     }
 
-    getNonConformity(number, organization, config = {}) {
-        return WS._get(`/proxy/nonconformities/${encodeURIComponent(number + '#' + organization)}`, config);
+    getNonConformity(ncrIdentifier, config = {}) {
+        return WS._get(`/proxy/nonconformities/${encodeCodeOrg(ncrIdentifier)}`, config);
     }
 
     createNonConformity(workOrder, config = {}) {
@@ -18,8 +18,8 @@ class WSNCRs {
         return WS._put('/proxy/nonconformities/', workOrder, config);
     }
 
-    deleteNonConformity(number, organization, config = {}) {
-        return WS._delete('/proxy/nonconformities/' + number+ '%23' + organization, config);
+    deleteNonConformity(ncrIdentifier, config = {}) {
+        return WS._delete(`/proxy/nonconformities/${encodeCodeOrg(ncrIdentifier)}`, config);
     }
 
     getNonConformityObservations(code, config = {}) {

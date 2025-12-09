@@ -271,7 +271,7 @@ const useEntity = (params) => {
         setId(null)
 
         let newEntity = response.body.Result.ResultData[resultDefaultDataProperty ?? entityProperty] ?? response.body.Result.ResultData
-        //newEntity.USERDEFINEDAREA = customFields.body.Result;
+        newEntity.USERDEFINEDAREA = customFields.body.Result;
         newEntity = assignDefaultValues(newEntity, screenLayout);
 
         // Temporary fix (SG-15959)
@@ -281,7 +281,7 @@ const useEntity = (params) => {
 
         assignQueryParamValues()
         document.title = "New " + entityDesc;
-        postActions?.new(newEntity);
+        postActions?.new?.(newEntity);
       })
       .catch((error) => {
         console.error('initNewEntity error', error)
@@ -332,11 +332,11 @@ const useEntity = (params) => {
 
   const updateEntityProperty = (key, value, type) => {
     const keys = Array.isArray(key) ? key : [key];
-    const values = Array.isArray(value) ? value : [value];
+    const values = (Array.isArray(value) ? value : [value]).map(v => toEAMValue(v, type));
 
-    setEntity(prevEntity => {
-      keys.forEach((k, i) => set(prevEntity, k, toEAMValue(values[i], type)));
-      return {...prevEntity};
+    setEntity(prev => {
+      keys.forEach((k, i) => set(prev, k, values[i]));
+      return { ...prev };
     });
 
     fireHandler(keys, values);

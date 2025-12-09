@@ -2,6 +2,24 @@ import { Description } from "@mui/icons-material";
 import { GridTypes } from "../../../tools/entities/GridRequest";
 
 
+
+export const bookLabourPropertiesMap = {
+    octype: {
+        autocompleteHandlerData: {
+            resultMap: {
+                code: "octype",
+                desc: "octypedesc"
+            }
+        }
+    },
+
+    employee: {
+        autocompleteHandlerData: {
+            gridType: GridTypes.LIST
+        },
+    },
+}
+
 export const activityPropertiesMap = {
     matlcode: {
         autocompleteHandlerData: {

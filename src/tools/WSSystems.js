@@ -1,4 +1,4 @@
-import { getCodeOrg, getOrg } from '../hooks/tools';
+import { encodeCodeOrg, getCodeOrg, getOrg } from '../hooks/tools';
 import WS from './WS';
 
 export const createSystem = (position, config = {}) => {
@@ -11,7 +11,7 @@ export const updateSystem = (position, config = {}) => {
 
 export const getSystem = async (equipmentIdentifier, config = {}) => {
     const {code: systemCode, org: organization} = getCodeOrg(equipmentIdentifier)
-    const positionResponse = await WS._get(`/proxy/systems/${encodeURIComponent(systemCode + '#' + organization)}`, config)
+    const positionResponse = await WS._get(`/proxy/systems/${encodeCodeOrg(equipmentIdentifier)}`, config)
     const hierarchyResponse = await getSystemHierarchy(systemCode, organization, config);
     positionResponse.body.Result.ResultData.SystemEquipment.SystemParentHierarchy = hierarchyResponse.body.Result.ResultData.SystemParentHierarchy;
     return positionResponse;
@@ -29,8 +29,8 @@ export const getSystemHierarchy = async (equipmentCode, organization, config = {
     return WS._post(`/proxy/systemparenthierarchy`, request, config)
 }
 
-export const deleteSystem = (positionCode, organization, config = {}) => {
-  return WS._delete(`/proxy/systems/${encodeURIComponent(positionCode + '#' + organization)}`, config)
+export const deleteSystem = (equipmentIdentifier, config = {}) => {
+  return WS._delete(`/proxy/systems/${encodeCodeOrg(equipmentIdentifier)}`, config)
 }
 
 export const getSystemDefault = (organization = getOrg(), config = {}) => {

@@ -24,7 +24,7 @@ function AddActivityDialog(props) {
 
   if (!open) {
       return null; 
-    }
+  }
 
   const {
     screenLayout: activityLayout,

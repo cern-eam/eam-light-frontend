@@ -826,7 +826,6 @@ const Workorder = () => {
   };
 
   const postAddActivityHandler = () => {
-    console.log('refresh catviit')
     //Refresh the activities in the checklist
     checklists.current?.readActivities(id?.code);
   };

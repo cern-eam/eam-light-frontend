@@ -1,9 +1,10 @@
+import { encodeCodeOrg } from '../hooks/tools';
 import WS from './WS';
 
 const init = (config = {}) => WS._get('/locations/init', config);
 
-export const getLocation = (locationCode, organization, config = {}) => {
-    return WS._get(`/locations/${encodeURIComponent(locationCode + '#' + organization)}`, config)
+export const getLocation = (locationIdentifier, config = {}) => {
+    return WS._get(`/locations/${encodeCodeOrg(locationIdentifier)}`, config)
 }
 
 const create = (location, config = {}) => WS._post(`/locations/`, location, config);

@@ -448,7 +448,7 @@ export const getCustomTabRegions = (
   export const toEAMNumber = (input) => {
     const num = Number(input);
 
-    if (isNaN(num) || !num) {
+    if (isNaN(num)) {
       return null
       // return {
       //   VALUE: null,
@@ -470,6 +470,8 @@ export const getCustomTabRegions = (
       NUMOFDEC: numOfDec,
       SIGN: num >= 0 ? "+" : "-",
       UOM: "default",
+      CURRENCY:	"",
+      DRCR:	"",
       qualifier: "OTHER"
     };
   }
