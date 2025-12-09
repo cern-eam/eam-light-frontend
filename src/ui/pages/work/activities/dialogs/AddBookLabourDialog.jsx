@@ -11,96 +11,80 @@ import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMDatePicker from "eam-components/dist/ui/components/inputs-ng/EAMDatePicker";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
-import {
-  createOnChangeHandler,
-  processElementInfo,
-} from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import LightDialog from "@/ui/components/LightDialog";
 import EAMTimePicker from "eam-components/dist/ui/components/inputs-ng/EAMTimePicker";
-import useSnackbarStore from "@/state/useSnackbarStore";
-import { autocompleteDepartment } from "../../../../../tools/WSGrids";
 import { getOrg } from "../../../../../hooks/tools";
+import useEntity from "../../../../../hooks/useEntity";
+import { bookLabourPropertiesMap } from "../../WorkorderTools";
+import { fromEAMDate, toEAMDate, toEAMNumber } from "../../../EntityTools";
 
 /**
  * Display detail of an activity
  */
 function AddBookLabourDialog(props) {
-  let [loading, setLoading] = useState(false);
-  let [formValues, setFormValues] = useState({});
-  const {handleError, showNotification} = useSnackbarStore();
+  const {workorderNumber, onChange, activities, open} = props;
 
-  useEffect(() => {
-    if (props.open) {
-      init();
+  if (!open) {
+      return null; 
+  }
+
+  const {
+    entity: laborBooking,
+    saveHandler,
+    updateEntityProperty: updateBookLabourProperty,
+    register,
+    loading,
+    handleError,
+  } = useEntity({
+    WS: {
+      create: WSWorkorders.createBookingLabour,
+      new: () => WSWorkorders.initBookingLabour(workorderNumber, activities),
+    },
+    postActions: {
+      create: postCreate,
+    },
+    handlers: {
+      "ACTIVITYID.ACTIVITYCODE.value": activityCodeChanged,
+    },
+    entityCode: "EVNT",
+    tabCode: "BOO",
+    entityDesc: "Book Labour",
+    screenProperty: "workOrderScreen",
+    explicitIdentifier: ``,
+    layoutPropertiesMap: bookLabourPropertiesMap
+  });
+
+
+  function activityCodeChanged(activity) {
+    const activityCode = activity['ACTIVITYID.ACTIVITYCODE.value']
+
+    if (!activityCode) {
+      return
     }
-  }, [props.open]);
+    updateBookLabourProperty('TRADEID.TRADECODE', activities.find(a => a.activityCode === activityCode)?.tradeCode);
+  }
 
-  let init = () => {
-    setFormValues({
-      workOrderNumber: props.workorderNumber,
-      departmentCode: props.department,
-      departmentDesc: props.departmentDesc,
-      employeeCode: props.defaultEmployee,
-      employeeDesc: props.defaultEmployeeDesc,
-      activityCode: props.activities.length === 1 ? "5" : null,
-      typeOfHours: "N",
-      dateWorked: new Date(),
-    });
-  };
+
+  function postCreate() {
+    onChange();
+    handleClose();
+
+    WSWorkorders.getWorkOrder.bind(null, props.workorderNumber, getOrg()) //TODO do we really have to read the WO?
+      .then((result) => {
+        const workorder = result.body.Result.ResultData.WorkOrder;
+        props.updateWorkorderProperty("recordid", workorder.recordid);
+        props.updateWorkorderProperty("STARTDATE", workorder.STARTDATE);
+      })
+      .catch((error) => {
+        handleError(error);
+      });
+  }
 
   let handleClose = () => {
     props.onClose();
   };
 
-  let handleSave = () => {
-    // Populate trade code
-    let tradeCode = "";
-    let filteredActivities = props.activities.filter(
-      (activity) => activity.activityCode === formValues.activityCode
-    );
-    if (filteredActivities.length === 1) {
-      tradeCode = filteredActivities[0].tradeCode;
-    }
-
-    let bookingLabour = {
-      ...formValues,
-      startTime: convertTimeToSeconds(formValues["startTime"]),
-      endTime: convertTimeToSeconds(formValues["endTime"]),
-      tradeCode,
-    };
-    delete bookingLabour.departmentDesc;
-
-    setLoading(true);
-    WSWorkorders.createBookingLabour(bookingLabour)
-      .then(WSWorkorders.getWorkOrder.bind(null, props.workorderNumber, getOrg())) //TODO do we really have to read the WO?
-      .then((result) => {
-        setLoading(false);
-        const workorder = result.body.Result.ResultData.WorkOrder;
-        props.updateWorkorderProperty("recordid", workorder.recordid);
-        props.updateWorkorderProperty("STARTDATE", workorder.STARTDATE);
-
-        showNotification("Booking labour successfully created");
-        handleClose();
-        props.onChange();
-      })
-      .catch((error) => {
-        setLoading(false);
-        handleError(error);
-      });
-  };
-
-  let convertTimeToSeconds = (value) => {
-    const date = new Date(value);
-    return date.getMinutes() * 60 + date.getHours() * 3600;
-  };
-
-  let updateFormValues = (key, value) => {
-    setFormValues((prevFormValues) => ({
-      ...prevFormValues,
-      [key]: value,
-    }));
-  };
-
+ 
   let onKeyDown = (e) => {
     if (e.keyCode === KeyCode.ENTER) {
       e.stopPropagation();
@@ -108,58 +92,44 @@ function AddBookLabourDialog(props) {
     }
   };
 
-  let formatHoursWorkedValue = (value) =>
-    parseFloat(value).toFixed(2).toString();
+  //
+  // HANDLE HOURS WORKED
+  //
+
+  let formatHoursWorkedValue = (value) => parseFloat(value).toFixed(2).toString();
 
   let updateTimeWorked = (startTime, endTime) => {
-    const timeWorked =
-      endTime.getHours() * 60 +
-      endTime.getMinutes() -
-      (startTime.getHours() * 60 + startTime.getMinutes());
-    updateFormValues(
-      "hoursWorked",
-      formatHoursWorkedValue(timeWorked / 60 || "0")
-    );
+    const timeWorked = endTime.getHours() * 60 + endTime.getMinutes() - (startTime.getHours() * 60 + startTime.getMinutes());
+    updateBookLabourProperty('HOURSBOOKED', toEAMNumber(formatHoursWorkedValue(timeWorked / 60 || "0")));
   };
 
-  let updateStartTime = (key, value) => {
-    let startTime = new Date(value);
-    const endTime = new Date(formValues["endTime"]);
+  function startEndTimeChanged(value, isStartTime) {
+    if (!value) {
+      return
+    }
+    
+    const startTime = new Date(isStartTime ? value : fromEAMDate(laborBooking.ACTUALSTARTTIME));
+    const endTime = new Date(isStartTime ? fromEAMDate(laborBooking.ACTUALENDTIME) : value);
 
-    // TODO: Waiting for EAM-2766
-    // if(startTime > endTime) {
-    //     startTime = endTime
-    // }
+    if (startTime.getTime() > endTime.getTime()) {
+      updateBookLabourProperty('ACTUALENDTIME', toEAMDate(startTime))
+      updateBookLabourProperty('HOURSBOOKED', toEAMNumber(0))
+      return
+    }
 
-    updateFormValues("startTime", startTime.toString());
     updateTimeWorked(startTime, endTime);
   };
 
-  let updateEndTime = (key, value) => {
-    let endTime = new Date(value);
-    const startTime = new Date(formValues["startTime"]);
+  
+function hoursWorkedChanged(hoursWorked) {
+  if (!laborBooking.ACTUALSTARTTIME || !hoursWorked || isNaN(hoursWorked)) {
+    return;
+  }
 
-    // TODO: Waiting for EAM-2766
-    // if(startTime > endTime) {
-    //     endTime = startTime
-    // }
-
-    updateFormValues("endTime", endTime.toString());
-    updateTimeWorked(startTime, endTime);
-  };
-  let updateHoursWorked = (key, value) => {
-    const startTime = new Date(formValues["startTime"]);
-    const endTime = new Date(formValues["endTime"]);
-    const [hoursWorked, minutesWorked] = (value || "0.0").split(".");
-
-    const newEndTime = endTime.setHours(
-      startTime.getHours() + parseInt(hoursWorked),
-      startTime.getMinutes() + parseInt(minutesWorked || "0") * 6
-    );
-
-    updateFormValues("endTime", newEndTime);
-    updateFormValues("hoursWorked", formatHoursWorkedValue(value));
-  };
+  const startTime = new Date(fromEAMDate(laborBooking.ACTUALSTARTTIME));
+  const endTime = new Date(startTime.getTime() + parseFloat(hoursWorked) * 60 * 60_000);
+  updateBookLabourProperty("ACTUALENDTIME", toEAMDate(endTime));
+}
 
   return (
     <div onKeyDown={onKeyDown}>
@@ -175,102 +145,28 @@ function AddBookLabourDialog(props) {
         <DialogContent id="content">
           <div>
             <BlockUi tag="div" blocking={loading}>
-              <EAMSelect
-                {...processElementInfo(props.layout.booactivity)}
-                value={formValues["activityCode"] || ""}
+              <EAMSelect {...register('booactivity')}
                 options={props.activities.map((activity) => {
                   return {
                     code: activity.activityCode,
                     desc: activity.activityNote,
                   };
                 })}
-                onChange={createOnChangeHandler(
-                  "activityCode",
-                  null,
-                  null,
-                  updateFormValues
-                )}
               />
 
-              <EAMAutocomplete
-                autocompleteHandler={WSWorkorders.autocompleteBOOEmployee}
-                {...processElementInfo(props.layout.employee)}
-                value={formValues["employeeCode"] || ""}
-                desc={formValues["employeeDesc"]}
-                onChange={createOnChangeHandler(
-                  "employeeCode",
-                  "employeeDesc",
-                  null,
-                  updateFormValues
-                )}
-              />
+              <EAMAutocomplete {...register('employee')} />
 
-              <EAMAutocomplete
-                autocompleteHandler={autocompleteDepartment}
-                {...processElementInfo(props.layout.department)}
-                value={formValues["departmentCode"] || ""}
-                desc={formValues["departmentDesc"]}
-                onChange={createOnChangeHandler(
-                  "departmentCode",
-                  "departmentDesc",
-                  null,
-                  updateFormValues
-                )}
-              />
+              <EAMAutocomplete {...register('department')} />
 
-              <EAMDatePicker
-                {...processElementInfo(props.layout.datework)}
-                value={formValues["dateWorked"]}
-                onChange={createOnChangeHandler(
-                  "dateWorked",
-                  null,
-                  null,
-                  updateFormValues
-                )}
-              />
+              <EAMDatePicker {...register('datework')} />
 
-              <EAMSelect
-                {...processElementInfo(props.layout.octype)}
-                value={formValues["typeOfHours"] || ""}
-                autocompleteHandler={WSWorkorders.getTypesOfHours}
-                onChange={createOnChangeHandler(
-                  "typeOfHours",
-                  null,
-                  null,
-                  updateFormValues
-                )}
-              />
+              <EAMSelect {...register('octype')} />
 
-              <EAMTextField
-                {...processElementInfo(props.layout.hrswork)}
-                value={formValues["hoursWorked"]}
-                onChange={createOnChangeHandler(
-                  "hoursWorked",
-                  null,
-                  null,
-                  updateHoursWorked
-                )}
-              />
-              <EAMTimePicker
-                {...processElementInfo(props.layout.actstarttime)}
-                value={formValues["startTime"] || null}
-                onChange={createOnChangeHandler(
-                  "startTime",
-                  null,
-                  null,
-                  updateStartTime
-                )}
-              />
-              <EAMTimePicker
-                {...processElementInfo(props.layout.actendtime)}
-                value={formValues["endTime"] || null}
-                onChange={createOnChangeHandler(
-                  "endTime",
-                  null,
-                  null,
-                  updateEndTime
-                )}
-              />
+              <EAMTextField {...register('hrswork', null, null, null, hoursWorkedChanged)} />
+              
+              <EAMTimePicker {...register('actstarttime', null, null, null, (time) => startEndTimeChanged(time, true))} />
+
+              <EAMTimePicker {...register('actendtime', null, null, null, (time) => startEndTimeChanged(time, false))} />
             </BlockUi>
           </div>
         </DialogContent>
@@ -280,7 +176,7 @@ function AddBookLabourDialog(props) {
             <Button onClick={handleClose} color="primary" disabled={loading}>
               Cancel
             </Button>
-            <Button onClick={handleSave} color="primary" disabled={loading}>
+            <Button onClick={saveHandler} color="primary" disabled={loading}>
               Save
             </Button>
           </div>

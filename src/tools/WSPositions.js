@@ -1,4 +1,4 @@
-import { getCodeOrg, getOrg } from '../hooks/tools';
+import { encodeCodeOrg, getCodeOrg, getOrg } from '../hooks/tools';
 import WS from './WS';
 
 export const createPosition = (position, config = {}) => {
@@ -33,8 +33,8 @@ export const getPositionHierarchy = async (equipmentCode, organization, config =
 
 }
 
-export const deletePosition = (positionCode, organization, config = {}) => {
-  return WS._delete(`/proxy/positions/${encodeURIComponent(positionCode + '#' + organization)}`, config)
+export const deletePosition = (equipmentIdentifier, config = {}) => {
+  return WS._delete(`/proxy/positions/${encodeCodeOrg(equipmentIdentifier)}`, config)
 }
 
 export const getPositionsDefault = (organization = getOrg(), config = {}) => {

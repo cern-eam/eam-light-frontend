@@ -10,6 +10,7 @@ export const toEAMValue = (value, type) => {
     switch(type) {
         case "date":
         case "datetime":
+        case "uxtimepicker":
             return toEAMDate(value)
         case "number":
         case "currency":
@@ -23,6 +24,7 @@ export const fromEAMValue = (value, type) => {
     switch(type) {
         case "date":
         case "datetime":
+        case "uxtimepicker":
             return fromEAMDate(value)
         case "number":
         case "currency":
@@ -127,4 +129,9 @@ export const getCodeOrg = (codeorg) => {
 export const getOrg = () => {
     const {inforContext} = useInforContextStore.getState();
     return inforContext ? inforContext.INFOR_ORGANIZATION : '*'
+}
+
+export const encodeCodeOrg = (entityIdentifier) => {
+    const {code, org} = getCodeOrg(entityIdentifier)
+    return encodeURIComponent(code + '#' + org);
 }

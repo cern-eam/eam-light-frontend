@@ -89,7 +89,7 @@ function Activities(props) {
                 </Button>
 
                 <Button onClick={() => setIsBookLaborModalOpen(true)} color="primary"
-                        disabled={disabled || !layout.BOO.insertAllowed} variant="outlined">
+                        disabled={disabled || !layout.BOO.insertAllowed || !activities?.length} variant="outlined">
                     Book Labor
                 </Button>
             </Stack>

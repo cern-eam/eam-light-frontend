@@ -2,7 +2,9 @@ import { Description } from '@mui/icons-material';
 import GridRequest, { GridFilterJoiner, GridTypes } from './entities/GridRequest';
 import WS from './WS';
 import { getGridData, transformResponse } from './WSGrids';
-import { getCodeOrg, getOrg } from '../hooks/tools';
+import { encodeCodeOrg, getCodeOrg, getOrg, toEAMValue } from '../hooks/tools';
+import set from 'set-value';
+import { toEAMNumber } from '../ui/pages/EntityTools';
 
 /**
  * Handles all calls to REST Api
@@ -17,8 +19,7 @@ class WSWorkorders {
     }
 
     getWorkOrder(entityIdentifier, config = {}) {
-        const {code, org} = getCodeOrg(entityIdentifier)
-        return WS._get(`/proxy/workorders/${encodeURIComponent(code + '#' + org)}`, config);
+        return WS._get(`/proxy/workorders/${encodeCodeOrg(entityIdentifier)}`, config);
     }
 
     createWorkOrder(workOrder, config = {}) {
@@ -30,8 +31,7 @@ class WSWorkorders {
     }
 
     deleteWorkOrder(entityIdentifier, config = {}) {
-        const {code, org} = getCodeOrg(entityIdentifier)
-        return WS._delete(`/proxy/workorders/${encodeURIComponent(code + '#' + org)}`, config);
+        return WS._delete(`/proxy/workorders/${encodeCodeOrg(entityIdentifier)}`, config);
     }
 
     getStandardWorkOrder(code, config = {}) {
@@ -191,27 +191,28 @@ class WSWorkorders {
     }
 
     // Get default values for next activity for one work order
-    initBookingLabour(workorderNumber, department, config = {}) {
-        return WS._get('/bookinglabour/init/' + workorderNumber + '/' + department, config);
+    initBookingLabour(workOrderNumber, activities, config = {}) {
+        const result = {};
+        set(result, 'body.Result.ResultData.OCCUPATIONTYPE.OCCUPATIONTYPECODE', 'N');
+        set(result, 'body.Result.ResultData.ACTIVITYID.WORKORDERID.JOBNUM', workOrderNumber);
+        set(result, 'body.Result.ResultData.ACTIVITYID.WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE', '*');
+        set(result, 'body.Result.ResultData.TRADERATE', toEAMNumber(0));
+        set(result, 'body.Result.ResultData.ACTUALSTARTTIME', null);
+        set(result, 'body.Result.ResultData.ACTUALENDTIME', null);
+        set(result, 'body.Result.ResultData.ACTIVITYID.ACTIVITYCODE.value', activities?.[0]?.activityCode ?? null);
+        
+        return Promise.resolve(result);
     }
 
     // Create a new activity for one workorder
     createBookingLabour(bookingLabour, config = {}) {
-        return WS._post('/bookinglabour', bookingLabour, config);
+        return WS._post('/proxy/workorders/booklabor', bookingLabour, config);
     }
 
     getBookingLabours(workorderNumber, config = {}) {
         return WS._get("/bookinglabour/" + workorderNumber, config)
     }
 
-    getTypesOfHours(config = {}) {
-        return WS._get("/boolists/typehours", config);
-    }
-
-
-    autocompleteBOOEmployee = ({filter}, config = {}) => {
-        return WS._get("/autocomplete/boo/employee/" + filter, config);
-    };
 
     //
     //CHECKLIST
