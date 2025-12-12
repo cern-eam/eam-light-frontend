@@ -86,6 +86,12 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
             
             // Parameters 
             Object.entries(inputFields ?? {}).forEach(([key, value]) => { 
+                const elementInfo = fields[value]
+
+                if (elementInfo?.fieldType === 'date') {
+                    return // TODO: rather than skipping parse the date for the format required in the param
+                }
+
                 if (key === 'param.group') {
                     gridRequest.addParam(key, useUserDataStore.getState().userData.eamAccount.userGroup)
                 } else {

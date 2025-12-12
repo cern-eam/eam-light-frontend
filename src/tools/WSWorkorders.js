@@ -4,7 +4,7 @@ import WS from './WS';
 import { getGridData, transformResponse } from './WSGrids';
 import { encodeCodeOrg, getCodeOrg, getOrg, toEAMValue } from '../hooks/tools';
 import set from 'set-value';
-import { toEAMNumber } from '../ui/pages/EntityTools';
+import { toEAMDate, toEAMNumber } from '../ui/pages/EntityTools';
 
 /**
  * Handles all calls to REST Api
@@ -191,15 +191,23 @@ class WSWorkorders {
     }
 
     // Get default values for next activity for one work order
-    initBookingLabour(workOrderNumber, activities, config = {}) {
-        const result = {};
-        set(result, 'body.Result.ResultData.OCCUPATIONTYPE.OCCUPATIONTYPECODE', 'N');
-        set(result, 'body.Result.ResultData.ACTIVITYID.WORKORDERID.JOBNUM', workOrderNumber);
-        set(result, 'body.Result.ResultData.ACTIVITYID.WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE', '*');
-        set(result, 'body.Result.ResultData.TRADERATE', toEAMNumber(0));
-        set(result, 'body.Result.ResultData.ACTUALSTARTTIME', null);
-        set(result, 'body.Result.ResultData.ACTUALENDTIME', null);
-        set(result, 'body.Result.ResultData.ACTIVITYID.ACTIVITYCODE.value', activities?.[0]?.activityCode ?? null);
+    initBookingLabour(workOrderNumber, activities, defaultEmployee, config = {}) {
+        const result = {
+        body: { Result: { ResultData: {
+            OCCUPATIONTYPE: { OCCUPATIONTYPECODE: 'N' },
+            ACTIVITYID: {
+            WORKORDERID: { JOBNUM: workOrderNumber, ORGANIZATIONID: { ORGANIZATIONCODE: '*' } },
+            ACTIVITYCODE: { value: activities?.[0]?.activityCode ?? null },
+            },
+            TRADERATE: toEAMNumber(0),
+            ACTUALSTARTTIME: null,
+            ACTUALENDTIME: null,
+            TRADEID: { TRADECODE: activities?.[0]?.tradeCode },
+            EMPLOYEE: {PERSONCODE: defaultEmployee},
+            DATEWORKED: toEAMDate((new Date()).toISOString())
+        }}},
+        };
+                
         
         return Promise.resolve(result);
     }

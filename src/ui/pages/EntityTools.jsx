@@ -448,7 +448,7 @@ export const getCustomTabRegions = (
   export const toEAMNumber = (input) => {
     const num = Number(input);
 
-    if (isNaN(num)) {
+    if (input == null || input === '' ||  isNaN(num)) {
       return null
       // return {
       //   VALUE: null,
@@ -494,7 +494,7 @@ export const getCustomTabRegions = (
     if (returnString) {
       return number.toString();
     }
-
+    console.log("from", number)
     return number;
   };
 
