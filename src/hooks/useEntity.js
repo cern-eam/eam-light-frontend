@@ -261,7 +261,7 @@ const useEntity = (params) => {
 
     Promise.all([
       WS.new(),
-      getCustomFields(entityCode, "*")
+      tabCode ? Promise.resolve(null) : getCustomFields(entityCode, "*")
     ])
       .then(([response, customFields]) => {
         resetErrorMessages();
@@ -271,7 +271,7 @@ const useEntity = (params) => {
         setId(null)
 
         let newEntity = response.body.Result.ResultData[resultDefaultDataProperty ?? entityProperty] ?? response.body.Result.ResultData
-        newEntity.USERDEFINEDAREA = customFields.body.Result;
+        newEntity.USERDEFINEDAREA = customFields?.body?.Result;
         newEntity = assignDefaultValues(newEntity, screenLayout);
 
         // Temporary fix (SG-15959)

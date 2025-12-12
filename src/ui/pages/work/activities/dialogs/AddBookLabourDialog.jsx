@@ -18,11 +18,8 @@ import useEntity from "../../../../../hooks/useEntity";
 import { bookLabourPropertiesMap } from "../../WorkorderTools";
 import { fromEAMDate, toEAMDate, toEAMNumber } from "../../../EntityTools";
 
-/**
- * Display detail of an activity
- */
 function AddBookLabourDialog(props) {
-  const {workorderNumber, onChange, activities, open} = props;
+  const {workorderNumber, onChange, activities, open, defaultEmployee} = props;
 
   if (!open) {
       return null; 
@@ -38,7 +35,7 @@ function AddBookLabourDialog(props) {
   } = useEntity({
     WS: {
       create: WSWorkorders.createBookingLabour,
-      new: () => WSWorkorders.initBookingLabour(workorderNumber, activities),
+      new: () => WSWorkorders.initBookingLabour(workorderNumber, activities, defaultEmployee),
     },
     postActions: {
       create: postCreate,
@@ -54,13 +51,12 @@ function AddBookLabourDialog(props) {
     layoutPropertiesMap: bookLabourPropertiesMap
   });
 
+  if (!laborBooking) {
+    return null;
+  }
 
-  function activityCodeChanged(activity) {
-    const activityCode = activity['ACTIVITYID.ACTIVITYCODE.value']
-
-    if (!activityCode) {
-      return
-    }
+  function activityCodeChanged({ ['ACTIVITYID.ACTIVITYCODE.value']: activityCode }) {
+    if (!activityCode) return
     updateBookLabourProperty('TRADEID.TRADECODE', activities.find(a => a.activityCode === activityCode)?.tradeCode);
   }
 
@@ -98,38 +94,37 @@ function AddBookLabourDialog(props) {
 
   let formatHoursWorkedValue = (value) => parseFloat(value).toFixed(2).toString();
 
-  let updateTimeWorked = (startTime, endTime) => {
+  let updateHourseWorked = (startTime, endTime) => {
     const timeWorked = endTime.getHours() * 60 + endTime.getMinutes() - (startTime.getHours() * 60 + startTime.getMinutes());
     updateBookLabourProperty('HOURSBOOKED', toEAMNumber(formatHoursWorkedValue(timeWorked / 60 || "0")));
   };
 
-  function startEndTimeChanged(value, isStartTime) {
-    if (!value) {
+  function startEndTimeChanged(value) {
+    if (!laborBooking.ACTUALSTARTTIME || !laborBooking.ACTUALENDTIME) {
       return
     }
-    
-    const startTime = new Date(isStartTime ? value : fromEAMDate(laborBooking.ACTUALSTARTTIME));
-    const endTime = new Date(isStartTime ? fromEAMDate(laborBooking.ACTUALENDTIME) : value);
 
-    if (startTime.getTime() > endTime.getTime()) {
+    const startTime = new Date(fromEAMDate(laborBooking.ACTUALSTARTTIME));
+    const endTime = new Date(fromEAMDate(laborBooking.ACTUALENDTIME));
+    
+    if ( (startTime.getTime() > endTime.getTime())) {
       updateBookLabourProperty('ACTUALENDTIME', toEAMDate(startTime))
       updateBookLabourProperty('HOURSBOOKED', toEAMNumber(0))
       return
     }
 
-    updateTimeWorked(startTime, endTime);
+    updateHourseWorked(startTime, endTime);
   };
 
-  
-function hoursWorkedChanged(hoursWorked) {
-  if (!laborBooking.ACTUALSTARTTIME || !hoursWorked || isNaN(hoursWorked)) {
-    return;
-  }
+  // function hoursWorkedChanged(hoursWorked) {
+  //   if (!laborBooking.ACTUALSTARTTIME || !hoursWorked || isNaN(hoursWorked)) {
+  //     return;
+  //   }
 
-  const startTime = new Date(fromEAMDate(laborBooking.ACTUALSTARTTIME));
-  const endTime = new Date(startTime.getTime() + parseFloat(hoursWorked) * 60 * 60_000);
-  updateBookLabourProperty("ACTUALENDTIME", toEAMDate(endTime));
-}
+  //   const startTime = new Date(fromEAMDate(laborBooking.ACTUALSTARTTIME));
+  //   const endTime = new Date(startTime.getTime() + parseFloat(hoursWorked) * 60 * 60_000);
+  //   updateBookLabourProperty("ACTUALENDTIME", toEAMDate(endTime));
+  // }
 
   return (
     <div onKeyDown={onKeyDown}>
@@ -162,11 +157,11 @@ function hoursWorkedChanged(hoursWorked) {
 
               <EAMSelect {...register('octype')} />
 
-              <EAMTextField {...register('hrswork', null, null, null, hoursWorkedChanged)} />
+              <EAMTextField {...register('hrswork')} />
               
-              <EAMTimePicker {...register('actstarttime', null, null, null, (time) => startEndTimeChanged(time, true))} />
+              <EAMTimePicker {...register('actstarttime', null, null, null, startEndTimeChanged)} />
 
-              <EAMTimePicker {...register('actendtime', null, null, null, (time) => startEndTimeChanged(time, false))} />
+              <EAMTimePicker {...register('actendtime', null, null, null, startEndTimeChanged)} />
             </BlockUi>
           </div>
         </DialogContent>
