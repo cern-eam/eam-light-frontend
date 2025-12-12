@@ -50,7 +50,8 @@ const useEntity = (params) => {
     onUnmountHandler,
     codeQueryParamName,
     tabCode,
-    explicitIdentifier
+    explicitIdentifier,
+    updateWindowTitle = true
   } = params;
 
   const [loading, setLoading] = useState(false);
@@ -139,7 +140,9 @@ const useEntity = (params) => {
     }
     entityIdentifier ? readEntity() : initNewEntity();
     // Reset window title when unmounting
-    return () => (document.title = "EAM Light");
+    return () => {
+      updateWindowTitle && (document.title = "EAM Light")
+    }
   }, [entityIdentifier, screenLayout]);
 
   // Provide mount and unmount handlers to the client
@@ -196,7 +199,7 @@ const useEntity = (params) => {
         setEntity(readEntity);
         setId({code: get(readEntity, entityCodeProperty), org: get(readEntity, entityOrgProperty)})
 
-        document.title = entityDesc + " " + get(readEntity, entityCodeProperty);
+        updateWindowTitle && (document.title = entityDesc + " " + get(readEntity, entityCodeProperty));
         //Render as read-only depending on screen rights, department security or custom handler
         setReadOnly(
           !screenPermissions.updateAllowed ||
@@ -280,7 +283,7 @@ const useEntity = (params) => {
         setEntity(newEntity)
 
         assignQueryParamValues()
-        document.title = "New " + entityDesc;
+        updateWindowTitle && (document.title = "New " + entityDesc)
         postActions?.new?.(newEntity);
       })
       .catch((error) => {
@@ -304,7 +307,7 @@ const useEntity = (params) => {
       copyFrom: code,
     }));
     entityURL && window.history.pushState({}, "", process.env.PUBLIC_URL + entityURL);
-    document.title = "New " + entityDesc;
+    updateWindowTitle && (document.title = "New " + entityDesc);
     postActions?.copy?.();
   };
 

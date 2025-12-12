@@ -14,7 +14,6 @@ import LightDialog from "@/ui/components/LightDialog";
 import useEntity from "../../../../../hooks/useEntity";
 import { fromEAMNumber } from "../../../EntityTools";
 import { activityPropertiesMap } from "../../WorkorderTools";
-import { ProjectorScreenVariantOutline } from "mdi-material-ui";
 
 /**
  * Display detail of an activity
@@ -52,7 +51,6 @@ function AddActivityDialog(props) {
     },
     entityCode: "EVNT",
     tabCode: "ACT",
-    entityDesc: "Activity",
     entityURL: "",
     entityCodeProperty: "ACTIVITYID.ACTIVITYCODE.value",
     entityOrgProperty: "WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE",
@@ -61,7 +59,8 @@ function AddActivityDialog(props) {
     resultDefaultDataProperty: "ActivityDefault",
     screenProperty: "workOrderScreen",
     explicitIdentifier: activityToEdit ? `${activityToEdit.workOrderNumber}#*#${activityToEdit.activityCode}`: ``,
-    layoutPropertiesMap: activityPropertiesMap
+    layoutPropertiesMap: activityPropertiesMap,
+    updateWindowTitle: false
   });
 
   activityLayout.fields.esthrs.fieldType = "text"  
@@ -133,9 +132,7 @@ function AddActivityDialog(props) {
 
               <EAMAutocomplete {...register('task')} />
 
-              <EAMAutocomplete {...register('matlcode')} 
-                // maxHeight={200}
-              />
+              <EAMAutocomplete {...register('matlcode')} />
 
               <EAMAutocomplete {...register('trade')}  />
 
