@@ -15,7 +15,8 @@ export const bookLabourPropertiesMap = {
 
     employee: {
         autocompleteHandlerData: {
-            gridType: GridTypes.LIST
+            gridType: GridTypes.LIST,
+            searchKeys: ["personcode", "description"]
         },
     },
 }

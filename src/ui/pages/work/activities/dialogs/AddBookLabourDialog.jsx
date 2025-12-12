@@ -43,12 +43,11 @@ function AddBookLabourDialog(props) {
     handlers: {
       "ACTIVITYID.ACTIVITYCODE.value": activityCodeChanged,
     },
-    entityCode: "EVNT",
     tabCode: "BOO",
-    entityDesc: "Book Labour",
     screenProperty: "workOrderScreen",
     explicitIdentifier: ``,
-    layoutPropertiesMap: bookLabourPropertiesMap
+    layoutPropertiesMap: bookLabourPropertiesMap,
+    updateWindowTitle: false
   });
 
   if (!laborBooking) {
@@ -92,7 +91,7 @@ function AddBookLabourDialog(props) {
   // HANDLE HOURS WORKED
   //
 
-  let formatHoursWorkedValue = (value) => parseFloat(value).toFixed(2).toString();
+  let formatHoursWorkedValue = (value) => parseFloat(value).toFixed(6).toString();
 
   let updateHourseWorked = (startTime, endTime) => {
     const timeWorked = endTime.getHours() * 60 + endTime.getMinutes() - (startTime.getHours() * 60 + startTime.getMinutes());
@@ -116,15 +115,15 @@ function AddBookLabourDialog(props) {
     updateHourseWorked(startTime, endTime);
   };
 
-  // function hoursWorkedChanged(hoursWorked) {
-  //   if (!laborBooking.ACTUALSTARTTIME || !hoursWorked || isNaN(hoursWorked)) {
-  //     return;
-  //   }
-
-  //   const startTime = new Date(fromEAMDate(laborBooking.ACTUALSTARTTIME));
-  //   const endTime = new Date(startTime.getTime() + parseFloat(hoursWorked) * 60 * 60_000);
-  //   updateBookLabourProperty("ACTUALENDTIME", toEAMDate(endTime));
-  // }
+  function hoursWorkedChanged(hoursWorked) {
+    if (!laborBooking.ACTUALSTARTTIME || !hoursWorked || isNaN(hoursWorked)) {
+      return;
+    }
+    const startTime = new Date(fromEAMDate(laborBooking.ACTUALSTARTTIME));
+    const endTime = new Date(startTime.getTime() + parseFloat(hoursWorked) * 60 * 60_000);
+    console.log('end time', endTime)
+    updateBookLabourProperty("ACTUALENDTIME", toEAMDate(endTime));
+  }
 
   return (
     <div onKeyDown={onKeyDown}>
@@ -157,11 +156,14 @@ function AddBookLabourDialog(props) {
 
               <EAMSelect {...register('octype')} />
 
-              <EAMTextField {...register('hrswork')} />
+              <EAMTextField {...register('hrswork', null, null, null, hoursWorkedChanged)}
+                            renderDependencies={[laborBooking.ACTUALSTARTTIME, laborBooking.ACTUALENDTIME]} />
               
-              <EAMTimePicker {...register('actstarttime', null, null, null, startEndTimeChanged)} />
+              <EAMTimePicker {...register('actstarttime', null, null, null, startEndTimeChanged)}
+                            renderDependencies={[laborBooking.ACTUALENDTIME, laborBooking.HOURSBOOKED]} />
 
-              <EAMTimePicker {...register('actendtime', null, null, null, startEndTimeChanged)} />
+              <EAMTimePicker {...register('actendtime', null, null, null, startEndTimeChanged)}
+                            renderDependencies={[laborBooking.ACTUALSTARTTIME, laborBooking.HOURSBOOKED]} />
             </BlockUi>
           </div>
         </DialogContent>
