@@ -118,6 +118,17 @@ export const layoutPropertiesMap = {
 
 }
 
+export const ncrWorkOrderPropertiesMap = {
+    assignedto: {
+        autocompleteHandlerData: {
+            searchKeys: ['personcode', 'description'],
+            resultMap: {code: "personcode", desc: "description"}
+        }
+    },
+
+    equipment: layoutPropertiesMap.equipment
+}
+
 export function isReadOnlyCustomHandler(workOrder) {
     return false
     //TODO return workOrder.systemStatusCode === 'C' || !workOrder.jtAuthCanUpdate;
@@ -138,4 +149,3 @@ export function isRegionAvailable(regionCode, workOrderLayout) {
             return true;
     }
 }
-
