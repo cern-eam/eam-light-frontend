@@ -28,13 +28,7 @@ const Observations = ({
 
     useEffect(() => {
         if (!ncrWorkOrderLayout) {
-            fetchScreenLayout(
-                userData.eamAccount.userGroup,
-                "OBJ",
-                "OSJOBS",
-                "OSJOBS",
-                []
-            );
+            fetchScreenLayout(userData.eamAccount.userGroup, "OBJ", "OSJOBS", "OSJOBS", [] );
         }
     }, [ncrWorkOrderLayout]);
 
@@ -62,7 +56,6 @@ const Observations = ({
     const {
         isOpen: isWorkOrdersDialogOpen,
         isDisabled: isWorkOrdersDialogDisabled,
-        workOrder,
         updateHandler: workOrdersDialogUpdateHandler,
         successHandler: workOrdersDialogSuccessHandler,
         cancelHandler: workOrdersDialogCancelHandler,
@@ -71,14 +64,7 @@ const Observations = ({
         isLoading,
         showNotification,
         handleError,
-        observationsDialogSuccessHandler,
-        {
-            departmentCode: userData?.eamAccount?.department,
-            statusCode: "R",
-            typeCode: "CD",
-            assignedTo: userData?.eamAccount?.employeeCode,
-            equipmentCode: ncr?.EQUIPMENTID?.EQUIPMENTCODE,
-        }
+        observationsDialogSuccessHandler
     );
 
     return isLoading || !ncrWorkOrderLayout ? (
@@ -112,7 +98,7 @@ const Observations = ({
                 handleCancel={workOrdersDialogCancelHandler}
                 fields={ncrWorkOrderLayout.fields}
                 disabled={isWorkOrdersDialogDisabled}
-                workOrder={workOrder}
+                ncr={ncr}
                 handleUpdate={workOrdersDialogUpdateHandler}
                 userData={userData}
             />

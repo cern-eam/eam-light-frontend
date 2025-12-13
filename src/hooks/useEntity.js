@@ -88,12 +88,8 @@ const useEntity = (params) => {
     fetchScreenLayout,
   } = useLayoutStore();
 
-  const screenLayout = tabCode
-    ? allLayouts?.[screenCode]?.tabs?.[tabCode]
-    : allLayouts?.[screenCode];
-  const screenPermissions = userData.screens[screenCode];
-
-
+  const screenLayout = tabCode ? allLayouts?.[screenCode]?.tabs?.[tabCode] : allLayouts?.[screenCode];
+  const screenPermissions = params.screenPermissions ?? userData.screens[screenCode];
 
   const {
     errorMessages,
@@ -161,12 +157,11 @@ const useEntity = (params) => {
 
     setLoading(true);
 
-    WS.create(entityToCreate)
-      .then((response) => {
+    WS.create(entityToCreate).then((response) => {
         const entityCode = get(response.body.Result.ResultData, resultDataCodeProperty);
         showNotification(response.body.Result.InfoAlert.Message);
         commentsComponent.current?.createCommentForNewEntity(entityCode);
-        postActions?.create?.(entityToCreate)
+        postActions?.create?.(entityToCreate, response, entityCode)
         // Read after the creation 
         entityURL && history.push(process.env.PUBLIC_URL +  entityURL + encodeURIComponent(entityCode + "#" +  get(entityToCreate, entityOrgProperty)));
       })

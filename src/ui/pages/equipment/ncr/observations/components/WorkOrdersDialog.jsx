@@ -1,5 +1,6 @@
 import WS from "@/tools/WS";
 import WSWorkorders from "@/tools/WSWorkorders";
+import WSWorkorder from "@/tools/WSWorkorders";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -7,27 +8,24 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import BlockUi from "react-block-ui";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
-import {
-    createOnChangeHandler,
-    processElementInfo,
-} from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import { isDepartmentReadOnly } from "@/ui/pages/EntityTools";
 import { useEffect, useState } from "react";
 import useUserDataStore from "../../../../../../state/useUserDataStore";
 import { autocompleteDepartment } from "../../../../../../tools/WSGrids";
-import { createAutocompleteHandler } from "../../../../../../hooks/tools";
 import { GridTypes } from "../../../../../../tools/entities/GridRequest";
+import useEntity from "../../../../../../hooks/useEntity";
+import { getOrg } from "../../../../../../hooks/tools";
+import { ncrWorkOrderPropertiesMap } from "../../../../work/WorkorderTools";
 
 const WorkOrdersDialog = ({
+    entity: workOrder,
     handleSuccess,
     open,
     handleCancel,
-    fields,
     disabled,
-    workOrder,
-    handleUpdate
+    ncr,
 }) => {
     const [statuses, setStatuses] = useState([]);
     const {userData} = useUserDataStore();
@@ -40,15 +38,40 @@ const WorkOrdersDialog = ({
 
     useEffect( () => readStatuses("", "", true), [])
 
-    let equipmentAutocompleteHandlerData = { 
-                resultMap: {
-                    code: "equipmentcode",
-                    desc: "description_obj",
-                    organization: "equiporganization"
-                }, 
-                searchKeys: ["equipmentcode"],
-                gridType: GridTypes.LIST
-            }
+    const {
+        saveHandler,
+        register,
+        loading,
+        updateEntityProperty: updateWorkorderProperty,
+        handleError,
+    } = useEntity({
+        WS: {
+            create: WSWorkorder.createWorkOrder,
+            new: WSWorkorder.initWorkOrder
+        },
+        postActions: {
+            new: postInit,
+            create: postCreate
+        },
+        resultDataCodeProperty: "JOBNUM",
+        screenProperty: "ncrWorkOrderScreen",
+        entityCode: "EVNT",
+        explicitIdentifier: ``,
+        updateWindowTitle: false,
+        screenPermissions: userData.screens.WSJOBS,
+        layoutPropertiesMap: ncrWorkOrderPropertiesMap
+    });
+
+    function postCreate(entityToCreate, response, workOrderCode) {
+        handleSuccess(workOrderCode)
+    }
+
+    function postInit(wo) {
+        updateWorkorderProperty("WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE", getOrg());
+        updateWorkorderProperty("EQUIPMENTID", ncr?.EQUIPMENTID);
+        updateWorkorderProperty("DEPARTMENTID.DEPARTMENTCODE", userData?.eamAccount?.department);
+        updateWorkorderProperty("ASSIGNEDTO.PERSONCODE", userData?.eamAccount?.employeeCode);
+    }
 
     return (
         <Dialog
@@ -63,43 +86,14 @@ const WorkOrdersDialog = ({
             <DialogContent id="content" style={{ overflowY: "visible" }}>
                 <BlockUi tag="div" blocking={disabled}>
                     <EAMAutocomplete
-                        {...processElementInfo(fields["equipment"])}
-                        {...createAutocompleteHandler(fields.equipment, fields, {}, equipmentAutocompleteHandlerData)}
-                        barcodeScanner
-                        value={workOrder.equipmentCode}
-                        onChange={createOnChangeHandler(
-                            "equipmentCode",
-                            "equipmentDesc",
-                            "equipmentOrganization",
-                            handleUpdate
-                        )}
-                        link={() =>
-                            workOrder.equipmentCode
-                                ? "/equipment/" + workOrder.equipmentCode
-                                : null
-                        }
+                        {...register("equipment")} 
+                        barcodeScanner 
+                        //link={() => workOrder?.EQUIPMENTID?.EQUIPMENTCODE  ? "/equipment/" + workOrder.EQUIPMENTID.EQUIPMENTCODE : null}
                     />
 
-                    <EAMTextField
-                        {...processElementInfo(fields["description"])}
-                        value={workOrder.severity}
-                        onChange={createOnChangeHandler(
-                            "description",
-                            null,
-                            null,
-                            handleUpdate
-                        )}
-                    />
+                    <EAMTextField {...register("description")}  />
 
-                    <EAMSelect
-                        {...processElementInfo(fields["workordertype"])}
-                        value={workOrder.typeCode}
-                        onChange={createOnChangeHandler(
-                            "typeCode",
-                            "typeDesc",
-                            null,
-                            handleUpdate
-                        )}
+                    <EAMSelect {...register("workordertype")}
                         renderSuggestion={(suggestion) => suggestion.desc}
                         renderValue={(value) => value.desc || value.code}
                         autocompleteHandler={
@@ -110,77 +104,40 @@ const WorkOrdersDialog = ({
                         ]}
                     />
 
-                    <EAMSelect
-                        {...processElementInfo(fields["workorderstatus"])}
-                        value={workOrder.statusCode}
-                        onChange={createOnChangeHandler(
-                            "statusCode",
-                            "statusDesc",
-                            null,
-                            handleUpdate
-                        )}
-                        disabled={
-                            isDepartmentReadOnly(
-                                workOrder.departmentCode,
-                                userData
-                            )
-                            // ||
-                            // !screenPermissions.updateAllowed ||
-                            // !workOrder.jtAuthCanUpdate
-                        }
+                    <EAMSelect {...register("workorderstatus")}
+                        // disabled={
+                        //     isDepartmentReadOnly(
+                        //         workOrder.departmentCode,
+                        //         userData
+                        //     )
+                        //     // ||
+                        //     // !screenPermissions.updateAllowed ||
+                        //     // !workOrder.jtAuthCanUpdate
+                        // }
                         renderSuggestion={(suggestion) => suggestion.desc}
                         renderValue={(value) => value.desc || value.code}
                         options={statuses}
                     />
 
-                    <EAMAutocomplete
-                        {...processElementInfo(fields["department"])}
-                        value={workOrder.departmentCode}
-                        onChange={createOnChangeHandler(
-                            "departmentCode",
-                            "departmentDesc",
-                            null,
-                            handleUpdate
-                        )}
-                        autocompleteHandler={autocompleteDepartment}
-                        validate
+                    <EAMAutocomplete {...register("department")} 
+                                    autocompleteHandler={autocompleteDepartment}
+                        // {...processElementInfo(fields["department"])}
+                        // value={workOrder.departmentCode}
+                        // onChange={createOnChangeHandler(
+                        //     "departmentCode",
+                        //     "departmentDesc",
+                        //     null,
+                        //     handleUpdate
+                        // )}
+                        // autocompleteHandler={autocompleteDepartment}
+                        // validate
                     />
 
-                    <EAMAutocomplete
-                        {...processElementInfo(fields["location"])}
-                        {...createAutocompleteHandler(fields.location, fields, {})}
-                        value={workOrder.locationCode}
-                        onChange={createOnChangeHandler(
-                            "locationCode",
-                            "locationDesc",
-                            "locationOrg",
-                            handleUpdate
-                        )}
-                    />
+                    <EAMAutocomplete {...register("location")} />
 
-                    <EAMAutocomplete
-                        {...processElementInfo(fields["costcode"])}
-                        {...createAutocompleteHandler(fields.costcode, fields, {})}
-                        value={workOrder.costCode}
-                        onChange={createOnChangeHandler(
-                            "costCode",
-                            "costCodeDesc",
-                            null,
-                            handleUpdate
-                        )}
-                    />
+                    <EAMAutocomplete {...register("costcode")} />
 
-                    <EAMAutocomplete
-                        {...processElementInfo(fields["assignedto"])}
-                        {...createAutocompleteHandler(fields.assignedto, fields, {}, {resultMap: {code: "personcode", desc: "description"}})}
-                        value={workOrder.assignedTo}
-                        onChange={createOnChangeHandler(
-                            "assignedTo",
-                            "assignedToDesc",
-                            null,
-                            handleUpdate
-                        )}
-                    />
+                    <EAMAutocomplete {...register("assignedto")}  />
                 </BlockUi>
             </DialogContent>
             <DialogActions>
@@ -192,7 +149,7 @@ const WorkOrdersDialog = ({
                     Cancel
                 </Button>
                 <Button
-                    onClick={handleSuccess}
+                    onClick={saveHandler}
                     color="primary"
                     disabled={disabled}
                 >
