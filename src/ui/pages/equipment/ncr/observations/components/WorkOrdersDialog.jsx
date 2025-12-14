@@ -10,12 +10,12 @@ import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import { useEffect, useState } from "react";
-import useUserDataStore from "../../../../../../state/useUserDataStore";
-import { autocompleteDepartment } from "../../../../../../tools/WSGrids";
-import useEntity from "../../../../../../hooks/useEntity";
-import { getOrg } from "../../../../../../hooks/tools";
-import { ncrWorkOrderPropertiesMap } from "../../../../work/WorkorderTools";
-import WSNCRs from "../../../../../../tools/WSNCRs";
+import useUserDataStore from "@/state/useUserDataStore";
+import { autocompleteDepartment } from "@/tools/WSGrids";
+import useEntity from "@/hooks/useEntity";
+import { getOrg } from "@/hooks/tools";
+import { ncrWorkOrderPropertiesMap } from "@/ui/pages/work/WorkorderTools";
+import WSNCRs from "@/tools/WSNCRs";
 
 const WorkOrdersDialog = ({
     open,
