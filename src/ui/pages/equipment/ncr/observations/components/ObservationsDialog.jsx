@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -6,8 +7,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import BlockUi from "react-block-ui";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
-import WSNCRs from "../../../../../../tools/WSNCRs";
-import useEntity from "../../../../../../hooks/useEntity";
+import WSNCRs from "@/tools/WSNCRs";
+import useEntity from "@/hooks/useEntity";
 
 const ObservationsDialog = ({
     open,
@@ -15,10 +16,10 @@ const ObservationsDialog = ({
     fetchData,
     ncrCode
 }) => {
-
     if (!open || !ncrCode) {
         return null
     }
+
     const {
         saveHandler,
         register,
@@ -71,7 +72,7 @@ const ObservationsDialog = ({
                         options={[{ code: "U", desc: "Unfinished" }]}
                     />
                     <EAMSelect {...register('severity')}
-                        options={{ code: "HIGH", desc: "High" }}
+                        options={[{ code: "HIGH", desc: "High" }]}
 
                     />
                     <EAMTextField {...register('note')} />
