@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -6,25 +5,55 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import BlockUi from "react-block-ui";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
-import {
-    createOnChangeHandler,
-    processElementInfo,
-} from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
+import WSNCRs from "../../../../../../tools/WSNCRs";
+import useEntity from "../../../../../../hooks/useEntity";
 
 const ObservationsDialog = ({
-    handleSuccess,
     open,
-    handleCancel,
-    fields,
-    disabled,
-    observation,
-    handleUpdate,
+    setOpen,
+    fetchData,
+    ncrCode
 }) => {
-    const [lists, setLists] = useState({
-        observationStatusCode: [{ code: "U", desc: "Unfinished" }],
-        severity: [{ code: "HIGH", desc: "High" }],
+
+    if (!open || !ncrCode) {
+        return null
+    }
+    const {
+        saveHandler,
+        register,
+        loading,
+        updateEntityProperty: updateObservationProperty,
+        handleError,
+    } = useEntity({
+        WS: {
+            create: WSNCRs.createObservation,
+            new: WSNCRs.getObservationDefault
+        },
+        postActions: {
+            new: postInit,
+            create: postCreate
+        },
+        screenProperty: "ncrScreen",
+        tabCode: "OBS",
+        explicitIdentifier: ``,
+        updateWindowTitle: false,
+        resultDefaultDataProperty: 'NonconformityObservationDefault'
     });
+
+    function postInit() {
+        updateObservationProperty('NONCONFORMITYOBSERVATIONID.NONCONFORMITYCODE', ncrCode)
+        updateObservationProperty('NONCONFORMITYOBSERVATIONID.ORGANIZATIONID.ORGANIZATIONCODE', '*')
+    }
+
+    function postCreate() {
+        setOpen(false)
+        fetchData(ncrCode)
+    }
+
+    function handleCancel() {
+        setOpen(false)
+    }
 
     return (
         <Dialog
@@ -37,53 +66,29 @@ const ObservationsDialog = ({
             <DialogTitle id="form-dialog-title">Add Observation</DialogTitle>
 
             <DialogContent id="content" style={{ overflowY: "visible" }}>
-                <BlockUi tag="div" blocking={disabled}>
-                    <EAMSelect
-                        {...processElementInfo(fields["status"])}
-                        options={lists.observationStatusCode}
-                        value={observation.observationStatusCode}
-                        onChange={createOnChangeHandler(
-                            "observationStatusCode",
-                            null,
-                            null,
-                            handleUpdate
-                        )}
+                <BlockUi tag="div" blocking={false}> // TODO
+                    <EAMSelect {...register('status')}
+                        options={[{ code: "U", desc: "Unfinished" }]}
                     />
-                    <EAMSelect
-                        {...processElementInfo(fields["severity"])}
-                        options={lists.severity}
-                        value={observation.severity}
-                        onChange={createOnChangeHandler(
-                            "severity",
-                            null,
-                            null,
-                            handleUpdate
-                        )}
+                    <EAMSelect {...register('severity')}
+                        options={{ code: "HIGH", desc: "High" }}
+
                     />
-                    <EAMTextField
-                        {...processElementInfo(fields["note"])}
-                        value={observation.note}
-                        onChange={createOnChangeHandler(
-                            "note",
-                            null,
-                            null,
-                            handleUpdate
-                        )}
-                    />
+                    <EAMTextField {...register('note')} />
                 </BlockUi>
             </DialogContent>
             <DialogActions>
                 <Button
                     onClick={handleCancel}
                     color="primary"
-                    disabled={disabled}
+                    disabled={false}
                 >
                     Cancel
                 </Button>
                 <Button
-                    onClick={() => handleSuccess(observation)}
+                    onClick={saveHandler}
                     color="primary"
-                    disabled={disabled}
+                    disabled={false}
                 >
                     Save
                 </Button>
