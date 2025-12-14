@@ -3,24 +3,20 @@ import ObservationsDialog from "./components/ObservationsDialog";
 import useLayoutStore from "@/state/useLayoutStore";
 import WorkOrdersDialog from "./components/WorkOrdersDialog";
 import useUserDataStore from "@/state/useUserDataStore";
-import useObservationsDialog from "./hooks/useObservationsDialog";
-import useWorkOrdersDialog from "./hooks/useWorkOrdersDialog";
 import ObservationsActions from "./components/ObservationsActions";
 import ObservationsTable from "./components/ObservationsTable";
 import useObservations from "./hooks/useObservations";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Observations = ({
+    ncr,
     ncrCode,
-    showNotification,
     disabled,
     handleError,
-    observationFields,
-    statuses,
-    ncr,
 }) => {
     const { userData } = useUserDataStore();
-
+    const [isObservationsDialogOpen, setObservationsDialogOpen] = useState(false);
+    const [isWorkOrdersDialogOpen, setWorkOrdersDialogOpen] = useState(false);
     const {
         screenLayout: { OSJOBS: ncrWorkOrderLayout },
         fetchScreenLayout,
@@ -37,36 +33,6 @@ const Observations = ({
         handleError
     );
 
-    const {
-        isOpen: isObservationsDialogOpen,
-        isDisabled: isObservationsDialogDisabled,
-        observation,
-        updateHandler: observationsDialogUpdateHandler,
-        successHandler: observationsDialogSuccessHandler,
-        cancelHandler: observationsDialogCancelHandler,
-        openHandler: observationsDialogOpenHandler,
-    } = useObservationsDialog(
-        isLoading,
-        showNotification,
-        handleError,
-        fetchData,
-        ncrCode
-    );
-
-    const {
-        isOpen: isWorkOrdersDialogOpen,
-        isDisabled: isWorkOrdersDialogDisabled,
-        updateHandler: workOrdersDialogUpdateHandler,
-        successHandler: workOrdersDialogSuccessHandler,
-        cancelHandler: workOrdersDialogCancelHandler,
-        openHandler: workOrdersDialogOpenHandler,
-    } = useWorkOrdersDialog(
-        isLoading,
-        showNotification,
-        handleError,
-        observationsDialogSuccessHandler
-    );
-
     return isLoading || !ncrWorkOrderLayout ? (
         <BlockUi tag="div" blocking={isLoading} style={{ width: "100%" }} />
     ) : (
@@ -79,28 +45,22 @@ const Observations = ({
                 )}
                 <ObservationsActions
                     disabled={disabled}
-                    handleAddObservationClick={observationsDialogOpenHandler}
-                    handleCreateWorkOrderClick={workOrdersDialogOpenHandler}
+                    handleAddObservationClick={setObservationsDialogOpen}
+                    handleCreateWorkOrderClick={setWorkOrdersDialogOpen}
                 />
             </div>
             <ObservationsDialog
-                handleSuccess={observationsDialogSuccessHandler}
                 open={isObservationsDialogOpen}
-                handleCancel={observationsDialogCancelHandler}
-                fields={observationFields}
-                disabled={isObservationsDialogDisabled}
-                observation={observation}
-                handleUpdate={observationsDialogUpdateHandler}
+                setOpen={setObservationsDialogOpen}
+                fetchData={fetchData}
+                ncrCode={ncrCode}
             />
             <WorkOrdersDialog
-                handleSuccess={workOrdersDialogSuccessHandler}
                 open={isWorkOrdersDialogOpen}
-                handleCancel={workOrdersDialogCancelHandler}
-                fields={ncrWorkOrderLayout.fields}
-                disabled={isWorkOrdersDialogDisabled}
+                setOpen={setWorkOrdersDialogOpen}
+                ncrCode={ncrCode}
                 ncr={ncr}
-                handleUpdate={workOrdersDialogUpdateHandler}
-                userData={userData}
+                fetchData={fetchData}
             />
         </>
     );

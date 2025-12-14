@@ -27,7 +27,11 @@ class WSNCRs {
     }
 
     createObservation(observation, config = {}) {
-        return WS._post(`/ncrobservations/`, observation, config);
+        return WS._post(`/proxy/nonconformities/observations`, observation, config);
+    }
+
+    getObservationDefault(config = {}) {
+        return WS._post(`/proxy//nonconformities/observationdefaults`, {}, config);
     }
 
     getEquipmentNonConformities(asset, config = {}) {
