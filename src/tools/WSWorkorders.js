@@ -191,21 +191,22 @@ class WSWorkorders {
     }
 
     // Get default values for next activity for one work order
-    initBookingLabour(workOrderNumber, activities, defaultEmployee, config = {}) {
+    initBookingLabour(workOrder, activities, defaultEmployee, config = {}) {
         const result = {
-        body: { Result: { ResultData: {
-            OCCUPATIONTYPE: { OCCUPATIONTYPECODE: 'N' },
-            ACTIVITYID: {
-            WORKORDERID: { JOBNUM: workOrderNumber, ORGANIZATIONID: { ORGANIZATIONCODE: '*' } },
-            ACTIVITYCODE: { value: activities?.[0]?.activityCode ?? null },
-            },
-            TRADERATE: toEAMNumber(0),
-            ACTUALSTARTTIME: null,
-            ACTUALENDTIME: null,
-            TRADEID: { TRADECODE: activities?.[0]?.tradeCode },
-            EMPLOYEE: {PERSONCODE: defaultEmployee},
-            DATEWORKED: toEAMDate((new Date()).toISOString())
-        }}},
+            body: { Result: { ResultData: {
+                OCCUPATIONTYPE: { OCCUPATIONTYPECODE: 'N' },
+                ACTIVITYID: {
+                    WORKORDERID: workOrder.WORKORDERID,
+                    ACTIVITYCODE: { value: activities?.[0]?.activityCode ?? null },
+                },
+                TRADERATE: toEAMNumber(0),
+                ACTUALSTARTTIME: null,
+                ACTUALENDTIME: null,
+                TRADEID: { TRADECODE: activities?.[0]?.tradeCode },
+                EMPLOYEE: {PERSONCODE: defaultEmployee},
+                DATEWORKED: toEAMDate((new Date()).toISOString()),
+                DEPARTMENTID: workOrder.DEPARTMENTID,
+            }}},
         };
                 
         

@@ -1,46 +1,12 @@
-import { Description } from "@mui/icons-material";
 import { GridTypes } from "../../../tools/entities/GridRequest";
 
-
-
 export const bookLabourPropertiesMap = {
-    octype: {
-        autocompleteHandlerData: {
-            resultMap: {
-                code: "octype",
-                desc: "octypedesc"
-            }
-        }
-    },
 
     employee: {
         autocompleteHandlerData: {
-            gridType: GridTypes.LIST,
-            searchKeys: ["personcode", "description"]
+            gridType: GridTypes.LIST
         },
     },
-}
-
-export const activityPropertiesMap = {
-    matlcode: {
-        autocompleteHandlerData: {
-            resultMap: {
-                code: "matlist",
-                desc: "matlistdesc",
-                organization: "matlistorg"
-            }
-        }
-    },
-
-    trade: {
-        autocompleteHandlerData: {
-            resultMap: {
-                code: "trade",
-                desc: "tradedesc",
-                organization: "tradeorganization"
-            }
-        }
-    }
 }
 
 export const layoutPropertiesMap = {
@@ -93,18 +59,6 @@ export const layoutPropertiesMap = {
             resultMap: {code: "standardwo", desc: "standardwodesc", organization: "standardwoorg"}
         },
         alias: "standardWO"
-    },
-
-    assignedto: {
-        autocompleteHandlerData: {
-            searchKeys: ['personcode', 'description']
-        }
-    },
-
-    reportedby: {
-        autocompleteHandlerData: {
-            searchKeys: ['personcode', 'description']
-        }
     },
 
     udfchar01: {

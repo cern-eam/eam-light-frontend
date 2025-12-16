@@ -63,9 +63,15 @@ export const appendPath = (input, suffix) => {
     return /\./.test(input) ? input.replace(/\.[^.]+$/, `.${suffix}`) : null;
 }
 
+const extractDescriptionFromGridResult = (obj = {}) =>
+  obj.des_text ??
+  obj.description ??
+  obj.desc ??
+  obj[Object.keys(obj).find(k => ['description', 'desc'].some(s => k.includes(s)))];
+
 const generateResultMap = (returnFields = {}, elementInfo) => ({
     code: returnFields[elementInfo.elementId] ?? Object.values(returnFields).find(value => value.includes('code')),
-    desc: Object.values(returnFields).find(value => value.includes('desc')) ?? "des_text",
+    desc: Object.values(returnFields).find(value => value.includes('desc')) ?? extractDescriptionFromGridResult,
     organization: Object.values(returnFields).find(value => value.includes('organization'))
 })
 

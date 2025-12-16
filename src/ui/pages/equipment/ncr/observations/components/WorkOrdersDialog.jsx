@@ -7,7 +7,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import BlockUi from "react-block-ui";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import { useEffect, useState } from "react";
 import useUserDataStore from "@/state/useUserDataStore";
@@ -16,6 +15,7 @@ import useEntity from "@/hooks/useEntity";
 import { getOrg } from "@/hooks/tools";
 import { ncrWorkOrderPropertiesMap } from "@/ui/pages/work/WorkorderTools";
 import WSNCRs from "@/tools/WSNCRs";
+import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 
 const WorkOrdersDialog = ({
     open,
@@ -109,7 +109,7 @@ const WorkOrdersDialog = ({
 
             <DialogContent id="content" style={{ overflowY: "visible" }}>
                 <BlockUi tag="div" blocking={disabled}>
-                    <EAMAutocomplete {...register("equipment")} 
+                    <EAMComboAutocomplete {...register("equipment")} 
                         barcodeScanner 
                     />
 
@@ -132,15 +132,15 @@ const WorkOrdersDialog = ({
                         options={statuses}
                     />
 
-                    <EAMAutocomplete {...register("department")} 
+                    <EAMComboAutocomplete {...register("department")} 
                                     autocompleteHandler={autocompleteDepartment}
                     />
 
-                    <EAMAutocomplete {...register("location")} />
+                    <EAMComboAutocomplete {...register("location")} />
 
-                    <EAMAutocomplete {...register("costcode")} />
+                    <EAMComboAutocomplete {...register("costcode")} />
 
-                    <EAMAutocomplete {...register("assignedto")}  />
+                    <EAMComboAutocomplete {...register("assignedto")}  />
                 </BlockUi>
             </DialogContent>
             <DialogActions>

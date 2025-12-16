@@ -8,12 +8,11 @@ import "./AddActivityDialog.css";
 import WSWorkorders from "../../../../../tools/WSWorkorders";
 import KeyCode from "eam-components/dist/enums/KeyCode";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMDatePicker from "eam-components/dist/ui/components/inputs-ng/EAMDatePicker";
 import LightDialog from "@/ui/components/LightDialog";
 import useEntity from "../../../../../hooks/useEntity";
 import { fromEAMNumber } from "../../../EntityTools";
-import { activityPropertiesMap } from "../../WorkorderTools";
+import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 
 /**
  * Display detail of an activity
@@ -59,7 +58,6 @@ function AddActivityDialog(props) {
     resultDefaultDataProperty: "ActivityDefault",
     screenProperty: "workOrderScreen",
     explicitIdentifier: activityToEdit ? `${activityToEdit.workOrderNumber}#*#${activityToEdit.activityCode}`: ``,
-    layoutPropertiesMap: activityPropertiesMap,
     updateWindowTitle: false
   });
 
@@ -130,11 +128,11 @@ function AddActivityDialog(props) {
 
               <EAMTextField {...register('activitynote')} />
 
-              <EAMAutocomplete {...register('task')} />
+              <EAMComboAutocomplete {...register('task')} />
 
-              <EAMAutocomplete {...register('matlcode')} />
+              <EAMComboAutocomplete {...register('matlcode')} />
 
-              <EAMAutocomplete {...register('trade')}  />
+              <EAMComboAutocomplete {...register('trade')}  />
 
               <EAMTextField {...register('personsreq')} />
 
@@ -143,6 +141,8 @@ function AddActivityDialog(props) {
               <EAMDatePicker {...register('actstartdate')}  />
 
               <EAMDatePicker {...register('actenddate')} />
+
+              <EAMTextField {...register('percentcomplete')} />
             </BlockUi>
           </div>
         </DialogContent>

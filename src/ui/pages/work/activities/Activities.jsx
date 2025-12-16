@@ -107,6 +107,7 @@ function Activities(props) {
                 open={isBookLaborModalOpen}
                 activities={activities}
                 workorderNumber={workOrderNumber}
+                workOrder={workOrder}
                 department={props.department}
                 departmentDesc={props.departmentDesc}
                 defaultEmployee={props.defaultEmployee}
