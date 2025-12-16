@@ -8,7 +8,6 @@ import "./AddActivityDialog.css";
 import WSWorkorders from "../../../../../tools/WSWorkorders";
 import KeyCode from "eam-components/dist/enums/KeyCode";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMDatePicker from "eam-components/dist/ui/components/inputs-ng/EAMDatePicker";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import LightDialog from "@/ui/components/LightDialog";
@@ -17,9 +16,10 @@ import { getOrg } from "../../../../../hooks/tools";
 import useEntity from "../../../../../hooks/useEntity";
 import { bookLabourPropertiesMap } from "../../WorkorderTools";
 import { fromEAMDate, toEAMDate, toEAMNumber } from "../../../EntityTools";
+import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 
 function AddBookLabourDialog(props) {
-  const {workorderNumber, onChange, activities, open, defaultEmployee} = props;
+  const {workorderNumber, workOrder, onChange, activities, open, defaultEmployee} = props;
 
   if (!open) {
       return null; 
@@ -35,7 +35,7 @@ function AddBookLabourDialog(props) {
   } = useEntity({
     WS: {
       create: WSWorkorders.createBookingLabour,
-      new: () => WSWorkorders.initBookingLabour(workorderNumber, activities, defaultEmployee),
+      new: () => WSWorkorders.initBookingLabour(workOrder, activities, defaultEmployee),
     },
     postActions: {
       create: postCreate,
@@ -56,6 +56,7 @@ function AddBookLabourDialog(props) {
 
   function activityCodeChanged({ ['ACTIVITYID.ACTIVITYCODE.value']: activityCode }) {
     if (!activityCode) return
+    
     updateBookLabourProperty('TRADEID.TRADECODE', activities.find(a => a.activityCode === activityCode)?.tradeCode);
   }
 
@@ -64,7 +65,7 @@ function AddBookLabourDialog(props) {
     onChange();
     handleClose();
 
-    WSWorkorders.getWorkOrder.bind(null, props.workorderNumber, getOrg()) //TODO do we really have to read the WO?
+    WSWorkorders.getWorkOrder.bind(null, workorderNumber, getOrg()) //TODO do we really have to read the WO?
       .then((result) => {
         const workorder = result.body.Result.ResultData.WorkOrder;
         props.updateWorkorderProperty("recordid", workorder.recordid);
@@ -148,13 +149,13 @@ function AddBookLabourDialog(props) {
                 })}
               />
 
-              <EAMAutocomplete {...register('employee')} />
+              <EAMComboAutocomplete {...register('employee')} />
 
-              <EAMAutocomplete {...register('department')} />
+              <EAMComboAutocomplete {...register('department')} />
 
               <EAMDatePicker {...register('datework')} />
 
-              <EAMSelect {...register('octype')} />
+              <EAMComboAutocomplete {...register('octype')} selectMode={true}/>
 
               <EAMTextField {...register('hrswork', null, null, null, hoursWorkedChanged)}
                             renderDependencies={[laborBooking.ACTUALSTARTTIME, laborBooking.ACTUALENDTIME]} />
@@ -164,6 +165,8 @@ function AddBookLabourDialog(props) {
 
               <EAMTimePicker {...register('actendtime', null, null, null, startEndTimeChanged)}
                             renderDependencies={[laborBooking.ACTUALSTARTTIME, laborBooking.HOURSBOOKED]} />
+
+              <EAMComboAutocomplete {...register('emptrade')} />
             </BlockUi>
           </div>
         </DialogContent>
