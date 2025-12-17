@@ -3,7 +3,7 @@ import EAMComboAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EA
 
 const WorkorderClosingCodes = props => {
 
-    let {workOrderLayout, workorder, equipment, register} = props;
+    let {workOrderLayout, register} = props;
     
     if ("H" === workOrderLayout.fields.problemcode.attribute
         && "H" === workOrderLayout.fields.failurecode.attribute

@@ -38,21 +38,18 @@ class EquipmentTools {
 
 export default new EquipmentTools();
 
-export const onCategoryChange = (category, updateProperty) => {
-  console.log('category', category)
-  if (!category) {
+export const onCategoryChange = ({'CATEGORYID.CATEGORYCODE': categoryCode}, updateProperty) => {
+  if (!categoryCode) {
     return;
   }
 
-  WSEquipment.getCategory(category)
+  WSEquipment.getCategory(categoryCode)
     .then((response) => {
-      const category = response.body.Result.ResultData.EquipmentCategory;
+      const category = response.body.Result.ResultData.EquipmentCategory;   
 
-      //TODO
-    //   if (category.manufacturerCode) {
-    //     updateProperty("manufacturerCode", category.manufacturerCode);
-    //     updateProperty("manufacturerDesc", category.manufacturerDesc);
-    //   }
+      if (category.MANUFACTURERID?.MANUFACTURERCODE) {
+        updateProperty("ManufacturerInfo.MANUFACTURERCODE", category.MANUFACTURERID.MANUFACTURERCODE);
+      }
      })
     .catch((error) => {
       console.error(error);
@@ -144,13 +141,6 @@ export const equipmentLayoutPropertiesMap = {
   },
 
   class: {
-    autocompleteHandlerData: {
-        resultMap: {
-            code: "class",
-            desc: "des_text",
-            organization: "classorganization"
-        }
-    },
     alias: "classcode"
   },
 

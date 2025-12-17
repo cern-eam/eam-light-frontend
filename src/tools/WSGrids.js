@@ -21,6 +21,7 @@ export const getGridData = (gridRequest, config = {}) =>
 export function transformResponse(response, keyMap, additionalData = []) {
     return {
         body: {
+            metadata: response.body.metadata,
             data: [
                 ...response.body.data.map(item => 
                     Object.fromEntries(Object.entries(keyMap).map(([newKey, oldKey]) => [newKey, typeof oldKey === 'function' ? oldKey(item) : item[oldKey]]))
