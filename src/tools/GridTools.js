@@ -60,11 +60,16 @@ const replaceUrlParam = (key, val) => {
 const getURLParameterByName = name => queryString.parse(window.location.search)[name] || '';
 
 export const transformNativeResponse = (response) => {
-  const records = response.body.Result.ResultData.DATARECORD ?? []
-
+  const gridResultData = response.body.Result.ResultData
+  
   return {
     body: {
-      data: records.map(record => {
+      metadata: {...gridResultData.METADATA,
+                DATAENTITYNAME: gridResultData.DATAENTITYNAME,
+                CURRENTCURSORPOSITION: gridResultData.CURRENTCURSORPOSITION,
+                NEXTCURSORPOSITION: gridResultData.NEXTCURSORPOSITION,
+      },
+      data: (gridResultData.DATARECORD ?? []).map(record => {
         const obj = {};
         for (const field of record.DATAFIELD) {
           let value = field.FIELDVALUE;
