@@ -9,7 +9,6 @@ import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
 import { IconButton } from "@mui/material";
 import { FileTree } from "mdi-material-ui";
 import useEquipmentTreeStore from "../../../state/useEquipmentTreeStore";
-import { autocompleteDepartment } from "../../../tools/WSGrids";
 import EAMInput from "../../components/EAMInput";
 
 function WorkorderGeneral(props) {
@@ -61,12 +60,9 @@ function WorkorderGeneral(props) {
         }
       />
 
-      <EAMComboAutocomplete {...register("location")}/>
+      <EAMComboAutocomplete {...register("location")} />
 
-      <EAMComboAutocomplete
-        {...register("department")}
-        autocompleteHandler={autocompleteDepartment}
-      />
+      <EAMComboAutocomplete {...register("department")} />
 
       <EAMSelect
         {...register("workordertype")}
@@ -89,7 +85,7 @@ function WorkorderGeneral(props) {
         options={statuses}
       />
 
-      <EAMComboAutocomplete {...register("priority")} autocompleteHandler={WSWorkorders.getWorkOrderPriorities} selectMode={true}/>
+      <EAMComboAutocomplete {...register("priority")} selectMode={true}/>
 
       <EAMComboAutocomplete {...register("woclass")} />
 

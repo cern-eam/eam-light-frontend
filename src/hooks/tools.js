@@ -76,13 +76,18 @@ const generateResultMap = (returnFields = {}, elementInfo) => ({
 })
 
 export const createAutocompleteHandler = (elementInfo, fields, entity, autocompleteHandlerData = {}) => {
+    const { gridType, searchKeys, resultMap, userFunctionName, extraData, handler} = autocompleteHandlerData;
+
+    if (handler) {
+        return {autocompleteHandler: handler}
+    }
+
     if (!elementInfo || !elementInfo.onLookup || elementInfo.onLookup == "{}" ) {
         return;
     } 
 
     const { lovName, inputVars, inputFields, returnFields = [] } = JSON.parse(elementInfo.onLookup)
-    const { gridType, searchKeys, resultMap, userFunctionName, extraData} = autocompleteHandlerData;
-
+    
     const autocompleteHandler = (options, config) => {
         try {
             let {operator = "BEGINS", filter} = options;

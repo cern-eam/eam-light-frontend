@@ -1,4 +1,6 @@
 import { GridTypes } from "../../../tools/entities/GridRequest";
+import { autocompleteDepartment } from "../../../tools/WSGrids";
+import WSWorkorders from "../../../tools/WSWorkorders";
 
 export const bookLabourPropertiesMap = {
 
@@ -46,7 +48,10 @@ export const layoutPropertiesMap = {
     },
 
     department: {
-        alias: "departmentCode"
+        alias: "departmentCode",
+        autocompleteHandlerData: {
+            handler: autocompleteDepartment
+        }
     },
 
     woclass: {
@@ -69,6 +74,11 @@ export const layoutPropertiesMap = {
         link: 'https://its.cern.ch/jira/browse/'
     },
 
+    priority: {
+        autocompleteHandlerData: {
+            handler: WSWorkorders.getWorkOrderPriorities
+        }
+    },
 
 }
 
