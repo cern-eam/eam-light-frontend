@@ -3,10 +3,11 @@ export const GridTypes = Object.freeze({ LIST: "LIST", LOV: "LOV" });
 export const GridFilterJoiner = Object.freeze({ AND: "AND", OR: "OR" });
 
 export default class GridRequest {
-  constructor(gridName, gridType = GridTypes.LIST, userFunctionName) {
+  constructor(gridName, gridType = GridTypes.LIST, userFunctionName, rowCount = 1000) {
     this.GRID = {
       GRID_NAME: gridName,
-      NUMBER_OF_ROWS_FIRST_RETURNED: 1000,
+      NUMBER_OF_ROWS_FIRST_RETURNED: rowCount,
+      WSGRIDSZ_OVERRIDE: rowCount,
       CURSOR_POSITION: 0
     }
 

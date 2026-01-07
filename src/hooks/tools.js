@@ -93,7 +93,7 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
             let {operator = "BEGINS", filter} = options;
             filter = (typeof filter === "string") ? filter : ""
 
-            const gridRequest = new GridRequest(lovName, gridType ?? GridTypes.LOV, userFunctionName)
+            const gridRequest = new GridRequest(lovName, gridType ?? GridTypes.LOV, userFunctionName, 100)
             
             // Parameters 
             Object.entries(inputFields ?? {}).forEach(([key, value]) => { 

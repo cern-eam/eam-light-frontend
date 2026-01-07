@@ -85,7 +85,7 @@ function WorkorderGeneral(props) {
         options={statuses}
       />
 
-      <EAMComboAutocomplete {...register("priority")} selectMode={true}/>
+      <EAMComboAutocomplete {...register("priority")} />
 
       <EAMComboAutocomplete {...register("woclass")} />
 
