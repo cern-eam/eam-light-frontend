@@ -5,7 +5,13 @@ import EAMDateTimePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDa
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 
-const EAMInput = ({ type = 'text', ...props }) => {
+const EAMInput = (props) => {
+
+    const {type, autocompleteHandler} = props;
+
+    if (autocompleteHandler) {
+        return <EAMComboAutocomplete {...props} />
+    }
 
     switch (type) {
         case 'checkbox':
@@ -14,10 +20,6 @@ const EAMInput = ({ type = 'text', ...props }) => {
             return <EAMDatePicker {...props} />;
         case 'datetime':
             return <EAMDateTimePicker {...props} />;
-        case 'autocomplete':
-            return <EAMComboAutocomplete {...props} />;
-        case 'select':
-            return <EAMSelect {...props} />;
         case 'number':
         case 'currency':
             return <EAMTextField type="number" {...props} />;
