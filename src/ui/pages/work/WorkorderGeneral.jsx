@@ -104,25 +104,25 @@ function WorkorderGeneral(props) {
         }
       />
 
-      <EAMTextField {...register("udfchar01")} />
+      <EAMInput {...register("udfchar01")} />
 
-      <EAMTextField {...register("udfchar20")} />
+      <EAMInput {...register("udfchar20")} />
 
-      <EAMTextField {...register("udfchar24")}  />
+      <EAMInput {...register("udfchar24")}  />
 
-      <EAMUDF {...register("udfchkbox01")} />
+      <EAMInput {...register("udfchkbox01")} />
 
-      <EAMUDF {...register("udfchkbox02")} />
+      <EAMInput {...register("udfchkbox02")} />
 
-      <EAMUDF {...register("udfchkbox03")} />
+      <EAMInput {...register("udfchkbox03")} />
 
-      <EAMUDF {...register("udfchkbox04")} />
+      <EAMInput {...register("udfchkbox04")} />
 
-      <EAMUDF {...register("udfchkbox05")} />
+      <EAMInput {...register("udfchkbox05")} />
 
-      <EAMCheckbox {...register("warranty")} />
+      <EAMInput {...register("warranty")} />
 
-      <EAMTextField {...register("downtimehours")} />
+      <EAMInput {...register("downtimehours")} />
     </React.Fragment>
   );
 }

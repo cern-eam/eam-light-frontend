@@ -62,7 +62,7 @@ export const readUserCodes = (options) => {
 }
 
 export const autocompleteDepartment = (options) => {
-    let gridRequest = new GridRequest("LVMRCS", GridTypes.LOV)
+    let gridRequest = new GridRequest("LVMRCS", GridTypes.LOV, "LVMORCS", 100)
     gridRequest.rowCount = 10
     gridRequest.addParam("param.showstardepartment", null)
     gridRequest.addParam("param.bypassdeptsecurity", null)
