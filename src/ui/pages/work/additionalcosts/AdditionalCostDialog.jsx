@@ -9,20 +9,58 @@ import WSWorkorders from "../../../../tools/WSWorkorders";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
-import { createOnChangeHandler, processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import useEntity from '../../../../hooks/useEntity';
+import { getOrg } from '../../../../hooks/tools';
+import { toEAMNumber } from '../../EntityTools';
 
 const AdditionalCostDialog = (props) => {
-    const [additionalCost, setAdditionalCost] = useState({ 
-        costType: "MISC" , 
-        date: new Date()});
+    const {workOrderNumber, isDialogOpen, successHandler} = props
+
+    if (!isDialogOpen) {
+        return null;
+    }
+
     const [activityList, setActivityList] = useState([]);
-    const [loading, setLoading] = useState(false);
+
+    const {
+        saveHandler,
+        updateEntityProperty: updateAdditionalCostProperty,
+        register,
+        loading,
+    } = useEntity({
+        WS: {
+            create: WSWorkorders.createAdditionalCost,
+            new: () => WSWorkorders.initAdditionalCost(workOrderNumber),
+        },
+        postActions: {
+            new: postInit,
+            create: postCreate,
+        },
+        tabCode: "ACO",
+        screenProperty: "workOrderScreen",
+        entityDesc: 'Additional Cost',
+        explicitIdentifier: ``,
+        updateWindowTitle: false
+    });
 
     useEffect(() => {
         if (props.isDialogOpen) {
             loadActivities(props.workOrderNumber);
         }
     }, [props.isDialogOpen]);
+
+    function postCreate() {
+        successHandler()
+    }
+
+    function postInit(addcostdefaults) {
+        updateAdditionalCostProperty('ACTIVITYID.ACTIVITYCODE', addcostdefaults.ACTIVITYCODE)
+        updateAdditionalCostProperty('ACTIVITYID.WORKORDERID.JOBNUM', workOrderNumber)
+        updateAdditionalCostProperty('ACTIVITYID.WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE', getOrg())
+        updateAdditionalCostProperty('WOADDITIONALCOSTQTY', toEAMNumber(1))
+        updateAdditionalCostProperty('MULTIEQUIPSPLITINFO.RELATEDWORKORDERID.JOBNUM', workOrderNumber)
+        updateAdditionalCostProperty('MULTIEQUIPSPLITINFO.RELATEDWORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE', getOrg())
+    }
 
     const loadActivities = (workOrderNumber) => {
         WSWorkorders.getWorkOrderActivities(workOrderNumber).then((response) => {
@@ -32,27 +70,11 @@ const AdditionalCostDialog = (props) => {
         });
     };
 
-    const transformActivities = (activities) => {
-        return activities.map((activity) => ({
-            code: activity.activityCode,
-            desc: activity.tradeCode
-        }));
-    }
-
-    const updateAdditionalCostProperty = (key, value) => {
-        setAdditionalCost((prevAdditionalCost) => ({
-            ...prevAdditionalCost,
-            [key]: value,
-        }));
-    };
-
-    const handleSave = () => {
-        setLoading(true);
-        WSWorkorders.createAdditionalCost({...additionalCost }, props.workOrderNumber)
-            .then(props.successHandler)
-            .catch(props.handleError)
-            .finally(() => setLoading(false));
-    };
+    const transformActivities = activities =>
+    activities.map(activity => ({
+        code: Number(activity.activityCode),
+        desc: activity.tradeCode
+    }));
 
     return (
         <Dialog
@@ -66,44 +88,24 @@ const AdditionalCostDialog = (props) => {
 
             <DialogContent id="content" style={{ overflowY: 'visible' }}>
                 <BlockUi tag="div" blocking={loading || props.isLoading}>
-                    <EAMSelect 
-                        {...processElementInfo(props.tabLayout['activitytrade'])}
+                    <EAMSelect {...register('activitytrade')}
                         options={activityList}
-                        value={additionalCost.activityCode}
-                        onChange={createOnChangeHandler("activityCode", null, null, updateAdditionalCostProperty)}
                     />
 
-                    <EAMTextField 
-                        {...processElementInfo(props.tabLayout['costdescription'])}
-                        value={additionalCost.costDescription}
-                        onChange={createOnChangeHandler("costDescription", null, null, updateAdditionalCostProperty)}
-                    />
+                    <EAMTextField  {...register('costdescription')} />
 
-                    <EAMTextField 
-                        {...processElementInfo(props.tabLayout['costtype'])}
-                        disabled
-                        value="Parts/Services"
-                        onChange={createOnChangeHandler("costType", null, null, updateAdditionalCostProperty)}
-                    />
+                    <EAMTextField   {...register('costtype')} />
 
-                    <EAMTextField 
-                        {...processElementInfo(props.tabLayout['cost'])}
-                        value={additionalCost.cost}
-                        onChange={createOnChangeHandler("cost", null, null, updateAdditionalCostProperty)}
-                    />
+                    <EAMTextField   {...register('cost')} />
 
-                    <EAMDatePicker 
-                        {...processElementInfo(props.tabLayout['additionalcostsdate'])}
-                        value={additionalCost.date}
-                        onChange={createOnChangeHandler("date", null, null, updateAdditionalCostProperty)}
-                    />
+                    <EAMDatePicker   {...register('additionalcostsdate')} />
                 </BlockUi>
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.handleCancel} color="primary" disabled={loading || props.isLoading}>
                     Cancel
                 </Button>
-                <Button onClick={handleSave} color="primary" disabled={loading || props.isLoading}>
+                <Button onClick={saveHandler} color="primary" disabled={loading || props.isLoading}>
                     Save
                 </Button>
             </DialogActions>

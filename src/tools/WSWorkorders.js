@@ -247,8 +247,20 @@ class WSWorkorders {
     //
     //AdditionalCosts
     //
-    createAdditionalCost(additionalCost, workorder, config = {}) {
-        return WS._post('/workorders/' + workorder + '/additionalcosts', additionalCost, config);
+    createAdditionalCost(additionalCost, config = {}) {
+        return WS._post('/proxy/workorders/additionalcosts', additionalCost, config);
+    }
+
+    initAdditionalCost(workOrderNumber, config = {}) {
+        const request = {
+                WORKORDERID: {
+                    JOBNUM: workOrderNumber,
+                    ORGANIZATIONID: {
+                        ORGANIZATIONCODE: getOrg()
+                    }
+            }
+        }
+        return WS._post('/proxy/workorders/additionalcostdefaults', request, config);
     }
 
     getAdditionalCostsList(workorder, config = {}) {
