@@ -2,7 +2,6 @@ import EAMCheckbox from "eam-components/dist/ui/components/inputs-ng/EAMCheckbox
 import EAMDatePicker from "eam-components/dist/ui/components/inputs-ng/EAMDatePicker";
 import EAMDateTimePicker from "eam-components/dist/ui/components/inputs-ng/EAMDateTimePicker";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
-import * as React from "react";
 import WSUDF from "@/tools/WSUDF";
 import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 
@@ -12,6 +11,7 @@ const CODEDESC = "CODEDESC";
 const RENT = "RENT";
 
 const EAMUDF = (props) => {
+
   const { udfLookupType, udfLookupEntity, elementId, fieldType, udfUom } =
     props.elementInfo;
     

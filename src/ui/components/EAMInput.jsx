@@ -4,10 +4,15 @@ import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePi
 import EAMDateTimePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDateTimePicker';
 import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
+import EAMUDF from './userdefinedfields/EAMUDF';
 
 const EAMInput = (props) => {
 
-    const {type, autocompleteHandler} = props;
+    const {type, autocompleteHandler, elementInfo} = props;
+    
+    if (elementInfo.elementId?.startsWith('udf')) {
+        return <EAMUDF {...props}/>
+    }
 
     if (autocompleteHandler) {
         return <EAMComboAutocomplete {...props} />
