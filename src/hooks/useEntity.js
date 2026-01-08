@@ -159,7 +159,7 @@ const useEntity = (params) => {
 
     WS.create(entityToCreate).then((response) => {
         const entityCode = get(response.body.Result.ResultData, resultDataCodeProperty);
-        showNotification(response.body.Result.InfoAlert.Message);
+        showNotification(response.body.Result.InfoAlert?.Message ?? entityDesc + ' has been successfully created.');
         commentsComponent.current?.createCommentForNewEntity(entityCode);
         postActions?.create?.(entityToCreate, response, entityCode)
         // Read after the creation 

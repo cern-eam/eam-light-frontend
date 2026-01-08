@@ -6,13 +6,6 @@ import AdditionalCostDialog from "./AdditionalCostDialog";
 import BlockUi from 'react-block-ui';
 import useSnackbarStore from '../../../../state/useSnackbarStore';
 
-const buttonStyle = {
-    //position: 'relative',
-    //float: 'left',
-    //bottom: '-13px',
-   // left: '5px',
-   padding: 10
-};
 
 const AdditionalCosts = (props) => {
     const headers = ['Activity', 'Cost Description', 'Cost Type', 'Quantity', 'Cost', 'Date'];
@@ -21,7 +14,6 @@ const AdditionalCosts = (props) => {
     const [data, setData] = useState([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isLoading, setIsLoading] = useState([]);
-    const {showError, showNotification, handleError} = useSnackbarStore();
 
     useEffect(() => {
         fetchData(props.workOrderNumber);
@@ -50,7 +42,6 @@ const AdditionalCosts = (props) => {
     };
 
     const successHandler = () => {
-        showNotification('Additional cost created successfully');
         setIsDialogOpen(false);
         fetchData(props.workOrderNumber);
     }
@@ -75,7 +66,6 @@ const AdditionalCosts = (props) => {
                 </Button>
             </div>
             <AdditionalCostDialog
-                handleError={handleError}
                 handleCancel={() => setIsDialogOpen(false)}
                 tabLayout={props.tabLayout.fields}
                 isDialogOpen={isDialogOpen}
