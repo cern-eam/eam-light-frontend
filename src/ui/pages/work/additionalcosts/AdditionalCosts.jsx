@@ -4,8 +4,6 @@ import EISTable from 'eam-components/dist/ui/components/table';
 import Button from '@mui/material/Button';
 import AdditionalCostDialog from "./AdditionalCostDialog";
 import BlockUi from 'react-block-ui';
-import useSnackbarStore from '../../../../state/useSnackbarStore';
-
 
 const AdditionalCosts = (props) => {
     const headers = ['Activity', 'Cost Description', 'Cost Type', 'Quantity', 'Cost', 'Date'];

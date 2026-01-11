@@ -12,6 +12,8 @@ import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextFie
 import useEntity from '../../../../hooks/useEntity';
 import { getOrg } from '../../../../hooks/tools';
 import { toEAMNumber } from '../../EntityTools';
+import EAMInput from '../../../components/EAMInput';
+import WS from '../../../../tools/WS';
 
 const AdditionalCostDialog = (props) => {
     const {workOrderNumber, isDialogOpen, successHandler} = props
@@ -92,9 +94,12 @@ const AdditionalCostDialog = (props) => {
                         options={activityList}
                     />
 
-                    <EAMTextField  {...register('costdescription')} />
+                    <EAMTextField {...register('costdescription')} />
 
-                    <EAMTextField   {...register('costtype')} />
+                    <EAMInput {...register('costtype')} 
+                        autocompleteHandler={WS.getCodeLov}
+                        autocompleteHandlerParams={["WOCS"]}
+                        />
 
                     <EAMTextField   {...register('cost')} />
 
