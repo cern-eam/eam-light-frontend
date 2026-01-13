@@ -12,8 +12,7 @@ function CustomFieldNUM({customField, register, index, validate}) {
                           endTextAdornment={customField.UOM}
                           autocompleteHandler={cfNum}
                           autocompleteHandlerParams={[customField.PROPERTYCODE]}
-                          validate={validate}
-                          selectMode={true}/>
+                          validate={validate}/>
     } else {
         return (
             <EAMTextField {...extraProps}

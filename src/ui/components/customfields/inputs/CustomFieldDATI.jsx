@@ -12,8 +12,7 @@ function CustomFieldDATI({customField, register, index, validate}) {
                           validate={validate}
                           autocompleteHandler={cfDateTime}
                           autocompleteHandlerParams={[customField.PROPERTYCODE]}
-                          renderValue={(value) => value.desc}
-                          selectMode={true}/>
+                          renderValue={(value) => value.desc}/>
     } else {
         return (
             <EAMDateTimePicker {...extraProps}/>

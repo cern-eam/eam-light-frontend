@@ -13,8 +13,7 @@ function CustomFieldCODE({customField, register, index, validate}) {
                           {...extraProps}
                           validate={validate}
                           autocompleteHandler={cfCodeDesc}
-                          autocompleteHandlerParams={[customField.PROPERTYCODE]}
-                          selectMode={true}/>
+                          autocompleteHandlerParams={[customField.PROPERTYCODE]}/>
     } else {
         return (
             <EAMTextField {...extraProps}/>

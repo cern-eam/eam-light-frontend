@@ -34,7 +34,6 @@ const EAMUDF = (props) => {
           {...props}
           autocompleteHandler={WSUDF.getUDFCodeValues}
           autocompleteHandlerParams={[udfLookupEntity, elementId]}
-          selectMode={true}
         />
       );
     case CODEDESC:
@@ -43,7 +42,6 @@ const EAMUDF = (props) => {
           {...props}
           autocompleteHandler={WSUDF.getUDFCodeDescValues}
           autocompleteHandlerParams={[udfLookupEntity, elementId]}
-          selectMode={true}
         />
       );
     case RENT:

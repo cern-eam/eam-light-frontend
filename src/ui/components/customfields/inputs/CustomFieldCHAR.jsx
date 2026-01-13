@@ -12,9 +12,7 @@ function CustomFieldCHAR({customField, register, index, validate}) {
                           endTextAdornment={customField.UOM}
                           autocompleteHandler={cfChar}
                           autocompleteHandlerParams={[customField.PROPERTYCODE]}
-                          validate={validate}
-                          selectMode={true}
-        />
+                          validate={validate} />
     } else {
         return (
             <EAMTextField {...extraProps} 
