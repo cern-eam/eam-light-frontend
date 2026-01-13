@@ -12,8 +12,7 @@ function CustomFieldDATE({customField, register, index, validate}) {
                           validate={validate}
                           renderValue={(value) => value.desc}
                           autocompleteHandler={cfDate}
-                          autocompleteHandlerParams={[customField.PROPERTYCODE]}
-                          selectMode={true}/>
+                          autocompleteHandlerParams={[customField.PROPERTYCODE]}/>
     } else {
         return (
             <EAMDatePicker {...extraProps} 
