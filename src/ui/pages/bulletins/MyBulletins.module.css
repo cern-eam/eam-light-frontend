@@ -1,0 +1,30 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 32px;
+    height: -webkit-fill-available;
+}
+
+.container h1 {
+    margin: 0;
+}
+
+.bulletinsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: -webkit-fill-available;
+    padding-bottom: 32px;
+}
+
+.noBulletins {
+    color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    height: 100%;
+    text-align: center;
+}
