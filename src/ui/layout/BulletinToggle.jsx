@@ -1,7 +1,7 @@
 import {Bell } from "mdi-material-ui";
 import {Badge, Drawer, IconButton, Tooltip} from "@mui/material";
 import {useEffect, useState} from "react";
-import {MyBulletins} from "@/ui/pages/bulletins/MyBulletins.jsx";
+import {MyBulletins} from "@/ui/pages/bulletins/BulletinWindow/MyBulletins.jsx";
 import WSBulletins from "@/tools/WSBulletins.js";
 
 import { keyframes } from "@mui/system";
@@ -92,7 +92,7 @@ export const BulletinToggle = () => {
 
     const tooltipMessage = hasUnreadCriticalBulletins
         ? "You have critical unread notifications!"
-        : "You have unread bulletins!";
+        : "You have unread notifications!";
 
     return (
         <>
@@ -114,13 +114,13 @@ export const BulletinToggle = () => {
                     PopperProps={{
                         sx: hasUnreadBulletins ? {
                             '& .MuiTooltip-tooltip': {
-                                backgroundColor: 'error.main',
+                                backgroundColor: hasUnreadCriticalBulletins ? 'error.main' : 'text.secondary',
                                 color: 'white',
                                 fontSize: '0.875rem',
                                 fontWeight: 500,
                             },
                             '& .MuiTooltip-arrow': {
-                                color: 'error.main',
+                                color: hasUnreadCriticalBulletins ? 'error.main' : 'text.secondary',
                             }
                         } : {}
                     }}
@@ -186,6 +186,7 @@ export const BulletinToggle = () => {
                     loading={loading}
                     error={error}
                     onAcknowledge={handleBulletinAcknowledged}
+                    activeTabOnOpen={ hasUnreadBulletins ? 0 : 1}
                 />
             </Drawer>
         </>
