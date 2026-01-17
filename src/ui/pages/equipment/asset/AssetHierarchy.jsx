@@ -4,11 +4,11 @@ import Dependency from "../components/Dependency";
 import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
 import { get } from "lodash";
 import { getHierarchyObject, ParentDependencyTypes, getDependencyType, getParentAssetCode, getParentPositionCode, getParentPrimarySystemCode } from "../tools/hierarchyTools";
-import { assetLayoutPropertiesMap } from "../EquipmentTools";
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { createAutocompleteHandler, getCodeOrg } from "../../../../hooks/tools";
 import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 import { useInitHierarchyFromQueryParams } from "../tools/useInitHierarchyFromQueryParams";
+import { assetLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap";
 
 
 const AssetHierarchy = (props) => {

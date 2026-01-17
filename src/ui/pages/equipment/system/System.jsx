@@ -42,15 +42,15 @@ import {
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
 import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
-import Variables from "../components/Variables";
 import {
   isClosedEquipment,
   onCategoryChange,
-  systemLayoutPropertiesMap,
 } from "../EquipmentTools";
 import SystemDetails from "./SystemDetails";
 import SystemGeneral from "./SystemGeneral";
 import SystemHierarchy from "./SystemHierarchy";
+import { systemLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
+import ScreenContainer from "../../../components/ScreenContainer.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -195,7 +195,9 @@ const System = () => {
         label: "Variables",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        render: () => <Variables {...commonProps} />,
+        render: () => (
+          <ScreenContainer register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_4.3', 'cont_4.4']}/>
+        ),
         column: 1,
         order: 10,
         summaryIcon: ClearAllIcon,

@@ -37,9 +37,9 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
-import { locationLayoutPropertiesMap } from "../EquipmentTools";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
+import { locationLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
 
 const customTabGridParamNames = [
   "equipmentno",

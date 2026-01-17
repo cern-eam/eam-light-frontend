@@ -28,7 +28,6 @@ import useEntity from "@/hooks/useEntity";
 import {
   isClosedEquipment,
   onCategoryChange,
-  positionLayoutPropertiesMap,
 } from "../EquipmentTools";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import { PositionIcon } from "eam-components/dist/ui/components/icons";
@@ -43,7 +42,6 @@ import ShareIcon from "@mui/icons-material/Share";
 import AccountTreeRoundedIcon from "@mui/icons-material/AccountTreeRounded";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-import Variables from "../components/Variables";
 import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import { createPosition, deletePosition, getPosition, getPositionsDefault, updatePosition } from "../../../../tools/WSPositions.js";
@@ -53,6 +51,8 @@ import { Article } from "@mui/icons-material";
 import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
 import { Link } from "react-router-dom";
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import { positionLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
+import ScreenContainer from "../../../components/ScreenContainer.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -190,7 +190,9 @@ const Position = () => {
         label: "Variables",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        render: () => <Variables {...commonProps} />,
+        render: () => (
+          <ScreenContainer register={register} screenLayout={positionLayout} layoutPropertiesMap={positionLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_4.3', 'cont_4.4']}/>
+        ),
         column: 1,
         order: 10,
         summaryIcon: ClearAllIcon,

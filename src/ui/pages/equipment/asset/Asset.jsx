@@ -7,8 +7,6 @@ import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDocligh
 import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
-import AssetDetails from "./AssetDetails";
-import AssetGeneral from "./AssetGeneral";
 import AssetHierarchy from "./AssetHierarchy";
 import EntityRegions from "../../../components/entityregions/EntityRegions";
 import AddBoxIcon from '@mui/icons-material/AddBox';
@@ -19,7 +17,7 @@ import { TAB_CODES } from "../../../components/entityregions/TabCodeMapping";
 import { getTabAvailability, getTabInitialVisibility, registerCustomField, getTabGridRegions, renderLoading, getCustomTabRegions, toEAMDate } from "../../EntityTools";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer";
 import useEntity from "@/hooks/useEntity";
-import { isClosedEquipment, assetLayoutPropertiesMap, onCategoryChange } from "../EquipmentTools";
+import { isClosedEquipment, onCategoryChange } from "../EquipmentTools";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import { AssetIcon, PartIcon } from "eam-components/dist/ui/components/icons";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
@@ -36,7 +34,6 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import HardwareIcon from "@mui/icons-material/Hardware";
 import WarningIcon from "@mui/icons-material/Warning";
-import Variables from "../components/Variables";
 import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
@@ -48,6 +45,9 @@ import { getOrg } from "../../../../hooks/tools.js";
 import GridRequest, { GridTypes } from "../../../../tools/entities/GridRequest.js";
 import { getGridData } from "../../../../tools/WSGrids.js";
 import { extractSingleResult } from "../../../../tools/GridTools.js";
+import { assetLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
+import ScreenContainer from "../../../components/ScreenContainer.jsx";
+import StatusRow from "../../../components/statusrow/StatusRow.jsx";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -195,12 +195,18 @@ const Asset = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <AssetGeneral
-            showNotification={showNotification}
-            {...commonProps}
-            userData={userData}
-            screenCode={screenCode}
-            screenPermissions={screenPermissions}
+          <ScreenContainer register={register} screenLayout={assetLayout} 
+          layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} 
+          containers={['cont_1', 'cont_1.1', 'cont_1.2', 'cont_2']}
+          footer={!newEntity &&
+                  <StatusRow
+                    entity={equipment}
+                    entityType={"equipment"}
+                    screenCode={screenCode}
+                    code={id?.code}
+                    org={id?.org}
+                    style={{ marginTop: "10px", marginBottom: "-10px" }}
+                  />}
           />
         ),
         column: 1,
@@ -214,7 +220,9 @@ const Asset = () => {
         label: "Details",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        render: () => <AssetDetails {...commonProps} />,
+        render: () => (
+          <ScreenContainer register={register} screenLayout={assetLayout} layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_3', 'cont_4', 'cont_5', 'cont_6', 'cont_7', 'cont_8']}/>
+        ),
         column: 1,
         order: 2,
         summaryIcon: AssignmentIcon,
@@ -226,7 +234,9 @@ const Asset = () => {
         label: "Variables",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        render: () => <Variables {...commonProps} />,
+        render: () => (
+          <ScreenContainer register={register} screenLayout={assetLayout} layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_9', 'cont_10']}/>
+        ),
         column: 1,
         order: 10,
         summaryIcon: ClearAllIcon,
@@ -398,7 +408,10 @@ const Asset = () => {
         label: "User Defined Fields",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        render: () => <UserDefinedFields {...commonProps} entityLayout={assetLayout.fields} />,
+        //render: () => <UserDefinedFields {...commonProps} entityLayout={assetLayout.fields} />,
+        render: () => (
+          <ScreenContainer register={register} screenLayout={assetLayout} layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_15', 'cont_16']}/>
+        ),
         column: 2,
         order: 10,
         summaryIcon: AssignmentIndIcon,

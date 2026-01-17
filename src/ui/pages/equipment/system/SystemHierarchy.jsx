@@ -4,9 +4,9 @@ import WSEquipment from "../../../../tools/WSEquipment";
 import Dependency from "../components/Dependency";
 import { processElementInfo } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { get } from "lodash";
-import { systemLayoutPropertiesMap } from "../EquipmentTools";
 import { createAutocompleteHandler } from "../../../../hooks/tools";
 import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
+import { systemLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap";
 
 const SystemHierarchy = (props) => {
   const {

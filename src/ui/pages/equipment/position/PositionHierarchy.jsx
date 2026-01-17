@@ -12,10 +12,10 @@ import {
   getParentPositionCode,
   getParentPrimarySystemCode,
 } from "../tools/hierarchyTools";
-import { positionLayoutPropertiesMap } from "../EquipmentTools";
 import { createAutocompleteHandler } from "../../../../hooks/tools";
 import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 import { useInitHierarchyFromQueryParams } from "../tools/useInitHierarchyFromQueryParams";
+import { positionLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap";
 
 const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readOnly, showWarning, positionLayout, newEntity }) => {
   

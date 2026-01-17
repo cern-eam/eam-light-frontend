@@ -9,7 +9,6 @@ import GridOnIcon from "@mui/icons-material/GridOn";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import BlockUi from "react-block-ui";
 import { Launch, Web } from "@mui/icons-material";
-import { equipmentLayoutPropertiesMap } from "./equipment/EquipmentTools";
 import ResizableIFrame from "../components/iframes/ResizableIframe";
 import CustomFieldTools from "../components/customfields/CustomFieldTools";
 import { fromEAMValue } from "../../hooks/tools";
@@ -383,7 +382,7 @@ export const getCustomTabRegions = (
   screenCode,
   equipment,
   userData,
-  layoutPropertiesMap = equipmentLayoutPropertiesMap
+  layoutPropertiesMap 
 ) => {
   return [] // TODO the custom tab regions should be not be visible by default
 

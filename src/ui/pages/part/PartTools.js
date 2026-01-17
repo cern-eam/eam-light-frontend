@@ -1,8 +1,13 @@
+import { getPartTrackingMethods } from "../../../tools/WSParts";
+
 // MAPPING BETWEEN ENTITY KEYS AND LAYOUT ID
 export const layoutPropertiesMap =  {
 
     partcode: {
-        noOrgDescProps: true
+        noOrgDescProps: true,
+        extraProps: (ctx) => ({
+            hidden: !ctx.newEntity
+        })
     },
 
     uom: {
@@ -11,6 +16,12 @@ export const layoutPropertiesMap =  {
                 code: "uomcode",
                 desc: "description"
             }
+        }
+    },
+
+    trackingtype: {
+        autocompleteHandlerData: { 
+            handler: getPartTrackingMethods
         }
     }
 }

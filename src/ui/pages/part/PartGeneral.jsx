@@ -14,7 +14,7 @@ const PartGeneral = (props) => {
     <React.Fragment>
       {isMultiOrg && newEntity && (<EAMSelect {...register("organization")} />)}
 
-      {newEntity && <EAMTextField {...register("partcode")} />}
+      <EAMTextField {...register("partcode")} hidden={!newEntity}/>
 
       <EAMTextField {...register("description")} />
 
@@ -24,7 +24,7 @@ const PartGeneral = (props) => {
 
       <EAMComboAutocomplete {...register("uom")} />
 
-      <EAMSelect {...register("trackingtype")} autocompleteHandler={getPartTrackingMethods}/>
+      <EAMComboAutocomplete {...register("trackingtype")} />
 
       <EAMComboAutocomplete {...register("commoditycode")} />
 

@@ -39,6 +39,8 @@ import CustomFields from "../../components/customfields/CustomFields";
 import { getOrg } from "../../../hooks/tools";
 import { Article } from "@mui/icons-material";
 import Documents from "../../components/documents/Documents";
+import ScreenContainer from "../../components/ScreenContainer";
+import StatusRow from "../../components/statusrow/StatusRow";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -140,7 +142,10 @@ const Part = () => {
         label: "General",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        render: () => <PartGeneral {...commonProps} screenCode={screenCode} />,
+        render: () => <ScreenContainer register={register} screenLayout={partLayout} layoutPropertiesMap={layoutPropertiesMap} ctx={{newEntity}} containers={['cont_1', 'cont_2', 'cont_3', 'cont_4']}
+                       footer={!newEntity &&
+                              <StatusRow entity={part} entityType={"part"} screenCode={screenCode} code={id?.code} org={id?.org} style={{ marginTop: "10px", marginBottom: "-10px" }}/>}/>, 
+        //render: () => <PartGeneral {...commonProps} screenCode={screenCode} />,
         column: 1,
         order: 1,
         summaryIcon: DescriptionIcon,
