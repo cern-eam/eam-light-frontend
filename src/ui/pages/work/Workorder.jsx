@@ -282,7 +282,7 @@ const Workorder = () => {
         maximizable: false,
         customVisibility: () =>
           isRegionAvailable("SCHEDULING", commonProps.workOrderLayout),
-        render: () => <WorkorderScheduling {...commonProps} />,
+        render: () => <WorkorderScheduling {...commonProps} />, //<ScreenContainer register={register} screenLayout={workOrderLayout} containers={['cont_9']}/>,
         column: 1,
         order: 2,
         summaryIcon: CalendarMonthIcon,

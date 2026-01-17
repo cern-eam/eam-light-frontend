@@ -2,19 +2,18 @@ import EAMCheckbox from 'eam-components/dist/ui/components/inputs-ng/EAMCheckbox
 import EAMComboAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete';
 import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePicker';
 import EAMDateTimePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDateTimePicker';
-import EAMSelect from 'eam-components/dist/ui/components/inputs-ng/EAMSelect';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import EAMUDF from './userdefinedfields/EAMUDF';
 
 const EAMInput = (props) => {
 
-    const {type, autocompleteHandler, elementInfo} = props;
+    const {type, autocompleteHandler, elementInfo, disabled} = props;
     
     if (elementInfo.elementId?.startsWith('udf')) {
         return <EAMUDF {...props}/>
     }
 
-    if (autocompleteHandler) {
+    if (autocompleteHandler && !disabled) {
         return <EAMComboAutocomplete {...props} />
     }
 

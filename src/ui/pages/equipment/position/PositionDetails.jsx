@@ -23,7 +23,6 @@ const PositionDetails = (props) => {
             <EAMComboAutocomplete {...register('criticality')}
                 autocompleteHandler={readUserCodes}
                 autocompleteHandlerParams={["OBCR"]}
-                selectMode={true}
             />
 
             <EAMComboAutocomplete {...register('manufacturer')} />
