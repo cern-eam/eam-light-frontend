@@ -30,7 +30,6 @@ import { TAB_CODES } from "../../../components/entityregions/TabCodeMapping";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import EquipmentGraphIframe from "../../../components/iframes/EquipmentGraphIframe";
 import { ENTITY_TYPE } from "../../../components/Toolbar";
-import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import {
   getCustomTabRegions,
   getTabAvailability,
@@ -46,11 +45,10 @@ import {
   isClosedEquipment,
   onCategoryChange,
 } from "../EquipmentTools";
-import SystemDetails from "./SystemDetails";
-import SystemGeneral from "./SystemGeneral";
 import SystemHierarchy from "./SystemHierarchy";
 import { systemLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
 import ScreenContainer from "../../../components/ScreenContainer.jsx";
+import StatusRow from "../../../components/statusrow/StatusRow.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -164,12 +162,17 @@ const System = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <SystemGeneral
-            showNotification={showNotification}
-            {...commonProps}
-            userData={userData}
-            screenCode={screenCode}
-            screenPermissions={screenPermissions}
+          <ScreenContainer register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} 
+          containers={['cont_1', 'cont_1.1', 'cont_1.2', 'cont_2']}
+          footer={!newEntity &&
+                  <StatusRow
+                    entity={equipment}
+                    entityType={"equipment"}
+                    screenCode={screenCode}
+                    code={id?.code}
+                    org={id?.org}
+                    style={{ marginTop: "10px", marginBottom: "-10px" }}
+                  />}
           />
         ),
         column: 1,
@@ -183,7 +186,9 @@ const System = () => {
         label: "Details",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        render: () => <SystemDetails {...commonProps} />,
+        render: () => (
+          <ScreenContainer register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_3', 'cont_4', 'cont_4.1', 'cont_4.2']}/>
+        ),
         column: 1,
         order: 2,
         summaryIcon: AssignmentIcon,
@@ -348,11 +353,7 @@ const System = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <UserDefinedFields
-            entityLayout={systemLayout.fields}
-            exclusions={["udfchar45"]}
-            {...commonProps}
-          />
+          <ScreenContainer register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_5.4', 'cont_5.5', 'cont_5.6']}/>
         ),
 
         column: 2,

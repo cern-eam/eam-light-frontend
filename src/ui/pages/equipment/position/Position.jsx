@@ -3,10 +3,7 @@ import EquipmentHistory from "../components/EquipmentHistory.jsx";
 import WSEquipment from "../../../../tools/WSEquipment";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
-import PositionGeneral from "./PositionGeneral";
-import PositionDetails from "./PositionDetails";
 import PositionHierarchy from "./PositionHierarchy";
-import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import { ENTITY_TYPE } from "../../../components/Toolbar";
@@ -53,6 +50,7 @@ import { Link } from "react-router-dom";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { positionLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
 import ScreenContainer from "../../../components/ScreenContainer.jsx";
+import StatusRow from "../../../components/statusrow/StatusRow.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -159,12 +157,18 @@ const Position = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <PositionGeneral
-            showNotification={showNotification}
-            {...commonProps}
-            userData={userData}
-            screenCode={screenCode}
-            screenPermissions={screenPermissions}
+          <ScreenContainer register={register} screenLayout={positionLayout} 
+          layoutPropertiesMap={positionLayoutPropertiesMap} ctx={{newEntity, equipment}} 
+          containers={['cont_1', 'cont_1.1', 'cont_1.2', 'cont_2']}
+          footer={!newEntity &&
+                  <StatusRow
+                    entity={equipment}
+                    entityType={"equipment"}
+                    screenCode={screenCode}
+                    code={id?.code}
+                    org={id?.org}
+                    style={{ marginTop: "10px", marginBottom: "-10px" }}
+                  />}
           />
         ),
         column: 1,
@@ -178,7 +182,9 @@ const Position = () => {
         label: "Details",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        render: () => <PositionDetails {...commonProps} />,
+        render: () => (
+          <ScreenContainer register={register} screenLayout={positionLayout} layoutPropertiesMap={positionLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_3', 'cont_4', 'cont_4.1', 'cont_4.2']}/>
+        ),
         column: 1,
         order: 2,
         summaryIcon: AssignmentIcon,
@@ -364,10 +370,7 @@ const Position = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <UserDefinedFields
-            entityLayout={positionLayout.fields}
-            {...commonProps}
-          />
+          <ScreenContainer register={register} screenLayout={positionLayout} layoutPropertiesMap={positionLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_6.4', 'cont_6.5', 'cont_6.6']}/>
         ),
         column: 2,
         order: 10,

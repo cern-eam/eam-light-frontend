@@ -1,5 +1,6 @@
 import { GridTypes } from "../../../../tools/entities/GridRequest";
 import { autocompleteDepartment, readStatuses, readUserCodes } from "../../../../tools/WSGrids";
+import { isMultiOrg } from "../../EntityTools";
 
 export const equipmentLayoutPropertiesMap = {
 
@@ -9,6 +10,12 @@ export const equipmentLayoutPropertiesMap = {
     extraProps: (ctx) => ({
         hidden: !ctx.newEntity
     })
+  },
+
+  organization: {
+    extraProps: {
+        hidden: !isMultiOrg
+    }
   },
 
   equipmentdesc: {
@@ -88,6 +95,16 @@ export const equipmentLayoutPropertiesMap = {
             searchKeys: ['personcode', 'description'],
         }
     },
+
+    assetstatus: {
+    extraProps: (ctx) => (
+        {
+            autocompleteHandler: readStatuses,
+            autocompleteHandlerParams: ["OBJ", ctx.newEntity, ctx.equipment.STATUS.STATUSCODE],
+            renderDependencies: [ctx.newEntity, ctx.equipment.STATUS.STATUSCODE]
+        }
+    )
+  },
 };
 
 //
@@ -110,16 +127,6 @@ export const assetLayoutPropertiesMap = {
   part: {
     link: "/part/",
     clear: 'PartAssociation.STORELOCATION'
-  },
-
-  assetstatus: {
-    extraProps: (ctx) => (
-        {
-            autocompleteHandler: readStatuses,
-            autocompleteHandlerParams: ["OBJ", ctx.newEntity, ctx.equipment.STATUS.STATUSCODE],
-            renderDependencies: [ctx.newEntity, ctx.equipment.STATUS.STATUSCODE]
-        }
-    )
   },
 
   state: {
