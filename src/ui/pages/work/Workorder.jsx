@@ -69,6 +69,7 @@ import { getOrg } from "../../../hooks/tools";
 import useUserDataStore from "../../../state/useUserDataStore";
 import GridTools from "../../../tools/GridTools";
 import { ConsoleLine } from "mdi-material-ui";
+import ScreenContainer from "../../components/ScreenContainer";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -215,7 +216,6 @@ const Workorder = () => {
   }
 
   function onChangeStandardWorkOrder({ ['STANDARDWO.STDWOCODE']: standardWorkOrderCode }) {
-    console.log('std wo', standardWorkOrderCode)
     if (!standardWorkOrderCode) {
       return;
     }
@@ -257,18 +257,21 @@ const Workorder = () => {
         label: "Details",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        render: () => (
-          <WorkorderGeneral
-            {...commonProps}
-            applicationData={applicationData}
-            userData={userData}
-            equipment={equipment}
-            statuses={statuses}
-            newEntity={newEntity}
-            screenCode={screenCode}
-            screenPermissions={screenPermissions}
-          />
-        ),
+        // render: () => (
+        //   <WorkorderGeneral
+        //     {...commonProps}
+        //     applicationData={applicationData}
+        //     userData={userData}
+        //     equipment={equipment}
+        //     statuses={statuses}
+        //     newEntity={newEntity}
+        //     screenCode={screenCode}
+        //     screenPermissions={screenPermissions}
+        //   />
+        // ),
+          render: () => (
+            <ScreenContainer register={register} screenLayout={workOrderLayout} layoutPropertiesMap={layoutPropertiesMap} ctx={{newEntity, workorder, userData}} containers={['cont_1', 'cont_2', 'cont_3', 'cont_5', 'cont_6']}/>
+          ),
         column: 1,
         order: 1,
         summaryIcon: AssignmentIcon,
@@ -282,7 +285,7 @@ const Workorder = () => {
         maximizable: false,
         customVisibility: () =>
           isRegionAvailable("SCHEDULING", commonProps.workOrderLayout),
-        render: () => <WorkorderScheduling {...commonProps} />, //<ScreenContainer register={register} screenLayout={workOrderLayout} containers={['cont_9']}/>,
+        render: () => <ScreenContainer register={register} screenLayout={workOrderLayout} containers={['cont_4', 'cont_9']}/>,
         column: 1,
         order: 2,
         summaryIcon: CalendarMonthIcon,
@@ -750,7 +753,7 @@ const Workorder = () => {
   // CALLBACKS FOR ENTITY CLASS
   //
   function postInit(wo) {
-    readStatuses("", true);
+    //readStatuses("", true);
     setCurrentWorkOrder(null);
     updateWorkorderProperty(
       "WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE",
@@ -789,12 +792,12 @@ const Workorder = () => {
 
     updateWorkorderProperty("Activities", null);
     updateWorkorderProperty("confirmincompletechecklist", "confirmed");
-    readStatuses(workorder.STATUS.STATUSCODE, false);
+    //readStatuses(workorder.STATUS.STATUSCODE, false);
     readOtherIdMapping(workorder.WORKORDERID.JOBNUM);
   }
 
   function postCopy() {
-    readStatuses("", true);
+    //readStatuses("", true);
     updateWorkorderProperty("ENTEREDBY", null)
     updateWorkorderProperty("CREATEDBY", null)
     updateWorkorderProperty("CREATEDDATE", null)

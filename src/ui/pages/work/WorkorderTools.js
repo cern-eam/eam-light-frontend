@@ -1,6 +1,7 @@
 import { GridTypes } from "../../../tools/entities/GridRequest";
 import { autocompleteDepartment } from "../../../tools/WSGrids";
 import WSWorkorders from "../../../tools/WSWorkorders";
+import WSWorkorder from "../../../tools/WSWorkorders";
 
 export const bookLabourPropertiesMap = {
 
@@ -14,7 +15,21 @@ export const bookLabourPropertiesMap = {
 export const layoutPropertiesMap = {
 
     workorderstatus: {
-        alias: "statuscode"
+        alias: "statuscode",
+        extraProps: (ctx) => ({
+            autocompleteHandler: WSWorkorder.getWorkOrderStatusValues,
+            autocompleteHandlerParams: [ctx.workorder.STATUS.STATUSCODE, ctx.newEntity],
+            renderDependencies: [ctx.workorder.STATUS.STATUSCODE, ctx.newEntity],
+            optionsTransformer: options => options.map(o => ({ code: o.code, desc: o.desc?.replace(`${o.code} - `, "") }))
+        })
+    },
+
+    workordertype: {
+        extraProps: (ctx) => ({
+            autocompleteHandler: WSWorkorders.getWorkOrderTypeValues,
+            autocompleteHandlerParams: [ctx.userData.eamAccount.userGroup],
+            optionsTransformer: options => options.map(o => ({ code: o.code, desc: o.desc?.replace(`${o.code} - `, "") }))
+        })
     },
 
     equipment: {
@@ -29,7 +44,10 @@ export const layoutPropertiesMap = {
             gridType: GridTypes.LIST
         },
         link: "/equipment/",
-        alias: "equipmentCode"
+        alias: "equipmentCode",
+        extraProps: {
+            barcodeScanner: true
+        }
         //onChange: (v1, v2) => console.log(v1, v2)
     },
 

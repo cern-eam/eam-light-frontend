@@ -45,7 +45,7 @@ class WSWorkorders {
     //
     // DROP DOWN VALUES FOR WOS
     //
-    getWorkOrderStatusValues(oldStatus, newWorkOrder, config = {}) {
+    getWorkOrderStatusValues({handlerParams: [oldStatus, newWorkOrder]}, config = {}) {
         let gridRequest = new GridRequest("LVWRSTDRP", GridTypes.LOV)
         if (newWorkOrder) {
             gridRequest.addParam("param.poldstat", "-");
