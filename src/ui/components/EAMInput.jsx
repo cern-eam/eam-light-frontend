@@ -8,7 +8,7 @@ import EAMUDF from './userdefinedfields/EAMUDF';
 const EAMInput = (props) => {
 
     const {type, autocompleteHandler, elementInfo, disabled} = props;
-    
+
     if (elementInfo.elementId?.startsWith('udf')) {
         return <EAMUDF {...props}/>
     }

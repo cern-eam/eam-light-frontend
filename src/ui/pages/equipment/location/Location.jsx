@@ -12,7 +12,6 @@ import { TAB_CODES } from "../../../components/entityregions/TabCodeMapping";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer";
 import { ENTITY_TYPE } from "../../../components/Toolbar";
-import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import {
   getTabAvailability,
   getTabInitialVisibility,
@@ -40,6 +39,7 @@ import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
 import { locationLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
+import ScreenContainer from "../../../components/ScreenContainer.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -310,10 +310,7 @@ export default Location = (props) => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <UserDefinedFields
-            entityLayout={locationLayout.fields}
-            {...commonProps}
-          />
+          <ScreenContainer  register={register} screenLayout={locationLayout} layoutPropertiesMap={locationLayoutPropertiesMap}  containers={['cont_6', 'cont_7']}/>
         ),
         column: 2,
         order: 9,
