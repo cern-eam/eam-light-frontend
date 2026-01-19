@@ -55,7 +55,8 @@ class WSWorkorders {
 			gridRequest.addParam("param.pexcclause", "A");
         }
         gridRequest.addParam("param.pfunrentity", "EVNT");
-        return getGridData(gridRequest).then(response => transformResponse(response, {code: "code", desc: "description"}));
+        return getGridData(gridRequest).then(response => transformResponse(response, 
+            {code: "code", desc: option => option.description?.replace(`${option.code} - `, "")}));
     
     }
 
@@ -63,7 +64,8 @@ class WSWorkorders {
         let gridRequest = new GridRequest("LVGROUPWOTYPE", GridTypes.LOV)
         gridRequest.addParam("parameter.pagemode", null);
 		gridRequest.addParam("parameter.usergroup", options.handlerParams[0]);
-        return getGridData(gridRequest).then(response => transformResponse(response, {code: "typecode", desc: "codedescription"}));
+        return getGridData(gridRequest).then(response => transformResponse(response, 
+            {code: "typecode", desc: option => option.codedescription?.replace(`${option.typecode} - `, "")}));
     }
 
     getWorkOrderPriorities(config = {}) {
