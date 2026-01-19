@@ -1,11 +1,10 @@
 import * as React from "react";
-import EAMCheckbox from "eam-components/dist/ui/components/inputs-ng/EAMCheckbox";
 import WSWorkorders from "../../../tools/WSWorkorders";
 import EAMComboAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete';
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
+import WSWorkorder from "../../../tools/WSWorkorders";
 import { isDepartmentReadOnly, isMultiOrg } from "../EntityTools";
-import EAMUDF from "@/ui/components/userdefinedfields/EAMUDF";
 import { IconButton } from "@mui/material";
 import { FileTree } from "mdi-material-ui";
 import useEquipmentTreeStore from "../../../state/useEquipmentTreeStore";
@@ -72,7 +71,7 @@ function WorkorderGeneral(props) {
         autocompleteHandlerParams={[userGroup]}
       />
 
-      <EAMSelect
+      <EAMComboAutocomplete
         {...register("workorderstatus")}
         disabled={
           isDepartmentReadOnly(workorder.DEPARTMENTID?.DEPARTMENTCODE, userData) ||
@@ -80,9 +79,12 @@ function WorkorderGeneral(props) {
           workorder?.STATUS?.STATUSCODE === 'A'
           //!workorder.jtAuthCanUpdate
         }
-        renderSuggestion={(suggestion) => suggestion.desc}
-        renderValue={(value) => value.desc || value.code}
-        options={statuses}
+        //renderSuggestion={(suggestion) => suggestion.desc}
+        //renderValue={(value) => value.desc || value.code}
+        //options={statuses}
+        autocompleteHandler={WSWorkorder.getWorkOrderStatusValues}
+        autocompleteHandlerParams={[workorder.STATUS.STATUSCODE, newEntity]}
+        optionsTransformer={options => options.map(o => ({ code: o.code, desc: o.desc?.replace(`${o.code} - `, "") }))}
       />
 
       <EAMComboAutocomplete {...register("priority")} />

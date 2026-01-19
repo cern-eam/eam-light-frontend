@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import { createPart, deletePart, getPart, initPart, updatePart } from "../../../tools/WSParts";
-import PartGeneral from "./PartGeneral";
-import UserDefinedFields from "../../components/userdefinedfields/UserDefinedFields";
 import PartStock from "./PartStock";
 import Comments from "eam-components/dist/ui/components/comments/Comments";
 import PartWhereUsed from "./PartWhereUsed";
@@ -158,10 +156,7 @@ const Part = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <UserDefinedFields
-            entityLayout={partLayout.fields}
-            {...commonProps}
-          />
+          <ScreenContainer register={register} screenLayout={partLayout} layoutPropertiesMap={layoutPropertiesMap} ctx={{newEntity}} containers={['cont_11.3', 'cont_11.6', 'cont_11.9']}/>
         ),
         column: 1,
         order: 2,

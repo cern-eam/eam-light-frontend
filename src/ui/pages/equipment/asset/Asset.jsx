@@ -408,7 +408,6 @@ const Asset = () => {
         label: "User Defined Fields",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        //render: () => <UserDefinedFields {...commonProps} entityLayout={assetLayout.fields} />,
         render: () => (
           <ScreenContainer register={register} screenLayout={assetLayout} layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_15', 'cont_16']}/>
         ),
