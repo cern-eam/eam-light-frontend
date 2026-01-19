@@ -4,7 +4,6 @@ import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import { ENTITY_TYPE } from "../../../components/Toolbar.jsx";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
-import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
 import AssetHierarchy from "./AssetHierarchy";

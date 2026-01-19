@@ -19,7 +19,6 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
 import NCRGeneral from "./NCRGeneral.jsx";
 import { isRegionAvailable, layoutPropertiesMap } from "./NCRTools.js";
-import UserDefinedFields from "../../../components/userdefinedfields/UserDefinedFields.jsx";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import EDMSDoclightIframeContainer from "@/ui/components/iframes/EDMSDoclightIframeContainer";
 import Observations from "./observations/Observations";
@@ -27,6 +26,7 @@ import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import WSEquipment from "../../../../tools/WSEquipment.js";
 import { isCernMode } from "../../../components/CERNMode.js";
 import { getOrg } from "../../../../hooks/tools.js";
+import ScreenContainer from "../../../components/ScreenContainer.jsx";
 
 const NCR = () => {
 
@@ -209,10 +209,7 @@ const NCR = () => {
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
                 render: () => (
-                    <UserDefinedFields
-                        entityLayout={ncrLayout.fields}
-                        {...commonProps}
-                    />
+                    <ScreenContainer register={register} screenLayout={ncrLayout} layoutPropertiesMap={layoutPropertiesMap} containers={['cont_10', 'cont_11']}/>
                 ),
                 column: 2,
                 order: 10,

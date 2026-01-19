@@ -14,8 +14,7 @@ import WorkorderChildren from "./childrenwo/WorkorderChildren";
 import MeterReadingWO from "./meter/MeterReadingWO";
 import PartUsage from "./partusage/PartUsage";
 import WorkorderClosingCodes from "./WorkorderClosingCodes";
-import WorkorderGeneral from "./WorkorderGeneral";
-import WorkorderScheduling from "./WorkorderScheduling";
+import DescriptionIcon from "@mui/icons-material/Description";
 import {
   isReadOnlyCustomHandler,
   isRegionAvailable,
@@ -38,7 +37,6 @@ import {
 } from "../EntityTools";
 import WSWorkorders from "../../../tools/WSWorkorders";
 import useEntity from "@/hooks/useEntity";
-import UserDefinedFields from "@/ui/components/userdefinedfields/UserDefinedFields";
 import { isHidden } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
@@ -206,8 +204,6 @@ const Workorder = () => {
           updateWorkorderProperty("COSTCODEID", equipment.COSTCODEID);
         }
 
-        //TODO warranty: linearDetails.ISWARRANTYACTIVE,
-
         if (linearDetails.body?.data?.ISWARRANTYACTIVE === "true") {
           showWarning("This equipment is currently under warranty.");
         }
@@ -251,26 +247,35 @@ const Workorder = () => {
       register,
     };
 
+    const screenContainerProps = {
+      register,
+      screenLayout: workOrderLayout,
+      layoutPropertiesMap,
+      ctx: { newEntity, workorder, userData },
+    };
+
     return [
+      {
+        id: "GENERAL",
+        label: "General",
+        isVisibleWhenNewEntity: true,
+        maximizable: false,
+          render: () => (
+            <ScreenContainer {...screenContainerProps} containers={['cont_1', 'cont_3', 'cont_2']}/>
+          ),
+        column: 1,
+        order: 1,
+        summaryIcon: DescriptionIcon,
+        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+      },
       {
         id: "DETAILS",
         label: "Details",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        // render: () => (
-        //   <WorkorderGeneral
-        //     {...commonProps}
-        //     applicationData={applicationData}
-        //     userData={userData}
-        //     equipment={equipment}
-        //     statuses={statuses}
-        //     newEntity={newEntity}
-        //     screenCode={screenCode}
-        //     screenPermissions={screenPermissions}
-        //   />
-        // ),
           render: () => (
-            <ScreenContainer register={register} screenLayout={workOrderLayout} layoutPropertiesMap={layoutPropertiesMap} ctx={{newEntity, workorder, userData}} containers={['cont_1', 'cont_2', 'cont_3', 'cont_5', 'cont_6']}/>
+            <ScreenContainer {...screenContainerProps} containers={['cont_5', 'cont_6']}/>
           ),
         column: 1,
         order: 1,
@@ -285,7 +290,7 @@ const Workorder = () => {
         maximizable: false,
         customVisibility: () =>
           isRegionAvailable("SCHEDULING", commonProps.workOrderLayout),
-        render: () => <ScreenContainer register={register} screenLayout={workOrderLayout} containers={['cont_4', 'cont_9']}/>,
+        render: () => <ScreenContainer {...screenContainerProps} containers={['cont_4', 'cont_9']}/>,
         column: 1,
         order: 2,
         summaryIcon: CalendarMonthIcon,
@@ -673,10 +678,7 @@ const Workorder = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <UserDefinedFields
-            {...commonProps}
-            entityLayout={workOrderLayout.fields}
-          />
+          <ScreenContainer {...screenContainerProps} containers={['cont_8.4', 'cont_8.5', 'cont_8.6']}/>
         ),
         column: 2,
         order: 10,
@@ -753,7 +755,6 @@ const Workorder = () => {
   // CALLBACKS FOR ENTITY CLASS
   //
   function postInit(wo) {
-    //readStatuses("", true);
     setCurrentWorkOrder(null);
     updateWorkorderProperty(
       "WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE",
@@ -792,12 +793,10 @@ const Workorder = () => {
 
     updateWorkorderProperty("Activities", null);
     updateWorkorderProperty("confirmincompletechecklist", "confirmed");
-    //readStatuses(workorder.STATUS.STATUSCODE, false);
     readOtherIdMapping(workorder.WORKORDERID.JOBNUM);
   }
 
   function postCopy() {
-    //readStatuses("", true);
     updateWorkorderProperty("ENTEREDBY", null)
     updateWorkorderProperty("CREATEDBY", null)
     updateWorkorderProperty("CREATEDDATE", null)
@@ -822,11 +821,6 @@ const Workorder = () => {
   //
   // DROP DOWN VALUES
   //
-  const readStatuses = (status, newwo) => {
-    WSWorkorder.getWorkOrderStatusValues(status, newwo)
-      .then((response) => setStatuses(response.body.data))
-      .catch(console.error);
-  };
 
   const postAddActivityHandler = () => {
     //Refresh the activities in the checklist

@@ -27,6 +27,10 @@ const EAMUDF = (props) => {
     return <EAMDateTimePicker {...props} />;
   }
 
+  if (fieldType === "textarea") {
+    return <EAMTextField textarea={true} {...props} />;
+  }
+
   switch (udfLookupType) {
     case CODE:
       return (
