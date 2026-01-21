@@ -19,6 +19,8 @@ import {
   isReadOnlyCustomHandler,
   isRegionAvailable,
   layoutPropertiesMap,
+  WO_BLOCK_CONTAINERS,
+  WO_BLOCKS,
 } from "./WorkorderTools";
 import EntityRegions from "../../components/entityregions/EntityRegions";
 import IconButton from "@mui/material/IconButton";
@@ -66,8 +68,8 @@ import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
 import { getOrg } from "../../../hooks/tools";
 import useUserDataStore from "../../../state/useUserDataStore";
 import GridTools from "../../../tools/GridTools";
-import { ConsoleLine } from "mdi-material-ui";
-import ScreenContainer from "../../components/ScreenContainer";
+import ScreenContainers from "../../layout/ScreenContainers";
+import ScreenBlocks from "../../layout/ScreenBlocks";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -261,7 +263,7 @@ const Workorder = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
           render: () => (
-            <ScreenContainer {...screenContainerProps} containers={['cont_1', 'cont_3', 'cont_2']}/>
+            <ScreenContainers {...screenContainerProps} containers={['cont_1', 'cont_3', 'cont_2']}/>
           ),
         column: 1,
         order: 1,
@@ -275,7 +277,7 @@ const Workorder = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
           render: () => (
-            <ScreenContainer {...screenContainerProps} containers={['cont_5', 'cont_6']}/>
+            <ScreenContainers {...screenContainerProps} containers={['cont_5', 'cont_6']}/>
           ),
         column: 1,
         order: 1,
@@ -290,7 +292,7 @@ const Workorder = () => {
         maximizable: false,
         customVisibility: () =>
           isRegionAvailable("SCHEDULING", commonProps.workOrderLayout),
-        render: () => <ScreenContainer {...screenContainerProps} containers={['cont_4', 'cont_9']}/>,
+        render: () => <ScreenContainers {...screenContainerProps} containers={['cont_4', 'cont_9']}/>,
         column: 1,
         order: 2,
         summaryIcon: CalendarMonthIcon,
@@ -678,12 +680,12 @@ const Workorder = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainer {...screenContainerProps} containers={['cont_8.4', 'cont_8.5', 'cont_8.6']}/>
+          <ScreenBlocks {...screenContainerProps} blocks={[WO_BLOCKS.USERDEFINEDFIELDSSECTION]} blockContainers={WO_BLOCK_CONTAINERS}/>
         ),
         column: 2,
         order: 10,
         summaryIcon: AssignmentIndIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+        //ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
       },
       ...getTabGridRegions(

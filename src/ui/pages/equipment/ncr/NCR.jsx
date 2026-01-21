@@ -26,7 +26,7 @@ import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import WSEquipment from "../../../../tools/WSEquipment.js";
 import { isCernMode } from "../../../components/CERNMode.js";
 import { getOrg } from "../../../../hooks/tools.js";
-import ScreenContainer from "../../../components/ScreenContainer.jsx";
+import ScreenContainers from "../../../layout/ScreenContainers.jsx";
 
 const NCR = () => {
 
@@ -209,7 +209,7 @@ const NCR = () => {
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
                 render: () => (
-                    <ScreenContainer register={register} screenLayout={ncrLayout} layoutPropertiesMap={layoutPropertiesMap} containers={['cont_10', 'cont_11']}/>
+                    <ScreenContainers register={register} screenLayout={ncrLayout} layoutPropertiesMap={layoutPropertiesMap} containers={['cont_10', 'cont_11']}/>
                 ),
                 column: 2,
                 order: 10,

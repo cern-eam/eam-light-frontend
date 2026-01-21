@@ -47,8 +47,8 @@ import {
 } from "../EquipmentTools";
 import SystemHierarchy from "./SystemHierarchy";
 import { systemLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
-import ScreenContainer from "../../../components/ScreenContainer.jsx";
 import StatusRow from "../../../components/statusrow/StatusRow.jsx";
+import ScreenContainers from "../../../layout/ScreenContainers.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -162,7 +162,7 @@ const System = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainer register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} 
+          <ScreenContainers register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} 
           containers={['cont_1', 'cont_1.1', 'cont_1.2', 'cont_2']}
           footer={!newEntity &&
                   <StatusRow
@@ -187,7 +187,7 @@ const System = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainer register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_3', 'cont_4', 'cont_4.1', 'cont_4.2']}/>
+          <ScreenContainers register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_3', 'cont_4', 'cont_4.1', 'cont_4.2']}/>
         ),
         column: 1,
         order: 2,
@@ -201,7 +201,7 @@ const System = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainer register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_4.3', 'cont_4.4']}/>
+          <ScreenContainers register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_4.3', 'cont_4.4']}/>
         ),
         column: 1,
         order: 10,
@@ -353,7 +353,7 @@ const System = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainer register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_5.4', 'cont_5.5', 'cont_5.6']}/>
+          <ScreenContainers register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_5.4', 'cont_5.5', 'cont_5.6']}/>
         ),
 
         column: 2,
