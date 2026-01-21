@@ -49,8 +49,8 @@ import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
 import { Link } from "react-router-dom";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { positionLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
-import ScreenContainer from "../../../components/ScreenContainer.jsx";
 import StatusRow from "../../../components/statusrow/StatusRow.jsx";
+import ScreenContainers from "../../../layout/ScreenContainers.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -157,7 +157,7 @@ const Position = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainer register={register} screenLayout={positionLayout} 
+          <ScreenContainers register={register} screenLayout={positionLayout} 
           layoutPropertiesMap={positionLayoutPropertiesMap} ctx={{newEntity, equipment}} 
           containers={['cont_1', 'cont_1.1', 'cont_1.2', 'cont_2']}
           footer={!newEntity &&
@@ -183,7 +183,7 @@ const Position = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainer register={register} screenLayout={positionLayout} layoutPropertiesMap={positionLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_3', 'cont_4', 'cont_4.1', 'cont_4.2']}/>
+          <ScreenContainers register={register} screenLayout={positionLayout} layoutPropertiesMap={positionLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_3', 'cont_4', 'cont_4.1', 'cont_4.2']}/>
         ),
         column: 1,
         order: 2,
@@ -197,7 +197,7 @@ const Position = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainer register={register} screenLayout={positionLayout} layoutPropertiesMap={positionLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_4.3', 'cont_4.4']}/>
+          <ScreenContainers register={register} screenLayout={positionLayout} layoutPropertiesMap={positionLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_4.3', 'cont_4.4']}/>
         ),
         column: 1,
         order: 10,
@@ -370,7 +370,7 @@ const Position = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainer register={register} screenLayout={positionLayout} layoutPropertiesMap={positionLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_6.4', 'cont_6.5', 'cont_6.6']}/>
+          <ScreenContainers register={register} screenLayout={positionLayout} layoutPropertiesMap={positionLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_6.4', 'cont_6.5', 'cont_6.6']}/>
         ),
         column: 2,
         order: 10,

@@ -39,7 +39,7 @@ import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
 import { locationLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
-import ScreenContainer from "../../../components/ScreenContainer.jsx";
+import ScreenContainers from "../../../layout/ScreenContainers.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -310,7 +310,7 @@ export default Location = (props) => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainer  register={register} screenLayout={locationLayout} layoutPropertiesMap={locationLayoutPropertiesMap}  containers={['cont_6', 'cont_7']}/>
+          <ScreenContainers register={register} screenLayout={locationLayout} layoutPropertiesMap={locationLayoutPropertiesMap}  containers={['cont_6', 'cont_7']}/>
         ),
         column: 2,
         order: 9,

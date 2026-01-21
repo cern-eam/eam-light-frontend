@@ -45,8 +45,8 @@ import GridRequest, { GridTypes } from "../../../../tools/entities/GridRequest.j
 import { getGridData } from "../../../../tools/WSGrids.js";
 import { extractSingleResult } from "../../../../tools/GridTools.js";
 import { assetLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
-import ScreenContainer from "../../../components/ScreenContainer.jsx";
 import StatusRow from "../../../components/statusrow/StatusRow.jsx";
+import ScreenContainers from "../../../layout/ScreenContainers.jsx";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -194,7 +194,7 @@ const Asset = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainer register={register} screenLayout={assetLayout} 
+          <ScreenContainers register={register} screenLayout={assetLayout} 
           layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} 
           containers={['cont_1', 'cont_1.1', 'cont_1.2', 'cont_2']}
           footer={!newEntity &&
@@ -220,7 +220,7 @@ const Asset = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainer register={register} screenLayout={assetLayout} layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_3', 'cont_4', 'cont_5', 'cont_6', 'cont_7', 'cont_8']}/>
+          <ScreenContainers register={register} screenLayout={assetLayout} layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_3', 'cont_4', 'cont_5', 'cont_6', 'cont_7', 'cont_8']}/>
         ),
         column: 1,
         order: 2,
@@ -234,7 +234,7 @@ const Asset = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainer register={register} screenLayout={assetLayout} layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_9', 'cont_10']}/>
+          <ScreenContainers register={register} screenLayout={assetLayout} layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_9', 'cont_10']}/>
         ),
         column: 1,
         order: 10,
@@ -408,7 +408,7 @@ const Asset = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainer register={register} screenLayout={assetLayout} layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_15', 'cont_16']}/>
+          <ScreenContainers register={register} screenLayout={assetLayout} layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_15', 'cont_16']}/>
         ),
         column: 2,
         order: 10,

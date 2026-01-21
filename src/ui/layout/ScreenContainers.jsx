@@ -1,7 +1,7 @@
 import React from "react";
-import EAMInput from "./EAMInput";
+import EAMInput from "../components/EAMInput";
 
-const ScreenContainer = ({ register, screenLayout, layoutPropertiesMap = {}, ctx = {}, containers = [], footer }) => {
+const ScreenContainers = ({ register, screenLayout, layoutPropertiesMap = {}, ctx = {}, containers = [], footer }) => {
 
   const fields = screenLayout?.fields || {};
 
@@ -36,4 +36,4 @@ const ScreenContainer = ({ register, screenLayout, layoutPropertiesMap = {}, ctx
   );
 };
 
-export default ScreenContainer;
+export default ScreenContainers;
