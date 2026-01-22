@@ -263,7 +263,7 @@ const Workorder = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
           render: () => (
-            <ScreenContainers {...screenContainerProps} containers={['cont_1', 'cont_3', 'cont_2']}/>
+            <ScreenBlocks {...screenContainerProps} blocks={[WO_BLOCKS.GENERAL]} blockContainers={WO_BLOCK_CONTAINERS}/>
           ),
         column: 1,
         order: 1,
@@ -277,7 +277,7 @@ const Workorder = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
           render: () => (
-            <ScreenContainers {...screenContainerProps} containers={['cont_5', 'cont_6']}/>
+            <ScreenBlocks {...screenContainerProps} blocks={[WO_BLOCKS.WODETAILSSECTION]} blockContainers={WO_BLOCK_CONTAINERS}/>
           ),
         column: 1,
         order: 1,
@@ -292,7 +292,7 @@ const Workorder = () => {
         maximizable: false,
         customVisibility: () =>
           isRegionAvailable("SCHEDULING", commonProps.workOrderLayout),
-        render: () => <ScreenContainers {...screenContainerProps} containers={['cont_4', 'cont_9']}/>,
+        render: () => <ScreenContainers {...screenContainerProps} containers={['cont_9']}/>,
         column: 1,
         order: 2,
         summaryIcon: CalendarMonthIcon,
@@ -307,7 +307,7 @@ const Workorder = () => {
         customVisibility: () =>
           isRegionAvailable("CLOSING_CODES", commonProps.workOrderLayout),
         render: () => (
-          <WorkorderClosingCodes {...commonProps} equipment={equipment} />
+          <ScreenContainers {...screenContainerProps} containers={['cont_999']}/>
         ),
         column: 1,
         order: 3,
