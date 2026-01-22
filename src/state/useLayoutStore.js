@@ -1,6 +1,12 @@
 import { create } from "zustand";
 import WS from "../tools/WS";
 
+const applyWSJOBSContainerOverrides = (screenLayout) => {
+  ['actioncode', 'causecode', 'failurecode', 'failuremodedesc', 'humanfactor', 'humanoversight', 'methodofdetection', 'problemcode', 'symptom', 'tacticalcause', 'workmanship']
+    .forEach(f => { if (screenLayout.fields?.[f]) screenLayout.fields[f].fieldContainer = 'cont_99'; });
+  return screenLayout;
+};
+
 const useLayoutStore = create((set) => ({
   screenLayout: {},
   screenLayoutFetchError: false, // Add a boolean property to track fetch errors
@@ -26,6 +32,8 @@ const useLayoutStore = create((set) => ({
       } else if (screen === "OSOBJP") {
         delete newScreenLayout.customGridTabs.XPI;
         delete newScreenLayout.customGridTabs.XPM;
+      } else if (parentScreen === "WSJOBS") {
+        newScreenLayout = applyWSJOBSContainerOverrides(newScreenLayout);
       }
 
       set((state) => ({
