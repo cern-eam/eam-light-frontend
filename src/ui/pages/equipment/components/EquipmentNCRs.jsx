@@ -3,7 +3,7 @@ import EISTable from 'eam-components/dist/ui/components/table';
 import WSNCRs from '../../../../tools/WSNCRs';
 import SimpleEmptyState from 'eam-components/dist/ui/components/emptystates/SimpleEmptyState'
 
-function AssetNCRs({equipment}) {
+function EquipmentNCRs({equipment}) {
 
     let headers = ['NCR', 'Description', 'Status', 'Severity'];
     let propCodes = ['nonconformity', 'description', 'status_display', 'severity_display'];
@@ -41,4 +41,4 @@ function AssetNCRs({equipment}) {
     );
 }
 
-export default AssetNCRs;
+export default EquipmentNCRs;

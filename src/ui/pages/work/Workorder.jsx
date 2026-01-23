@@ -60,7 +60,6 @@ import HardwareIcon from "@mui/icons-material/Hardware";
 import EamlightToolbar from "../../components/EamlightToolbar";
 import useWorkOrderStore from "../../../state/useWorkOrderStore";
 import { isLocalAdministrator } from "../../../state/utils";
-import AssetNCRs from "../../pages/equipment/components/EquipmentNCRs";
 import CustomFields from "../../components/customfields/CustomFields";
 import { getPart } from "../../../tools/WSParts";
 import Documents from "../../components/documents/Documents";
@@ -70,6 +69,7 @@ import useUserDataStore from "../../../state/useUserDataStore";
 import GridTools from "../../../tools/GridTools";
 import ScreenContainers from "../../layout/ScreenContainers";
 import ScreenBlocks from "../../layout/ScreenBlocks";
+import EquipmentNCRs from "../../pages/equipment/components/EquipmentNCRs";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -174,7 +174,6 @@ const Workorder = () => {
     onUnmountHandler: unmountHandler,
     codeQueryParamName: "workordernum",
   });
-
 
   function onChangeEquipment(equipmentData) {
 
@@ -432,21 +431,10 @@ const Workorder = () => {
       },
       {
         id: "NCRS",
-        label: "NCRs",
+        label: "Non Conformities",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () =>
-          applicationData.EL_TBURL ? (
-            <NCRIframeContainer
-              objectType="J"
-              objectID={id?.code}
-              mode="NCR"
-              url={`${applicationData.EL_TBURL}/ncr`}
-              edmsDocListLink={applicationData.EL_EDMSL}
-            />
-          ) : (
-            <AssetNCRs equipment={workorder.EQUIPMENTID?.EQUIPMENTCODE} />
-          ),
+        render: () => <EquipmentNCRs equipment={workorder.EQUIPMENTID?.EQUIPMENTCODE} />,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -455,6 +443,33 @@ const Workorder = () => {
         summaryIcon: BookmarkBorderRoundedIcon,
         ignore:
           !isCernMode &&
+          !getTabAvailability(tabs, TAB_CODES.NONCONFORMITIES_WORKORDER),
+        initialVisibility: getTabInitialVisibility(
+          tabs,
+          TAB_CODES.NONCONFORMITIES
+        ),
+      },
+      {
+        id: "NCRSEDMS",
+        label: "NCRs (EDMS)",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => (
+          <NCRIframeContainer
+            objectType={workorder.OBJTYPE === "S" ? 'X' : workorder.OBJTYPE === "P" ? 'S' : workorder.OBJTYPE}
+            objectID={workorder.EQUIPMENTID?.EQUIPMENTCODE}
+            url={`${applicationData.EL_TBURL}/ncr`}
+            edmsDocListLink={applicationData.EL_EDMSL}
+          />
+        ),
+        RegionPanelProps: {
+          detailsStyle: { padding: 0 },
+        },
+        column: 2,
+        order: 8,
+        summaryIcon: BookmarkBorderRoundedIcon,
+        ignore:
+          !isCernMode ||
           !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_WORK_ORDERS),
         initialVisibility: getTabInitialVisibility(
           tabs,
