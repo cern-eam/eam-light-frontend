@@ -49,6 +49,7 @@ import SystemHierarchy from "./SystemHierarchy";
 import { systemLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
 import StatusRow from "../../../components/statusrow/StatusRow.jsx";
 import ScreenContainers from "../../../layout/ScreenContainers.jsx";
+import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -162,7 +163,7 @@ const System = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainers register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} 
+          <ScreenContainers register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}}
           containers={['cont_1', 'cont_1.1', 'cont_1.2', 'cont_2']}
           footer={!newEntity &&
                   <StatusRow
@@ -322,6 +323,28 @@ const System = () => {
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.NONCONFORMITIES),
       },
       {
+        id: "NCRSEDMS",
+        label: "NCRs (EDMS)",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => (
+          <NCRIframeContainer objectType="X" objectID={id?.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
+        ),
+        RegionPanelProps: {
+          detailsStyle: { padding: 0 },
+        },
+        column: 2,
+        order: 8,
+        summaryIcon: BookmarkBorderRoundedIcon,
+        ignore:
+          !isCernMode ||
+          !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),
+        initialVisibility: getTabInitialVisibility(
+          tabs,
+          TAB_CODES.EDMS_DOCUMENTS_POSITIONS
+        ),
+      },
+      {
         id: "COMMENTS",
         label: "Comments",
         isVisibleWhenNewEntity: true,
@@ -342,7 +365,7 @@ const System = () => {
           detailsStyle: { padding: 0 },
         },
         column: 2,
-        order: 8,
+        order: 9,
         summaryIcon: DriveFileRenameOutlineIcon,
         ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS),
@@ -357,7 +380,7 @@ const System = () => {
         ),
 
         column: 2,
-        order: 9,
+        order: 10,
         summaryIcon: AssignmentIndIcon,
         ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),

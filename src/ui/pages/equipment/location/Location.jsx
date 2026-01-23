@@ -258,28 +258,28 @@ export default Location = (props) => {
       //     column: 2,
       //     order: 7
       // },
-      // {
-      //   id: "NCRS",
-      //   label: "NCRs",
-      //   isVisibleWhenNewEntity: false,
-      //   maximizable: true,
-      //   render: () => (
-      //     <NCRIframeContainer objectType="L" objectID={id?.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
-      //   ),
-      //   RegionPanelProps: {
-      //     detailsStyle: { padding: 0 },
-      //   },
-      //   column: 2,
-      //   order: 8,
-      //   summaryIcon: BookmarkBorderRoundedIcon,
-      //   ignore:
-      //     !isCernMode ||
-      //     !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),
-      //   initialVisibility: getTabInitialVisibility(
-      //     tabs,
-      //     TAB_CODES.EDMS_DOCUMENTS_POSITIONS
-      //   ),
-      // },
+      {
+        id: "NCRSEDMS",
+        label: "NCRs (EDMS)",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => (
+          <NCRIframeContainer objectType="L" objectID={id?.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
+        ),
+        RegionPanelProps: {
+          detailsStyle: { padding: 0 },
+        },
+        column: 2,
+        order: 8,
+        summaryIcon: BookmarkBorderRoundedIcon,
+        ignore:
+          !isCernMode ||
+          !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_LOCATIONS),
+        initialVisibility: getTabInitialVisibility(
+          tabs,
+          TAB_CODES.EDMS_DOCUMENTS_LOCATIONS
+        ),
+      },
       {
         id: "COMMENTS",
         label: "Comments",
@@ -299,7 +299,7 @@ export default Location = (props) => {
           detailsStyle: { padding: 0 },
         },
         column: 2,
-        order: 8,
+        order: 9,
         summaryIcon: DriveFileRenameOutlineIcon,
         ignore: !getTabAvailability(tabs, TAB_CODES.COMMENTS),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.COMMENTS),
@@ -313,7 +313,7 @@ export default Location = (props) => {
           <ScreenContainers register={register} screenLayout={locationLayout} layoutPropertiesMap={locationLayoutPropertiesMap}  containers={['cont_6', 'cont_7']}/>
         ),
         column: 2,
-        order: 9,
+        order: 10,
         summaryIcon: AssignmentIndIcon,
         ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
@@ -334,7 +334,7 @@ export default Location = (props) => {
           />
         ),
         column: 2,
-        order: 10,
+        order: 11,
         summaryIcon: ListAltIcon,
         ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),

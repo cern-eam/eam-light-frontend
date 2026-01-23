@@ -9,6 +9,7 @@ const ResizableIFrame = ({
   iframeResizerOptions = {},
 }) => (
   <IframeResizer
+    key={src}
     {...iframeResizerOptions}
     autoResize
     src={src}
