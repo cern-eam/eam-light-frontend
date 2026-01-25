@@ -12,7 +12,6 @@ import { TAB_CODES } from "../../../components/entityregions/TabCodeMapping";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer";
 import { ENTITY_TYPE } from "../../../components/Toolbar";
-import StatusRow from "../../components/statusrow/StatusRow";
 import {
   getTabAvailability,
   getTabInitialVisibility,
@@ -39,6 +38,7 @@ import EamlightToolbar from "../../../components/EamlightToolbar.jsx";
 import EquipmentNCRs from "../components/EquipmentNCRs.jsx";
 import { locationLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
 import ScreenContainers from "../../../layout/ScreenContainers.jsx";
+import StatusRow from "../../../components/statusrow/StatusRow.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -145,7 +145,6 @@ export default Location = (props) => {
                                 org={id?.org}
                                 style={{ marginTop: "10px", marginBottom: "-10px" }}
                               />}
-        
         />,
         column: 1,
         order: 1,
