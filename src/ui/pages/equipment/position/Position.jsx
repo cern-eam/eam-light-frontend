@@ -157,8 +157,8 @@ const Position = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainers register={register} screenLayout={positionLayout} 
-          layoutPropertiesMap={positionLayoutPropertiesMap} ctx={{newEntity, equipment}} 
+          <ScreenContainers register={register} screenLayout={positionLayout}
+          layoutPropertiesMap={positionLayoutPropertiesMap} ctx={{newEntity, equipment}}
           containers={['cont_1', 'cont_1.1', 'cont_1.2', 'cont_2']}
           footer={!newEntity &&
                   <StatusRow
@@ -317,28 +317,28 @@ const Position = () => {
         ignore: !getTabAvailability(tabs, TAB_CODES.NONCONFORMITIES),
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.NONCONFORMITIES),
       },
-      // {
-      //   id: "NCRS",
-      //   label: "NCRs",
-      //   isVisibleWhenNewEntity: false,
-      //   maximizable: true,
-      //   render: () => (
-      //     <NCRIframeContainer objectType="S" objectID={id?.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
-      //   ),
-      //   RegionPanelProps: {
-      //     detailsStyle: { padding: 0 },
-      //   },
-      //   column: 2,
-      //   order: 8,
-      //   summaryIcon: BookmarkBorderRoundedIcon,
-      //   ignore:
-      //     !isCernMode ||
-      //     !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),
-      //   initialVisibility: getTabInitialVisibility(
-      //     tabs,
-      //     TAB_CODES.EDMS_DOCUMENTS_POSITIONS
-      //   ),
-      // },
+      {
+        id: "NCRSEDMS",
+        label: "NCRs (EDMS)",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => (
+          <NCRIframeContainer objectType="S" objectID={id?.code} url={`${applicationData.EL_TBURL}/ncr`} edmsDocListLink={applicationData.EL_EDMSL}/>
+        ),
+        RegionPanelProps: {
+          detailsStyle: { padding: 0 },
+        },
+        column: 2,
+        order: 8,
+        summaryIcon: BookmarkBorderRoundedIcon,
+        ignore:
+          !isCernMode ||
+          !getTabAvailability(tabs, TAB_CODES.EDMS_DOCUMENTS_POSITIONS),
+        initialVisibility: getTabInitialVisibility(
+          tabs,
+          TAB_CODES.EDMS_DOCUMENTS_POSITIONS
+        ),
+      },
       {
         id: "COMMENTS",
         label: "Comments",

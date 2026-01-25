@@ -7,7 +7,7 @@ const NCRIframeContainer = (props) => {
         profile: 'EAMLIGHT',
         creationMode: 'NCR',
         options: {
-            heightCalculationMethod: 'taggedElement',
+            heightCalculationMethod: 'lowestElement',
         },
         ...props // Allow additional props to override defaults
     };
