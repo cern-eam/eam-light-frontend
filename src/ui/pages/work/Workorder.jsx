@@ -89,7 +89,6 @@ const Workorder = () => {
   const [equipmentMEC, setEquipmentMEC] = useState();
   const [equipment, setEquipment] = useState();
   const [equipmentPart, setEquipmentPart] = useState();
-  const [statuses, setStatuses] = useState([]);
   const [otherIdMapping, setOtherIdMapping] = useState({});
   const [expandChecklistsOptions, setExpandChecklistsOptions] = useState(false);
   const checklists = useRef(null);
@@ -273,7 +272,7 @@ const Workorder = () => {
       },
       {
         id: "DETAILS",
-        label: "Details",
+        label: workOrderLayout.fields?.[WO_BLOCKS.WODETAILSSECTION]?.text || "Detailss",
         isVisibleWhenNewEntity: true,
         maximizable: false,
           render: () => (
@@ -287,7 +286,7 @@ const Workorder = () => {
       },
       {
         id: "SCHEDULING",
-        label: "Scheduling",
+        label: workOrderLayout.fields?.[WO_BLOCKS.SCHEDDETAILSSECTION]?.text || "Scheduling",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         customVisibility: () =>
@@ -594,7 +593,7 @@ const Workorder = () => {
       },
       {
         id: "CUSTOMFIELDS",
-        label: "Custom Fields",
+        label: workOrderLayout.fields?.[WO_BLOCKS.CUSTOMFIELDSSECTION]?.text || "Custom Fields",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
@@ -676,7 +675,7 @@ const Workorder = () => {
       },
       {
         id: "USERDEFINEDFIELDS",
-        label: "User Defined Fields",
+        label: workOrderLayout.fields?.[WO_BLOCKS.USERDEFINEDFIELDSSECTION]?.text || "User Defined Fieldss",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
