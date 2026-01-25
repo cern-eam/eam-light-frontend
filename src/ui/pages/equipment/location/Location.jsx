@@ -12,6 +12,7 @@ import { TAB_CODES } from "../../../components/entityregions/TabCodeMapping";
 import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer";
 import { ENTITY_TYPE } from "../../../components/Toolbar";
+import StatusRow from "../../components/statusrow/StatusRow";
 import {
   getTabAvailability,
   getTabInitialVisibility,
@@ -21,8 +22,6 @@ import {
 } from "../../EntityTools";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
 import EquipmentWorkOrders from "../components/EquipmentWorkOrders";
-import LocationDetails from "./LocationDetails";
-import LocationGeneral from "./LocationGeneral";
 import LocationHierarchy from "./LocationHierarchy";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { Link } from "react-router-dom";
@@ -124,13 +123,30 @@ export default Location = (props) => {
       register,
     };
 
+    const screenContainerProps = {
+      register,
+      screenLayout: locationLayout,
+      layoutPropertiesMap: locationLayoutPropertiesMap
+    };
+
     return [
       {
         id: "GENERAL",
         label: "General",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        render: () => <LocationGeneral {...commonProps} />,
+        render: () => <ScreenContainers {...screenContainerProps} containers={['cont_1', 'cont_2']}
+                      footer={!newEntity &&
+                              <StatusRow
+                                entity={location}
+                                entityType={"equipment"}
+                                screenCode={screenCode}
+                                code={id?.code}
+                                org={id?.org}
+                                style={{ marginTop: "10px", marginBottom: "-10px" }}
+                              />}
+        
+        />,
         column: 1,
         order: 1,
         summaryIcon: DescriptionIcon,
@@ -142,7 +158,7 @@ export default Location = (props) => {
         label: "Details",
         isVisibleWhenNewEntity: true,
         maximizable: false,
-        render: () => <LocationDetails {...commonProps} />,
+        render: () => <ScreenContainers {...screenContainerProps} containers={['cont_3', 'cont_4']}/>,
         column: 1,
         order: 2,
         summaryIcon: AssignmentIcon,
@@ -310,7 +326,7 @@ export default Location = (props) => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainers register={register} screenLayout={locationLayout} layoutPropertiesMap={locationLayoutPropertiesMap}  containers={['cont_6', 'cont_7']}/>
+          <ScreenContainers register={register} screenLayout={locationLayout} layoutPropertiesMap={locationLayoutPropertiesMap}  containers={['cont_6', 'cont_7', 'cont_7.5']}/>
         ),
         column: 2,
         order: 9,
