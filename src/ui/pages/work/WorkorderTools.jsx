@@ -126,6 +126,9 @@ export const layoutPropertiesMap = {
     assignedto: {
         autocompleteHandlerData: {
             searchKeys: ['personcode', 'description']
+        },
+        extraProps: {
+            barcodeScanner: true
         }
     },
 

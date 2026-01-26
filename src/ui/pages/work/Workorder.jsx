@@ -13,7 +13,6 @@ import AdditionalCosts from "./additionalcosts/AdditionalCosts";
 import WorkorderChildren from "./childrenwo/WorkorderChildren";
 import MeterReadingWO from "./meter/MeterReadingWO";
 import PartUsage from "./partusage/PartUsage";
-import WorkorderClosingCodes from "./WorkorderClosingCodes";
 import DescriptionIcon from "@mui/icons-material/Description";
 import {
   isReadOnlyCustomHandler,
@@ -271,7 +270,7 @@ const Workorder = () => {
       },
       {
         id: "DETAILS",
-        label: workOrderLayout.fields?.[WO_BLOCKS.WODETAILSSECTION]?.text || "Detailss",
+        label: workOrderLayout.fields?.[WO_BLOCKS.WODETAILSSECTION]?.text || "Details",
         isVisibleWhenNewEntity: true,
         maximizable: false,
           render: () => (
@@ -349,7 +348,7 @@ const Workorder = () => {
       ),
       {
         id: "ADDITIONALCOSTS",
-        label: "Additional Costs",
+        label: workOrderLayout.tabs[TAB_CODES.ADDITIONAL_COSTS]?.tabDescription || "Additional Costs",
         isVisibleWhenNewEntity: false,
         maximizable: false,
         customVisibility: () =>
@@ -477,7 +476,7 @@ const Workorder = () => {
       },
       {
         id: "COMMENTS",
-        label: "Comments",
+        label: workOrderLayout.tabs[TAB_CODES.COMMENTS]?.tabDescription || "Comments",
         isVisibleWhenNewEntity: true,
         maximizable: true,
         render: () => (
@@ -503,7 +502,7 @@ const Workorder = () => {
       },
       {
         id: "ACTIVITIES",
-        label: "Activities and Booked Labor",
+        label: workOrderLayout.tabs[TAB_CODES.ACTIVITIES]?.tabDescription + ' & ' + workOrderLayout.tabs[TAB_CODES.BOOK_LABOR]?.tabDescription,
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
