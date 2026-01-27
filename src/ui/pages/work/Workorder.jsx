@@ -18,7 +18,6 @@ import {
   isReadOnlyCustomHandler,
   isRegionAvailable,
   layoutPropertiesMap,
-  WO_BLOCK_CONTAINERS,
   WO_BLOCKS,
 } from "./WorkorderTools";
 import EntityRegions from "../../components/entityregions/EntityRegions";
@@ -67,7 +66,7 @@ import { getOrg } from "../../../hooks/tools";
 import useUserDataStore from "../../../state/useUserDataStore";
 import GridTools from "../../../tools/GridTools";
 import ScreenContainers from "../../layout/ScreenContainers";
-import ScreenBlocks from "../../layout/ScreenBlocks";
+import ScreenBlock from "../../layout/ScreenBlock";
 import EquipmentNCRs from "../../pages/equipment/components/EquipmentNCRs";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
@@ -260,7 +259,7 @@ const Workorder = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
           render: () => (
-            <ScreenBlocks {...screenContainerProps} blocks={[WO_BLOCKS.GENERAL]} blockContainers={WO_BLOCK_CONTAINERS}/>
+            <ScreenBlock {...screenContainerProps} block={WO_BLOCKS.GENERAL} />
           ),
         column: 1,
         order: 1,
@@ -270,11 +269,11 @@ const Workorder = () => {
       },
       {
         id: "DETAILS",
-        label: workOrderLayout.fields?.[WO_BLOCKS.WODETAILSSECTION]?.text || "Details",
+        label: workOrderLayout.fields?.[WO_BLOCKS.WODETAILSSECTION.code]?.text || "Details*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
           render: () => (
-            <ScreenBlocks {...screenContainerProps} blocks={[WO_BLOCKS.WODETAILSSECTION]} blockContainers={WO_BLOCK_CONTAINERS}/>
+            <ScreenBlock {...screenContainerProps} block={WO_BLOCKS.WODETAILSSECTION} />
           ),
         column: 1,
         order: 1,
@@ -284,12 +283,12 @@ const Workorder = () => {
       },
       {
         id: "SCHEDULING",
-        label: workOrderLayout.fields?.[WO_BLOCKS.SCHEDDETAILSSECTION]?.text || "Scheduling",
+        label: workOrderLayout.fields?.[WO_BLOCKS.SCHEDDETAILSSECTION.code]?.text || "Scheduling*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         customVisibility: () =>
           isRegionAvailable("SCHEDULING", commonProps.workOrderLayout),
-        render: () => <ScreenContainers {...screenContainerProps} containers={['cont_9']}/>,
+        render: () => <ScreenBlock {...screenContainerProps} block={WO_BLOCKS.SCHEDDETAILSSECTION} />,
         column: 1,
         order: 2,
         summaryIcon: CalendarMonthIcon,
@@ -298,13 +297,13 @@ const Workorder = () => {
       },
       {
         id: "CLOSINGCODES",
-        label: "Closing Codes",
+        label: workOrderLayout.tabs?.[TAB_CODES.CLOSING_CODES]?.fields?.block_2?.text || "Closing Codes*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         customVisibility: () =>
           isRegionAvailable("CLOSING_CODES", commonProps.workOrderLayout),
         render: () => (
-          <ScreenContainers {...screenContainerProps} containers={['cont_999']}/>
+          <ScreenContainers {...screenContainerProps} containers={['cont_99']}/>
         ),
         column: 1,
         order: 3,
@@ -317,7 +316,7 @@ const Workorder = () => {
       },
       {
         id: "PARTUSAGE",
-        label: "Part Usage",
+        label: workOrderLayout.tabs?.[TAB_CODES.PART_USAGE]?.tabDescription || "Part Usage*",
         isVisibleWhenNewEntity: false,
         maximizable: false,
         customVisibility: () =>
@@ -348,7 +347,7 @@ const Workorder = () => {
       ),
       {
         id: "ADDITIONALCOSTS",
-        label: workOrderLayout.tabs[TAB_CODES.ADDITIONAL_COSTS]?.tabDescription || "Additional Costs",
+        label: workOrderLayout.tabs[TAB_CODES.ADDITIONAL_COSTS]?.tabDescription || "Additional Costs*",
         isVisibleWhenNewEntity: false,
         maximizable: false,
         customVisibility: () =>
@@ -372,7 +371,7 @@ const Workorder = () => {
       },
       {
         id: "CHILDRENWOS",
-        label: "Child Work Orders",
+        label: workOrderLayout.tabs?.[TAB_CODES.CHILD_WO]?.tabDescription || "Child Work Orders*",
         isVisibleWhenNewEntity: false,
         maximizable: false,
         customVisibility: () =>
@@ -412,11 +411,11 @@ const Workorder = () => {
       },
       {
         id: "DOCUMENTS",
-        label: "Documents",
+        label: workOrderLayout.tabs?.[TAB_CODES.DOCUMENTS]?.tabDescription || "Documents*",
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
-          <Documents objectType="A" code={id?.code} entity="EVNT" />
+          <Documents code={id?.code} entity="EVNT" />
         ),
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
@@ -476,7 +475,7 @@ const Workorder = () => {
       },
       {
         id: "COMMENTS",
-        label: workOrderLayout.tabs[TAB_CODES.COMMENTS]?.tabDescription || "Comments",
+        label: workOrderLayout.tabs[TAB_CODES.COMMENTS]?.tabDescription || "Comments*",
         isVisibleWhenNewEntity: true,
         maximizable: true,
         render: () => (
@@ -533,7 +532,7 @@ const Workorder = () => {
       },
       {
         id: "CHECKLISTS",
-        label: "Checklists",
+        label: workOrderLayout.tabs?.[TAB_CODES.CHECKLIST]?.tabDescription || "Checklists*",
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: ({ panelQueryParams }) => (
@@ -607,7 +606,7 @@ const Workorder = () => {
       },
       {
         id: "CUSTOMFIELDS",
-        label: workOrderLayout.fields?.[WO_BLOCKS.CUSTOMFIELDSSECTION]?.text || "Custom Fields",
+        label: workOrderLayout.fields?.[WO_BLOCKS.CUSTOMFIELDSSECTION.code]?.text || "Custom Fields*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
@@ -669,7 +668,7 @@ const Workorder = () => {
       },
       {
         id: "METERREADINGS",
-        label: "Meter Readings",
+        label: workOrderLayout.tabs?.[TAB_CODES.METER_READINGS]?.tabDescription || "Meter Readings*",
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
@@ -689,11 +688,11 @@ const Workorder = () => {
       },
       {
         id: "USERDEFINEDFIELDS",
-        label: workOrderLayout.fields?.[WO_BLOCKS.USERDEFINEDFIELDSSECTION]?.text || "User Defined Fieldss",
+        label: workOrderLayout.fields?.[WO_BLOCKS.USERDEFINEDFIELDSSECTION.code]?.text || "User Defined Fields*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenBlocks {...screenContainerProps} blocks={[WO_BLOCKS.USERDEFINEDFIELDSSECTION]} blockContainers={WO_BLOCK_CONTAINERS}/>
+          <ScreenBlock {...screenContainerProps} block={WO_BLOCKS.USERDEFINEDFIELDSSECTION} />
         ),
         column: 2,
         order: 10,
