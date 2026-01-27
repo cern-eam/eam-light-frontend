@@ -26,6 +26,18 @@ export const layoutPropertiesMap =  {
     }
 }
 
+export const PART_BLOCKS = {
+  GENERAL: "block_1",
+  TRACKINGSECTION: "block_2",
+  PARTSUMMARYSECTION: "block_3",
+  PROFILEATTACHMENTSECTION: "block_4",
+  ORDERDETAILSSECTION: "block_5",
+  CUSTOMFIELDSSECTION: "block_6",
+  BLOCK_7: "block_7",
+  USERDEFINEDFIELDSSECTION: "block_8",
+  CONDITIONDETAILSSECTION: "block_9"
+};
+
 class PartTools {
 
 

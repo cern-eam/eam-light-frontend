@@ -173,31 +173,52 @@ export function isRegionAvailable(regionCode, workOrderLayout) {
 }
 
 export const WO_BLOCKS = {
-  GENERAL: "block_1",
-  WODETAILSSECTION: "block_2",
-  ACTDETAILSSECTION: "block_3",
-  SCHEDDETAILSSECTION: "block_4",
-  CUSTOMFIELDSSECTION: "block_5",
-  LINEARREFERENCEDETAILS: "block_6",
-  CALLCENTERDETAILS: "block_7",
-  USERDEFINEDFIELDSSECTION: "block_8",
-  PRODUCTIONDETAILS: "block_9",
-  COMPLIANCEDETAILSSECTION: "block_12",
-  INCIDENTTRACKINGSECTION: "block_13",
-  GUESTDETAILSSECTION: "block_14"
-};
-
-export const WO_BLOCK_CONTAINERS = {
-  [WO_BLOCKS.GENERAL]: ['cont_1', 'cont_2', 'cont_3', 'cont_4'],
-  [WO_BLOCKS.WODETAILSSECTION]: ['cont_5', 'cont_6'],
-  [WO_BLOCKS.ACTDETAILSSECTION]: [],
-  [WO_BLOCKS.SCHEDDETAILSSECTION]: ['block_4'],
-  [WO_BLOCKS.CUSTOMFIELDSSECTION]: [],
-  [WO_BLOCKS.LINEARREFERENCEDETAILS]: [],
-  [WO_BLOCKS.CALLCENTERDETAILS]: [],
-  [WO_BLOCKS.USERDEFINEDFIELDSSECTION]: ['cont_8.4', 'cont_8.5', 'cont_8.6'],
-  [WO_BLOCKS.PRODUCTIONDETAILS]: [],
-  [WO_BLOCKS.COMPLIANCEDETAILSSECTION]: [],
-  [WO_BLOCKS.INCIDENTTRACKINGSECTION]: [],
-  [WO_BLOCKS.GUESTDETAILSSECTION]: []
+  GENERAL: {
+    code: "block_1",
+    containers: ['cont_1', 'cont_2', 'cont_3', 'cont_4']
+  },
+  WODETAILSSECTION: {
+    code: "block_2",
+    containers: ['cont_5', 'cont_6']
+  },
+  ACTDETAILSSECTION: {
+    code: "block_3",
+    containers: []
+  },
+  SCHEDDETAILSSECTION: {
+    code: "block_4",
+    containers: ['cont_9']
+  },
+  CUSTOMFIELDSSECTION: {
+    code: "block_5",
+    containers: []
+  },
+  LINEARREFERENCEDETAILS: {
+    code: "block_6",
+    containers: []
+  },
+  CALLCENTERDETAILS: {
+    code: "block_7",
+    containers: []
+  },
+  USERDEFINEDFIELDSSECTION: {
+    code: "block_8",
+    containers: ['cont_8.4', 'cont_8.5', 'cont_8.6']
+  },
+  PRODUCTIONDETAILS: {
+    code: "block_9",
+    containers: []
+  },
+  COMPLIANCEDETAILSSECTION: {
+    code: "block_12",
+    containers: []
+  },
+  INCIDENTTRACKINGSECTION: {
+    code: "block_13",
+    containers: []
+  },
+  GUESTDETAILSSECTION: {
+    code: "block_14",
+    containers: []
+  }
 };

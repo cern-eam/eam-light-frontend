@@ -1,9 +1,16 @@
 import { create } from "zustand";
 import WS from "../tools/WS";
 
-const applyWSJOBSContainerOverrides = (screenLayout) => {
-  ['actioncode', 'causecode', 'failurecode', 'failuremodedesc', 'humanfactor', 'humanoversight', 'methodofdetection', 'problemcode', 'symptom', 'tacticalcause', 'workmanship']
-    .forEach(f => { if (screenLayout.fields?.[f]) screenLayout.fields[f].fieldContainer = 'cont_99'; });
+const applyOverrides = (screenLayout, screen, parentScreen) => {
+  if (screen === "OSOBJA") {
+    delete screenLayout.customGridTabs.XDP;
+  } else if (screen === "OSOBJP") {
+    delete screenLayout.customGridTabs.XPI;
+    delete screenLayout.customGridTabs.XPM;
+  } else if (parentScreen === "WSJOBS") {
+    ['actioncode', 'causecode', 'failurecode', 'failuremodedesc', 'humanfactor', 'humanoversight', 'methodofdetection', 'problemcode', 'symptom', 'tacticalcause', 'workmanship']
+      .forEach(f => { if (screenLayout.fields?.[f]) screenLayout.fields[f].fieldContainer = 'cont_99'; });
+  }
   return screenLayout;
 };
 
@@ -27,14 +34,8 @@ const useLayoutStore = create((set) => ({
         screen,
         tabs
       ).then((result) => result.body.data);
-      if (screen === "OSOBJA") {
-        delete newScreenLayout.customGridTabs.XDP;
-      } else if (screen === "OSOBJP") {
-        delete newScreenLayout.customGridTabs.XPI;
-        delete newScreenLayout.customGridTabs.XPM;
-      } else if (parentScreen === "WSJOBS") {
-        newScreenLayout = applyWSJOBSContainerOverrides(newScreenLayout);
-      }
+      
+      newScreenLayout = applyOverrides(newScreenLayout, screen, parentScreen);
 
       set((state) => ({
         screenLayout: {

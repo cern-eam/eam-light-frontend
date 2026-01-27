@@ -143,7 +143,6 @@ const Part = () => {
         render: () => <ScreenContainers register={register} screenLayout={partLayout} layoutPropertiesMap={layoutPropertiesMap} ctx={{newEntity}} containers={['cont_1', 'cont_2', 'cont_3', 'cont_4']}
                        footer={!newEntity &&
                               <StatusRow entity={part} entityType={"part"} screenCode={screenCode} code={id?.code} org={id?.org} style={{ marginTop: "10px", marginBottom: "-10px" }}/>}/>, 
-        //render: () => <PartGeneral {...commonProps} screenCode={screenCode} />,
         column: 1,
         order: 1,
         summaryIcon: DescriptionIcon,
