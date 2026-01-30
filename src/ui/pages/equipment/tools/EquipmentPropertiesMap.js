@@ -192,7 +192,7 @@ export const ASSET_BLOCKS = {
   },
   VARIABLES: {
     code: "block_7",
-    containers: []
+    containers: ['cont_9', 'cont_10']
   },
   GISDETAILS: {
     code: "block_8",
@@ -212,7 +212,7 @@ export const ASSET_BLOCKS = {
   },
   USERDEFINEDFIELDSSECTION: {
     code: "block_12",
-    containers: []
+    containers: ['cont_15', 'cont_16']
   },
   FACILITYDETAILS: {
     code: "block_13",
@@ -251,11 +251,11 @@ export const ASSET_BLOCKS = {
 export const POSITION_BLOCKS = {
   GENERAL: {
     code: "block_1",
-    containers: []
+    containers: ['cont_1', 'cont_1.1', 'cont_1.2', 'cont_2']
   },
   EQUIPMENTDETAILS: {
     code: "block_2",
-    containers: []
+    containers: ['cont_3', 'cont_4']
   },
   HIERARCHY: {
     code: "block_3",
@@ -275,11 +275,11 @@ export const POSITION_BLOCKS = {
   },
   TRACKINGDETAILS: {
     code: "block_7",
-    containers: []
+    containers: ['cont_4.1', 'cont_4.2']
   },
   VARIABLES: {
     code: "block_8",
-    containers: []
+    containers: ['cont_4.3', 'cont_4.4']
   },
   CALLCENTERDETAILS: {
     code: "block_9",
@@ -287,7 +287,7 @@ export const POSITION_BLOCKS = {
   },
   USERDEFINEDFIELDSSECTION: {
     code: "block_10",
-    containers: []
+    containers: ['cont_6.4', 'cont_6.5', 'cont_6.6']
   },
   FACILITYDETAILS: {
     code: "block_11",
@@ -330,11 +330,11 @@ export const POSITION_BLOCKS = {
 export const SYSTEM_BLOCKS = {
   GENERAL: {
     code: "block_1",
-    containers: []
+    containers: ['cont_1', 'cont_1.1', 'cont_1.2', 'cont_2']
   },
   EQUIPMENTDETAILS: {
     code: "block_2",
-    containers: []
+    containers: ['cont_3', 'cont_4']
   },
   HIERARCHY: {
     code: "block_3",
@@ -358,15 +358,15 @@ export const SYSTEM_BLOCKS = {
   },
   TRACKINGDETAILS: {
     code: "block_8",
-    containers: []
+    containers: ['cont_4.1', 'cont_4.2']
   },
   VARIABLES: {
     code: "block_9",
-    containers: []
+    containers: ['cont_4.3', 'cont_4.4']
   },
   USERDEFINEDFIELDSSECTION: {
     code: "block_10",
-    containers: []
+    containers: ['cont_5.4', 'cont_5.5', 'cont_5.6']
   },
   FACILITYDETAILS: {
     code: "block_11",

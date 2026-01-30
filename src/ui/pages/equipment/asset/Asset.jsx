@@ -46,7 +46,6 @@ import { getGridData } from "../../../../tools/WSGrids.js";
 import { extractSingleResult } from "../../../../tools/GridTools.js";
 import { ASSET_BLOCKS, assetLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
 import StatusRow from "../../../components/statusrow/StatusRow.jsx";
-import ScreenContainers from "../../../layout/ScreenContainers.jsx";
 import ScreenBlock from "../../../layout/ScreenBlock.jsx";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
@@ -188,6 +187,13 @@ const Asset = () => {
       showWarning,
     };
 
+    const screenBlockProps = {
+      register,
+      screenLayout: assetLayout,
+      layoutPropertiesMap: assetLayoutPropertiesMap,
+      ctx: {newEntity, equipment},
+    };
+
     return [
       {
         id: "GENERAL",
@@ -195,8 +201,7 @@ const Asset = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenBlock register={register} screenLayout={assetLayout}
-          layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}}
+          <ScreenBlock {...screenBlockProps}
           blocks={[ASSET_BLOCKS.GENERAL]}
           footer={!newEntity &&
                   <StatusRow
@@ -221,7 +226,7 @@ const Asset = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenBlock register={register} screenLayout={assetLayout} layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} blocks={[ASSET_BLOCKS.EQUIPMENTDETAILS, ASSET_BLOCKS.TRACKINGDETAILS, ASSET_BLOCKS.PARTASSOCIATION]}/>
+          <ScreenBlock {...screenBlockProps} blocks={[ASSET_BLOCKS.EQUIPMENTDETAILS, ASSET_BLOCKS.TRACKINGDETAILS, ASSET_BLOCKS.PARTASSOCIATION]}/>
         ),
         column: 1,
         order: 2,
@@ -235,7 +240,7 @@ const Asset = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainers register={register} screenLayout={assetLayout} layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_9', 'cont_10']}/>
+          <ScreenBlock {...screenBlockProps} blocks={[ASSET_BLOCKS.VARIABLES]}/>
         ),
         column: 1,
         order: 10,
@@ -409,7 +414,7 @@ const Asset = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainers register={register} screenLayout={assetLayout} layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_15', 'cont_16']}/>
+          <ScreenBlock {...screenBlockProps} blocks={[ASSET_BLOCKS.USERDEFINEDFIELDSSECTION]}/>
         ),
         column: 2,
         order: 10,
