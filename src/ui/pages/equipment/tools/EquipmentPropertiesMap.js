@@ -168,19 +168,19 @@ export const locationLayoutPropertiesMap = {
 export const ASSET_BLOCKS = {
   GENERAL: {
     code: "block_1",
-    containers: []
+    containers: ['cont_1', 'cont_1.1', 'cont_1.2', 'cont_2']
   },
   EQUIPMENTDETAILS: {
     code: "block_2",
-    containers: []
+    containers: ['cont_3', 'cont_4']
   },
   TRACKINGDETAILS: {
     code: "block_3",
-    containers: []
+    containers: ['cont_5', 'cont_6']
   },
   PARTASSOCIATION: {
     code: "block_4",
-    containers: []
+    containers: ['cont_7', 'cont_8']
   },
   HIERARCHY: {
     code: "block_5",
