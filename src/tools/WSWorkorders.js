@@ -115,7 +115,29 @@ class WSWorkorders {
     getPartUsagePart(options, config = {}) {
         const [workorder, store] = options.handlerParams
         const code = options.filter
-        return WS._get(`/autocomplete/partusage/part/${workorder}/${store}/${code}`, config);
+        //return WS._get(`/autocomplete/partusage/part/${workorder}/${store}/${code}`, config);
+
+        let gridRequest = new GridRequest("LVIRPART", GridTypes.LOV);
+        gridRequest.addParam("control.org", getOrg());
+        gridRequest.addParam("multiequipwo", "false");
+        gridRequest.addParam("store_code", store);
+        gridRequest.addParam("parameter.excludeparentpart", "false");
+        gridRequest.addParam("relatedworkordernum", workorder);
+
+        if (code) {
+            gridRequest.addFilter("partcode", code.toUpperCase(), "BEGINS", GridFilterJoiner.OR);
+
+            if (code?.length > 3) {
+                gridRequest.addFilter("partdescription", code, "CONTAINS", GridFilterJoiner.OR);
+            }
+            gridRequest.addFilter("udfchar01", code, "BEGINS", GridFilterJoiner.OR);
+            // CDD Drawing Reference
+            gridRequest.addFilter("udfchar03", code, "BEGINS", GridFilterJoiner.OR);
+            // EDMS Item ID Reference
+            gridRequest.addFilter("udfchar11", code.toUpperCase(), "BEGINS");
+        }
+
+        return getGridData(gridRequest).then(response => transformResponse(response, {code: "partcode", desc: "partdescription", organization: "partorganization"}));
     }
 
     getPartUsageAsset(options, config = {}) {
