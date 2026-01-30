@@ -44,7 +44,7 @@ import { getOrg } from "../../../../hooks/tools.js";
 import GridRequest, { GridTypes } from "../../../../tools/entities/GridRequest.js";
 import { getGridData } from "../../../../tools/WSGrids.js";
 import { extractSingleResult } from "../../../../tools/GridTools.js";
-import { assetLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
+import { ASSET_BLOCKS, assetLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
 import StatusRow from "../../../components/statusrow/StatusRow.jsx";
 import ScreenContainers from "../../../layout/ScreenContainers.jsx";
 
@@ -216,7 +216,7 @@ const Asset = () => {
       },
       {
         id: "DETAILS",
-        label: "Details",
+        label: assetLayout.fields?.[ASSET_BLOCKS.EQUIPMENTDETAILS.code]?.text || "Details*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
@@ -230,7 +230,7 @@ const Asset = () => {
       },
       {
         id: "VARIABLES",
-        label: "Variables",
+        label: assetLayout.fields?.[ASSET_BLOCKS.VARIABLES.code]?.text || "Variables*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
@@ -244,7 +244,7 @@ const Asset = () => {
       },
       {
         id: "HIERARCHY",
-        label: "Hierarchy",
+        label: assetLayout.fields?.[ASSET_BLOCKS.HIERARCHY.code]?.text || "Hierarchy*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => <AssetHierarchy {...commonProps} />,
@@ -256,7 +256,7 @@ const Asset = () => {
       },
       {
         id: "WORKORDERS",
-        label: "Work Orders",
+        label: assetLayout.tabs[TAB_CODES.WORKORDERS]?.tabDescription || "Work Orders*",
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: ({ panelQueryParams }) => (
@@ -287,7 +287,7 @@ const Asset = () => {
       },
       {
         id: "SAFETY",
-        label: "Safety",
+        label: assetLayout.tabs[TAB_CODES.SAFETY]?.tabDescription || "Safety*",
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => (
@@ -325,10 +325,10 @@ const Asset = () => {
       },
       {
         id: "DOCUMENTS",
-        label: "Documents",
+        label: assetLayout.tabs[TAB_CODES.DOCUMENTS]?.tabDescription || "Documents*",
         isVisibleWhenNewEntity: false,
         maximizable: true,
-        render: () => <Documents objectType="A"code={id?.code + '#' + id.org}  entity="OBJ"/>,
+        render: () => <Documents code={id?.code + '#' + id.org}  entity="OBJ"/>,
         RegionPanelProps: {
           detailsStyle: { padding: 0 },
         },
@@ -340,7 +340,7 @@ const Asset = () => {
       },
       {
         id: "NCRS",
-        label: "Non Conformities",
+        label: assetLayout.tabs[TAB_CODES.NONCONFORMITIES]?.tabDescription || "Non Conformities*",
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: () => <EquipmentNCRs equipment={id?.code}/>,
@@ -378,7 +378,7 @@ const Asset = () => {
       },
       {
         id: "COMMENTS",
-        label: "Comments",
+        label: assetLayout.tabs[TAB_CODES.COMMENTS]?.tabDescription || "Comments*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
@@ -404,7 +404,7 @@ const Asset = () => {
       },
       {
         id: "USERDEFINEDFIELDS",
-        label: "User Defined Fields",
+        label: assetLayout.fields?.[ASSET_BLOCKS.USERDEFINEDFIELDSSECTION.code]?.text || "User Defined Fields*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
@@ -418,7 +418,7 @@ const Asset = () => {
       },
       {
         id: "CUSTOMFIELDS",
-        label: "Custom Fields",
+        label: assetLayout.fields?.[ASSET_BLOCKS.CUSTOMFIELDS.code]?.text || "Custom Fields*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
