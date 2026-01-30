@@ -259,7 +259,7 @@ const Workorder = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
           render: () => (
-            <ScreenBlock {...screenContainerProps} block={WO_BLOCKS.GENERAL} />
+            <ScreenBlock {...screenContainerProps} blocks={WO_BLOCKS.GENERAL} />
           ),
         column: 1,
         order: 1,
@@ -273,7 +273,7 @@ const Workorder = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
           render: () => (
-            <ScreenBlock {...screenContainerProps} block={WO_BLOCKS.WODETAILSSECTION} />
+            <ScreenBlock {...screenContainerProps} blocks={WO_BLOCKS.WODETAILSSECTION} />
           ),
         column: 1,
         order: 1,
@@ -288,7 +288,7 @@ const Workorder = () => {
         maximizable: false,
         customVisibility: () =>
           isRegionAvailable("SCHEDULING", commonProps.workOrderLayout),
-        render: () => <ScreenBlock {...screenContainerProps} block={WO_BLOCKS.SCHEDDETAILSSECTION} />,
+        render: () => <ScreenBlock {...screenContainerProps} blocks={WO_BLOCKS.SCHEDDETAILSSECTION} />,
         column: 1,
         order: 2,
         summaryIcon: CalendarMonthIcon,
@@ -692,7 +692,7 @@ const Workorder = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenBlock {...screenContainerProps} block={WO_BLOCKS.USERDEFINEDFIELDSSECTION} />
+          <ScreenBlock {...screenContainerProps} blocks={WO_BLOCKS.USERDEFINEDFIELDSSECTION} />
         ),
         column: 2,
         order: 10,

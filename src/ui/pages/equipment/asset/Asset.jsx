@@ -47,6 +47,7 @@ import { extractSingleResult } from "../../../../tools/GridTools.js";
 import { ASSET_BLOCKS, assetLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
 import StatusRow from "../../../components/statusrow/StatusRow.jsx";
 import ScreenContainers from "../../../layout/ScreenContainers.jsx";
+import ScreenBlock from "../../../layout/ScreenBlock.jsx";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -194,9 +195,9 @@ const Asset = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainers register={register} screenLayout={assetLayout}
+          <ScreenBlock register={register} screenLayout={assetLayout}
           layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}}
-          containers={['cont_1', 'cont_1.1', 'cont_1.2', 'cont_2']}
+          blocks={[ASSET_BLOCKS.GENERAL]}
           footer={!newEntity &&
                   <StatusRow
                     entity={equipment}
@@ -220,7 +221,7 @@ const Asset = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainers register={register} screenLayout={assetLayout} layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_3', 'cont_4', 'cont_5', 'cont_6', 'cont_7', 'cont_8']}/>
+          <ScreenBlock register={register} screenLayout={assetLayout} layoutPropertiesMap={assetLayoutPropertiesMap} ctx={{newEntity, equipment}} blocks={[ASSET_BLOCKS.EQUIPMENTDETAILS, ASSET_BLOCKS.TRACKINGDETAILS, ASSET_BLOCKS.PARTASSOCIATION]}/>
         ),
         column: 1,
         order: 2,

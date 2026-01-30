@@ -1,22 +1,29 @@
 import React from "react";
 import ScreenContainers from "./ScreenContainers";
 
-const ScreenBlock = ({ register, screenLayout, layoutPropertiesMap = {}, ctx = {}, block, footer }) => {
+const ScreenBlock = ({ register, screenLayout, layoutPropertiesMap = {}, ctx = {}, blocks, footer }) => {
+  const blockList = Array.isArray(blocks) ? blocks : [blocks];
+  
+  const visibleBlocks = blockList.filter(
+    (b) => screenLayout.fields[b.code]?.attribute !== "H"
+  );
 
-  if (screenLayout.fields[block.code]?.attribute === "H") {
-    return null;
+  if (visibleBlocks.length === 0) {
+    return footer ?? null;
   }
 
   return (
     <React.Fragment>
+      {visibleBlocks.map((b) => (
         <ScreenContainers
-          key={block}
+          key={b.code}
           register={register}
           screenLayout={screenLayout}
           layoutPropertiesMap={layoutPropertiesMap}
           ctx={ctx}
-          containers={block.containers}
+          containers={b.containers}
         />
+      ))}
       {footer}
     </React.Fragment>
   );
