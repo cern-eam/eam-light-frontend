@@ -43,14 +43,14 @@ export const readStatuses = (options) => {
     gridRequest.addFilter("usercode", userData.eamAccount.userCode, "=", "AND", false, true)
     gridRequest.addFilter("entity", entity, "=")
     
-    if (newEntity) {
+    if (newEntity || !oldStatus) {
         gridRequest.addFilter("fromstatus", "-", "=")
     } else {
         gridRequest.addFilter("fromstatus", oldStatus, "=")
     }
 
     return getGridData(gridRequest).then(response => transformResponse(response, {code: "tostatus", desc: "tostatusdesc"}, 
-        newEntity && response.body.data.length > 0 ? [] : [{ code: oldStatus, desc: response.body.data[0].fromstatusdesc }]
+        (newEntity && response.body.data.length > 0 || !oldStatus) ? [] : [{ code: oldStatus, desc: response.body.data[0].fromstatusdesc }]
     ));
 
 }
