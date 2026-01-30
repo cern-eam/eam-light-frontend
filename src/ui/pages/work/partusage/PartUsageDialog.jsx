@@ -22,6 +22,7 @@ import { getPartStock } from "../../part/PartStock";
 import { getPart } from "../../../../tools/WSParts";
 import { getEquipment } from "../../../../tools/WSEquipment";
 import { get } from "lodash";
+import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 
 const overflowStyle = {
   overflowY: "visible",
@@ -614,7 +615,7 @@ function PartUsageDialog(props) {
                 errorText={errorMessages?.activityCode}
               />
 
-              <EAMAutocomplete
+              <EAMComboAutocomplete
                 {...processElementInfo(tabLayout["partcode"])}
                 disabled={!formData.storeCode || !formData.activityCode}
                 value={formData.partCode}
@@ -636,7 +637,7 @@ function PartUsageDialog(props) {
                 barcodeScanner
               />
 
-              <EAMAutocomplete
+              <EAMComboAutocomplete
                 {...processElementInfo(tabLayout["assetid"])}
                 disabled={
                   !formData.storeCode ||
