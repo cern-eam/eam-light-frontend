@@ -122,7 +122,7 @@ class WSWorkorders {
         const [transaction, store, part] = options.handlerParams
         const code = options.filter
 
-		let gridRequest = new GridRequest("OSOBJA", GridTypes.LIST);
+		let gridRequest = new GridRequest("OSOBJA", GridTypes.LIST, "OSOBJA");
 		gridRequest.addFilter("equipmentno", code, "CONTAINS", GridFilterJoiner.AND);
 
 		if (part) {
