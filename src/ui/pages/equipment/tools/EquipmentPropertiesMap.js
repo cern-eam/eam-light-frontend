@@ -29,10 +29,6 @@ export const equipmentLayoutPropertiesMap = {
     }
   },
 
-  assetstatus: {
-    alias: "statuscode"
-  },
-
   manufacturer: {
     noOrgDescProps: true,
     alias: "manufacturercode"
@@ -97,13 +93,14 @@ export const equipmentLayoutPropertiesMap = {
     },
 
     assetstatus: {
-    extraProps: (ctx) => (
-        {
-            autocompleteHandler: readStatuses,
-            autocompleteHandlerParams: ["OBJ", ctx.newEntity, ctx.equipment.STATUS.STATUSCODE],
-            renderDependencies: [ctx.newEntity, ctx.equipment.STATUS.STATUSCODE]
-        }
-    )
+      alias: "statuscode",
+      extraProps: (ctx) => (
+          {
+              autocompleteHandler: readStatuses,
+              autocompleteHandlerParams: ["OBJ", ctx.newEntity, ctx.equipment.STATUS.STATUSCODE],
+              renderDependencies: [ctx.newEntity, ctx.equipment.STATUS.STATUSCODE]
+          }
+      )
   },
 };
 
