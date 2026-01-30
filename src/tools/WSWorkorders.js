@@ -47,7 +47,7 @@ class WSWorkorders {
     //
     getWorkOrderStatusValues({handlerParams: [oldStatus, newWorkOrder]}, config = {}) {
         let gridRequest = new GridRequest("LVWRSTDRP", GridTypes.LOV)
-        if (newWorkOrder) {
+        if (newWorkOrder || !oldStatus) {
             gridRequest.addParam("param.poldstat", "-");
 			gridRequest.addParam("param.pexcclause", "C");
         } else {
