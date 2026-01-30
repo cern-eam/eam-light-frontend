@@ -169,69 +169,240 @@ export const locationLayoutPropertiesMap = {
 };
 
 export const ASSET_BLOCKS = {
-  GENERAL: "block_1",
-  EQUIPMENTDETAILS: "block_2",
-  TRACKINGDETAILS: "block_3",
-  PARTASSOCIATION: "block_4",
-  HIERARCHY: "block_5",
-  CUSTOMFIELDS: "block_6",
-  VARIABLES: "block_7",
-  GISDETAILS: "block_8",
-  LINEARREFERENCEDETAILS: "block_9",
-  CONTRACTANDRENTALDETAILS: "block_10",
-  CALLCENTERDETAILS: "block_11",
-  USERDEFINEDFIELDSSECTION: "block_12",
-  FACILITYDETAILS: "block_13",
-  BLOCK_14: "block_14",
-  RELIABILITYRANKDETAILSSECTION: "block_15",
-  ENERGYPERFORMANCESECTION: "block_16",
-  RCMDETAILSSECTION: "block_17",
-  COMPLIANCEASSOCIATIONSECTION: "block_19",
-  FINANCIALANDDISPOSITIONDETAILSSECTION: "block_20",
-  PERFORMANCEDETAILSSECTION: "block_21"
+  GENERAL: {
+    code: "block_1",
+    containers: []
+  },
+  EQUIPMENTDETAILS: {
+    code: "block_2",
+    containers: []
+  },
+  TRACKINGDETAILS: {
+    code: "block_3",
+    containers: []
+  },
+  PARTASSOCIATION: {
+    code: "block_4",
+    containers: []
+  },
+  HIERARCHY: {
+    code: "block_5",
+    containers: []
+  },
+  CUSTOMFIELDS: {
+    code: "block_6",
+    containers: []
+  },
+  VARIABLES: {
+    code: "block_7",
+    containers: []
+  },
+  GISDETAILS: {
+    code: "block_8",
+    containers: []
+  },
+  LINEARREFERENCEDETAILS: {
+    code: "block_9",
+    containers: []
+  },
+  CONTRACTANDRENTALDETAILS: {
+    code: "block_10",
+    containers: []
+  },
+  CALLCENTERDETAILS: {
+    code: "block_11",
+    containers: []
+  },
+  USERDEFINEDFIELDSSECTION: {
+    code: "block_12",
+    containers: []
+  },
+  FACILITYDETAILS: {
+    code: "block_13",
+    containers: []
+  },
+  BLOCK_14: {
+    code: "block_14",
+    containers: []
+  },
+  RELIABILITYRANKDETAILSSECTION: {
+    code: "block_15",
+    containers: []
+  },
+  ENERGYPERFORMANCESECTION: {
+    code: "block_16",
+    containers: []
+  },
+  RCMDETAILSSECTION: {
+    code: "block_17",
+    containers: []
+  },
+  COMPLIANCEASSOCIATIONSECTION: {
+    code: "block_19",
+    containers: []
+  },
+  FINANCIALANDDISPOSITIONDETAILSSECTION: {
+    code: "block_20",
+    containers: []
+  },
+  PERFORMANCEDETAILSSECTION: {
+    code: "block_21",
+    containers: []
+  }
 };
 
 export const POSITION_BLOCKS = {
-  GENERAL: "block_1",
-  EQUIPMENTDETAILS: "block_2",
-  HIERARCHY: "block_3",
-  CUSTOMFIELDS: "block_4",
-  GISDETAILS: "block_5",
-  LINEARREFERENCEDETAILS: "block_6",
-  TRACKINGDETAILS: "block_7",
-  VARIABLES: "block_8",
-  CALLCENTERDETAILS: "block_9",
-  USERDEFINEDFIELDSSECTION: "block_10",
-  FACILITYDETAILS: "block_11",
-  BLOCK_12: "block_12",
-  RELIABILITYRANKDETAILSSECTION: "block_13",
-  CONTRACTANDRENTALDETAILSSECTION: "block_14",
-  ENERGYPERFORMANCESECTION: "block_15",
-  RCMDETAILSSECTION: "block_16",
-  COMPLIANCEASSOCIATIONSECTION: "block_18",
-  FINANCIALANDDISPOSITIONDETAILSSECTION: "block_19",
-  PERFORMANCEDETAILSSECTION: "block_20"
+  GENERAL: {
+    code: "block_1",
+    containers: []
+  },
+  EQUIPMENTDETAILS: {
+    code: "block_2",
+    containers: []
+  },
+  HIERARCHY: {
+    code: "block_3",
+    containers: []
+  },
+  CUSTOMFIELDS: {
+    code: "block_4",
+    containers: []
+  },
+  GISDETAILS: {
+    code: "block_5",
+    containers: []
+  },
+  LINEARREFERENCEDETAILS: {
+    code: "block_6",
+    containers: []
+  },
+  TRACKINGDETAILS: {
+    code: "block_7",
+    containers: []
+  },
+  VARIABLES: {
+    code: "block_8",
+    containers: []
+  },
+  CALLCENTERDETAILS: {
+    code: "block_9",
+    containers: []
+  },
+  USERDEFINEDFIELDSSECTION: {
+    code: "block_10",
+    containers: []
+  },
+  FACILITYDETAILS: {
+    code: "block_11",
+    containers: []
+  },
+  BLOCK_12: {
+    code: "block_12",
+    containers: []
+  },
+  RELIABILITYRANKDETAILSSECTION: {
+    code: "block_13",
+    containers: []
+  },
+  CONTRACTANDRENTALDETAILSSECTION: {
+    code: "block_14",
+    containers: []
+  },
+  ENERGYPERFORMANCESECTION: {
+    code: "block_15",
+    containers: []
+  },
+  RCMDETAILSSECTION: {
+    code: "block_16",
+    containers: []
+  },
+  COMPLIANCEASSOCIATIONSECTION: {
+    code: "block_18",
+    containers: []
+  },
+  FINANCIALANDDISPOSITIONDETAILSSECTION: {
+    code: "block_19",
+    containers: []
+  },
+  PERFORMANCEDETAILSSECTION: {
+    code: "block_20",
+    containers: []
+  }
 };
 
 export const SYSTEM_BLOCKS = {
-  GENERAL: "block_1",
-  EQUIPMENTDETAILS: "block_2",
-  HIERARCHY: "block_3",
-  CUSTOMFIELDS: "block_4",
-  GISDETAILS: "block_5",
-  LINEARREFERENCEDETAILS: "block_6",
-  CALLCENTERDETAILS: "block_7",
-  TRACKINGDETAILS: "block_8",
-  VARIABLES: "block_9",
-  USERDEFINEDFIELDSSECTION: "block_10",
-  FACILITYDETAILS: "block_11",
-  BLOCK_12: "block_12",
-  RELIABILITYRANKDETAILSSECTION: "block_13",
-  CONTRACTANDRENTALDETAILSSECTION: "block_14",
-  RCMDETAILSSECTION: "block_15",
-  COMPLIANCEASSOCIATIONSECTION: "block_17",
-  FINANCIALANDDISPOSITIONDETAILSSECTION: "block_18",
-  PERFORMANCEDETAILSSECTION: "block_19"
+  GENERAL: {
+    code: "block_1",
+    containers: []
+  },
+  EQUIPMENTDETAILS: {
+    code: "block_2",
+    containers: []
+  },
+  HIERARCHY: {
+    code: "block_3",
+    containers: []
+  },
+  CUSTOMFIELDS: {
+    code: "block_4",
+    containers: []
+  },
+  GISDETAILS: {
+    code: "block_5",
+    containers: []
+  },
+  LINEARREFERENCEDETAILS: {
+    code: "block_6",
+    containers: []
+  },
+  CALLCENTERDETAILS: {
+    code: "block_7",
+    containers: []
+  },
+  TRACKINGDETAILS: {
+    code: "block_8",
+    containers: []
+  },
+  VARIABLES: {
+    code: "block_9",
+    containers: []
+  },
+  USERDEFINEDFIELDSSECTION: {
+    code: "block_10",
+    containers: []
+  },
+  FACILITYDETAILS: {
+    code: "block_11",
+    containers: []
+  },
+  BLOCK_12: {
+    code: "block_12",
+    containers: []
+  },
+  RELIABILITYRANKDETAILSSECTION: {
+    code: "block_13",
+    containers: []
+  },
+  CONTRACTANDRENTALDETAILSSECTION: {
+    code: "block_14",
+    containers: []
+  },
+  RCMDETAILSSECTION: {
+    code: "block_15",
+    containers: []
+  },
+  COMPLIANCEASSOCIATIONSECTION: {
+    code: "block_17",
+    containers: []
+  },
+  FINANCIALANDDISPOSITIONDETAILSSECTION: {
+    code: "block_18",
+    containers: []
+  },
+  PERFORMANCEDETAILSSECTION: {
+    code: "block_19",
+    containers: []
+  }
 };
 
 
