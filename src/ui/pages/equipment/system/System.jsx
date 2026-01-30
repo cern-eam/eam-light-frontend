@@ -46,10 +46,10 @@ import {
   onCategoryChange,
 } from "../EquipmentTools";
 import SystemHierarchy from "./SystemHierarchy";
-import { systemLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
+import { SYSTEM_BLOCKS, systemLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
 import StatusRow from "../../../components/statusrow/StatusRow.jsx";
-import ScreenContainers from "../../../layout/ScreenContainers.jsx";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer.jsx";
+import ScreenBlock from "../../../layout/ScreenBlock.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -156,6 +156,13 @@ const System = () => {
       readOnly,
     };
 
+    const screenBlockProps = {
+      register,
+      screenLayout: systemLayout,
+      layoutPropertiesMap: systemLayoutPropertiesMap,
+      ctx: {newEntity, equipment},
+    };
+
     return [
       {
         id: "GENERAL",
@@ -163,7 +170,7 @@ const System = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainers register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}}
+          <ScreenBlock {...screenBlockProps} blocks={SYSTEM_BLOCKS.GENERAL}
           containers={['cont_1', 'cont_1.1', 'cont_1.2', 'cont_2']}
           footer={!newEntity &&
                   <StatusRow
@@ -188,7 +195,7 @@ const System = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainers register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_3', 'cont_4', 'cont_4.1', 'cont_4.2']}/>
+          <ScreenBlock {...screenBlockProps} blocks={[SYSTEM_BLOCKS.EQUIPMENTDETAILS, SYSTEM_BLOCKS.TRACKINGDETAILS]}/>
         ),
         column: 1,
         order: 2,
@@ -202,7 +209,7 @@ const System = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainers register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_4.3', 'cont_4.4']}/>
+          <ScreenBlock {...screenBlockProps} blocks={SYSTEM_BLOCKS.VARIABLES}/>
         ),
         column: 1,
         order: 10,
@@ -376,13 +383,12 @@ const System = () => {
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
-          <ScreenContainers register={register} screenLayout={systemLayout} layoutPropertiesMap={systemLayoutPropertiesMap} ctx={{newEntity, equipment}} containers={['cont_5.4', 'cont_5.5', 'cont_5.6']}/>
+          <ScreenBlock {...screenBlockProps} blocks={SYSTEM_BLOCKS.USERDEFINEDFIELDSSECTION}/>
         ),
-
         column: 2,
         order: 10,
         summaryIcon: AssignmentIndIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
+        ignore: systemLayout.fields.block_4.attribute === "H",
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
       },
       {

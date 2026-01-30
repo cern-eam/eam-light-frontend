@@ -7,8 +7,6 @@ const ScreenContainers = ({ register, screenLayout, layoutPropertiesMap = {}, ct
 
   const containerIndex = (c) => containers.length ? containers.indexOf(c) : 0;
 
-    // TODO: if all blocks are hidden, return null
-
   return (
     <React.Fragment>
       {Object.values(fields)
