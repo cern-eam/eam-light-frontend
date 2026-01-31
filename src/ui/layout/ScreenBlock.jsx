@@ -5,7 +5,7 @@ const ScreenBlock = ({ register, screenLayout, layoutPropertiesMap = {}, ctx = {
   const blockList = Array.isArray(blocks) ? blocks : [blocks];
   
   const visibleBlocks = blockList.filter(
-    (b) => screenLayout.fields[b.code]?.attribute !== "H"
+    (block) => screenLayout.fields[block.code]?.attribute !== "H"
   );
 
   if (visibleBlocks.length === 0) {
@@ -14,14 +14,14 @@ const ScreenBlock = ({ register, screenLayout, layoutPropertiesMap = {}, ctx = {
 
   return (
     <React.Fragment>
-      {visibleBlocks.map((b) => (
+      {visibleBlocks.map((block) => (
         <ScreenContainers
-          key={b.code}
+          key={block.code}
           register={register}
           screenLayout={screenLayout}
           layoutPropertiesMap={layoutPropertiesMap}
           ctx={ctx}
-          containers={b.containers}
+          containers={block?.containers}
         />
       ))}
       {footer}
