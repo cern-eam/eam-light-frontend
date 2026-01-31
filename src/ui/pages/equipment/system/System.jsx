@@ -191,7 +191,7 @@ const System = () => {
       },
       {
         id: "DETAILS",
-        label: "Details",
+        label: systemLayout.fields[SYSTEM_BLOCKS.EQUIPMENTDETAILS.code]?.text || "Details*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
@@ -205,7 +205,7 @@ const System = () => {
       },
       {
         id: "VARIABLES",
-        label: "Variables",
+        label: systemLayout.fields[SYSTEM_BLOCKS.VARIABLES.code]?.text || "Variables*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
@@ -219,7 +219,7 @@ const System = () => {
       },
       {
         id: "HIERARCHY",
-        label: "Hierarchy",
+        label: systemLayout.fields[SYSTEM_BLOCKS.HIERARCHY.code]?.text || "Hierarchy*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => <SystemHierarchy {...commonProps} />,
@@ -353,7 +353,7 @@ const System = () => {
       },
       {
         id: "COMMENTS",
-        label: "Comments",
+        label: systemLayout.tabs[TAB_CODES.COMMENTS]?.tabDescription || "Comments*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
@@ -379,7 +379,7 @@ const System = () => {
       },
       {
         id: "USERDEFINEDFIELDS",
-        label: "User Defined Fields",
+        label: systemLayout.fields[SYSTEM_BLOCKS.USERDEFINEDFIELDSSECTION.code]?.text || "User Defined Fields*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
@@ -393,7 +393,7 @@ const System = () => {
       },
       {
         id: "CUSTOMFIELDS",
-        label: "Custom Fields",
+        label: systemLayout.fields[SYSTEM_BLOCKS.CUSTOMFIELDS.code]?.text || "Custom Fields*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
