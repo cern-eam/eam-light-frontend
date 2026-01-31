@@ -18,9 +18,8 @@ const SettingsMenu = ({ classes }) => {
 
     return (
         <SubMenu id="settings" header={<span>SETTINGS</span>}>
-            {applicationData.EL_ADMUG &&
-                applicationData.EL_ADMUG.split(",").includes(
-                    eamAccount.userGroup
+            {(applicationData.EL_ADMUG && applicationData.EL_ADMUG.split(",").includes(eamAccount.userGroup) 
+             || eamAccount.userDefinedFields.udfchkbox02 === 'true'
                 ) && (
                     <MenuItem
                         label="Refresh EAM Light Cache"
