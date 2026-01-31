@@ -184,7 +184,7 @@ const Position = () => {
       },
       {
         id: "DETAILS",
-        label: "Details",
+        label: positionLayout.fields[POSITION_BLOCKS.EQUIPMENTDETAILS.code]?.text || "Details*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
@@ -198,7 +198,7 @@ const Position = () => {
       },
       {
         id: "VARIABLES",
-        label: "Variables",
+        label: positionLayout.fields[POSITION_BLOCKS.VARIABLES.code]?.text || "Variables*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
@@ -212,7 +212,7 @@ const Position = () => {
       },
       {
         id: "HIERARCHY",
-        label: "Hierarchy",
+        label: positionLayout.fields[POSITION_BLOCKS.HIERARCHY.code]?.text || "Hierarchy*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => <PositionHierarchy {...commonProps} />,
@@ -346,7 +346,7 @@ const Position = () => {
       },
       {
         id: "COMMENTS",
-        label: "Comments",
+        label: positionLayout.tabs[TAB_CODES.COMMENTS]?.tabDescription || "Comments*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
@@ -371,7 +371,7 @@ const Position = () => {
       },
       {
         id: "USERDEFINEDFIELDS",
-        label: "User Defined Fields",
+        label: positionLayout.fields[POSITION_BLOCKS.USERDEFINEDFIELDSSECTION.code]?.text || "User Defined Fields*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
@@ -385,7 +385,7 @@ const Position = () => {
       },
       {
         id: "CUSTOMFIELDS",
-        label: "Custom Fields",
+        label: positionLayout.fields[POSITION_BLOCKS.CUSTOMFIELDS.code]?.text || "Custom Fields*",
         isVisibleWhenNewEntity: true,
         maximizable: false,
         render: () => (
