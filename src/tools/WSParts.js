@@ -23,6 +23,10 @@ export const deletePart = (partIdentifier, config = {}) => {
     return WS._delete(`/proxy/parts/${encodeCodeOrg(partIdentifier)}`, config);
 }
 
+export const createManufacturer = (manufacturer, config = {}) => {
+    return WS._post('/proxy/manufacturers/', manufacturer, config);
+}
+
 export const getPartTrackingMethods = (config = {}) => {
     const gridRequest = new GridRequest("LVTRACK", GridTypes.LOV)
     return getGridData(gridRequest).then(response => transformResponse(response, {code: "trackingtype", desc: "description"}));

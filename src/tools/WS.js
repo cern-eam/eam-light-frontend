@@ -43,7 +43,7 @@ class WS {
     entity,
     systemFunction,
     userFunction,
-    tabs,
+    tabs = [],
     config = { timeout: 60000 }
   ) {
     if (tabs) tabs = "tabname=" + tabs.join("&tabname=");
