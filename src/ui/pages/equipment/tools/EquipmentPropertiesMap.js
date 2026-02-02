@@ -1,6 +1,8 @@
+import React from "react";
 import { GridTypes } from "../../../../tools/entities/GridRequest";
 import { autocompleteDepartment, readStatuses, readUserCodes } from "../../../../tools/WSGrids";
 import { isMultiOrg } from "../../EntityTools";
+import AddManufacturerButton from "../../part/manufacturer/AddManufacturerButton";
 
 export const equipmentLayoutPropertiesMap = {
 
@@ -31,7 +33,10 @@ export const equipmentLayoutPropertiesMap = {
 
   manufacturer: {
     noOrgDescProps: true,
-    alias: "manufacturercode"
+    alias: "manufacturercode",
+    extraProps: {
+      //endAdornment: React.createElement(AddManufacturerButton)
+    }
   },
 
   serialnumber: {
