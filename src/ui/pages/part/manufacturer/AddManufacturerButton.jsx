@@ -11,7 +11,9 @@ export default function AddManufacturerButton() {
       <IconButton onClick={() => setOpen(true)} size="small" aria-label="add manufacturer">
         <AddIcon />
       </IconButton>
-      <AddManufacturerDialog open={open} onClose={() => setOpen(false)} />
+      <div>
+        <AddManufacturerDialog open={open} onClose={() => setOpen(false)} />
+      </div>
     </>
   );
 }

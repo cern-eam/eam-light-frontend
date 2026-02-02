@@ -1,18 +1,19 @@
 import React from "react";
-import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import ScreenContainers from "../../../layout/ScreenContainers";
 import useEntity from "../../../../hooks/useEntity";
-import { Button, DialogActions, DialogTitle } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
 import BlockUi from "react-block-ui";
 import { layoutPropertiesMap } from "./manufacturerTools";
+import { createManufacturer } from "../../../../tools/WSParts";
+import { getOrg } from "../../../../hooks/tools";
 
 export default function AddManufacturerDialog({ open, onClose }) {
   
   if (!open) {
     return null;
   }
-
+  
   const {
     saveHandler,
     updateEntityProperty: updateManufacturerProperty,
@@ -22,8 +23,8 @@ export default function AddManufacturerDialog({ open, onClose }) {
     newEntity,
 } = useEntity({
     WS: {
-        create: () => {},
-        new: () => {},
+        create: createManufacturer,
+        new: () => Promise.resolve({body: {Result: {ResultData: {}}}}),
     },
     postActions: {
         new: postInit,
@@ -31,13 +32,14 @@ export default function AddManufacturerDialog({ open, onClose }) {
     },
     screenProperty: "manufacturerScreen",
     entityDesc: 'Manufacturer',
+    entityCode: "MANU",
     explicitIdentifier: ``,
     updateWindowTitle: false,
     layoutPropertiesMap: layoutPropertiesMap,
 });
 
 function postInit() {
-  
+  updateManufacturerProperty('MANUFACTURERID.ORGANIZATIONID.ORGANIZATIONCODE', getOrg());
 }
 
 function postCreate() {
@@ -45,18 +47,26 @@ function postCreate() {
 }
 
   return (
-    <Dialog fullWidth open={open} onClose={onClose}>
+    <Dialog fullWidth 
+      id="addManufacturerDialog" 
+      open={open} onClose={onClose} 
+      aria-labelledby="form-dialog-title"
+      onMouseDown={(e) => e.stopPropagation()}
+      >
+      
       <DialogTitle id="form-dialog-title">Add Manufacturer</DialogTitle>
-      <DialogContent>
-        <BlockUi tag="div" blocking={loading}>
-          <ScreenContainers
-              register={register}
-              screenLayout={manufacturerLayout}
-              layoutPropertiesMap={layoutPropertiesMap}
-              ctx={{ newEntity }}
-              containers={['cont_1', 'cont_2', 'cont_3']}
-            />
-        </BlockUi>
+      
+      <DialogContent id="content">
+        <div>
+          <BlockUi tag="div" blocking={loading}>
+            <ScreenContainers
+                register={register}
+                screenLayout={manufacturerLayout}
+                layoutPropertiesMap={layoutPropertiesMap}
+                containers={['cont_1','cont_2','cont_3']}
+              />
+          </BlockUi>
+        </div>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary" disabled={loading}>Cancel</Button>

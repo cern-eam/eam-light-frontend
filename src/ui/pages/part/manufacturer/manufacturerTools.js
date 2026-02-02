@@ -6,4 +6,8 @@ export const layoutPropertiesMap = {
       hidden: !isMultiOrg,
     },
   },
+
+  manufacturer: {
+    noOrgDescProps: true,
+  }
 };
