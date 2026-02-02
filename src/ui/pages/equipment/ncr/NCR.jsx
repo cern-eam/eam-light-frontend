@@ -17,7 +17,6 @@ import Rule from "@mui/icons-material/Rule";
 import DescriptionIcon from "@mui/icons-material/Description";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
-import NCRGeneral from "./NCRGeneral.jsx";
 import { isRegionAvailable, layoutPropertiesMap } from "./NCRTools.js";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import EDMSDoclightIframeContainer from "@/ui/components/iframes/EDMSDoclightIframeContainer";
@@ -133,14 +132,7 @@ const NCR = () => {
                 isVisibleWhenNewEntity: true,
                 maximizable: false,
                 render: () => (
-                    <NCRGeneral
-                        showNotification={showNotification}
-                        {...commonProps}
-                        userData={userData}
-                        screenCode={screenCode}
-                        screenPermissions={screenPermissions}
-                        ncr={ncr}
-                    />
+                    <ScreenContainers register={register} screenLayout={ncrLayout} layoutPropertiesMap={layoutPropertiesMap} ctx={{newEntity, ncr}} containers={['cont_1', 'cont_2', 'cont_3', 'cont_4']}/>
                 ),
                 column: 1,
                 order: 1,

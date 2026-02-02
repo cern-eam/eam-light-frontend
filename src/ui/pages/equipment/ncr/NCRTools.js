@@ -1,13 +1,13 @@
 import { GridTypes } from "../../../../tools/entities/GridRequest";
+import WS from "../../../../tools/WS";
+import { readStatuses } from "../../../../tools/WSGrids";
+import { isMultiOrg } from "../../EntityTools";
 
 export const layoutPropertiesMap = {
-    description: "description",
-    organization: "organizationCode",
+
     equipment: {
-        value: "EQUIPMENTID.EQUIPMENTCODE",
-        desc: "EQUIPMENTID.DESCRIPTION",
-        org: 'EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE',
         alias: "equipmentCode",
+        link: "/equipment/",
         autocompleteHandlerData: {
             resultMap: {
                 code: "equipmentcode",
@@ -23,19 +23,55 @@ export const layoutPropertiesMap = {
         alias: "locationCode"
     },
     class: {
-        value: "CLASSID.CLASSCODE",
-        desc: "CLASSID.DESCRIPTION",
-        org: "CLASSID.ORGANIZATIONID.ORGANIZATIONCODE",
         alias: "classCode"
     },
+
     department: {
-        value: "DEPARTMENTID.DEPARTMENTCODE",
-        desc: "DEPARTMENTID.DESCRIPTION",
         alias: "departmentCode"
     },
+
     type: {
-        org: "NONCONFORMITYTYPEID.ORGANIZATIONID.ORGANIZATIONCODE",
         alias: "typeCode"
+    },
+
+    severity: {
+        extraProps: {
+            autocompleteHandler: WS.getCodeLov,
+            autocompleteHandlerParams: ["SEVE"]
+        }
+    },
+
+    importance: {
+        extraProps: {
+            autocompleteHandler: WS.getCodeLov, 
+            autocompleteHandlerParams: ["IMPT"]
+        }
+    },
+
+    status: {
+        extraProps: (ctx) => ({
+            autocompleteHandler: readStatuses,
+            autocompleteHandlerParams: ["NOCF", ctx.newEntity, ctx.ncr.statusCode],
+            renderDependencies: [ctx.newEntity, ctx.ncr.statusCode]
+        })
+    },
+
+    nonconformity: {
+        extraProps: {
+            hidden: true
+        }
+    },
+
+    organization: {
+        extraProps: {
+            hidden: !isMultiOrg
+        }
+    },
+
+    note: {
+        extraProps: {
+            textarea: true
+        }
     }
 };
 
