@@ -111,9 +111,11 @@ const System = () => {
     entityOrgProperty: "SYSTEMID.ORGANIZATIONID.ORGANIZATIONCODE",
     entityProperty: "SystemEquipment",
     resultDataCodeProperty: "SYSTEMID.EQUIPMENTCODE",
+    resultDefaultDataProperty: "SystemEquipmentDefault",
     screenProperty: "systemScreen",
     layoutProperty: "systemLayout",
     layoutPropertiesMap: systemLayoutPropertiesMap,
+
   });
 
   useEffect( () => {
