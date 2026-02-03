@@ -154,7 +154,7 @@ const Position = () => {
       register,
       screenLayout: positionLayout,
       layoutPropertiesMap: positionLayoutPropertiesMap,
-      ctx: {newEntity, equipment},
+      ctx: {newEntity, equipment, updateEquipmentProperty},
     };
 
     return [
@@ -224,7 +224,7 @@ const Position = () => {
       },
       {
         id: "WORKORDERS",
-        label: "Work Orders",
+        label: positionLayout.tabs[TAB_CODES.WORKORDERS]?.tabDescription || "Work Orders*",
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: ({ panelQueryParams }) => (

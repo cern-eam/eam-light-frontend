@@ -191,7 +191,7 @@ const Asset = () => {
       register,
       screenLayout: assetLayout,
       layoutPropertiesMap: assetLayoutPropertiesMap,
-      ctx: {newEntity, equipment},
+      ctx: {newEntity, equipment, updateEquipmentProperty},
     };
 
     return [

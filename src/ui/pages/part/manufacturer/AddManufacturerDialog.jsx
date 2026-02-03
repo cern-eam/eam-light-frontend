@@ -8,7 +8,7 @@ import { layoutPropertiesMap } from "./manufacturerTools";
 import { createManufacturer } from "../../../../tools/WSParts";
 import { getOrg } from "../../../../hooks/tools";
 
-export default function AddManufacturerDialog({ open, onClose }) {
+export default function AddManufacturerDialog({ open, onClose, updateEquipmentProperty, equipment }) {
   
   if (!open) {
     return null;
@@ -42,7 +42,10 @@ function postInit() {
   updateManufacturerProperty('MANUFACTURERID.ORGANIZATIONID.ORGANIZATIONCODE', getOrg());
 }
 
-function postCreate() {
+function postCreate(manufacturer) {
+  if (!equipment.ManufacturerInfo?.MANUFACTURERCODE) {
+    updateEquipmentProperty('ManufacturerInfo.MANUFACTURERCODE', manufacturer.MANUFACTURERID.MANUFACTURERCODE);
+  }
   onClose();
 }
 
