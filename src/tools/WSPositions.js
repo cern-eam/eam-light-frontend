@@ -41,14 +41,16 @@ export const getPositionsDefault = (organization = getOrg(), config = {}) => {
   return WS._post(`/proxy/positiondefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": organization}}, config)
   .then(response => {
     if (response.body.Result.ResultData.AssetEquipment) { // For the moment the REST WS returns wrong response that needs to be altered 
-      response.body.Result.ResultData.PositionEquipment = response.body.Result.ResultData.AssetEquipment
+      response.body.Result.ResultData.PositionEquipmentDefault = response.body.Result.ResultData.AssetEquipment
       delete response.body.Result.ResultData.AssetEquipment
-      response.body.Result.ResultData.PositionEquipment.POSITIONID = response.body.Result.ResultData.PositionEquipment.ASSETID
-      delete response.body.Result.ResultData.PositionEquipment.ASSETID
-      response.body.Result.ResultData.PositionEquipment.TYPE.TYPECODE = 'P'
+      response.body.Result.ResultData.PositionEquipmentDefault.ORGANIZATIONID = response.body.Result.ResultData.PositionEquipmentDefault.ASSETID.ORGANIZATIONID
+      delete response.body.Result.ResultData.PositionEquipmentDefault.ASSETID
+      response.body.Result.ResultData.PositionEquipmentDefault.TYPE.TYPECODE = 'P'
     }
-    response.body.Result.ResultData.PositionEquipment.POSITIONID.EQUIPMENTCODE = null
-    response.body.Result.ResultData.PositionEquipment.PositionParentHierarchy = {}
+    
+    response.body.Result.ResultData.PositionEquipmentDefault.POSITIONID = {}
+    response.body.Result.ResultData.PositionEquipmentDefault.POSITIONID.ORGANIZATIONID = response.body.Result.ResultData.PositionEquipmentDefault.ORGANIZATIONID
+    response.body.Result.ResultData.PositionEquipmentDefault.PositionParentHierarchy = {}
     return response
   })
 }

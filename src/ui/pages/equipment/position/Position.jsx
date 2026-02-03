@@ -113,6 +113,7 @@ const Position = () => {
     entityOrgProperty: "POSITIONID.ORGANIZATIONID.ORGANIZATIONCODE",
     entityProperty: "PositionEquipment",
     resultDataCodeProperty: "POSITIONID.EQUIPMENTCODE",
+    resultDefaultDataProperty: "PositionEquipmentDefault",
     screenProperty: "positionScreen",
     layoutProperty: "positionLayout",
     layoutPropertiesMap: positionLayoutPropertiesMap,
