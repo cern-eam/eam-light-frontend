@@ -160,7 +160,7 @@ const System = () => {
       register,
       screenLayout: systemLayout,
       layoutPropertiesMap: systemLayoutPropertiesMap,
-      ctx: {newEntity, equipment},
+      ctx: {newEntity, equipment, updateEquipmentProperty},
     };
 
     return [
@@ -231,7 +231,7 @@ const System = () => {
       },
       {
         id: "WORKORDERS",
-        label: "Work Orders",
+        label: systemLayout.tabs[TAB_CODES.WORKORDERS]?.tabDescription || "Work Orders*",
         isVisibleWhenNewEntity: false,
         maximizable: true,
         render: ({ panelQueryParams }) => (

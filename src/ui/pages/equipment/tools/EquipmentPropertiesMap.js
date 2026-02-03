@@ -35,9 +35,12 @@ export const equipmentLayoutPropertiesMap = {
   manufacturer: {
     noOrgDescProps: true,
     alias: "manufacturercode",
-    extraProps: {
-      endAdornment: React.createElement(AddManufacturerButton)
-    }
+    extraProps: (ctx) => ({
+      endAdornment: React.createElement(AddManufacturerButton, {
+        updateEquipmentProperty: ctx.updateEquipmentProperty,
+        equipment: ctx.equipment
+      })
+    })
   },
 
   serialnumber: {
