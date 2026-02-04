@@ -457,14 +457,14 @@ const Position = () => {
         isModified={isModified}
         newEntity={newEntity}
         entityScreen={screenPermissions}
-        entityName="Position"
+        entityName={positionLayout.fields?.equipmentno?.text ?? "Position*"}
         entityKeyCode={id?.code}
         organization={id?.org}
         saveHandler={saveHandler}
         newHandler={newHandler}
         deleteHandler={deleteHandler}
         toolbarProps={{
-          entityDesc: "Position",
+          entityDesc: positionLayout.fields?.equipmentno?.text ?? "Position*",
           entity: equipment,
           id,
           // postInit: this.postInit.bind(this),

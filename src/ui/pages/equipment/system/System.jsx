@@ -466,14 +466,14 @@ const System = () => {
         isModified={isModified}
         newEntity={newEntity}
         entityScreen={screenPermissions}
-        entityName="System"
+        entityName={systemLayout.fields?.equipmentno?.text ?? "System*"}
         entityKeyCode={id?.code}
         organization={id?.org}
         saveHandler={saveHandler}
         newHandler={newHandler}
         deleteHandler={deleteHandler}
         toolbarProps={{
-          entityDesc: "System", // TODO:
+          entityDesc: systemLayout.fields?.equipmentno?.text ?? "System*",
           entity: equipment,
           id,
           // postInit: this.postInit.bind(this),
