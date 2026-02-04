@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function MenuItem({ onClick, icon, label, link }) {
     if (onClick) {
         return (
-            <li style={{ marginTop: 15 }}>
+            <li style={{ margin: 7 }}>
                 <a onClick={onClick}>
                     {icon}
                     <span>{label}</span>

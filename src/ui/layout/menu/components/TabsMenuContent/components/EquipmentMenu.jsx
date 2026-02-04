@@ -25,6 +25,7 @@ const EquipmentMenu = ({ classes }) => {
             positionScreen,
             systemScreen,
             locationScreen,
+            screens,
             eamAccount,
         },
     } = useUserDataStore();
@@ -36,7 +37,7 @@ const EquipmentMenu = ({ classes }) => {
             <SubMenu id="equipment" header={<span>EQUIPMENT</span>}>
                 {assetScreen && (
                     <MenuItem
-                        label="Assets"
+                        label={screens[assetScreen]?.screenDesc ?? 'Assets*'}
                         icon={<AssetIcon className={classes.menuIcon} />}
                         onClick={() =>
                             setActiveMenuVisibility("equipmentAssets")
@@ -46,7 +47,7 @@ const EquipmentMenu = ({ classes }) => {
 
                 {ncrScreen && ( 
                         <MenuItem
-                            label="NCRs"
+                            label={screens[ncrScreen]?.screenDesc ?? 'NCRs*'}
                             icon={<Rule className={classes.menuIcon} />} // TODO: Add NCR icon
                             onClick={() =>
                                 setActiveMenuVisibility("equipmentNcrs")
@@ -56,7 +57,7 @@ const EquipmentMenu = ({ classes }) => {
 
                 {positionScreen && (
                     <MenuItem
-                        label="Positions"
+                        label={screens[positionScreen]?.screenDesc ?? 'Positions*'}
                         icon={<PositionIcon className={classes.menuIcon} />}
                         onClick={() =>
                             setActiveMenuVisibility("equipmentPositions")
@@ -66,7 +67,7 @@ const EquipmentMenu = ({ classes }) => {
 
                 {systemScreen && (
                     <MenuItem
-                        label="Systems"
+                        label={screens[systemScreen]?.screenDesc ?? 'Systems*'}
                         icon={<SystemIcon className={classes.menuIcon} />}
                         onClick={() =>
                             setActiveMenuVisibility("equipmentSystems")
@@ -76,7 +77,7 @@ const EquipmentMenu = ({ classes }) => {
 
                 {locationScreen && (
                     <MenuItem
-                        label="Locations"
+                        label={screens[locationScreen]?.screenDesc ?? 'Locations*'}
                         icon={<RoomIcon className={classes.menuIcon} />}
                         onClick={() =>
                             setActiveMenuVisibility("equipmentLocations")
