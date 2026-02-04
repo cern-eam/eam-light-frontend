@@ -873,6 +873,7 @@ const Workorder = () => {
     return renderLoading("Reading Work Order ...");
   }
 
+  
   return (
     <div className="entityContainer">
       <BlockUi
@@ -884,7 +885,7 @@ const Workorder = () => {
           isModified={isModified}
           newEntity={newEntity}
           entityScreen={screenPermissions}
-          entityName="Work Order"
+          entityName={workOrderLayout.fields?.workordernum?.text ?? "Work Order*"}
           entityKeyCode={id?.code}
           organization={id?.org}
           saveHandler={saveHandler}
@@ -903,7 +904,7 @@ const Workorder = () => {
             screencode: screenCode,
             copyHandler: copyHandler,
             repeatStepHandler: repeatStepHandler,
-            entityDesc: "Work Order",
+            entityDesc: workOrderLayout.fields.workordernum.text ?? "Work Order*",
             entityType: ENTITY_TYPE.WORKORDER,
             screens: userData.screens,
             workorderScreencode: userData.workOrderScreen,

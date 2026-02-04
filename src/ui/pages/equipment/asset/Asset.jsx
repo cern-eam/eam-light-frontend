@@ -514,14 +514,14 @@ const Asset = () => {
         isModified={isModified}
         newEntity={newEntity}
         entityScreen={screenPermissions}
-        entityName="Asset" // TODO:
+        entityName={assetLayout.fields?.equipmentno?.text ?? "Asset*"}
         entityKeyCode={id?.code}
         organization={id?.org}
         saveHandler={saveHandler}
         newHandler={newHandler}
         deleteHandler={deleteHandler}
         toolbarProps={{
-          entityDesc: "Asset", // TODO:
+          entityDesc: assetLayout.fields?.equipmentno?.text ?? "Asset*",
           entity: equipment,
           id,
           // postInit: this.postInit.bind(this),
