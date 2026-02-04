@@ -46,9 +46,8 @@ class WS {
     tabs = [],
     config = { timeout: 60000 }
   ) {
-    if (tabs) tabs = "tabname=" + tabs.join("&tabname=");
     return this._get(
-      `/users/screenlayout/${userGroup}/${entity}/${systemFunction}/${userFunction}?${tabs}`,
+      `/users/screenlayout/${userGroup}/${entity}/${systemFunction}/${userFunction}${(tabs.length > 0) ? "?tabname=" + tabs.join("&tabname=") : ""}`,
       config
     );
   }
