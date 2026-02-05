@@ -37,3 +37,24 @@ export const getAssetsList = (partCode, config = {}) => {
     gridRequest.addFilter("part", partCode, "=");
     return getGridData(gridRequest, config)
 }
+
+// Lot web services
+export const initLot = (config = {}) => {
+    return WS._post(`/proxy/lotdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": getOrg()}}, config)
+}
+
+export const getLot = (lotIdentifier, config = {}) => {
+    return WS._get(`/proxy/lots/${encodeCodeOrg(lotIdentifier)}`, config);
+}
+
+export const createLot = (lot, config = {}) => {
+    return WS._post('/proxy/lots/', lot, config);
+}
+
+export const updateLot = (lot, config = {}) => {
+    return WS._put('/proxy/lots/', lot, config);
+}
+
+export const deleteLot = (lotIdentifier, config = {}) => {
+    return WS._delete(`/proxy/lots/${encodeCodeOrg(lotIdentifier)}`, config);
+}

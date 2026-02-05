@@ -6,6 +6,8 @@ import ApplicationLayout from "./ui/layout/ApplicationLayout";
 import EamlightMenu from "./ui/layout/menu/EamlightMenu";
 import WorkorderSearch from "./ui/pages/work/search/WorkorderSearch";
 import PartSearch from "./ui/pages/part/search/PartSearch";
+import Lot from "./ui/pages/part/lot/Lot";
+import LotSearch from "./ui/pages/part/lot/search/LotSearch";
 import AssetSearch from "./ui/pages/equipment/asset/search/AssetSearch";
 import NCRSearch from "./ui/pages/equipment/ncr/search/NCRSearch";
 import PositionSearch from "./ui/pages/equipment/position/search/PositionSearch";
@@ -112,6 +114,8 @@ const Eamlight = () => {
                 <Route path="/meterreading" component={MeterReading} />
                 <Route path="/grid" component={Grid} />
                 <Route path="/report" component={Report} />
+                <Route path="/lot/:code?" component={Lot} />
+                <Route path="/lotsearch" component={LotSearch} />
                 <Route path={eqpRegex} component={Equipment} />
                 <Route path={releaseNotesPath} component={ReleaseNotesPage} />
               </div>

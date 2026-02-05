@@ -11,6 +11,7 @@ import EquipmentNcrMenu from "./components/EquipmentNcrMenu";
 import EquipmentPositionMenu from "./components/EquipmentPositionMenu";
 import EquipmentSystemMenu from "./components/EquipmentSystemMenu";
 import EquipmentLocationMenu from "./components/EquipmentLocationMenu";
+import MaterialLotMenu from "./components/MaterialLotMenu";
 
 const TabsMenuContent = () => {
     const {
@@ -27,6 +28,7 @@ const TabsMenuContent = () => {
             equipmentPositions,
             equipmentSystems,
             equipmentLocations,
+            materialLots,
         },
     } = useMenuVisibilityStore();
 
@@ -44,6 +46,7 @@ const TabsMenuContent = () => {
             {equipmentPositions && <EquipmentPositionMenu />}
             {equipmentSystems && <EquipmentSystemMenu />}
             {equipmentLocations && <EquipmentLocationMenu />}
+            {materialLots && <MaterialLotMenu />}
         </>
     );
 };
