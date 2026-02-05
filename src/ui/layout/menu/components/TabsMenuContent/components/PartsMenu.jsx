@@ -6,14 +6,18 @@ import MenuItem from "./common/MenuItem";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import useScreenPermissions from "../hooks/useScreenPermissions";
+import useMenuVisibilityStore from "@/state/useMenuVisibilityStore";
 import withStyles from "@mui/styles/withStyles";
 import { styles } from "../styles";
+import { AssetIcon } from "eam-components/dist/ui/components/icons";
+import LotIcon from "../../../../../components/eqtree/LotIcon";
 
 const PartsMenu = ({ classes }) => {
     const {
-        userData: { partScreen, screens },
+        userData: { partScreen, lotScreen, screens },
         updateUserData,
     } = useUserDataStore();
+    const { setActiveMenuVisibility } = useMenuVisibilityStore();
     const partScreenPermissions = useScreenPermissions(partScreen);
 
     const currentPartScreen = useMemo(
@@ -49,6 +53,14 @@ const PartsMenu = ({ classes }) => {
                     label={"Search " + currentPartScreen.screenDesc}
                     icon={<SearchIcon className={classes.menuIcon} />}
                     link="partsearch"
+                />
+            )}
+
+            {lotScreen && (
+                <MenuItem
+                    label={screens[lotScreen]?.screenDesc ?? "Lots"}
+                    icon={<LotIcon className={classes.menuIcon} />}
+                    onClick={() => setActiveMenuVisibility("materialLots")}
                 />
             )}
         </SubMenu>

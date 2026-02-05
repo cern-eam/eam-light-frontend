@@ -47,6 +47,7 @@ const TabsMenuSidebar = () => {
             equipmentSystems,
             equipmentLocations,
             materials,
+            materialLots,
             customgrids,
             settings,
         },
@@ -131,7 +132,7 @@ const TabsMenuSidebar = () => {
             {partScreen && (
                 <li>
                     <div
-                        className={materials ? "active" : ""}
+                        className={materials || materialLots ? "active" : ""}
                         onClick={() => setActiveMenuVisibility("materials")}
                     >
                         <Tooltip title="MATERIALS" placement="right">

@@ -14,6 +14,7 @@ const useMenuVisibilityStore = create((set) => ({
         equipmentPositions: false,
         equipmentSystems: false,
         equipmentLocations: false,
+        materialLots: false,
     },
     setActiveMenuVisibility: (menuId) => {
         set((state) => ({

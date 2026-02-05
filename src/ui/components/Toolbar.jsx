@@ -26,7 +26,8 @@ export const ENTITY_TYPE = {
   EQUIPMENT: "EQUIPMENT",
   PART: "PART",
   LOCATION: "LOCATION",
-  NCR: "NCR"
+  NCR: "NCR",
+  LOT: "LOT"
 };
 
 const VIEW_MODES = {
@@ -370,6 +371,12 @@ class Toolbar extends React.Component {
           BUTTON_KEYS.SHOW_ON_MAP,
           BUTTON_KEYS.CREATE_WORKORDER,
           BUTTON_KEYS.SHOW_IN_INFOR,
+        ];
+        break;
+      case ENTITY_TYPE.LOT:
+        buttonKeys = [
+          BUTTON_KEYS.COPY,
+          BUTTON_KEYS.EMAIL,
         ];
         break;
     }

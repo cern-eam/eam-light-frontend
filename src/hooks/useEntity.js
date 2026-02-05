@@ -105,6 +105,7 @@ const useEntity = (params) => {
   //   entity
   // );
 
+  // TODO IF screens[screenCode] is undefined, there is no access to the screen so act accordingly
 
   const userCode = useMemo(() => userData.eamAccount.userCode, [userData]);
 
