@@ -6,7 +6,6 @@ import ApplicationLayout from "./ui/layout/ApplicationLayout";
 import EamlightMenu from "./ui/layout/menu/EamlightMenu";
 import WorkorderSearch from "./ui/pages/work/search/WorkorderSearch";
 import PartSearch from "./ui/pages/part/search/PartSearch";
-import Lot from "./ui/pages/part/lot/Lot";
 import LotSearch from "./ui/pages/part/lot/search/LotSearch";
 import AssetSearch from "./ui/pages/equipment/asset/search/AssetSearch";
 import NCRSearch from "./ui/pages/equipment/ncr/search/NCRSearch";
@@ -83,6 +82,7 @@ const Eamlight = () => {
     "/location",
     "/workorder",
     "/installeqp",
+    "/lot",
   ].map((e) => `${e}/:code(.+)?`);
 
   const selectedTheme =
@@ -109,13 +109,12 @@ const Eamlight = () => {
                 <Route path="/positionsearch" component={PositionSearch} />
                 <Route path="/systemsearch" component={SystemSearch} />
                 <Route path="/locationsearch" component={LocationSearch} />
+                <Route path="/lotsearch" component={LotSearch} />
                 <Route path="/equipment/:code(.+)?" component={EquipmentRedirect} />
                 <Route path="/replaceeqp" component={ReplaceEqp} />
                 <Route path="/meterreading" component={MeterReading} />
                 <Route path="/grid" component={Grid} />
                 <Route path="/report" component={Report} />
-                <Route path="/lot/:code?" component={Lot} />
-                <Route path="/lotsearch" component={LotSearch} />
                 <Route path={eqpRegex} component={Equipment} />
                 <Route path={releaseNotesPath} component={ReleaseNotesPage} />
               </div>

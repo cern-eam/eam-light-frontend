@@ -10,6 +10,7 @@ import Location from "./location/Location";
 import Workorder from "../work/Workorder";
 import InstallEqp from "./installeqp/InstallEqp";
 import useEquipmentTreeStore from "../../../state/useEquipmentTreeStore";
+import Lot from "../part/lot/Lot";
 
 const Equipment = () => {
   const {equipmentTreeData: {showEqpTree, equipment}, updateEquipmentTreeData} = useEquipmentTreeStore();
@@ -48,6 +49,7 @@ const Equipment = () => {
             <Route path={"/system/:code(.+)?"} component={System} />
             <Route path={"/location/:code(.+)?"} component={Location} />
             <Route path="/workorder/:code(.+)?" component={Workorder} />
+            <Route path="/lot/:code(.+)?" component={Lot} />
             <Route path="/installeqp" component={InstallEqp} />
           </Switch>
         </div>
