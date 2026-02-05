@@ -258,7 +258,7 @@ const EamlightToolbar = ({
           disabled={isSaveButtonDisabled}
           startIcon={<SaveIcon />}
         >
-          {translations?.DTSAVE ?? 'Save*'}
+          {translations?.DTSAVE ?? 'Save'}
         </Button>
 
         {compactMenu ? renderCompactMenu() : renderDesktopMenu()}

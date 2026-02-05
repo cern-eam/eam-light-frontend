@@ -66,7 +66,7 @@ function postCreate(manufacturer) {
                 register={register}
                 screenLayout={manufacturerLayout}
                 layoutPropertiesMap={layoutPropertiesMap}
-                containers={['cont_1','cont_2','cont_3']}
+                containers={['cont_1','cont_2','cont_3', 'cont_4', 'cont_5', 'cont_6']}
               />
           </BlockUi>
         </div>
