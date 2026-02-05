@@ -16,6 +16,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import Toolbar from "./Toolbar";
 import "./EamlightToolbar.css";
+import useApplicationDataStore from "../../state/useApplicationDataStore";
 
 
 const EamlightToolbar = ({
@@ -41,6 +42,8 @@ const EamlightToolbar = ({
   const [smallScreenMode, setSmallScreenMode] = useState(false);
   const [moreMenu, setMoreMenu] = useState(null);
   const [visibilityMenu, setVisibilityMenu] = useState(null);
+
+  const { applicationData: { translations } } = useApplicationDataStore();
 
   const {
     userData: {
@@ -184,14 +187,14 @@ const EamlightToolbar = ({
         >
           <MenuItem onClick={localNewHandler} disabled={isNewButtonDisabled}>
             <AddIcon className="iconButton iconMenuStyle" />
-            <div> New</div>
+            <div> {translations?.DTNEW ?? 'New'}</div>
           </MenuItem>
           <MenuItem
             onClick={() => deleteConfirmation.current.show()}
             disabled={isDeleteButtonDisabled}
           >
             <DeleteOutlineIcon className="iconButton iconMenuStyle" />
-            <div> Delete</div>
+            <div> {translations?.DTDEL ?? 'Delete'}</div>
           </MenuItem>
           {getToolbar("MENUITEMS")}
           {smallScreenMode && regions && renderPanelSelectorMenu(true)}
@@ -208,14 +211,14 @@ const EamlightToolbar = ({
           disabled={isNewButtonDisabled}
           startIcon={<AddIcon />}
         >
-          New
+          {translations?.DTNEW ?? 'New'}
         </Button>
         <Button
           onClick={() => deleteConfirmation.current.show()}
           disabled={isDeleteButtonDisabled}
           startIcon={<DeleteOutlineIcon />}
         >
-          Delete
+          {translations?.DTDEL ?? 'Delete'}
         </Button>
         {getToolbar("TOOLBARICONS")}
       </div>
@@ -255,7 +258,7 @@ const EamlightToolbar = ({
           disabled={isSaveButtonDisabled}
           startIcon={<SaveIcon />}
         >
-          Save
+          {translations?.DTSAVE ?? 'Save*'}
         </Button>
 
         {compactMenu ? renderCompactMenu() : renderDesktopMenu()}

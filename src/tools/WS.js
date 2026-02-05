@@ -1,6 +1,7 @@
 import ajax from "eam-components/dist/tools/ajax";
 import GridRequest, { GridTypes } from "./entities/GridRequest";
 import { getGridData, transformResponse } from "./WSGrids";
+import { isCernMode } from "../ui/components/CERNMode";
 
 /**
  * Handles all calls to REST Api
@@ -24,12 +25,13 @@ class WS {
       config
     );
   }
-  getApplicationData(config = {}) {
-    return this._get("/application/applicationdata", config);
-  }
 
   refreshCache(config = {}) {
     return this._get("/application/refreshCache", config);
+  }
+
+  getApplicationData(config = {}) {
+    return this._get("/application/applicationdata", config);
   }
 
   getCodeLov = ({handlerParams: [code]}, config = {}) => {
@@ -128,3 +130,17 @@ class WS {
 }
 
 export default new WS();
+
+
+export const getTranlations = () => {
+  // in CERN mode should NOT make ajax call, but return response.body.data, but as a promise that resolves to the response.body.data: {}
+
+  if (isCernMode) {
+    return Promise.resolve({body: {data: []}});
+  }
+  
+  let gridRequest = new GridRequest("ASOBOT", GridTypes.LIST)
+    .addFilter("bot_function", "BSDTSP", "=", "AND")
+    .addFilter("bot_fld1", "DTDEL,DTSAVE,DTNEW", "IN", "OR")    
+  return getGridData(gridRequest).then(response => transformResponse(response, {code: "bot_fld1", desc: "bot_text"}))
+}

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import WS from '../tools/WS';
+import WS, { getTranlations } from '../tools/WS';
 
 const useApplicationDataStore = create((set) => ({
     applicationData: null,
@@ -8,9 +8,10 @@ const useApplicationDataStore = create((set) => ({
     fetchApplicationData: async () => {
         try {
             const response = await WS.getApplicationData();
+            const translationsResponse = await getTranlations();
 
             let serviceAccounts;
-            try {
+            try {   
                 serviceAccounts =
                     response.body.data.EL_SERVI &&
                     Object.keys(
@@ -24,6 +25,7 @@ const useApplicationDataStore = create((set) => ({
                 applicationData: {
                     ...response.body.data,
                     serviceAccounts,
+                    translations: Object.fromEntries(translationsResponse.body.data.map(item => [item.code, item.desc])),
                 },
                 applicationDataFetchError: false, 
             });
@@ -38,3 +40,4 @@ const useApplicationDataStore = create((set) => ({
 }));
 
 export default useApplicationDataStore;
+

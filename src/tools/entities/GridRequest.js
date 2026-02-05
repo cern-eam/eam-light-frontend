@@ -21,17 +21,23 @@ export default class GridRequest {
 
     this.REQUEST_TYPE = "LIST.HEAD_DATA.STORED";
     this.LOCALIZE_RESULT = "false"
+
+    return this;
   }
 
   setDataspy(dataspyId) {
     this.DATASPY = {
       DATASPY_ID: dataspyId
     };
+
+    return this;
   }
   
   setRowCount(rowCount) {
     this.GRID.NUMBER_OF_ROWS_FIRST_RETURNED = rowCount;
     this.GRID.WSGRIDSZ_OVERRIDE = rowCount;
+
+    return this;
   }
 
   addParam(alias, value) {
@@ -50,6 +56,8 @@ export default class GridRequest {
       ALIAS_NAME: alias,
       VALUE: value
     });
+
+    return this;
   }
 
   addFilter(fieldName, fieldValue, operator, joiner = "AND", leftParenthesis = false, rightParenthesis = false) {
@@ -69,6 +77,8 @@ export default class GridRequest {
       RPAREN: rightParenthesis,
       SEQNUM: this.MULTIADDON_FILTERS.MADDON_FILTER.length
     });
+
+    return this;
   }
 
   sortBy(sortBy, sortType = "ASC") {
@@ -77,6 +87,7 @@ export default class GridRequest {
       TYPE: sortType
     };
   }
+
 
 }
 
