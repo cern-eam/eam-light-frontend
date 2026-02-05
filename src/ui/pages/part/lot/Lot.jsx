@@ -22,9 +22,11 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import EamlightToolbar from "../../../components/EamlightToolbar";
 import CustomFields from "../../../components/customfields/CustomFields";
-import StatusRow from "../../../components/statusrow/StatusRow";
 import ScreenContainers from "../../../layout/ScreenContainers";
 import { layoutPropertiesMap } from "./LotTools";
+import EDMSDoclightIframeContainer from "../../../components/iframes/EDMSDoclightIframeContainer";
+import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
+import { isCernMode } from "eam-components/dist/tools/CERNMode";
 
 const customTabGridParamNames = [
   "lot",
@@ -110,18 +112,6 @@ const Lot = () => {
             layoutPropertiesMap={layoutPropertiesMap}
             ctx={{ newEntity }}
             containers={["cont_1", "cont_2", "cont_3", "cont_4"]}
-            footer={
-              !newEntity && (
-                <StatusRow
-                  entity={lot}
-                  entityType={"lot"}
-                  screenCode={screenCode}
-                  code={id?.code}
-                  org={id?.org}
-                  style={{ marginTop: "10px", marginBottom: "-10px" }}
-                />
-              )
-            }
           />
         ),
         column: 1,
@@ -191,6 +181,21 @@ const Lot = () => {
         summaryIcon: ListAltIcon,
         ignore: lotLayout.fields.block_6?.attribute === "H",
         initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+      },
+      {
+        id: "EDMSDOCUMENTS",
+        label: "EDMS Documents",
+        isVisibleWhenNewEntity: false,
+        maximizable: true,
+        render: () => <EDMSDoclightIframeContainer objectType="LOT" objectID={id?.code} url={applicationData.EL_DOCLI}/>,
+        RegionPanelProps: {
+          detailsStyle: { padding: 0 },
+        },
+        column: 2,
+        order: 7,
+        summaryIcon: FunctionsRoundedIcon,
+        ignore: !isCernMode,
+        initialVisibility: false,
       },
       ...getTabGridRegions(
         applicationData,
