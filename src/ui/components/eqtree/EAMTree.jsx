@@ -140,7 +140,7 @@ export default function EAMTree(props) {
   const nodeClickHandler = (rowInfo) => (event) => {
     if (
       event.target.className === `rowTitle` &&
-      ["A", "P", "S", "L", "LOT"].includes(rowInfo.node.type)
+      ["A", "P", "S", "L"].includes(rowInfo.node.type) // add LOT later
     ) {
       setCurrentRow(rowInfo);
 
