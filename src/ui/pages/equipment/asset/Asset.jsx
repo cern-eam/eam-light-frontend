@@ -127,6 +127,10 @@ const Asset = () => {
   }, [equipment?.partCode]);
 
   useEffect( () => {
+    if (showEqpTree) {
+      return;
+    }
+    
     if (id) {
       updateEquipmentTreeData({equipment: {
         code: id.code,

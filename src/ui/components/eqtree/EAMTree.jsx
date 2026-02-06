@@ -121,11 +121,11 @@ export default function EAMTree(props) {
   };
 
   const _navigate = (rowInfo) => {
-    console.log('rowInfo', rowInfo);
+    const code = rowInfo.node.type === "LOT" && rowInfo.node.id.includes(" - ") ? rowInfo.node.id.split(" - ")[1] : rowInfo.node.id;
     history.push(
       "/" +
         urlTypeMap[rowInfo.node.type] +
-        `/${rowInfo.node.id}${isMultiOrg ? "%23" + rowInfo.node.idOrg : ""}`
+        `/${code}${isMultiOrg ? "%23" + rowInfo.node.idOrg : ""}`
     );
 
     window.parent.postMessage(
@@ -140,7 +140,7 @@ export default function EAMTree(props) {
   const nodeClickHandler = (rowInfo) => (event) => {
     if (
       event.target.className === `rowTitle` &&
-      ["A", "P", "S", "L"].includes(rowInfo.node.type) // add LOT later
+      ["A", "P", "S", "L", "LOT"].includes(rowInfo.node.type) 
     ) {
       setCurrentRow(rowInfo);
 

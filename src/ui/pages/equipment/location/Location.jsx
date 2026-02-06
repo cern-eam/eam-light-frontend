@@ -95,7 +95,11 @@ export default Location = (props) => {
     layoutPropertiesMap: locationLayoutPropertiesMap,
   });
 
-  React.useEffect( () => {
+  React.useEffect( () => {  
+    if (showEqpTree) {
+      return;
+    }
+    
     if (id) {
       updateEquipmentTreeData({equipment: {
         code: id?.code,
