@@ -308,7 +308,7 @@ function PartUsageDialog(props) {
     await Promise.all([
       loadBinList(bin, partCode),
       transactionType === RETURN
-        ? loadLotList(transactionType, lot, "", partCode, "")
+        ? loadLotList(transactionType, lot ?? "", "", partCode, "")
         : null,
     ]);
   };
