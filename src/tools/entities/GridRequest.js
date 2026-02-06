@@ -86,6 +86,8 @@ export default class GridRequest {
       ALIAS_NAME: sortBy,
       TYPE: sortType
     };
+
+    return this;
   }
 
 

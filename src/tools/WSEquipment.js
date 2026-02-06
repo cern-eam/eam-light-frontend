@@ -87,11 +87,12 @@ class WSEquipment {
         return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "equipmentcode", desc: "description_obj", org: "equiporganization"}));
     }
 
-    autocompletePartsAssociated({filter}, config = {}) {
+    autocompletePartsAssociated({filter, operator  = "BEGINS"}, config = {}) {
         let gridRequest = new GridRequest( "SSPART")
-        gridRequest.addFilter('partcode', filter, "BEGINS")
-        gridRequest.setRowCount(10)
-        gridRequest.sortBy("partcode")
+        .addFilter('partcode', filter, operator, "AND")
+        .addFilter('outofservice', "0", "=")
+        .setRowCount(10)
+        .sortBy("partcode")
         return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "partcode", desc: "description", org: "organization", uom: "uom"}));
     }
 

@@ -4,13 +4,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import React, { useEffect, useState } from 'react';
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import WSEquipment from "../../../tools/WSEquipment";
-import { createOnChangeHandler, processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
+import { processElementInfo } from 'eam-components/dist/ui/components/inputs-ng/tools/input-tools';
 import PropTypes from "prop-types";
 import useUserDataStore from '../../../state/useUserDataStore';
 import useLayoutStore from '../../../state/useLayoutStore';
+import EAMComboAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete';
 
 
 const PartsAssociatedDialog = ({
@@ -20,6 +20,11 @@ const PartsAssociatedDialog = ({
   partAssociated,
   isLoading,
   updatePartAssociatedProperty}) => {
+
+    if (!isDialogOpen) {
+      return null;
+    }
+    
     const { userData } = useUserDataStore();
     const [ uom, setUom ] = useState("  ")
 
@@ -79,11 +84,12 @@ const PartsAssociatedDialog = ({
         <DialogTitle id="form-dialog-title">Add Associated Part</DialogTitle>
 
         <DialogContent id="content" style={{ overflowY: 'visible' }}>
-        <EAMAutocomplete
+        
+        <EAMComboAutocomplete
             {...processElementInfo(partsAssociatedLayout.fields.papartcode)}
             label="Part"
             value={partAssociated["part"]}
-            onSelect={onPartSelect}
+            onChange={onPartSelect}
             autocompleteHandler={WSEquipment.autocompletePartsAssociated}
             />
         <EAMTextField
