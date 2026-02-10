@@ -81,7 +81,7 @@ export const transformNativeResponse = (response) => {
               value = value === '' ? null : Number(value?.replace(/,/g, ""));
               break;
             case 'CHKBOOLEAN':
-              value = value === '' ? null : value === '1';
+              value = value === '' ? null : ['1', '-1'].includes(value);
               break;
             default:
               // Keep VARCHAR, MIXVARCHAR, DATE, etc. as-is
