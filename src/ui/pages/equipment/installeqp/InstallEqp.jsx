@@ -15,17 +15,21 @@ import Panel from "@/ui/components/panel/Panel";
 import useEquipmentTreeStore from "../../../../state/useEquipmentTreeStore";
 import useSnackbarStore from "@/state/useSnackbarStore";
 import Dependency from "../components/Dependency";
+import { readStructureTabPermissions } from "./InstallEqpTools";
 
 export default function InstallEqp(props) {
   const [parentEq, setParentEq] = useState("");
   const [childEq, setChildEq] = useState("");
   const [blocking, setBlocking] = useState(false);
-  const [dependent, setDependent] = useState(false)
+  const [dependent, setDependent] = useState(false);
+  const [permissions, setPermissions] = useState(null);
   const {equipmentTreeData: {currentRoot}, updateEquipmentTreeData} = useEquipmentTreeStore();
   const {showNotification, handleError, showError} = useSnackbarStore();
   const idPrefix = "EAMID_InstallEqp_";
 
   useEffect(() => {
+    readStructureTabPermissions().then(result => setPermissions(result));
+
     updateEquipmentTreeData({eqpTreeMenu: [
       {
         desc: "Use as Parent",
@@ -118,6 +122,10 @@ export default function InstallEqp(props) {
       showEqpTree: true });
   };
 
+  if (!permissions) {
+    return null;
+  }
+
   return (
     <div id="entityContainer" style={{ height: "100%" }}>
       <BlockUi
@@ -199,6 +207,7 @@ export default function InstallEqp(props) {
                         )
                       }
                       variant="outlined"
+                      disabled={!permissions.assetPermissions.insertval && !permissions.positionPermissions.insertval && !permissions.systemPermissions.insertval}
                     >
                       INSTALL EQUIPMENT
                     </Button>
@@ -211,6 +220,7 @@ export default function InstallEqp(props) {
                         )
                       }
                       variant="outlined"
+                        disabled={!permissions.assetPermissions.deleteval && !permissions.positionPermissions.deleteval && !permissions.systemPermissions.deleteval}
                     >
                       DETACH EQUIPMENT
                     </Button>
