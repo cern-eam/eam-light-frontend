@@ -33,6 +33,9 @@ export default defineConfig(({ mode }) => {
         "/SSO": {
           target: `http://localhost:${env.VITE_BACKEND_PORT ?? '8080'}/`,
         },
+        "/api": {
+          target: `http://pcca-ai.cern.ch:${env.VITE_CHAT_PORT ?? '3001'}`,
+        },
       },
     },
     optimizeDeps: {

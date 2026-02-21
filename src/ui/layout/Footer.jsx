@@ -1,12 +1,16 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import { isCernMode } from "@/ui/components/CERNMode";
 import { version } from "../../../package.json";
 import EAMFooter from "eam-components/dist/ui/components/footer/Footer";
 import { releaseNotesPath } from "@/Eamlight";
+import Chat from "@/ui/components/chat/Chat";
 
 const Footer = (props) => {
   const { applicationData } = props;
+  const [chatOpen, setChatOpen] = useState(false);
 
   const theme = useTheme();
 
@@ -17,7 +21,7 @@ const Footer = (props) => {
     display: "flex",
     justifyContent: "end",
     alignItems: "center",
-    zIndex: 1250, // snackbar has 1400
+    zIndex: 1250,
   };
 
   return (
@@ -31,6 +35,14 @@ const Footer = (props) => {
         supportEmail={isCernMode && "eam.support@cern.ch"}
         releaseNotesPath={releaseNotesPath}
       />
+      <IconButton
+        size="small"
+        onClick={() => setChatOpen(true)}
+        sx={{ color: "white", marginLeft: "5px", marginRight: "5px" }}
+      >
+        <SmartToyOutlinedIcon sx={{ fontSize: 18 }} />
+      </IconButton>
+      <Chat open={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   );
 };
