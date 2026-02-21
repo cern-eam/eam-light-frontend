@@ -6,12 +6,24 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import CircularProgress from "@mui/material/CircularProgress";
 import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import { useTheme } from "@mui/material/styles";
+import { Link } from "react-router-dom";
 import "./Chat.css";
 import useUserDataStore from "@/state/useUserDataStore";
 
 const getUserContext = () => {
   const { userCode, emailAddress, userDesc } = useUserDataStore.getState().userData.eamAccount;
   return [{role: "user", content: `About me: user code=${userCode}, emailAddress=${emailAddress}, name=${userDesc}`}];
+};
+
+const renderMessageContent = (text) => {
+  const parts = text.split(/(\[[^\]]+\]\([^)]+\))/g);
+  return parts.map((part, i) => {
+    const match = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if (match) {
+      return <Link key={i} to={match[2]} className="chat-link">{match[1]}</Link>;
+    }
+    return part;
+  });
 };
 
 const Chat = ({ open, onClose }) => {
@@ -108,7 +120,7 @@ const Chat = ({ open, onClose }) => {
             className={`chat-bubble chat-bubble-${msg.role}`}
             style={msg.role === "user" ? { backgroundColor: theme.palette.primary.main } : undefined}
           >
-            {msg.content}
+            {msg.role === "assistant" ? renderMessageContent(msg.content) : msg.content}
           </div>
         ))}
         {loading && (

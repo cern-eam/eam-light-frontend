@@ -93,3 +93,13 @@
 .chat-input:disabled {
   background-color: #f5f5f5;
 }
+
+.chat-link {
+  color: #1976d2;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.chat-link:hover {
+  text-decoration: none;
+}
