@@ -36,11 +36,21 @@ const Footer = (props) => {
         releaseNotesPath={releaseNotesPath}
       />
       <IconButton
-        size="small"
         onClick={() => setChatOpen(true)}
-        sx={{ color: "white", marginLeft: "5px", marginRight: "5px" }}
+        sx={{
+          position: "absolute",
+          right: 6,
+          bottom: 38,
+          width: 40,
+          height: 40,
+          backgroundColor: theme.palette.primary.main,
+          color: "white",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
+          "&:hover": { backgroundColor: theme.palette.primary.dark },
+          zIndex: 1260,
+        }}
       >
-        <SmartToyOutlinedIcon sx={{ fontSize: 18 }} />
+        <SmartToyOutlinedIcon sx={{ fontSize: 20 }} />
       </IconButton>
       <Chat open={chatOpen} onClose={() => setChatOpen(false)} />
     </div>

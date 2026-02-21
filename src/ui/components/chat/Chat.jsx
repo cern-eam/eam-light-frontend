@@ -1,43 +1,38 @@
 import React, { useState, useRef, useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
+import MicIcon from "@mui/icons-material/Mic";
+import MicOffIcon from "@mui/icons-material/MicOff";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import CircularProgress from "@mui/material/CircularProgress";
 import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import { useTheme } from "@mui/material/styles";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import "./Chat.css";
 import useUserDataStore from "@/state/useUserDataStore";
-
-const getUserContext = () => {
-  const { userCode, emailAddress, userDesc } = useUserDataStore.getState().userData.eamAccount;
-  return [{role: "user", content: `About me: user code=${userCode}, emailAddress=${emailAddress}, name=${userDesc}`}];
-};
-
-const renderMessageContent = (text) => {
-  const parts = text.split(/(\[[^\]]+\]\([^)]+\))/g);
-  return parts.map((part, i) => {
-    const match = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
-    if (match) {
-      return <Link key={i} to={match[2]} className="chat-link">{match[1]}</Link>;
-    }
-    return part;
-  });
-};
+import { getUserContext, renderMessageContent, extractAutoNavLink, isSpeechSupported, createSpeechRecognition } from "./tools";
 
 const Chat = ({ open, onClose }) => {
   const theme = useTheme();
+  const history = useHistory();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [threadId, setThreadId] = useState(null);
+  const [listening, setListening] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const recognitionRef = useRef(null);
   const { userData } = useUserDataStore();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const lastMsg = messages[messages.length - 1];
+    if (lastMsg?.role === "assistant") {
+      const autoLink = extractAutoNavLink(lastMsg.content);
+      if (autoLink) history.push(autoLink);
+    }
   }, [messages]);
 
   useEffect(() => {
@@ -82,6 +77,21 @@ const Chat = ({ open, onClose }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const toggleListening = () => {
+    if (listening) {
+      recognitionRef.current?.stop();
+      return;
+    }
+    const recognition = createSpeechRecognition(
+      (transcript) => setInput(transcript),
+      () => setListening(false)
+    );
+    if (!recognition) return;
+    recognition.start();
+    recognitionRef.current = recognition;
+    setListening(true);
   };
 
   const handleKeyDown = (e) => {
@@ -142,6 +152,16 @@ const Chat = ({ open, onClose }) => {
           onKeyDown={handleKeyDown}
           disabled={loading}
         />
+        {isSpeechSupported() && (
+          <IconButton
+            onClick={toggleListening}
+            disabled={loading}
+            color={listening ? "error" : "default"}
+            size="small"
+          >
+            {listening ? <MicOffIcon /> : <MicIcon />}
+          </IconButton>
+        )}
         <IconButton
           onClick={sendMessage}
           disabled={!input.trim() || loading}
