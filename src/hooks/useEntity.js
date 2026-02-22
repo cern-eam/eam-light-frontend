@@ -147,7 +147,7 @@ const useEntity = (params) => {
     onMountHandler?.();
     return () => {
       onUnmountHandler?.(); 
-      pageMode && setCurrentEntity(null)
+      pageMode && setCurrentEntity({})
       pageMode && (document.title = "EAM Light")
     };
   }, []);

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 const useCurrentEntityStore = create((set) => ({
-  currentEntity: null,
+  currentEntity: {},
   setCurrentEntity: (entity) => set({ currentEntity: entity }),
 }));
 
