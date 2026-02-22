@@ -60,7 +60,7 @@ const WorkOrdersDialog = ({
         screenProperty: "ncrWorkOrderScreen",
         entityCode: "EVNT",
         explicitIdentifier: ``,
-        updateWindowTitle: false,
+        pageMode: false,
         screenPermissions: userData.screens.WSJOBS,
         layoutPropertiesMap: ncrWorkOrderPropertiesMap
     });

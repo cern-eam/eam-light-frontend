@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import BellIcon from "mdi-material-ui/Bell";
 import { format } from "date-fns";
-import useWorkOrderStore from "@/state/useWorkOrderStore";
+import useCurrentEntityStore from "@/state/useCurrentEntityStore";
 
 const WorkorderMenu = ({ wo }) => {
-    const { currentWorkOrder } = useWorkOrderStore();
+    const { currentEntity } = useCurrentEntityStore();
+    const code = currentEntity?.id?.code;
 
     const spanStyle = {
         display: "block",
@@ -29,7 +30,7 @@ const WorkorderMenu = ({ wo }) => {
         marginTop: 5,
     };
 
-    if (wo.number === currentWorkOrder) {
+    if (wo.number === code) {
         linkStyle.borderLeft = "3px solid #00aaff";
     } else {
         linkStyle.borderLeft = "3px solid rgb(40,40,40)";

@@ -42,7 +42,7 @@ const AdditionalCostDialog = (props) => {
         screenProperty: "workOrderScreen",
         entityDesc: 'Additional Cost',
         explicitIdentifier: ``,
-        updateWindowTitle: false
+        pageMode: false
     });
 
     useEffect(() => {
