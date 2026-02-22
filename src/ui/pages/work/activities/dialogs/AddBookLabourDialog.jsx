@@ -47,7 +47,7 @@ function AddBookLabourDialog(props) {
     screenProperty: "workOrderScreen",
     explicitIdentifier: ``,
     layoutPropertiesMap: bookLabourPropertiesMap,
-    updateWindowTitle: false
+    pageMode: false
   });
 
   if (!laborBooking) {

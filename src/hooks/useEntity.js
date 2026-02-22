@@ -29,6 +29,7 @@ import useSnackbarStore from "../state/useSnackbarStore";
 import { getCustomFields } from "../tools/WSCustomFields";
 import { assignDefaultValues, toEAMValue, createAutocompleteHandler, fromEAMValue, getCodeOrg, appendPath } from "./tools";
 import { applyTimezoneOffsetToYearField } from "../ui/pages/EntityTools";
+import useCurrentEntityStore from "../state/useCurrentEntityStore";
 
 const useEntity = (params) => {
   const {
@@ -51,7 +52,7 @@ const useEntity = (params) => {
     codeQueryParamName,
     tabCode,
     explicitIdentifier,
-    updateWindowTitle = true
+    pageMode = true
   } = params;
 
   const [loading, setLoading] = useState(false);
@@ -81,6 +82,9 @@ const useEntity = (params) => {
     equipmentTreeData: { showEqpTree },
     updateEquipmentTreeData,
   } = useEquipmentTreeStore();
+
+// property nad function to modify curretnentitystore
+  const {setCurrentEntity} = useCurrentEntityStore();
 
   const screenCode = userData[screenProperty];
   const {
@@ -136,16 +140,16 @@ const useEntity = (params) => {
       return;
     }
     entityIdentifier ? readEntity() : initNewEntity();
-    // Reset window title when unmounting
-    return () => {
-      updateWindowTitle && (document.title = "EAM Light")
-    }
   }, [entityIdentifier, screenLayout]);
 
   // Provide mount and unmount handlers to the client
   useEffect(() => {
     onMountHandler?.();
-    return () => onUnmountHandler?.();
+    return () => {
+      onUnmountHandler?.(); 
+      pageMode && setCurrentEntity(null)
+      pageMode && (document.title = "EAM Light")
+    };
   }, []);
 
   //
@@ -193,9 +197,11 @@ const useEntity = (params) => {
         //applyTimezoneOffsetToYearField(readEntity)
 
         setEntity(readEntity);
-        setId({code: get(readEntity, entityCodeProperty), org: get(readEntity, entityOrgProperty)})
+        const id = {code: get(readEntity, entityCodeProperty), org: get(readEntity, entityOrgProperty)}
+        setId(id)
+        pageMode && setCurrentEntity({entityCode, entityDesc, id})
 
-        updateWindowTitle && (document.title = entityDesc + " " + get(readEntity, entityCodeProperty));
+        pageMode && (document.title = entityDesc + " " + get(readEntity, entityCodeProperty));
         //Render as read-only depending on screen rights, department security or custom handler
         setReadOnly(
           !screenPermissions.updateAllowed ||
@@ -268,6 +274,7 @@ const useEntity = (params) => {
         setIsModified(false);
         setReadOnly(!screenPermissions.creationAllowed);
         setId(null)
+        pageMode && setCurrentEntity({entityCode, entityDesc, id: null})
 
         let newEntity = response.body.Result.ResultData[resultDefaultDataProperty ?? entityProperty] ?? response.body.Result.ResultData
         newEntity.USERDEFINEDAREA = customFields?.body?.Result;
@@ -279,7 +286,7 @@ const useEntity = (params) => {
         setEntity(newEntity)
 
         assignQueryParamValues()
-        updateWindowTitle && (document.title = "New " + entityDesc)
+        pageMode && (document.title = "New " + entityDesc)
         postActions?.new?.(newEntity);
       })
       .catch((error) => {
@@ -303,7 +310,7 @@ const useEntity = (params) => {
       copyFrom: code,
     }));
     entityURL && window.history.pushState({}, "", process.env.PUBLIC_URL + entityURL);
-    updateWindowTitle && (document.title = "New " + entityDesc);
+    pageMode && (document.title = "New " + entityDesc);
     postActions?.copy?.();
   };
 

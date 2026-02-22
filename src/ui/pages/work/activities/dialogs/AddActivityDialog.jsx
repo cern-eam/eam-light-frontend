@@ -58,7 +58,7 @@ function AddActivityDialog(props) {
     resultDefaultDataProperty: "ActivityDefault",
     screenProperty: "workOrderScreen",
     explicitIdentifier: activityToEdit ? `${activityToEdit.workOrderNumber}#*#${activityToEdit.activityCode}`: ``,
-    updateWindowTitle: false
+    pageMode: false
   });
 
   activityLayout.fields.esthrs.fieldType = "text"  

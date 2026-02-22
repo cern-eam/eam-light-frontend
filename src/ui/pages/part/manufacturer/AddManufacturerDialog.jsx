@@ -34,7 +34,7 @@ export default function AddManufacturerDialog({ open, onClose, updateEquipmentPr
     entityDesc: 'Manufacturer',
     entityCode: "MANU",
     explicitIdentifier: ``,
-    updateWindowTitle: false,
+    pageMode: false,
     layoutPropertiesMap: layoutPropertiesMap,
 });
 

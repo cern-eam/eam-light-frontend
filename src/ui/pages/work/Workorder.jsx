@@ -56,7 +56,6 @@ import { PartIcon } from "eam-components/dist/ui/components/icons";
 import FunctionsRoundedIcon from "@mui/icons-material/FunctionsRounded";
 import HardwareIcon from "@mui/icons-material/Hardware";
 import EamlightToolbar from "../../components/EamlightToolbar";
-import useWorkOrderStore from "../../../state/useWorkOrderStore";
 import { isLocalAdministrator } from "../../../state/utils";
 import CustomFields from "../../components/customfields/CustomFields";
 import { getPart } from "../../../tools/WSParts";
@@ -90,7 +89,6 @@ const Workorder = () => {
   const [otherIdMapping, setOtherIdMapping] = useState({});
   const [expandChecklistsOptions, setExpandChecklistsOptions] = useState(false);
   const checklists = useRef(null);
-  const { setCurrentWorkOrder } = useWorkOrderStore();
 
   const screen = GridTools.getURLParameterByName('screenCode');
 
@@ -769,7 +767,6 @@ const Workorder = () => {
   // CALLBACKS FOR ENTITY CLASS
   //
   function postInit(wo) {
-    setCurrentWorkOrder(null);
     updateWorkorderProperty(
       "WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE",
       getOrg()
@@ -803,7 +800,6 @@ const Workorder = () => {
         organization: workorder.EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE,
       },
     });
-    setCurrentWorkOrder(workorder.WORKORDERID.JOBNUM);
 
     updateWorkorderProperty("Activities", null);
     updateWorkorderProperty("confirmincompletechecklist", "confirmed");
@@ -866,7 +862,6 @@ const Workorder = () => {
 
   function unmountHandler() {
     updateEquipmentTreeData({ eqpTreeMenu: null });
-    setCurrentWorkOrder(null);
   }
 
   if (!workorder || !workOrderLayout) {

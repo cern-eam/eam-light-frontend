@@ -38,7 +38,7 @@ const ObservationsDialog = ({
         screenProperty: "ncrScreen",
         tabCode: "OBS",
         explicitIdentifier: ``,
-        updateWindowTitle: false,
+        pageMode: false,
         resultDefaultDataProperty: 'NonconformityObservationDefault'
     });
 
