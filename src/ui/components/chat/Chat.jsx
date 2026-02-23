@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom";
 import "./Chat.css";
 import useUserDataStore from "@/state/useUserDataStore";
 import { getUserContext, renderMessageContent, extractAutoNavLink, isSpeechSupported, createSpeechRecognition } from "./tools";
+import useCurrentEntityStore from "../../../state/useCurrentEntityStore";
 
 const Chat = ({ open, onClose }) => {
   const theme = useTheme();
@@ -25,6 +26,7 @@ const Chat = ({ open, onClose }) => {
   const inputRef = useRef(null);
   const recognitionRef = useRef(null);
   const { userData } = useUserDataStore();
+  const { currentEntity } = useCurrentEntityStore();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -62,6 +64,7 @@ const Chat = ({ open, onClose }) => {
         body: JSON.stringify({
           state: { messages: [
             ...(messages.length === 0 ? getUserContext() : []),
+            { role: "user", content: `Current entity: Description: ${currentEntity.entityDesc}, Code=${currentEntity.id?.code}`},
             { role: "user", content: text }
           ] },
           config: { configurable: { thread_id: threadId, user: userData.eamAccount.userCode } }
