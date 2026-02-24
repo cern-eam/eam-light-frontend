@@ -1,4 +1,5 @@
 import React from "react";
+import ReactMarkdown from "react-markdown";
 import { Link } from "react-router-dom";
 import useUserDataStore from "@/state/useUserDataStore";
 
@@ -39,14 +40,18 @@ export const extractAutoNavLink = (text) => {
   return match ? match[1] : null;
 };
 
+const MarkdownLink = ({ href, children }) => {
+  if (href?.startsWith("/")) {
+    return <Link to={href} className="chat-link">{children}</Link>;
+  }
+  return <a href={href} className="chat-link" target="_blank" rel="noopener noreferrer">{children}</a>;
+};
+
 export const renderMessageContent = (text) => {
   const cleaned = text.replace(/AUTO(\[[^\]]+\]\([^)]+\))/g, "$1");
-  const parts = cleaned.split(/(\[[^\]]+\]\([^)]+\))/g);
-  return parts.map((part, i) => {
-    const match = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
-    if (match) {
-      return <Link key={i} to={match[2]} className="chat-link">{match[1]}</Link>;
-    }
-    return part;
-  });
+  return (
+    <ReactMarkdown components={{ a: MarkdownLink }}>
+      {cleaned}
+    </ReactMarkdown>
+  );
 };

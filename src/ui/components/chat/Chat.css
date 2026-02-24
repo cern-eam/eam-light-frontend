@@ -47,12 +47,14 @@
   font-size: 14px;
   line-height: 1.5;
   word-wrap: break-word;
+}
+
+.chat-bubble-user {
   white-space: pre-wrap;
 }
 
 .chat-bubble-user {
   align-self: flex-end;
-  background-color: #1976d2;
   color: white;
   border-bottom-right-radius: 4px;
 }
@@ -102,4 +104,87 @@
 
 .chat-link:hover {
   text-decoration: none;
+}
+
+.chat-bubble-assistant > :first-child {
+  margin-top: 0;
+}
+
+.chat-bubble-assistant > :last-child {
+  margin-bottom: 0;
+}
+
+.chat-bubble-assistant p {
+  margin: 0.4em 0;
+}
+
+.chat-bubble-assistant ul,
+.chat-bubble-assistant ol {
+  margin: 0.4em 0;
+  padding-left: 1.4em;
+}
+
+.chat-bubble-assistant li {
+  margin: 0.2em 0;
+}
+
+.chat-bubble-assistant code {
+  background-color: #f0f0f0;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.chat-bubble-assistant pre {
+  background-color: #f0f0f0;
+  padding: 8px 10px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 0.4em 0;
+}
+
+.chat-bubble-assistant pre code {
+  background: none;
+  padding: 0;
+}
+
+.chat-bubble-assistant h1,
+.chat-bubble-assistant h2,
+.chat-bubble-assistant h3,
+.chat-bubble-assistant h4 {
+  margin: 0.5em 0 0.3em;
+  line-height: 1.3;
+}
+
+.chat-bubble-assistant h1 { font-size: 1.2em; }
+.chat-bubble-assistant h2 { font-size: 1.1em; }
+.chat-bubble-assistant h3 { font-size: 1.05em; }
+
+.chat-bubble-assistant blockquote {
+  margin: 0.4em 0;
+  padding-left: 10px;
+  border-left: 3px solid #ccc;
+  color: #666;
+}
+
+.chat-bubble-assistant table {
+  border-collapse: collapse;
+  margin: 0.4em 0;
+  font-size: 0.9em;
+}
+
+.chat-bubble-assistant th,
+.chat-bubble-assistant td {
+  border: 1px solid #ddd;
+  padding: 4px 8px;
+}
+
+.chat-bubble-assistant th {
+  background-color: #f0f0f0;
+}
+
+.chat-bubble-assistant hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 0.5em 0;
 }

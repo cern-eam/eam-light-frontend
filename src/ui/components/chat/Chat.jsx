@@ -64,7 +64,7 @@ const Chat = ({ open, onClose }) => {
         body: JSON.stringify({
           state: { messages: [
             ...(messages.length === 0 ? getUserContext() : []),
-            { role: "user", content: `Current entity: Description: ${currentEntity.entityDesc}, Code=${currentEntity.id?.code}`},
+            //{ role: "user", content: `Current entity: Description: ${currentEntity.entityDesc}, Code=${currentEntity.id?.code}`},
             { role: "user", content: text }
           ] },
           config: { configurable: { thread_id: threadId, user: userData.eamAccount.userCode } }
