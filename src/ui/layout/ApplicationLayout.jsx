@@ -21,6 +21,7 @@ import useApplicationDataStore from "../../state/useApplicationDataStore";
 import useUserDataStore from "../../state/useUserDataStore";
 import useEquipmentTreeStore from "../../state/useEquipmentTreeStore";
 import useScannedUserStore from "../../state/useScannedUserStore";
+import {BulletinToggle} from "@/ui/layout/BulletinToggle.jsx";
 
 const styles = {
   topBarLink: {
@@ -32,6 +33,17 @@ const styles = {
   topBarSpan: {
     fontSize: "12px",
   },
+  notifAndInfoButtons: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    flexGrow: 1,
+  },
+  separationLine: {
+    borderLeft: "1px solid rgba(255, 255, 255, 0.8)",
+    width: 1,
+    height: 22,
+  }
 };
 
 export default withStyles(styles)(function ApplicationLayout(props) {
@@ -122,7 +134,11 @@ export default withStyles(styles)(function ApplicationLayout(props) {
           </div>
         )}
 
-        <UserInfo />
+        <div className={clsx(classes.notifAndInfoButtons)}>
+          <BulletinToggle />
+          <span className={clsx(classes.separationLine)}/>
+          <UserInfo />
+        </div>
       </div>
     </div>
   );
