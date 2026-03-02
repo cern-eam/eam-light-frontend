@@ -53,7 +53,8 @@ const UserInfo = () => {
 
   const usernameDisplay =
     userData.eamAccount.userCode +
-    (scannedUser ? ` (${scannedUser.userCode})` : "");
+    (scannedUser ? `/(${scannedUser.userCode})` : "") +
+    ` (${userData.eamAccount.userGroup})`;
 
   return (
     <div style={userInfoStyle}>
