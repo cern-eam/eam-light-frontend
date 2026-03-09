@@ -11,8 +11,9 @@ import { useTheme } from "@mui/material/styles";
 import { useHistory } from "react-router-dom";
 import "./Chat.css";
 import useUserDataStore from "@/state/useUserDataStore";
-import { getUserContext, renderMessageContent, extractAutoNavLink, isSpeechSupported, createSpeechRecognition } from "./tools";
+import { getUserContext, renderMessageContent, isSpeechSupported, createSpeechRecognition, processToolCalls, normalizeResponseMessage } from "./tools";
 import useCurrentEntityStore from "../../../state/useCurrentEntityStore";
+import WS from "../../../tools/WS";
 
 const Chat = ({ open, onClose }) => {
   const theme = useTheme();
@@ -30,11 +31,6 @@ const Chat = ({ open, onClose }) => {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    const lastMsg = messages[messages.length - 1];
-    if (lastMsg?.role === "assistant") {
-      const autoLink = extractAutoNavLink(lastMsg.content);
-      if (autoLink) history.push(autoLink);
-    }
   }, [messages]);
 
   useEffect(() => {
@@ -43,13 +39,15 @@ const Chat = ({ open, onClose }) => {
     }
   }, [open]);
 
-  const extractHumanMessage = (data) => {
-    const response = data.messages[data.messages.length - 1].kwargs.content;
-    return response;
+  const extractMessage = (data) => {
+    const response = JSON.parse(data.messages[data.messages.length - 1].kwargs.content);
+    const toolCalls = response.toolCalls;
+    processToolCalls(toolCalls, { history });
+    return normalizeResponseMessage(response.message);
   };
 
   const sendMessage = async () => {
-    const text = input.trim();
+    const text = input.trim(); 
     if (!text || loading) return;
 
     const userMessage = { role: "user", content: text };
@@ -58,27 +56,28 @@ const Chat = ({ open, onClose }) => {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const res = await WS._post(
+        "/chat",
+        {
           state: { messages: [
             ...(messages.length === 0 ? getUserContext() : []),
-            //{ role: "user", content: `Current entity: Description: ${currentEntity.entityDesc}, Code=${currentEntity.id?.code}`},
+            { role: "user", content: `Current entity: Description: ${currentEntity.entityDesc}, Code=${currentEntity.id?.code}`},
             { role: "user", content: text }
           ] },
           config: { configurable: { thread_id: threadId, user: userData.eamAccount.userCode } }
-      }),
-      });
-      const data = await res.json();
-      console.log('chat response', data);
-      const response = extractHumanMessage(data);
+        }
+      );
+      const data = res?.body ?? res;
+      const response = extractMessage(data);
       setMessages((prev) => [...prev, { role: "assistant", content: response }]);
     } catch (error) {
       console.error('Error sending message:', error);
       setMessages((prev) => [...prev, { role: "assistant", content: "Sorry, something went wrong." }]);
     } finally {
       setLoading(false);
+      requestAnimationFrame(() => {
+        inputRef.current?.focus();
+      });
     }
   };
 
@@ -167,6 +166,7 @@ const Chat = ({ open, onClose }) => {
         )}
         <IconButton
           onClick={sendMessage}
+          onMouseDown={(e) => e.preventDefault()}
           disabled={!input.trim() || loading}
           color="primary"
           size="small"

@@ -1,5 +1,6 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Link } from "react-router-dom";
 import useUserDataStore from "@/state/useUserDataStore";
 
@@ -35,11 +36,6 @@ export const createSpeechRecognition = (onResult, onEnd) => {
   return recognition;
 };
 
-export const extractAutoNavLink = (text) => {
-  const match = text.match(/AUTO\[[^\]]+\]\(([^)]+)\)/);
-  return match ? match[1] : null;
-};
-
 const MarkdownLink = ({ href, children }) => {
   if (href?.startsWith("/")) {
     return <Link to={href} className="chat-link">{children}</Link>;
@@ -48,10 +44,49 @@ const MarkdownLink = ({ href, children }) => {
 };
 
 export const renderMessageContent = (text) => {
-  const cleaned = text.replace(/AUTO(\[[^\]]+\]\([^)]+\))/g, "$1");
   return (
-    <ReactMarkdown components={{ a: MarkdownLink }}>
-      {cleaned}
+    <ReactMarkdown remarkPlugins={[remarkGfm]} components={{ a: MarkdownLink }}>
+      {text}
     </ReactMarkdown>
   );
+};
+
+export const normalizeResponseMessage = (message) => {
+  if (typeof message !== "string") return "";
+  return message.replace(/\\n/g, "\n");
+};
+
+const buildSetFieldQuery = (toolCalls = []) => {
+  return toolCalls
+    .filter((tool) => tool?.name === "setField")
+    .map((tool) => tool?.args)
+    .filter((args) => typeof args?.field === "string" && args.field.trim())
+    .map((args) => `${encodeURIComponent(args.field)}=${encodeURIComponent(args.value == null ? "" : String(args.value))}`)
+    .join("&");
+};
+
+export const processToolCalls = (toolCalls = [], { history } = {}) => {
+  if (!Array.isArray(toolCalls) || toolCalls.length === 0) return null;
+
+  const navigateCall = toolCalls.find((tool) => tool?.name === "navigate");
+  if (!navigateCall) return null;
+
+  const handlers = {
+    navigate: (toolArgs) => {
+      let link = toolArgs?.link;
+      if (typeof link !== "string" || !link.trim() || !history) return null;
+
+      const query = buildSetFieldQuery(toolCalls);
+      if (query) link = `${link}${link.includes("?") ? "&" : "?"}${query}`;
+
+      history.push(link);
+      return { type: "navigate", link };
+    },
+  };
+
+  const { name, args } = navigateCall;
+  const handler = handlers[name];
+  if (!handler) return null;
+
+  return handler(args);
 };

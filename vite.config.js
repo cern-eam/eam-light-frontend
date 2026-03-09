@@ -23,6 +23,11 @@ export default defineConfig(({ mode }) => {
       port: parseInt(env.VITE_PORT ?? "3000"),
       host: "0.0.0.0",
       proxy: {
+        "/apis/eamlightws/rest/chat": {
+          target: `http://pcca-ai.cern.ch:${env.VITE_CHAT_PORT ?? '3001'}`,
+          changeOrigin: true,
+          rewrite: () => "/api/chat",
+        },
         "/rest": {
           target: `http://localhost:${env.VITE_BACKEND_PORT ?? '8080'}/`,
         },
@@ -32,10 +37,7 @@ export default defineConfig(({ mode }) => {
         },
         "/SSO": {
           target: `http://localhost:${env.VITE_BACKEND_PORT ?? '8080'}/`,
-        },
-        "/api": {
-          target: `http://pcca-ai.cern.ch:${env.VITE_CHAT_PORT ?? '3001'}`,
-        },
+        }
       },
     },
     optimizeDeps: {
