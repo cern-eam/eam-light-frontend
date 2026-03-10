@@ -42,13 +42,22 @@ const Chat = ({ open, onClose }) => {
   const extractMessage = (data) => {
     const response = JSON.parse(data.messages[data.messages.length - 1].kwargs.content);
     const toolCalls = response.toolCalls;
-    processToolCalls(toolCalls, { history });
+    processToolCalls(toolCalls, {
+      history,
+      updateEntityProperty: currentEntity.updateEntityProperty,
+    });
     return normalizeResponseMessage(response.message);
   };
 
   const sendMessage = async () => {
     const text = input.trim(); 
     if (!text || loading) return;
+
+    if (listening) {
+      recognitionRef.current?.stop();
+      recognitionRef.current = null;
+      setListening(false);
+    }
 
     const userMessage = { role: "user", content: text };
     setMessages((prev) => [...prev, userMessage]);
@@ -84,6 +93,8 @@ const Chat = ({ open, onClose }) => {
   const toggleListening = () => {
     if (listening) {
       recognitionRef.current?.stop();
+      recognitionRef.current = null;
+      setListening(false);
       return;
     }
     const recognition = createSpeechRecognition(

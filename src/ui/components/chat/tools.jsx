@@ -65,10 +65,18 @@ const buildSetFieldQuery = (toolCalls = []) => {
     .join("&");
 };
 
-export const processToolCalls = (toolCalls = [], { history } = {}) => {
+export const processToolCalls = (toolCalls = [], { history, updateEntityProperty } = {}) => {
   if (!Array.isArray(toolCalls) || toolCalls.length === 0) return null;
 
   const navigateCall = toolCalls.find((tool) => tool?.name === "navigate");
+  const setFieldTools = toolCalls.filter((tool) => tool?.name === "setField");
+  if (!navigateCall && setFieldTools.length > 0) {
+    setFieldTools.forEach((tool) => {
+      updateEntityProperty(tool.args.field, tool.args.value);
+    });
+    return null;
+  }
+
   if (!navigateCall) return null;
 
   const handlers = {

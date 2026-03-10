@@ -199,7 +199,7 @@ const useEntity = (params) => {
         setEntity(readEntity);
         const id = {code: get(readEntity, entityCodeProperty), org: get(readEntity, entityOrgProperty)}
         setId(id)
-        pageMode && setCurrentEntity({entityCode, entityDesc, id})
+        pageMode && setCurrentEntity({entityCode, entityDesc, id, updateEntityProperty})
 
         pageMode && (document.title = entityDesc + " " + get(readEntity, entityCodeProperty));
         //Render as read-only depending on screen rights, department security or custom handler
@@ -274,7 +274,7 @@ const useEntity = (params) => {
         setIsModified(false);
         setReadOnly(!screenPermissions.creationAllowed);
         setId(null)
-        pageMode && setCurrentEntity({entityCode, entityDesc, id: null})
+        pageMode && setCurrentEntity({entityCode, entityDesc, id: null, updateEntityProperty })
 
         let newEntity = response.body.Result.ResultData[resultDefaultDataProperty ?? entityProperty] ?? response.body.Result.ResultData
         newEntity.USERDEFINEDAREA = customFields?.body?.Result;
@@ -337,6 +337,10 @@ const useEntity = (params) => {
   };
 
   const updateEntityProperty = (key, value, type) => {
+    if (screenLayout.fields[key]?.xpath ) {
+      key = screenLayout.fields[key].xpath;
+    }
+    
     const keys = Array.isArray(key) ? key : [key];
     const values = (Array.isArray(value) ? value : [value]).map(v => toEAMValue(v, type));
 
