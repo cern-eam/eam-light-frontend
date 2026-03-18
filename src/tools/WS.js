@@ -1,6 +1,6 @@
 import ajax from "eam-components/dist/tools/ajax";
-import GridRequest, { GridTypes } from "./entities/GridRequest";
-import { getGridData, transformResponse } from "./WSGrids";
+import { GridFilterJoiner, GridRequest, GridType, transformResponse } from 'eam-rest-tools';
+import { getGridData } from "./WSGrids";
 import { isCernMode } from "../ui/components/CERNMode";
 
 /**
@@ -35,8 +35,8 @@ class WS {
   }
 
   getCodeLov = ({handlerParams: [code]}, config = {}) => {
-		let gridRequest = new GridRequest("LVALLCODES", GridTypes.LOV, "LVALLCODES");
-		gridRequest.addParam("parameter.rtype", code);
+		const gridRequest = new GridRequest("LVALLCODES", GridType.LOV, "LVALLCODES")
+            .addParam("parameter.rtype", code);
     return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "code", desc: "description"}));
   }
 
@@ -139,8 +139,8 @@ export const getTranlations = () => {
     return Promise.resolve({body: {data: []}});
   }
   
-  let gridRequest = new GridRequest("ASOBOT", GridTypes.LIST)
-    .addFilter("bot_function", "BSDTSP", "=", "AND")
-    .addFilter("bot_fld1", "DTDEL,DTSAVE,DTNEW", "IN", "OR")    
+  const gridRequest = new GridRequest("ASOBOT", GridType.LIST)
+    .addFilter("bot_function", "BSDTSP", "=", GridFilterJoiner.AND)
+    .addFilter("bot_fld1", "DTDEL,DTSAVE,DTNEW", "IN", GridFilterJoiner.OR)    
   return getGridData(gridRequest).then(response => transformResponse(response, {code: "bot_fld1", desc: "bot_text"}))
 }

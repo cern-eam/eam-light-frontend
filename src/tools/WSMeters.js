@@ -1,8 +1,8 @@
 import { get } from 'lodash';
 import { fromEAMNumber } from '../ui/pages/EntityTools';
-import GridRequest, { GridTypes } from './entities/GridRequest';
+import { GridRequest, GridType, transformResponse } from 'eam-rest-tools';
 import WS from './WS';
-import { getGridData, transformResponse } from './WSGrids';
+import { getGridData } from './WSGrids';
 import { getOrg } from '../hooks/tools';
 
 /**
@@ -16,10 +16,9 @@ class WSMeters {
     }
 
     async getReadingsByEquipment(equipmentCode, equipmentOrg, config = {}) {
-		let gridRequest = new GridRequest("OSMETE", GridTypes.LIST, "OSOBJA");
-
-		gridRequest.addParam("parameter.organization", equipmentOrg);
-		gridRequest.addParam("parameter.object", equipmentCode);
+		const gridRequest = new GridRequest("OSMETE", GridType.LIST, "OSOBJA")
+            .addParam("parameter.organization", equipmentOrg)
+            .addParam("parameter.object", equipmentCode);
 
         if (equipmentCode) {
 			gridRequest.addFilter("equipment", equipmentCode, "=");
@@ -70,16 +69,16 @@ class WSMeters {
     }
 
     autocompleteMeterEquipment = ({filter}, config = {}) => {
-        let gridRequest = new GridRequest("OSMETE", GridTypes.LIST, "OSMETE");
-        gridRequest.setRowCount(10)
-		gridRequest.addFilter("equipment", filter, "BEGINS");
+        const gridRequest = new GridRequest("OSMETE", GridType.LIST, "OSMETE")
+            .setRowCount(10)
+            .addFilter("equipment", filter, "BEGINS");
         return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "equipment", desc: "meterunit", org: "organization"}));
     };
 
     autocompleteMeterCode = ({filter}, config = {}) => {
-        let gridRequest = new GridRequest("OSMETE", GridTypes.LIST, "OSMETE");
-        gridRequest.setRowCount(10)
-		gridRequest.addFilter("metercode", filter, "BEGINS");
+        const gridRequest = new GridRequest("OSMETE", GridType.LIST, "OSMETE")
+            .setRowCount(10)
+            .addFilter("metercode", filter, "BEGINS");
         return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "metercode", desc: "meterunit", org: "organization"}));
     };
 }

@@ -1,8 +1,8 @@
 import { getCodeOrg, getOrg } from '../hooks/tools';
-import GridRequest, { GridFilterJoiner, GridTypes } from './entities/GridRequest';
+import { GridFilterJoiner, GridRequest, GridType, transformResponse } from 'eam-rest-tools';
 import WS from './WS';
 import { getAsset } from './WSAssets';
-import { getGridData, transformResponse } from './WSGrids';
+import { getGridData } from './WSGrids';
 import { getLocation } from './WSLocation';
 import { getPosition } from './WSPositions';
 import { getSystem } from './WSSystems';
@@ -17,9 +17,9 @@ class WSEquipment {
     // EQUIPMENT
     //
     getEquipmentHistory(equipmentCode, config = {}) {
-        let gridRequest = new GridRequest("EUMLWH", GridTypes.LIST);
-        gridRequest.addFilter("woobject", equipmentCode, "=");
-        gridRequest.sortBy("wocompleted", "DESC");
+        const gridRequest = new GridRequest("EUMLWH", GridType.LIST)
+            .addFilter("woobject", equipmentCode, "=")
+            .sortBy("wocompleted", "DESC");
 
         const fieldMapping = {
             number: "wocode",
@@ -36,19 +36,19 @@ class WSEquipment {
     }
 
     getEquipmentWorkOrders(equipmentCode) {
-        let gridRequest = new GridRequest("WSJOBS", GridTypes.LIST, "WSJOBS")
-        gridRequest.addFilter("equipment", equipmentCode, "=")
-        gridRequest.sortBy("datecreated", "DESC")
+        const gridRequest = new GridRequest("WSJOBS", GridType.LIST, "WSJOBS")
+            .addFilter("equipment", equipmentCode, "=")
+            .sortBy("datecreated", "DESC")
         return getGridData(gridRequest).then(response => transformResponse(response, WSWorkorders.myWorkOrderMapper));
     }
 
     getEquipmentEvents(equipmentCode, equipmentOrg, screenCode, config = {}) {
-        let gridRequest = new GridRequest("OSVEVT", GridTypes.LIST, screenCode)
-        gridRequest.addParam("parameter.object", equipmentCode)
-        gridRequest.addParam("parameter.objorganization", equipmentOrg)
-        gridRequest.addFilter("wotype", "IS - ", "NOTCONTAINS")
-        gridRequest.addFilter("equipment", equipmentCode, "=")
-        gridRequest.sortBy("datecreated", "DESC")
+        const gridRequest = new GridRequest("OSVEVT", GridType.LIST, screenCode)
+            .addParam("parameter.object", equipmentCode)
+            .addParam("parameter.objorganization", equipmentOrg)
+            .addFilter("wotype", "IS - ", "NOTCONTAINS")
+            .addFilter("equipment", equipmentCode, "=")
+            .sortBy("datecreated", "DESC")
 
         const equipmentEventsMapper = {
             "number": "eventno",
@@ -74,22 +74,22 @@ class WSEquipment {
     // HIERARCHY
     //
     autocompleteAssetParent({handlerParams, filter, operator = "BEGINS"}, config = {}) {
-        let gridRequest = new GridRequest( "LVOBJL_EQ")
-        gridRequest.setRowCount(10)
-        gridRequest.addParam("param.objectrtype", handlerParams[0])
-        gridRequest.addParam("param.bypassdeptsecurity", null)
-        gridRequest.addParam("param.objectcode", "")
-        gridRequest.addParam("param.objectorg", getOrg())
-        gridRequest.addParam("control.org", getOrg())
-        gridRequest.addParam('param.bypasstagoption', 'true')
-        gridRequest.addFilter("equipmentcode", filter, operator)
-        gridRequest.sortBy("equipmentcode")
+        const gridRequest = new GridRequest("LVOBJL_EQ")
+            .setRowCount(10)
+            .addParam("param.objectrtype", handlerParams[0])
+            .addParam("param.bypassdeptsecurity", null)
+            .addParam("param.objectcode", "")
+            .addParam("param.objectorg", getOrg())
+            .addParam("control.org", getOrg())
+            .addParam('param.bypasstagoption', 'true')
+            .addFilter("equipmentcode", filter, operator)
+            .sortBy("equipmentcode")
         return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "equipmentcode", desc: "description_obj", org: "equiporganization"}));
     }
 
     autocompletePartsAssociated({filter, operator  = "BEGINS"}, config = {}) {
-        let gridRequest = new GridRequest( "SSPART")
-        .addFilter('partcode', filter, operator, "AND")
+        const gridRequest = new GridRequest( "SSPART")
+        .addFilter('partcode', filter, operator, GridFilterJoiner.AND)
         .addFilter('outofservice', "0", "=")
         .setRowCount(10)
         .sortBy("partcode")
@@ -97,10 +97,9 @@ class WSEquipment {
     }
 
     getEquipmentPartsAssociated(code, associationEntity, config = {}) {
-        let gridRequest = new GridRequest("BSPARA");
-
-        gridRequest.addParam("param.entity", associationEntity);
-        gridRequest.addParam("param.valuecode", code);
+        const gridRequest = new GridRequest("BSPARA")
+            .addParam("param.entity", associationEntity)
+            .addParam("param.valuecode", code);
 
         return getGridData(gridRequest, config)
     }
@@ -164,20 +163,20 @@ export const getEquipment = async (equipmentIdentifier, config = {}) => {
 
 export const getEquipmentType = async (equipmentIdentifier, config = {}) => {
     const {code: equipmentCode, org: organization} = getCodeOrg(equipmentIdentifier)
-    let gridRequest = new GridRequest("OCOBJC", GridTypes.LIST)
-    gridRequest.addFilter("obj_code", equipmentCode, "=", "AND");
-    gridRequest.addFilter("obj_org", organization, "=");
-    gridRequest.addParam("parameter.lastupdated", "31-JAN-1970");
+    const gridRequest = new GridRequest("OCOBJC", GridType.LIST)
+        .addFilter("obj_code", equipmentCode, "=", GridFilterJoiner.AND)
+        .addFilter("obj_org", organization, "=")
+        .addParam("parameter.lastupdated", "31-JAN-1970");
     let equipmentType = await getGridData(gridRequest).then(response => response.body.data[0]?.obj_obrtype)
 
     if (equipmentType) {
         return equipmentType
     }
 
-    let gridRequestLocation = new GridRequest("OSOBJL", GridTypes.LIST);
-    gridRequestLocation.addFilter("equipmentno", equipmentCode, "=", GridFilterJoiner.AND);
-    gridRequestLocation.addFilter("organization", organization, "=");
-    let gridRequestLocationResponse = await getGridData(gridRequestLocation).then(response => response.body.data)
+    const gridRequestLocation = new GridRequest("OSOBJL", GridType.LIST)
+        .addFilter("equipmentno", equipmentCode, "=", GridFilterJoiner.AND)
+        .addFilter("organization", organization, "=");
+    const gridRequestLocationResponse = await getGridData(gridRequestLocation).then(response => response.body.data)
     if (gridRequestLocationResponse.length == 1) {
         return "L"
     }

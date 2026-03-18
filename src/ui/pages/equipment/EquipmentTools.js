@@ -1,6 +1,4 @@
 import WSEquipment from "@/tools/WSEquipment";
-import { GridTypes } from "../../../tools/entities/GridRequest";
-import { autocompleteDepartment } from "../../../tools/WSGrids";
 
 class EquipmentTools {
   isRegionAvailable(regionCode, equipmentLayout, equipmentType) {
