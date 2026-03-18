@@ -1,4 +1,4 @@
-import GridRequest, { GridTypes } from "./entities/GridRequest"
+import { GridRequest, GridType } from 'eam-rest-tools'
 import WS from "./WS"
 import { getGridData } from "./WSGrids"
 
@@ -52,8 +52,8 @@ export const detachDocument = async (parentid, documentid, rentity, config = {})
 }
 
 export const getDocuments = async (code, entity, config = {}) => {
-    let gridRequest = new GridRequest("BSDOCP", GridTypes.LIST)
-    gridRequest.addParam("param.daerentity", entity)
-    gridRequest.addParam("param.daecode", code);
+    const gridRequest = new GridRequest("BSDOCP", GridType.LIST)
+        .addParam("param.daerentity", entity)
+        .addParam("param.daecode", code);
     return getGridData(gridRequest, config)
 }

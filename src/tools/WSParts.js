@@ -1,7 +1,7 @@
 import { encodeCodeOrg, getCodeOrg, getOrg } from '../hooks/tools';
-import GridRequest, { GridTypes } from './entities/GridRequest';
+import { GridRequest, GridType, transformResponse } from 'eam-rest-tools';
 import WS from './WS';
-import { getGridData, transformResponse } from './WSGrids';
+import { getGridData } from './WSGrids';
 
 export const initPart = (config = {}) => {
     return WS._post(`/proxy/partdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": getOrg()}}, config)
@@ -28,13 +28,13 @@ export const createManufacturer = (manufacturer, config = {}) => {
 }
 
 export const getPartTrackingMethods = (config = {}) => {
-    const gridRequest = new GridRequest("LVTRACK", GridTypes.LOV)
+    const gridRequest = new GridRequest("LVTRACK", GridType.LOV)
     return getGridData(gridRequest).then(response => transformResponse(response, {code: "trackingtype", desc: "description"}));
 }
 
 export const getAssetsList = (partCode, config = {}) => {
-    let gridRequest = new GridRequest("OSOBJA", GridTypes.LIST, "OSOBJA")
-    gridRequest.addFilter("part", partCode, "=");
+    const gridRequest = new GridRequest("OSOBJA", GridType.LIST, "OSOBJA")
+        .addFilter("part", partCode, "=");
     return getGridData(gridRequest, config)
 }
 

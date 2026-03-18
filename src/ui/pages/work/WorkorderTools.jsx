@@ -1,5 +1,5 @@
 import { IconButton } from "@mui/material";
-import { GridTypes } from "../../../tools/entities/GridRequest";
+import { GridType } from 'eam-rest-tools';
 import { autocompleteDepartment } from "../../../tools/WSGrids";
 import WSWorkorders from "../../../tools/WSWorkorders";
 import WSWorkorder from "../../../tools/WSWorkorders";
@@ -11,7 +11,7 @@ export const bookLabourPropertiesMap = {
 
     employee: {
         autocompleteHandlerData: {
-            gridType: GridTypes.LIST,
+            gridType: GridType.LIST,
             searchKeys: ['personcode', 'description']
         },
     },
@@ -53,7 +53,7 @@ export const layoutPropertiesMap = {
                 equipmentType: "equipmentrtype"
             },
             searchKeys: ["equipmentcode"],
-            gridType: GridTypes.LIST
+            gridType: GridType.LIST
         },
         link: "/equipment/",
         alias: "equipmentCode",
@@ -85,7 +85,7 @@ export const layoutPropertiesMap = {
                 organization: "equiporganization"
             },
             searchKeys: ["equipmentcode"],
-            gridType: GridTypes.LIST
+            gridType: GridType.LIST
         },
         alias: "locationCode",
         clear: "LOCATIONID",

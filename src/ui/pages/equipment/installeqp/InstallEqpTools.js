@@ -1,12 +1,12 @@
-import GridRequest from "../../../../tools/entities/GridRequest";
+import { GridRequest } from 'eam-rest-tools';
 import { getGridData } from "../../../../tools/WSGrids";
 import useUserDataStore from "../../../../state/useUserDataStore";
 
 function buildGridRequest(userGroup, userFunction) {
-    const gridRequest = new GridRequest("BSGROU_PRM");
-    gridRequest.addParam("param.usergroupcode", userGroup);
-    gridRequest.addParam("param.userfunction", userFunction);
-    gridRequest.addFilter("tabcode", "STC", "BEGINS");
+    const gridRequest = new GridRequest("BSGROU_PRM")
+        .addParam("param.usergroupcode", userGroup)
+        .addParam("param.userfunction", userFunction)
+        .addFilter("tabcode", "STC", "BEGINS");
     return getGridData(gridRequest);
 }
 

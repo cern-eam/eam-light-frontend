@@ -3,8 +3,8 @@ import EISTable from 'eam-components/dist/ui/components/table';
 import {Link} from 'react-router-dom';
 import { isCernMode } from '../../components/CERNMode';
 import queryString from 'query-string';
-import GridRequest, { GridTypes } from '../../../tools/entities/GridRequest';
-import {getGridData, transformResponse} from '../../../tools/WSGrids';
+import { GridRequest, GridType, transformResponse } from 'eam-rest-tools';
+import { getGridData } from '../../../tools/WSGrids';
 
 const keyMap = { 
     storeCode: "bisstore", 
@@ -18,9 +18,9 @@ const keyMap = {
 };
 
 export function getPartStock(partCode, partOrganization) {
-    let gridRequest = new GridRequest("SSPART_BIS", GridTypes.LIST, "SSPART")
-    gridRequest.addParam("partcode", partCode)
-    gridRequest.addParam("partorg", partOrganization)
+    const gridRequest = new GridRequest("SSPART_BIS", GridType.LIST, "SSPART")
+        .addParam("partcode", partCode)
+        .addParam("partorg", partOrganization)
     return getGridData(gridRequest).then(response => transformResponse(response, keyMap))
 }
 
