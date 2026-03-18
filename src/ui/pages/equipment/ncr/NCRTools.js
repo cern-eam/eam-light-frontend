@@ -1,4 +1,4 @@
-import { GridTypes } from "../../../../tools/entities/GridRequest";
+import { GridType } from 'eam-rest-tools';
 import WS from "../../../../tools/WS";
 import { readStatuses } from "../../../../tools/WSGrids";
 import { isMultiOrg } from "../../EntityTools";
@@ -15,7 +15,7 @@ export const layoutPropertiesMap = {
                 organization: "equiporganization",
                 equipmentType: "equipmentrtype"
             },
-            gridType: GridTypes.LIST
+            gridType: GridType.LIST
         }
     },
     location: {

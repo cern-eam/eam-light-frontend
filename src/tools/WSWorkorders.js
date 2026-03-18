@@ -1,7 +1,7 @@
 import { Description } from '@mui/icons-material';
-import GridRequest, { GridFilterJoiner, GridTypes } from './entities/GridRequest';
+import { GridFilterJoiner, GridRequest, GridType, transformResponse } from 'eam-rest-tools';
 import WS from './WS';
-import { getGridData, transformResponse } from './WSGrids';
+import { getGridData } from './WSGrids';
 import { encodeCodeOrg, getCodeOrg, getOrg, toEAMValue } from '../hooks/tools';
 import set from 'set-value';
 import { toEAMDate, toEAMNumber } from '../ui/pages/EntityTools';
@@ -46,13 +46,13 @@ class WSWorkorders {
     // DROP DOWN VALUES FOR WOS
     //
     getWorkOrderStatusValues({handlerParams: [oldStatus, newWorkOrder]}, config = {}) {
-        let gridRequest = new GridRequest("LVWRSTDRP", GridTypes.LOV)
+        const gridRequest = new GridRequest("LVWRSTDRP", GridType.LOV)
         if (newWorkOrder || !oldStatus) {
-            gridRequest.addParam("param.poldstat", "-");
-			gridRequest.addParam("param.pexcclause", "C");
+            gridRequest.addParam("param.poldstat", "-")
+                       .addParam("param.pexcclause", "C");
         } else {
-			gridRequest.addParam("param.poldstat", oldStatus);
-			gridRequest.addParam("param.pexcclause", "A");
+            gridRequest.addParam("param.poldstat", oldStatus)
+                       .addParam("param.pexcclause", "A");
         }
         gridRequest.addParam("param.pfunrentity", "EVNT");
         return getGridData(gridRequest).then(response => transformResponse(response, 
@@ -61,16 +61,16 @@ class WSWorkorders {
     }
 
     getWorkOrderTypeValues(options, config = {}) {
-        let gridRequest = new GridRequest("LVGROUPWOTYPE", GridTypes.LOV)
-        gridRequest.addParam("parameter.pagemode", null);
-		gridRequest.addParam("parameter.usergroup", options.handlerParams[0]);
+        const gridRequest = new GridRequest("LVGROUPWOTYPE", GridType.LOV)
+            .addParam("parameter.pagemode", null)
+            .addParam("parameter.usergroup", options.handlerParams[0]);
         return getGridData(gridRequest).then(response => transformResponse(response, 
             {code: "typecode", desc: option => option.codedescription?.replace(`${option.typecode} - `, "")}));
     }
 
     getWorkOrderPriorities(config = {}) {
-        let gridRequest = new GridRequest("LVJBPR", GridTypes.LOV)
-        gridRequest.addFilter("description", "Tou", "NOTCONTAINS");
+        const gridRequest = new GridRequest("LVJBPR", GridType.LOV)
+            .addFilter("description", "Tou", "NOTCONTAINS");
         return getGridData(gridRequest).then(response => transformResponse(response, {code: "priority", desc: "description"}));
     }
 
@@ -105,10 +105,10 @@ class WSWorkorders {
     }
 
     getPartUsageStores(config = {}) {
-        let gridRequest = new GridRequest("LVIRSTOR", GridTypes.LOV, "SSISSU")
-        gridRequest.addParam("param.storefield", "IR")
-        gridRequest.addParam("parameter.r5role", "")
-        gridRequest.sortBy("storecode")
+        const gridRequest = new GridRequest("LVIRSTOR", GridType.LOV, "SSISSU")
+            .addParam("param.storefield", "IR")
+            .addParam("parameter.r5role", "")
+            .sortBy("storecode")
         return getGridData(gridRequest).then(response => transformResponse(response, {code: "storecode", desc: "des_text"}));
     }
 
@@ -117,12 +117,12 @@ class WSWorkorders {
         const code = options.filter
         //return WS._get(`/autocomplete/partusage/part/${workorder}/${store}/${code}`, config);
 
-        let gridRequest = new GridRequest("LVIRPART", GridTypes.LOV);
-        gridRequest.addParam("control.org", getOrg());
-        gridRequest.addParam("multiequipwo", "false");
-        gridRequest.addParam("store_code", store);
-        gridRequest.addParam("parameter.excludeparentpart", "false");
-        gridRequest.addParam("relatedworkordernum", workorder);
+        const gridRequest = new GridRequest("LVIRPART", GridType.LOV)
+            .addParam("control.org", getOrg())
+            .addParam("multiequipwo", "false")
+            .addParam("store_code", store)
+            .addParam("parameter.excludeparentpart", "false")
+            .addParam("relatedworkordernum", workorder);
 
         if (code) {
             gridRequest.addFilter("partcode", code.toUpperCase(), "BEGINS", GridFilterJoiner.OR);
@@ -130,11 +130,12 @@ class WSWorkorders {
             if (code?.length > 3) {
                 gridRequest.addFilter("partdescription", code, "CONTAINS", GridFilterJoiner.OR);
             }
-            gridRequest.addFilter("udfchar01", code, "BEGINS", GridFilterJoiner.OR);
-            // CDD Drawing Reference
-            gridRequest.addFilter("udfchar03", code, "BEGINS", GridFilterJoiner.OR);
-            // EDMS Item ID Reference
-            gridRequest.addFilter("udfchar11", code.toUpperCase(), "BEGINS");
+            gridRequest
+                .addFilter("udfchar01", code, "BEGINS", GridFilterJoiner.OR)
+                // CDD Drawing Reference
+                .addFilter("udfchar03", code, "BEGINS", GridFilterJoiner.OR)
+                // EDMS Item ID Reference
+                .addFilter("udfchar11", code.toUpperCase(), "BEGINS");
         }
 
         return getGridData(gridRequest).then(response => transformResponse(response, {code: "partcode", desc: "partdescription", organization: "partorganization"}));
@@ -144,8 +145,8 @@ class WSWorkorders {
         const [transaction, store, part] = options.handlerParams
         const code = options.filter
 
-		let gridRequest = new GridRequest("OSOBJA", GridTypes.LIST, "OSOBJA");
-		gridRequest.addFilter("equipmentno", code, "CONTAINS", GridFilterJoiner.AND);
+		const gridRequest = new GridRequest("OSOBJA", GridType.LIST, "OSOBJA")
+            .addFilter("equipmentno", code, "CONTAINS", GridFilterJoiner.AND);
 
 		if (part) {
 			gridRequest.addFilter("part", part, "=", GridFilterJoiner.AND);
@@ -153,7 +154,7 @@ class WSWorkorders {
 
 		if (transaction === "ISSUE") {
 			gridRequest.addFilter("store", store, "=");
-		} else if (transaction ==="RETURN") {
+		} else if (transaction === "RETURN") {
 			gridRequest.addFilter("store", "", "IS EMPTY");
 		}
 
@@ -323,11 +324,11 @@ class WSWorkorders {
     }
 
     getAssignedWorkOrders(employee) {
-        let gridRequest = new GridRequest("WSJOBS", GridTypes.LIST, "WSJOBS")
-        gridRequest.setRowCount(200)
-        gridRequest.addFilter("assignedto", employee, "=", "AND")
-        gridRequest.addFilter("evt_rstatus", "R", "=", "AND")
-        gridRequest.sortBy("schedenddate")
+        const gridRequest = new GridRequest("WSJOBS", GridType.LIST, "WSJOBS")
+            .setRowCount(200)
+            .addFilter("assignedto", employee, "=", GridFilterJoiner.AND)
+            .addFilter("evt_rstatus", "R", "=", GridFilterJoiner.AND)
+            .sortBy("schedenddate")
         return getGridData(gridRequest).then(response => transformResponse(response, this.myWorkOrderMapper));
     }
 
@@ -337,16 +338,16 @@ class WSWorkorders {
             return Promise.resolve({ body: { data: [] } });
         }
         
-        let gridRequest = new GridRequest("WSJOBS", GridTypes.LIST, "WSJOBS")
-        gridRequest.setRowCount(200)
-        gridRequest.addFilter("department", userDepartments, "IN", "AND")
-        gridRequest.addFilter("evt_rstatus", "R", "=", "AND")
+        const gridRequest = new GridRequest("WSJOBS", GridType.LIST, "WSJOBS")
+            .setRowCount(200)
+            .addFilter("department", userDepartments, "IN", GridFilterJoiner.AND)
+            .addFilter("evt_rstatus", "R", "=", GridFilterJoiner.AND)
         return getGridData(gridRequest).then(response => transformResponse(response, this.myWorkOrderMapper));
     }
 
     getScheduledWorkOrders() {
-        let gridRequest = new GridRequest("WUSCHE", GridTypes.LIST)
-        gridRequest.sortBy("acssched")
+        const gridRequest = new GridRequest("WUSCHE", GridType.LIST)
+            .sortBy("acssched")
         return getGridData(gridRequest).then(response => transformResponse(response, this.scheduledWorkOrderMapper));
     }
 

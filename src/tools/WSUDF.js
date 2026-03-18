@@ -1,6 +1,6 @@
 import { getOrg } from '../hooks/tools';
-import GridRequest, { GridTypes } from './entities/GridRequest';
-import { getGridData, transformResponse } from './WSGrids';
+import { GridFilterJoiner, GridRequest, GridType, transformResponse } from 'eam-rest-tools';
+import { getGridData } from './WSGrids';
 
 /**
  * Handles all calls to REST Api
@@ -14,34 +14,34 @@ class WSUDF {
     autocompleteUserDefinedField = (options, config = {}) => {
         let entity = options.handlerParams[0]
         let filter = options.filter
-        let gridRequest = new GridRequest("LVUDFE", GridTypes.LOV)
-        gridRequest.setRowCount(10)
-		gridRequest.addParam("param.rentity", entity)
-        gridRequest.addParam("control.org", getOrg())
-        gridRequest.addFilter("userdefinedfieldvalue", filter, "BEGINS", "OR")
-        gridRequest.addFilter("description", filter, "BEGINS")
+        const gridRequest = new GridRequest("LVUDFE", GridType.LOV)
+            .setRowCount(10)
+            .addParam("param.rentity", entity)
+            .addParam("control.org", getOrg())
+            .addFilter("userdefinedfieldvalue", filter, "BEGINS", GridFilterJoiner.OR)
+            .addFilter("description", filter, "BEGINS")
         return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "userdefinedfieldvalue", desc: "description"}));
     };
 
     getUDFCodeValues(options, config = {}) {
         let entity = options.handlerParams[0]
         let field = options.handlerParams[1]
-        let gridRequest = new GridRequest("LVUDFC", GridTypes.LOV)
-        gridRequest.addParam("param.field", field);
-		gridRequest.addParam("param.fieldid", field);
-		gridRequest.addParam("param.rentity", entity);
-		gridRequest.addParam("param.associatedrentity", entity);
+        const gridRequest = new GridRequest("LVUDFC", GridType.LOV)
+            .addParam("param.field", field)
+            .addParam("param.fieldid", field)
+            .addParam("param.rentity", entity)
+            .addParam("param.associatedrentity", entity);
         return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "userdefinedfieldvalue", desc: "description"}));
     }
 
     getUDFCodeDescValues(options, config = {}) {
         let entity = options.handlerParams[0]
         let field = options.handlerParams[1]
-        let gridRequest = new GridRequest("LVUDFCD", GridTypes.LOV)
-        gridRequest.addParam("param.field", field);
-		gridRequest.addParam("param.fieldid", field);
-		gridRequest.addParam("param.rentity", entity);
-		gridRequest.addParam("param.associatedrentity", entity);
+        const gridRequest = new GridRequest("LVUDFCD", GridType.LOV)
+            .addParam("param.field", field)
+            .addParam("param.fieldid", field)
+            .addParam("param.rentity", entity)
+            .addParam("param.associatedrentity", entity);
         return getGridData(gridRequest, config).then(response => transformResponse(response, {code: "userdefinedfieldvalue", desc: "description"}));
     }
 

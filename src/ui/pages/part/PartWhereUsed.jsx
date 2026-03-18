@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import EISTable from 'eam-components/dist/ui/components/table';
-import GridRequest, { GridTypes } from '../../../tools/entities/GridRequest';
-import { getGridData, transformResponse } from '../../../tools/WSGrids';
+import { GridRequest, GridType, transformResponse } from 'eam-rest-tools';
+import { getGridData } from '../../../tools/WSGrids';
 
 const keyMap = {
     entity: "epaentity_display",
@@ -12,9 +12,9 @@ const keyMap = {
   }
 
  function getPartsAssociated(partCode, partOrganization) {
-    let gridRequest = new GridRequest("SSPART_EPA", GridTypes.LIST, "SSPART")
-    gridRequest.addParam("partcode", partCode)
-    gridRequest.addParam("partorg", partOrganization)
+    const gridRequest = new GridRequest("SSPART_EPA", GridType.LIST, "SSPART")
+        .addParam("partcode", partCode)
+        .addParam("partorg", partOrganization)
     return getGridData(gridRequest).then(response => transformResponse(response, keyMap))
 }
 

@@ -1,7 +1,7 @@
 import { get } from "lodash";
 import { fromEAMDate, fromEAMNumber, fromEAMCheckbox, toEAMDate, toEAMNumber } from "../ui/pages/EntityTools";
-import GridRequest, { GridTypes } from "../tools/entities/GridRequest";
-import { getGridData, transformResponse } from "../tools/WSGrids";
+import { GridFilterJoiner, GridRequest, GridType, transformResponse } from 'eam-rest-tools';
+import { getGridData } from "../tools/WSGrids";
 import set from "set-value";
 import useUserDataStore from "../state/useUserDataStore";
 import useInforContextStore from "../state/useInforContext";
@@ -93,7 +93,7 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
             let {operator = "BEGINS", filter} = options;
             filter = (typeof filter === "string") ? filter : ""
 
-            const gridRequest = new GridRequest(lovName, gridType ?? GridTypes.LOV, userFunctionName, 100)
+            const gridRequest = new GridRequest(lovName, gridType ?? GridType.LOV, userFunctionName, 100)
             
             // Parameters 
             Object.entries(inputFields ?? {}).forEach(([key, value]) => { 
@@ -118,7 +118,7 @@ export const createAutocompleteHandler = (elementInfo, fields, entity, autocompl
 
             // filter implies autocomplete so limit the row count to 10
             if (filter) {
-                searchFields.forEach(searchField => gridRequest.addFilter(searchField, filter, operator, "OR"))
+                searchFields.forEach(searchField => gridRequest.addFilter(searchField, filter, operator, GridFilterJoiner.OR))
                 gridRequest.setRowCount(10)
             } 
 

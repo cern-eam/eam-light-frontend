@@ -1,8 +1,6 @@
 import useUserDataStore from '../state/useUserDataStore';
-import { transformNativeResponse } from './GridTools';
+import { GridFilterJoiner, GridRequest, GridType, transformNativeResponse, transformResponse } from 'eam-rest-tools';
 import WS from './WS';
-import GridRequest, { GridFilterJoiner } from './entities/GridRequest';
-import { GridTypes } from './entities/GridRequest';
 import { getOrg } from '../hooks/tools';
 
 export const getGridDataNative = (gridRequest, config = {}) => WS._post('/proxy/grids', gridRequest, config);
@@ -18,31 +16,17 @@ export const getGridData = (gridRequest, config = {}) =>
     });
 
 
-export function transformResponse(response, keyMap, additionalData = []) {
-    return {
-        body: {
-            metadata: response.body.metadata,
-            data: [
-                ...response.body.data.map(item => 
-                    Object.fromEntries(Object.entries(keyMap).map(([newKey, oldKey]) => [newKey, typeof oldKey === 'function' ? oldKey(item) : item[oldKey]]))
-                ),
-                ...additionalData
-            ]
-        }
-    };
-}
-
 export const readStatuses = (options) => {
     let entity = options.handlerParams[0]
     let newEntity = options.handlerParams[1]
     let oldStatus = options.handlerParams[2]
     let userData = useUserDataStore.getState().userData
 
-    let gridRequest = new GridRequest("BSAUTH_HDR")
-    gridRequest.addFilter("usergroupcode", userData.eamAccount.userGroup, "=", "OR", true, false)
-    gridRequest.addFilter("usercode", userData.eamAccount.userCode, "=", "AND", false, true)
-    gridRequest.addFilter("entity", entity, "=")
-    
+    const gridRequest = new GridRequest("BSAUTH_HDR")
+        .addFilter("usergroupcode", userData.eamAccount.userGroup, "=", GridFilterJoiner.OR, true, false)
+        .addFilter("usercode", userData.eamAccount.userCode, "=", GridFilterJoiner.AND, false, true)
+        .addFilter("entity", entity, "=");
+
     if (newEntity || !oldStatus) {
         gridRequest.addFilter("fromstatus", "-", "=")
     } else {
@@ -56,32 +40,32 @@ export const readStatuses = (options) => {
 }
 
 export const readUserCodes = (options) => {
-    let gridRequest = new GridRequest("BSUCOD_HDR")
-    gridRequest.addParam("param.entitycode", options.handlerParams[0])
+    const gridRequest = new GridRequest("BSUCOD_HDR")
+        .addParam("param.entitycode", options.handlerParams[0])
     return getGridData(gridRequest).then(response => transformResponse(response, {code: "usercode", systemCode: "systemcode", desc: "usercodedescription"}));
 }
 
 export const autocompleteDepartment = (options) => {
-    let gridRequest = new GridRequest("LVMRCS", GridTypes.LOV, "LVMORCS", 100)
+    const gridRequest = new GridRequest("LVMRCS", GridType.LOV, "LVMORCS", 100)
     gridRequest.rowCount = 10
-    gridRequest.addParam("param.showstardepartment", null)
-    gridRequest.addParam("param.bypassdeptsecurity", null)
-    gridRequest.addFilter("department", options.filter, "CONTAINS")
-    gridRequest.sortBy("department")
-    gridRequest.addParam("control.org", getOrg())
+    gridRequest
+        .addParam("param.showstardepartment", null)
+        .addParam("param.bypassdeptsecurity", null)
+        .addFilter("department", options.filter, "CONTAINS")
+        .sortBy("department")
+        .addParam("control.org", getOrg())
     return getGridData(gridRequest).then(response => transformResponse(response, {code: "department", desc: "des_text"}));
 }
 
 export const getPartUsageList = (workorder, config = {}) => {
-    let gridRequest = new GridRequest("WSJOBS_PAR", GridTypes.LIST, "WSJOBS")
-    gridRequest.addParam("param.workordernum", workorder);
-    gridRequest.addParam("param.headeractivity", "0");
-    gridRequest.addParam("param.headerjob", "0");
-
-    gridRequest.addFilter("plannedqty", "0", "!=", GridFilterJoiner.OR);
-    gridRequest.addFilter("reservedqty", "0", "!=", GridFilterJoiner.OR);
-    gridRequest.addFilter("allocatedqty", "0", "!=", GridFilterJoiner.OR);
-    gridRequest.addFilter("usedqty", "0", "!=", GridFilterJoiner.OR);
+    const gridRequest = new GridRequest("WSJOBS_PAR", GridType.LIST, "WSJOBS")
+        .addParam("param.workordernum", workorder)
+        .addParam("param.headeractivity", "0")
+        .addParam("param.headerjob", "0")
+        .addFilter("plannedqty", "0", "!=", GridFilterJoiner.OR)
+        .addFilter("reservedqty", "0", "!=", GridFilterJoiner.OR)
+        .addFilter("allocatedqty", "0", "!=", GridFilterJoiner.OR)
+        .addFilter("usedqty", "0", "!=", GridFilterJoiner.OR);
 
     return getGridData(gridRequest).then(response => transformResponse(response, {
         partCode: "partcode",

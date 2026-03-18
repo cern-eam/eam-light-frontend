@@ -1,5 +1,5 @@
 import React from "react";
-import { GridTypes } from "../../../../tools/entities/GridRequest";
+import { GridType } from 'eam-rest-tools';
 import { autocompleteDepartment, readStatuses, readUserCodes } from "../../../../tools/WSGrids";
 import { isMultiOrg } from "../../EntityTools";
 import AddManufacturerButton from "../../part/manufacturer/AddManufacturerButton";
@@ -78,7 +78,7 @@ export const equipmentLayoutPropertiesMap = {
             desc: "description_obj",
             org: "equiporganization"
         },
-        gridType: GridTypes.LIST
+        gridType: GridType.LIST
     }
   },
 

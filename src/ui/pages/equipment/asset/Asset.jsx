@@ -41,7 +41,7 @@ import { createAsset, deleteAsset, getAsset, getAssetDefault, getAssetHierarchy,
 import CustomFields from "../../../components/customfields/CustomFields.jsx";
 import Documents from "../../../components/documents/Documents.jsx";
 import { getOrg } from "../../../../hooks/tools.js";
-import GridRequest, { GridTypes } from "../../../../tools/entities/GridRequest.js";
+import { GridRequest, GridType } from 'eam-rest-tools';
 import { getGridData } from "../../../../tools/WSGrids.js";
 import { extractSingleResult } from "../../../../tools/GridTools.js";
 import { ASSET_BLOCKS, assetLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
@@ -148,10 +148,10 @@ const Asset = () => {
 
     const prefix = code.slice(1);
 
-    const gridRequest = new GridRequest(screenCode, GridTypes.LIST, screenCode);
-    gridRequest.setRowCount(1);
-    gridRequest.addFilter("equipmentno", prefix, "BEGINS");
-		gridRequest.sortBy("equipmentno", "DESC");
+    const gridRequest = new GridRequest(screenCode, GridType.LIST, screenCode)
+        .setRowCount(1)
+        .addFilter("equipmentno", prefix, "BEGINS")
+        .sortBy("equipmentno", "DESC");
 
     getGridData(gridRequest)
       .then(response => {

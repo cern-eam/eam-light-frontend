@@ -59,43 +59,6 @@ const replaceUrlParam = (key, val) => {
 
 const getURLParameterByName = name => queryString.parse(window.location.search)[name] || '';
 
-export const transformNativeResponse = (response) => {
-  const gridResultData = response.body.Result.ResultData
-  
-  return {
-    body: {
-      metadata: {...gridResultData.METADATA,
-                DATAENTITYNAME: gridResultData.DATAENTITYNAME,
-                CURRENTCURSORPOSITION: gridResultData.CURRENTCURSORPOSITION,
-                NEXTCURSORPOSITION: gridResultData.NEXTCURSORPOSITION,
-      },
-      data: (gridResultData.DATARECORD ?? []).map(record => {
-        const obj = {};
-        for (const field of record.DATAFIELD) {
-          let value = field.FIELDVALUE;
-
-          // Normalize types
-          switch (field.DATATYPE) {
-            case 'DECIMAL':
-            case 'NUMBER':
-              value = value === '' ? null : Number(value?.replace(/,/g, ""));
-              break;
-            case 'CHKBOOLEAN':
-              value = value === '' ? null : ['1', '-1'].includes(value);
-              break;
-            default:
-              // Keep VARCHAR, MIXVARCHAR, DATE, etc. as-is
-              break;
-          }
-
-          obj[field.FIELDNAME] = value;
-        }
-        return obj;
-      }),
-    },
-  };
-};
-
 export const extractSingleResult = (requestResponse, column) => {
   return requestResponse.body?.data?.[0]?.[column]
 }
