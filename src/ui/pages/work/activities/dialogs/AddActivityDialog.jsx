@@ -26,6 +26,7 @@ function AddActivityDialog(props) {
 
   const {
     screenLayout: activityLayout,
+    entity: activity,
     loading,
     saveHandler,
     updateEntityProperty: updateActivityProperty,
@@ -82,11 +83,11 @@ function AddActivityDialog(props) {
 
   function onTaskCodeChanged(task) {
     const taskCode = task['TASKSID.TASKCODE']
-
+    
     if (!taskCode) {
       return;
     }
-
+    
     setLoading(true);
     WSWorkorders.getTaskPlan(taskCode)
       .then((response) => {

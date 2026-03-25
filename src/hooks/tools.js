@@ -5,6 +5,7 @@ import { getGridData } from "../tools/WSGrids";
 import set from "set-value";
 import useUserDataStore from "../state/useUserDataStore";
 import useInforContextStore from "../state/useInforContext";
+import { KeyWireless } from "mdi-material-ui";
 
 export const toEAMValue = (value, type) => {
     switch(type) {
@@ -55,12 +56,34 @@ export const assignDefaultValues = (entity, layout) => {
 };
 
 export const appendPath = (input, suffix) => {
-    const exclusions = ['UserDefinedFields', '.DESCRIPTION']
+    const exclusions = ['UserDefinedFields', '.DESCRIPTION', '.ORGANIZATIONCODE']
     if (exclusions.some(item => input?.includes(item))) {
         return null;
     }
     // Replace the last segment of a dot-separated path with the given suffix (for example, transform 'x.y.z' into 'x.y.[suffix]'.
     return /\./.test(input) ? input.replace(/\.[^.]+$/, `.${suffix}`) : null;
+}
+
+export const createOnChangeHandler = (valueKey, updateEntityProperty, type) => (value) => {
+    const values = {}
+
+    if (value === null) {
+        values[valueKey] = null
+        values[appendPath(valueKey, 'DESCRIPTION')] = null
+        values[appendPath(valueKey, 'ORGANIZATIONID.ORGANIZATIONCODE')] = null
+    } else if (typeof value === 'string') {
+        values[valueKey] = value
+    } else if (typeof value === 'object') {
+        values[valueKey] = value.code
+        if (value.desc) {
+            values[appendPath(valueKey, 'DESCRIPTION')] = value.desc
+        }
+        if (value.organization) {
+            values[appendPath(valueKey, 'ORGANIZATIONID.ORGANIZATIONCODE')] = value.organization
+        }
+    }
+
+    updateEntityProperty(values, type)
 }
 
 const extractDescriptionFromGridResult = (obj = {}) =>

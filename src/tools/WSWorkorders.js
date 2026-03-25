@@ -203,7 +203,18 @@ class WSWorkorders {
 
     readWorkOrderActivity(activityIdentifier, config = {}) {
         const [workorder, org, activity] = activityIdentifier.split('#');
-        return WS._get(`/proxy/workorders/${workorder}%23${org}/activities/${activity}`, config);
+        // in the response set Result.ResultData.Activity.TASKID.DESCRIPTION TO "No Description" to the activity code if Result.ResultData.Activity.TASKID.TASKCODE is defined. Do not use await, return promise
+        return new Promise((resolve, reject) => {
+            WS._get(`/proxy/workorders/${workorder}%23${org}/activities/${activity}`, config)
+                .then(result => {
+                    if (result.body.Result.ResultData.Activity.TASKSID?.TASKCODE) {
+                        result.body.Result.ResultData.Activity.TASKSID.DESCRIPTION = "No Description";
+                    }
+                    resolve(result);
+                });
+        });
+
+      // return WS._get(`/proxy/workorders/${workorder}%23${org}/activities/${activity}`, config);
     }
 
     updateWorkOrderActivity(activity, config = {}) {
