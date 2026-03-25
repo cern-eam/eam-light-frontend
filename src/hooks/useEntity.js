@@ -11,7 +11,6 @@ import {
   prepareDataForFieldsValidator,
 } from "@/ui/pages/EntityTools";
 import {
-  createOnChangeHandler,
   processElementInfo,
 } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
 import { get } from "lodash";
@@ -27,7 +26,7 @@ import { TABS } from "../ui/components/entityregions/TabCodeMapping";
 import useEquipmentTreeStore from "../state/useEquipmentTreeStore";
 import useSnackbarStore from "../state/useSnackbarStore";
 import { getCustomFields } from "../tools/WSCustomFields";
-import { assignDefaultValues, toEAMValue, createAutocompleteHandler, fromEAMValue, getCodeOrg, appendPath } from "./tools";
+import { assignDefaultValues, toEAMValue, createAutocompleteHandler, fromEAMValue, getCodeOrg, appendPath, createOnChangeHandler } from "./tools";
 import { applyTimezoneOffsetToYearField } from "../ui/pages/EntityTools";
 import useCurrentEntityStore from "../state/useCurrentEntityStore";
 
@@ -336,27 +335,23 @@ const useEntity = (params) => {
      .catch(console.error);
   };
 
-  const updateEntityProperty = (key, value, type) => {
-    const keys = Array.isArray(key) ? key : [key];
-    const values = (Array.isArray(value) ? value : [value]).map(v => toEAMValue(v, type));
-
-    setEntity(prev => {
-      keys.forEach((k, i) => set(prev, k, values[i]));
+  const updateEntityProperty = (values, type) => {
+    console.log('updateEntityProperty', values, type)
+    setEntity((prev) => {
+      for (const [path, value] of Object.entries(values)) {
+        set(prev, path, toEAMValue(value, type));
+      }
       return { ...prev };
     });
 
-    fireHandler(keys, values);
+    fireHandler(values);
   };
 
-  const fireHandler = (key, value) => {
+  const fireHandler = (values) => {
     const handlers = getHandlers();
-
-    for (const [keys, handlerFunction] of Object.entries(handlers)) {
-      const handlerKeys = keys.split(',');
-      if (handlerKeys.every(k => key.includes(k))) {
-        const payload = Object.fromEntries(key.map((k, i) => [k, value[i]]));
-        //console.log('Firing handler', handlerKeys, payload);
-        handlerFunction(payload);
+    for (const key of Object.keys(values)) {
+      if (Object.keys(handlers).some(k => k === key)) {
+        handlers[key](values[key]);
       }
     }
   };
@@ -383,23 +378,9 @@ const useEntity = (params) => {
       valueKey = elementInfo.xpath
     }
 
-    if (!descKey && !elementCustomInfo?.noOrgDescProps) {
-      descKey = appendPath(valueKey, 'DESCRIPTION')
-    }
-
-    if (!orgKey && !elementCustomInfo?.noOrgDescProps) {
-      orgKey = appendPath(valueKey, 'ORGANIZATIONID.ORGANIZATIONCODE')
-    }
-
     let data = processElementInfo(elementInfo ?? getElementInfoFromCustomFields(layoutKey, entity.USERDEFINEDAREA.CUSTOMFIELD))
 
-    data.onChange = createOnChangeHandler(
-      valueKey,
-      descKey,
-      orgKey,
-      (key, value) => updateEntityProperty(key, value, data.type),
-      onChange ?? elementCustomInfo?.onChange, [], true
-    );
+    data.onChange = createOnChangeHandler(valueKey, updateEntityProperty, data.type)
 
     if (elementCustomInfo?.clear) {
       data.onClear = () => updateEntityProperty(elementCustomInfo.clear, null)
@@ -410,12 +391,10 @@ const useEntity = (params) => {
 
     // Value
     data.value = fromEAMValue(get(entity, valueKey), data.type)
-
+    
     // Description
-    if (descKey) {
-      data.desc = get(entity, descKey);
-    }
-
+    data.desc = get(entity, appendPath(valueKey, 'DESCRIPTION')) ?? null;
+    
     // Link
     if (elementCustomInfo?.link) {
       const orgLink = get(entity, orgKey) ? "%23" + get(entity, orgKey) : "";
@@ -432,7 +411,7 @@ const useEntity = (params) => {
     return data;
   };
 
-  const getHandlers = () => ({ ...handlers, "CLASSID.CLASSCODE,CLASSID.ORGANIZATIONID.ORGANIZATIONCODE": onChangeClass });
+  const getHandlers = () => ({ ...handlers, "CLASSID.CLASSCODE": onChangeClass });
 
   const updateExtraData = (key, value) => setExtraData(prev => ({ ...prev, [key]: value }));
 

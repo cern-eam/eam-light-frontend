@@ -4,6 +4,7 @@ import EAMDatePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDatePi
 import EAMDateTimePicker from 'eam-components/dist/ui/components/inputs-ng/EAMDateTimePicker';
 import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import EAMUDF from './userdefinedfields/EAMUDF';
+import { Code } from '@mui/icons-material';
 
 const EAMInput = (props) => {
 
@@ -14,7 +15,11 @@ const EAMInput = (props) => {
     }
 
     if (autocompleteHandler && !disabled) {
-        return <EAMComboAutocomplete {...props} />
+        return <EAMComboAutocomplete {...props} 
+        value={{
+            code: props.value,
+            desc: props.desc
+        }} />
     }
 
     switch (type) {
