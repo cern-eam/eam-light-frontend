@@ -99,7 +99,14 @@ export const layoutPropertiesMap = {
     },
 
     woclass: {
-        alias: "classCode"
+        alias: "classCode",
+        autocompleteHandlerData: {
+            resultMap: {
+                code: "class", 
+                desc: "des_text", 
+                woclassorganization: "classorganization" 
+            }
+        }
     },
 
     standardwo: {

@@ -145,7 +145,7 @@ const System = () => {
   };
 
   function postCopy() {
-    updateEquipmentProperty("COMMISSIONDATE", toEAMDate((new Date()).toISOString()))
+    updateEquipmentProperty({ "COMMISSIONDATE": toEAMDate((new Date()).toISOString()) })
   }
 
   const getRegions = () => {

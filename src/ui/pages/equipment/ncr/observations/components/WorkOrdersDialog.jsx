@@ -91,10 +91,12 @@ const WorkOrdersDialog = ({
     }
 
     function postInit(wo) {
-        updateWorkorderProperty("WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE", getOrg());
-        updateWorkorderProperty("EQUIPMENTID", ncr?.EQUIPMENTID);
-        updateWorkorderProperty("DEPARTMENTID.DEPARTMENTCODE", userData?.eamAccount?.department);
-        updateWorkorderProperty("ASSIGNEDTO.PERSONCODE", userData?.eamAccount?.employeeCode);
+        updateWorkorderProperty({
+            "WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE": getOrg(),
+            "EQUIPMENTID": ncr?.EQUIPMENTID,
+            "DEPARTMENTID.DEPARTMENTCODE": userData?.eamAccount?.department,
+            "ASSIGNEDTO.PERSONCODE": userData?.eamAccount?.employeeCode,
+        });
     }
 
     return (

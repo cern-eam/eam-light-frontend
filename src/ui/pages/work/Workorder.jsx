@@ -152,7 +152,7 @@ const Workorder = () => {
       copy: postCopy,
     },
     handlers: {
-      "STANDARDWO.STDWOCODE,STANDARDWO.DESCRIPTION": onChangeStandardWorkOrder,
+      "STANDARDWO.STDWOCODE,STANDARDWO.ORGANIZATIONID.ORGANIZATIONCODE": onChangeStandardWorkOrder,
       "EQUIPMENTID.EQUIPMENTCODE,EQUIPMENTID.ORGANIZATIONID.ORGANIZATIONCODE": onChangeEquipment,
     },
     isReadOnlyCustomHandler: isReadOnlyCustomHandler,
@@ -189,15 +189,20 @@ const Workorder = () => {
         setEquipment(equipment);
 
         if (!workorder?.DEPARTMENTID?.DEPARTMENTCODE) {
-          updateWorkorderProperty("DEPARTMENTID", equipment.DEPARTMENTID);
+          updateWorkorderProperty({ "DEPARTMENTID": equipment.DEPARTMENTID });
         }
 
         if (!workorder?.LOCATIONID?.LOCATIONCODE) {
-          updateWorkorderProperty("LOCATIONID", equipment?.AssetParentHierarchy?.LOCATIONID ?? equipment?.PositionParentHierarchy?.LOCATIONID ?? equipment?.SystemParentHierarchy?.LOCATIONID);
+          updateWorkorderProperty({
+            "LOCATIONID":
+              equipment?.AssetParentHierarchy?.LOCATIONID ??
+              equipment?.PositionParentHierarchy?.LOCATIONID ??
+              equipment?.SystemParentHierarchy?.LOCATIONID
+          });
         }
 
         if (!workorder?.COSTCODEID) {
-          updateWorkorderProperty("COSTCODEID", equipment.COSTCODEID);
+          updateWorkorderProperty({ "COSTCODEID": equipment.COSTCODEID });
         }
 
         if (linearDetails.body?.data?.ISWARRANTYACTIVE === "true") {
@@ -215,11 +220,13 @@ const Workorder = () => {
     WSWorkorder.getStandardWorkOrder(standardWorkOrderCode)
       .then((response) => {
         const standardWorkOrder = response.body.Result.ResultData.StandardWorkOrder;
-        updateWorkorderProperty("CLASSID", standardWorkOrder.WORKORDERCLASSID);
-        updateWorkorderProperty("TYPE", standardWorkOrder.WORKORDERTYPE);
-        updateWorkorderProperty("PRIORITY", standardWorkOrder.PRIORITY);
-        updateWorkorderProperty("PROBLEMCODEID", standardWorkOrder.PROBLEMCODEID);
-        updateWorkorderProperty("WORKORDERID.DESCRIPTION", standardWorkOrder.STANDARDWO.DESCRIPTION);
+        updateWorkorderProperty({
+          "CLASSID": standardWorkOrder.WORKORDERCLASSID,
+          "TYPE": standardWorkOrder.WORKORDERTYPE,
+          "PRIORITY": standardWorkOrder.PRIORITY,
+          "PROBLEMCODEID": standardWorkOrder.PROBLEMCODEID,
+          "WORKORDERID.DESCRIPTION": standardWorkOrder.STANDARDWO.DESCRIPTION
+        });
         console.log(standardWorkOrder);
       })
       .catch(console.error);
@@ -767,10 +774,9 @@ const Workorder = () => {
   // CALLBACKS FOR ENTITY CLASS
   //
   function postInit(wo) {
-    updateWorkorderProperty(
-      "WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE",
-      getOrg()
-    );
+    updateWorkorderProperty({
+      "WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE": getOrg(),
+    });
   }
 
   function postRead(workorder) {
@@ -801,31 +807,31 @@ const Workorder = () => {
       },
     });
 
-    updateWorkorderProperty("Activities", null);
-    updateWorkorderProperty("confirmincompletechecklist", "confirmed");
+    updateWorkorderProperty({
+      "Activities": null,
+      "confirmincompletechecklist": "confirmed",
+    });
     readOtherIdMapping(workorder.WORKORDERID.JOBNUM);
   }
 
   function postCopy() {
-    updateWorkorderProperty("ENTEREDBY", null)
-    updateWorkorderProperty("CREATEDBY", null)
-    updateWorkorderProperty("CREATEDDATE", null)
+    updateWorkorderProperty({
+      "ENTEREDBY": null,
+      "CREATEDBY": null,
+      "CREATEDDATE": null,
+    })
     let fields = workOrderLayout.fields;
-    isCernMode &&
-      updateWorkorderProperty(
-        "STATUS.STATUSCODE",
-        fields.workorderstatus.defaultValue
+    if (isCernMode) {
+      updateWorkorderProperty({
+        "STATUS.STATUSCODE": fields.workorderstatus.defaultValue
           ? fields.workorderstatus.defaultValue
-          : "R"
-      );
-    isCernMode &&
-      updateWorkorderProperty(
-        "TYPE.TYPECODE",
-        fields.workordertype.defaultValue
+          : "R",
+        "TYPE.TYPECODE": fields.workordertype.defaultValue
           ? fields.workordertype.defaultValue
-          : "CD"
-      );
-    isCernMode && updateWorkorderProperty("COMPLETEDDATE", null);
+          : "CD",
+        "COMPLETEDDATE": null,
+      });
+    }
   }
 
   //
@@ -850,10 +856,9 @@ const Workorder = () => {
           desc: "Use for this Work Order",
           icon: <ContentPasteIcon />,
           handler: (rowInfo) => {
-            updateWorkorderProperty(
-              "EQUIPMENTID.EQUIPMENTCODE",
-              rowInfo.node.id
-            );
+            updateWorkorderProperty({
+              "EQUIPMENTID.EQUIPMENTCODE": rowInfo.node.id
+            });
           },
         },
       ],

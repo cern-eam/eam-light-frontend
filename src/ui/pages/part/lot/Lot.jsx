@@ -87,7 +87,7 @@ const Lot = () => {
 
 
   function postInit(defaultData) {
-    updateLotProperty('LOTID.ORGANIZATIONID', defaultData.ORGANIZATIONID);
+    updateLotProperty({ 'LOTID.ORGANIZATIONID': defaultData.ORGANIZATIONID });
   }
 
   function postCreate() {

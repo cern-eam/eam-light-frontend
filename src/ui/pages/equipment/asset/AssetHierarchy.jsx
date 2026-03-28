@@ -24,14 +24,15 @@ const AssetHierarchy = (props) => {
   useInitHierarchyFromQueryParams({newEntity, equipment, updateEquipmentProperty, hierarchyKey: "AssetParentHierarchy"});
 
   const onChangeAsset = (value, manualInput) => {
-    if (!manualInput) return
+    console.log('on change asset', value)
+    //if (!manualInput) return
 
     const hierarchy = getHierarchyObject({
       parentAssetCode: value?.code || '',
       parentAssetOrg:  value?.org  || ''
     }, equipment.AssetParentHierarchy);
-  
-    updateEquipmentProperty("AssetParentHierarchy", hierarchy);
+    console.log('hierarchy', hierarchy)
+    updateEquipmentProperty({ "AssetParentHierarchy": hierarchy });
   };
   
   const onChangeAssetDependency = (event) => {
@@ -39,18 +40,18 @@ const AssetHierarchy = (props) => {
       dependencyType: event.target.checked ? ParentDependencyTypes.ASSET : ParentDependencyTypes.NONE
     }, equipment.AssetParentHierarchy);
   
-    updateEquipmentProperty("AssetParentHierarchy", hierarchy);
+    updateEquipmentProperty({ "AssetParentHierarchy": hierarchy });
   };
   
   const onChangePosition = (value, manualInput) => {
-    if (!manualInput) return
-    console.log('on change position', value)
+   // if (!manualInput) return
+
     const hierarchy = getHierarchyObject({
       parentPositionCode: value?.code || '',
       parentPositionOrg:  value?.org  || ''
     }, equipment.AssetParentHierarchy);
   
-    updateEquipmentProperty("AssetParentHierarchy", hierarchy);
+    updateEquipmentProperty({ "AssetParentHierarchy": hierarchy });
   };
   
   const onChangePositionDependency = (event) => {
@@ -58,18 +59,18 @@ const AssetHierarchy = (props) => {
       dependencyType: event.target.checked ? ParentDependencyTypes.POSITION : ParentDependencyTypes.NONE
     }, equipment.AssetParentHierarchy);
   
-    updateEquipmentProperty("AssetParentHierarchy", hierarchy);
+    updateEquipmentProperty({ "AssetParentHierarchy": hierarchy });
   };
   
   const onChangeSystem = (value, manualInput) => {
-    if (!manualInput) return
+   // if (!manualInput) return
 
     const hierarchy = getHierarchyObject({
       parentPrimarySystemCode: value?.code || '',
       parentPrimarySystemOrg:  value?.org  || ''
     }, equipment.AssetParentHierarchy);
   
-    updateEquipmentProperty("AssetParentHierarchy", hierarchy);
+    updateEquipmentProperty({ "AssetParentHierarchy": hierarchy });
   };
   
   const onChangeSystemDependency = (event) => {
@@ -77,19 +78,19 @@ const AssetHierarchy = (props) => {
       dependencyType: event.target.checked ? ParentDependencyTypes.PRIMARYSYSTEM : ParentDependencyTypes.NONE
     }, equipment.AssetParentHierarchy);
   
-    updateEquipmentProperty("AssetParentHierarchy", hierarchy);
+    updateEquipmentProperty({ "AssetParentHierarchy": hierarchy });
   };
 
 
   const onChangeLocation = (value, manualInput) => {
-    if (!manualInput) return
+   // if (!manualInput) return
 
     const hierarchy = getHierarchyObject({
       parentLocationCode:  value?.code || '',
       parentLocationOrg:   value?.org  || '',
       dependencyType:      value?.code ? ParentDependencyTypes.LOCATION : ParentDependencyTypes.NONE
     }, equipment.AssetParentHierarchy);
-    updateEquipmentProperty("AssetParentHierarchy", hierarchy);
+    updateEquipmentProperty({ "AssetParentHierarchy": hierarchy });
   };
   
   return (
@@ -100,7 +101,7 @@ const AssetHierarchy = (props) => {
 
       <EAMComboAutocomplete
         {...processElementInfo(assetLayout.fields.parentasset)}
-        value={getParentAssetCode('AssetParentHierarchy', equipment)}
+        value={{code: getParentAssetCode('AssetParentHierarchy', equipment)}}
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
         autocompleteHandlerParams={["A"]}
         onChange={onChangeAsset}
@@ -117,7 +118,7 @@ const AssetHierarchy = (props) => {
 
       <EAMComboAutocomplete
         {...processElementInfo(assetLayout.fields.position)}
-        value = {getParentPositionCode('AssetParentHierarchy', equipment) }
+        value = {{code: getParentPositionCode('AssetParentHierarchy', equipment) }}
         barcodeScanner
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
         autocompleteHandlerParams={["P"]}
@@ -134,7 +135,7 @@ const AssetHierarchy = (props) => {
 
       <EAMComboAutocomplete
         {...processElementInfo(assetLayout.fields.primarysystem)}
-        value = {getParentPrimarySystemCode('AssetParentHierarchy', equipment)}
+        value = {{code: getParentPrimarySystemCode('AssetParentHierarchy', equipment)}}
         barcodeScanner
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
         autocompleteHandlerParams={["S"]}
@@ -152,8 +153,9 @@ const AssetHierarchy = (props) => {
       <EAMComboAutocomplete
         {...processElementInfo(assetLayout.fields.location)}
         {...createAutocompleteHandler(assetLayout.fields.location, assetLayout.fields, equipment, assetLayoutPropertiesMap.location?.autocompleteHandlerData)}
-        value={get(equipment, 'AssetParentHierarchy.LocationDependency.DEPENDENTLOCATION.LOCATIONID.LOCATIONCODE') ??
-               get(equipment, 'AssetParentHierarchy.LOCATIONID.LOCATIONCODE')}
+        value={{code: get(equipment, 'AssetParentHierarchy.LocationDependency.DEPENDENTLOCATION.LOCATIONID.LOCATIONCODE') ??
+               get(equipment, 'AssetParentHierarchy.LOCATIONID.LOCATIONCODE')
+      }}
         disabled={
           readOnly || 
           getDependencyType(equipment.AssetParentHierarchy) !== ParentDependencyTypes.NONE &&

@@ -31,6 +31,6 @@ export const useInitHierarchyFromQueryParams = ({
     };
 
     const hierarchy = getHierarchyObject(hierarchyProps, equipment?.[hierarchyKey]);
-    updateEquipmentProperty(hierarchyKey, hierarchy);
+    updateEquipmentProperty({ [hierarchyKey]: hierarchy });
   }, []);
 };

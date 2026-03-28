@@ -2,7 +2,6 @@ import "core-js";
 import "regenerator-runtime";
 import { polyfill } from "es6-promise";
 import * as React from "react";
-import ReactDOM from "react-dom";
 import * as ReactDOMClient from "react-dom/client";
 import "./index.css";
 import Eamlight from "./Eamlight";

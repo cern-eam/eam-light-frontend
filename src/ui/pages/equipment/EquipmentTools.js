@@ -29,7 +29,7 @@ class EquipmentTools {
           "Updating the equipment status to Hors service definitif (D) will lead to the its hierarchy being nullified."
         );
       }
-      updateProperty(key, value);
+      updateProperty({ [key]: value });
     };
   }
 }
@@ -46,7 +46,7 @@ export const onCategoryChange = ({'CATEGORYID.CATEGORYCODE': categoryCode}, upda
       const category = response.body.Result.ResultData.EquipmentCategory;   
 
       if (category.MANUFACTURERID?.MANUFACTURERCODE) {
-        updateProperty("ManufacturerInfo.MANUFACTURERCODE", category.MANUFACTURERID.MANUFACTURERCODE);
+        updateProperty({ "ManufacturerInfo.MANUFACTURERCODE": category.MANUFACTURERID.MANUFACTURERCODE });
       }
      })
     .catch((error) => {
@@ -70,7 +70,7 @@ export const onChangeDependentInput = (
 
   // We only set a dependency when we still have no dependent
   if (value && noDependencySet) {
-    updateEquipmentProperty(dependencyKey, true.toString());
+    updateEquipmentProperty({ [dependencyKey]: true.toString() });
     // If there is already a dependency (not on the current input) we warn the users:
   } else if (value && equipment[dependencyKey] === "false") {
     showWarning(
@@ -80,7 +80,7 @@ export const onChangeDependentInput = (
     );
     // Set as not dependent on input clear
   } else if (!value) {
-    updateEquipmentProperty(dependencyKey, false.toString());
+    updateEquipmentProperty({ [dependencyKey]: false.toString() });
   }
 };
 

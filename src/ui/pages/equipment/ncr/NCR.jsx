@@ -85,10 +85,9 @@ const NCR = () => {
     });
 
     function postInit() {
-        updateNCRProperty(
-            "NONCONFORMITYID.ORGANIZATIONID.ORGANIZATIONCODE",
-            getOrg()
-        );
+        updateNCRProperty({
+            "NONCONFORMITYID.ORGANIZATIONID.ORGANIZATIONCODE": getOrg(),
+        });
     }
 
     function postRead() {

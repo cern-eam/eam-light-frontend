@@ -336,7 +336,7 @@ const useEntity = (params) => {
   };
 
   const updateEntityProperty = (values, type) => {
-    console.log('updateEntityProperty', values, type)
+    
     setEntity((prev) => {
       for (const [path, value] of Object.entries(values)) {
         set(prev, path, toEAMValue(value, type));
@@ -349,9 +349,10 @@ const useEntity = (params) => {
 
   const fireHandler = (values) => {
     const handlers = getHandlers();
-    for (const key of Object.keys(values)) {
-      if (Object.keys(handlers).some(k => k === key)) {
-        handlers[key](values[key]);
+    for (const key of Object.keys(handlers)) {
+      const keys = key.split(',');
+      if (keys.every(k => Object.keys(values).includes(k))) {
+        handlers[key](values);
       }
     }
   };
@@ -363,7 +364,7 @@ const useEntity = (params) => {
         const altKey = Object.keys(layoutPropertiesMap ?? {}).find(k => layoutPropertiesMap?.[k].alias?.toLowerCase() === key.toLowerCase());
         const elementInfo = screenLayout.fields[key.toLowerCase()] ?? screenLayout.fields[altKey]
         if (elementInfo && elementInfo.xpath && value) {
-          updateEntityProperty(elementInfo.xpath, value, elementInfo.fieldType)
+          updateEntityProperty({ [elementInfo.xpath]: value }, elementInfo.fieldType)
         }
       })
       // TODO custom fields
@@ -383,7 +384,7 @@ const useEntity = (params) => {
     data.onChange = createOnChangeHandler(valueKey, updateEntityProperty, data.type)
 
     if (elementCustomInfo?.clear) {
-      data.onClear = () => updateEntityProperty(elementCustomInfo.clear, null)
+      data.onClear = () => updateEntityProperty({[elementCustomInfo.clear]: null})
     }
 
     data.disabled = data.disabled || readOnly; // It should remain disabled
