@@ -7,8 +7,6 @@ import BlockUi from "react-block-ui";
 import "./AddActivityDialog.css";
 import WSWorkorders from "../../../../../tools/WSWorkorders";
 import KeyCode from "eam-components/dist/enums/KeyCode";
-import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
-import EAMDatePicker from "eam-components/dist/ui/components/inputs-ng/EAMDatePicker";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import LightDialog from "@/ui/components/LightDialog";
 import EAMTimePicker from "eam-components/dist/ui/components/inputs-ng/EAMTimePicker";
@@ -16,7 +14,7 @@ import { getOrg } from "../../../../../hooks/tools";
 import useEntity from "../../../../../hooks/useEntity";
 import { bookLabourPropertiesMap } from "../../WorkorderTools";
 import { fromEAMDate, toEAMDate, toEAMNumber } from "../../../EntityTools";
-import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
+import EAMInput from "../../../../components/EAMInput";
 
 function AddBookLabourDialog(props) {
   const {workorderNumber, workOrder, onChange, activities, open, defaultEmployee} = props;
@@ -122,13 +120,12 @@ function AddBookLabourDialog(props) {
     updateHourseWorked(startTime, endTime);
   };
 
-  function hoursWorkedChanged(hoursWorked) {
+  function hoursWorkedChanged({['HOURSBOOKED']: hoursWorked}) {
     if (!laborBooking.ACTUALSTARTTIME || !hoursWorked || isNaN(hoursWorked)) {
       return;
     }
     const startTime = new Date(fromEAMDate(laborBooking.ACTUALSTARTTIME));
     const endTime = new Date(startTime.getTime() + parseFloat(hoursWorked) * 60 * 60_000);
-    console.log('end time', endTime)
     updateBookLabourProperty({ "ACTUALENDTIME": toEAMDate(endTime) });
   }
 
@@ -155,24 +152,24 @@ function AddBookLabourDialog(props) {
                 })}
               />
 
-              <EAMComboAutocomplete {...register('employee')} />
+              <EAMInput {...register('employee')} />
 
-              <EAMComboAutocomplete {...register('department')} />
+              <EAMInput {...register('department')} />
 
-              <EAMDatePicker {...register('datework')} />
+              <EAMInput {...register('datework')} />
 
-              <EAMComboAutocomplete {...register('octype')} selectMode={true}/>
+              <EAMInput {...register('octype')} />
 
-              <EAMTextField {...register('hrswork', null, null, null, hoursWorkedChanged)}
+              <EAMInput {...register('hrswork', null, hoursWorkedChanged)}
                             renderDependencies={[laborBooking.ACTUALSTARTTIME, laborBooking.ACTUALENDTIME]} />
               
-              <EAMTimePicker {...register('actstarttime', null, null, null, startEndTimeChanged)}
+              <EAMTimePicker {...register('actstarttime', null, startEndTimeChanged)}
                             renderDependencies={[laborBooking.ACTUALENDTIME, laborBooking.HOURSBOOKED]} />
 
-              <EAMTimePicker {...register('actendtime', null, null, null, startEndTimeChanged)}
+              <EAMTimePicker {...register('actendtime', null, startEndTimeChanged)}
                             renderDependencies={[laborBooking.ACTUALSTARTTIME, laborBooking.HOURSBOOKED]} />
 
-              <EAMComboAutocomplete {...register('emptrade')} />
+              <EAMInput {...register('emptrade')} />
             </BlockUi>
           </div>
         </DialogContent>

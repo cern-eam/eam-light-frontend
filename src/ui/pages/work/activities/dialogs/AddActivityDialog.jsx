@@ -7,12 +7,9 @@ import BlockUi from "react-block-ui";
 import "./AddActivityDialog.css";
 import WSWorkorders from "../../../../../tools/WSWorkorders";
 import KeyCode from "eam-components/dist/enums/KeyCode";
-import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
-import EAMDatePicker from "eam-components/dist/ui/components/inputs-ng/EAMDatePicker";
 import LightDialog from "@/ui/components/LightDialog";
 import useEntity from "../../../../../hooks/useEntity";
 import { fromEAMNumber } from "../../../EntityTools";
-import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
 import EAMInput from "../../../../components/EAMInput";
 
 /**

@@ -64,26 +64,23 @@ export const appendPath = (input, suffix) => {
     return /\./.test(input) ? input.replace(/\.[^.]+$/, `.${suffix}`) : null;
 }
 
-export const createOnChangeHandler = (valueKey, updateEntityProperty, type) => (value) => {
+export const createOnChangeHandler = (valueKey, updateEntityProperty, type, onChangeCustomHandler) => (value) => {
     const values = {}
 
     if (value === null) {
         values[valueKey] = null
-        values[appendPath(valueKey, 'DESCRIPTION')] = null
         values[appendPath(valueKey, 'ORGANIZATIONID.ORGANIZATIONCODE')] = null
     } else if (typeof value === 'string') {
         values[valueKey] = value
     } else if (typeof value === 'object') {
         values[valueKey] = value.code
-        if (value.desc) {
-            values[appendPath(valueKey, 'DESCRIPTION')] = value.desc
-        }
         if (value.organization) {
             values[appendPath(valueKey, 'ORGANIZATIONID.ORGANIZATIONCODE')] = value.organization
         }
     }
 
     updateEntityProperty(values, type)
+    onChangeCustomHandler?.(values)
 }
 
 const extractDescriptionFromGridResult = (obj = {}) =>

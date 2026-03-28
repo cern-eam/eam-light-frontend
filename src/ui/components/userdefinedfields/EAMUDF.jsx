@@ -36,6 +36,7 @@ const EAMUDF = (props) => {
       return (
         <EAMComboAutocomplete
           {...props}
+          value={{code: props.code}}
           autocompleteHandler={WSUDF.getUDFCodeValues}
           autocompleteHandlerParams={[udfLookupEntity, elementId]}
         />
@@ -44,6 +45,7 @@ const EAMUDF = (props) => {
       return (
         <EAMComboAutocomplete
           {...props}
+          value={{desc: props.desc}}
           autocompleteHandler={WSUDF.getUDFCodeDescValues}
           autocompleteHandlerParams={[udfLookupEntity, elementId]}
         />
@@ -52,6 +54,7 @@ const EAMUDF = (props) => {
       return (
         <EAMComboAutocomplete
           {...props}
+          value={{code: props.code}}
           autocompleteHandler={WSUDF.autocompleteUserDefinedField}
           autocompleteHandlerParams={[udfLookupEntity]}
         />
