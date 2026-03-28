@@ -163,7 +163,7 @@ const Asset = () => {
 
         const newNumber = parseInt(withoutPrefix, 10) + 1;
         const padded = String(newNumber).padStart(withoutPrefix.length, '0');
-        updateEquipmentProperty('ASSETID.EQUIPMENTCODE', prefix + padded)
+        updateEquipmentProperty({ 'ASSETID.EQUIPMENTCODE': prefix + padded })
       })
       .catch(error => {
         showError(error.message)
@@ -171,8 +171,10 @@ const Asset = () => {
   }
 
   function postCopy() {
-    updateEquipmentProperty("GISOBJID", null)
-    updateEquipmentProperty("COMMISSIONDATE", toEAMDate((new Date()).toISOString()))
+    updateEquipmentProperty({
+      "GISOBJID": null,
+      "COMMISSIONDATE": toEAMDate((new Date()).toISOString()),
+    })
   }
 
 

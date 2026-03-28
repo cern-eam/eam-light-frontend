@@ -118,7 +118,7 @@ const Part = () => {
   }
 
   function onChangeDescription() {
-    !isMultiOrg && updatePartProperty('PARTID.ORGANIZATIONID.ORGANIZATIONCODE', getOrg())
+    !isMultiOrg && updatePartProperty({ 'PARTID.ORGANIZATIONID.ORGANIZATIONCODE': getOrg() })
   }
 
   const getRegions = () => {

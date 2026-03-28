@@ -43,8 +43,10 @@ const ObservationsDialog = ({
     });
 
     function postInit() {
-        updateObservationProperty('NONCONFORMITYOBSERVATIONID.NONCONFORMITYCODE', ncrCode)
-        updateObservationProperty('NONCONFORMITYOBSERVATIONID.ORGANIZATIONID.ORGANIZATIONCODE', '*')
+        updateObservationProperty({
+            'NONCONFORMITYOBSERVATIONID.NONCONFORMITYCODE': ncrCode,
+            'NONCONFORMITYOBSERVATIONID.ORGANIZATIONID.ORGANIZATIONCODE': '*'
+        })
     }
 
     function postCreate() {

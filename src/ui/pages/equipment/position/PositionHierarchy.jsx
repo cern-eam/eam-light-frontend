@@ -28,14 +28,14 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
       parentAssetCode: value?.code || '',
       parentAssetOrg:  value?.org  || ''
     }, equipment.PositionParentHierarchy);
-    updateEquipmentProperty("PositionParentHierarchy", hierarchy);
+    updateEquipmentProperty({ "PositionParentHierarchy": hierarchy });
   };
 
   const onChangeAssetDependency = (event) => {
     const hierarchy = getHierarchyObject({
       dependencyType: event.target.checked ? ParentDependencyTypes.ASSET : ParentDependencyTypes.NONE
     }, equipment.PositionParentHierarchy);
-    updateEquipmentProperty("PositionParentHierarchy", hierarchy);
+    updateEquipmentProperty({ "PositionParentHierarchy": hierarchy });
   };
 
   const onChangePosition = (value, manualInput) => {
@@ -45,14 +45,14 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
       parentPositionCode: value?.code || '',
       parentPositionOrg:  value?.org  || ''
     }, equipment.PositionParentHierarchy);
-    updateEquipmentProperty("PositionParentHierarchy", hierarchy);
+    updateEquipmentProperty({ "PositionParentHierarchy": hierarchy });
   };
 
   const onChangePositionDependency = (event) => {
     const hierarchy = getHierarchyObject({
       dependencyType: event.target.checked ? ParentDependencyTypes.POSITION : ParentDependencyTypes.NONE
     }, equipment.PositionParentHierarchy);
-    updateEquipmentProperty("PositionParentHierarchy", hierarchy);
+    updateEquipmentProperty({ "PositionParentHierarchy": hierarchy });
   };
 
   const onChangeSystem = (value, manualInput) => {
@@ -62,14 +62,14 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
       parentPrimarySystemCode: value?.code || '',
       parentPrimarySystemOrg:  value?.org  || ''
     }, equipment.PositionParentHierarchy);
-    updateEquipmentProperty("PositionParentHierarchy", hierarchy);
+    updateEquipmentProperty({ "PositionParentHierarchy": hierarchy });
   };
 
   const onChangeSystemDependency = (event) => {
     const hierarchy = getHierarchyObject({
       dependencyType: event.target.checked ? ParentDependencyTypes.PRIMARYSYSTEM : ParentDependencyTypes.NONE
     }, equipment.PositionParentHierarchy);
-    updateEquipmentProperty("PositionParentHierarchy", hierarchy);
+    updateEquipmentProperty({ "PositionParentHierarchy": hierarchy });
   };
 
   const onChangeLocation = (value, manualInput) => {
@@ -80,7 +80,7 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
       parentLocationOrg:   value?.org  || '',
       dependencyType:      value?.code ? ParentDependencyTypes.LOCATION : ParentDependencyTypes.NONE
     }, equipment.PositionParentHierarchy);
-    updateEquipmentProperty("PositionParentHierarchy", hierarchy);
+    updateEquipmentProperty({ "PositionParentHierarchy": hierarchy });
   };
 
   return (

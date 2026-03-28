@@ -56,12 +56,14 @@ const AdditionalCostDialog = (props) => {
     }
 
     function postInit(addcostdefaults) {
-        updateAdditionalCostProperty('ACTIVITYID.ACTIVITYCODE', addcostdefaults.ACTIVITYCODE)
-        updateAdditionalCostProperty('ACTIVITYID.WORKORDERID.JOBNUM', workOrderNumber)
-        updateAdditionalCostProperty('ACTIVITYID.WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE', getOrg())
-        updateAdditionalCostProperty('WOADDITIONALCOSTQTY', toEAMNumber(1))
-        updateAdditionalCostProperty('MULTIEQUIPSPLITINFO.RELATEDWORKORDERID.JOBNUM', workOrderNumber)
-        updateAdditionalCostProperty('MULTIEQUIPSPLITINFO.RELATEDWORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE', getOrg())
+        updateAdditionalCostProperty({
+            'ACTIVITYID.ACTIVITYCODE': addcostdefaults.ACTIVITYCODE,
+            'ACTIVITYID.WORKORDERID.JOBNUM': workOrderNumber,
+            'ACTIVITYID.WORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE': getOrg(),
+            'WOADDITIONALCOSTQTY': toEAMNumber(1),
+            'MULTIEQUIPSPLITINFO.RELATEDWORKORDERID.JOBNUM': workOrderNumber,
+            'MULTIEQUIPSPLITINFO.RELATEDWORKORDERID.ORGANIZATIONID.ORGANIZATIONCODE': getOrg()
+        })
     }
 
     const loadActivities = (workOrderNumber) => {

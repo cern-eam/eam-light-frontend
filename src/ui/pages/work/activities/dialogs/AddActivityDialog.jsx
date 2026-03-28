@@ -13,6 +13,7 @@ import LightDialog from "@/ui/components/LightDialog";
 import useEntity from "../../../../../hooks/useEntity";
 import { fromEAMNumber } from "../../../EntityTools";
 import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
+import EAMInput from "../../../../components/EAMInput";
 
 /**
  * Display detail of an activity
@@ -65,10 +66,12 @@ function AddActivityDialog(props) {
   activityLayout.fields.esthrs.fieldType = "text"  
 
   function postInit(activity) {
-    updateActivityProperty("ACTIVITYID.ACTIVITYCODE", activity.ACTIVITYCODE)
-    updateActivityProperty("ACTIVITYID.WORKORDERID", workOrder?.WORKORDERID)
-    updateActivityProperty("ESTIMATEDHOURS", 1);
-    updateActivityProperty("PERSONS", 1);
+    updateActivityProperty({
+      "ACTIVITYID.ACTIVITYCODE": activity.ACTIVITYCODE,
+      "ACTIVITYID.WORKORDERID": workOrder?.WORKORDERID,
+      "ESTIMATEDHOURS": 1,
+      "PERSONS": 1,
+    });
   }
 
   let handleClose = () => {
@@ -82,6 +85,7 @@ function AddActivityDialog(props) {
   }
 
   function onTaskCodeChanged(task) {
+    console.log("onTaskCodeChanged", task);
     const taskCode = task['TASKSID.TASKCODE']
     
     if (!taskCode) {
@@ -92,12 +96,14 @@ function AddActivityDialog(props) {
     WSWorkorders.getTaskPlan(taskCode)
       .then((response) => {
         const taskPlan = response.body?.Result?.ResultData?.Task;
-        updateActivityProperty("ACTIVITYID.ACTIVITYNOTE", taskPlan.TASKLISTID.DESCRIPTION);
-        updateActivityProperty("TASKSID", taskPlan.TASKLISTID);
-        updateActivityProperty("ESTIMATEDHOURS", fromEAMNumber(taskPlan.HOURSREQUESTED));
-        updateActivityProperty("PERSONS", taskPlan.PERSONS);
-        updateActivityProperty("TRADEID", taskPlan.TRADEID);
-        updateActivityProperty("MATLIST", taskPlan.MATERIALLISTID);
+        updateActivityProperty({
+          "ACTIVITYID.ACTIVITYNOTE": taskPlan.TASKLISTID.DESCRIPTION,
+          "TASKSID": taskPlan.TASKLISTID,
+          "ESTIMATEDHOURS": fromEAMNumber(taskPlan.HOURSREQUESTED),
+          "PERSONS": taskPlan.PERSONS,
+          "TRADEID": taskPlan.TRADEID,
+          "MATLIST": taskPlan.MATERIALLISTID,
+        });
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -124,26 +130,26 @@ function AddActivityDialog(props) {
         <DialogContent id="content">
           <div>
             <BlockUi tag="div" blocking={loading}>
-              <EAMTextField
+              <EAMInput
               {...register('activity')} disabled={activityToEdit} />
 
-              <EAMTextField {...register('activitynote')} />
+              <EAMInput {...register('activitynote')} />
 
-              <EAMComboAutocomplete {...register('task')} />
+              <EAMInput {...register('task')} />
 
-              <EAMComboAutocomplete {...register('matlcode')} />
+              <EAMInput {...register('matlcode')} />
 
-              <EAMComboAutocomplete {...register('trade')}  />
+              <EAMInput {...register('trade')}  />
 
-              <EAMTextField {...register('personsreq')} />
+              <EAMInput {...register('personsreq')} />
 
-              <EAMTextField {...register('esthrs')} />
+              <EAMInput {...register('esthrs')} />
 
-              <EAMDatePicker {...register('actstartdate')}  />
+              <EAMInput {...register('actstartdate')}  />
 
-              <EAMDatePicker {...register('actenddate')} />
+              <EAMInput {...register('actenddate')} />
 
-              <EAMTextField {...register('percentcomplete')} />
+              <EAMInput {...register('percentcomplete')} />
             </BlockUi>
           </div>
         </DialogContent>

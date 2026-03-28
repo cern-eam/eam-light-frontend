@@ -57,7 +57,9 @@ function AddBookLabourDialog(props) {
   function activityCodeChanged({ ['ACTIVITYID.ACTIVITYCODE.value']: activityCode }) {
     if (!activityCode) return
     
-    updateBookLabourProperty('TRADEID.TRADECODE', activities.find(a => a.activityCode === activityCode)?.tradeCode);
+    updateBookLabourProperty({
+      'TRADEID.TRADECODE': activities.find(a => a.activityCode === activityCode)?.tradeCode
+    });
   }
 
 
@@ -68,8 +70,10 @@ function AddBookLabourDialog(props) {
     WSWorkorders.getWorkOrder.bind(null, workorderNumber, getOrg()) //TODO do we really have to read the WO?
       .then((result) => {
         const workorder = result.body.Result.ResultData.WorkOrder;
-        props.updateWorkorderProperty("recordid", workorder.recordid);
-        props.updateWorkorderProperty("STARTDATE", workorder.STARTDATE);
+        props.updateWorkorderProperty({
+          "recordid": workorder.recordid,
+          "STARTDATE": workorder.STARTDATE,
+        });
       })
       .catch((error) => {
         handleError(error);
@@ -96,7 +100,7 @@ function AddBookLabourDialog(props) {
 
   let updateHourseWorked = (startTime, endTime) => {
     const timeWorked = endTime.getHours() * 60 + endTime.getMinutes() - (startTime.getHours() * 60 + startTime.getMinutes());
-    updateBookLabourProperty('HOURSBOOKED', toEAMNumber(formatHoursWorkedValue(timeWorked / 60 || "0")));
+    updateBookLabourProperty({ 'HOURSBOOKED': toEAMNumber(formatHoursWorkedValue(timeWorked / 60 || "0")) });
   };
 
   function startEndTimeChanged(value) {
@@ -108,8 +112,10 @@ function AddBookLabourDialog(props) {
     const endTime = new Date(fromEAMDate(laborBooking.ACTUALENDTIME));
     
     if ( (startTime.getTime() > endTime.getTime())) {
-      updateBookLabourProperty('ACTUALENDTIME', toEAMDate(startTime))
-      updateBookLabourProperty('HOURSBOOKED', toEAMNumber(0))
+      updateBookLabourProperty({
+        'ACTUALENDTIME': toEAMDate(startTime),
+        'HOURSBOOKED': toEAMNumber(0),
+      })
       return
     }
 
@@ -123,7 +129,7 @@ function AddBookLabourDialog(props) {
     const startTime = new Date(fromEAMDate(laborBooking.ACTUALSTARTTIME));
     const endTime = new Date(startTime.getTime() + parseFloat(hoursWorked) * 60 * 60_000);
     console.log('end time', endTime)
-    updateBookLabourProperty("ACTUALENDTIME", toEAMDate(endTime));
+    updateBookLabourProperty({ "ACTUALENDTIME": toEAMDate(endTime) });
   }
 
   return (

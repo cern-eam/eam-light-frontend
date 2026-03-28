@@ -39,12 +39,12 @@ export default function AddManufacturerDialog({ open, onClose, updateEquipmentPr
 });
 
 function postInit() {
-  updateManufacturerProperty('MANUFACTURERID.ORGANIZATIONID.ORGANIZATIONCODE', getOrg());
+  updateManufacturerProperty({ 'MANUFACTURERID.ORGANIZATIONID.ORGANIZATIONCODE': getOrg() });
 }
 
 function postCreate(manufacturer) {
   if (!equipment.ManufacturerInfo?.MANUFACTURERCODE) {
-    updateEquipmentProperty('ManufacturerInfo.MANUFACTURERCODE', manufacturer.MANUFACTURERID.MANUFACTURERCODE);
+    updateEquipmentProperty({ 'ManufacturerInfo.MANUFACTURERCODE': manufacturer.MANUFACTURERID.MANUFACTURERCODE });
   }
   onClose();
 }

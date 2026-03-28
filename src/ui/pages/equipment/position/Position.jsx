@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import EquipmentHistory from "../components/EquipmentHistory.jsx";
-import WSEquipment from "../../../../tools/WSEquipment";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import PositionHierarchy from "./PositionHierarchy";
@@ -136,8 +135,10 @@ const Position = () => {
   }, [id])
 
   function postCopy() {
-    updateEquipmentProperty("GISOBJID", null)
-    updateEquipmentProperty("COMMISSIONDATE", toEAMDate((new Date()).toISOString()))
+    updateEquipmentProperty({
+      "GISOBJID": null,
+      "COMMISSIONDATE": toEAMDate((new Date()).toISOString()),
+    })
   }
 
   const getRegions = () => {

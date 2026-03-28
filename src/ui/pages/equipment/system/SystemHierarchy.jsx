@@ -23,20 +23,24 @@ const SystemHierarchy = (props) => {
     if (!manualInput) return
 
     if (!value) {
-      updateEquipmentProperty("SystemParentHierarchy", {
-        ...equipment.SystemParentHierarchy,
-        NONDEPENDENTPRIMARYSYSTEM: null,
-        DEPENDENTPRIMARYSYSTEM: null
+      updateEquipmentProperty({
+        "SystemParentHierarchy": {
+          ...equipment.SystemParentHierarchy,
+          NONDEPENDENTPRIMARYSYSTEM: null,
+          DEPENDENTPRIMARYSYSTEM: null
+        }
       })
       return
     }
 
-    updateEquipmentProperty("SystemParentHierarchy", {
-      ...equipment.SystemParentHierarchy,
-      NONDEPENDENTPRIMARYSYSTEM: {
-        SYSTEMID: {
-          EQUIPMENTCODE:  value.code,
-          ORGANIZATIONID: {ORGANIZATIONCODE: value.org}
+    updateEquipmentProperty({
+      "SystemParentHierarchy": {
+        ...equipment.SystemParentHierarchy,
+        NONDEPENDENTPRIMARYSYSTEM: {
+          SYSTEMID: {
+            EQUIPMENTCODE:  value.code,
+            ORGANIZATIONID: {ORGANIZATIONCODE: value.org}
+          }
         }
       }
     })
@@ -45,17 +49,21 @@ const SystemHierarchy = (props) => {
 
   const onChangePrimarySystemDependency = (event) => {
     if (event.target.checked) {
-      updateEquipmentProperty('SystemParentHierarchy', {
-        ...equipment.SystemParentHierarchy,
-        DEPENDENTPRIMARYSYSTEM: equipment.SystemParentHierarchy.NONDEPENDENTPRIMARYSYSTEM,
-        NONDEPENDENTPRIMARYSYSTEM: null,
-        DEPENDENTLOCATION: null
+      updateEquipmentProperty({
+        'SystemParentHierarchy': {
+          ...equipment.SystemParentHierarchy,
+          DEPENDENTPRIMARYSYSTEM: equipment.SystemParentHierarchy.NONDEPENDENTPRIMARYSYSTEM,
+          NONDEPENDENTPRIMARYSYSTEM: null,
+          DEPENDENTLOCATION: null
+        }
       })
     } else {
-      updateEquipmentProperty('SystemParentHierarchy', {
-        ...equipment.SystemParentHierarchy,
-        NONDEPENDENTPRIMARYSYSTEM: equipment.SystemParentHierarchy.DEPENDENTPRIMARYSYSTEM,
-        DEPENDENTPRIMARYSYSTEM: null
+      updateEquipmentProperty({
+        'SystemParentHierarchy': {
+          ...equipment.SystemParentHierarchy,
+          NONDEPENDENTPRIMARYSYSTEM: equipment.SystemParentHierarchy.DEPENDENTPRIMARYSYSTEM,
+          DEPENDENTPRIMARYSYSTEM: null
+        }
       })
     }
 
@@ -65,19 +73,23 @@ const SystemHierarchy = (props) => {
     if (!manualInput) return
     
     if (!value?.code) {
-      updateEquipmentProperty("SystemParentHierarchy", {
-        ...equipment.SystemParentHierarchy,
-        DEPENDENTLOCATION: null
+      updateEquipmentProperty({
+        "SystemParentHierarchy": {
+          ...equipment.SystemParentHierarchy,
+          DEPENDENTLOCATION: null
+        }
       })
       return
     }
 
-    updateEquipmentProperty("SystemParentHierarchy", {
-      ...equipment.SystemParentHierarchy,
-      DEPENDENTLOCATION: {
-        LOCATIONID: {
-          LOCATIONCODE:  value.code,
-          ORGANIZATIONID: {ORGANIZATIONCODE: value.org}
+    updateEquipmentProperty({
+      "SystemParentHierarchy": {
+        ...equipment.SystemParentHierarchy,
+        DEPENDENTLOCATION: {
+          LOCATIONID: {
+            LOCATIONCODE:  value.code,
+            ORGANIZATIONID: {ORGANIZATIONCODE: value.org}
+          }
         }
       }
     })
