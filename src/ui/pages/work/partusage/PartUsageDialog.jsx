@@ -94,6 +94,7 @@ function PartUsageDialog(props) {
     useFieldsValidator(fieldsData, formData);
 
   const updateFormDataProperty = (key, value) => {
+    console.log('updateFormDataProperty', key, value)
     setFormData((oldFormData) => ({
       ...oldFormData,
       [key]: value,
@@ -201,6 +202,20 @@ function PartUsageDialog(props) {
     resetFormTransactionLinesAndRelatedStates();
   };
 
+  const onPartChange = (part) => {
+    console.log('onPartChange', part)
+    updateFormDataProperty(FORM.PART, part?.code);
+    updateFormDataProperty(FORM.PART_DESC, part?.desc);
+    updateFormDataProperty(FORM.PART_ORGANIZATION, part?.organization);
+    runUiBlockingFunction(() => handlePartChange(part?.code, part));
+  }
+
+  const onAssetChange = (asset) => {
+    console.log('onAssetChange', asset)
+    updateFormDataProperty(FORM.ASSET, asset?.code);
+    updateFormDataProperty(FORM.ASSET_DESC, asset?.desc);
+    runUiBlockingFunction(() => handleAssetChange(asset?.code, asset));
+  }
   /* This function handles at least 3 cases:
    * 1) The asset ID field is cleared, is solely whitespace or is falsy.
    * 2) The user searches for an asset ID without having selected a part or by selecting it from the history
@@ -618,20 +633,13 @@ function PartUsageDialog(props) {
               <EAMComboAutocomplete
                 {...processElementInfo(tabLayout["partcode"])}
                 disabled={!formData.storeCode || !formData.activityCode}
-                value={formData.partCode}
-                desc={formData.partDesc}
+                value={{code: formData.partCode, desc: formData.partDesc}}
                 autocompleteHandler={WSWorkorders.getPartUsagePart}
                 autocompleteHandlerParams={[
                   workOrderCode,
                   formData.storeCode,
                 ]}
-                onChange={createOnChangeHandler(
-                  FORM.PART,
-                  FORM.PART_DESC,
-                  FORM.PART_ORGANIZATION,
-                  updateFormDataProperty,
-                  (partCode, part) => runUiBlockingFunction(() => handlePartChange(partCode, part))
-                )}
+                onChange={onPartChange}
                 renderDependencies={[formData.transactionType]}
                 errorText={errorMessages?.partCode}
                 barcodeScanner
@@ -644,22 +652,14 @@ function PartUsageDialog(props) {
                   !formData.activityCode ||
                   (formData.partCode?.trim() !== "" && !isTrackedByAsset)
                 }
-                value={formData.assetIDCode}
-                desc={formData.assetIDDesc}
+                value={{code: formData.assetIDCode, desc: formData.assetIDDesc}}
                 autocompleteHandler={WSWorkorders.getPartUsageAsset}
                 autocompleteHandlerParams={[
                   formData.transactionType,
                   formData.storeCode,
                   formData.partCode,
                 ]}
-                onChange={createOnChangeHandler(
-                  FORM.ASSET,
-                  FORM.ASSET_DESC,
-                  null,
-                  updateFormDataProperty,
-                  (assetCode, asset) =>
-                    runUiBlockingFunction(() => handleAssetChange(assetCode, asset))
-                )}
+                onChange={onAssetChange}
                 barcodeScanner
                 renderDependencies={[formData.partCode]}
                 errorText={errorMessages?.assetIDCode}

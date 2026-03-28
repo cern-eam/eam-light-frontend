@@ -6,7 +6,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import BlockUi from "react-block-ui";
-import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
 import { useEffect, useState } from "react";
 import useUserDataStore from "@/state/useUserDataStore";
@@ -15,7 +14,7 @@ import useEntity from "@/hooks/useEntity";
 import { getOrg } from "@/hooks/tools";
 import { ncrWorkOrderPropertiesMap } from "@/ui/pages/work/WorkorderTools";
 import WSNCRs from "@/tools/WSNCRs";
-import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
+import EAMInput from "../../../../../components/EAMInput";
 
 const WorkOrdersDialog = ({
     open,
@@ -111,13 +110,13 @@ const WorkOrdersDialog = ({
 
             <DialogContent id="content" style={{ overflowY: "visible" }}>
                 <BlockUi tag="div" blocking={disabled}>
-                    <EAMComboAutocomplete {...register("equipment")} 
+                    <EAMInput {...register("equipment")} 
                         barcodeScanner 
                     />
 
-                    <EAMTextField {...register("description")}  />
+                    <EAMInput {...register("description")}  />
 
-                    <EAMSelect {...register("workordertype")}
+                    <EAMInput {...register("workordertype")}
                         renderSuggestion={(suggestion) => suggestion.desc}
                         renderValue={(value) => value.desc || value.code}
                         autocompleteHandler={
@@ -134,15 +133,15 @@ const WorkOrdersDialog = ({
                         options={statuses}
                     />
 
-                    <EAMComboAutocomplete {...register("department")} 
+                    <EAMInput {...register("department")} 
                                     autocompleteHandler={autocompleteDepartment}
                     />
 
-                    <EAMComboAutocomplete {...register("location")} />
+                    <EAMInput {...register("location")} />
 
-                    <EAMComboAutocomplete {...register("costcode")} />
+                    <EAMInput {...register("costcode")} />
 
-                    <EAMComboAutocomplete {...register("assignedto")}  />
+                    <EAMInput {...register("assignedto")}  />
                 </BlockUi>
             </DialogContent>
             <DialogActions>

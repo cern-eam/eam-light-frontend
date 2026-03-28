@@ -1,7 +1,6 @@
 import tools from '../CustomFieldTools'
-import EAMTextField from 'eam-components/dist/ui/components/inputs-ng/EAMTextField';
 import { cfCodeDesc } from '../../../../tools/WSCustomFields';
-import EAMComboAutocomplete from 'eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete';
+import EAMInput from '../../../components/EAMInput';
 
 function CustomFieldCODE({customField, register, index, validate}) {
     const extraProps = register(customField.PROPERTYCODE, 
@@ -9,14 +8,14 @@ function CustomFieldCODE({customField, register, index, validate}) {
                                 `USERDEFINEDAREA.CUSTOMFIELD.${index}.CODEDESCFIELD.DESCRIPTION`);
 
     if (tools.isLookupCustomField(customField)) {
-        return <EAMComboAutocomplete 
+        return <EAMInput 
                           {...extraProps}
                           validate={validate}
                           autocompleteHandler={cfCodeDesc}
                           autocompleteHandlerParams={[customField.PROPERTYCODE]}/>
     } else {
         return (
-            <EAMTextField {...extraProps}/>
+            <EAMInput {...extraProps}/>
         )
     }
 

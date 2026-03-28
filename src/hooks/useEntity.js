@@ -370,7 +370,7 @@ const useEntity = (params) => {
       // TODO custom fields
   };
 
-  const register = (layoutKey, valueKey, descKey, orgKey, onChange) => {
+  const register = (layoutKey, valueKey, onChangeCustomHandler) => {
 
     const elementInfo = screenLayout.fields[layoutKey]
     const elementCustomInfo = layoutPropertiesMap[layoutKey];
@@ -381,7 +381,7 @@ const useEntity = (params) => {
 
     let data = processElementInfo(elementInfo ?? getElementInfoFromCustomFields(layoutKey, entity.USERDEFINEDAREA.CUSTOMFIELD))
 
-    data.onChange = createOnChangeHandler(valueKey, updateEntityProperty, data.type)
+    data.onChange = createOnChangeHandler(valueKey, updateEntityProperty, data.type, onChangeCustomHandler)
 
     if (elementCustomInfo?.clear) {
       data.onClear = () => updateEntityProperty({[elementCustomInfo.clear]: null})
@@ -398,8 +398,8 @@ const useEntity = (params) => {
     
     // Link
     if (elementCustomInfo?.link) {
-      const orgLink = get(entity, orgKey) ? "%23" + get(entity, orgKey) : "";
-      data.link = () => (data.value ? elementCustomInfo.link + data.value + orgLink : null)
+      //const orgLink = get(entity, orgKey) ? "%23" + get(entity, orgKey) : "";  // + org
+      data.link = () => (data.value ? elementCustomInfo.link + data.value : null)
     }
 
 
