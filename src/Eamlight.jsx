@@ -58,6 +58,7 @@ const Eamlight = () => {
   }
 
   if (userDataFetchError || applicationDataFetchError || screenLayoutFetchError) {
+    console.error('initError', userDataFetchError, applicationDataFetchError, screenLayoutFetchError)
     return (
       <InfoPage
         title="Error initializing EAM Light"
