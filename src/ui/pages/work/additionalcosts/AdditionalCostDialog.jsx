@@ -101,7 +101,7 @@ const AdditionalCostDialog = (props) => {
                     <EAMInput {...register('costtype')} 
                         autocompleteHandler={WS.getCodeLov}
                         autocompleteHandlerParams={["WOCS"]}
-                        />
+                    />
 
                     <EAMTextField   {...register('cost')} />
 

@@ -381,7 +381,7 @@ const useEntity = (params) => {
 
     let data = processElementInfo(elementInfo ?? getElementInfoFromCustomFields(layoutKey, entity.USERDEFINEDAREA.CUSTOMFIELD))
 
-    data.onChange = createOnChangeHandler(valueKey, updateEntityProperty, data.type, onChangeCustomHandler)
+    data.onChange = createOnChangeHandler({valueKey, updateEntityProperty, type: data.type, onChangeCustomHandler, noOrgDescProps: elementCustomInfo?.noOrgDescProps})
 
     if (elementCustomInfo?.clear) {
       data.onClear = () => updateEntityProperty({[elementCustomInfo.clear]: null})
@@ -394,7 +394,9 @@ const useEntity = (params) => {
     data.value = fromEAMValue(get(entity, valueKey), data.type)
     
     // Description
-    data.desc = get(entity, appendPath(valueKey, 'DESCRIPTION')) ?? null;
+    if (appendPath(valueKey, 'DESCRIPTION') && !elementCustomInfo?.noOrgDescProps) {
+      data.desc = get(entity, appendPath(valueKey, 'DESCRIPTION')) ?? null;
+    }
     
     // Link
     if (elementCustomInfo?.link) {

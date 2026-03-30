@@ -104,7 +104,7 @@ export const layoutPropertiesMap = {
             resultMap: {
                 code: "class", 
                 desc: "des_text", 
-                woclassorganization: "classorganization" 
+                organization: "classorganization" 
             }
         }
     },

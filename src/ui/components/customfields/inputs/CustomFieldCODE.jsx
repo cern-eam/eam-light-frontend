@@ -4,8 +4,7 @@ import EAMInput from '../../../components/EAMInput';
 
 function CustomFieldCODE({customField, register, index, validate}) {
     const extraProps = register(customField.PROPERTYCODE, 
-                                `USERDEFINEDAREA.CUSTOMFIELD.${index}.CODEDESCFIELD.CODEVALUE`,
-                                `USERDEFINEDAREA.CUSTOMFIELD.${index}.CODEDESCFIELD.DESCRIPTION`);
+                                `USERDEFINEDAREA.CUSTOMFIELD.${index}.CODEDESCFIELD.CODEVALUE`);
 
     if (tools.isLookupCustomField(customField)) {
         return <EAMInput 

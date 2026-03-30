@@ -5,7 +5,6 @@ import { getGridData } from "../tools/WSGrids";
 import set from "set-value";
 import useUserDataStore from "../state/useUserDataStore";
 import useInforContextStore from "../state/useInforContext";
-import { KeyWireless } from "mdi-material-ui";
 
 export const toEAMValue = (value, type) => {
     switch(type) {
@@ -64,19 +63,21 @@ export const appendPath = (input, suffix) => {
     return /\./.test(input) ? input.replace(/\.[^.]+$/, `.${suffix}`) : null;
 }
 
-export const createOnChangeHandler = (valueKey, updateEntityProperty, type, onChangeCustomHandler) => (value) => {
+export const createOnChangeHandler = ({valueKey, updateEntityProperty, type, onChangeCustomHandler, noOrgDescProps}) => (value) => {
     const values = {}
-
+    const orgKey = appendPath(valueKey, 'ORGANIZATIONID.ORGANIZATIONCODE')
+    const descKey = appendPath(valueKey, 'DESCRIPTION')
+    
     if (value === null) {
         values[valueKey] = null
-        values[appendPath(valueKey, 'ORGANIZATIONID.ORGANIZATIONCODE')] = null
+        values[orgKey] = null
+        values[descKey] = null
     } else if (typeof value === 'string') {
         values[valueKey] = value
     } else if (typeof value === 'object') {
         values[valueKey] = value.code
-        if (value.organization) {
-            values[appendPath(valueKey, 'ORGANIZATIONID.ORGANIZATIONCODE')] = value.organization
-        }
+        values[orgKey] = value.organization
+        values[descKey] = value.desc
     }
 
     updateEntityProperty(values, type)

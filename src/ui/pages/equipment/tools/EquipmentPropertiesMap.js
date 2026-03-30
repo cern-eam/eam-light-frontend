@@ -3,7 +3,6 @@ import { GridType } from 'eam-rest-tools';
 import { autocompleteDepartment, readStatuses, readUserCodes } from "../../../../tools/WSGrids";
 import { isMultiOrg } from "../../EntityTools";
 import AddManufacturerButton from "../../part/manufacturer/AddManufacturerButton";
-import AddManufacturerDialog from "../../part/manufacturer/AddManufacturerDialog";
 
 export const equipmentLayoutPropertiesMap = {
 
