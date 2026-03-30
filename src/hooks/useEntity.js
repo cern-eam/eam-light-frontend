@@ -381,7 +381,7 @@ const useEntity = (params) => {
 
     let data = processElementInfo(elementInfo ?? getElementInfoFromCustomFields(layoutKey, entity.USERDEFINEDAREA.CUSTOMFIELD))
 
-    data.onChange = createOnChangeHandler({valueKey, updateEntityProperty, type: data.type, onChangeCustomHandler, noOrgDescProps: elementCustomInfo?.noOrgDescProps})
+    data.onChange = createOnChangeHandler({valueKey, updateEntityProperty, type: data.type, onChangeCustomHandler, screenLayout})
 
     if (elementCustomInfo?.clear) {
       data.onClear = () => updateEntityProperty({[elementCustomInfo.clear]: null})
