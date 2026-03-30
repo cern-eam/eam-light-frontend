@@ -44,9 +44,10 @@ const Eamlight = () => {
   const loginMethod = import.meta.env.VITE_LOGIN_METHOD;
 
   useEffect(() => {
-    if (loginMethod !== "STD" || (loginMethod === "STD" && inforContext))
+    if (loginMethod !== "STD" || (loginMethod === "STD" && inforContext)) {
       fetchUserData();
       fetchApplicationData();
+    }
   },[inforContext])
   
   if (!inforContext && loginMethod === "STD") {
@@ -58,7 +59,6 @@ const Eamlight = () => {
   }
 
   if (userDataFetchError || applicationDataFetchError || screenLayoutFetchError) {
-    console.error('initError', userDataFetchError, applicationDataFetchError, screenLayoutFetchError)
     return (
       <InfoPage
         title="Error initializing EAM Light"
