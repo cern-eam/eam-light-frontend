@@ -6,8 +6,7 @@ function CustomFieldRENT({customField, register, index}) {
     
     return (
         <EAMInput {...register(customField.PROPERTYCODE, 
-                                     `USERDEFINEDAREA.CUSTOMFIELD.${index}.ENTITYCODEFIELD.CODEVALUE`, 
-                                     `USERDEFINEDAREA.CUSTOMFIELD.${index}.ENTITYCODEFIELD.DESCRIPTION`)}
+                                     `USERDEFINEDAREA.CUSTOMFIELD.${index}.ENTITYCODEFIELD.CODEVALUE`)}
                          autocompleteHandler={autocompleteCustomFieldRENT}
                          autocompleteHandlerParams={[customField.entity, customField.ENTITYCODEFIELD.entity, customField.PROPERTYCODE]}
         />

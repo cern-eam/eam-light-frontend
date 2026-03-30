@@ -94,7 +94,6 @@ function PartUsageDialog(props) {
     useFieldsValidator(fieldsData, formData);
 
   const updateFormDataProperty = (key, value) => {
-    console.log('updateFormDataProperty', key, value)
     setFormData((oldFormData) => ({
       ...oldFormData,
       [key]: value,
@@ -269,7 +268,7 @@ function PartUsageDialog(props) {
       const assetData = {
         bin: get(equipmentData, 'PartAssociation.STORELOCATION.BIN'),
         partCode: get(equipmentData, 'PartAssociation.PARTID.PARTCODE'),
-        lot: get(equipmentData, 'equipmentData.PartAssociation.STORELOCATION.LOT')
+        lot: get(equipmentData, 'PartAssociation.STORELOCATION.LOT')
       };
       
       // Can happen if user un-focuses the input with an unexpected equipment selected (e.g. "A")
