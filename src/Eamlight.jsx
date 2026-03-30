@@ -72,7 +72,7 @@ const Eamlight = () => {
     
 
   if (!userData || !applicationData) {
-    return renderLoading("Loading EAM Light")
+    return renderLoading()
   }
 
   const eqpRegex = [

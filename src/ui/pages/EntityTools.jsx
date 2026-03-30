@@ -289,7 +289,7 @@ export const getCustomTabGridRenderers = (applicationData) => {
   };
 };
 
-export const renderLoading = (message) => {
+export const renderLoading = (message = "") => {
 
   const blockUiStyle = {
     height: "100%",

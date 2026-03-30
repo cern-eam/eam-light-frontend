@@ -146,6 +146,16 @@ export const layoutPropertiesMap = {
        }
     },
 
+    routecode: {
+        autocompleteHandlerData: {
+            resultMap: {
+                code: "routecode", 
+                desc: "routedescription", 
+                routerevision: "routerevision"
+            }
+        }
+    }
+
 }
 
 export const ncrWorkOrderPropertiesMap = {

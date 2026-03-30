@@ -63,7 +63,7 @@ export const appendPath = (input, suffix) => {
     return /\./.test(input) ? input.replace(/\.[^.]+$/, `.${suffix}`) : null;
 }
 
-export const createOnChangeHandler = ({valueKey, updateEntityProperty, type, onChangeCustomHandler, noOrgDescProps}) => (value) => {
+export const createOnChangeHandler = ({valueKey, updateEntityProperty, type, onChangeCustomHandler, screenLayout}) => (value) => {
     const values = {}
     const orgKey = appendPath(valueKey, 'ORGANIZATIONID.ORGANIZATIONCODE')
     const descKey = appendPath(valueKey, 'DESCRIPTION')
@@ -76,8 +76,14 @@ export const createOnChangeHandler = ({valueKey, updateEntityProperty, type, onC
         values[valueKey] = value
     } else if (typeof value === 'object') {
         values[valueKey] = value.code
-        values[orgKey] = value.organization
         values[descKey] = value.desc
+        values[orgKey] = value.organization
+        // Assign all other keys from value to values
+        Object.keys(value).forEach(key => {
+            if (key !== 'code' && key !== 'organization' && key !== 'desc' && screenLayout.fields[key]?.xpath) {
+                values[screenLayout.fields[key]?.xpath] = value[key]
+            }
+        })
     }
 
     updateEntityProperty(values, type)
