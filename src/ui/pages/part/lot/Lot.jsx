@@ -215,7 +215,7 @@ const Lot = () => {
   };
 
   if (!lot || !lotLayout) {
-    return renderLoading("Reading Lot ...");
+    return renderLoading();
   }
 
   return (

@@ -449,7 +449,7 @@ const Position = () => {
   };
 
   if (!equipment || !positionLayout) {
-    return renderLoading("Reading Position ...")
+    return renderLoading();
   }
 
   return (

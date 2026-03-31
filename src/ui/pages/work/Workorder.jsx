@@ -870,7 +870,7 @@ const Workorder = () => {
   }
 
   if (!workorder || !workOrderLayout) {
-    return renderLoading("Reading Work Order ...");
+    return renderLoading();
   }
 
   

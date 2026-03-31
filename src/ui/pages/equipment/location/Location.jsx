@@ -395,7 +395,7 @@ export default Location = (props) => {
   };
 
   if (!location || !locationLayout) {
-    return renderLoading("Reading Location ...")
+    return renderLoading()
   }
 
   return (

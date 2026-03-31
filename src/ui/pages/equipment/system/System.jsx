@@ -457,7 +457,7 @@ const System = () => {
   };
 
   if (!equipment || !systemLayout) {
-    return renderLoading("Reading System ...")
+    return renderLoading();
   }
 
   return (

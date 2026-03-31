@@ -244,7 +244,7 @@ const NCR = () => {
     };
 
     if (!ncr || !ncrLayout) {
-        return renderLoading("Reading NCR ...");
+        return renderLoading();
     }
 
     return (
