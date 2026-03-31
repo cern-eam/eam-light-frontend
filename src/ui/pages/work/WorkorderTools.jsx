@@ -151,7 +151,8 @@ export const layoutPropertiesMap = {
             resultMap: {
                 code: "routecode", 
                 desc: "routedescription", 
-                routerevision: "routerevision"
+                routerevision: "routerevision",
+                organization: "organization"
             }
         }
     }
