@@ -306,7 +306,7 @@ const Part = () => {
   };
 
   if (!part || !partLayout) {
-    return renderLoading("Reading Part ...")
+    return renderLoading();
   }
 
   return (

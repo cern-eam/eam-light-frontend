@@ -177,7 +177,7 @@ const ReplaceEqp = (props) => {
     };
 
     if (!equipmentLayout) {
-        return renderLoading("Loading Screen Layout")
+        return renderLoading();
     }
 
     return (

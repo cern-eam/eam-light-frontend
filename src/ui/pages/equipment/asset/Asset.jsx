@@ -511,7 +511,7 @@ const Asset = () => {
   };
 
   if (!equipment || !assetLayout) {
-    return renderLoading("Reading Asset ...")
+    return renderLoading()
   }
 
   return (
