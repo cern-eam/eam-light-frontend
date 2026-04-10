@@ -111,10 +111,10 @@ const SystemHierarchy = (props) => {
       
       <EAMComboAutocomplete
         {...processElementInfo(systemLayout.fields.primarysystem)}
-        value = {
+        value = {{code:
           get(equipment, 'SystemParentHierarchy.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE') ??
           get(equipment, 'SystemParentHierarchy.DEPENDENTPRIMARYSYSTEM.SYSTEMID.EQUIPMENTCODE')
-        }
+        }}
         barcodeScanner
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
         autocompleteHandlerParams={["S"]}
@@ -136,8 +136,8 @@ const SystemHierarchy = (props) => {
       <EAMComboAutocomplete
         {...processElementInfo(systemLayout.fields.location)}
         {...createAutocompleteHandler(systemLayout.fields.location, systemLayout.fields, equipment, systemLayoutPropertiesMap.location?.autocompleteHandlerData)}
-        value={get(equipment, 'SystemParentHierarchy.DEPENDENTLOCATION.LOCATIONID.LOCATIONCODE') ??
-               get(equipment, 'SystemParentHierarchy.LOCATIONID.LOCATIONCODE')}
+        value={{code: get(equipment, 'SystemParentHierarchy.DEPENDENTLOCATION.LOCATIONID.LOCATIONCODE') ??
+               get(equipment, 'SystemParentHierarchy.LOCATIONID.LOCATIONCODE')}}
         disabled={
           readOnly || get(equipment, 'SystemParentHierarchy.DEPENDENTPRIMARYSYSTEM.SYSTEMID')
         }

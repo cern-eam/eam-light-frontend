@@ -90,7 +90,7 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
 
       <EAMComboAutocomplete
         {...processElementInfo(positionLayout.fields.asset)}
-        value={getParentAssetCode('PositionParentHierarchy', equipment)}
+        value={{code: getParentAssetCode('PositionParentHierarchy', equipment)}}
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
         autocompleteHandlerParams={["A"]}
         onChange={onChangeAsset}
@@ -107,7 +107,7 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
 
       <EAMComboAutocomplete
         {...processElementInfo(positionLayout.fields.parentasset)}
-        value={getParentPositionCode('PositionParentHierarchy', equipment)}
+        value={{code: getParentPositionCode('PositionParentHierarchy', equipment)}}
         barcodeScanner
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
         autocompleteHandlerParams={["P"]}
@@ -124,7 +124,7 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
 
       <EAMComboAutocomplete
         {...processElementInfo(positionLayout.fields.primarysystem)}
-        value={getParentPrimarySystemCode('PositionParentHierarchy', equipment)}
+        value={{code: getParentPrimarySystemCode('PositionParentHierarchy', equipment)}}
         barcodeScanner
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
         autocompleteHandlerParams={["S"]}
@@ -142,8 +142,8 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
       <EAMComboAutocomplete
         {...processElementInfo(positionLayout.fields.location)}
         {...createAutocompleteHandler(positionLayout.fields.location, positionLayout.fields, equipment, positionLayoutPropertiesMap.location?.autocompleteHandlerData)}
-        value={get(equipment, 'PositionParentHierarchy.LocationDependency.DEPENDENTLOCATION.LOCATIONID.LOCATIONCODE') ??
-               get(equipment, 'PositionParentHierarchy.LOCATIONID.LOCATIONCODE')}
+        value={{code: get(equipment, 'PositionParentHierarchy.LocationDependency.DEPENDENTLOCATION.LOCATIONID.LOCATIONCODE') ??
+               get(equipment, 'PositionParentHierarchy.LOCATIONID.LOCATIONCODE')}}
         disabled={
           readOnly ||
           (getDependencyType(equipment.PositionParentHierarchy) !== ParentDependencyTypes.NONE &&
