@@ -4,9 +4,10 @@ import { PartsAssociatedDialog } from "./PartsAssociatedDialog";
 import WSEquipment from "../../../tools/WSEquipment";
 import useSnackbarStore from '@/state/useSnackbarStore';
 import EISTable from 'eam-components/dist/ui/components/table';
+import { getPartsAssociatedByParent } from '../../../tools/WSParts';
 
 const PartsAssociatedContainer = (
-    { code, associationEntity, disabled }
+    { code, associationEntity = 'OBJ', disabled, hideAddPartAssociation = false }
   ) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const initState = {
@@ -17,25 +18,41 @@ const PartsAssociatedContainer = (
   const [isLoading, setLoading] = useState(false);
   const [partAssociated, setPartAssociated] = useState(initState);
   const headers = ['Part', 'Description', 'Quantity', 'UOM'];
-  const propCodes = ['papartcode', 'description', 'quantity', 'partuom'];
+  const propCodes = ['partcode', 'description', 'quantity', 'partuom'];
   const [data, setData] = useState([]);
 
   useEffect(() => {
     if (code) {
-      fetchData(code, associationEntity);
+      fetchData(code);
     }
   }, [code]);
 
-  const fetchData = (code, associationEntity) => {
-      setLoading(true)
-          WSEquipment.getEquipmentPartsAssociated(code, associationEntity).then((response) => {
-              setData(response.body.data);
-              setLoading(false);
-          }).catch((error) => {
-              console.log(error);
-              setLoading(false);
-          });
-  };
+ const fetchData = (code) => {
+  setLoading(true);
+
+  getPartsAssociatedByParent(code)
+    .then((response) => {
+      const records = response.body.Result.ResultData.DATARECORD || [];
+      if(records.length === 0) {
+        setData([]);
+        setLoading(false);
+        return;
+      }
+      const formattedData = records.map(part => ({
+        partcode: part.PARTID?.PARTCODE || "",
+        description: part.PARTID?.DESCRIPTION || "",
+        quantity: part.PARTQUANTITY?.VALUE || 0,
+        partuom: part.UOMCODE || part.partUoM || ""
+      }));
+
+      setData(formattedData);
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.error(error);
+      setLoading(false);
+    });
+};
 
   const updatePartAssociatedProperty = (key, value) => {
       setPartAssociated((prevPart) => ({
@@ -56,7 +73,7 @@ const PartsAssociatedContainer = (
       partCode: value.part,
       associationEntity
     }
-    
+
     setLoading(true);
     WSEquipment.createPartAssociated(newAssociation).then((result)=> {
       if(result.body && result.body.data) {
@@ -79,19 +96,22 @@ const PartsAssociatedContainer = (
   }
 
   return (
-    <div>   
+    <div style={{ width: '100%', height: '100%' }}>
       {data?.length > 0 &&
         <EISTable
             data={data}
             headers={headers}
             propCodes={propCodes} />
         }
+      {!hideAddPartAssociation &&
         <div style={{ marginTop: '16px' }}>
-          <Button onClick={() => setIsDialogOpen(true)} color="primary"
-                  disabled={disabled} variant="outlined">
-              Add Parts Association
-          </Button>
-        </div>
+            <Button onClick={() => setIsDialogOpen(true)} color="primary"
+                    disabled={disabled} variant="outlined">
+                Add Parts Association
+            </Button>
+          </div>
+        }
+       
         <PartsAssociatedDialog
           isDialogOpen={isDialogOpen}
           handleCancel={()=>setIsDialogOpen(false)}
@@ -99,6 +119,7 @@ const PartsAssociatedContainer = (
           partAssociated={partAssociated}
           isLoading={isLoading}
           updatePartAssociatedProperty={updatePartAssociatedProperty}/>
+
       </div>
   );
 }
