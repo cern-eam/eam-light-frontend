@@ -4,6 +4,8 @@ import { PartsAssociatedDialog } from "./PartsAssociatedDialog";
 import WSEquipment from "../../../tools/WSEquipment";
 import useSnackbarStore from '@/state/useSnackbarStore';
 import EISTable from 'eam-components/dist/ui/components/table';
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const PartsAssociatedContainer = (
     { code, associationEntity, disabled }
@@ -16,8 +18,8 @@ const PartsAssociatedContainer = (
   const {showError, showNotification} = useSnackbarStore();
   const [isLoading, setLoading] = useState(false);
   const [partAssociated, setPartAssociated] = useState(initState);
-  const headers = ['Part', 'Description', 'Quantity', 'UOM'];
-  const propCodes = ['papartcode', 'description', 'quantity', 'partuom'];
+  const headers = ['Part', 'Description', 'Quantity', 'UOM', 'Delete'];
+  const propCodes = ['papartcode', 'description', 'quantity', 'partuom', 'delete'];
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -27,11 +29,25 @@ const PartsAssociatedContainer = (
   }, [code]);
 
   const fetchData = (code, associationEntity) => {
-      setLoading(true)
-          WSEquipment.getEquipmentPartsAssociated(code, associationEntity).then((response) => {
-              setData(response.body.data);
+      setLoading(true);
+      WSEquipment.getEquipmentPartsAssociated(code, associationEntity)
+          .then((response) => {
+              const enrichedData = response.body.data.map((row) => ({
+                  ...row,
+                  delete: (
+                      <IconButton
+                          size="small"
+                          color="error"
+                          onClick={() => handleDelete(row)}
+                      >
+                          <DeleteIcon fontSize="small" />
+                      </IconButton>
+                  ),
+              }));
+              setData(enrichedData);
               setLoading(false);
-          }).catch((error) => {
+          })
+          .catch((error) => {
               console.log(error);
               setLoading(false);
           });
@@ -56,7 +72,7 @@ const PartsAssociatedContainer = (
       partCode: value.part,
       associationEntity
     }
-    
+
     setLoading(true);
     WSEquipment.createPartAssociated(newAssociation).then((result)=> {
       if(result.body && result.body.data) {
@@ -74,12 +90,26 @@ const PartsAssociatedContainer = (
     })
   }
 
+  const handleDelete = (value) => {
+    if (!value) return;
+    setLoading(true);
+
+    WSEquipment.deletePartAssociated(value.valuecode, value.partassociatedpk).then(()=> {
+      fetchData(code, associationEntity)
+      setLoading(false);
+    }).catch((e) => {
+      setLoading(false);
+      showError(e?.response?.body?.errors?.[0]?.message ?? "The association has failed");
+    })
+  }
+
+
   if (!data) {
     return React.Fragment
   }
 
   return (
-    <div>   
+    <div>
       {data?.length > 0 &&
         <EISTable
             data={data}

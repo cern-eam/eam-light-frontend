@@ -1,4 +1,4 @@
-import { getCodeOrg, getOrg } from '../hooks/tools';
+import { encodeCodeOrg, getCodeOrg, getOrg } from '../hooks/tools';
 import { GridFilterJoiner, GridRequest, GridType, transformResponse } from 'eam-rest-tools';
 import WS from './WS';
 import { getAsset } from './WSAssets';
@@ -112,6 +112,10 @@ class WSEquipment {
         return WS._post('/equipment/partsassociated', part, config);
     }
 
+    deletePartAssociated(equipmentCode, pk, config = {}) {
+        return WS._delete(`/proxy/assets/${encodeCodeOrg(equipmentCode)}/partsassociated/${pk}`, config);
+    }
+
     //
     //EQUIPMENT REPLACEMENT
     //
@@ -143,9 +147,9 @@ class WSEquipment {
 
 export const getEquipment = async (equipmentIdentifier, config = {}) => {
     const equipmentType = await getEquipmentType(equipmentIdentifier);
-  
+
     const extract = (response) => response.body.Result.ResultData;
-  
+
     switch (equipmentType) {
       case "A":
         return extract(await getAsset(equipmentIdentifier, config)).AssetEquipment;
@@ -159,7 +163,7 @@ export const getEquipment = async (equipmentIdentifier, config = {}) => {
         return null;
     }
   };
-  
+
 
 export const getEquipmentType = async (equipmentIdentifier, config = {}) => {
     const {code: equipmentCode, org: organization} = getCodeOrg(equipmentIdentifier)
