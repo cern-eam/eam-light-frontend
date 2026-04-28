@@ -50,6 +50,7 @@ import { SYSTEM_BLOCKS, systemLayoutPropertiesMap } from "../tools/EquipmentProp
 import StatusRow from "../../../components/statusrow/StatusRow.jsx";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer.jsx";
 import ScreenBlock, { getScreenBlockRegionFlags } from "../../../layout/ScreenBlock.jsx";
+import Entities from "@/enums/Entities";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -265,12 +266,12 @@ const System = () => {
       },
       getPartsAssociated(
         id?.code + '#' + id?.org,
-        'OBJ',
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         1,
         30,
-        readOnly
+        readOnly,
+        Entities.SYSTEMS
       ),
       {
         id: "EDMSDOCUMENTS",

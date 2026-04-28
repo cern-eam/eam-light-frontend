@@ -31,7 +31,7 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import PlaceIcon from "@mui/icons-material/Place";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import { isCernMode } from "@/ui/components/CERNMode";
-import getPartsAssociated from "../PartsAssociated";
+import getPartsAssociated from "@/ui/pages/partsAssociated/PartsAssociated";
 import EamlightToolbar from "../../components/EamlightToolbar";
 import CustomFields from "../../components/customfields/CustomFields";
 import { getOrg } from "../../../hooks/tools";
@@ -39,6 +39,7 @@ import { Article } from "@mui/icons-material";
 import Documents from "../../components/documents/Documents";
 import StatusRow from "../../components/statusrow/StatusRow";
 import ScreenContainers from "../../layout/ScreenContainers";
+import Entities from "@/enums/Entities";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -282,11 +283,13 @@ const Part = () => {
       },
       getPartsAssociated(
         id?.code,
-        id?.org,
+        "OBJ",
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         2,
-        8
+        8,
+        false,
+        Entities.PARTS
       ),
       ...getTabGridRegions(
         applicationData,

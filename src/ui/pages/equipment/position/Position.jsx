@@ -50,6 +50,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import { POSITION_BLOCKS, positionLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
 import StatusRow from "../../../components/statusrow/StatusRow.jsx";
 import ScreenBlock, { getScreenBlockRegionFlags } from "../../../layout/ScreenBlock.jsx";
+import Entities from "@/enums/Entities";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -263,7 +264,8 @@ const Position = () => {
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         1,
         30,
-        readOnly
+        readOnly,
+        Entities.POSITIONS
       ),
       {
         id: "EDMSDOCUMENTS",

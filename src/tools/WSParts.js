@@ -2,6 +2,7 @@ import { encodeCodeOrg, getCodeOrg, getOrg } from '../hooks/tools';
 import { GridRequest, GridType, transformResponse } from 'eam-rest-tools';
 import WS from './WS';
 import { getGridData } from './WSGrids';
+import Entities from "@/enums/Entities";
 
 export const initPart = (config = {}) => {
     return WS._post(`/proxy/partdefaults`, {"ORGANIZATIONID": { "ORGANIZATIONCODE": getOrg()}}, config)
@@ -21,6 +22,12 @@ export const updatePart = (part, config = {}) => {
 
 export const deletePart = (partIdentifier, config = {}) => {
     return WS._delete(`/proxy/parts/${encodeCodeOrg(partIdentifier)}`, config);
+}
+
+export const getPartsAssociatedByParent = (code, config = {}) => {
+   const entity = config.parentEntity || Entities.PARTS;
+   const entityPath = entity.toLowerCase();
+   return  WS._get(`/proxy/${entityPath}/${encodeCodeOrg(code)}/partsassociated`, config); //for wo it is /proxy/workorders/{code}/parts ?
 }
 
 export const createManufacturer = (manufacturer, config = {}) => {
