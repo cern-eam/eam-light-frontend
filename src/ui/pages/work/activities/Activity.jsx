@@ -232,11 +232,12 @@ function Activity(props) {
                 {/* {layout.BOO.fields.hrswork.text} */}
                 Hrs. Worked
                 <br />
-                (Estimated)
+                (Estimated) [% Completed]
               </Typography>
               <Typography>
                 {totalHours}{" "}
                 <span className="estmtd">({activity.estimatedHours})</span>
+                {activity.percentCompleted && <span>[{activity.percentCompleted}]</span>}
               </Typography>
             </Grid>
 
