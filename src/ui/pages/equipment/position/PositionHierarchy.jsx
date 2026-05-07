@@ -21,9 +21,7 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
   
   useInitHierarchyFromQueryParams({newEntity, equipment, updateEquipmentProperty, hierarchyKey: "PositionParentHierarchy"});
 
-  const onChangeAsset = (value, manualInput) => {
-    if (!manualInput) return
-
+  const onChangeAsset = (value) => {
     const hierarchy = getHierarchyObject({
       parentAssetCode: value?.code || '',
       parentAssetOrg:  value?.org  || ''
@@ -38,9 +36,7 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
     updateEquipmentProperty({ "PositionParentHierarchy": hierarchy });
   };
 
-  const onChangePosition = (value, manualInput) => {
-    if (!manualInput) return
-
+  const onChangePosition = (value) => {
     const hierarchy = getHierarchyObject({
       parentPositionCode: value?.code || '',
       parentPositionOrg:  value?.org  || ''
@@ -55,9 +51,7 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
     updateEquipmentProperty({ "PositionParentHierarchy": hierarchy });
   };
 
-  const onChangeSystem = (value, manualInput) => {
-    if (!manualInput) return
-
+  const onChangeSystem = (value) => {
     const hierarchy = getHierarchyObject({
       parentPrimarySystemCode: value?.code || '',
       parentPrimarySystemOrg:  value?.org  || ''
@@ -72,9 +66,7 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
     updateEquipmentProperty({ "PositionParentHierarchy": hierarchy });
   };
 
-  const onChangeLocation = (value, manualInput) => {
-    if (!manualInput) return
-
+  const onChangeLocation = (value) => {
     const hierarchy = getHierarchyObject({
       parentLocationCode:  value?.code || '',
       parentLocationOrg:   value?.org  || '',

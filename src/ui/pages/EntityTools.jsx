@@ -521,8 +521,16 @@ export const getCustomTabRegions = (
 
   export const toEAMDate = (iso) => {
 
+    // if iso is a string like +3 make it today + 3days
+    
     if (!iso) return null;
 
+    if (/^\+?-?\d+$/.test(iso)) {
+      const now = new Date();
+      now.setDate(now.getDate() + Number(iso));
+      iso = now.toISOString();
+    }
+    
     const local = new Date(iso);
 
     if (isNaN(local.getTime()) || local.getFullYear() < 1970) {

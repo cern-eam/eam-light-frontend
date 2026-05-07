@@ -33,6 +33,7 @@ import { renderLoading } from "./ui/pages/EntityTools";
 import useInforContextStore from "./state/useInforContext";
 import useLayoutStore from "./state/useLayoutStore";
 import { isCernMode } from "./ui/components/CERNMode";
+import ParentMessageBridge from "./bridge/ParentMessageBridge";
 
 export const releaseNotesPath = "/releasenotes";
 
@@ -95,6 +96,7 @@ const Eamlight = () => {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={selectedTheme}>
         <Router basename={process.env.PUBLIC_URL}>
+          <ParentMessageBridge />
           <Switch>
             <Route path="/eqptree" component={EqpTree} />
 

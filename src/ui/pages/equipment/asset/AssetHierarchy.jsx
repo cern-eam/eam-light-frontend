@@ -23,9 +23,8 @@ const AssetHierarchy = (props) => {
 
   useInitHierarchyFromQueryParams({newEntity, equipment, updateEquipmentProperty, hierarchyKey: "AssetParentHierarchy"});
 
-  const onChangeAsset = (value, manualInput) => {
+  const onChangeAsset = (value) => {
     console.log('on change asset', value)
-    //if (!manualInput) return
 
     const hierarchy = getHierarchyObject({
       parentAssetCode: value?.code || '',
@@ -43,8 +42,7 @@ const AssetHierarchy = (props) => {
     updateEquipmentProperty({ "AssetParentHierarchy": hierarchy });
   };
   
-  const onChangePosition = (value, manualInput) => {
-   // if (!manualInput) return
+  const onChangePosition = (value) => {
 
     const hierarchy = getHierarchyObject({
       parentPositionCode: value?.code || '',
@@ -62,8 +60,7 @@ const AssetHierarchy = (props) => {
     updateEquipmentProperty({ "AssetParentHierarchy": hierarchy });
   };
   
-  const onChangeSystem = (value, manualInput) => {
-   // if (!manualInput) return
+  const onChangeSystem = (value) => {
 
     const hierarchy = getHierarchyObject({
       parentPrimarySystemCode: value?.code || '',
@@ -82,8 +79,7 @@ const AssetHierarchy = (props) => {
   };
 
 
-  const onChangeLocation = (value, manualInput) => {
-   // if (!manualInput) return
+  const onChangeLocation = (value) => {
 
     const hierarchy = getHierarchyObject({
       parentLocationCode:  value?.code || '',
@@ -96,7 +92,6 @@ const AssetHierarchy = (props) => {
   return (
     <React.Fragment>
       <EAMUDF {...register("udfchar13")} />
-
       <EAMUDF {...register("udfchar11")} />
 
       <EAMComboAutocomplete

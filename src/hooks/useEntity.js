@@ -233,7 +233,7 @@ const useEntity = (params) => {
 
         commentsComponent.current?.createCommentForNewEntity(entityCode);
         showNotification(response.body.Result.InfoAlert.Message);
-        postActions?.update?.(entityToCreate)
+        postActions?.update?.(entity, response)
         readEntity();
       })
       .catch((error) => {
@@ -336,7 +336,6 @@ const useEntity = (params) => {
   };
 
   const updateEntityProperty = (values, type) => {
-    
     setEntity((prev) => {
       for (const [path, value] of Object.entries(values)) {
         set(prev, path, toEAMValue(value, type));

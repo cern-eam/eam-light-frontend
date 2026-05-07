@@ -19,9 +19,7 @@ const SystemHierarchy = (props) => {
   } = props;
 
 
-  const onChangePrimarySystem = (value, manualInput) => {
-    if (!manualInput) return
-
+  const onChangePrimarySystem = (value) => {
     if (!value) {
       updateEquipmentProperty({
         "SystemParentHierarchy": {
@@ -69,9 +67,7 @@ const SystemHierarchy = (props) => {
 
   }
 
-  const onChangeLocation = (value, manualInput) => {
-    if (!manualInput) return
-    
+  const onChangeLocation = (value) => {
     if (!value?.code) {
       updateEquipmentProperty({
         "SystemParentHierarchy": {
