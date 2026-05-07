@@ -41,6 +41,8 @@ export const fromEAMDefaultValue = (value, type) => {
     switch(type) {
         case "checkbox":
             return fromEAMCheckbox(value)
+        case "date":
+            return toEAMDate(value)
         default:
             return value;
     }
