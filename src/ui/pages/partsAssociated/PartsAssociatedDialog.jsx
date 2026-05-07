@@ -88,7 +88,7 @@ const PartsAssociatedDialog = ({
         <EAMComboAutocomplete
             {...processElementInfo(partsAssociatedLayout.fields.papartcode)}
             label="Part"
-            value={partAssociated["part"]}
+            value={{code: partAssociated["part"]}}
             onChange={onPartSelect}
             autocompleteHandler={WSEquipment.autocompletePartsAssociated}
             />
