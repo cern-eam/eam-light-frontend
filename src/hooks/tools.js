@@ -69,17 +69,17 @@ export const createOnChangeHandler = ({valueKey, updateEntityProperty, type, onC
     const values = {}
     const orgKey = appendPath(valueKey, 'ORGANIZATIONID.ORGANIZATIONCODE')
     const descKey = appendPath(valueKey, 'DESCRIPTION')
-    
+
     if (value === null) {
         values[valueKey] = null
-        values[orgKey] = null
-        values[descKey] = null
+        if (orgKey) values[orgKey] = null
+        if (descKey) values[descKey] = null
     } else if (typeof value === 'string') {
         values[valueKey] = value
     } else if (typeof value === 'object') {
         values[valueKey] = value.code
-        values[descKey] = value.desc
-        values[orgKey] = value.organization
+        if (descKey) values[descKey] = value.desc
+        if (orgKey) values[orgKey] = value.organization
         // Assign all other keys from value to values
         Object.keys(value).forEach(key => {
             if (key !== 'code' && key !== 'organization' && key !== 'desc' && screenLayout.fields[key]?.xpath) {
