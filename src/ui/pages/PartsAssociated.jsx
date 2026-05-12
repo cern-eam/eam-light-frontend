@@ -1,6 +1,7 @@
 import * as React from "react";
 import EAMGridTab from "eam-components/dist/ui/components/grids/eam/EAMGridTab";
 import { PartPlusIcon } from "eam-components/dist/ui/components/icons";
+import { PartsAssociatedContainer } from "./partsAssociated/PartsAssociatedContainer";
 
 const getPartsAssociated = (
   objCode,
@@ -15,23 +16,12 @@ const getPartsAssociated = (
   isVisibleWhenNewEntity: false,
   maximizable: true,
   render: ({ isMaximized }) => (
-    <EAMGridTab
-      gridName="BSPARA"
-      objectCode={`${objCode}#${objOrganization}`}
-      paramNames={["param.valuecode"]}
-      additionalParams={{ "param.entity": "OBJ" }}
-      showGrid={isMaximized}
-      rowCount={100}
-      gridContainerStyle={
-        isMaximized
-          ? {
-              height: `${
-                document.getElementById("entityContent").offsetHeight - 220
-              }px`,
-            }
-          : {}
-      }
-    />
+      <PartsAssociatedContainer
+          code={`${objCode}`}
+          isMaximized={isMaximized}
+          disabled= {false}
+          hideAddPartAssociation = {true}
+        />
   ),
   column: column,
   order: order,
