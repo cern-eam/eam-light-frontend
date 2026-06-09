@@ -28,7 +28,7 @@ function EquipmentHistory(props) {
           response.body.data.map((line) => ({
             ...line,
             relatedObject:
-              line.jobType === "EDH" ? (
+              line.jobType === "EDH" || line.type === "EDH" ? (
                 <a
                   target="_blank"
                   href={"https://edh.cern.ch/Document/" + line.relatedObject}
