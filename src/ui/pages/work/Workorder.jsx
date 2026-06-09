@@ -819,6 +819,8 @@ const Workorder = () => {
       "ENTEREDBY": null,
       "CREATEDBY": null,
       "CREATEDDATE": null,
+      "DUEDATE": null,
+      "PPM": null
     })
     let fields = workOrderLayout.fields;
     if (isCernMode) {

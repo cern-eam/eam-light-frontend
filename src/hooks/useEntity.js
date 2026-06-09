@@ -232,7 +232,7 @@ const useEntity = (params) => {
         setIsModified(false);
 
         commentsComponent.current?.createCommentForNewEntity(entityCode);
-        showNotification(response.body.Result.InfoAlert.Message);
+        showNotification(response.body.Result.InfoAlert?.Message ?? entityDesc + ' has been successfully saved.');
         postActions?.update?.(entity, response)
         readEntity();
       })
