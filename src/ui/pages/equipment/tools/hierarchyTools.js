@@ -65,7 +65,8 @@ export const convert = (currentParents, dependent, dependentProp, nonDependentPr
     }
 
     let parent = null;
-    if (parentCode && parentOrg) {
+    if (parentCode && parentOrg)
+         {
         parent = {
             [parentProp === 'LOCATIONID' ? 'LOCATIONCODE' : 'EQUIPMENTCODE']: parentCode,
             ORGANIZATIONID: {ORGANIZATIONCODE: parentOrg}
