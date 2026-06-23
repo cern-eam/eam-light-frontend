@@ -181,7 +181,7 @@ function Activity(props) {
               <Typography variant="caption" color="gray">
                 {layout.ACT.fields.task.text}
               </Typography>
-              <Typography noWrap>
+              <Typography noWrap sx={{ width: "100%" }} title={activity.taskCode}>
                 {activity.taskCode ? activity.taskCode : "—"}
               </Typography>
             </Grid>
@@ -198,7 +198,7 @@ function Activity(props) {
               <Typography variant="caption" color="gray">
                 {layout.ACT.fields.matlcode.text}
               </Typography>
-              <Typography noWrap>
+              <Typography noWrap sx={{ width: "100%" }} title={activity.materialList}>
                 {activity.materialList ? activity.materialList : "—"}
               </Typography>
             </Grid>
@@ -255,7 +255,9 @@ function Activity(props) {
                 {/* {layout.ACT.fields.actstartdate.text} */}
                 {<CalendarStart />}
               </Typography>
-              <Typography noWrap>{formatDate(activity.startDate)}</Typography>
+              <Typography noWrap sx={{ width: "100%" }} title={formatDate(activity.startDate)}>
+                {formatDate(activity.startDate)}
+              </Typography>
             </Grid>
           </Stack>
 
