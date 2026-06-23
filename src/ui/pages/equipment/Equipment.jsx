@@ -21,6 +21,7 @@ const Equipment = () => {
       updateEquipmentTreeData({
         equipment: null,
         eqpTreeMenu: null,
+        showEqpTree: false,
       })
     };
   }, []);
