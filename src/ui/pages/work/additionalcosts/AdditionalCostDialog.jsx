@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -14,6 +14,7 @@ import { getOrg } from '../../../../hooks/tools';
 import { toEAMNumber } from '../../EntityTools';
 import EAMInput from '../../../components/EAMInput';
 import WS from '../../../../tools/WS';
+import {adaptActivitiesFromRestFormat} from "../activities/utils/activityRestAdapter.js";
 
 const AdditionalCostDialog = (props) => {
     const {workOrderNumber, isDialogOpen, successHandler} = props
@@ -68,7 +69,10 @@ const AdditionalCostDialog = (props) => {
 
     const loadActivities = (workOrderNumber) => {
         WSWorkorders.getWorkOrderActivities(workOrderNumber).then((response) => {
-            setActivityList(transformActivities(response.body.data));
+            setActivityList(
+                transformActivities(
+                    adaptActivitiesFromRestFormat(response.body.Result.ResultData.DATARECORD)
+                ));
         }).catch((error) => {
             props.handleError(error);
         });

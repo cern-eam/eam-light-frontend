@@ -1,9 +1,7 @@
-import { Description } from '@mui/icons-material';
 import { GridFilterJoiner, GridRequest, GridType, transformResponse } from 'eam-rest-tools';
 import WS from './WS';
 import { getGridData } from './WSGrids';
-import { encodeCodeOrg, getCodeOrg, getOrg, toEAMValue } from '../hooks/tools';
-import set from 'set-value';
+import { encodeCodeOrg, getOrg } from '../hooks/tools';
 import { toEAMDate, toEAMNumber } from '../ui/pages/EntityTools';
 
 /**
@@ -45,7 +43,7 @@ class WSWorkorders {
     //
     // DROP DOWN VALUES FOR WOS
     //
-    getWorkOrderStatusValues({handlerParams: [oldStatus, newWorkOrder]}, config = {}) {
+    getWorkOrderStatusValues({handlerParams: [oldStatus, newWorkOrder]}) {
         const gridRequest = new GridRequest("LVWRSTDRP", GridType.LOV)
         if (newWorkOrder || !oldStatus) {
             gridRequest.addParam("param.poldstat", "-")
@@ -60,7 +58,7 @@ class WSWorkorders {
     
     }
 
-    getWorkOrderTypeValues(options, config = {}) {
+    getWorkOrderTypeValues(options) {
         const gridRequest = new GridRequest("LVGROUPWOTYPE", GridType.LOV)
             .addParam("parameter.pagemode", null)
             .addParam("parameter.usergroup", options.handlerParams[0]);
@@ -68,7 +66,7 @@ class WSWorkorders {
             {code: "typecode", desc: option => option.codedescription?.replace(`${option.typecode} - `, "")}));
     }
 
-    getWorkOrderPriorities(config = {}) {
+    getWorkOrderPriorities() {
         const gridRequest = new GridRequest("LVJBPR", GridType.LOV)
             .addFilter("description", "Tou", "NOTCONTAINS");
         return getGridData(gridRequest).then(response => transformResponse(response, {code: "priority", desc: "description"}));
@@ -104,7 +102,7 @@ class WSWorkorders {
         return WS._post('/partusage/init', workorder, config);
     }
 
-    getPartUsageStores(config = {}) {
+    getPartUsageStores() {
         const gridRequest = new GridRequest("LVIRSTOR", GridType.LOV, "SSISSU")
             .addParam("param.storefield", "IR")
             .addParam("parameter.r5role", "")
@@ -112,7 +110,7 @@ class WSWorkorders {
         return getGridData(gridRequest).then(response => transformResponse(response, {code: "storecode", desc: "des_text"}));
     }
 
-    getPartUsagePart(options, config = {}) {
+    getPartUsagePart(options) {
         const [workorder, store] = options.handlerParams
         const code = options.filter
         //return WS._get(`/autocomplete/partusage/part/${workorder}/${store}/${code}`, config);
@@ -141,7 +139,7 @@ class WSWorkorders {
         return getGridData(gridRequest).then(response => transformResponse(response, {code: "partcode", desc: "partdescription", organization: "partorganization"}));
     }
 
-    getPartUsageAsset(options, config = {}) {
+    getPartUsageAsset(options) {
         const [transaction, store, part] = options.handlerParams
         const code = options.filter
 
@@ -180,8 +178,8 @@ class WSWorkorders {
     //
     // ACTIVITIES AND BOOKED LABOURS
     //
-    getWorkOrderActivities(number, config = {}) {
-        return WS._get('/activities/read/?workorder=' + number + '&includeChecklists=false', config);
+    getWorkOrderActivities(workOrderNumber, config = {}) {
+        return WS._get(`/proxy/workorders/${workOrderNumber}/activities`, config);
     }
 
     // Get default values for next activity for one work order
@@ -216,7 +214,7 @@ class WSWorkorders {
     }
 
     // Get default values for next activity for one work order
-    initBookingLabour(workOrder, activities, defaultEmployee, config = {}) {
+    initBookingLabour(workOrder, activities, defaultEmployee) {
         const result = {
             body: { Result: { ResultData: {
                 OCCUPATIONTYPE: { OCCUPATIONTYPECODE: 'N' },
