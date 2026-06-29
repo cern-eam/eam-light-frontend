@@ -17,7 +17,7 @@ import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EA
 import { useInitHierarchyFromQueryParams } from "../tools/useInitHierarchyFromQueryParams";
 import { positionLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap";
 
-const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readOnly, showWarning, positionLayout, newEntity }) => {
+const PositionHierarchy = ({ equipment, id, updateEquipmentProperty, register, readOnly, showWarning, positionLayout, newEntity }) => {
   
   useInitHierarchyFromQueryParams({newEntity, equipment, updateEquipmentProperty, hierarchyKey: "PositionParentHierarchy"});
 
@@ -84,7 +84,7 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
         {...processElementInfo(positionLayout.fields.asset)}
         value={{code: getParentAssetCode('PositionParentHierarchy', equipment)}}
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
-        autocompleteHandlerParams={["A"]}
+        autocompleteHandlerParams={["A", id?.code]}
         onChange={onChangeAsset}
         barcodeScanner
         endAdornment={
@@ -102,7 +102,7 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
         value={{code: getParentPositionCode('PositionParentHierarchy', equipment)}}
         barcodeScanner
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
-        autocompleteHandlerParams={["P"]}
+        autocompleteHandlerParams={["P", id?.code]}
         onChange={onChangePosition}
         renderDependencies={[equipment.PositionParentHierarchy]}
         endAdornment={
@@ -119,7 +119,7 @@ const PositionHierarchy = ({ equipment, updateEquipmentProperty, register, readO
         value={{code: getParentPrimarySystemCode('PositionParentHierarchy', equipment)}}
         barcodeScanner
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
-        autocompleteHandlerParams={["S"]}
+        autocompleteHandlerParams={["S", id?.code]}
         onChange={onChangeSystem}
         renderDependencies={[equipment.PositionParentHierarchy]}
         endAdornment={

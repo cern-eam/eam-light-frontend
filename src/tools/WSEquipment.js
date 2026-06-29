@@ -78,7 +78,7 @@ class WSEquipment {
             .setRowCount(10)
             .addParam("param.objectrtype", handlerParams[0])
             .addParam("param.bypassdeptsecurity", null)
-            .addParam("param.objectcode", "")
+            .addParam("param.objectcode", handlerParams[1])
             .addParam("param.objectorg", getOrg())
             .addParam("control.org", getOrg())
             .addParam('param.bypasstagoption', 'true')

@@ -11,6 +11,7 @@ import { systemLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap";
 const SystemHierarchy = (props) => {
   const {
     equipment,
+    id,
     updateEquipmentProperty,
     register,
     readOnly,
@@ -113,7 +114,7 @@ const SystemHierarchy = (props) => {
         }}
         barcodeScanner
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
-        autocompleteHandlerParams={["S"]}
+        autocompleteHandlerParams={["S", id?.code]}
         renderDependencies={[equipment.SystemParentHierarchy]}
         
         onChange={onChangePrimarySystem}

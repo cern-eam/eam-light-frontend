@@ -14,6 +14,7 @@ import { assetLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap";
 const AssetHierarchy = (props) => {
   const {
     equipment,
+    id,
     newEntity,
     updateEquipmentProperty,
     register,
@@ -98,7 +99,7 @@ const AssetHierarchy = (props) => {
         {...processElementInfo(assetLayout.fields.parentasset)}
         value={{code: getParentAssetCode('AssetParentHierarchy', equipment)}}
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
-        autocompleteHandlerParams={["A"]}
+        autocompleteHandlerParams={["A", id?.code]}
         onChange={onChangeAsset}
         barcodeScanner
         endAdornment={
@@ -116,7 +117,7 @@ const AssetHierarchy = (props) => {
         value = {{code: getParentPositionCode('AssetParentHierarchy', equipment) }}
         barcodeScanner
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
-        autocompleteHandlerParams={["P"]}
+        autocompleteHandlerParams={["P", id?.code]}
         renderDependencies={[equipment.AssetParentHierarchy]}
         onChange={onChangePosition}
         endAdornment={
@@ -133,7 +134,7 @@ const AssetHierarchy = (props) => {
         value = {{code: getParentPrimarySystemCode('AssetParentHierarchy', equipment)}}
         barcodeScanner
         autocompleteHandler={WSEquipment.autocompleteAssetParent}
-        autocompleteHandlerParams={["S"]}
+        autocompleteHandlerParams={["S", id?.code]}
         renderDependencies={[equipment.AssetParentHierarchy]}
         onChange={onChangeSystem}
         endAdornment={
