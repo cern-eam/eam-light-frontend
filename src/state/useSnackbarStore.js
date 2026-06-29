@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import ErrorTypes from "eam-components/dist/enums/ErrorTypes"; 
 import useInforContextStore from './useInforContext';
+import { postException } from '../bridge/postMessage';
+
 
 const useSnackbarStore = create((set, get) => ({
   snackbarData: {
@@ -9,6 +11,7 @@ const useSnackbarStore = create((set, get) => ({
     title: '',
     message: '',
   },
+
   showNotification: (message, title = '') =>
     set({
       snackbarData: {
@@ -18,6 +21,7 @@ const useSnackbarStore = create((set, get) => ({
         open: true,
       },
     }),
+
   showWarning: (message, title = '') =>
     set({
       snackbarData: {
@@ -27,7 +31,9 @@ const useSnackbarStore = create((set, get) => ({
         open: true,
       },
     }),
-  showError: (message, title = '') =>
+
+  showError: (message, title = '') => {
+    postException(title ? `${title}: ${message}` : message);
     set({
       snackbarData: {
         title,
@@ -35,7 +41,9 @@ const useSnackbarStore = create((set, get) => ({
         type: 'error',
         open: true,
       },
-    }),
+    });
+  },
+
   hideNotification: () => 
     set({
       snackbarData: {
@@ -45,7 +53,9 @@ const useSnackbarStore = create((set, get) => ({
         open: false,
       },
     }),
+    
   handleError: (error) => {
+    
     const { showError } = get();
     const { setInforContext } = useInforContextStore.getState();
 

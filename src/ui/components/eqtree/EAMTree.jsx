@@ -12,6 +12,7 @@ import { isMultiOrg } from "@/ui/pages/EntityTools";
 import { isEmpty } from "lodash";
 import useEquipmentTreeStore from "../../../state/useEquipmentTreeStore";
 import useSnackbarStore from "../../../state/useSnackbarStore";
+import { postMessage } from "../../../bridge/postMessage";
 
 const urlTypeMap = {
   A: "asset",
@@ -128,13 +129,10 @@ export default function EAMTree(props) {
         `/${code}${isMultiOrg ? "%23" + rowInfo.node.idOrg : ""}`
     );
 
-    window.parent.postMessage(
-      JSON.stringify({
-        type: "EQUIPMENT_TREE_NODE_CLICK",
-        node: rowInfo.node,
-      }),
-      "*"
-    );
+    postMessage({
+      type: "EQUIPMENT_TREE_NODE_CLICK",
+      node: rowInfo.node,
+    });
   };
 
   const nodeClickHandler = (rowInfo) => (event) => {
