@@ -34,7 +34,6 @@ const EntityRegions = (props) => {
     [].concat(searchParams[ENTITY_REGION_PARAMS.VISIBLE]) : [];
 
   const expandedRegion = searchParams.expanded;
-  const regionOnly = queryString.parse(window.location.search)['regionOnly'];
 
   /**
    * Variables necessary on render.
@@ -42,6 +41,13 @@ const EntityRegions = (props) => {
   const regions = inputRegions.filter(
     region => !region.ignore && !(isNewEntity && region.isVisibleWhenNewEntity === false)
   );
+  const regionOnly = (searchParams.regionOnly
+    ? [].concat(searchParams.regionOnly)
+    : []
+  )
+    .map((regionId) => regions.find((region) => region.id === regionId))
+    .filter(Boolean);
+
   const columns = regions.reduce((acc, region) => ({
     ...acc,
     [region.column]: [
@@ -55,7 +61,6 @@ const EntityRegions = (props) => {
     md: showEqpTree || regionMaximized ? 12 : 12 / Object.keys(columns).length,
     lg: regionMaximized ? 12 : 12 / Object.keys(columns).length,
   }
-  const matchingRegion = regions.find(region => region.id === regionOnly);
   /**
    * Set Regions visibility Effect
    */
@@ -107,16 +112,20 @@ const EntityRegions = (props) => {
         [paramKey.replace(`${regionID}_`, '')]: searchParams[paramKey],
       }), {}), [searchParams]);
 
-  if (matchingRegion) {
+  if (regionOnly.length) {
     return createPortal(
-      <RegionPanel
-        key={matchingRegion.id}
-        heading={matchingRegion.label.toUpperCase()}
-        summaryIcon={matchingRegion.summaryIcon && styleSummaryIcon(matchingRegion.summaryIcon)}
-        initiallyExpanded={true}
-        {...matchingRegion.RegionPanelProps}>
-        {matchingRegion.render({ panelQueryParams: getRegionPanelQueryParams(matchingRegion.id)})}
-      </RegionPanel>,
+      <>
+        {regionOnly.map((region) => (
+          <RegionPanel
+            key={region.id}
+            heading={region.label.toUpperCase()}
+            summaryIcon={region.summaryIcon && styleSummaryIcon(region.summaryIcon)}
+            initiallyExpanded={true}
+            {...region.RegionPanelProps}>
+            {region.render({ panelQueryParams: getRegionPanelQueryParams(region.id)})}
+          </RegionPanel>
+        ))}
+      </>,
       document.getElementById("portalContent")
     )
   }
