@@ -178,8 +178,8 @@ class WSWorkorders {
     //
     // ACTIVITIES AND BOOKED LABOURS
     //
-    getWorkOrderActivities(workOrderNumber, config = {}) {
-        return WS._get(`/proxy/workorders/${workOrderNumber}/activities`, config);
+    getWorkOrderActivities(workOrderNumber, workOrderOrg, config = {}) {
+        return WS._get(`/proxy/workorders/${encodeURIComponent(workOrderNumber + '#' + workOrderOrg)}/activities`, config);
     }
 
     // Get default values for next activity for one work order
