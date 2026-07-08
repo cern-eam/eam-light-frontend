@@ -17,7 +17,7 @@ function Activities(props) {
     let [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
     let [isBookLaborModalOpen, setIsBookLaborModalOpen] = useState(false);
     let [loading, setLoading] = useState(false);
-    let {workOrder, workOrderNumber, layout, disabled, handleError, updateCount} = props;
+    let {workOrder, workOrderNumber, workOrderOrg, layout, disabled, handleError, updateCount} = props;
 
     useEffect(() => {
         readActivities(workOrderNumber);
@@ -30,7 +30,7 @@ function Activities(props) {
      */
     let readActivities = workOrderNumber => {
         setLoading(true)
-        WSWorkorders.getWorkOrderActivities(workOrderNumber)
+        WSWorkorders.getWorkOrderActivities(workOrderNumber, workOrderOrg)
             .then(result => {
                 setActivities(
                     adaptActivitiesFromRestFormat(result.body.Result.ResultData.DATARECORD)

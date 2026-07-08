@@ -512,6 +512,7 @@ const Workorder = () => {
         render: () => (
           <Activities
             workOrderNumber={id?.code}
+            workOrderOrg={id?.org}
             workOrder={workorder}
             department={workorder?.DEPARTMENTID?.DEPARTMENTCODE}
             departmentDesc={workorder?.DEPARTMENTID?.DEPARTMENTCODE}
