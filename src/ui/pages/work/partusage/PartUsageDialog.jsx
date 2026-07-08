@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -7,7 +7,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import BlockUi from "react-block-ui";
 import WSWorkorders from "../../../../tools/WSWorkorders";
 import EAMSelect from "eam-components/dist/ui/components/inputs-ng/EAMSelect";
-import EAMAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMAutocomplete";
 import EAMTextField from "eam-components/dist/ui/components/inputs-ng/EAMTextField";
 import useFieldsValidator from "eam-components/dist/ui/components/inputs-ng/hooks/useFieldsValidator";
 import makeStyles from "@mui/styles/makeStyles";
@@ -17,12 +16,12 @@ import {
   processElementInfo,
   isHidden,
 } from "eam-components/dist/ui/components/inputs-ng/tools/input-tools";
-import WSEquipment from "@/tools/WSEquipment";
 import { getPartStock } from "../../part/PartStock";
 import { getPart } from "../../../../tools/WSParts";
 import { getEquipment } from "../../../../tools/WSEquipment";
 import { get } from "lodash";
 import EAMComboAutocomplete from "eam-components/dist/ui/components/inputs-ng/EAMComboAutocomplete";
+import {adaptActivitiesFromRestFormat} from "../activities/utils/activityRestAdapter.js";
 
 const overflowStyle = {
   overflowY: "visible",
@@ -163,7 +162,10 @@ function PartUsageDialog(props) {
       const response = await WSWorkorders.getWorkOrderActivities(
         workOrderCode
       );
-      setActivityList(transformActivities(response.body.data));
+      setActivityList(
+          transformActivities(
+              adaptActivitiesFromRestFormat(response.body.Result.ResultData.DATARECORD)
+          ));
     } catch (error) {
       handleError(error);
     }

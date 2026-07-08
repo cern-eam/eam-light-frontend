@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import AddActivityDialog from "./dialogs/AddActivityDialog";
 import AddBookLabourDialog from "./dialogs/AddBookLabourDialog";
 import { Stack } from '@mui/material';
+import {adaptActivitiesFromRestFormat} from "./utils/activityRestAdapter.js";
 
 /**
  * Panel Activities and Book labor
@@ -31,7 +32,9 @@ function Activities(props) {
         setLoading(true)
         WSWorkorders.getWorkOrderActivities(workOrderNumber)
             .then(result => {
-                setActivities(result.body.data);
+                setActivities(
+                    adaptActivitiesFromRestFormat(result.body.Result.ResultData.DATARECORD)
+                );
                 setLoading(false);
             })
             .catch(error => {
@@ -70,7 +73,7 @@ function Activities(props) {
 
     return (
         <div id="activities">
-            {activities.map((activity, index) => {
+            {activities.map((activity) => {
                 return <Activity
                     key={activity.activityCode}
                     activity={activity}
