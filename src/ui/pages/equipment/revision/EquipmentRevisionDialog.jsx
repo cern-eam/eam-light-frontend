@@ -42,6 +42,9 @@ const EquipmentRevisionDialogContent = ({ revisionIdentifier, onClose }) => {
     screenProperty: "equipmentRevisionScreen",
     explicitIdentifier: revisionIdentifier,
     layoutPropertiesMap: equipmentRevisionLayoutPropertiesMap,
+    postActions: {
+      update: onClose,
+    },
     pageMode: false,
   });
 
