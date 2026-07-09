@@ -16,6 +16,7 @@ import {
   Eye,
   Repeat,
 } from "mdi-material-ui";
+import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import { RadiationIcon } from "eam-components/dist/ui/components/icons";
 import { Link } from "react-router-dom";
 import { isCernMode } from "./CERNMode";
@@ -50,6 +51,7 @@ export const BUTTON_KEYS = {
   CREATE_WORKORDER: "CREATE_WORKORDER",
   WATCHLIST: "WATCHLIST",
   REPEAT_STEP: "REPEAT_STEP",
+  EQUIPMENT_REVISION: "EQUIPMENT_REVISION",
 };
 
 class Toolbar extends React.Component {
@@ -100,7 +102,8 @@ class Toolbar extends React.Component {
       workorderScreencode,
       readOnly,
       id,
-      entityType
+      entityType,
+      openRevisionDialog,
     } = this.props;
 
     return {
@@ -325,6 +328,16 @@ class Toolbar extends React.Component {
           text: "Repeat Step",
         },
       },
+      [BUTTON_KEYS.EQUIPMENT_REVISION]: {
+        isVisible: () =>
+          !!openRevisionDialog && entity?.EQUIPMENTREVISIONCONTROL === "true",
+        onClick: () => openRevisionDialog?.(),
+        isDisabled: () => newEntity,
+        values: {
+          icon: <ManageHistoryIcon />,
+          text: "Equipment Revision",
+        },
+      },
     };
   };
 
@@ -354,6 +367,7 @@ class Toolbar extends React.Component {
           BUTTON_KEYS.CREATE_WORKORDER,
           BUTTON_KEYS.SHOW_IN_INFOR,
           BUTTON_KEYS.BARCODING,
+          BUTTON_KEYS.EQUIPMENT_REVISION,
         ];
         break;
       case ENTITY_TYPE.PART:

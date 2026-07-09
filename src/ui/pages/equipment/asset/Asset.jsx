@@ -47,11 +47,13 @@ import { extractSingleResult } from "../../../../tools/GridTools.js";
 import { ASSET_BLOCKS, assetLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
 import StatusRow from "../../../components/statusrow/StatusRow.jsx";
 import ScreenBlock from "../../../layout/ScreenBlock.jsx";
+import EquipmentRevisionDialog from "../revision/EquipmentRevisionDialog";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
 const Asset = () => {
   const [part, setPart] = useState(null);
+  const [revisionDialogOpen, setRevisionDialogOpen] = useState(false);
 
   const {
     screenLayout: assetLayout,
@@ -540,6 +542,7 @@ const Asset = () => {
           entityType: ENTITY_TYPE.EQUIPMENT,
           screens: screenPermissions,
           workorderScreencode: userData.workOrderScreen,
+          openRevisionDialog: () => setRevisionDialogOpen(true),
         }}
         width={730}
         entityIcon={<AssetIcon style={{ height: 18 }} />}
@@ -547,6 +550,12 @@ const Asset = () => {
         regions={getRegions()}
         isHiddenRegion={isHiddenRegion}
         setRegionVisibility={setRegionVisibility}
+      />
+      <EquipmentRevisionDialog
+        open={revisionDialogOpen}
+        onClose={() => setRevisionDialogOpen(false)}
+        equipmentCode={id?.code}
+        equipmentOrg={id?.org}
       />
       <EntityRegions
         showEqpTree={showEqpTree}
