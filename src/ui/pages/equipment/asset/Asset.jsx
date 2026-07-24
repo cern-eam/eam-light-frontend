@@ -543,6 +543,7 @@ const Asset = () => {
           screens: screenPermissions,
           workorderScreencode: userData.workOrderScreen,
           openRevisionDialog: () => setRevisionDialogOpen(true),
+          userData,
         }}
         width={730}
         entityIcon={<AssetIcon style={{ height: 18 }} />}

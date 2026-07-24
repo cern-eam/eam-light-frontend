@@ -218,7 +218,8 @@ export const getElementInfoForCustomField = (customField) => {
   return {
     text: CustomFieldTools.isCategoryValue(customField) ? customField?.PROPERTYLABEL + " (cat. value)" : customField?.PROPERTYLABEL,
     xpath: "EAMID_" + customField?.PROPERTYCODE,
-    fieldType: mapper[customField?.type] ?? "text"
+    fieldType: mapper[customField?.type] ?? "text",
+    revisionControl: customField?.CUSTOMFIELDREVISIONCONTROL	=== "true"
   };
 };
 
