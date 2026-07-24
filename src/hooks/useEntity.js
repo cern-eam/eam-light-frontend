@@ -57,6 +57,7 @@ const useEntity = (params) => {
   const [loading, setLoading] = useState(false);
   const [entity, setEntity] = useState(null);
   const [newEntity, setNewEntity] = useState(true);
+  const [revisionControl, setRevisionControl] = useState(false);
   const [readOnly, setReadOnly] = useState(false);
   const [isModified, setIsModified] = useState(false);
   const [id, setId] = useState(null)
@@ -192,12 +193,10 @@ const useEntity = (params) => {
         // Sort custom based on the index prop
         readEntity.USERDEFINEDAREA?.CUSTOMFIELD?.sort((cf1, cf2) => (cf1.index ?? 0) - (cf2.index ?? 0))
 
-        // Temporary fix (SG-15959)
-        //applyTimezoneOffsetToYearField(readEntity)
-
         setEntity(readEntity);
         const id = {code: get(readEntity, entityCodeProperty), org: get(readEntity, entityOrgProperty)}
         setId(id)
+        setRevisionControl(readEntity.EQUIPMENTREVISIONCONTROL === "true" && screenCode !== "OSEQRV");
         pageMode && setCurrentEntity({entityCode, entityDesc, id})
 
         pageMode && (document.title = entityDesc + " " + get(readEntity, entityCodeProperty));
@@ -272,6 +271,7 @@ const useEntity = (params) => {
         setNewEntity(true);
         setIsModified(false);
         setReadOnly(!screenPermissions.creationAllowed);
+        setRevisionControl(false);
         setId(null)
         pageMode && setCurrentEntity({entityCode, entityDesc, id: null})
 
@@ -386,7 +386,7 @@ const useEntity = (params) => {
       data.onClear = () => updateEntityProperty({[elementCustomInfo.clear]: null})
     }
 
-    data.disabled = data.disabled || readOnly; // It should remain disabled
+    data.disabled = data.disabled || readOnly || (revisionControl && data.revisionControl); // It should remain disabled
     data.elementInfo = elementInfo; // Return elementInfo as it is still needed in some cases (for example for UDFs)
 
     // Value

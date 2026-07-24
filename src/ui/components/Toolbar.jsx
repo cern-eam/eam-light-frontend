@@ -16,7 +16,7 @@ import {
   Eye,
   Repeat,
 } from "mdi-material-ui";
-import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
+import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import { RadiationIcon } from "eam-components/dist/ui/components/icons";
 import { Link } from "react-router-dom";
 import { isCernMode } from "./CERNMode";
@@ -104,7 +104,11 @@ class Toolbar extends React.Component {
       id,
       entityType,
       openRevisionDialog,
+      userData,
     } = this.props;
+
+    const equipmentRevisionScreen =
+      userData?.screens?.[userData?.equipmentRevisionScreen];
 
     return {
       [BUTTON_KEYS.COPY]: {
@@ -330,11 +334,15 @@ class Toolbar extends React.Component {
       },
       [BUTTON_KEYS.EQUIPMENT_REVISION]: {
         isVisible: () =>
-          !!openRevisionDialog && entity?.EQUIPMENTREVISIONCONTROL === "true",
+          !!openRevisionDialog &&
+          entity?.EQUIPMENTREVISIONCONTROL === "true" &&
+          equipmentRevisionScreen?.creationAllowed &&
+          equipmentRevisionScreen?.readAllowed &&
+          equipmentRevisionScreen?.updateAllowed,
         onClick: () => openRevisionDialog?.(),
         isDisabled: () => newEntity,
         values: {
-          icon: <ManageHistoryIcon />,
+          icon: <PublishedWithChangesIcon />,
           text: "Equipment Revision",
         },
       },

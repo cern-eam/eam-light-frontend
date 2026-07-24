@@ -21,7 +21,7 @@ export default function InstallEqp(props) {
   const [parentEq, setParentEq] = useState("");
   const [childEq, setChildEq] = useState("");
   const [blocking, setBlocking] = useState(false);
-  const [dependent, setDependent] = useState(false);
+  const [dependent, setDependent] = useState(true);
   const [permissions, setPermissions] = useState(null);
   const {equipmentTreeData: {currentRoot}, updateEquipmentTreeData} = useEquipmentTreeStore();
   const {showNotification, handleError, showError} = useSnackbarStore();

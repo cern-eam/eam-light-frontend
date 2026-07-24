@@ -7,6 +7,8 @@ import BlockUi from "react-block-ui";
 import LightDialog from "@/ui/components/LightDialog";
 import useEntity from "@/hooks/useEntity";
 import ScreenContainers from "../../../layout/ScreenContainers.jsx";
+import CustomFields from "../../../components/customfields/CustomFields.jsx";
+import Panel from "../../../components/panel/Panel";
 import { equipmentRevisionLayoutPropertiesMap } from "./EquipmentRevisionTools";
 import {
   createEquipmentRevision,
@@ -19,6 +21,22 @@ import {
 } from "../../../../tools/WSEquipmentRevisions";
 import { getOrg } from "../../../../hooks/tools";
 
+const postReadEquipmentRevision = (entity, setEntity) => {
+  if (!entity?.USERDEFINEDAREA?.CUSTOMFIELD) {
+    return;
+  }
+
+  setEntity({
+    ...entity,
+    USERDEFINEDAREA: {
+      ...entity.USERDEFINEDAREA,
+      CUSTOMFIELD: entity.USERDEFINEDAREA.CUSTOMFIELD.filter(
+        (field) => field.CUSTOMFIELDREVISIONCONTROL === "true",
+      ),
+    },
+  });
+};
+
 const EquipmentRevisionDialogContent = ({ revisionIdentifier, onClose }) => {
   const {
     screenLayout,
@@ -26,6 +44,7 @@ const EquipmentRevisionDialogContent = ({ revisionIdentifier, onClose }) => {
     loading,
     saveHandler,
     register,
+    setEntity,
   } = useEntity({
     WS: {
       create: createEquipmentRevision,
@@ -43,6 +62,7 @@ const EquipmentRevisionDialogContent = ({ revisionIdentifier, onClose }) => {
     explicitIdentifier: revisionIdentifier,
     layoutPropertiesMap: equipmentRevisionLayoutPropertiesMap,
     postActions: {
+      read: (revision) => postReadEquipmentRevision(revision, setEntity),
       update: onClose,
     },
     pageMode: false,
@@ -57,12 +77,18 @@ const EquipmentRevisionDialogContent = ({ revisionIdentifier, onClose }) => {
       <DialogContent id="content">
         <BlockUi tag="div" blocking={loading}>
           {entity && screenLayout && (
-            <ScreenContainers
-              register={register}
-              screenLayout={screenLayout}
-              layoutPropertiesMap={equipmentRevisionLayoutPropertiesMap}
-              containers={["cont_4", "cont_19", "cont_20"]}
-            />
+            <>
+              <ScreenContainers
+                register={register}
+                screenLayout={screenLayout}
+                layoutPropertiesMap={equipmentRevisionLayoutPropertiesMap}
+                containers={["cont_4", "cont_19", "cont_20"]}
+              />
+              <CustomFields
+                customFields={entity.USERDEFINEDAREA?.CUSTOMFIELD}
+                register={register}
+              />
+            </>
           )}
         </BlockUi>
       </DialogContent>
