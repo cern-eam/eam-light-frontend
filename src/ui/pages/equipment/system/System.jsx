@@ -49,7 +49,7 @@ import SystemHierarchy from "./SystemHierarchy";
 import { SYSTEM_BLOCKS, systemLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
 import StatusRow from "../../../components/statusrow/StatusRow.jsx";
 import NCRIframeContainer from "../../../components/iframes/NCRIframeContainer.jsx";
-import ScreenBlock from "../../../layout/ScreenBlock.jsx";
+import ScreenBlock, { getScreenBlockRegionFlags } from "../../../layout/ScreenBlock.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -192,8 +192,7 @@ const System = () => {
         column: 1,
         order: 1,
         summaryIcon: DescriptionIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(SYSTEM_BLOCKS.GENERAL, systemLayout),
       },
       {
         id: "DETAILS",
@@ -220,8 +219,7 @@ const System = () => {
         column: 1,
         order: 10,
         summaryIcon: ClearAllIcon,
-        ignore: systemLayout.fields.block_9.attribute === "H",
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(SYSTEM_BLOCKS.VARIABLES, systemLayout),
       },
       {
         id: "HIERARCHY",
@@ -232,8 +230,7 @@ const System = () => {
         column: 1,
         order: 15,
         summaryIcon: AccountTreeRoundedIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(SYSTEM_BLOCKS.HIERARCHY, systemLayout),
       },
       {
         id: "WORKORDERS",
@@ -394,8 +391,7 @@ const System = () => {
         column: 2,
         order: 10,
         summaryIcon: AssignmentIndIcon,
-        ignore: systemLayout.fields.block_4.attribute === "H",
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(SYSTEM_BLOCKS.USERDEFINEDFIELDSSECTION, systemLayout),
       },
       {
         id: "CUSTOMFIELDS",
@@ -411,8 +407,7 @@ const System = () => {
         column: 2,
         order: 20,
         summaryIcon: ListAltIcon,
-        ignore: systemLayout.fields.block_4.attribute === "H",
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(SYSTEM_BLOCKS.CUSTOMFIELDS, systemLayout),
       },
       {
         id: "EQUIPMENTGRAPH",
