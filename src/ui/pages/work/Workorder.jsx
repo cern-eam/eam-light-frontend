@@ -65,8 +65,9 @@ import { getOrg } from "../../../hooks/tools";
 import useUserDataStore from "../../../state/useUserDataStore";
 import GridTools from "../../../tools/GridTools";
 import ScreenContainers from "../../layout/ScreenContainers";
-import ScreenBlock from "../../layout/ScreenBlock";
+import ScreenBlock, { getScreenBlockRegionFlags } from "../../layout/ScreenBlock";
 import EquipmentNCRs from "../../pages/equipment/components/EquipmentNCRs";
+import { stubFalse } from "lodash";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -269,8 +270,7 @@ const Workorder = () => {
         column: 1,
         order: 1,
         summaryIcon: DescriptionIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(WO_BLOCKS.GENERAL, workOrderLayout),
       },
       {
         id: "DETAILS",
@@ -283,8 +283,7 @@ const Workorder = () => {
         column: 1,
         order: 1,
         summaryIcon: AssignmentIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(WO_BLOCKS.WODETAILSSECTION, workOrderLayout),
       },
       {
         id: "SCHEDULING",
@@ -297,8 +296,7 @@ const Workorder = () => {
         column: 1,
         order: 2,
         summaryIcon: CalendarMonthIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(WO_BLOCKS.SCHEDDETAILSSECTION, workOrderLayout),
       },
       {
         id: "CLOSINGCODES",
@@ -624,8 +622,7 @@ const Workorder = () => {
         column: 2,
         order: 10,
         summaryIcon: ListAltIcon,
-        ignore: workOrderLayout.fields.block_5.attribute === "H",
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(WO_BLOCKS.CUSTOMFIELDSSECTION, workOrderLayout),
       },
       {
         id: "CUSTOMFIELDSEQP",
@@ -703,8 +700,7 @@ const Workorder = () => {
         column: 2,
         order: 10,
         summaryIcon: AssignmentIndIcon,
-        //ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(WO_BLOCKS.USERDEFINEDFIELDSSECTION, workOrderLayout),
       },
       ...getTabGridRegions(
         applicationData,

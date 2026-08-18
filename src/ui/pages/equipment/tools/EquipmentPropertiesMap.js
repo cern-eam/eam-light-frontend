@@ -192,7 +192,7 @@ export const ASSET_BLOCKS = {
   },
   HIERARCHY: {
     code: "block_5",
-    containers: []
+    containers: ["cont_17"]
   },
   CUSTOMFIELDS: {
     code: "block_6",

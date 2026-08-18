@@ -46,7 +46,7 @@ import { getGridData } from "../../../../tools/WSGrids.js";
 import { extractSingleResult } from "../../../../tools/GridTools.js";
 import { ASSET_BLOCKS, assetLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
 import StatusRow from "../../../components/statusrow/StatusRow.jsx";
-import ScreenBlock from "../../../layout/ScreenBlock.jsx";
+import ScreenBlock, { getScreenBlockRegionFlags } from "../../../layout/ScreenBlock.jsx";
 import EquipmentRevisionDialog from "../revision/EquipmentRevisionDialog";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
@@ -225,8 +225,7 @@ const Asset = () => {
         column: 1,
         order: 1,
         summaryIcon: DescriptionIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(ASSET_BLOCKS.GENERAL, assetLayout),
       },
       {
         id: "DETAILS",
@@ -253,8 +252,7 @@ const Asset = () => {
         column: 1,
         order: 10,
         summaryIcon: ClearAllIcon,
-        ignore: assetLayout.fields.block_7.attribute === "H",
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(ASSET_BLOCKS.VARIABLES, assetLayout),
       },
       {
         id: "HIERARCHY",
@@ -265,8 +263,7 @@ const Asset = () => {
         column: 1,
         order: 15,
         summaryIcon: AccountTreeRoundedIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(ASSET_BLOCKS.HIERARCHY, assetLayout),
       },
       {
         id: "WORKORDERS",
@@ -427,8 +424,7 @@ const Asset = () => {
         column: 2,
         order: 10,
         summaryIcon: AssignmentIndIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(ASSET_BLOCKS.USERDEFINEDFIELDSSECTION, assetLayout),
       },
       {
         id: "CUSTOMFIELDS",
@@ -444,8 +440,7 @@ const Asset = () => {
         column: 2,
         order: 20,
         summaryIcon: ListAltIcon,
-        ignore: assetLayout.fields.block_6.attribute === "H",
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(ASSET_BLOCKS.CUSTOMFIELDS, assetLayout),
       },
       {
         id: "PARTCUSTOMFIELDS",
@@ -467,8 +462,7 @@ const Asset = () => {
         column: 2,
         order: 25,
         summaryIcon: HardwareIcon,
-        ignore: assetLayout.fields.block_6.attribute === "H",
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
+        ...getScreenBlockRegionFlags(ASSET_BLOCKS.CUSTOMFIELDS, assetLayout),
       },
       {
         id: "EQUIPMENTGRAPH",

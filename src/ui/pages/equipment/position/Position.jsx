@@ -49,7 +49,7 @@ import { Link } from "react-router-dom";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { POSITION_BLOCKS, positionLayoutPropertiesMap } from "../tools/EquipmentPropertiesMap.js";
 import StatusRow from "../../../components/statusrow/StatusRow.jsx";
-import ScreenBlock from "../../../layout/ScreenBlock.jsx";
+import ScreenBlock, { getScreenBlockRegionFlags } from "../../../layout/ScreenBlock.jsx";
 
 const customTabGridParamNames = [
   "equipmentno",
@@ -185,8 +185,7 @@ const Position = () => {
         column: 1,
         order: 1,
         summaryIcon: DescriptionIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(POSITION_BLOCKS.GENERAL, positionLayout),
       },
       {
         id: "DETAILS",
@@ -213,8 +212,7 @@ const Position = () => {
         column: 1,
         order: 10,
         summaryIcon: ClearAllIcon,
-        ignore: positionLayout.fields.block_8.attribute === "H",
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(POSITION_BLOCKS.VARIABLES, positionLayout),
       },
       {
         id: "HIERARCHY",
@@ -225,8 +223,7 @@ const Position = () => {
         column: 1,
         order: 15,
         summaryIcon: AccountTreeRoundedIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(POSITION_BLOCKS.HIERARCHY, positionLayout),
       },
       {
         id: "WORKORDERS",
@@ -386,8 +383,7 @@ const Position = () => {
         column: 2,
         order: 10,
         summaryIcon: AssignmentIndIcon,
-        ignore: !getTabAvailability(tabs, TAB_CODES.RECORD_VIEW),
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(POSITION_BLOCKS.USERDEFINEDFIELDSSECTION, positionLayout),
       },
       {
         id: "CUSTOMFIELDS",
@@ -403,8 +399,7 @@ const Position = () => {
         column: 2,
         order: 20,
         summaryIcon: ListAltIcon,
-        ignore: positionLayout.fields.block_4.attribute === "H",
-        initialVisibility: getTabInitialVisibility(tabs, TAB_CODES.RECORD_VIEW),
+        ...getScreenBlockRegionFlags(POSITION_BLOCKS.CUSTOMFIELDS, positionLayout),
       },
       {
         id: "EQUIPMENTGRAPH",
