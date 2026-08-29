@@ -16,7 +16,6 @@
 .env.development.local
 .env.test.local
 .env.production.local
-.idea/
 package-lock.json
 
 npm-debug.log*
@@ -27,3 +26,7 @@ yarn-error.log*
 *.tar.gz
 yarn.lock
 
+
+# IDE dirs
+.vscode/
+.idea/
