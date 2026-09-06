@@ -44,6 +44,7 @@ class WSEquipment {
 
     getEquipmentEvents(equipmentCode, equipmentOrg, screenCode, config = {}) {
         const gridRequest = new GridRequest("OSVEVT", GridType.LIST, screenCode)
+            .setRowCount(5000)
             .addParam("parameter.object", equipmentCode)
             .addParam("parameter.objorganization", equipmentOrg)
             .addFilter("wotype", "IS - ", "NOTCONTAINS")
