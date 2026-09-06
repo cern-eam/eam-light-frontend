@@ -8,7 +8,6 @@ export const getParentAssetCode = (hierarchyKey, equipment) => (
             get(equipment, `${hierarchyKey}.LocationDependency.NONDEPENDENTASSET.ASSETID.EQUIPMENTCODE`) ??
             get(equipment, `${hierarchyKey}.NonDependentParents.NONDEPENDENTASSET.ASSETID.EQUIPMENTCODE`));
 
-
 export const getParentPositionCode = (hierarchyKey, equipment) => (
             get(equipment, `${hierarchyKey}.PositionDependency.DEPENDENTPOSITION.POSITIONID.EQUIPMENTCODE`) ??
             get(equipment, `${hierarchyKey}.AssetDependency.NONDEPENDENTPOSITION.POSITIONID.EQUIPMENTCODE`) ??

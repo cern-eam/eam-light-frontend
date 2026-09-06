@@ -25,7 +25,6 @@ const AssetHierarchy = (props) => {
   useInitHierarchyFromQueryParams({newEntity, equipment, updateEquipmentProperty, hierarchyKey: "AssetParentHierarchy"});
 
   const onChangeAsset = (value) => {
-    console.log('on change asset', value)
 
     const hierarchy = getHierarchyObject({
       parentAssetCode: value?.code || '',
@@ -44,7 +43,7 @@ const AssetHierarchy = (props) => {
   };
   
   const onChangePosition = (value) => {
-
+    
     const hierarchy = getHierarchyObject({
       parentPositionCode: value?.code || '',
       parentPositionOrg:  value?.org  || ''
@@ -81,7 +80,6 @@ const AssetHierarchy = (props) => {
 
 
   const onChangeLocation = (value) => {
-
     const hierarchy = getHierarchyObject({
       parentLocationCode:  value?.code || '',
       parentLocationOrg:   value?.org  || '',
