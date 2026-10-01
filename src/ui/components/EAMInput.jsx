@@ -29,6 +29,7 @@ const EAMInput = (props) => {
             return <EAMDateTimePicker {...props} />;
         case 'number':
         case 'currency':
+        case 'integer':
             return <EAMTextField type="number" {...props} />;
         default:
             return <EAMTextField type="text" {...props} />;

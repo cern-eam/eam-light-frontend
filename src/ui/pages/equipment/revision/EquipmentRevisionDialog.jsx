@@ -3,13 +3,12 @@ import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import Grid from "@mui/material/Grid";
 import BlockUi from "react-block-ui";
 import LightDialog from "@/ui/components/LightDialog";
 import useEntity from "@/hooks/useEntity";
-import ScreenContainers from "../../../layout/ScreenContainers.jsx";
 import CustomFields from "../../../components/customfields/CustomFields.jsx";
-import Panel from "../../../components/panel/Panel";
-import { equipmentRevisionLayoutPropertiesMap } from "./EquipmentRevisionTools";
+import { equipmentRevisionLayoutPropertiesMap, REVISION_BLOCKS } from "./EquipmentRevisionTools";
 import {
   createEquipmentRevision,
   createEquipmentRevisionForEquipment,
@@ -20,6 +19,8 @@ import {
   updateEquipmentRevision,
 } from "../../../../tools/WSEquipmentRevisions";
 import { getOrg } from "../../../../hooks/tools";
+import ScreenBlock from "../../../layout/ScreenBlock.jsx";
+import RegionPanel from "../../../components/entityregions/regionpanel/RegionPanel";
 
 const postReadEquipmentRevision = (entity, setEntity) => {
   if (!entity?.USERDEFINEDAREA?.CUSTOMFIELD) {
@@ -68,32 +69,72 @@ const EquipmentRevisionDialogContent = ({ revisionIdentifier, onClose }) => {
     pageMode: false,
   });
 
+
+  const screenContainerProps = {
+    register,
+    screenLayout: screenLayout,
+    layoutPropertiesMap: equipmentRevisionLayoutPropertiesMap
+  };
+
   return (
     <>
-      <DialogTitle id="equipment-revision-dialog-title">
+      <DialogTitle
+        id="equipment-revision-dialog-title"
+        style={{ flexShrink: 0 }}
+      >
         Equipment Revision
       </DialogTitle>
 
-      <DialogContent id="content">
+      <DialogContent
+        id="content"
+        style={{
+          backgroundColor: "#eeeeee",
+          paddingLeft: 8,
+          paddingRight: 8,
+          paddingTop: 8,
+          paddingBottom: 4,
+          overflow: "auto",
+          flex: 1,
+          minHeight: 0,
+        }}
+      >
         <BlockUi tag="div" blocking={loading}>
           {entity && screenLayout && (
-            <>
-              <ScreenContainers
-                register={register}
-                screenLayout={screenLayout}
-                layoutPropertiesMap={equipmentRevisionLayoutPropertiesMap}
-                containers={["cont_4", "cont_19", "cont_20"]}
-              />
-              <CustomFields
-                customFields={entity.USERDEFINEDAREA?.CUSTOMFIELD}
-                register={register}
-              />
-            </>
+            <Grid container spacing={1}>
+              <Grid item xs={12} sm={6}>
+                <RegionPanel
+                  heading={(screenLayout.fields?.[REVISION_BLOCKS.GENERAL.code]?.text || "General").toUpperCase()}
+                  initiallyExpanded
+                >
+                  <ScreenBlock {...screenContainerProps} blocks={REVISION_BLOCKS.GENERAL} />
+                </RegionPanel>
+                <RegionPanel
+                  heading={(screenLayout.fields?.[REVISION_BLOCKS.DETAILS.code]?.text || "Details").toUpperCase()}
+                  initiallyExpanded
+                >
+                  <ScreenBlock {...screenContainerProps} blocks={REVISION_BLOCKS.DETAILS} />
+                </RegionPanel>
+                <RegionPanel
+                  heading={(screenLayout.fields?.[REVISION_BLOCKS.USERDEFINEDFIELDSSECTION.code]?.text || "User Defined Fields").toUpperCase()}
+
+                >
+                  <ScreenBlock {...screenContainerProps} blocks={REVISION_BLOCKS.USERDEFINEDFIELDSSECTION} />
+                </RegionPanel>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <RegionPanel heading={(screenLayout.fields?.[REVISION_BLOCKS.CUSTOMFIELDSSECTION.code]?.text || "Custom Fields").toUpperCase()}>
+                  <CustomFields
+                    customFields={entity.USERDEFINEDAREA?.CUSTOMFIELD}
+                    register={register}
+                  />
+                </RegionPanel>
+              </Grid>
+            </Grid>
           )}
         </BlockUi>
       </DialogContent>
 
-      <DialogActions>
+      <DialogActions style={{ backgroundColor: "#fff", flexShrink: 0 }}>
         <div>
           <Button onClick={onClose} color="primary" disabled={loading}>
             Close
@@ -155,12 +196,30 @@ const EquipmentRevisionDialog = ({ open, onClose, equipmentCode, equipmentOrg })
   return (
     <LightDialog
       fullWidth
+      maxWidth="md"
       id="equipmentRevisionDialog"
       open={open}
       onClose={onClose}
       aria-labelledby="equipment-revision-dialog-title"
+      PaperProps={{
+        style: {
+          maxHeight: "90vh",
+          display: "flex",
+          flexDirection: "column",
+        },
+      }}
     >
-      <BlockUi tag="div" blocking={initializing || !revisionIdentifier}>
+      <BlockUi
+        tag="div"
+        blocking={initializing || !revisionIdentifier}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          minHeight: 0,
+          overflow: "hidden",
+        }}
+      >
         {revisionIdentifier && (
           <EquipmentRevisionDialogContent
             revisionIdentifier={revisionIdentifier}
