@@ -6,12 +6,18 @@ import { EAMCellField } from "eam-components/dist/ui/components/grids/eam/utils"
 import SyncedQueryParamsEAMGridContext from "../../../../../tools/SyncedQueryParamsEAMGridContext";
 import useUserDataStore from "../../../../../state/useUserDataStore";
 import useSnackbarStore from "../../../../../state/useSnackbarStore";
+import useInforContextStore from "../../../../../state/useInforContext";
+import { isCernMode } from "eam-components/dist/tools/CERNMode";
+
 
 const cellRenderer = ({ column, value }) => {
   if (column.id === "equipmentno") {
+    const { inforContext } = useInforContextStore.getState();
+    const suffix = !isCernMode ? encodeURIComponent(`#${inforContext.INFOR_ORGANIZATION}`) : "";
+
     return (
       <Typography>
-        <Link to={"/location/" + value}>{value}</Link>
+        <Link to={`/location/${value}${suffix}`}>{value}</Link>
       </Typography>
     );
   }
