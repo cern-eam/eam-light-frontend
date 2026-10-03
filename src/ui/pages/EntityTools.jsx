@@ -265,28 +265,27 @@ export const prepareDataForFieldsValidator = (
 
 export const isMultiOrg = import.meta.env.VITE_MULTI_ORG === "TRUE";
 
-export const getCustomTabGridRenderers = (applicationData) => {
+export const getCustomTabGridRenderers = (applicationData, newTab = true) => {
+  const linkTo = (entity) =>
+    function renderLink(value) {
+      return (
+        <Link to={{ pathname: `/${entity}/${value}` }} target={newTab ? "_blank" : "_self"}>
+          {value}
+        </Link>
+      );
+    };
+
   return {
     caseno: (value) => (
       <a href={applicationData.EL_LOURL + value} target="_blank">
         {value}
       </a>
     ),
-    equipmentno: (value) => (
-      <Link to={{ pathname: `/equipment/${value}` }} target="_blank">
-        {value}
-      </Link>
-    ),
-    workorderno: (value) => (
-      <Link to={{ pathname: `/workorder/${value}` }} target="_blank">
-        {value}
-      </Link>
-    ),
-    partno: (value) => (
-      <Link to={{ pathname: `/part/${value}` }} target="_blank">
-        {value}
-      </Link>
-    ),
+    equipmentno: linkTo("equipment"),
+    workorderno: linkTo("workorder"),
+    partno: linkTo("part"),
+    lot: linkTo("lot", false),
+    part: linkTo("part", false)
   };
 };
 
@@ -345,7 +344,7 @@ export const getTabGridRegions = (
                 }
               : {}
           }
-        ></EAMGridTab>
+        />
       ),
       column: 2,
       order: 30 + 5 * index,

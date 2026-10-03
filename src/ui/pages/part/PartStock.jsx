@@ -28,6 +28,15 @@ function PartStock(props) {
 
     let headers = ['Store', 'Description', 'Bin', 'Lot', 'Qty on Hand', 'Qty for Repair', 'Asset ID'];
     let propCodes = ['storeCode', 'storeDesc', 'bin', 'lot', 'qtyOnHand', 'repairQuantity', 'assetCode'];
+    const linksMap = new Map([
+      [
+        "lot",
+        {
+          linkPrefix: "/lot/",
+          linkValue: "lot",
+        },
+      ],
+    ]);
     let [data, setData] = useState([])
 
     
@@ -65,7 +74,7 @@ function PartStock(props) {
         return null;
 
     return (
-        <EISTable data={data} headers={headers} propCodes={propCodes}/>
+        <EISTable data={data} headers={headers} propCodes={propCodes} linksMap={linksMap} />
     );
 
 }
