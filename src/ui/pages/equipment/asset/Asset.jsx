@@ -400,6 +400,7 @@ const Asset = () => {
             entityOrganization={id?.org}
             handleError={handleError}
             userCode={userData.eamAccount.userCode}
+            userDesc={userData.eamAccount.userName || userData.eamAccount.userCode}
             allowHtml={true}
             disabled={readOnly}
           />

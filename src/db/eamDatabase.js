@@ -1,0 +1,490 @@
+import Dexie from "dexie";
+
+export class EamDatabase extends Dexie {
+  constructor() {
+    super("EamLightDatabase");
+    this.version(1).stores({
+      workorders: "code, equipmentCode, statusCode, department, type",
+      activities: "[workorder+activityCode], workorder",
+      checklists: "++id, [workorder+activityCode], workorder",
+      equipment: "code, type, parentCode, departmentCode, statusCode", // type: 'A' (Asset), 'P' (Position), 'S' (System)
+      parts: "code, trackingType, uom",
+      partLots: "[partCode+lotCode], partCode",
+      comments: "++id, [entityCode+entityType], entityCode, entityType, creationDate",
+      sequences: "entityType",
+    });
+  }
+}
+
+export const db = new EamDatabase();
+
+export const extractCode = (raw) => {
+  if (!raw) return "";
+  const decoded = decodeURIComponent(String(raw));
+  return decoded.split("#")[0].trim();
+};
+
+/**
+ * Auto-Increment Sequence Engine
+ */
+export async function getNextSequence(entityType) {
+  return await db.transaction("rw", db.sequences, async () => {
+    let seq = await db.sequences.get(entityType);
+    let nextVal = 1001;
+    if (seq) {
+      nextVal = seq.currentValue + 1;
+      await db.sequences.put({ entityType, currentValue: nextVal });
+    } else {
+      await db.sequences.put({ entityType, currentValue: nextVal });
+    }
+
+    switch (entityType) {
+      case "workorders":
+      case "EVNT":
+        return `WO-${nextVal}`;
+      case "assets":
+      case "A":
+        return `AST-${nextVal}`;
+      case "positions":
+      case "P":
+        return `POS-${nextVal}`;
+      case "systems":
+      case "S":
+        return `SYS-${nextVal}`;
+      case "parts":
+      case "PART":
+        return `PRT-${nextVal}`;
+      case "lots":
+      case "LOT":
+        return `LOT-${nextVal}`;
+      default:
+        return `${entityType.toUpperCase()}-${nextVal}`;
+    }
+  });
+}
+
+/**
+ * Seed initial data (First launch only)
+ */
+export async function seedInitialData(force = false) {
+  const count = await db.equipment.count();
+  if (count > 0 && !force) {
+    return;
+  }
+
+  if (force) {
+    await db.transaction(
+      "rw",
+      [
+        db.workorders,
+        db.activities,
+        db.checklists,
+        db.equipment,
+        db.parts,
+        db.partLots,
+        db.comments,
+        db.sequences,
+      ],
+      async () => {
+        await db.workorders.clear();
+        await db.activities.clear();
+        await db.checklists.clear();
+        await db.equipment.clear();
+        await db.parts.clear();
+        await db.partLots.clear();
+        await db.comments.clear();
+        await db.sequences.clear();
+      }
+    );
+  }
+
+  const now = new Date();
+
+  // 1. Sequences
+  await db.sequences.bulkPut([
+    { entityType: "workorders", currentValue: 1002 },
+    { entityType: "assets", currentValue: 1002 },
+    { entityType: "systems", currentValue: 1001 },
+    { entityType: "positions", currentValue: 1001 },
+    { entityType: "parts", currentValue: 1001 },
+  ]);
+
+  // 2. Equipment
+  // 1 System: SYS-01 ("HVAC Primary Loop")
+  // 2 Assets: AST-01 ("Chiller Pump A"), AST-02 ("Air Handler Unit 1") parented to SYS-01
+  await db.equipment.bulkPut([
+    {
+      code: "SYS-01",
+      description: "HVAC Primary Loop",
+      type: "S",
+      parentCode: null,
+      departmentCode: "*",
+      statusCode: "I",
+      statusDesc: "In Service",
+      categoryCode: "HVAC",
+      classCode: "CRITICAL",
+      criticalityCode: "A",
+      commissionDate: now.toISOString(),
+      raw: {
+        SYSTEMID: {
+          EQUIPMENTCODE: "SYS-01",
+          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+          DESCRIPTION: "HVAC Primary Loop",
+        },
+        STATUS: { STATUSCODE: "I", DESCRIPTION: "In Service" },
+        DEPARTMENTID: { DEPARTMENTCODE: "*" },
+        CATEGORYID: { CATEGORYCODE: "HVAC" },
+        CLASSID: { CLASSCODE: "CRITICAL" },
+        CRITICALITYID: { CRITICALITYCODE: "A" },
+        COMMISSIONDATE: now.toISOString(),
+        systemTypeCode: "S",
+        SystemParentHierarchy: {},
+        USERDEFINEDAREA: { CUSTOMFIELD: [] },
+      },
+    },
+    {
+      code: "AST-01",
+      description: "Chiller Pump A",
+      type: "A",
+      parentCode: "SYS-01",
+      departmentCode: "*",
+      statusCode: "I",
+      statusDesc: "In Service",
+      categoryCode: "PUMP",
+      classCode: "CRITICAL",
+      criticalityCode: "A",
+      commissionDate: now.toISOString(),
+      raw: {
+        ASSETID: {
+          EQUIPMENTCODE: "AST-01",
+          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+          DESCRIPTION: "Chiller Pump A",
+        },
+        STATUS: { STATUSCODE: "I", DESCRIPTION: "In Service" },
+        DEPARTMENTID: { DEPARTMENTCODE: "*" },
+        CATEGORYID: { CATEGORYCODE: "PUMP" },
+        CLASSID: { CLASSCODE: "CRITICAL" },
+        CRITICALITYID: { CRITICALITYCODE: "A" },
+        COMMISSIONDATE: now.toISOString(),
+        systemTypeCode: "A",
+        AssetParentHierarchy: {
+          primarysystem: "SYS-01",
+        },
+        USERDEFINEDAREA: { CUSTOMFIELD: [] },
+      },
+    },
+    {
+      code: "AST-02",
+      description: "Air Handler Unit 1",
+      type: "A",
+      parentCode: "SYS-01",
+      departmentCode: "*",
+      statusCode: "I",
+      statusDesc: "In Service",
+      categoryCode: "COMP",
+      classCode: "STANDARD",
+      criticalityCode: "B",
+      commissionDate: now.toISOString(),
+      raw: {
+        ASSETID: {
+          EQUIPMENTCODE: "AST-02",
+          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+          DESCRIPTION: "Air Handler Unit 1",
+        },
+        STATUS: { STATUSCODE: "I", DESCRIPTION: "In Service" },
+        DEPARTMENTID: { DEPARTMENTCODE: "*" },
+        CATEGORYID: { CATEGORYCODE: "COMP" },
+        CLASSID: { CLASSCODE: "STANDARD" },
+        CRITICALITYID: { CRITICALITYCODE: "B" },
+        COMMISSIONDATE: now.toISOString(),
+        systemTypeCode: "A",
+        AssetParentHierarchy: {
+          primarysystem: "SYS-01",
+        },
+        USERDEFINEDAREA: { CUSTOMFIELD: [] },
+      },
+    },
+    {
+      code: "POS-01",
+      description: "Cooling Circuit Pos 01",
+      type: "P",
+      parentCode: "SYS-01",
+      departmentCode: "*",
+      statusCode: "I",
+      statusDesc: "In Service",
+      categoryCode: "POS",
+      classCode: "STANDARD",
+      criticalityCode: "M",
+      commissionDate: now.toISOString(),
+      raw: {
+        POSITIONID: {
+          EQUIPMENTCODE: "POS-01",
+          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+          DESCRIPTION: "Cooling Circuit Pos 01",
+        },
+        STATUS: { STATUSCODE: "I", DESCRIPTION: "In Service" },
+        DEPARTMENTID: { DEPARTMENTCODE: "*" },
+        CATEGORYID: { CATEGORYCODE: "POS" },
+        CLASSID: { CLASSCODE: "STANDARD" },
+        CRITICALITYID: { CRITICALITYCODE: "M" },
+        COMMISSIONDATE: now.toISOString(),
+        systemTypeCode: "P",
+        PositionParentHierarchy: {},
+        USERDEFINEDAREA: { CUSTOMFIELD: [] },
+      },
+    },
+  ]);
+
+  // 3. Work Orders
+  // 2 Work Orders (WO-1001, WO-1002) assigned to AST-01 and AST-02
+  await db.workorders.bulkPut([
+    {
+      code: "WO-1001",
+      description: "Inspect Cooling Pump 01",
+      equipmentCode: "AST-01",
+      statusCode: "R",
+      statusDesc: "Released",
+      department: "*",
+      type: "CORR",
+      typeDesc: "Corrective",
+      priority: "M",
+      priorityDesc: "Medium",
+      schedStartDate: now.toISOString(),
+      schedEndDate: new Date(Date.now() + 86400000).toISOString(),
+      raw: {
+        WORKORDERID: {
+          JOBNUM: "WO-1001",
+          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+          DESCRIPTION: "Inspect Cooling Pump 01",
+        },
+        STATUS: { STATUSCODE: "R", DESCRIPTION: "Released" },
+        TYPE: { TYPECODE: "CORR", DESCRIPTION: "Corrective" },
+        DEPARTMENTID: { DEPARTMENTCODE: "*" },
+        EQUIPMENTID: {
+          EQUIPMENTCODE: "AST-01",
+          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+        },
+        LOCATIONID: { LOCATIONCODE: "LOC-BLD1" },
+        PRIORITY: { PRIORITYCODE: "M", DESCRIPTION: "Medium" },
+        ASSIGNEDTO: { PERSONCODE: "TECH01" },
+        SCHEDSTARTDATE: now.toISOString(),
+        SCHEDENDDATE: new Date(Date.now() + 86400000).toISOString(),
+        USERDEFINEDAREA: { CUSTOMFIELD: [] },
+      },
+    },
+    {
+      code: "WO-1002",
+      description: "Calibrate Pressure Sensors",
+      equipmentCode: "AST-02",
+      statusCode: "R",
+      statusDesc: "Released",
+      department: "*",
+      type: "PREV",
+      typeDesc: "Preventive",
+      priority: "H",
+      priorityDesc: "High",
+      schedStartDate: now.toISOString(),
+      schedEndDate: new Date(Date.now() + 172800000).toISOString(),
+      raw: {
+        WORKORDERID: {
+          JOBNUM: "WO-1002",
+          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+          DESCRIPTION: "Calibrate Pressure Sensors",
+        },
+        STATUS: { STATUSCODE: "R", DESCRIPTION: "Released" },
+        TYPE: { TYPECODE: "PREV", DESCRIPTION: "Preventive" },
+        DEPARTMENTID: { DEPARTMENTCODE: "*" },
+        EQUIPMENTID: {
+          EQUIPMENTCODE: "AST-02",
+          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+        },
+        LOCATIONID: { LOCATIONCODE: "LOC-BLD2" },
+        PRIORITY: { PRIORITYCODE: "H", DESCRIPTION: "High" },
+        ASSIGNEDTO: { PERSONCODE: "TECH01" },
+        SCHEDSTARTDATE: now.toISOString(),
+        SCHEDENDDATE: new Date(Date.now() + 172800000).toISOString(),
+        USERDEFINEDAREA: { CUSTOMFIELD: [] },
+      },
+    },
+  ]);
+
+  // 4. Activities
+  await db.activities.bulkPut([
+    {
+      workorder: "WO-1001",
+      activityCode: "10",
+      activityNote: "Safety Inspection",
+      peopleRequired: 1,
+      estimatedHours: 2,
+      hoursRemaining: 2,
+      startDate: now.toISOString(),
+      endDate: new Date(Date.now() + 86400000).toISOString(),
+      tradeCode: "MECH",
+      taskCode: "TSK-01",
+      taskDesc: "Safety Check & Calibration",
+    },
+    {
+      workorder: "WO-1001",
+      activityCode: "20",
+      activityNote: "Component Replacement",
+      peopleRequired: 2,
+      estimatedHours: 4,
+      hoursRemaining: 4,
+      startDate: now.toISOString(),
+      endDate: new Date(Date.now() + 86400000).toISOString(),
+      tradeCode: "MECH",
+      taskCode: "TSK-02",
+      taskDesc: "Mechanical Component Swap",
+    },
+    {
+      workorder: "WO-1002",
+      activityCode: "10",
+      activityNote: "Calibration",
+      peopleRequired: 1,
+      estimatedHours: 1.5,
+      hoursRemaining: 1.5,
+      startDate: now.toISOString(),
+      endDate: new Date(Date.now() + 86400000).toISOString(),
+      tradeCode: "ELECT",
+      taskCode: "TSK-03",
+      taskDesc: "Sensor Calibration",
+    },
+  ]);
+
+  // 5. Checklists
+  await db.checklists.bulkPut([
+    {
+      workorder: "WO-1001",
+      activityCode: "10",
+      checklistCode: "CHK-01",
+      checkListCode: "CHK-01",
+      sequence: 1,
+      desc: "Safety lockout applied?",
+      type: "01",
+      result: null,
+      completed: false,
+      notes: "",
+      required: true,
+      equipmentCode: "AST-01",
+      equipmentDesc: "Chiller Pump A",
+      possibleFindings: [],
+      finding: null,
+      numericValue: null,
+      freeText: null,
+    },
+    {
+      workorder: "WO-1001",
+      activityCode: "10",
+      checklistCode: "CHK-02",
+      checkListCode: "CHK-02",
+      sequence: 2,
+      desc: "Operating pressure (Bar)",
+      type: "04",
+      result: null,
+      completed: false,
+      notes: "",
+      required: true,
+      minimumValue: 2.0,
+      maximumValue: 8.0,
+      numericValue: 4.5,
+      UOM: "Bar",
+      equipmentCode: "AST-01",
+      equipmentDesc: "Chiller Pump A",
+      possibleFindings: [],
+      finding: null,
+      freeText: null,
+    },
+    {
+      workorder: "WO-1001",
+      activityCode: "10",
+      checklistCode: "CHK-03",
+      checkListCode: "CHK-03",
+      sequence: 3,
+      desc: "Visual inspection notes",
+      type: "03",
+      result: null,
+      completed: false,
+      notes: "",
+      required: false,
+      finding: null,
+      possibleFindings: [
+        { code: "NORMAL", desc: "Normal - No wear detected" },
+        { code: "MINOR_WEAR", desc: "Minor surface wear noted" },
+        { code: "ACTION_REQ", desc: "Immediate action required" },
+      ],
+      numericValue: null,
+      freeText: null,
+      equipmentCode: "AST-01",
+      equipmentDesc: "Chiller Pump A",
+    },
+  ]);
+
+  // 6. Parts & Lots
+  await db.parts.bulkPut([
+    {
+      code: "PRT-100",
+      description: "Pump Mechanical Seal Ring",
+      trackingType: "LOT",
+      uom: "EA",
+      raw: {
+        PARTID: {
+          PARTCODE: "PRT-100",
+          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+          DESCRIPTION: "Pump Mechanical Seal Ring",
+        },
+        UOM: "EA",
+        TRACKINGBYASSET: false,
+        COMMODITYCODE: "MECH",
+        TRACKINGTYPE: "LOT",
+        USERDEFINEDAREA: { CUSTOMFIELD: [] },
+      },
+    },
+  ]);
+
+  await db.partLots.bulkPut([
+    {
+      partCode: "PRT-100",
+      lotCode: "LOT-A",
+      description: "Batch A - High Precision Seals",
+      qty: 50,
+      statusCode: "A",
+      raw: {
+        LOTID: {
+          LOTCODE: "LOT-A",
+          PARTCODE: "PRT-100",
+          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+          DESCRIPTION: "Batch A - High Precision Seals",
+        },
+        QTY: 50,
+        STATUS: { STATUSCODE: "A", DESCRIPTION: "Available" },
+        USERDEFINEDAREA: { CUSTOMFIELD: [] },
+      },
+    },
+  ]);
+
+  // 7. Comments
+  await db.comments.bulkPut([
+    {
+      entityCode: "WO-1001",
+      entityType: "EVNT",
+      text: "Initial inspection scheduled for cooling circuit pump.",
+      creationDate: new Date(Date.now() - 3600000).toISOString(),
+      userDate: new Date(Date.now() - 3600000).toLocaleString(),
+      userCode: "TECH01",
+      userDesc: "TECH01",
+      creationUserCode: "TECH01",
+      creationUserDesc: "TECH01",
+    },
+    {
+      entityCode: "AST-01",
+      entityType: "OBJ",
+      text: "Asset installed and passed vibration tests.",
+      creationDate: new Date(Date.now() - 86400000).toISOString(),
+      userDate: new Date(Date.now() - 86400000).toLocaleString(),
+      userCode: "TECH01",
+      userDesc: "TECH01",
+      creationUserCode: "TECH01",
+      creationUserDesc: "TECH01",
+    },
+  ]);
+}

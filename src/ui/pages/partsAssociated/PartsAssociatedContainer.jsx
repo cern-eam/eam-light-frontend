@@ -32,7 +32,7 @@ const PartsAssociatedContainer = (
       setLoading(true);
       WSEquipment.getEquipmentPartsAssociated(code, associationEntity)
           .then((response) => {
-              const enrichedData = response.body.data.map((row) => ({
+              const enrichedData = (response?.body?.data || []).map((row) => ({
                   ...row,
                   delete: (
                       <IconButton

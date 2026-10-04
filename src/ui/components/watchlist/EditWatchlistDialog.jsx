@@ -14,14 +14,19 @@ import Watchlist from './Watchlist';
 const EditWatchlistDialog = ({ open, woCode, userCode, handleClose, handleError }) => {
     const [isWatching, setIsWatching] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [watchers, setWatchers] = useState();
+    const [watchers, setWatchers] = useState([]);
 
     const getWatchers = async () => {
+        if (!woCode) {
+            setWatchers([]);
+            return;
+        }
         setIsLoading(true);
 
         WSWatchers.getWatchersForWorkOrder(woCode).then( response => {
-            setWatchers(response.body.data);
-            const isWatcher = response.body.data.some((watcher) => watcher.userCode === userCode);
+            const list = Array.isArray(response?.body?.data) ? response.body.data : [];
+            setWatchers(list);
+            const isWatcher = list.some((watcher) => watcher?.userCode === userCode);
             setIsWatching(isWatcher);
         }).catch(console.error)
         .finally( () => setIsLoading(false))

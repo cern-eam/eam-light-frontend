@@ -366,6 +366,7 @@ const System = () => {
             entityKeyCode={id?.code}
             entityOrganization={id?.org}
             userCode={userData.eamAccount.userCode}
+            userDesc={userData.eamAccount.userName || userData.eamAccount.userCode}
             handleError={handleError}
             allowHtml={true}
             disabled={readOnly}

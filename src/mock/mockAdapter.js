@@ -1,4 +1,4 @@
-// Standalone Mock Network Adapter for EAM Light
+// Standalone Mock Network Adapter for EAM Light backed by Dexie.js (IndexedDB)
 import {
   mockUser,
   mockApplicationData,
@@ -9,7 +9,16 @@ import {
   mockScreenLayoutSSPART,
   mockScreenLayoutSSLOT,
 } from "./mockData";
-import { mockDb, extractCode } from "./mockDb";
+import { db, extractCode, getNextSequence, seedInitialData } from "../db/eamDatabase";
+
+// Ensure seed data is initialized
+let seedPromise = null;
+const ensureDbSeeded = () => {
+  if (!seedPromise) {
+    seedPromise = seedInitialData(false);
+  }
+  return seedPromise;
+};
 
 const createResponse = (config, data, status = 200, statusText = "OK") => ({
   data,
@@ -61,17 +70,31 @@ const buildGridPayload = (gridName, rows, fields, dataSpyList = null) => {
   };
 };
 
+/**
+ * Core async mock request handler
+ */
 export const mockAdapterHandler = async (cfg) => {
-  const url = cfg.url || "";
-  const method = (cfg.method || "get").toLowerCase();
+  await ensureDbSeeded();
 
+  const method = (cfg.method || "get").toLowerCase();
+  const url = cfg.url || "";
   let reqBody = cfg.data;
+
   if (typeof reqBody === "string") {
     try {
       reqBody = JSON.parse(reqBody);
     } catch (_e) {
       // ignore parsing error
     }
+  }
+
+  // 0. Database reset endpoint
+  if (url.includes("/database/reset") || url.includes("/resetDatabase")) {
+    await seedInitialData(true);
+    return createResponse(cfg, {
+      status: "SUCCESS",
+      data: "Database reset and re-seeded successfully.",
+    });
   }
 
   // 1. GET /users (Session verification & user profile)
@@ -158,28 +181,34 @@ export const mockAdapterHandler = async (cfg) => {
     });
   }
 
-  // 4. WORK ORDERS CRUD & DEFAULTS
-  // Defaults
-  if (method === "post" && url.includes("/proxy/workorderdefaults")) {
+  // 4. WORK ORDERS SCHEMA FACTORY & CRUD
+  // Schema Factory / Init: /proxy/workorderdefaults or /workorders/init
+  if (
+    url.includes("/workorders/init") ||
+    (method === "post" && url.includes("/proxy/workorderdefaults"))
+  ) {
+    const nextCode = await getNextSequence("workorders");
+    const now = new Date();
     return createResponse(cfg, {
       Result: {
         ResultData: {
           WorkOrder: {
             WORKORDERID: {
-              JOBNUM: "",
+              JOBNUM: nextCode,
               ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
               DESCRIPTION: "",
             },
-            STATUS: { STATUSCODE: "R" },
-            TYPE: { TYPECODE: "CORR" },
+            STATUS: { STATUSCODE: "R", DESCRIPTION: "Released" },
+            TYPE: { TYPECODE: "CORR", DESCRIPTION: "Corrective" },
             DEPARTMENTID: { DEPARTMENTCODE: "*" },
-            PRIORITY: { PRIORITYCODE: "M" },
+            PRIORITY: { PRIORITYCODE: "M", DESCRIPTION: "Medium" },
             EQUIPMENTID: {
               EQUIPMENTCODE: "",
               ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
             },
-            SCHEDSTARTDATE: new Date().toISOString(),
+            SCHEDSTARTDATE: now.toISOString(),
             SCHEDENDDATE: new Date(Date.now() + 86400000).toISOString(),
+            DATEREPORTED: now.toISOString(),
             USERDEFINEDAREA: { CUSTOMFIELD: [] },
           },
         },
@@ -187,43 +216,166 @@ export const mockAdapterHandler = async (cfg) => {
     });
   }
 
+  // Additional costs for WO
+  if (url.includes("/additionalcosts")) {
+    return createResponse(cfg, {
+      status: "SUCCESS",
+      data: [],
+      Result: {
+        ResultData: [],
+      },
+    });
+  }
+
   // GET single work order: /proxy/workorders/:id or /workorders/:id
   const woGetMatch = url.match(/(?:\/proxy)?\/workorders\/([^/?#]+)/);
-  if (method === "get" && woGetMatch) {
+  if (
+    method === "get" &&
+    woGetMatch &&
+    !url.includes("/workordersmisc") &&
+    !url.includes("/activities") &&
+    !url.includes("/watchers") &&
+    !url.includes("/booklabor") &&
+    !url.includes("/additionalcosts")
+  ) {
     const code = extractCode(woGetMatch[1]);
-    const found = mockDb.getWorkOrder(code);
+    const found = await db.workorders.get(code);
     if (found) {
       return createResponse(cfg, {
         Result: {
           ResultData: {
-            WorkOrder: found,
+            WorkOrder: found.raw || found,
           },
         },
       });
     }
     return Promise.reject({
-      response: createResponse(cfg, { ErrorAlert: [{ Message: `Work Order ${code} not found` }] }, 404, "Not Found"),
+      response: createResponse(
+        cfg,
+        { ErrorAlert: [{ Message: `Work Order ${code} not found` }] },
+        404,
+        "Not Found"
+      ),
     });
   }
 
   // POST create work order: /proxy/workorders/ or /workorders/
   if (method === "post" && (url.endsWith("/workorders") || url.endsWith("/workorders/"))) {
     const payload = reqBody?.WorkOrder || reqBody || {};
-    const jobNum = payload.WORKORDERID?.JOBNUM || `WO-${String(Date.now()).slice(-4)}`;
-    const newWo = {
+    let jobNum = payload.WORKORDERID?.JOBNUM;
+    if (!jobNum) {
+      jobNum = await getNextSequence("workorders");
+    }
+
+    const eqCode = payload.EQUIPMENTID?.EQUIPMENTCODE || "";
+    // Verify equipment and populate relational fields
+    let dept = payload.DEPARTMENTID?.DEPARTMENTCODE || "*";
+    let loc = payload.LOCATIONID?.LOCATIONCODE || "";
+    if (eqCode) {
+      const eqRecord = await db.equipment.get(eqCode);
+      if (eqRecord) {
+        if (!dept || dept === "*") dept = eqRecord.departmentCode || "*";
+      }
+    }
+
+    const newWoRaw = {
       ...payload,
       WORKORDERID: {
         ...(payload.WORKORDERID || {}),
         JOBNUM: jobNum,
         ORGANIZATIONID: payload.WORKORDERID?.ORGANIZATIONID || { ORGANIZATIONCODE: "*" },
       },
+      DEPARTMENTID: { DEPARTMENTCODE: dept },
+      LOCATIONID: loc ? { LOCATIONCODE: loc } : payload.LOCATIONID,
     };
-    mockDb.saveWorkOrder(newWo);
+
+    const newWoRecord = {
+      code: jobNum,
+      description: newWoRaw.WORKORDERID?.DESCRIPTION || "",
+      equipmentCode: eqCode,
+      statusCode: newWoRaw.STATUS?.STATUSCODE || "R",
+      statusDesc: newWoRaw.STATUS?.DESCRIPTION || "Released",
+      department: dept,
+      type: newWoRaw.TYPE?.TYPECODE || "CORR",
+      typeDesc: newWoRaw.TYPE?.DESCRIPTION || "Corrective",
+      priority: newWoRaw.PRIORITY?.PRIORITYCODE || "M",
+      priorityDesc: newWoRaw.PRIORITY?.DESCRIPTION || "Medium",
+      schedStartDate: newWoRaw.SCHEDSTARTDATE || new Date().toISOString(),
+      schedEndDate: newWoRaw.SCHEDENDDATE || new Date().toISOString(),
+      raw: newWoRaw,
+    };
+
+    await db.workorders.put(newWoRecord);
+
+    // Auto-instantiate default Activity 10 if not present
+    const existingActs = await db.activities.where("workorder").equals(jobNum).toArray();
+    if (existingActs.length === 0) {
+      const now = new Date();
+      await db.activities.put({
+        workorder: jobNum,
+        activityCode: "10",
+        activityNote: "Initial Inspection",
+        peopleRequired: 1,
+        estimatedHours: 2,
+        hoursRemaining: 2,
+        startDate: now.toISOString(),
+        endDate: new Date(Date.now() + 86400000).toISOString(),
+        tradeCode: "MECH",
+        taskCode: "TSK-01",
+        taskDesc: "Initial Inspection & Setup",
+      });
+
+      // Link default checklist inspection items
+      await db.checklists.bulkPut([
+        {
+          workorder: jobNum,
+          activityCode: "10",
+          checklistCode: `${jobNum}-CHK-01`,
+          checkListCode: `${jobNum}-CHK-01`,
+          sequence: 1,
+          desc: "Safety lockout applied?",
+          type: "01",
+          result: null,
+          completed: false,
+          notes: "",
+          required: true,
+          equipmentCode: eqCode,
+          equipmentDesc: "",
+          possibleFindings: [],
+          finding: null,
+          numericValue: null,
+          freeText: null,
+        },
+        {
+          workorder: jobNum,
+          activityCode: "10",
+          checklistCode: `${jobNum}-CHK-02`,
+          checkListCode: `${jobNum}-CHK-02`,
+          sequence: 2,
+          desc: "Operating pressure (Bar)",
+          type: "04",
+          result: null,
+          completed: false,
+          notes: "",
+          required: true,
+          minimumValue: 2.0,
+          maximumValue: 8.0,
+          numericValue: 4.5,
+          UOM: "Bar",
+          equipmentCode: eqCode,
+          equipmentDesc: "",
+          possibleFindings: [],
+          finding: null,
+          freeText: null,
+        },
+      ]);
+    }
+
     return createResponse(cfg, {
       Result: {
         ResultData: {
           JOBNUM: jobNum,
-          WorkOrder: newWo,
+          WorkOrder: newWoRaw,
         },
         InfoAlert: { Message: `Work Order ${jobNum} created successfully.` },
       },
@@ -234,22 +386,45 @@ export const mockAdapterHandler = async (cfg) => {
   if (method === "put" && (url.endsWith("/workorders") || url.endsWith("/workorders/"))) {
     const payload = reqBody?.WorkOrder || reqBody || {};
     const jobNum = payload.WORKORDERID?.JOBNUM;
-    const updated = mockDb.saveWorkOrder(payload);
+    const eqCode = payload.EQUIPMENTID?.EQUIPMENTCODE || "";
+
+    const updatedRecord = {
+      code: jobNum,
+      description: payload.WORKORDERID?.DESCRIPTION || "",
+      equipmentCode: eqCode,
+      statusCode: payload.STATUS?.STATUSCODE || "R",
+      statusDesc: payload.STATUS?.DESCRIPTION || "Released",
+      department: payload.DEPARTMENTID?.DEPARTMENTCODE || "*",
+      type: payload.TYPE?.TYPECODE || "CORR",
+      typeDesc: payload.TYPE?.DESCRIPTION || "Corrective",
+      priority: payload.PRIORITY?.PRIORITYCODE || "M",
+      priorityDesc: payload.PRIORITY?.DESCRIPTION || "Medium",
+      schedStartDate: payload.SCHEDSTARTDATE,
+      schedEndDate: payload.SCHEDENDDATE,
+      raw: payload,
+    };
+
+    await db.workorders.put(updatedRecord);
+
     return createResponse(cfg, {
       Result: {
         ResultData: {
           JOBNUM: jobNum,
-          WorkOrder: updated,
+          WorkOrder: payload,
         },
         InfoAlert: { Message: `Work Order ${jobNum} updated successfully.` },
       },
     });
   }
 
-  // DELETE work order: /proxy/workorders/:id or /workorders/:id
+  // DELETE work order: Cascade delete activities & checklists
   if (method === "delete" && woGetMatch) {
     const code = extractCode(woGetMatch[1]);
-    mockDb.deleteWorkOrder(code);
+    await db.transaction("rw", [db.workorders, db.activities, db.checklists], async () => {
+      await db.workorders.delete(code);
+      await db.activities.where("workorder").equals(code).delete();
+      await db.checklists.where("workorder").equals(code).delete();
+    });
     return createResponse(cfg, {
       Result: {
         InfoAlert: { Message: `Work Order ${code} deleted successfully.` },
@@ -271,18 +446,38 @@ export const mockAdapterHandler = async (cfg) => {
       woCode = extractCode(urlObj.searchParams.get("workorder") || "WO-1001");
     }
 
-    const activities = mockDb.getWorkOrderActivities(woCode);
-    const dataRecords = activities.map((act) => ({
+    const acts = await db.activities.where("workorder").equals(woCode).toArray();
+    const chks = await db.checklists.where("workorder").equals(woCode).toArray();
+
+    const activitiesWithChecklists = acts.map((act) => ({
+      ...act,
+      checklists: chks.filter((c) => String(c.activityCode) === String(act.activityCode)),
+    }));
+
+    const toEamDateObj = (iso) => {
+      const d = iso ? new Date(iso) : new Date();
+      return {
+        YEAR: new Date(`${d.getFullYear()}-01-02T00:00:00`).getTime(),
+        MONTH: d.getMonth() + 1,
+        DAY: d.getDate(),
+        HOUR: d.getHours(),
+        MINUTE: d.getMinutes(),
+        SECOND: d.getSeconds(),
+        TIMEZONE: "Z",
+      };
+    };
+
+    const dataRecords = activitiesWithChecklists.map((act) => ({
       ACTIVITYID: {
         ACTIVITYCODE: { value: act.activityCode },
         ACTIVITYNOTE: act.activityNote,
-        WORKORDERID: { JOBNUM: act.workOrderNumber },
+        WORKORDERID: { JOBNUM: act.workorder },
       },
       PERSONS: act.peopleRequired,
       ESTIMATEDHOURS: act.estimatedHours,
       HOURSREMAINING: act.hoursRemaining,
-      ACTIVITYSTARTDATE: act.startDate,
-      ACTIVITYENDDATE: act.endDate,
+      ACTIVITYSTARTDATE: toEamDateObj(act.startDate),
+      ACTIVITYENDDATE: toEamDateObj(act.endDate),
       TASKSID: {
         TASKCODE: act.taskCode,
         DESCRIPTION: act.taskDesc,
@@ -292,7 +487,7 @@ export const mockAdapterHandler = async (cfg) => {
 
     return createResponse(cfg, {
       status: "SUCCESS",
-      data: activities,
+      data: activitiesWithChecklists,
       Result: {
         ResultData: {
           DATARECORD: dataRecords,
@@ -307,7 +502,13 @@ export const mockAdapterHandler = async (cfg) => {
     const urlObj = new URL(url, "http://localhost");
     const woCode = extractCode(urlObj.searchParams.get("workorder") || "WO-1001");
     const actCode = urlObj.searchParams.get("activity");
-    const items = mockDb.getWorkOrderChecklists(woCode, actCode);
+
+    let query = db.checklists.where("workorder").equals(woCode);
+    let items = await query.toArray();
+    if (actCode) {
+      items = items.filter((i) => String(i.activityCode) === String(actCode));
+    }
+
     return createResponse(cfg, {
       status: "SUCCESS",
       data: items,
@@ -320,7 +521,38 @@ export const mockAdapterHandler = async (cfg) => {
   // PUT /checklists/ or /checklists?taskPlanCode=...
   if (method === "put" && url.includes("/checklists")) {
     const item = reqBody || {};
-    const updatedItem = mockDb.saveChecklistItem(item);
+    const urlObj = new URL(url, "http://localhost");
+    const rawWo = item.workOrderCode || item.workorder || item.workOrderNumber || urlObj.searchParams.get("workorder") || "";
+    const woCode = extractCode(rawWo) || "WO-1001";
+
+    // Find and update item in db.checklists
+    const existing = await db.checklists
+      .where("workorder")
+      .equals(woCode)
+      .filter(
+        (c) =>
+          (c.checklistCode && c.checklistCode === (item.checklistCode || item.checkListCode)) ||
+          (c.checkListCode && c.checkListCode === (item.checklistCode || item.checkListCode)) ||
+          (c.sequence &&
+            c.sequence === item.sequence &&
+            String(c.activityCode) === String(item.activityCode))
+      )
+      .first();
+
+    const updatedItem = {
+      ...(existing || {}),
+      ...item,
+      workorder: woCode,
+      checklistCode: item.checklistCode || item.checkListCode,
+      checkListCode: item.checklistCode || item.checkListCode,
+    };
+
+    if (existing?.id) {
+      updatedItem.id = existing.id;
+    }
+
+    await db.checklists.put(updatedItem);
+
     return createResponse(cfg, {
       status: "SUCCESS",
       data: updatedItem,
@@ -331,21 +563,90 @@ export const mockAdapterHandler = async (cfg) => {
     });
   }
 
-  // 5. ASSETS CRUD & DEFAULTS
-  // Defaults
-  if (method === "post" && url.includes("/proxy/assetdefaults")) {
+  // 4d. BOOKING LABOUR
+  if (url.includes("/bookinglabour") || url.includes("/workorders/booklabor")) {
+    return createResponse(cfg, {
+      status: "SUCCESS",
+      data: [],
+      Result: {
+        ResultData: [],
+      },
+    });
+  }
+
+  // 4e. WORK ORDERS MISC (Children WO, Other ID, Eqp Mec WO)
+  if (url.includes("/workordersmisc/childrenwo") || url.includes("/workordersmisc/eqpmecwo")) {
+    return createResponse(cfg, {
+      status: "SUCCESS",
+      data: [],
+      Result: {
+        ResultData: [],
+      },
+    });
+  }
+
+  if (url.includes("/workordersmisc/equipment")) {
+    return createResponse(cfg, {
+      status: "SUCCESS",
+      data: { ISWARRANTYACTIVE: "false" },
+      Result: {
+        ResultData: { ISWARRANTYACTIVE: "false" },
+      },
+    });
+  }
+
+  if (url.includes("/workordersmisc/otherid") || url.includes("/workordersmisc/gislink")) {
+    return createResponse(cfg, {
+      status: "SUCCESS",
+      data: {},
+      Result: {
+        ResultData: {},
+      },
+    });
+  }
+
+  // 4f. WATCHERS
+  if (url.includes("/watchers")) {
+    return createResponse(cfg, {
+      status: "SUCCESS",
+      data: [],
+      Result: {
+        ResultData: [],
+      },
+    });
+  }
+
+  // 4g. NCRs for equipment
+  if (url.includes("/ncrs/equipment")) {
+    return createResponse(cfg, {
+      status: "SUCCESS",
+      data: [],
+      Result: {
+        ResultData: [],
+      },
+    });
+  }
+
+  // 5. ASSETS SCHEMA FACTORY & CRUD
+  // Schema Factory / Init: /proxy/assetdefaults or /assets/init
+  if (
+    url.includes("/assets/init") ||
+    (method === "post" && url.includes("/proxy/assetdefaults"))
+  ) {
+    const nextCode = await getNextSequence("assets");
     return createResponse(cfg, {
       Result: {
         ResultData: {
           AssetEquipment: {
             ASSETID: {
-              EQUIPMENTCODE: null,
+              EQUIPMENTCODE: nextCode,
               ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
               DESCRIPTION: "",
             },
-            STATUS: { STATUSCODE: "I" },
+            STATUS: { STATUSCODE: "I", DESCRIPTION: "In Service" },
             DEPARTMENTID: { DEPARTMENTCODE: "*" },
             AssetParentHierarchy: {},
+            systemTypeCode: "A",
             USERDEFINEDAREA: { CUSTOMFIELD: [] },
           },
         },
@@ -368,14 +669,16 @@ export const mockAdapterHandler = async (cfg) => {
   const astGetMatch = url.match(/(?:\/proxy)?\/assets\/([^/?#]+)/);
   if (method === "get" && astGetMatch) {
     const code = extractCode(astGetMatch[1]);
-    const found = mockDb.getAsset(code);
-    if (found) {
+    const found = await db.equipment.get(code);
+    if (found && found.type === "A") {
       return createResponse(cfg, {
         Result: {
           ResultData: {
             AssetEquipment: {
-              ...found,
-              AssetParentHierarchy: {},
+              ...(found.raw || found),
+              AssetParentHierarchy: {
+                primarysystem: found.parentCode || "",
+              },
             },
           },
         },
@@ -389,7 +692,16 @@ export const mockAdapterHandler = async (cfg) => {
   // POST create asset
   if (method === "post" && (url.endsWith("/assets") || url.endsWith("/assets/"))) {
     const payload = reqBody?.AssetEquipment || reqBody || {};
-    const code = payload.ASSETID?.EQUIPMENTCODE || `AST-${String(Date.now()).slice(-3)}`;
+    let code = payload.ASSETID?.EQUIPMENTCODE;
+    if (!code) {
+      code = await getNextSequence("assets");
+    }
+
+    const parentCode =
+      payload.AssetParentHierarchy?.primarysystem ||
+      payload.AssetParentHierarchy?.parentasset ||
+      null;
+
     const newAst = {
       ...payload,
       ASSETID: {
@@ -399,7 +711,22 @@ export const mockAdapterHandler = async (cfg) => {
       },
       systemTypeCode: "A",
     };
-    mockDb.saveAsset(newAst);
+
+    await db.equipment.put({
+      code,
+      description: newAst.ASSETID?.DESCRIPTION || "",
+      type: "A",
+      parentCode: parentCode ? extractCode(parentCode) : null,
+      departmentCode: newAst.DEPARTMENTID?.DEPARTMENTCODE || "*",
+      statusCode: newAst.STATUS?.STATUSCODE || "I",
+      statusDesc: newAst.STATUS?.DESCRIPTION || "In Service",
+      categoryCode: newAst.CATEGORYID?.CATEGORYCODE || "PUMP",
+      classCode: newAst.CLASSID?.CLASSCODE || "STANDARD",
+      criticalityCode: newAst.CRITICALITYID?.CRITICALITYCODE || "B",
+      commissionDate: new Date().toISOString(),
+      raw: newAst,
+    });
+
     return createResponse(cfg, {
       Result: {
         ResultData: {
@@ -415,12 +742,30 @@ export const mockAdapterHandler = async (cfg) => {
   if (method === "put" && (url.endsWith("/assets") || url.endsWith("/assets/"))) {
     const payload = reqBody?.AssetEquipment || reqBody || {};
     const code = payload.ASSETID?.EQUIPMENTCODE;
-    const updated = mockDb.saveAsset(payload);
+    const parentCode =
+      payload.AssetParentHierarchy?.primarysystem ||
+      payload.AssetParentHierarchy?.parentasset ||
+      null;
+
+    await db.equipment.put({
+      code,
+      description: payload.ASSETID?.DESCRIPTION || "",
+      type: "A",
+      parentCode: parentCode ? extractCode(parentCode) : null,
+      departmentCode: payload.DEPARTMENTID?.DEPARTMENTCODE || "*",
+      statusCode: payload.STATUS?.STATUSCODE || "I",
+      statusDesc: payload.STATUS?.DESCRIPTION || "In Service",
+      categoryCode: payload.CATEGORYID?.CATEGORYCODE || "PUMP",
+      classCode: payload.CLASSID?.CLASSCODE || "STANDARD",
+      criticalityCode: payload.CRITICALITYID?.CRITICALITYCODE || "B",
+      raw: payload,
+    });
+
     return createResponse(cfg, {
       Result: {
         ResultData: {
           ASSETID: { EQUIPMENTCODE: code },
-          AssetEquipment: updated,
+          AssetEquipment: payload,
         },
         InfoAlert: { Message: `Asset ${code} updated successfully.` },
       },
@@ -430,7 +775,7 @@ export const mockAdapterHandler = async (cfg) => {
   // DELETE asset
   if (method === "delete" && astGetMatch) {
     const code = extractCode(astGetMatch[1]);
-    mockDb.deleteAsset(code);
+    await db.equipment.delete(code);
     return createResponse(cfg, {
       Result: {
         InfoAlert: { Message: `Asset ${code} deleted successfully.` },
@@ -438,19 +783,23 @@ export const mockAdapterHandler = async (cfg) => {
     });
   }
 
-  // 6. SYSTEMS CRUD & DEFAULTS
-  // Defaults
-  if (method === "post" && url.includes("/proxy/systemdefaults")) {
+  // 6. SYSTEMS SCHEMA FACTORY & CRUD
+  // Schema Factory / Init: /proxy/systemdefaults or /systems/init
+  if (
+    url.includes("/systems/init") ||
+    (method === "post" && url.includes("/proxy/systemdefaults"))
+  ) {
+    const nextCode = await getNextSequence("systems");
     return createResponse(cfg, {
       Result: {
         ResultData: {
           SystemEquipmentDefault: {
             SYSTEMID: {
-              EQUIPMENTCODE: "",
+              EQUIPMENTCODE: nextCode,
               ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
               DESCRIPTION: "",
             },
-            STATUS: { STATUSCODE: "I" },
+            STATUS: { STATUSCODE: "I", DESCRIPTION: "In Service" },
             DEPARTMENTID: { DEPARTMENTCODE: "*" },
             ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
             systemTypeCode: "S",
@@ -477,13 +826,13 @@ export const mockAdapterHandler = async (cfg) => {
   const sysGetMatch = url.match(/(?:\/proxy)?\/systems\/([^/?#]+)/);
   if (method === "get" && sysGetMatch) {
     const code = extractCode(sysGetMatch[1]);
-    const found = mockDb.getSystem(code);
-    if (found) {
+    const found = await db.equipment.get(code);
+    if (found && found.type === "S") {
       return createResponse(cfg, {
         Result: {
           ResultData: {
             SystemEquipment: {
-              ...found,
+              ...(found.raw || found),
               SystemParentHierarchy: {},
             },
           },
@@ -498,7 +847,11 @@ export const mockAdapterHandler = async (cfg) => {
   // POST create system
   if (method === "post" && (url.endsWith("/systems") || url.endsWith("/systems/"))) {
     const payload = reqBody?.SystemEquipment || reqBody || {};
-    const eqCode = payload.SYSTEMID?.EQUIPMENTCODE || `SYS-${String(Date.now()).slice(-2)}`;
+    let eqCode = payload.SYSTEMID?.EQUIPMENTCODE;
+    if (!eqCode) {
+      eqCode = await getNextSequence("systems");
+    }
+
     const newSys = {
       ...payload,
       SYSTEMID: {
@@ -508,7 +861,21 @@ export const mockAdapterHandler = async (cfg) => {
       },
       systemTypeCode: "S",
     };
-    mockDb.saveSystem(newSys);
+
+    await db.equipment.put({
+      code: eqCode,
+      description: newSys.SYSTEMID?.DESCRIPTION || "",
+      type: "S",
+      parentCode: null,
+      departmentCode: newSys.DEPARTMENTID?.DEPARTMENTCODE || "*",
+      statusCode: newSys.STATUS?.STATUSCODE || "I",
+      statusDesc: newSys.STATUS?.DESCRIPTION || "In Service",
+      categoryCode: newSys.CATEGORYID?.CATEGORYCODE || "HVAC",
+      classCode: newSys.CLASSID?.CLASSCODE || "CRITICAL",
+      criticalityCode: newSys.CRITICALITYID?.CRITICALITYCODE || "A",
+      raw: newSys,
+    });
+
     return createResponse(cfg, {
       Result: {
         ResultData: {
@@ -524,12 +891,26 @@ export const mockAdapterHandler = async (cfg) => {
   if (method === "put" && (url.endsWith("/systems") || url.endsWith("/systems/"))) {
     const payload = reqBody?.SystemEquipment || reqBody || {};
     const eqCode = payload.SYSTEMID?.EQUIPMENTCODE;
-    const updated = mockDb.saveSystem(payload);
+
+    await db.equipment.put({
+      code: eqCode,
+      description: payload.SYSTEMID?.DESCRIPTION || "",
+      type: "S",
+      parentCode: null,
+      departmentCode: payload.DEPARTMENTID?.DEPARTMENTCODE || "*",
+      statusCode: payload.STATUS?.STATUSCODE || "I",
+      statusDesc: payload.STATUS?.DESCRIPTION || "In Service",
+      categoryCode: payload.CATEGORYID?.CATEGORYCODE || "HVAC",
+      classCode: payload.CLASSID?.CLASSCODE || "CRITICAL",
+      criticalityCode: payload.CRITICALITYID?.CRITICALITYCODE || "A",
+      raw: payload,
+    });
+
     return createResponse(cfg, {
       Result: {
         ResultData: {
           SYSTEMID: { EQUIPMENTCODE: eqCode },
-          SystemEquipment: updated,
+          SystemEquipment: payload,
         },
         InfoAlert: { Message: `System ${eqCode} updated successfully.` },
       },
@@ -539,7 +920,7 @@ export const mockAdapterHandler = async (cfg) => {
   // DELETE system
   if (method === "delete" && sysGetMatch) {
     const code = extractCode(sysGetMatch[1]);
-    mockDb.deleteSystem(code);
+    await db.equipment.delete(code);
     return createResponse(cfg, {
       Result: {
         InfoAlert: { Message: `System ${code} deleted successfully.` },
@@ -547,18 +928,22 @@ export const mockAdapterHandler = async (cfg) => {
     });
   }
 
-  // 6b. POSITIONS CRUD & DEFAULTS
-  if (method === "post" && url.includes("/proxy/positiondefaults")) {
+  // 6b. POSITIONS SCHEMA FACTORY & CRUD
+  if (
+    url.includes("/positions/init") ||
+    (method === "post" && url.includes("/proxy/positiondefaults"))
+  ) {
+    const nextCode = await getNextSequence("positions");
     return createResponse(cfg, {
       Result: {
         ResultData: {
           PositionEquipmentDefault: {
             POSITIONID: {
-              EQUIPMENTCODE: "",
+              EQUIPMENTCODE: nextCode,
               ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
               DESCRIPTION: "",
             },
-            STATUS: { STATUSCODE: "I" },
+            STATUS: { STATUSCODE: "I", DESCRIPTION: "In Service" },
             DEPARTMENTID: { DEPARTMENTCODE: "*" },
             ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
             TYPE: { TYPECODE: "P" },
@@ -585,13 +970,13 @@ export const mockAdapterHandler = async (cfg) => {
   const posGetMatch = url.match(/(?:\/proxy)?\/positions\/([^/?#]+)/);
   if (method === "get" && posGetMatch) {
     const code = extractCode(posGetMatch[1]);
-    const found = mockDb.getPosition(code);
-    if (found) {
+    const found = await db.equipment.get(code);
+    if (found && found.type === "P") {
       return createResponse(cfg, {
         Result: {
           ResultData: {
             PositionEquipment: {
-              ...found,
+              ...(found.raw || found),
               PositionParentHierarchy: {},
             },
           },
@@ -606,7 +991,11 @@ export const mockAdapterHandler = async (cfg) => {
   // POST create position
   if (method === "post" && (url.endsWith("/positions") || url.endsWith("/positions/"))) {
     const payload = reqBody?.PositionEquipment || reqBody || {};
-    const eqCode = payload.POSITIONID?.EQUIPMENTCODE || `POS-${String(Date.now()).slice(-2)}`;
+    let eqCode = payload.POSITIONID?.EQUIPMENTCODE;
+    if (!eqCode) {
+      eqCode = await getNextSequence("positions");
+    }
+
     const newPos = {
       ...payload,
       POSITIONID: {
@@ -616,7 +1005,21 @@ export const mockAdapterHandler = async (cfg) => {
       },
       systemTypeCode: "P",
     };
-    mockDb.savePosition(newPos);
+
+    await db.equipment.put({
+      code: eqCode,
+      description: newPos.POSITIONID?.DESCRIPTION || "",
+      type: "P",
+      parentCode: null,
+      departmentCode: newPos.DEPARTMENTID?.DEPARTMENTCODE || "*",
+      statusCode: newPos.STATUS?.STATUSCODE || "I",
+      statusDesc: newPos.STATUS?.DESCRIPTION || "In Service",
+      categoryCode: newPos.CATEGORYID?.CATEGORYCODE || "POS",
+      classCode: newPos.CLASSID?.CLASSCODE || "STANDARD",
+      criticalityCode: newPos.CRITICALITYID?.CRITICALITYCODE || "M",
+      raw: newPos,
+    });
+
     return createResponse(cfg, {
       Result: {
         ResultData: {
@@ -632,12 +1035,26 @@ export const mockAdapterHandler = async (cfg) => {
   if (method === "put" && (url.endsWith("/positions") || url.endsWith("/positions/"))) {
     const payload = reqBody?.PositionEquipment || reqBody || {};
     const eqCode = payload.POSITIONID?.EQUIPMENTCODE;
-    const updated = mockDb.savePosition(payload);
+
+    await db.equipment.put({
+      code: eqCode,
+      description: payload.POSITIONID?.DESCRIPTION || "",
+      type: "P",
+      parentCode: null,
+      departmentCode: payload.DEPARTMENTID?.DEPARTMENTCODE || "*",
+      statusCode: payload.STATUS?.STATUSCODE || "I",
+      statusDesc: payload.STATUS?.DESCRIPTION || "In Service",
+      categoryCode: payload.CATEGORYID?.CATEGORYCODE || "POS",
+      classCode: payload.CLASSID?.CLASSCODE || "STANDARD",
+      criticalityCode: payload.CRITICALITYID?.CRITICALITYCODE || "M",
+      raw: payload,
+    });
+
     return createResponse(cfg, {
       Result: {
         ResultData: {
           POSITIONID: { EQUIPMENTCODE: eqCode },
-          PositionEquipment: updated,
+          PositionEquipment: payload,
         },
         InfoAlert: { Message: `Position ${eqCode} updated successfully.` },
       },
@@ -647,7 +1064,7 @@ export const mockAdapterHandler = async (cfg) => {
   // DELETE position
   if (method === "delete" && posGetMatch) {
     const code = extractCode(posGetMatch[1]);
-    mockDb.deletePosition(code);
+    await db.equipment.delete(code);
     return createResponse(cfg, {
       Result: {
         InfoAlert: { Message: `Position ${code} deleted successfully.` },
@@ -655,20 +1072,52 @@ export const mockAdapterHandler = async (cfg) => {
     });
   }
 
-  // 7. PARTS & LOTS (Parent & Child routes)
-  // Defaults
-  if (method === "post" && url.includes("/proxy/partdefaults")) {
+  // 6c. EQUIPMENT TREE & CHILDREN
+  // Intercept /equipment/tree?equipment=:code or /equipment/children/:code
+  if (url.includes("/equipment/tree") || url.includes("/equipment/children")) {
+    let eqCode = "";
+    const match = url.match(/\/equipment\/children\/([^/?#]+)/);
+    if (match) {
+      eqCode = extractCode(match[1]);
+    } else {
+      const urlObj = new URL(url, "http://localhost");
+      eqCode = extractCode(urlObj.searchParams.get("equipment") || "");
+    }
+
+    const children = await db.equipment.where("parentCode").equals(eqCode).toArray();
+    return createResponse(cfg, {
+      status: "SUCCESS",
+      data: children.map((c) => ({
+        code: c.code,
+        desc: c.description,
+        type: c.type,
+        parent: c.parentCode,
+      })),
+      Result: {
+        ResultData: children,
+      },
+    });
+  }
+
+  // 7. PARTS & LOTS SCHEMA FACTORY & CRUD
+  // Schema Factory / Init: /proxy/partdefaults or /parts/init
+  if (
+    url.includes("/parts/init") ||
+    (method === "post" && url.includes("/proxy/partdefaults"))
+  ) {
+    const nextCode = await getNextSequence("parts");
     return createResponse(cfg, {
       Result: {
         ResultData: {
           Part: {
             PARTID: {
-              PARTCODE: "",
+              PARTCODE: nextCode,
               ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
               DESCRIPTION: "",
             },
             UOM: "EA",
             TRACKINGBYASSET: false,
+            TRACKINGTYPE: "LOT",
             USERDEFINEDAREA: { CUSTOMFIELD: [] },
           },
         },
@@ -700,18 +1149,23 @@ export const mockAdapterHandler = async (cfg) => {
   if (method === "get" && partLotMatch) {
     const partCode = extractCode(partLotMatch[1]);
     const lotCode = extractCode(partLotMatch[2]);
-    const foundLot = mockDb.getPartLot(partCode, lotCode);
+    const foundLot = await db.partLots.get([partCode, lotCode]);
     if (foundLot) {
       return createResponse(cfg, {
         Result: {
           ResultData: {
-            Lot: foundLot,
+            Lot: foundLot.raw || foundLot,
           },
         },
       });
     }
     return Promise.reject({
-      response: createResponse(cfg, { ErrorAlert: [{ Message: `Lot ${lotCode} for part ${partCode} not found` }] }, 404, "Not Found"),
+      response: createResponse(
+        cfg,
+        { ErrorAlert: [{ Message: `Lot ${lotCode} for part ${partCode} not found` }] },
+        404,
+        "Not Found"
+      ),
     });
   }
 
@@ -719,12 +1173,12 @@ export const mockAdapterHandler = async (cfg) => {
   const lotGetMatch = url.match(/(?:\/proxy)?\/lots\/([^/?#]+)/);
   if (method === "get" && lotGetMatch) {
     const code = extractCode(lotGetMatch[1]);
-    const foundLot = mockDb.getLot(code);
+    const foundLot = await db.partLots.where("lotCode").equals(code).first();
     if (foundLot) {
       return createResponse(cfg, {
         Result: {
           ResultData: {
-            Lot: foundLot,
+            Lot: foundLot.raw || foundLot,
           },
         },
       });
@@ -737,7 +1191,10 @@ export const mockAdapterHandler = async (cfg) => {
   // POST create lot
   if (method === "post" && (url.endsWith("/lots") || url.endsWith("/lots/"))) {
     const payload = reqBody?.Lot || reqBody || {};
-    const lotCode = payload.LOTID?.LOTCODE || `LOT-${String(Date.now()).slice(-3)}`;
+    let lotCode = payload.LOTID?.LOTCODE;
+    if (!lotCode) lotCode = `LOT-${String(Date.now()).slice(-3)}`;
+    const partCode = payload.LOTID?.PARTCODE || "";
+
     const newLot = {
       ...payload,
       LOTID: {
@@ -746,7 +1203,16 @@ export const mockAdapterHandler = async (cfg) => {
         ORGANIZATIONID: payload.LOTID?.ORGANIZATIONID || { ORGANIZATIONCODE: "*" },
       },
     };
-    mockDb.saveLot(newLot);
+
+    await db.partLots.put({
+      partCode,
+      lotCode,
+      description: newLot.LOTID?.DESCRIPTION || "",
+      qty: newLot.QTY || 0,
+      statusCode: newLot.STATUS?.STATUSCODE || "A",
+      raw: newLot,
+    });
+
     return createResponse(cfg, {
       Result: {
         ResultData: {
@@ -762,12 +1228,22 @@ export const mockAdapterHandler = async (cfg) => {
   if (method === "put" && (url.endsWith("/lots") || url.endsWith("/lots/"))) {
     const payload = reqBody?.Lot || reqBody || {};
     const lotCode = payload.LOTID?.LOTCODE;
-    const updated = mockDb.saveLot(payload);
+    const partCode = payload.LOTID?.PARTCODE || "";
+
+    await db.partLots.put({
+      partCode,
+      lotCode,
+      description: payload.LOTID?.DESCRIPTION || "",
+      qty: payload.QTY || 0,
+      statusCode: payload.STATUS?.STATUSCODE || "A",
+      raw: payload,
+    });
+
     return createResponse(cfg, {
       Result: {
         ResultData: {
           LOTCODE: lotCode,
-          Lot: updated,
+          Lot: payload,
         },
         InfoAlert: { Message: `Lot ${lotCode} updated successfully.` },
       },
@@ -777,7 +1253,7 @@ export const mockAdapterHandler = async (cfg) => {
   // DELETE lot
   if (method === "delete" && lotGetMatch) {
     const code = extractCode(lotGetMatch[1]);
-    mockDb.deleteLot(code);
+    await db.partLots.where("lotCode").equals(code).delete();
     return createResponse(cfg, {
       Result: {
         InfoAlert: { Message: `Lot ${code} deleted successfully.` },
@@ -789,12 +1265,12 @@ export const mockAdapterHandler = async (cfg) => {
   const partGetMatch = url.match(/(?:\/proxy)?\/parts\/([^/?#]+)/);
   if (method === "get" && partGetMatch && !url.includes("/lots/")) {
     const code = extractCode(partGetMatch[1]);
-    const foundPart = mockDb.getPart(code);
+    const foundPart = await db.parts.get(code);
     if (foundPart) {
       return createResponse(cfg, {
         Result: {
           ResultData: {
-            Part: foundPart,
+            Part: foundPart.raw || foundPart,
           },
         },
       });
@@ -807,7 +1283,11 @@ export const mockAdapterHandler = async (cfg) => {
   // POST create part
   if (method === "post" && (url.endsWith("/parts") || url.endsWith("/parts/"))) {
     const payload = reqBody?.Part || reqBody || {};
-    const partCode = payload.PARTID?.PARTCODE || `PRT-${String(Date.now()).slice(-3)}`;
+    let partCode = payload.PARTID?.PARTCODE;
+    if (!partCode) {
+      partCode = await getNextSequence("parts");
+    }
+
     const newPart = {
       ...payload,
       PARTID: {
@@ -816,7 +1296,15 @@ export const mockAdapterHandler = async (cfg) => {
         ORGANIZATIONID: payload.PARTID?.ORGANIZATIONID || { ORGANIZATIONCODE: "*" },
       },
     };
-    mockDb.savePart(newPart);
+
+    await db.parts.put({
+      code: partCode,
+      description: newPart.PARTID?.DESCRIPTION || "",
+      trackingType: newPart.TRACKINGTYPE || "LOT",
+      uom: newPart.UOM || "EA",
+      raw: newPart,
+    });
+
     return createResponse(cfg, {
       Result: {
         ResultData: {
@@ -832,12 +1320,20 @@ export const mockAdapterHandler = async (cfg) => {
   if (method === "put" && (url.endsWith("/parts") || url.endsWith("/parts/"))) {
     const payload = reqBody?.Part || reqBody || {};
     const partCode = payload.PARTID?.PARTCODE;
-    const updated = mockDb.savePart(payload);
+
+    await db.parts.put({
+      code: partCode,
+      description: payload.PARTID?.DESCRIPTION || "",
+      trackingType: payload.TRACKINGTYPE || "LOT",
+      uom: payload.UOM || "EA",
+      raw: payload,
+    });
+
     return createResponse(cfg, {
       Result: {
         ResultData: {
           PARTCODE: partCode,
-          Part: updated,
+          Part: payload,
         },
         InfoAlert: { Message: `Part ${partCode} updated successfully.` },
       },
@@ -847,7 +1343,7 @@ export const mockAdapterHandler = async (cfg) => {
   // DELETE part
   if (method === "delete" && partGetMatch) {
     const code = extractCode(partGetMatch[1]);
-    mockDb.deletePart(code);
+    await db.parts.delete(code);
     return createResponse(cfg, {
       Result: {
         InfoAlert: { Message: `Part ${code} deleted successfully.` },
@@ -855,17 +1351,66 @@ export const mockAdapterHandler = async (cfg) => {
     });
   }
 
-  // 8. GRIDS & AUTOCOMPLETE LOVs (GET & POST)
+  // 8. FULL DYNAMIC SEARCH GRIDS WITH INDEXEDDB QUERYING
   if (
     url.includes("/grids") ||
     url.includes("/proxy/grids") ||
     url.includes("/grids/data")
   ) {
     const gridName = reqBody?.gridName || reqBody?.gridID || "";
+    const filterList = reqBody?.filter || reqBody?.gridFilter || [];
+
+    // Helper: evaluate item against filters
+    const matchesFilters = (item, getterMap) => {
+      if (!Array.isArray(filterList) || filterList.length === 0) return true;
+      for (const f of filterList) {
+        const fieldName = (f.fieldName || f.name || "").toLowerCase();
+        const fieldValue = String(f.fieldValue ?? f.value ?? "").toLowerCase();
+        const operator = (f.operator || "=").toUpperCase();
+        if (!fieldValue) continue;
+
+        const valGetter = getterMap[fieldName];
+        const actualVal = valGetter ? String(valGetter(item) ?? "").toLowerCase() : "";
+
+        if (operator === "BEGINS") {
+          if (!actualVal.startsWith(fieldValue)) return false;
+        } else if (operator === "CONTAINS") {
+          if (!actualVal.includes(fieldValue)) return false;
+        } else if (operator === "NOTCONTAINS") {
+          if (actualVal.includes(fieldValue)) return false;
+        } else if (operator === "=") {
+          if (actualVal !== fieldValue) return false;
+        }
+      }
+      return true;
+    };
 
     // A. Work Orders Search Table
     if (gridName === "WSJOBS") {
-      const items = mockDb.getWorkOrders();
+      let items = await db.workorders.toArray();
+
+      const woGetterMap = {
+        workordernum: (w) => w.code,
+        workorder: (w) => w.code,
+        description: (w) => w.description,
+        equipment: (w) => w.equipmentCode,
+        workorderstatus_display: (w) => w.statusDesc,
+        status: (w) => w.statusDesc,
+        workordertype_display: (w) => w.typeDesc,
+        type: (w) => w.typeDesc,
+        department: (w) => w.department,
+        priority_display: (w) => w.priorityDesc,
+      };
+
+      items = items.filter((w) => matchesFilters(w, woGetterMap));
+
+      // Relational equipment joining: fetch equipment description
+      const equipmentMap = {};
+      const allEq = await db.equipment.toArray();
+      allEq.forEach((eq) => {
+        equipmentMap[eq.code] = eq.description;
+      });
+
       const fields = [
         { name: "workordernum", label: "Work Order", order: 1, width: 140, dataType: "VARCHAR" },
         { name: "description", label: "Description", order: 2, width: 250, dataType: "VARCHAR" },
@@ -878,25 +1423,53 @@ export const mockAdapterHandler = async (cfg) => {
       ];
 
       const rows = items.map((wo) => ({
-        id: wo.WORKORDERID?.JOBNUM,
+        id: wo.code,
         cell: [
-          { t: "workordernum", val: wo.WORKORDERID?.JOBNUM, value: wo.WORKORDERID?.JOBNUM, order: 1 },
-          { t: "description", val: wo.WORKORDERID?.DESCRIPTION, value: wo.WORKORDERID?.DESCRIPTION, order: 2 },
-          { t: "equipment", val: wo.EQUIPMENTID?.EQUIPMENTCODE, value: wo.EQUIPMENTID?.EQUIPMENTCODE, order: 3 },
-          { t: "workorderstatus_display", val: wo.STATUS?.DESCRIPTION || "Released", value: wo.STATUS?.DESCRIPTION || "Released", order: 4 },
-          { t: "workordertype_display", val: wo.TYPE?.DESCRIPTION || "Corrective", value: wo.TYPE?.DESCRIPTION || "Corrective", order: 5 },
-          { t: "department", val: wo.DEPARTMENTID?.DEPARTMENTCODE || "*", value: wo.DEPARTMENTID?.DEPARTMENTCODE || "*", order: 6 },
-          { t: "priority_display", val: wo.PRIORITY?.DESCRIPTION || "Medium", value: wo.PRIORITY?.DESCRIPTION || "Medium", order: 7 },
-          { t: "schedstartdate", val: wo.SCHEDSTARTDATE ? wo.SCHEDSTARTDATE.slice(0, 10) : "", value: wo.SCHEDSTARTDATE ? wo.SCHEDSTARTDATE.slice(0, 10) : "", order: 8 },
+          { t: "workordernum", val: wo.code, value: wo.code, order: 1 },
+          { t: "description", val: wo.description, value: wo.description, order: 2 },
+          { t: "equipment", val: wo.equipmentCode, value: wo.equipmentCode, order: 3 },
+          { t: "workorderstatus_display", val: wo.statusDesc || "Released", value: wo.statusDesc || "Released", order: 4 },
+          { t: "workordertype_display", val: wo.typeDesc || "Corrective", value: wo.typeDesc || "Corrective", order: 5 },
+          { t: "department", val: wo.department || "*", value: wo.department || "*", order: 6 },
+          { t: "priority_display", val: wo.priorityDesc || "Medium", value: wo.priorityDesc || "Medium", order: 7 },
+          { t: "schedstartdate", val: wo.schedStartDate ? wo.schedStartDate.slice(0, 10) : "", value: wo.schedStartDate ? wo.schedStartDate.slice(0, 10) : "", order: 8 },
+          { t: "datecreated", val: wo.schedStartDate ? wo.schedStartDate.slice(0, 10) : "", value: wo.schedStartDate ? wo.schedStartDate.slice(0, 10) : "", order: 9 },
+          { t: "schedenddate", val: wo.schedEndDate ? wo.schedEndDate.slice(0, 10) : "", value: wo.schedEndDate ? wo.schedEndDate.slice(0, 10) : "", order: 10 },
+          { t: "organization", val: "*", value: "*", order: 11 },
         ],
       }));
 
       return createResponse(cfg, buildGridPayload("WSJOBS", rows, fields));
     }
 
+    // A2. Work Order Part Usage Grid (WSJOBS_PAR)
+    if (gridName === "WSJOBS_PAR") {
+      const rows = [];
+      return createResponse(cfg, buildGridPayload("WSJOBS_PAR", rows, [
+        { name: "partcode", label: "Part", order: 1, width: 120, dataType: "VARCHAR" },
+        { name: "partdescription", label: "Description", order: 2, width: 200, dataType: "VARCHAR" },
+        { name: "plannedqty", label: "Planned", order: 3, width: 80, dataType: "VARCHAR" },
+        { name: "usedqty", label: "Used", order: 4, width: 80, dataType: "VARCHAR" },
+        { name: "activity_display", label: "Activity", order: 5, width: 120, dataType: "VARCHAR" },
+        { name: "storecode", label: "Store", order: 6, width: 100, dataType: "VARCHAR" },
+        { name: "partuom", label: "UOM", order: 7, width: 60, dataType: "VARCHAR" },
+      ]));
+    }
+
     // B. Assets Search Table
     if (gridName === "OSOBJA") {
-      const items = mockDb.getAssets();
+      let items = await db.equipment.where("type").equals("A").toArray();
+
+      const astGetterMap = {
+        equipmentno: (a) => a.code,
+        equipment: (a) => a.code,
+        equipmentdesc: (a) => a.description,
+        department: (a) => a.departmentCode,
+        assetstatus: (a) => a.statusDesc,
+      };
+
+      items = items.filter((a) => matchesFilters(a, astGetterMap));
+
       const fields = [
         { name: "equipmentno", label: "Equipment", order: 1, width: 140, dataType: "VARCHAR" },
         { name: "equipmentdesc", label: "Description", order: 2, width: 250, dataType: "VARCHAR" },
@@ -906,13 +1479,13 @@ export const mockAdapterHandler = async (cfg) => {
       ];
 
       const rows = items.map((ast) => ({
-        id: ast.ASSETID?.EQUIPMENTCODE,
+        id: ast.code,
         cell: [
-          { t: "equipmentno", val: ast.ASSETID?.EQUIPMENTCODE, value: ast.ASSETID?.EQUIPMENTCODE, order: 1 },
-          { t: "equipmentdesc", val: ast.ASSETID?.DESCRIPTION, value: ast.ASSETID?.DESCRIPTION, order: 2 },
-          { t: "department", val: ast.DEPARTMENTID?.DEPARTMENTCODE || "*", value: ast.DEPARTMENTID?.DEPARTMENTCODE || "*", order: 3 },
-          { t: "assetstatus", val: ast.STATUS?.DESCRIPTION || "In Service", value: ast.STATUS?.DESCRIPTION || "In Service", order: 4 },
-          { t: "organization", val: ast.ASSETID?.ORGANIZATIONID?.ORGANIZATIONCODE || "*", value: ast.ASSETID?.ORGANIZATIONID?.ORGANIZATIONCODE || "*", order: 5 },
+          { t: "equipmentno", val: ast.code, value: ast.code, order: 1 },
+          { t: "equipmentdesc", val: ast.description, value: ast.description, order: 2 },
+          { t: "department", val: ast.departmentCode || "*", value: ast.departmentCode || "*", order: 3 },
+          { t: "assetstatus", val: ast.statusDesc || "In Service", value: ast.statusDesc || "In Service", order: 4 },
+          { t: "organization", val: "*", value: "*", order: 5 },
         ],
       }));
 
@@ -920,8 +1493,9 @@ export const mockAdapterHandler = async (cfg) => {
     }
 
     // C. Systems Search Table
-    if (gridName === "OSOBJS" || gridName.includes("SYS")) {
-      const items = mockDb.getSystems();
+    if (gridName === "OSOBJS" || (gridName.includes("SYS") && !gridName.includes("BSUCOD"))) {
+      let items = await db.equipment.where("type").equals("S").toArray();
+
       const fields = [
         { name: "equipmentno", label: "System", order: 1, width: 140, dataType: "VARCHAR" },
         { name: "equipmentdesc", label: "Description", order: 2, width: 250, dataType: "VARCHAR" },
@@ -931,17 +1505,67 @@ export const mockAdapterHandler = async (cfg) => {
       ];
 
       const rows = items.map((sys) => ({
-        id: sys.SYSTEMID?.EQUIPMENTCODE,
+        id: sys.code,
         cell: [
-          { t: "equipmentno", val: sys.SYSTEMID?.EQUIPMENTCODE, value: sys.SYSTEMID?.EQUIPMENTCODE, order: 1 },
-          { t: "equipmentdesc", val: sys.SYSTEMID?.DESCRIPTION, value: sys.SYSTEMID?.DESCRIPTION, order: 2 },
-          { t: "department", val: sys.DEPARTMENTID?.DEPARTMENTCODE || "*", value: sys.DEPARTMENTID?.DEPARTMENTCODE || "*", order: 3 },
-          { t: "assetstatus", val: sys.STATUS?.DESCRIPTION || "In Service", value: sys.STATUS?.DESCRIPTION || "In Service", order: 4 },
-          { t: "organization", val: sys.SYSTEMID?.ORGANIZATIONID?.ORGANIZATIONCODE || "*", value: sys.SYSTEMID?.ORGANIZATIONID?.ORGANIZATIONCODE || "*", order: 5 },
+          { t: "equipmentno", val: sys.code, value: sys.code, order: 1 },
+          { t: "equipmentdesc", val: sys.description, value: sys.description, order: 2 },
+          { t: "department", val: sys.departmentCode || "*", value: sys.departmentCode || "*", order: 3 },
+          { t: "assetstatus", val: sys.statusDesc || "In Service", value: sys.statusDesc || "In Service", order: 4 },
+          { t: "organization", val: "*", value: "*", order: 5 },
         ],
       }));
 
       return createResponse(cfg, buildGridPayload("OSOBJS", rows, fields));
+    }
+
+    // C2. Positions Search Table (OSOBJP)
+    if (gridName === "OSOBJP") {
+      let items = await db.equipment.where("type").equals("P").toArray();
+
+      const fields = [
+        { name: "equipmentno", label: "Position", order: 1, width: 140, dataType: "VARCHAR" },
+        { name: "equipmentdesc", label: "Description", order: 2, width: 250, dataType: "VARCHAR" },
+        { name: "department", label: "Department", order: 3, width: 120, dataType: "VARCHAR" },
+        { name: "assetstatus", label: "Status", order: 4, width: 120, dataType: "VARCHAR" },
+        { name: "organization", label: "Organization", order: 5, width: 100, dataType: "VARCHAR" },
+      ];
+
+      const rows = items.map((pos) => ({
+        id: pos.code,
+        cell: [
+          { t: "equipmentno", val: pos.code, value: pos.code, order: 1 },
+          { t: "equipmentdesc", val: pos.description, value: pos.description, order: 2 },
+          { t: "department", val: pos.departmentCode || "*", value: pos.departmentCode || "*", order: 3 },
+          { t: "assetstatus", val: pos.statusDesc || "In Service", value: pos.statusDesc || "In Service", order: 4 },
+          { t: "organization", val: "*", value: "*", order: 5 },
+        ],
+      }));
+
+      return createResponse(cfg, buildGridPayload("OSOBJP", rows, fields));
+    }
+
+    // C3. Parts Search Table (SSPART)
+    if (gridName === "SSPART") {
+      let items = await db.parts.toArray();
+
+      const fields = [
+        { name: "partcode", label: "Part", order: 1, width: 140, dataType: "VARCHAR" },
+        { name: "description", label: "Description", order: 2, width: 250, dataType: "VARCHAR" },
+        { name: "uom", label: "UOM", order: 3, width: 80, dataType: "VARCHAR" },
+        { name: "trackingtype", label: "Tracking Type", order: 4, width: 120, dataType: "VARCHAR" },
+      ];
+
+      const rows = items.map((prt) => ({
+        id: prt.code,
+        cell: [
+          { t: "partcode", val: prt.code, value: prt.code, order: 1 },
+          { t: "description", val: prt.description, value: prt.description, order: 2 },
+          { t: "uom", val: prt.uom || "EA", value: prt.uom || "EA", order: 3 },
+          { t: "trackingtype", val: prt.trackingType || "LOT", value: prt.trackingType || "LOT", order: 4 },
+        ],
+      }));
+
+      return createResponse(cfg, buildGridPayload("SSPART", rows, fields));
     }
 
     // D. Statuses LOV (BSAUTH_HDR)
@@ -1014,7 +1638,114 @@ export const mockAdapterHandler = async (cfg) => {
       ]));
     }
 
-    // G. Generic / Fallback Grid LOV
+    // G. Equipment History (EUMLWH)
+    if (gridName === "EUMLWH") {
+      const eqFilter = filterList?.find((f) => f.fieldName === "woobject");
+      const eqCode = eqFilter ? extractCode(eqFilter.fieldValue) : "";
+      const wos = eqCode
+        ? await db.workorders.where("equipmentCode").equals(eqCode).toArray()
+        : await db.workorders.toArray();
+
+      const fields = [
+        { name: "wocode", label: "Work Order", order: 1, width: 140, dataType: "VARCHAR" },
+        { name: "wotypedescription", label: "Type", order: 2, width: 150, dataType: "VARCHAR" },
+        { name: "woobject", label: "Equipment", order: 3, width: 140, dataType: "VARCHAR" },
+        { name: "wocompleted", label: "Completed", order: 4, width: 140, dataType: "DATE" },
+      ];
+
+      const rows = wos.map((wo) => ({
+        id: wo.code,
+        cell: [
+          { t: "wocode", val: wo.code, value: wo.code, order: 1 },
+          { t: "wotypedescription", val: wo.typeDesc, value: wo.typeDesc, order: 2 },
+          { t: "woobject", val: wo.equipmentCode, value: wo.equipmentCode, order: 3 },
+          { t: "wocompleted", val: wo.schedEndDate?.slice(0, 10), value: wo.schedEndDate?.slice(0, 10), order: 4 },
+        ],
+      }));
+
+      return createResponse(cfg, buildGridPayload("EUMLWH", rows, fields));
+    }
+
+    // G2. Equipment Events / Work Orders (OSVEVT)
+    if (gridName === "OSVEVT") {
+      const eqParam = reqBody?.gridParam?.["parameter.object"] || reqBody?.["parameter.object"];
+      const eqFilter = filterList?.find((f) => f.fieldName === "equipment");
+      const eqCode = extractCode(eqParam || eqFilter?.fieldValue || "");
+      const wos = eqCode
+        ? await db.workorders.where("equipmentCode").equals(eqCode).toArray()
+        : await db.workorders.toArray();
+
+      const fields = [
+        { name: "eventno", label: "Work Order", order: 1, width: 140, dataType: "VARCHAR" },
+        { name: "equipment", label: "Equipment", order: 2, width: 140, dataType: "VARCHAR" },
+        { name: "description", label: "Description", order: 3, width: 250, dataType: "VARCHAR" },
+        { name: "statusdisplay", label: "Status", order: 4, width: 120, dataType: "VARCHAR" },
+        { name: "datecreated", label: "Relevant Date", order: 5, width: 140, dataType: "DATE" },
+        { name: "wotype", label: "Type", order: 6, width: 100, dataType: "VARCHAR" },
+        { name: "organization", label: "Org", order: 7, width: 100, dataType: "VARCHAR" },
+      ];
+
+      const rows = wos.map((wo) => ({
+        id: wo.code,
+        cell: [
+          { t: "eventno", val: wo.code, value: wo.code, order: 1 },
+          { t: "equipment", val: wo.equipmentCode, value: wo.equipmentCode, order: 2 },
+          { t: "description", val: wo.description, value: wo.description, order: 3 },
+          { t: "statusdisplay", val: wo.statusDesc || "Released", value: wo.statusDesc || "Released", order: 4 },
+          { t: "datecreated", val: wo.schedStartDate ? wo.schedStartDate.slice(0, 10) : "", value: wo.schedStartDate ? wo.schedStartDate.slice(0, 10) : "", order: 5 },
+          { t: "wotype", val: wo.type || "CORR", value: wo.type || "CORR", order: 6 },
+          { t: "organization", val: "*", value: "*", order: 7 },
+        ],
+      }));
+
+      return createResponse(cfg, buildGridPayload("OSVEVT", rows, fields));
+    }
+
+    // G3. Equipment Meters (OSMETE)
+    if (gridName === "OSMETE") {
+      return createResponse(cfg, buildGridPayload("OSMETE", [], [
+        { name: "equipment", label: "Equipment", order: 1, width: 140, dataType: "VARCHAR" },
+        { name: "metercode", label: "Meter", order: 2, width: 140, dataType: "VARCHAR" },
+        { name: "organization", label: "Org", order: 3, width: 100, dataType: "VARCHAR" },
+      ]));
+    }
+
+    // G4. Equipment Types LOV (OCOBJC)
+    if (gridName === "OCOBJC") {
+      const codeFilter = filterList?.find((f) => f.fieldName === "obj_code");
+      const eqCode = codeFilter ? extractCode(codeFilter.fieldValue) : "";
+      let eqType = "A";
+      if (eqCode) {
+        const found = await db.equipment.get(eqCode);
+        if (found) eqType = found.type;
+      }
+      const rows = [
+        {
+          id: eqCode || "AST-01",
+          cell: [
+            { t: "obj_code", val: eqCode, value: eqCode, order: 1 },
+            { t: "obj_obrtype", val: eqType, value: eqType, order: 2 },
+          ],
+        },
+      ];
+      return createResponse(cfg, buildGridPayload("OCOBJC", rows, [
+        { name: "obj_code", label: "Code", order: 1, width: 140, dataType: "VARCHAR" },
+        { name: "obj_obrtype", label: "Type", order: 2, width: 100, dataType: "VARCHAR" },
+      ]));
+    }
+
+    // G5. Parts Associated Grid (BSPARA)
+    if (gridName === "BSPARA") {
+      const rows = [];
+      return createResponse(cfg, buildGridPayload("BSPARA", rows, [
+        { name: "papartcode", label: "Part", order: 1, width: 120, dataType: "VARCHAR" },
+        { name: "description", label: "Description", order: 2, width: 200, dataType: "VARCHAR" },
+        { name: "quantity", label: "Quantity", order: 3, width: 80, dataType: "VARCHAR" },
+        { name: "partuom", label: "UOM", order: 4, width: 60, dataType: "VARCHAR" },
+      ]));
+    }
+
+    // H. Generic / Fallback Grid LOV
     const defaultFallbackCells = [
       { t: "code", val: "MOCK1", value: "MOCK1", order: 1 },
       { t: "description", val: "Option 1", value: "Option 1", order: 2 },
@@ -1030,27 +1761,35 @@ export const mockAdapterHandler = async (cfg) => {
   }
 
   // 9. Autocomplete endpoints
-  if (url.includes("/autocomplete/users")) {
+  if (url.includes("/autocomplete") && url.includes("/users")) {
     return createResponse(cfg, {
       status: "SUCCESS",
-      data: [{ code: "ADMIN", desc: "Administrator" }],
+      data: [{ code: "TECH01", desc: "Technician 01", usercode: "TECH01", description: "Technician 01" }, { code: "ADMIN", desc: "Administrator", usercode: "ADMIN", description: "Administrator" }],
     });
   }
 
   if (url.includes("/autocomplete/eqp")) {
-    const systems = mockDb.getSystems().map((s) => ({
-      code: s.SYSTEMID?.EQUIPMENTCODE,
-      desc: s.SYSTEMID?.DESCRIPTION,
-      org: s.SYSTEMID?.ORGANIZATIONID?.ORGANIZATIONCODE || "*",
-    }));
-    const assets = mockDb.getAssets().map((a) => ({
-      code: a.ASSETID?.EQUIPMENTCODE,
-      desc: a.ASSETID?.DESCRIPTION,
-      org: a.ASSETID?.ORGANIZATIONID?.ORGANIZATIONCODE || "*",
-    }));
+    const allEq = await db.equipment.toArray();
     return createResponse(cfg, {
       status: "SUCCESS",
-      data: [...systems, ...assets],
+      data: allEq.map((e) => ({
+        code: e.code,
+        desc: e.description,
+        org: "*",
+      })),
+    });
+  }
+
+  // 9b. Meters Endpoints
+  if (url.includes("/meters/read") || url.includes("/physicalmeters")) {
+    return createResponse(cfg, {
+      status: "SUCCESS",
+      data: [],
+      Result: {
+        ResultData: {
+          PhysicalMeter: {},
+        },
+      },
     });
   }
 
@@ -1063,36 +1802,35 @@ export const mockAdapterHandler = async (cfg) => {
   }
 
   if (url.includes("/index")) {
+    const wos = await db.workorders.toArray();
+    const eqs = await db.equipment.toArray();
+    const prts = await db.parts.toArray();
+    const lots = await db.partLots.toArray();
+
     const results = [
-      ...mockDb.getWorkOrders().map((wo) => ({
-        code: wo.WORKORDERID?.JOBNUM,
-        description: wo.WORKORDERID?.DESCRIPTION,
+      ...wos.map((wo) => ({
+        code: wo.code,
+        description: wo.description,
         type: "WORKORDER",
-        link: `/workorder/${wo.WORKORDERID?.JOBNUM}`,
+        link: `/workorder/${wo.code}`,
       })),
-      ...mockDb.getAssets().map((ast) => ({
-        code: ast.ASSETID?.EQUIPMENTCODE,
-        description: ast.ASSETID?.DESCRIPTION,
-        type: "ASSET",
-        link: `/asset/${ast.ASSETID?.EQUIPMENTCODE}`,
+      ...eqs.map((e) => ({
+        code: e.code,
+        description: e.description,
+        type: e.type === "A" ? "ASSET" : e.type === "S" ? "SYSTEM" : "POSITION",
+        link: e.type === "A" ? `/asset/${e.code}` : e.type === "S" ? `/system/${e.code}` : `/position/${e.code}`,
       })),
-      ...mockDb.getSystems().map((sys) => ({
-        code: sys.SYSTEMID?.EQUIPMENTCODE,
-        description: sys.SYSTEMID?.DESCRIPTION,
-        type: "SYSTEM",
-        link: `/system/${sys.SYSTEMID?.EQUIPMENTCODE}`,
-      })),
-      ...mockDb.getParts().map((prt) => ({
-        code: prt.PARTID?.PARTCODE,
-        description: prt.PARTID?.DESCRIPTION,
+      ...prts.map((p) => ({
+        code: p.code,
+        description: p.description,
         type: "PART",
-        link: `/part/${prt.PARTID?.PARTCODE}`,
+        link: `/part/${p.code}`,
       })),
-      ...mockDb.getLots().map((lot) => ({
-        code: lot.LOTID?.LOTCODE,
-        description: lot.LOTID?.DESCRIPTION,
+      ...lots.map((l) => ({
+        code: l.lotCode,
+        description: l.description,
         type: "LOT",
-        link: `/lot/${lot.LOTID?.LOTCODE}`,
+        link: `/lot/${l.lotCode}`,
       })),
     ];
 
@@ -1102,27 +1840,43 @@ export const mockAdapterHandler = async (cfg) => {
     });
   }
 
-  // 11. Miscellaneous equipment / work orders info
-  if (url.includes("/equipment/") || url.includes("/workordersmisc/")) {
+  // 11. Extra Equipment endpoints
+  if (url.includes("/equipment/type")) {
+    const code = extractCode(url.split("/").pop());
+    const eq = await db.equipment.get(code);
+    const eqType = eq ? eq.type : "A";
     return createResponse(cfg, {
       status: "SUCCESS",
-      data: [],
-      Result: { ResultData: {} },
+      data: eqType,
     });
   }
 
-  // 12. Comments & Documents
+  // 12. UNIFIED COMMENTS & DOCUMENTS TABLE (Polymorphic join: entityCode, entityType)
   // GET /comments?entityCode=:code&entityKeyCode=:key (or entityType)
   if (method === "get" && url.includes("/comments")) {
     const urlObj = new URL(url, "http://localhost");
-    const entityCode = urlObj.searchParams.get("entityCode") || urlObj.searchParams.get("entityType") || "EVNT";
-    const entityKeyCode = urlObj.searchParams.get("entityKeyCode") || urlObj.searchParams.get("entityCode") || "";
-    const comments = mockDb.getComments(entityCode, entityKeyCode);
+    const entityType = urlObj.searchParams.get("entityCode") || urlObj.searchParams.get("entityType") || "EVNT";
+    const entityCode = extractCode(urlObj.searchParams.get("entityKeyCode") || urlObj.searchParams.get("entityCode") || "");
+
+    const comments = await db.comments
+      .where({ entityCode, entityType })
+      .reverse()
+      .sortBy("creationDate");
+
+    const formattedComments = comments.map((c, idx) => ({
+      ...c,
+      pk: String(c.id || idx),
+      creationDate: c.creationDate || new Date().toISOString(),
+      userDate: c.creationDate || c.userDate || new Date().toISOString(),
+      userDesc: c.userDesc || c.userCode || "TECH01",
+      creationUserDesc: c.creationUserDesc || c.creationUserCode || "TECH01",
+    }));
+
     return createResponse(cfg, {
       status: "SUCCESS",
-      data: comments,
+      data: formattedComments,
       Result: {
-        ResultData: comments,
+        ResultData: formattedComments,
       },
     });
   }
@@ -1130,12 +1884,32 @@ export const mockAdapterHandler = async (cfg) => {
   // POST create comment: /comments/ or /comments
   if (method === "post" && (url.includes("/comments/") || url.endsWith("/comments"))) {
     const comment = reqBody || {};
-    const created = mockDb.saveComment(comment);
+    const entityType = comment.entityCode || comment.entityType || "EVNT";
+    const entityCode = extractCode(comment.entityKeyCode || comment.entityKey || "");
+    const now = new Date();
+    const userCode = comment.userCode || "TECH01";
+
+    const newComment = {
+      entityCode,
+      entityType,
+      text: comment.text || "",
+      creationDate: now.toISOString(),
+      userDate: now.toLocaleString(),
+      userCode,
+      userDesc: userCode,
+      creationUserCode: userCode,
+      creationUserDesc: userCode,
+    };
+
+    const id = await db.comments.put(newComment);
+    newComment.id = id;
+    newComment.pk = String(id);
+
     return createResponse(cfg, {
       status: "SUCCESS",
-      data: created,
+      data: newComment,
       Result: {
-        ResultData: created,
+        ResultData: newComment,
         InfoAlert: { Message: "Comment created successfully." },
       },
     });
@@ -1144,12 +1918,15 @@ export const mockAdapterHandler = async (cfg) => {
   // PUT update comment: /comments/ or /comments
   if (method === "put" && (url.includes("/comments/") || url.endsWith("/comments"))) {
     const comment = reqBody || {};
-    const updated = mockDb.saveComment(comment);
+    const id = comment.id ? Number(comment.id) : undefined;
+    if (id) {
+      await db.comments.update(id, { text: comment.text });
+    }
     return createResponse(cfg, {
       status: "SUCCESS",
-      data: updated,
+      data: comment,
       Result: {
-        ResultData: updated,
+        ResultData: comment,
         InfoAlert: { Message: "Comment updated successfully." },
       },
     });
@@ -1189,4 +1966,3 @@ export const setupMockAdapter = (axiosInstance) => {
     return config;
   });
 };
-

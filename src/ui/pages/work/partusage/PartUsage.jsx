@@ -24,7 +24,7 @@ function PartUsage(props) {
     }, [props.workOrderCode])
 
     let formatQuantity = (data) => {
-        data.forEach(part => {
+        (data || []).forEach(part => {
             part.transType =
                 part.plannedQty > 0 ? "Planned" :
                 part.usedQty > 0 ? "Issue" :

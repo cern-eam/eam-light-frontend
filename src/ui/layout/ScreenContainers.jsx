@@ -26,7 +26,7 @@ const ScreenContainers = ({ register, screenLayout, layoutPropertiesMap = {}, ct
                 ? layoutPropertiesMap[field.elementId].extraProps(ctx)
                 : layoutPropertiesMap[field.elementId]?.extraProps ?? {};
 
-           return <EAMInput {...register(field.elementId)} {...extraProps}/>
+           return <EAMInput key={field.elementId} {...register(field.elementId)} {...extraProps}/>
         })}
 
         {footer}

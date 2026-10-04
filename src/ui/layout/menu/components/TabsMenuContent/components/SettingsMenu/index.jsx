@@ -18,7 +18,7 @@ const SettingsMenu = ({ classes }) => {
 
     return (
         <SubMenu id="settings" header={<span>SETTINGS</span>}>
-            {(applicationData.EL_ADMUG && applicationData.EL_ADMUG.split(",").includes(eamAccount.userGroup) 
+            {((applicationData.EL_ADMUG && applicationData.EL_ADMUG.split(",").includes(eamAccount.userGroup)) 
              || eamAccount.userDefinedFields.udfchkbox02 === 'true'
                 ) && (
                     <MenuItem
@@ -29,6 +29,20 @@ const SettingsMenu = ({ classes }) => {
                         }
                     />
                 )}
+            <MenuItem
+                label="Reset Database (IndexedDB)"
+                icon={<DatabaseRefresh className={classes.menuIcon} />}
+                onClick={async () => {
+                    try {
+                        const { seedInitialData } = await import("@/db/eamDatabase");
+                        await seedInitialData(true);
+                        showNotification("IndexedDB reset and re-seeded successfully!");
+                        setTimeout(() => window.location.reload(), 800);
+                    } catch (err) {
+                        showError("Failed to reset database: " + err.message);
+                    }
+                }}
+            />
             <MenuItemInputHistory />
         </SubMenu>
     );

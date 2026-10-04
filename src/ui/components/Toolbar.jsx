@@ -403,16 +403,17 @@ class Toolbar extends React.Component {
         break;
     }
     const buttonDefinitions = this.getButtonDefinitions();
-    const buttonsRender = buttonKeys
-      .map((buttonKey) => buttonDefinitions[buttonKey])
-      .map((buttonDefinition) =>
-        this.generateContent({
-          renderOption: renderOption,
-          buttonDefinition: buttonDefinition,
-          entityType: entityType,
-          entity: entity,
-        })
-      );
+    const buttonsRender = buttonKeys.map((buttonKey) => {
+      const buttonDefinition = buttonDefinitions[buttonKey];
+      if (!buttonDefinition) return null;
+      const element = this.generateContent({
+        renderOption: renderOption,
+        buttonDefinition: buttonDefinition,
+        entityType: entityType,
+        entity: entity,
+      });
+      return element ? React.cloneElement(element, { key: buttonKey }) : null;
+    });
     return (
       <>
         {buttonsRender}

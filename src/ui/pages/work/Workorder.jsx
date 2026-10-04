@@ -487,6 +487,7 @@ const Workorder = () => {
             entityCode="EVNT"
             entityKeyCode={id?.code}
             userCode={userData.eamAccount.userCode}
+            userDesc={userData.eamAccount.userName || userData.eamAccount.userCode}
             handleError={handleError}
             allowHtml={true}
             //entityOrganization={workorder.organization}

@@ -203,7 +203,7 @@ const useEntity = (params) => {
         //Render as read-only depending on screen rights, department security or custom handler
         setReadOnly(
           !screenPermissions.updateAllowed ||
-            isDepartmentReadOnly(readEntity.DEPARTMENTID.DEPARTMENTCODE, userData) ||
+            (readEntity?.DEPARTMENTID?.DEPARTMENTCODE && isDepartmentReadOnly(readEntity.DEPARTMENTID.DEPARTMENTCODE, userData)) ||
             isReadOnlyCustomHandler?.(readEntity)
         );
         // Invoke entity specific logic

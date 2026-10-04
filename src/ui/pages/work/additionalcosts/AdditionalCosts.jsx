@@ -18,10 +18,10 @@ const AdditionalCosts = (props) => {
     }, [props.workOrderNumber]);
 
     const adjustData = (data) => {
-        return data.map((additionalCost) => ({
+        return (data || []).map((additionalCost) => ({
             ...additionalCost,
-            activitytrade_display: additionalCost.activitytrade_display.split(' ')[0],
-            additionalcostsdate: additionalCost.additionalcostsdate.split(' ')[0],
+            activitytrade_display: additionalCost.activitytrade_display?.split(' ')[0] || '',
+            additionalcostsdate: additionalCost.additionalcostsdate?.split(' ')[0] || '',
         }));
     };
 

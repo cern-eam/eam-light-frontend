@@ -12,7 +12,7 @@ const Watchlist = (props) => {
     const [options, setOptions] = useState([]);
 
     const filterOptions = (candidates) =>
-        candidates.filter((candidate) => !watchers?.some((watcherCode) => watcherCode.userCode === candidate.usercode));
+        (candidates || []).filter((candidate) => !(watchers || []).some((watcherCode) => watcherCode?.userCode === candidate?.usercode));
 
     const getAutocompleteOptions = async (hint) => {
         try {

@@ -193,13 +193,14 @@ export const formatDate = (date) => format(date, "dd-MMM-yyyy");
 export const formatDateTime = (date) => format(date, "dd-MMM-yyyy HH:mm");
 
 const format = (date, dateFormat) => {
+  if (!date) return "";
   try {
-    return formatfns(parseISO(date), dateFormat);
+    const parsed = typeof date === "string" ? parseISO(date) : new Date(date);
+    if (!parsed || isNaN(parsed.getTime())) return "";
+    return formatfns(parsed, dateFormat);
   } catch (error) {
-    console.error("formatDate error" + error);
+    return "";
   }
-
-  return null;
 };
 
 export const getElementInfoFromCustomFields = (layoutKey, customFields) => {

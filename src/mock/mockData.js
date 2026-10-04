@@ -251,7 +251,17 @@ export const mockScreenLayoutWSJOBS = {
         clo_block_2: { attribute: "O", text: "Closing Codes" },
       },
     },
-    ACT: { tabAvailable: true, alwaysDisplayed: false, tabDescription: "Activities", fields: {} },
+    ACT: {
+      tabAvailable: true,
+      alwaysDisplayed: false,
+      tabDescription: "Activities",
+      fields: {
+        task: { attribute: "O", text: "Task" },
+        matlcode: { attribute: "O", text: "Material List" },
+        personsreq: { attribute: "O", text: "Persons Required" },
+        actstartdate: { attribute: "O", text: "Start Date" },
+      },
+    },
     DOC: { tabAvailable: true, alwaysDisplayed: false, tabDescription: "Documents", fields: {} },
     PAR: {
       tabAvailable: true,
@@ -277,7 +287,16 @@ export const mockScreenLayoutWSJOBS = {
       },
     },
     ACO: { tabAvailable: true, alwaysDisplayed: false, tabDescription: "Additional Costs", fields: {} },
-    BOO: { tabAvailable: true, alwaysDisplayed: false, tabDescription: "Book Labor", fields: {} },
+    BOO: {
+      tabAvailable: true,
+      alwaysDisplayed: false,
+      tabDescription: "Book Labor",
+      fields: {
+        employee: { attribute: "O", text: "Employee" },
+        datework: { attribute: "O", text: "Date Worked" },
+        hrswork: { attribute: "O", text: "Hours Worked" },
+      },
+    },
     REA: { tabAvailable: true, alwaysDisplayed: false, tabDescription: "Meter Readings", fields: {} },
     CWO: { tabAvailable: true, alwaysDisplayed: false, tabDescription: "Child Work Orders", fields: {} },
     MEC: { tabAvailable: true, alwaysDisplayed: false, tabDescription: "Equipment", fields: {} },

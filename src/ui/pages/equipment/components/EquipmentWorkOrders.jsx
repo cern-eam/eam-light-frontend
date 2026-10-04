@@ -125,7 +125,7 @@ function EquipmentWorkOrders(props) {
 
                   };
 
-                const formatResponse = response => response.body.data.map(element => ({
+                const formatResponse = response => (response?.body?.data || []).map(element => ({
                     ...element,
                     createdDate: `${getDateLabel(element)}`,
                     objectUrl: `equipment/${encodeURIComponent(element?.object || '')}`
@@ -141,13 +141,29 @@ function EquipmentWorkOrders(props) {
 
     return (
         <div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
-            <EISTableFilter
-                filters={WO_FILTERS}
-                handleFilterChange={(newFilter) =>
-                    setWorkOrderFilter(newFilter)
-                }
-                activeFilter={workOrderFilter}
-                />
+            {WO_FILTERS && Object.keys(WO_FILTERS).length > 0 && (
+                <div style={{display: 'flex', alignItems: 'center', margin: '8px 0'}}>
+                    <span style={{fontSize: '0.8125rem', color: '#666', marginRight: '8px'}}>Filter:</span>
+                    <div style={{display: 'grid', fontSize: '0.8125rem', gridAutoFlow: 'column', gridColumnGap: '0.5rem'}}>
+                        {Object.keys(WO_FILTERS).map((key) => (
+                            <span
+                                key={`wo-filter-${key}`}
+                                onClick={() => setWorkOrderFilter(key)}
+                                style={{
+                                    cursor: 'pointer',
+                                    padding: '2px 8px',
+                                    borderRadius: '12px',
+                                    fontSize: '0.75rem',
+                                    backgroundColor: workOrderFilter === key ? '#1976d2' : '#e0e0e0',
+                                    color: workOrderFilter === key ? '#fff' : '#000',
+                                }}
+                            >
+                                {key}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {workOrderFilter === WO_FILTER_TYPES.MTF ?
                 <EquipmentMTFWorkOrders equipmentcode={equipmentcode} />
