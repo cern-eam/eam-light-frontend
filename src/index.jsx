@@ -78,14 +78,18 @@ window.onerror = (event, source, lineno, colno, err) => {
   document.body.appendChild(overlay);
 };
 
+import AccessGuard from "./ui/components/AccessGuard";
+
 ReactDOMClient.createRoot(document.getElementById("root")).render(
   <AuthWrapper>
     <StylesProvider jss={jss}>
       <LocalizationProvider dateAdapter={AdapterDateFns} locale={enGB}>
-        <div style={{ width: "100%", height: "100%" }}>
-          <Eamlight />
-          <SnackbarLight />
-        </div>
+        <AccessGuard>
+          <div style={{ width: "100%", height: "100%" }}>
+            <Eamlight />
+            <SnackbarLight />
+          </div>
+        </AccessGuard>
       </LocalizationProvider>
     </StylesProvider>
   </AuthWrapper>
