@@ -7,9 +7,24 @@ export class EamDatabase extends Dexie {
       workorders: "code, equipmentCode, statusCode, department, type",
       activities: "[workorder+activityCode], workorder",
       checklists: "++id, [workorder+activityCode], workorder",
-      equipment: "code, type, parentCode, departmentCode, statusCode", // type: 'A' (Asset), 'P' (Position), 'S' (System)
+      equipment: "code, type, parentCode, parentAssetCode, parentPositionCode, parentSystemCode, locationCode, departmentCode, statusCode",
       parts: "code, trackingType, uom",
       partLots: "[partCode+lotCode], partCode",
+      partAssociations: "[equipmentCode+partCode], equipmentCode, partCode",
+      comments: "++id, [entityCode+entityType], entityCode, entityType, creationDate",
+      sequences: "entityType",
+    });
+
+    this.version(2).stores({
+      workorders: "code, equipmentCode, statusCode, department, type",
+      activities: "[workorder+activityCode], workorder",
+      checklists: "++id, [workorder+activityCode], workorder",
+      equipment: "code, type, parentCode, parentAssetCode, parentPositionCode, parentSystemCode, locationCode, departmentCode, statusCode",
+      parts: "code, trackingType, uom",
+      partLots: "[partCode+lotCode], partCode",
+      partAssociations: "[equipmentCode+partCode], equipmentCode, partCode",
+      nonconformities: "code, equipmentCode, workOrderCode, locationCode, statusCode, severity",
+      ncrObservations: "++id, ncrCode, observerCode, observationDate",
       comments: "++id, [entityCode+entityType], entityCode, entityType, creationDate",
       sequences: "entityType",
     });
@@ -57,6 +72,12 @@ export async function getNextSequence(entityType) {
       case "lots":
       case "LOT":
         return `LOT-${nextVal}`;
+      case "nonconformities":
+      case "ncrs":
+      case "NCR":
+      case "NOCF":
+      case "NCNC":
+        return `NCR-${nextVal}`;
       default:
         return `${entityType.toUpperCase()}-${nextVal}`;
     }
@@ -68,7 +89,8 @@ export async function getNextSequence(entityType) {
  */
 export async function seedInitialData(force = false) {
   const count = await db.equipment.count();
-  if (count > 0 && !force) {
+  const ncrCount = await db.nonconformities.count();
+  if (count > 0 && ncrCount > 0 && !force) {
     return;
   }
 
@@ -82,6 +104,9 @@ export async function seedInitialData(force = false) {
         db.equipment,
         db.parts,
         db.partLots,
+        db.partAssociations,
+        db.nonconformities,
+        db.ncrObservations,
         db.comments,
         db.sequences,
       ],
@@ -92,6 +117,9 @@ export async function seedInitialData(force = false) {
         await db.equipment.clear();
         await db.parts.clear();
         await db.partLots.clear();
+        await db.partAssociations.clear();
+        await db.nonconformities.clear();
+        await db.ncrObservations.clear();
         await db.comments.clear();
         await db.sequences.clear();
       }
@@ -111,13 +139,22 @@ export async function seedInitialData(force = false) {
 
   // 2. Equipment
   // 1 System: SYS-01 ("HVAC Primary Loop")
-  // 2 Assets: AST-01 ("Chiller Pump A"), AST-02 ("Air Handler Unit 1") parented to SYS-01
+  // Equipment seed:
+  // SYS-01: Root system
+  // POS-01: Position parented to SYS-01
+  // AST-01: Asset parented to POS-01 (position) and SYS-01 (system)
+  // AST-02: Child asset parented to AST-01 (parentAssetCode), POS-01 (position), SYS-01 (system)
   await db.equipment.bulkPut([
     {
       code: "SYS-01",
       description: "HVAC Primary Loop",
       type: "S",
       parentCode: null,
+      parentAssetCode: null,
+      parentPositionCode: null,
+      parentSystemCode: null,
+      locationCode: "LOC-01",
+      costRollUp: true,
       departmentCode: "*",
       statusCode: "I",
       statusDesc: "In Service",
@@ -143,10 +180,51 @@ export async function seedInitialData(force = false) {
       },
     },
     {
+      code: "POS-01",
+      description: "Cooling Circuit Pos 01",
+      type: "P",
+      parentCode: "SYS-01",
+      parentAssetCode: null,
+      parentPositionCode: null,
+      parentSystemCode: "SYS-01",
+      locationCode: "LOC-01",
+      costRollUp: true,
+      departmentCode: "*",
+      statusCode: "I",
+      statusDesc: "In Service",
+      categoryCode: "POS",
+      classCode: "STANDARD",
+      criticalityCode: "M",
+      commissionDate: now.toISOString(),
+      raw: {
+        POSITIONID: {
+          EQUIPMENTCODE: "POS-01",
+          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+          DESCRIPTION: "Cooling Circuit Pos 01",
+        },
+        STATUS: { STATUSCODE: "I", DESCRIPTION: "In Service" },
+        DEPARTMENTID: { DEPARTMENTCODE: "*" },
+        CATEGORYID: { CATEGORYCODE: "POS" },
+        CLASSID: { CLASSCODE: "STANDARD" },
+        CRITICALITYID: { CRITICALITYCODE: "M" },
+        COMMISSIONDATE: now.toISOString(),
+        systemTypeCode: "P",
+        PositionParentHierarchy: {
+          primarysystem: "SYS-01",
+        },
+        USERDEFINEDAREA: { CUSTOMFIELD: [] },
+      },
+    },
+    {
       code: "AST-01",
       description: "Chiller Pump A",
       type: "A",
-      parentCode: "SYS-01",
+      parentCode: "POS-01",
+      parentAssetCode: null,
+      parentPositionCode: "POS-01",
+      parentSystemCode: "SYS-01",
+      locationCode: "LOC-01",
+      costRollUp: true,
       departmentCode: "*",
       statusCode: "I",
       statusDesc: "In Service",
@@ -168,6 +246,7 @@ export async function seedInitialData(force = false) {
         COMMISSIONDATE: now.toISOString(),
         systemTypeCode: "A",
         AssetParentHierarchy: {
+          position: "POS-01",
           primarysystem: "SYS-01",
         },
         USERDEFINEDAREA: { CUSTOMFIELD: [] },
@@ -177,7 +256,12 @@ export async function seedInitialData(force = false) {
       code: "AST-02",
       description: "Air Handler Unit 1",
       type: "A",
-      parentCode: "SYS-01",
+      parentCode: "AST-01",
+      parentAssetCode: "AST-01",
+      parentPositionCode: "POS-01",
+      parentSystemCode: "SYS-01",
+      locationCode: "LOC-01",
+      costRollUp: true,
       departmentCode: "*",
       statusCode: "I",
       statusDesc: "In Service",
@@ -199,37 +283,10 @@ export async function seedInitialData(force = false) {
         COMMISSIONDATE: now.toISOString(),
         systemTypeCode: "A",
         AssetParentHierarchy: {
+          parentasset: "AST-01",
+          position: "POS-01",
           primarysystem: "SYS-01",
         },
-        USERDEFINEDAREA: { CUSTOMFIELD: [] },
-      },
-    },
-    {
-      code: "POS-01",
-      description: "Cooling Circuit Pos 01",
-      type: "P",
-      parentCode: "SYS-01",
-      departmentCode: "*",
-      statusCode: "I",
-      statusDesc: "In Service",
-      categoryCode: "POS",
-      classCode: "STANDARD",
-      criticalityCode: "M",
-      commissionDate: now.toISOString(),
-      raw: {
-        POSITIONID: {
-          EQUIPMENTCODE: "POS-01",
-          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
-          DESCRIPTION: "Cooling Circuit Pos 01",
-        },
-        STATUS: { STATUSCODE: "I", DESCRIPTION: "In Service" },
-        DEPARTMENTID: { DEPARTMENTCODE: "*" },
-        CATEGORYID: { CATEGORYCODE: "POS" },
-        CLASSID: { CLASSCODE: "STANDARD" },
-        CRITICALITYID: { CRITICALITYCODE: "M" },
-        COMMISSIONDATE: now.toISOString(),
-        systemTypeCode: "P",
-        PositionParentHierarchy: {},
         USERDEFINEDAREA: { CUSTOMFIELD: [] },
       },
     },
@@ -462,7 +519,27 @@ export async function seedInitialData(force = false) {
     },
   ]);
 
-  // 7. Comments
+  // 6b. Part Associations (Equipment <-> Part)
+  await db.partAssociations.bulkPut([
+    {
+      equipmentCode: "AST-01",
+      partCode: "PRT-100",
+      description: "Pump Mechanical Seal Ring",
+      quantity: 2,
+      uom: "EA",
+      associationEntity: "A",
+    },
+    {
+      equipmentCode: "AST-02",
+      partCode: "PRT-100",
+      description: "Pump Mechanical Seal Ring",
+      quantity: 1,
+      uom: "EA",
+      associationEntity: "A",
+    },
+  ]);
+
+  // 7. Comments (Polymorphic: EVNT, OBJ, PART)
   await db.comments.bulkPut([
     {
       entityCode: "WO-1001",
@@ -485,6 +562,112 @@ export async function seedInitialData(force = false) {
       userDesc: "TECH01",
       creationUserCode: "TECH01",
       creationUserDesc: "TECH01",
+    },
+    {
+      entityCode: "PRT-100",
+      entityType: "PART",
+      text: "OEM mechanical seals certified for high pressure operation up to 10 Bar.",
+      creationDate: new Date(Date.now() - 172800000).toISOString(),
+      userDate: new Date(Date.now() - 172800000).toLocaleString(),
+      userCode: "TECH01",
+      userDesc: "TECH01",
+      creationUserCode: "TECH01",
+      creationUserDesc: "TECH01",
+    },
+    {
+      entityCode: "NCR-1001",
+      entityType: "NOCF",
+      text: "Vibration measurements confirmed exceedance of ISO 10816-3 Category II limits. Work order dispatched.",
+      creationDate: new Date(Date.now() - 7200000).toISOString(),
+      userDate: new Date(Date.now() - 7200000).toLocaleString(),
+      userCode: "TECH01",
+      userDesc: "TECH01",
+      creationUserCode: "TECH01",
+      creationUserDesc: "TECH01",
+    },
+    {
+      entityCode: "NCR-1001",
+      entityType: "NCNC",
+      text: "Vibration measurements confirmed exceedance of ISO 10816-3 Category II limits. Work order dispatched.",
+      creationDate: new Date(Date.now() - 7200000).toISOString(),
+      userDate: new Date(Date.now() - 7200000).toLocaleString(),
+      userCode: "TECH01",
+      userDesc: "TECH01",
+      creationUserCode: "TECH01",
+      creationUserDesc: "TECH01",
+    },
+  ]);
+
+  // 8. Nonconformities (NCRs)
+  await db.nonconformities.bulkPut([
+    {
+      code: "NCR-1001",
+      description: "Excessive vibration and oil leak on Primary Pump",
+      equipmentCode: "AST-01",
+      equipmentDesc: "Chiller Pump A",
+      workOrderCode: "WO-1001",
+      locationCode: "LOC-01",
+      departmentCode: "*",
+      statusCode: "O",
+      statusDesc: "Open",
+      severity: "MAJ",
+      severityDesc: "Major",
+      importance: "H",
+      importanceDesc: "High",
+      type: "MECH",
+      note: "Observed elevated vibration levels exceeding safety threshold during peak load.",
+      creationDate: new Date(Date.now() - 172800000).toISOString(),
+      raw: {
+        NONCONFORMITYID: {
+          STANDARDENTITYCODE: "NCR-1001",
+          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+        },
+        DESCRIPTION: "Excessive vibration and oil leak on Primary Pump",
+        EQUIPMENTID: {
+          EQUIPMENTCODE: "AST-01",
+          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+        },
+        STATUS: { STATUSCODE: "O", DESCRIPTION: "Open" },
+        SEVERITY: { USERCODE: "MAJ", DESCRIPTION: "Major" },
+        IMPORTANCE: { USERCODE: "H", DESCRIPTION: "High" },
+        LOCATIONID: { LOCATIONCODE: "LOC-01" },
+        DEPARTMENTID: { DEPARTMENTCODE: "*" },
+        TYPE: { USERCODE: "MECH", DESCRIPTION: "Mechanical" },
+        NOTE: "Observed elevated vibration levels exceeding safety threshold during peak load.",
+        USERDEFINEDAREA: { CUSTOMFIELD: [] },
+      },
+    },
+  ]);
+
+  // 9. NCR Observations
+  await db.ncrObservations.bulkPut([
+    {
+      id: 1,
+      ncrCode: "NCR-1001",
+      observerCode: "TECH01",
+      observationDate: new Date(Date.now() - 86400000).toISOString(),
+      note: "Bearing temperature 85°C",
+      importance: "H",
+      importanceDesc: "High",
+      severity: "HIGH",
+      severityDesc: "High",
+      status: "U",
+      statusDesc: "Unfinished",
+      workOrderNum: "WO-1001",
+    },
+    {
+      id: 2,
+      ncrCode: "NCR-1001",
+      observerCode: "TECH01",
+      observationDate: new Date(Date.now() - 43200000).toISOString(),
+      note: "Vibration analysis scheduled",
+      importance: "M",
+      importanceDesc: "Medium",
+      severity: "MED",
+      severityDesc: "Medium",
+      status: "U",
+      statusDesc: "Unfinished",
+      workOrderNum: "WO-1001",
     },
   ]);
 }

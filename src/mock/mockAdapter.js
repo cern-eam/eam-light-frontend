@@ -8,6 +8,7 @@ import {
   mockScreenLayoutOSOBJP,
   mockScreenLayoutSSPART,
   mockScreenLayoutSSLOT,
+  mockScreenLayoutOSNCHD,
 } from "./mockData";
 import { db, extractCode, getNextSequence, seedInitialData } from "../db/eamDatabase";
 
@@ -142,6 +143,10 @@ export const mockAdapterHandler = async (cfg) => {
       layout = mockScreenLayoutSSPART;
     } else if (url.includes("SSLOT")) {
       layout = mockScreenLayoutSSLOT;
+    } else if (url.includes("OSNCHD")) {
+      layout = mockScreenLayoutOSNCHD;
+    } else if (url.includes("OSJOBS")) {
+      layout = mockScreenLayoutWSJOBS;
     } else {
       // WSJOBS (Work orders)
       layout = {
@@ -563,6 +568,158 @@ export const mockAdapterHandler = async (cfg) => {
     });
   }
 
+  // 4c2. WORK ORDER ACTIVITY INIT / DEFAULTS
+  if (method === "post" && url.includes("/workorders/activitydefaults")) {
+    const woCode = extractCode(reqBody?.WORKORDERID?.JOBNUM || "WO-1001");
+    const existingActs = await db.activities.where("workorder").equals(woCode).toArray();
+    let nextActCode = 10;
+    if (existingActs.length > 0) {
+      const maxAct = Math.max(...existingActs.map((a) => parseInt(a.activityCode, 10) || 0));
+      nextActCode = maxAct + 10;
+    }
+    const now = new Date();
+    return createResponse(cfg, {
+      Result: {
+        ResultData: {
+          ActivityDefault: {
+            ACTIVITYID: {
+              ACTIVITYCODE: { value: String(nextActCode) },
+              ACTIVITYNOTE: "",
+              WORKORDERID: {
+                JOBNUM: woCode,
+                ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+              },
+            },
+            PERSONS: 1,
+            ESTIMATEDHOURS: 1,
+            HOURSREMAINING: 1,
+            STARTDATE: now.toISOString(),
+            ENDDATE: new Date(Date.now() + 86400000).toISOString(),
+            TRADEID: { TRADECODE: "MECH" },
+            TASKSID: { TASKCODE: "" },
+          },
+        },
+      },
+    });
+  }
+
+  // 4c3. WORK ORDER ACTIVITY CREATE / UPDATE / DELETE
+  const actMatch = url.match(/(?:\/proxy)?\/workorders\/([^/?#]+)\/activities(?:\/([^/?#]+))?/);
+  if (url.includes("/workorders/activities") || (actMatch && (method === "post" || method === "put" || method === "delete" || (method === "get" && actMatch[2])))) {
+    if (method === "post") {
+      const act = reqBody?.Activity || reqBody || {};
+      const woCode = extractCode(act.WORKORDERID?.JOBNUM || act.workorder || actMatch?.[1] || "WO-1001");
+      const actCode = String(act.ACTIVITYID?.ACTIVITYCODE?.value || act.activityCode || "10");
+      const note = act.ACTIVITYID?.ACTIVITYNOTE || act.activityNote || "";
+      const now = new Date();
+
+      const newAct = {
+        workorder: woCode,
+        activityCode: actCode,
+        activityNote: note,
+        peopleRequired: Number(act.PERSONS || act.peopleRequired || 1),
+        estimatedHours: Number(act.ESTIMATEDHOURS || act.estimatedHours || 1),
+        hoursRemaining: Number(act.HOURSREMAINING || act.hoursRemaining || 1),
+        startDate: act.STARTDATE || now.toISOString(),
+        endDate: act.ENDDATE || new Date(Date.now() + 86400000).toISOString(),
+        tradeCode: act.TRADEID?.TRADECODE || act.tradeCode || "MECH",
+        taskCode: act.TASKSID?.TASKCODE || act.taskCode || "TSK-01",
+        taskDesc: act.TASKSID?.DESCRIPTION || act.taskDesc || note,
+      };
+
+      await db.activities.put(newAct);
+
+      // Instantiate default inspection checklist item for new activity
+      await db.checklists.put({
+        workorder: woCode,
+        activityCode: actCode,
+        checklistCode: `${woCode}-${actCode}-CHK-01`,
+        checkListCode: `${woCode}-${actCode}-CHK-01`,
+        sequence: 1,
+        desc: `Inspection for Activity ${actCode}`,
+        type: "01",
+        result: null,
+        completed: false,
+        notes: "",
+        required: true,
+        equipmentCode: "",
+        equipmentDesc: "",
+        possibleFindings: [],
+      });
+
+      return createResponse(cfg, {
+        Result: {
+          ResultData: {
+            JOBNUM: woCode,
+            Activity: act,
+          },
+          InfoAlert: { Message: `Activity ${actCode} created successfully.` },
+        },
+      });
+    }
+
+    if (method === "put") {
+      const act = reqBody?.Activity || reqBody || {};
+      const woCode = extractCode(act.WORKORDERID?.JOBNUM || act.workorder || actMatch?.[1] || "WO-1001");
+      const actCode = String(act.ACTIVITYID?.ACTIVITYCODE?.value || act.activityCode || "10");
+      const existing = await db.activities.get([woCode, actCode]);
+
+      const updated = {
+        ...(existing || {}),
+        workorder: woCode,
+        activityCode: actCode,
+        activityNote: act.ACTIVITYID?.ACTIVITYNOTE || act.activityNote || existing?.activityNote || "",
+        peopleRequired: Number(act.PERSONS || act.peopleRequired || existing?.peopleRequired || 1),
+        estimatedHours: Number(act.ESTIMATEDHOURS || act.estimatedHours || existing?.estimatedHours || 1),
+        hoursRemaining: Number(act.HOURSREMAINING || act.hoursRemaining || existing?.hoursRemaining || 1),
+        tradeCode: act.TRADEID?.TRADECODE || act.tradeCode || existing?.tradeCode || "MECH",
+      };
+
+      await db.activities.put(updated);
+
+      return createResponse(cfg, {
+        Result: {
+          ResultData: {
+            JOBNUM: woCode,
+            Activity: act,
+          },
+          InfoAlert: { Message: `Activity ${actCode} updated successfully.` },
+        },
+      });
+    }
+
+    if (method === "delete") {
+      let woCode = "";
+      let actCode = "";
+      if (actMatch) {
+        woCode = extractCode(actMatch[1]);
+        actCode = extractCode(actMatch[2] || "");
+      }
+      if (!actCode && url.includes("/activities/")) {
+        const parts = url.split("/activities/")[1].split("?")[0].split("/");
+        actCode = extractCode(parts[0]);
+      }
+
+      if (woCode && actCode) {
+        await db.transaction("rw", [db.activities, db.checklists], async () => {
+          await db.activities.delete([woCode, actCode]);
+          // Cascade delete related checklist items
+          const chks = await db.checklists.where("workorder").equals(woCode).toArray();
+          const toDelete = chks.filter((c) => String(c.activityCode) === String(actCode));
+          for (const item of toDelete) {
+            if (item.id) await db.checklists.delete(item.id);
+          }
+        });
+      }
+
+      return createResponse(cfg, {
+        Result: {
+          InfoAlert: { Message: `Activity ${actCode} and checklists deleted successfully.` },
+        },
+      });
+    }
+  }
+
   // 4d. BOOKING LABOUR
   if (url.includes("/bookinglabour") || url.includes("/workorders/booklabor")) {
     return createResponse(cfg, {
@@ -618,11 +775,28 @@ export const mockAdapterHandler = async (cfg) => {
 
   // 4g. NCRs for equipment
   if (url.includes("/ncrs/equipment")) {
+    const assetCode = extractCode(url.split("/ncrs/equipment/")[1] || "");
+    let ncrs = [];
+    if (assetCode) {
+      ncrs = await db.nonconformities.where("equipmentCode").equals(assetCode).toArray();
+    } else {
+      ncrs = await db.nonconformities.toArray();
+    }
+
+    const formatted = ncrs.map((n) => ({
+      nonconformity: n.code,
+      description: n.description,
+      status: n.statusCode,
+      status_display: n.statusDesc || (n.statusCode === "O" ? "Open" : "Closed"),
+      severity: n.severity,
+      severity_display: n.severityDesc || (n.severity === "MAJ" ? "Major" : "Minor"),
+    }));
+
     return createResponse(cfg, {
       status: "SUCCESS",
-      data: [],
+      data: formatted,
       Result: {
-        ResultData: [],
+        ResultData: formatted,
       },
     });
   }
@@ -1073,25 +1247,87 @@ export const mockAdapterHandler = async (cfg) => {
   }
 
   // 6c. EQUIPMENT TREE & CHILDREN
-  // Intercept /equipment/tree?equipment=:code or /equipment/children/:code
-  if (url.includes("/equipment/tree") || url.includes("/equipment/children")) {
+  // Intercept /eqstructure/tree, /equipment/tree, /equipment/children/:code
+  if (url.includes("/eqstructure/tree") || url.includes("/equipment/tree") || url.includes("/equipment/children")) {
     let eqCode = "";
     const match = url.match(/\/equipment\/children\/([^/?#]+)/);
     if (match) {
       eqCode = extractCode(match[1]);
     } else {
       const urlObj = new URL(url, "http://localhost");
-      eqCode = extractCode(urlObj.searchParams.get("equipment") || "");
+      eqCode = extractCode(urlObj.searchParams.get("eqid") || urlObj.searchParams.get("equipment") || "");
     }
 
-    const children = await db.equipment.where("parentCode").equals(eqCode).toArray();
+    // Helper recursive function to construct hierarchical tree node
+    const buildTreeNode = async (code) => {
+      const eq = await db.equipment.get(code);
+      if (!eq) return null;
+
+      // Find children across any parent dimension
+      const allEqs = await db.equipment.toArray();
+      const directChildren = allEqs.filter(
+        (e) =>
+          e.code !== code &&
+          (e.parentCode === code ||
+            e.parentAssetCode === code ||
+            e.parentPositionCode === code ||
+            e.parentSystemCode === code)
+      );
+
+      const childrenNodes = [];
+      for (const child of directChildren) {
+        const childNode = await buildTreeNode(child.code);
+        if (childNode) childrenNodes.push(childNode);
+      }
+
+      return {
+        id: eq.code,
+        name: eq.description,
+        type: eq.type,
+        idOrg: "*",
+        parents: [eq.parentAssetCode, eq.parentPositionCode, eq.parentSystemCode, eq.parentCode].filter(Boolean),
+        children: childrenNodes,
+      };
+    };
+
+    // If requested via /eqstructure/tree (EAMTree), return the full tree hierarchy
+    if (url.includes("/eqstructure/tree")) {
+      const rootNode = (await buildTreeNode(eqCode)) || {
+        id: eqCode,
+        name: eqCode,
+        type: "A",
+        idOrg: "*",
+        parents: [],
+        children: [],
+      };
+
+      return createResponse(cfg, {
+        status: "SUCCESS",
+        data: [rootNode],
+        Result: {
+          ResultData: [rootNode],
+        },
+      });
+    }
+
+    // Otherwise return children array for /equipment/children/:code
+    const allEqs = await db.equipment.toArray();
+    const children = allEqs.filter(
+      (e) =>
+        e.code !== eqCode &&
+        (e.parentCode === eqCode ||
+          e.parentAssetCode === eqCode ||
+          e.parentPositionCode === eqCode ||
+          e.parentSystemCode === eqCode)
+    );
+
     return createResponse(cfg, {
       status: "SUCCESS",
       data: children.map((c) => ({
         code: c.code,
         desc: c.description,
         type: c.type,
-        parent: c.parentCode,
+        parent: c.parentCode || c.parentAssetCode || c.parentPositionCode || c.parentSystemCode,
       })),
       Result: {
         ResultData: children,
@@ -1250,6 +1486,53 @@ export const mockAdapterHandler = async (cfg) => {
     });
   }
 
+  // Part Associated Create & Delete
+  if (method === "post" && url.includes("/equipment/partsassociated")) {
+    const assoc = reqBody || {};
+    const eqCode = extractCode(assoc.equipmentCode || "");
+    const partCode = extractCode(assoc.partCode || assoc.part || "");
+    const quantity = Number(assoc.quantity || 1);
+    const uom = assoc.uom || "EA";
+    const desc = assoc.description || `Associated Part ${partCode}`;
+
+    const newAssoc = {
+      equipmentCode: eqCode,
+      partCode,
+      description: desc,
+      quantity,
+      uom,
+      associationEntity: assoc.associationEntity || "A",
+    };
+
+    await db.partAssociations.put(newAssoc);
+
+    return createResponse(cfg, {
+      status: "SUCCESS",
+      data: newAssoc,
+      Result: {
+        ResultData: newAssoc,
+        InfoAlert: { Message: `Part ${partCode} associated with equipment ${eqCode} successfully.` },
+      },
+    });
+  }
+
+  const deleteAssocMatch = url.match(/(?:\/proxy)?\/assets\/([^/?#]+)\/partsassociated\/([^/?#]+)/);
+  if (method === "delete" && deleteAssocMatch) {
+    const eqCode = extractCode(deleteAssocMatch[1]);
+    const pk = deleteAssocMatch[2];
+    const partCode = extractCode(pk.includes("#") ? pk.split("#")[1] : pk);
+
+    await db.partAssociations.delete([eqCode, partCode]);
+
+    return createResponse(cfg, {
+      status: "SUCCESS",
+      data: true,
+      Result: {
+        InfoAlert: { Message: `Part association deleted successfully.` },
+      },
+    });
+  }
+
   // DELETE lot
   if (method === "delete" && lotGetMatch) {
     const code = extractCode(lotGetMatch[1]);
@@ -1347,6 +1630,302 @@ export const mockAdapterHandler = async (cfg) => {
     return createResponse(cfg, {
       Result: {
         InfoAlert: { Message: `Part ${code} deleted successfully.` },
+      },
+    });
+  }
+
+  // 7b. NONCONFORMITIES (NCR) & OBSERVATIONS SCHEMA FACTORY & CRUD
+  // Init NCR: POST /proxy/nonconformitydefaults or GET /nonconformities/init
+  if (
+    url.includes("/nonconformities/init") ||
+    (method === "post" && url.includes("/nonconformitydefaults"))
+  ) {
+    const nextCode = await getNextSequence("NCR");
+    const now = new Date();
+    return createResponse(cfg, {
+      Result: {
+        ResultData: {
+          Nonconformity: {
+            NONCONFORMITYID: {
+              STANDARDENTITYCODE: nextCode,
+              ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+            },
+            DESCRIPTION: "",
+            EQUIPMENTID: {
+              EQUIPMENTCODE: "",
+              ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+            },
+            STATUS: { STATUSCODE: "O", DESCRIPTION: "Open" },
+            SEVERITY: { USERCODE: "MED", DESCRIPTION: "Medium" },
+            IMPORTANCE: { USERCODE: "M", DESCRIPTION: "Medium" },
+            LOCATIONID: { LOCATIONCODE: "" },
+            DEPARTMENTID: { DEPARTMENTCODE: "*" },
+            TYPE: { USERCODE: "MECH", DESCRIPTION: "Mechanical" },
+            NOTE: "",
+            USERDEFINEDAREA: { CUSTOMFIELD: [] },
+          },
+        },
+      },
+    });
+  }
+
+  // Init Observation: POST /proxy//nonconformities/observationdefaults or /observationdefaults
+  if (method === "post" && url.includes("observationdefaults")) {
+    return createResponse(cfg, {
+      Result: {
+        ResultData: {
+          NonconformityObservationDefault: {
+            NONCONFORMITYOBSERVATIONID: {
+              NONCONFORMITYCODE: "",
+              ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+            },
+            STATUS: { STATUSCODE: "U", DESCRIPTION: "Unfinished" },
+            SEVERITY: { USERCODE: "MED", DESCRIPTION: "Medium" },
+            NOTE: "",
+          },
+        },
+      },
+    });
+  }
+
+  // Observations List: GET /ncrobservations/:code or GET /proxy/nonconformities/:code/observations
+  const ncrObsMatch = url.match(/(?:\/ncrobservations|\/proxy\/nonconformities)\/([^/?#]+)(?:\/observations)?/);
+  if (
+    (method === "get" && url.includes("/ncrobservations/")) ||
+    (method === "get" && url.includes("/observations") && url.includes("nonconformities"))
+  ) {
+    let ncrCode = "";
+    if (url.includes("/ncrobservations/")) {
+      ncrCode = extractCode(url.split("/ncrobservations/")[1].split("?")[0]);
+    } else if (ncrObsMatch) {
+      ncrCode = extractCode(ncrObsMatch[1]);
+    }
+
+    const obsList = await db.ncrObservations.where("ncrCode").equals(ncrCode).toArray();
+    const formatted = obsList.map((o) => ({
+      observation: String(o.id),
+      note: o.note || "",
+      importance_display: o.importanceDesc || (o.importance === "H" ? "High" : "Medium"),
+      severity_display: o.severityDesc || (o.severity === "HIGH" ? "High" : "Medium"),
+      daterecorded: o.observationDate ? new Date(o.observationDate).toLocaleDateString() : new Date().toLocaleDateString(),
+      workordernum: o.workOrderNum || "",
+      status_display: o.statusDesc || "Unfinished",
+    }));
+
+    return createResponse(cfg, {
+      status: "SUCCESS",
+      data: formatted,
+      Result: {
+        ResultData: formatted,
+      },
+    });
+  }
+
+  // Create Observation: POST /proxy/nonconformities/observations or POST /nonconformities/:code/observations
+  if (method === "post" && (url.includes("/nonconformities/observations") || url.endsWith("/observations"))) {
+    const obs = reqBody || {};
+    const ncrCode = extractCode(
+      obs.NONCONFORMITYOBSERVATIONID?.NONCONFORMITYCODE ||
+      obs.ncrCode ||
+      (ncrObsMatch ? ncrObsMatch[1] : "")
+    );
+    const workOrderNum =
+      obs.OBTrackingDetails?.WORKORDERID?.JOBNUM ||
+      obs.workOrderNum ||
+      "";
+    const note = obs.note || obs.NOTE || "";
+    const severity = obs.severity || obs.SEVERITY?.USERCODE || "MED";
+    const status = obs.OBSERVATIONSTATUS?.STATUSCODE || obs.status || "U";
+    const now = new Date();
+
+    const newId = await db.ncrObservations.add({
+      ncrCode,
+      observerCode: "TECH01",
+      observationDate: now.toISOString(),
+      note,
+      importance: "M",
+      importanceDesc: "Medium",
+      severity,
+      severityDesc: severity === "HIGH" ? "High" : "Medium",
+      status,
+      statusDesc: status === "U" ? "Unfinished" : "Completed",
+      workOrderNum,
+    });
+
+    return createResponse(cfg, {
+      status: "SUCCESS",
+      data: { id: newId, ncrCode, workOrderNum },
+      Result: {
+        ResultData: { id: newId, ncrCode, workOrderNum },
+        InfoAlert: { Message: "Observation recorded successfully." },
+      },
+    });
+  }
+
+  // READ NCR: GET /proxy/nonconformities/:code or GET /nonconformities/:code
+  const ncrMatch = url.match(/(?:\/proxy)?\/nonconformities\/([^/?#]+)/);
+  if (method === "get" && ncrMatch && !url.includes("observation") && !url.includes("init") && !url.includes("default")) {
+    const code = extractCode(ncrMatch[1]);
+    const ncr = await db.nonconformities.get(code);
+
+    if (ncr) {
+      // Join with equipment description and location if available
+      const eq = ncr.equipmentCode ? await db.equipment.get(ncr.equipmentCode) : null;
+      const responsePayload = {
+        NONCONFORMITYID: {
+          STANDARDENTITYCODE: ncr.code,
+          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+        },
+        DESCRIPTION: ncr.description || "",
+        EQUIPMENTID: {
+          EQUIPMENTCODE: ncr.equipmentCode || "",
+          ORGANIZATIONID: { ORGANIZATIONCODE: "*" },
+        },
+        equipmentDesc: eq?.description || ncr.equipmentDesc || "",
+        STATUS: {
+          STATUSCODE: ncr.statusCode || "O",
+          DESCRIPTION: ncr.statusDesc || (ncr.statusCode === "O" ? "Open" : "Closed"),
+        },
+        SEVERITY: {
+          USERCODE: ncr.severity || "MED",
+          DESCRIPTION: ncr.severityDesc || (ncr.severity === "MAJ" ? "Major" : "Medium"),
+        },
+        IMPORTANCE: {
+          USERCODE: ncr.importance || "M",
+          DESCRIPTION: ncr.importanceDesc || "Medium",
+        },
+        LOCATIONID: {
+          LOCATIONCODE: ncr.locationCode || eq?.locationCode || "",
+        },
+        DEPARTMENTID: {
+          DEPARTMENTCODE: ncr.departmentCode || eq?.departmentCode || "*",
+        },
+        TYPE: {
+          USERCODE: ncr.type || "MECH",
+          DESCRIPTION: ncr.type || "Mechanical",
+        },
+        NOTE: ncr.note || "",
+        USERDEFINEDAREA: ncr.raw?.USERDEFINEDAREA || { CUSTOMFIELD: [] },
+        ...(ncr.raw || {}),
+      };
+
+      return createResponse(cfg, {
+        Result: {
+          ResultData: {
+            Nonconformity: responsePayload,
+          },
+        },
+      });
+    }
+
+    return createResponse(cfg, { status: "FAIL", message: "NCR not found" }, 404);
+  }
+
+  // CREATE NCR: POST /proxy/nonconformities/ or POST /nonconformities/
+  if (method === "post" && (url.endsWith("/nonconformities/") || url.endsWith("/nonconformities"))) {
+    const payload = reqBody?.Nonconformity || reqBody || {};
+    let ncrCode = payload.NONCONFORMITYID?.STANDARDENTITYCODE || payload.code;
+    if (!ncrCode || ncrCode.startsWith("@")) {
+      ncrCode = await getNextSequence("NCR");
+    }
+
+    const eqCode = extractCode(payload.EQUIPMENTID?.EQUIPMENTCODE || payload.equipmentCode || "");
+    const eq = eqCode ? await db.equipment.get(eqCode) : null;
+    const now = new Date();
+
+    const record = {
+      code: ncrCode,
+      description: payload.DESCRIPTION || payload.description || "",
+      equipmentCode: eqCode,
+      equipmentDesc: eq?.description || "",
+      workOrderCode: payload.workOrderCode || "",
+      locationCode: payload.LOCATIONID?.LOCATIONCODE || eq?.locationCode || "",
+      departmentCode: payload.DEPARTMENTID?.DEPARTMENTCODE || eq?.departmentCode || "*",
+      statusCode: payload.STATUS?.STATUSCODE || payload.statusCode || "O",
+      statusDesc: payload.STATUS?.DESCRIPTION || (payload.statusCode === "O" ? "Open" : "Closed"),
+      severity: payload.SEVERITY?.USERCODE || payload.severity || "MED",
+      severityDesc: payload.SEVERITY?.DESCRIPTION || (payload.severity === "MAJ" ? "Major" : "Medium"),
+      importance: payload.IMPORTANCE?.USERCODE || payload.importance || "M",
+      importanceDesc: payload.IMPORTANCE?.DESCRIPTION || "Medium",
+      type: payload.TYPE?.USERCODE || payload.type || "MECH",
+      note: payload.NOTE || payload.note || "",
+      creationDate: now.toISOString(),
+      raw: payload,
+    };
+
+    await db.nonconformities.put(record);
+
+    return createResponse(cfg, {
+      Result: {
+        ResultData: {
+          NONCONFORMITYID: { STANDARDENTITYCODE: ncrCode },
+          Nonconformity: payload,
+        },
+        InfoAlert: { Message: `Nonconformity ${ncrCode} created successfully.` },
+      },
+    });
+  }
+
+  // UPDATE NCR: PUT /proxy/nonconformities/ or PUT /nonconformities/
+  if (method === "put" && (url.endsWith("/nonconformities/") || url.endsWith("/nonconformities"))) {
+    const payload = reqBody?.Nonconformity || reqBody || {};
+    const ncrCode = extractCode(payload.NONCONFORMITYID?.STANDARDENTITYCODE || payload.code || "");
+    const existing = await db.nonconformities.get(ncrCode);
+
+    const eqCode = extractCode(payload.EQUIPMENTID?.EQUIPMENTCODE || existing?.equipmentCode || "");
+    const eq = eqCode ? await db.equipment.get(eqCode) : null;
+
+    const updated = {
+      ...(existing || {}),
+      code: ncrCode,
+      description: payload.DESCRIPTION ?? existing?.description ?? "",
+      equipmentCode: eqCode,
+      equipmentDesc: eq?.description || existing?.equipmentDesc || "",
+      locationCode: payload.LOCATIONID?.LOCATIONCODE ?? existing?.locationCode ?? "",
+      departmentCode: payload.DEPARTMENTID?.DEPARTMENTCODE ?? existing?.departmentCode ?? "*",
+      statusCode: payload.STATUS?.STATUSCODE ?? existing?.statusCode ?? "O",
+      statusDesc: payload.STATUS?.DESCRIPTION ?? existing?.statusDesc ?? "Open",
+      severity: payload.SEVERITY?.USERCODE ?? existing?.severity ?? "MED",
+      severityDesc: payload.SEVERITY?.DESCRIPTION ?? existing?.severityDesc ?? "Medium",
+      importance: payload.IMPORTANCE?.USERCODE ?? existing?.importance ?? "M",
+      importanceDesc: payload.IMPORTANCE?.DESCRIPTION ?? existing?.importanceDesc ?? "Medium",
+      type: payload.TYPE?.USERCODE ?? existing?.type ?? "MECH",
+      note: payload.NOTE ?? existing?.note ?? "",
+      raw: payload,
+    };
+
+    await db.nonconformities.put(updated);
+
+    return createResponse(cfg, {
+      Result: {
+        ResultData: {
+          NONCONFORMITYID: { STANDARDENTITYCODE: ncrCode },
+          Nonconformity: payload,
+        },
+        InfoAlert: { Message: `Nonconformity ${ncrCode} updated successfully.` },
+      },
+    });
+  }
+
+  // DELETE NCR: DELETE /proxy/nonconformities/:code (Cascade delete observations & comments)
+  if (method === "delete" && ncrMatch && !url.includes("observation")) {
+    const code = extractCode(ncrMatch[1]);
+    await db.transaction("rw", [db.nonconformities, db.ncrObservations, db.comments], async () => {
+      await db.nonconformities.delete(code);
+      // Cascade delete observations
+      await db.ncrObservations.where("ncrCode").equals(code).delete();
+      // Cascade delete comments
+      const ncrComments = await db.comments.where("entityCode").equals(code).toArray();
+      for (const c of ncrComments) {
+        if (c.entityType === "NOCF" || c.entityType === "NCNC") {
+          await db.comments.delete(c.id);
+        }
+      }
+    });
+
+    return createResponse(cfg, {
+      Result: {
+        InfoAlert: { Message: `Nonconformity ${code} deleted successfully.` },
       },
     });
   }
@@ -1572,15 +2151,18 @@ export const mockAdapterHandler = async (cfg) => {
     if (gridName === "BSAUTH_HDR") {
       const statusOptions = [
         { tostatus: "R", tostatusdesc: "Released", fromstatusdesc: "Released" },
-        { tostatus: "C", tostatusdesc: "Completed", fromstatusdesc: "Released" },
+        { tostatus: "C", tostatusdesc: "Closed", fromstatusdesc: "Closed" },
         { tostatus: "I", tostatusdesc: "In Service", fromstatusdesc: "In Service" },
-        { tostatus: "O", tostatusdesc: "Out of Service", fromstatusdesc: "In Service" },
+        { tostatus: "O", tostatusdesc: "Open", fromstatusdesc: "Open" },
+        { tostatus: "U", tostatusdesc: "Unfinished", fromstatusdesc: "Unfinished" },
       ];
       const rows = statusOptions.map((s, idx) => ({
         id: `ST_${idx}`,
         cell: [
           { t: "tostatus", val: s.tostatus, value: s.tostatus, order: 1 },
+          { t: "code", val: s.tostatus, value: s.tostatus, order: 1 },
           { t: "tostatusdesc", val: s.tostatusdesc, value: s.tostatusdesc, order: 2 },
+          { t: "description", val: s.tostatusdesc, value: s.tostatusdesc, order: 2 },
           { t: "fromstatusdesc", val: s.fromstatusdesc, value: s.fromstatusdesc, order: 3 },
         ],
       }));
@@ -1590,8 +2172,8 @@ export const mockAdapterHandler = async (cfg) => {
       ]));
     }
 
-    // E. User Codes LOV (BSUCOD_HDR) - types, priorities, criticality
-    if (gridName === "BSUCOD_HDR" || gridName === "LVCRIT") {
+    // E. User Codes LOV (BSUCOD_HDR / LVALLCODES / LVCRIT) - types, priorities, criticality, severity, importance
+    if (gridName === "BSUCOD_HDR" || gridName === "LVALLCODES" || gridName === "LVCRIT") {
       const userCodes = [
         { usercode: "CORR", systemcode: "CORR", usercodedescription: "Corrective" },
         { usercode: "PREV", systemcode: "PREV", usercodedescription: "Preventive" },
@@ -1602,18 +2184,27 @@ export const mockAdapterHandler = async (cfg) => {
         { usercode: "A", systemcode: "A", usercodedescription: "Critical A" },
         { usercode: "B", systemcode: "B", usercodedescription: "Medium B" },
         { usercode: "C", systemcode: "C", usercodedescription: "Low C" },
+        { usercode: "MAJ", systemcode: "MAJ", usercodedescription: "Major" },
+        { usercode: "MED", systemcode: "MED", usercodedescription: "Medium" },
+        { usercode: "MIN", systemcode: "MIN", usercodedescription: "Minor" },
+        { usercode: "HIGH", systemcode: "HIGH", usercodedescription: "High" },
+        { usercode: "CRIT", systemcode: "CRIT", usercodedescription: "Critical" },
       ];
       const rows = userCodes.map((c, idx) => ({
         id: `UC_${idx}`,
         cell: [
           { t: "usercode", val: c.usercode, value: c.usercode, order: 1 },
+          { t: "code", val: c.usercode, value: c.usercode, order: 1 },
           { t: "systemcode", val: c.systemcode, value: c.systemcode, order: 2 },
           { t: "usercodedescription", val: c.usercodedescription, value: c.usercodedescription, order: 3 },
+          { t: "description", val: c.usercodedescription, value: c.usercodedescription, order: 3 },
         ],
       }));
-      return createResponse(cfg, buildGridPayload("BSUCOD_HDR", rows, [
+      return createResponse(cfg, buildGridPayload(gridName, rows, [
         { name: "usercode", label: "Code", order: 1, width: 100, dataType: "VARCHAR" },
+        { name: "code", label: "Code", order: 1, width: 100, dataType: "VARCHAR" },
         { name: "usercodedescription", label: "Description", order: 2, width: 200, dataType: "VARCHAR" },
+        { name: "description", label: "Description", order: 2, width: 200, dataType: "VARCHAR" },
       ]));
     }
 
@@ -1736,16 +2327,78 @@ export const mockAdapterHandler = async (cfg) => {
 
     // G5. Parts Associated Grid (BSPARA)
     if (gridName === "BSPARA") {
-      const rows = [];
+      const eqParam = reqBody?.gridParam?.["param.valuecode"] || reqBody?.["param.valuecode"];
+      const eqFilter = filterList?.find((f) => f.fieldName === "papartcode" || f.fieldName === "equipmentcode");
+      const eqCode = extractCode(eqParam || eqFilter?.fieldValue || "");
+
+      let associations = [];
+      if (eqCode) {
+        associations = await db.partAssociations.where("equipmentCode").equals(eqCode).toArray();
+      } else {
+        associations = await db.partAssociations.toArray();
+      }
+
+      const rows = associations.map((pa, idx) => ({
+        id: `${pa.equipmentCode}_${pa.partCode}`,
+        cell: [
+          { t: "papartcode", val: pa.partCode, value: pa.partCode, order: 1 },
+          { t: "description", val: pa.description, value: pa.description, order: 2 },
+          { t: "quantity", val: String(pa.quantity), value: String(pa.quantity), order: 3 },
+          { t: "partuom", val: pa.uom || "EA", value: pa.uom || "EA", order: 4 },
+          { t: "valuecode", val: pa.equipmentCode, value: pa.equipmentCode, order: 5 },
+          { t: "partassociatedpk", val: `${pa.equipmentCode}#${pa.partCode}`, value: `${pa.equipmentCode}#${pa.partCode}`, order: 6 },
+        ],
+      }));
+
       return createResponse(cfg, buildGridPayload("BSPARA", rows, [
         { name: "papartcode", label: "Part", order: 1, width: 120, dataType: "VARCHAR" },
         { name: "description", label: "Description", order: 2, width: 200, dataType: "VARCHAR" },
         { name: "quantity", label: "Quantity", order: 3, width: 80, dataType: "VARCHAR" },
         { name: "partuom", label: "UOM", order: 4, width: 60, dataType: "VARCHAR" },
+        { name: "valuecode", label: "Equipment", order: 5, width: 100, dataType: "VARCHAR" },
+        { name: "partassociatedpk", label: "PK", order: 6, width: 100, dataType: "VARCHAR" },
       ]));
     }
 
-    // H. Generic / Fallback Grid LOV
+    // H. Nonconformities (NCR) Search Grid (OSNCHD / LVNCNC)
+    if (gridName === "OSNCHD" || gridName === "LVNCNC" || gridName.includes("NCNC") || gridName.includes("NCHD")) {
+      const allNcrs = await db.nonconformities.toArray();
+      const getterMap = {
+        nonconformity: (n) => n.code,
+        equipment: (n) => n.equipmentCode,
+        description: (n) => n.description,
+        status_display: (n) => n.statusDesc || (n.statusCode === "O" ? "Open" : "Closed"),
+        severity_display: (n) => n.severityDesc || (n.severity === "MAJ" ? "Major" : "Medium"),
+        location: (n) => n.locationCode,
+      };
+
+      const filtered = allNcrs.filter((n) => matchesFilters(n, getterMap));
+      const rows = filtered.map((n) => ({
+        id: n.code,
+        cell: [
+          { t: "nonconformity", val: n.code, value: n.code, order: 1 },
+          { t: "description", val: n.description, value: n.description, order: 2 },
+          { t: "equipment", val: n.equipmentCode, value: n.equipmentCode, order: 3 },
+          { t: "equipmentdesc", val: n.equipmentDesc || "", value: n.equipmentDesc || "", order: 4 },
+          { t: "status_display", val: n.statusDesc || (n.statusCode === "O" ? "Open" : "Closed"), value: n.statusDesc || (n.statusCode === "O" ? "Open" : "Closed"), order: 5 },
+          { t: "severity_display", val: n.severityDesc || (n.severity === "MAJ" ? "Major" : "Medium"), value: n.severityDesc || (n.severity === "MAJ" ? "Major" : "Medium"), order: 6 },
+          { t: "location", val: n.locationCode || "", value: n.locationCode || "", order: 7 },
+          { t: "organization", val: "*", value: "*", order: 8 },
+        ],
+      }));
+
+      return createResponse(cfg, buildGridPayload(gridName, rows, [
+        { name: "nonconformity", label: "NCR", order: 1, width: 110, dataType: "VARCHAR" },
+        { name: "description", label: "Description", order: 2, width: 250, dataType: "VARCHAR" },
+        { name: "equipment", label: "Equipment", order: 3, width: 120, dataType: "VARCHAR" },
+        { name: "equipmentdesc", label: "Equipment Description", order: 4, width: 180, dataType: "VARCHAR" },
+        { name: "status_display", label: "Status", order: 5, width: 100, dataType: "VARCHAR" },
+        { name: "severity_display", label: "Severity", order: 6, width: 100, dataType: "VARCHAR" },
+        { name: "location", label: "Location", order: 7, width: 100, dataType: "VARCHAR" },
+      ]));
+    }
+
+    // I. Generic / Fallback Grid LOV
     const defaultFallbackCells = [
       { t: "code", val: "MOCK1", value: "MOCK1", order: 1 },
       { t: "description", val: "Option 1", value: "Option 1", order: 2 },
@@ -1855,13 +2508,22 @@ export const mockAdapterHandler = async (cfg) => {
   // GET /comments?entityCode=:code&entityKeyCode=:key (or entityType)
   if (method === "get" && url.includes("/comments")) {
     const urlObj = new URL(url, "http://localhost");
-    const entityType = urlObj.searchParams.get("entityCode") || urlObj.searchParams.get("entityType") || "EVNT";
-    const entityCode = extractCode(urlObj.searchParams.get("entityKeyCode") || urlObj.searchParams.get("entityCode") || "");
+    const requestedType = urlObj.searchParams.get("entityCode") || urlObj.searchParams.get("entityType") || "EVNT";
+    const entityCode = extractCode(urlObj.searchParams.get("entityKeyCode") || "");
 
-    const comments = await db.comments
-      .where({ entityCode, entityType })
+    let comments = await db.comments
+      .where({ entityCode, entityType: requestedType })
       .reverse()
       .sortBy("creationDate");
+
+    // If requested is NOCF or NCNC, check either code in case comments were saved with either tag
+    if (comments.length === 0 && (requestedType === "NOCF" || requestedType === "NCNC")) {
+      const alternateType = requestedType === "NOCF" ? "NCNC" : "NOCF";
+      comments = await db.comments
+        .where({ entityCode, entityType: alternateType })
+        .reverse()
+        .sortBy("creationDate");
+    }
 
     const formattedComments = comments.map((c, idx) => ({
       ...c,

@@ -17,6 +17,7 @@ import {
   Repeat,
 } from "mdi-material-ui";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import RuleIcon from "@mui/icons-material/Rule";
 import { RadiationIcon } from "eam-components/dist/ui/components/icons";
 import { Link } from "react-router-dom";
 import { isCernMode } from "./CERNMode";
@@ -49,6 +50,7 @@ export const BUTTON_KEYS = {
   DISMAC: "DISMAC",
   TREC: "TREC",
   CREATE_WORKORDER: "CREATE_WORKORDER",
+  CREATE_NCR: "CREATE_NCR",
   WATCHLIST: "WATCHLIST",
   REPEAT_STEP: "REPEAT_STEP",
   EQUIPMENT_REVISION: "EQUIPMENT_REVISION",
@@ -306,6 +308,19 @@ class Toolbar extends React.Component {
           return `/workorder?equipment=${id?.code}`;
         },
       },
+      [BUTTON_KEYS.CREATE_NCR]: {
+        isVisible: () => true,
+        getOnClick: () => {},
+        isDisabled: () => newEntity || readOnly,
+        values: {
+          icon: <RuleIcon />,
+          text: "Create Nonconformity",
+        },
+        getLinkTo: () => {
+          const eqCode = entity?.EQUIPMENTID?.EQUIPMENTCODE || equipment?.EQUIPMENTCODE || id?.code || "";
+          return `/ncr?equipment=${eqCode}&workorder=${id?.code || ""}`;
+        },
+      },
       [BUTTON_KEYS.WATCHLIST]: {
         isVisible: () => true && isCernMode,
         getOnClick: (entityType, entity) => () =>
@@ -358,6 +373,7 @@ class Toolbar extends React.Component {
           BUTTON_KEYS.COPY,
           BUTTON_KEYS.EMAIL,
           BUTTON_KEYS.PRINT,
+          BUTTON_KEYS.CREATE_NCR,
           BUTTON_KEYS.SHOW_ON_MAP,
           BUTTON_KEYS.SHOW_IN_INFOR,
           BUTTON_KEYS.OSVC,
