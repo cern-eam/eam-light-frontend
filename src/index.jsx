@@ -18,14 +18,23 @@ import { enGB } from "date-fns/locale";
 import AuthWrapper, { tokens, keycloak } from "./AuthWrapper";
 import useInforContextStore from "./state/useInforContext";
 import useScannedUserStore from "./state/useScannedUserStore";
+import { setupMockAdapter } from "./mock/mockAdapter";
 
 const jss = create(jssPreset());
 
 unregister();
 polyfill();
 
+if (import.meta.env.VITE_MOCK_MODE === "true") {
+  setupMockAdapter(Ajax.getAxiosInstance());
+}
+
 Ajax.getAxiosInstance().interceptors.request.use(
   (config) => {
+    if (import.meta.env.VITE_MOCK_MODE === "true") {
+      return config;
+    }
+
     if (import.meta.env.VITE_LOGIN_METHOD !== "OPENID") {
       const { inforContext } = useInforContextStore.getState();
       if (inforContext) {

@@ -16,6 +16,10 @@ const handleTokens = (freshTokens) => {
 };
 
 export default (props) => {
+  if (import.meta.env.VITE_MOCK_MODE === "true") {
+    return props.children;
+  }
+
   switch (import.meta.env.VITE_LOGIN_METHOD) {
     case "OPENID":
       return (

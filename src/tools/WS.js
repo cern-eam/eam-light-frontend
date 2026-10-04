@@ -133,10 +133,16 @@ export default new WS();
 
 
 export const getTranlations = () => {
-  // in CERN mode should NOT make ajax call, but return response.body.data, but as a promise that resolves to the response.body.data: {}
-
-  if (isCernMode) {
-    return Promise.resolve({body: {data: []}});
+  if (isCernMode || import.meta.env.VITE_MOCK_MODE === "true") {
+    return Promise.resolve({
+      body: {
+        data: [
+          { code: "DTSAVE", desc: "Save" },
+          { code: "DTDEL", desc: "Delete" },
+          { code: "DTNEW", desc: "New" },
+        ],
+      },
+    });
   }
   
   const gridRequest = new GridRequest("ASOBOT", GridType.LIST)
