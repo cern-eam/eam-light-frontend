@@ -80,6 +80,7 @@ const Position = () => {
     showEqpTree,
     updateEquipmentTreeData,
     setRegionVisibility,
+    setInitialVisibility,
     newHandler,
     saveHandler,
     deleteHandler,
@@ -492,6 +493,7 @@ const Position = () => {
         getUniqueRegionID={getUniqueRegionID}
         isHiddenRegion={isHiddenRegion}
         setRegionVisibility={setRegionVisibility}
+        setInitialVisibility={setInitialVisibility}
       />
     </BlockUi>
   );

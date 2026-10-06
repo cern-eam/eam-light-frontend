@@ -125,6 +125,7 @@ const Workorder = () => {
     isHiddenRegion,
     getUniqueRegionID,
     setRegionVisibility,
+    setInitialVisibility,
     updateEquipmentTreeData,
     newHandler,
     saveHandler,
@@ -921,6 +922,7 @@ const Workorder = () => {
           isNewEntity={newEntity}
           getUniqueRegionID={getUniqueRegionID}
           setRegionVisibility={setRegionVisibility}
+          setInitialVisibility={setInitialVisibility}
           isHiddenRegion={isHiddenRegion}
         />
       </BlockUi>

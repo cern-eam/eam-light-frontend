@@ -53,6 +53,7 @@ const Lot = () => {
     getUniqueRegionID,
     showEqpTree,
     setRegionVisibility,
+    setInitialVisibility,
     newHandler,
     saveHandler,
     deleteHandler,
@@ -262,6 +263,7 @@ const Lot = () => {
           getUniqueRegionID={getUniqueRegionID}
           isHiddenRegion={isHiddenRegion}
           setRegionVisibility={setRegionVisibility}
+          setInitialVisibility={setInitialVisibility}
         />
       </BlockUi>
     </div>

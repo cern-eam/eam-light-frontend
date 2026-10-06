@@ -22,7 +22,7 @@ const styleSummaryIcon = (SummaryIcon) => styled(SummaryIcon)(({theme}) => ({
 }))
 
 const EntityRegions = (props) => {
-  const { isHiddenRegion, setRegionVisibility, regions : inputRegions = [], showEqpTree, isNewEntity, getUniqueRegionID } = props;
+  const { isHiddenRegion, setInitialVisibility, regions : inputRegions = [], showEqpTree, isNewEntity, getUniqueRegionID } = props;
   const [visibleRegions, setVisibleRegions] = React.useState([]);
   const [regionMaximized, setRegionMaximized] = React.useState(undefined);
 
@@ -34,7 +34,6 @@ const EntityRegions = (props) => {
     [].concat(searchParams[ENTITY_REGION_PARAMS.VISIBLE]) : [];
 
   const expandedRegion = searchParams.expanded;
-
   /**
    * Variables necessary on render.
    */
@@ -61,13 +60,18 @@ const EntityRegions = (props) => {
     md: showEqpTree || regionMaximized ? 12 : 12 / Object.keys(columns).length,
     lg: regionMaximized ? 12 : 12 / Object.keys(columns).length,
   }
+
+  // Set Initial Visibility Effect
+  React.useEffect(() => {
+     regions
+     .forEach(region => {
+      setInitialVisibility(getUniqueRegionID(region.id), !region.initialVisibility)}
+     )
+  }, []) //only on initial render
   /**
    * Set Regions visibility Effect
    */
   React.useEffect(() => {
-    regions.filter(region => isHiddenRegion(region.id) === undefined)
-      .forEach(region => setRegionVisibility(getUniqueRegionID(region.id), region.initialVisibility))
-
     const defaultVisibility = (region) => expandedRegion === region.id || regionMaximized === region.id ||
       visibleRegionsParam.includes(region.id) ||
       !visibleRegionsParam.length && !isHiddenRegion(region.id) && (region.customVisibility ? region.customVisibility() : true);
