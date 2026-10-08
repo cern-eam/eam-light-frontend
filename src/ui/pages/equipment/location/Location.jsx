@@ -68,6 +68,7 @@ export default Location = (props) => {
     showEqpTree,
     updateEquipmentTreeData,
     setRegionVisibility,
+    setInitialVisibility,
     newHandler,
     saveHandler,
     deleteHandler,
@@ -442,6 +443,7 @@ export default Location = (props) => {
         getUniqueRegionID={getUniqueRegionID}
         isHiddenRegion={isHiddenRegion}
         setRegionVisibility={setRegionVisibility}
+        setInitialVisibility={setInitialVisibility}
       />
     </BlockUi>
   );

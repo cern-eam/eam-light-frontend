@@ -80,6 +80,7 @@ const System = () => {
     showEqpTree,
     updateEquipmentTreeData,
     setRegionVisibility,
+    setInitialVisibility,
     newHandler,
     saveHandler,
     deleteHandler,
@@ -500,6 +501,7 @@ const System = () => {
         getUniqueRegionID={getUniqueRegionID}
         isHiddenRegion={isHiddenRegion}
         setRegionVisibility={setRegionVisibility}
+        setInitialVisibility={setInitialVisibility}
       />
     </BlockUi>
   );

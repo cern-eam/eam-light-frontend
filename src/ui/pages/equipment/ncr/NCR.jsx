@@ -47,6 +47,7 @@ const NCR = () => {
         getUniqueRegionID,
         showEqpTree,
         setRegionVisibility,
+        setInitialVisibility,
         newHandler,
         saveHandler,
         deleteHandler,
@@ -292,6 +293,7 @@ const NCR = () => {
                 getUniqueRegionID={getUniqueRegionID}
                 isHiddenRegion={isHiddenRegion}
                 setRegionVisibility={setRegionVisibility}
+                setInitialVisibility={setInitialVisibility}
             />
         </BlockUi>
     );

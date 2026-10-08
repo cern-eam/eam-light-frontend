@@ -69,6 +69,7 @@ const Part = () => {
     getUniqueRegionID,
     showEqpTree,
     setRegionVisibility,
+    setInitialVisibility,
     newHandler,
     saveHandler,
     deleteHandler,
@@ -358,6 +359,7 @@ const Part = () => {
           getUniqueRegionID={getUniqueRegionID}
           isHiddenRegion={isHiddenRegion}
           setRegionVisibility={setRegionVisibility}
+          setInitialVisibility={setInitialVisibility}
         />
       </BlockUi>
     </div>

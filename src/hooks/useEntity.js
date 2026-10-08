@@ -77,7 +77,7 @@ const useEntity = (params) => {
     useSnackbarStore();
   const { userData } = useUserDataStore();
   const { applicationData } = useApplicationDataStore();
-  const { isHiddenRegion, setRegionVisibility } = useHiddenRegionsStore();
+  const { isHiddenRegion, setRegionVisibility, setInitialVisibility } = useHiddenRegionsStore();
   const {
     equipmentTreeData: { showEqpTree },
     updateEquipmentTreeData,
@@ -437,6 +437,7 @@ const useEntity = (params) => {
     userData,
     applicationData,
     setRegionVisibility,
+    setInitialVisibility,
     isHiddenRegion: isHiddenRegion(screenCode, userCode),
     getUniqueRegionID: getUniqueRegionID(screenCode, userCode),
     commentsComponent,

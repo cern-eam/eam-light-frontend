@@ -73,6 +73,7 @@ const Asset = () => {
     showEqpTree,
     updateEquipmentTreeData,
     setRegionVisibility,
+    setInitialVisibility,
     newHandler,
     saveHandler,
     deleteHandler,
@@ -559,6 +560,7 @@ const Asset = () => {
         getUniqueRegionID={getUniqueRegionID}
         isHiddenRegion={isHiddenRegion}
         setRegionVisibility={setRegionVisibility}
+        setInitialVisibility={setInitialVisibility}
       />
     </BlockUi>
   );
