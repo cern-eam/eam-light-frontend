@@ -6,12 +6,17 @@ import EAMGrid from "eam-components/dist/ui/components/grids/eam/EAMGrid";
 import SyncedQueryParamsEAMGridContext from "../../../../tools/SyncedQueryParamsEAMGridContext";
 import useUserDataStore from "../../../../state/useUserDataStore";
 import useSnackbarStore from "../../../../state/useSnackbarStore";
+import useInforContextStore from "../../../../state/useInforContext";
+import { isCernMode } from "eam-components/dist/tools/CERNMode";
 
 const cellRenderer = ({ column, value }) => {
   if (column.id === "workordernum") {
+    const { inforContext } = useInforContextStore.getState();
+    const suffix = !isCernMode ? encodeURIComponent(`#${inforContext.INFOR_ORGANIZATION}`) : "";
+
     return (
       <Typography>
-        <Link to={"/workorder/" + value}>{value}</Link>
+        <Link to={`/workorder/${value}${suffix}`}>{value}</Link>
       </Typography>
     );
   }

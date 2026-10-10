@@ -68,6 +68,7 @@ import ScreenContainers from "../../layout/ScreenContainers";
 import ScreenBlock, { getScreenBlockRegionFlags } from "../../layout/ScreenBlock";
 import EquipmentNCRs from "../../pages/equipment/components/EquipmentNCRs";
 import { stubFalse } from "lodash";
+import useInforContextStore from "../../../state/useInforContext";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -241,6 +242,8 @@ const Workorder = () => {
 
   const getRegions = () => {
     const { tabs } = workOrderLayout;
+    const { inforContext } = useInforContextStore.getState();
+
     const commonProps = {
       workorder,
       id,
@@ -548,7 +551,10 @@ const Workorder = () => {
             maxExpandedChecklistItems={
               Math.abs(parseInt(applicationData.EL_MCHLS)) || 50
             }
-            getWoLink={(wo) => "/workorder/" + wo}
+            getWoLink={(wo) => {
+              const suffix = !isCernMode ? encodeURIComponent(`#${inforContext.INFOR_ORGANIZATION}`) : "";
+              return `/workorder/${wo}${suffix}`
+            }}
             ref={checklists}
             showSuccess={showNotification}
             showError={showError}
