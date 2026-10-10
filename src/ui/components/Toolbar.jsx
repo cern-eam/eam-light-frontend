@@ -21,6 +21,7 @@ import { RadiationIcon } from "eam-components/dist/ui/components/icons";
 import { Link } from "react-router-dom";
 import { isCernMode } from "./CERNMode";
 import EditWatchlistDialog from "./watchlist/EditWatchlistDialog";
+import useInforContextStore from "../../state/useInforContext";
 
 export const ENTITY_TYPE = {
   WORKORDER: "WORKORDER",
@@ -110,6 +111,8 @@ class Toolbar extends React.Component {
     const equipmentRevisionScreen =
       userData?.screens?.[userData?.equipmentRevisionScreen];
 
+    const {inforContext} = useInforContextStore.getState();
+    
     return {
       [BUTTON_KEYS.COPY]: {
         isVisible: () => true,
@@ -123,7 +126,10 @@ class Toolbar extends React.Component {
       [BUTTON_KEYS.EMAIL]: {
         isVisible: () => true,
         getOnClick: () => {
-          const url = window.location.href.split("?")[0];
+          let url = window.location.href.split("?")[0];
+          if(!isCernMode) {
+            url = encodeURIComponent(`${url}?organization=${inforContext.INFOR_ORGANIZATION}&tenant=${inforContext.INFOR_TENANT}`)
+          }
           return () =>
             window.open(`mailto:?Subject=${entityDesc} ${id?.code}` + `&body=${url}`);
         },
