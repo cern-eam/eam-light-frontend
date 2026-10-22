@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 import { isCernMode } from "@/ui/components/CERNMode";
 import { version } from "../../../package.json";
@@ -17,7 +16,6 @@ const Footer = (props) => {
     display: "flex",
     justifyContent: "end",
     alignItems: "center",
-    zIndex: 1250, // snackbar has 1400
   };
 
   return (

@@ -1,4 +1,3 @@
-import React from "react";
 import { Account, Logout } from "mdi-material-ui";
 import { IconButton } from "@mui/material";
 import { logout } from "../../AuthWrapper";
@@ -13,7 +12,6 @@ const UserInfo = () => {
 
   const userInfoStyle = {
     color: "rgba(255, 255, 255, 0.8)",
-    flexGrow: 1,
     height: 48,
     display: "flex",
     alignItems: "center",
