@@ -10,6 +10,13 @@ const applyOverrides = (screenLayout, screen, parentScreen) => {
   } else if (parentScreen === "WSJOBS") {
     ['actioncode', 'causecode', 'failurecode', 'failuremodedesc', 'humanfactor', 'humanoversight', 'methodofdetection', 'problemcode', 'symptom', 'tacticalcause', 'workmanship']
       .forEach(f => { if (screenLayout.fields?.[f]) screenLayout.fields[f].fieldContainer = 'cont_99'; });
+
+    if (screenLayout.tabs?.ACT?.fields) {
+      screenLayout.tabs.ACT.fields.personsreq.fieldType = "text";
+      screenLayout.tabs.ACT.fields.esthrs.fieldType = "text";
+      screenLayout.tabs.ACT.fields.schedhrs.fieldType = "text";
+      screenLayout.tabs.ACT.fields.percentcomplete.fieldType = "text";
+    }
   }
   return screenLayout;
 };
