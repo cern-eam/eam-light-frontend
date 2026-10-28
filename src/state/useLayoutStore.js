@@ -42,7 +42,7 @@ const useLayoutStore = create((set) => ({
         screen,
         tabs
       ).then((result) => result.body.data);
-      
+
       newScreenLayout = applyOverrides(newScreenLayout, screen, parentScreen);
 
       set((state) => ({
