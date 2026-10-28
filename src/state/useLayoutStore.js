@@ -16,6 +16,7 @@ const applyOverrides = (screenLayout, screen, parentScreen) => {
       screenLayout.tabs.ACT.fields.esthrs.fieldType = "text";
       screenLayout.tabs.ACT.fields.schedhrs.fieldType = "text";
       screenLayout.tabs.ACT.fields.percentcomplete.fieldType = "text";
+      screenLayout.tabs.ACT.fields.activity.fieldType = "text";
     }
   }
   return screenLayout;
