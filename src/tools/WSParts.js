@@ -23,6 +23,10 @@ export const deletePart = (partIdentifier, config = {}) => {
     return WS._delete(`/proxy/parts/${encodeCodeOrg(partIdentifier)}`, config);
 }
 
+export const getPartsAssociatedByParent = (code, config = {}) => {
+   return  WS._get(`/proxy/parts/${encodeCodeOrg(code)}/partsassociated`, config);
+}
+
 export const createManufacturer = (manufacturer, config = {}) => {
     return WS._post('/proxy/manufacturers/', manufacturer, config);
 }
