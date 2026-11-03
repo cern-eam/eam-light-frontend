@@ -319,6 +319,7 @@ const Part = () => {
         <EamlightToolbar
           isModified={isModified}
           newEntity={newEntity}
+          readOnly={readOnly}
           entityScreen={screenPermissions}
           entityName="Part" // TODO: hardcoded (following Location example)
           entityKeyCode={id?.code}

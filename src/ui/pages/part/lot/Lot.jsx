@@ -228,6 +228,7 @@ const Lot = () => {
         <EamlightToolbar
           isModified={isModified}
           newEntity={newEntity}
+          readOnly={readOnly}
           entityScreen={screenPermissions}
           entityName="Lot"
           entityKeyCode={id?.code}

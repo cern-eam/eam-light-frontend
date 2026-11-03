@@ -407,6 +407,7 @@ export default Location = (props) => {
       <EamlightToolbar
         isModified={isModified}
         newEntity={newEntity}
+        readOnly={readOnly}
         entityScreen={screenPermissions}
         entityName="Location"
         entityKeyCode={id?.code}

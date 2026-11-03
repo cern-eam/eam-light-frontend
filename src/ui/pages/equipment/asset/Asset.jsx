@@ -516,6 +516,7 @@ const Asset = () => {
       <EamlightToolbar
         isModified={isModified}
         newEntity={newEntity}
+        readOnly={readOnly}
         entityScreen={screenPermissions}
         entityName={assetLayout.fields?.equipmentno?.text ?? "Asset*"}
         entityKeyCode={id?.code}

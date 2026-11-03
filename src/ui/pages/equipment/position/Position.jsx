@@ -457,6 +457,7 @@ const Position = () => {
       <EamlightToolbar
         isModified={isModified}
         newEntity={newEntity}
+        readOnly={readOnly}
         entityScreen={screenPermissions}
         entityName={positionLayout.fields?.equipmentno?.text ?? "Position*"}
         entityKeyCode={id?.code}

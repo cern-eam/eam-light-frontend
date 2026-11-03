@@ -883,6 +883,7 @@ const Workorder = () => {
         <EamlightToolbar
           isModified={isModified}
           newEntity={newEntity}
+          readOnly={readOnly}
           entityScreen={screenPermissions}
           entityName={workOrderLayout.fields?.workordernum?.text ?? "Work Order*"}
           entityKeyCode={id?.code}

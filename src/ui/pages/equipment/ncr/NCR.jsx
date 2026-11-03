@@ -256,6 +256,7 @@ const NCR = () => {
             <EamlightToolbar
                 isModified={isModified}
                 newEntity={newEntity}
+                readOnly={readOnly}
                 entityScreen={screenPermissions}
                 entityName="NCR"
                 entityKeyCode={id?.code}

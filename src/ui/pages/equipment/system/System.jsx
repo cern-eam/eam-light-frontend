@@ -465,6 +465,7 @@ const System = () => {
       <EamlightToolbar
         isModified={isModified}
         newEntity={newEntity}
+        readOnly={readOnly}
         entityScreen={screenPermissions}
         entityName={systemLayout.fields?.equipmentno?.text ?? "System*"}
         entityKeyCode={id?.code}
