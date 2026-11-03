@@ -105,7 +105,7 @@ const Eamlight = () => {
               <div style={{ height: "calc(100% - 30px)" }}>
                 <Route exact path="/" component={Search} />
                 <Route path="/wosearch" component={WorkorderSearch} />
-                <Route path="/part/:code?" component={Part} />
+                <Route path="/part/:code(.+)?" component={Part} />
                 <Route path="/partsearch" component={PartSearch} />
                 <Route path="/assetsearch" component={AssetSearch} />
                 <Route path="/ncrsearch" component={NCRSearch} />
