@@ -87,11 +87,12 @@ const PositionHierarchy = ({ equipment, id, updateEquipmentProperty, register, r
         autocompleteHandlerParams={["A", id?.code]}
         onChange={onChangeAsset}
         barcodeScanner
+        disabled={readOnly || processElementInfo(positionLayout.fields.asset).disabled}
         endAdornment={
           <Dependency
             onChangeHandler={onChangeAssetDependency}
             value={getDependencyType(equipment.PositionParentHierarchy) === ParentDependencyTypes.ASSET}
-            disabled={!getParentAssetCode('PositionParentHierarchy', equipment)}
+            disabled={readOnly || !getParentAssetCode('PositionParentHierarchy', equipment)}
           />
         }
         renderDependencies={[equipment.PositionParentHierarchy]}
@@ -105,11 +106,12 @@ const PositionHierarchy = ({ equipment, id, updateEquipmentProperty, register, r
         autocompleteHandlerParams={["P", id?.code]}
         onChange={onChangePosition}
         renderDependencies={[equipment.PositionParentHierarchy]}
+        disabled={readOnly || processElementInfo(positionLayout.fields.parentasset).disabled}
         endAdornment={
           <Dependency
             onChangeHandler={onChangePositionDependency}
             value={getDependencyType(equipment.PositionParentHierarchy) === ParentDependencyTypes.POSITION}
-            disabled={!getParentPositionCode('PositionParentHierarchy', equipment)}
+            disabled={readOnly || !getParentPositionCode('PositionParentHierarchy', equipment)}
           />
         }
       />
@@ -122,11 +124,12 @@ const PositionHierarchy = ({ equipment, id, updateEquipmentProperty, register, r
         autocompleteHandlerParams={["S", id?.code]}
         onChange={onChangeSystem}
         renderDependencies={[equipment.PositionParentHierarchy]}
+        disabled={readOnly || processElementInfo(positionLayout.fields.primarysystem).disabled}
         endAdornment={
           <Dependency
             onChangeHandler={onChangeSystemDependency}
             value={getDependencyType(equipment.PositionParentHierarchy) === ParentDependencyTypes.PRIMARYSYSTEM}
-            disabled={!getParentPrimarySystemCode('PositionParentHierarchy', equipment)}
+            disabled={readOnly || !getParentPrimarySystemCode('PositionParentHierarchy', equipment)}
           />
         }
       />
@@ -138,6 +141,7 @@ const PositionHierarchy = ({ equipment, id, updateEquipmentProperty, register, r
                get(equipment, 'PositionParentHierarchy.LOCATIONID.LOCATIONCODE')}}
         disabled={
           readOnly ||
+          processElementInfo(positionLayout.fields.location).disabled ||
           (getDependencyType(equipment.PositionParentHierarchy) !== ParentDependencyTypes.NONE &&
            getDependencyType(equipment.PositionParentHierarchy) !== ParentDependencyTypes.LOCATION)
         }

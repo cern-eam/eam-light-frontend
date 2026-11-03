@@ -38,6 +38,7 @@ const PartsAssociatedContainer = (
                       <IconButton
                           size="small"
                           color="error"
+                          disabled={disabled}
                           onClick={() => handleDelete(row)}
                       >
                           <DeleteIcon fontSize="small" />

@@ -100,11 +100,12 @@ const AssetHierarchy = (props) => {
         autocompleteHandlerParams={["A", id?.code]}
         onChange={onChangeAsset}
         barcodeScanner
+        disabled={readOnly || processElementInfo(assetLayout.fields.parentasset).disabled}
         endAdornment={
           <Dependency
             onChangeHandler={onChangeAssetDependency}
             value={getDependencyType(equipment.AssetParentHierarchy) === ParentDependencyTypes.ASSET}
-            disabled={!getParentAssetCode('AssetParentHierarchy', equipment)}
+            disabled={readOnly || !getParentAssetCode('AssetParentHierarchy', equipment)}
           />
         }
         renderDependencies={[equipment.AssetParentHierarchy]}
@@ -118,11 +119,12 @@ const AssetHierarchy = (props) => {
         autocompleteHandlerParams={["P", id?.code]}
         renderDependencies={[equipment.AssetParentHierarchy]}
         onChange={onChangePosition}
+        disabled={readOnly || processElementInfo(assetLayout.fields.position).disabled}
         endAdornment={
           <Dependency
             onChangeHandler={onChangePositionDependency}
             value={getDependencyType(equipment.AssetParentHierarchy) === ParentDependencyTypes.POSITION}
-            disabled={!getParentPositionCode('AssetParentHierarchy', equipment)}
+            disabled={readOnly || !getParentPositionCode('AssetParentHierarchy', equipment)}
           />
         }
       />
@@ -135,11 +137,12 @@ const AssetHierarchy = (props) => {
         autocompleteHandlerParams={["S", id?.code]}
         renderDependencies={[equipment.AssetParentHierarchy]}
         onChange={onChangeSystem}
+        disabled={readOnly || processElementInfo(assetLayout.fields.primarysystem).disabled}
         endAdornment={
           <Dependency
             onChangeHandler={onChangeSystemDependency}
             value={getDependencyType(equipment.AssetParentHierarchy) === ParentDependencyTypes.PRIMARYSYSTEM}
-            disabled={!getParentPrimarySystemCode('AssetParentHierarchy', equipment)}
+            disabled={readOnly || !getParentPrimarySystemCode('AssetParentHierarchy', equipment)}
           />
         }
       />
@@ -151,7 +154,8 @@ const AssetHierarchy = (props) => {
                get(equipment, 'AssetParentHierarchy.LOCATIONID.LOCATIONCODE')
       }}
         disabled={
-          readOnly || 
+          readOnly ||
+          processElementInfo(assetLayout.fields.location).disabled ||
           getDependencyType(equipment.AssetParentHierarchy) !== ParentDependencyTypes.NONE &&
           getDependencyType(equipment.AssetParentHierarchy) !== ParentDependencyTypes.LOCATION
         }

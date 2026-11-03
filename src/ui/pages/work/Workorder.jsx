@@ -346,7 +346,7 @@ const Workorder = () => {
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         1,
         30,
-        "EVNT"
+        readOnly
       ),
       {
         id: "ADDITIONALCOSTS",

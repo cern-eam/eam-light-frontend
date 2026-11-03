@@ -269,7 +269,8 @@ const System = () => {
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         1,
-        30
+        30,
+        readOnly
       ),
       {
         id: "EDMSDOCUMENTS",

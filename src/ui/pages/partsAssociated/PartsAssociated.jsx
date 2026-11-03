@@ -9,7 +9,7 @@ const getPartsAssociated = (
   initialVisibility,
   column,
   order,
-  hideAddPartAssociation = false
+  readOnly = false
 ) => {
   return (
   {
@@ -21,8 +21,7 @@ const getPartsAssociated = (
     <PartsAssociatedContainer
       code={code}
       isMaximized={isMaximized}
-      disabled= {false}
-      hideAddPartAssociation = {hideAddPartAssociation}
+      disabled={readOnly}
       associationEntity = {associationEntity}
     />
   ),

@@ -487,7 +487,8 @@ const Asset = () => {
         !getTabAvailability(tabs, TAB_CODES.PARTS_ASSOCIATED),
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         2,
-        31
+        31,
+        readOnly
       ),
       ...getTabGridRegions(
         applicationData,

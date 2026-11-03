@@ -118,13 +118,14 @@ const SystemHierarchy = (props) => {
         renderDependencies={[equipment.SystemParentHierarchy]}
         
         onChange={onChangePrimarySystem}
+        disabled={readOnly || processElementInfo(systemLayout.fields.primarysystem).disabled}
 
         endAdornment={
           <Dependency
             onChangeHandler={onChangePrimarySystemDependency}
             value={!!get(equipment, 'SystemParentHierarchy.DEPENDENTPRIMARYSYSTEM.SYSTEMID')}
-            disabled={!get(equipment, 'SystemParentHierarchy.DEPENDENTPRIMARYSYSTEM.SYSTEMID') && 
-                      !get(equipment, 'SystemParentHierarchy.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID')}
+            disabled={readOnly || (!get(equipment, 'SystemParentHierarchy.DEPENDENTPRIMARYSYSTEM.SYSTEMID') && 
+                      !get(equipment, 'SystemParentHierarchy.NONDEPENDENTPRIMARYSYSTEM.SYSTEMID'))}
           />
         }
       />
@@ -136,7 +137,9 @@ const SystemHierarchy = (props) => {
         value={{code: get(equipment, 'SystemParentHierarchy.DEPENDENTLOCATION.LOCATIONID.LOCATIONCODE') ??
                get(equipment, 'SystemParentHierarchy.LOCATIONID.LOCATIONCODE')}}
         disabled={
-          readOnly || get(equipment, 'SystemParentHierarchy.DEPENDENTPRIMARYSYSTEM.SYSTEMID')
+          readOnly ||
+          processElementInfo(systemLayout.fields.location).disabled ||
+          get(equipment, 'SystemParentHierarchy.DEPENDENTPRIMARYSYSTEM.SYSTEMID')
         }
         onChange={onChangeLocation}
         renderDependencies={[equipment.SystemParentHierarchy]}
