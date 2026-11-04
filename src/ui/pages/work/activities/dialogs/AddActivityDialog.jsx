@@ -112,7 +112,7 @@ function AddActivityDialog(props) {
       handleSave();
     }
   };
-console.log("AddActivityDialog render", layout);
+  
   return (
     <div onKeyDown={onKeyDown}>
       <LightDialog
