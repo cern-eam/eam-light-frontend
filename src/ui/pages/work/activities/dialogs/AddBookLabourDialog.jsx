@@ -17,7 +17,7 @@ import { fromEAMDate, toEAMDate, toEAMNumber } from "../../../EntityTools";
 import EAMInput from "../../../../components/EAMInput";
 
 function AddBookLabourDialog(props) {
-  const {workorderNumber, workOrder, onChange, activities, open, defaultEmployee} = props;
+  const {workorderNumber, workOrder, onChange, activities, open, defaultEmployee, layout} = props;
 
   if (!open) {
       return null; 
@@ -144,6 +144,7 @@ function AddBookLabourDialog(props) {
           <div>
             <BlockUi tag="div" blocking={loading}>
               <EAMSelect {...register('booactivity')}
+                disabled={layout['booactivity'].readonly}
                 options={props.activities.map((activity) => {
                   return {
                     code: activity.activityCode,
@@ -152,24 +153,24 @@ function AddBookLabourDialog(props) {
                 })}
               />
 
-              <EAMInput {...register('employee')} />
+              <EAMInput {...register('employee')} disabled={layout['employee'].readonly}/>
 
-              <EAMInput {...register('department')} />
+              <EAMInput {...register('department')} disabled={layout['department'].readonly}/>
 
-              <EAMInput {...register('datework')} />
+              <EAMInput {...register('datework')} disabled={layout['datework'].readonly}/>
 
-              <EAMInput {...register('octype')} />
+              <EAMInput {...register('octype')} disabled={layout['octype'].readonly}/>
 
               <EAMInput {...register('hrswork', null, hoursWorkedChanged)}
-                            renderDependencies={[laborBooking.ACTUALSTARTTIME, laborBooking.ACTUALENDTIME]} />
-              
+                            renderDependencies={[laborBooking.ACTUALSTARTTIME, laborBooking.ACTUALENDTIME]} disabled={layout['hrswork'].readonly}/>
+
               <EAMTimePicker {...register('actstarttime', null, startEndTimeChanged)}
-                            renderDependencies={[laborBooking.ACTUALENDTIME, laborBooking.HOURSBOOKED]} />
+                            renderDependencies={[laborBooking.ACTUALENDTIME, laborBooking.HOURSBOOKED]} disabled={layout['actstarttime'].readonly}/>
 
               <EAMTimePicker {...register('actendtime', null, startEndTimeChanged)}
-                            renderDependencies={[laborBooking.ACTUALSTARTTIME, laborBooking.HOURSBOOKED]} />
+                            renderDependencies={[laborBooking.ACTUALSTARTTIME, laborBooking.HOURSBOOKED]} disabled={layout['actendtime'].readonly}/>
 
-              <EAMInput {...register('emptrade')} />
+              <EAMInput {...register('emptrade')} disabled={layout['emptrade'].readonly}/>
             </BlockUi>
           </div>
         </DialogContent>

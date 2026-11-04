@@ -112,7 +112,7 @@ function AddActivityDialog(props) {
       handleSave();
     }
   };
-
+console.log("AddActivityDialog render", layout);
   return (
     <div onKeyDown={onKeyDown}>
       <LightDialog
@@ -128,25 +128,25 @@ function AddActivityDialog(props) {
           <div>
             <BlockUi tag="div" blocking={loading}>
               <EAMInput
-              {...register('activity')} disabled={activityToEdit} />
+              {...register('activity')} disabled={activityToEdit || layout['activity'].readonly} />
 
-              <EAMInput {...register('activitynote')} />
+              <EAMInput {...register('activitynote')} disabled={layout['activitynote'].readonly}/>
 
-              <EAMInput {...register('task')} />
+              <EAMInput {...register('task')} disabled={layout['task'].readonly}/>
 
-              <EAMInput {...register('matlcode')} />
+              <EAMInput {...register('matlcode')} disabled={layout['matlcode'].readonly}/>
 
-              <EAMInput {...register('trade')}  />
+              <EAMInput {...register('trade')} disabled={layout['trade'].readonly}/>
 
-              <EAMInput {...register('personsreq')} />
+              <EAMInput {...register('personsreq')} disabled={layout['personsreq'].readonly}/>
 
-              <EAMInput {...register('esthrs')} />
+              <EAMInput {...register('esthrs')} disabled={layout['esthrs'].readonly}/>
 
-              <EAMInput {...register('actstartdate')}  />
+              <EAMInput {...register('actstartdate')} disabled={layout['actstartdate'].readonly}/>
 
-              <EAMInput {...register('actenddate')} />
+              <EAMInput {...register('actenddate')} disabled={layout['actenddate'].readonly}/>
 
-              <EAMInput {...register('percentcomplete')} />
+              <EAMInput {...register('percentcomplete')} disabled={layout['percentcomplete'].readonly}/>
             </BlockUi>
           </div>
         </DialogContent>
