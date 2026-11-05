@@ -520,7 +520,6 @@ const Workorder = () => {
             postAddActivityHandler={postAddActivityHandler}
             updateWorkorderProperty={updateWorkorderProperty}
             startDate={workorder.STARTDATE}
-            disabled={readOnly}
             handleError={handleError}
           />
         ),

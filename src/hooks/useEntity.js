@@ -93,7 +93,7 @@ const useEntity = (params) => {
   } = useLayoutStore();
 
   const screenLayout = tabCode ? allLayouts?.[screenCode]?.tabs?.[tabCode] : allLayouts?.[screenCode];
-  const screenPermissions = params.screenPermissions ?? userData.screens[screenCode];
+  const screenPermissions = params.screenPermissions ?? (tabCode ? allLayouts?.[screenCode]?.tabs?.[tabCode] : userData.screens[screenCode]);
 
   const {
     errorMessages,
@@ -202,7 +202,7 @@ const useEntity = (params) => {
         pageMode && (document.title = entityDesc + " " + get(readEntity, entityCodeProperty));
         //Render as read-only depending on screen rights, department security or custom handler
         setReadOnly(
-          !screenPermissions.updateAllowed ||
+          screenPermissions.updateAllowed === false ||
             isDepartmentReadOnly(readEntity.DEPARTMENTID.DEPARTMENTCODE, userData) ||
             isReadOnlyCustomHandler?.(readEntity)
         );
@@ -270,7 +270,7 @@ const useEntity = (params) => {
         resetErrorMessages();
         setNewEntity(true);
         setIsModified(false);
-        setReadOnly(!screenPermissions.creationAllowed);
+        setReadOnly(screenPermissions.creationAllowed === false || screenPermissions.insertAllowed === false);
         setRevisionControl(false);
         setId(null)
         pageMode && setCurrentEntity({entityCode, entityDesc, id: null})
@@ -301,7 +301,7 @@ const useEntity = (params) => {
     resetErrorMessages();
     setNewEntity(true);
     setIsModified(false);
-    setReadOnly(!screenPermissions.creationAllowed);
+    setReadOnly(screenPermissions.creationAllowed === false || screenPermissions.insertAllowed === false);
     setId(null)
 
     setEntity((oldEntity) => ({
@@ -379,7 +379,6 @@ const useEntity = (params) => {
     }
 
     let data = processElementInfo(elementInfo ?? getElementInfoFromCustomFields(layoutKey, entity.USERDEFINEDAREA.CUSTOMFIELD))
-
     data.onChange = createOnChangeHandler({valueKey, updateEntityProperty, type: data.type, onChangeCustomHandler, screenLayout})
 
     if (elementCustomInfo?.clear) {
@@ -388,7 +387,6 @@ const useEntity = (params) => {
 
     data.disabled = data.disabled || readOnly || (revisionControl && data.revisionControl); // It should remain disabled
     data.elementInfo = elementInfo; // Return elementInfo as it is still needed in some cases (for example for UDFs)
-
     // Value
     data.value = fromEAMValue(get(entity, valueKey), data.type)
     

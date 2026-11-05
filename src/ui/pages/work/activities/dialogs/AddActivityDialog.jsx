@@ -16,7 +16,7 @@ import EAMInput from "../../../../components/EAMInput";
  * Display detail of an activity
  */
 function AddActivityDialog(props) {
-  const { activityToEdit, layout, workOrder, open } = props;
+  const { activityToEdit, workOrder, open } = props;
 
   if (!open) {
       return null; 
@@ -60,7 +60,8 @@ function AddActivityDialog(props) {
     pageMode: false
   });
 
-  activityLayout.fields.esthrs.fieldType = "text"  
+  //activityLayout.fields.esthrs.fieldType = "text"  
+
 
   function postInit(activity) {
     updateActivityProperty({

@@ -98,7 +98,6 @@ function Activities(props) {
             </Stack>
 
             <AddActivityDialog
-                layout={layout.ACT.fields}
                 open={isActivityModalOpen}
                 workOrder={workOrder}
                 onChange={() => readActivities(workOrderNumber)}
@@ -106,7 +105,6 @@ function Activities(props) {
                 postAddActivityHandler={props.postAddActivityHandler} />
 
             <AddBookLabourDialog
-                layout={layout.BOO.fields}
                 open={isBookLaborModalOpen}
                 activities={activities}
                 workorderNumber={workOrderNumber}
