@@ -42,13 +42,25 @@ class WSEquipment {
         return getGridData(gridRequest).then(response => transformResponse(response, WSWorkorders.myWorkOrderMapper));
     }
 
-    getEquipmentEvents(equipmentCode, equipmentOrg, screenCode, config = {}) {
+    getEquipmentEvents(equipmentCode, equipmentOrg, screenCode, workOrderFilter, config = {}) {
+
+        const getDataspyId = (workOrderFilter) => {
+            console.log("Current Filter ", workOrderFilter)
+            switch (workOrderFilter) {
+                case "All": return "174849";
+                case "Open": return "174850";
+                case "This Eqp": return "174851"
+                default: return "174849"
+            }
+        }
+
         const gridRequest = new GridRequest("OSVEVT", GridType.LIST, screenCode)
             .setRowCount(5000)
             .addParam("parameter.object", equipmentCode)
             .addParam("parameter.objorganization", equipmentOrg)
             .addFilter("wotype", "IS - ", "NOTCONTAINS")
             .addFilter("equipment", equipmentCode, "=")
+            .setDataspy(getDataspyId(workOrderFilter))
             .sortBy("datecreated", "DESC")
 
         const equipmentEventsMapper = {

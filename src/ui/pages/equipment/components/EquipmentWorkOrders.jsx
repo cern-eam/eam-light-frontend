@@ -8,7 +8,6 @@ import BlockUi from 'react-block-ui';
 import { isCernMode } from '../../../components/CERNMode';
 import Constants from 'eam-components/dist/enums/Constants';
 import useLocalStorage from '../../../../hooks/useLocalStorage';
-import { readUserCodes } from '../../../../tools/WSGrids';
 
 const WO_FILTER_TYPES = {
     ALL: 'All',
@@ -103,10 +102,10 @@ function EquipmentWorkOrders(props) {
 
         fetchData(equipmentcode, equipmentorg, screencode);
 
-    }, [equipmentcode]);
+    }, [equipmentcode, workOrderFilter]);
 
     const fetchData = (equipmentCode, equipmentOrg, screenCode) => {
-        Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode, equipmentOrg, screenCode)])
+        Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode, equipmentOrg, screenCode, workOrderFilter)])
             .then(responses => {
                 const getDateLabel = (element) => {
                    const fallbackDateLabel = element.createdDate
@@ -154,7 +153,7 @@ function EquipmentWorkOrders(props) {
                 :
                 <BlockUi blocking={loadingData} style={{overflowX: 'auto'}}>
                     <EISTable
-                    data={getFilteredWorkOrderList(workOrderFilter === WO_FILTER_TYPES.THIS ? workorders : events)}
+                    data={workOrderFilter === WO_FILTER_TYPES.THIS ? workorders : events}
                     headers={headers}
                     propCodes={propCodes}
                     linksMap={linksMap}
