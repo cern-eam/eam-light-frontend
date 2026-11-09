@@ -6,7 +6,6 @@ import { getGridData } from './WSGrids';
 import { getLocation } from './WSLocation';
 import { getPosition } from './WSPositions';
 import { getSystem } from './WSSystems';
-import WSWorkorders from './WSWorkorders';
 
 /**
  * Handles all calls to REST Api
@@ -33,54 +32,6 @@ class WSEquipment {
           };
 
         return getGridData(gridRequest).then(response => transformResponse(response, fieldMapping));
-    }
-
-    getEquipmentWorkOrders(equipmentCode) {
-        const gridRequest = new GridRequest("WSJOBS", GridType.LIST, "WSJOBS")
-            .addFilter("equipment", equipmentCode, "=")
-            .sortBy("datecreated", "DESC")
-        return getGridData(gridRequest).then(response => transformResponse(response, WSWorkorders.myWorkOrderMapper));
-    }
-
-    getEquipmentEvents(equipmentCode, equipmentOrg, screenCode, workOrderFilter, config = {}) {
-
-        const getDataspyId = (workOrderFilter) => {
-            console.log("Current Filter ", workOrderFilter)
-            switch (workOrderFilter) {
-                case "All": return "174849";
-                case "Open": return "174850";
-                case "This Eqp": return "174851"
-                default: return "174849"
-            }
-        }
-
-        const gridRequest = new GridRequest("OSVEVT", GridType.LIST, screenCode)
-            .setRowCount(5000)
-            .addParam("parameter.object", equipmentCode)
-            .addParam("parameter.objorganization", equipmentOrg)
-            .addFilter("wotype", "IS - ", "NOTCONTAINS")
-            .addFilter("equipment", equipmentCode, "=")
-            .setDataspy(getDataspyId(workOrderFilter))
-            .sortBy("datecreated", "DESC")
-
-        const equipmentEventsMapper = {
-            "number": "eventno",
-            "desc": "description",
-            "status": "statusdisplay",
-            "statusCode": null,
-            "jobType": "wotype",
-            "object": "equipment",
-            "mrc": "organization",
-            "type": "eventtype",
-            "priority": null,
-            "schedulingEndDate": "schedenddate",
-            "schedulingStartDate": "schedstartdate",
-            "createdDate": "datecreated",
-            "completedDate": "completiondate",
-            "equipmentType": null
-            }
-
-        return getGridData(gridRequest).then(response => transformResponse(response, equipmentEventsMapper));
     }
 
     //

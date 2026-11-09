@@ -1,172 +1,118 @@
 import React, {useState, useEffect} from 'react';
-import {format} from 'date-fns'
-import WSEquipment from '../../../../tools/WSEquipment';
-import EISTable, {TRANSFORM_KEYS} from 'eam-components/dist/ui/components/table';
-import EISTableFilter from 'eam-components/dist/ui/components/table/EISTableFilter';
-import EquipmentMTFWorkOrders from "./EquipmentMTFWorkOrders"
 import BlockUi from 'react-block-ui';
-import { isCernMode } from '../../../components/CERNMode';
+import useLocalStorage from '../../../../hooks/useLocalStorage.js';
+import EISTable from 'eam-components/src/ui/components/table/index.js';
+import {Chip} from "@mui/material";
+import useApplicationDataStore from "../../../../state/useApplicationDataStore.js";
 import Constants from 'eam-components/dist/enums/Constants';
-import useLocalStorage from '../../../../hooks/useLocalStorage';
-
-const WO_FILTER_TYPES = {
-    ALL: 'All',
-    OPEN: 'Open',
-    MTF: 'MTF',
-    THIS: 'This Eqp'
-}
-
-const WO_FILTERS = {
-    [WO_FILTER_TYPES.ALL]: {
-        text: WO_FILTER_TYPES.ALL,
-        process: (data) => {
-            return [...data];
-        }
-    },
-    [WO_FILTER_TYPES.OPEN]: {
-        text: WO_FILTER_TYPES.OPEN,
-        process: (data) => {
-            return data.filter((workOrder) => workOrder.status && ['T', 'C'].every(statusCode => !workOrder.status.startsWith(statusCode)));
-        }
-    },
-    ...(isCernMode ? {[WO_FILTER_TYPES.MTF]: {
-        text: WO_FILTER_TYPES.MTF,
-        process: (data) => {
-            return data.filter((workOrder) => {
-                return workOrder.mrc && (workOrder.mrc.startsWith("ICF") || workOrder.mrc.startsWith("MTF"));
-            })
-        }
-    }} : {}),
-    [WO_FILTER_TYPES.THIS]: {
-        text: WO_FILTER_TYPES.THIS,
-        process: data => [...data]
-    }
-}
+import {
+    AVAILABLE_FILTERS,
+    buildEventsRequest,
+    getColumnsBasedOnFilter,
+    getDateForStatus, toRows,
+    WO_FILTER_TYPES
+} from "./utils.js";
+import {getGridData} from "../../../../tools/WSGrids.js";
 
 const LOCAL_STORAGE_FILTER_KEY = 'filters:workorders';
 
-function EquipmentWorkOrders(props) {
-    const { defaultFilter: initialFilter, equipmentcode, equipmentorg, screencode } = props;
+const EquipmentWorkOrders = (props) => {
+    const {defaultFilter: initialFilter, equipmentcode, equipmentorg, screencode} = props;
     const defaultFilter = initialFilter ?? WO_FILTER_TYPES.THIS;
-
-    let [events, setEvents] = useState([]);
-    let [workorders, setWorkorders] = useState([]);
-
-    const [loadingData, setLoadingData] = useState(true);
+    const {applicationData} = useApplicationDataStore();
+    const [dataByFilter, setDataByFilter]= useState({});
     const [workOrderFilter, setWorkOrderFilter] = useLocalStorage(LOCAL_STORAGE_FILTER_KEY, WO_FILTER_TYPES.ALL, defaultFilter);
+    const [headers, propCodes] = getColumnsBasedOnFilter(workOrderFilter);
 
-    let headers = ['Work Order', 'Equipment', 'Description', 'Status', 'Relevant Date'];
-    let propCodes = ['number', 'object','desc', 'status', 'createdDate'];
-
-    if (workOrderFilter === WO_FILTER_TYPES.THIS) {
-        headers = ['Work Order', 'Description', 'Status', 'Relevant Date'];
-        propCodes = ['number', 'desc', 'status', 'createdDate'];
-    }
-
-    // make spaces in header strings non-breaking so headers do not wrap to multiple lines
-    headers = headers.map(string => string.replaceAll(' ', '\u00a0'));
-
-    const linksMap = new Map([
-        ['number', {
-            linkType: 'fixed',
-            linkValue: 'workorder/',
-            linkPrefix: '/'
-        }],
-        ['object', {
-            linkType: 'dynamic',
-            linkValue: 'objectUrl',
-            linkPrefix: '/'
-        }]
-    ]);
+    const isMtf = workOrderFilter === WO_FILTER_TYPES.MTF;
+    const linksMap = new Map(isMtf
+        ? [['mtf_step', { linkType: 'dynamic', linkValue: 'stepUrl', linkPrefix: '/' }]]
+        : [['eventno',   { linkType: 'fixed',   linkValue: 'workorder/', linkPrefix: '/' }],
+            ['equipment', { linkType: 'dynamic', linkValue: 'objectUrl',  linkPrefix: '/' }]]);
 
     const stylesMap = {
-        number: {
+        eventno: {
             overflowWrap: 'anywhere'
         }
     };
 
-    const keyMap = {
-        createdDate: TRANSFORM_KEYS.DATE_DD_MMM_YYYY
-    }
-
-    let getFilteredWorkOrderList = (workOrders) => {
-        return WO_FILTERS[workOrderFilter].process(workOrders)
-    }
-
     useEffect(() => {
-        if (!equipmentcode) {
-            setWorkorders([]);
-            setEvents([]);
-            return;
-        }
+        setDataByFilter({});
+        if (!equipmentcode) return;
 
-        fetchData(equipmentcode, equipmentorg, screencode);
+        let cancelled = false;
+        AVAILABLE_FILTERS.forEach(filter => {
+            const request = buildEventsRequest(equipmentcode, equipmentorg, filter, screencode, applicationData);
+            getGridData(request)
+                .then(response => {
+                    if (!response) throw new Error('Grid Request failed');
+                    return toRows(response);
+                })
+                .catch(error => {
+                    console.error('Grid Request failed: ', error);
+                    return [];
+                })
+                .then(rows => {
+                    if (!cancelled) setDataByFilter(prev => ({ ...prev, [filter]: rows }));
+                });
+        });
+        return () => { cancelled = true; };
+    }, [equipmentcode, equipmentorg, screencode, applicationData]);
 
-    }, [equipmentcode, workOrderFilter]);
-
-    const fetchData = (equipmentCode, equipmentOrg, screenCode) => {
-        Promise.all([WSEquipment.getEquipmentWorkOrders(equipmentCode), WSEquipment.getEquipmentEvents(equipmentCode, equipmentOrg, screenCode, workOrderFilter)])
-            .then(responses => {
-                const getDateLabel = (element) => {
-                   const fallbackDateLabel = element.createdDate
-                      ? `${format(new Date(element.createdDate), "dd-MMM-yyyy")}`
-                      : "-";
-
-                   if (element.completedDate) {
-                    return `${format(new Date(element.completedDate), "dd-MMM-yyyy")}`
-                   }
-
-                   if (element.schedulingStartDate) {
-                    return `${format(new Date(element.schedulingStartDate), "dd-MMM-yyyy")}`
-                   }
-
-                   return fallbackDateLabel;
-
-                  };
-
-                const formatResponse = response => response.body.data.map(element => ({
-                    ...element,
-                    createdDate: `${getDateLabel(element)}`,
-                    objectUrl: `equipment/${encodeURIComponent(element?.object || '')}`
-                }));
-
-                const [workorders, events] = responses.map(formatResponse);
-                setWorkorders(workorders);
-                setEvents(events);
-            })
-            .catch(console.error)
-            .finally(() => setLoadingData(false));
-    }
+    const events = dataByFilter[workOrderFilter] ?? [];
+    const loadingData = !!equipmentcode && dataByFilter[workOrderFilter] === undefined;
 
     return (
         <div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
-            <EISTableFilter
-                filters={WO_FILTERS}
-                handleFilterChange={(newFilter) =>
-                    setWorkOrderFilter(newFilter)
-                }
-                activeFilter={workOrderFilter}
-                />
-
-            {workOrderFilter === WO_FILTER_TYPES.MTF ?
-                <EquipmentMTFWorkOrders equipmentcode={equipmentcode} />
-                :
-                <BlockUi blocking={loadingData} style={{overflowX: 'auto'}}>
-                    <EISTable
-                    data={workOrderFilter === WO_FILTER_TYPES.THIS ? workorders : events}
+            <div style={{ display: 'flex', gap: 4, justifyContent: 'flex-start', marginBottom: 4 }}>
+                {AVAILABLE_FILTERS.map(filter => (
+                    <Chip
+                        key={filter}
+                        size="small"
+                        label={filter}
+                        color={filter === workOrderFilter ? 'primary' : 'default'}
+                        variant={filter === workOrderFilter ? 'filled' : 'outlined'}
+                        onClick={() => { setWorkOrderFilter(filter); }}
+                    />
+                ))}
+            </div>
+            <BlockUi blocking={loadingData} style={{overflowX: 'auto'}}>
+                <EISTable
+                    key={workOrderFilter}
+                    stickyHeader
+                    defaultOrderBy={isMtf ? 'mtf_step' : 'displaydate'}
+                    defaultOrder={isMtf ? Constants.SORT_ASC: Constants.SORT_DESC}
+                    data={events}
                     headers={headers}
                     propCodes={propCodes}
                     linksMap={linksMap}
                     stylesMap={stylesMap}
-                    keyMap={keyMap}
-                    defaultOrderBy='createdDate'
-                    defaultOrder={Constants.SORT_DESC}
-                    />
-                </BlockUi>
-            }
+                    keyMap={{
+                        displaydate: v => (v instanceof Date ? v.getTime() : 0),
+                        mtf_step: v => { const n = parseFloat(v); return Number.isNaN(n) ? Infinity : n; },
+                    }}
+                    cellRenderer={({ propCode, row }) => {
+                        switch (propCode) {
+                            case 'displaydate': {
+                                const result = getDateForStatus(row);
+                                return result
+                                    ? <span style={{ whiteSpace: 'nowrap', display: "flex", gap: "4px" }}>
+                                        {result.date}
+                                        <span style={{ color: 'gray', fontSize: '0.75rem' }}>({result.label})</span>
+                                      </span>
+                                    : '-';
+                            }
+                            case 'last_repeated_status_color':
+                                return <div style={{ width: 16, height: 16, borderRadius: 4, background: row.last_repeated_status_color || 'transparent' }} />;
+                            default:
+                                return undefined;
+                        }
+
+                    }}
+                />
+            </BlockUi>
         </div>
     )
-
 }
 
-export default React.memo(EquipmentWorkOrders)
+export default React.memo(EquipmentWorkOrders);
