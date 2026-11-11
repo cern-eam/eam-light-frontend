@@ -48,6 +48,7 @@ import { ASSET_BLOCKS, assetLayoutPropertiesMap } from "../tools/EquipmentProper
 import StatusRow from "../../../components/statusrow/StatusRow.jsx";
 import ScreenBlock, { getScreenBlockRegionFlags } from "../../../layout/ScreenBlock.jsx";
 import EquipmentRevisionDialog from "../revision/EquipmentRevisionDialog";
+import Entities from "@/enums/Entities";
 
 const customTabGridParamNames = ["equipmentno", "obj_code", "main_eqp_code", "OBJ_CODE", "object", "puobject"];
 
@@ -488,7 +489,8 @@ const Asset = () => {
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         2,
         31,
-        readOnly
+        readOnly,
+        Entities.ASSETS
       ),
       ...getTabGridRegions(
         applicationData,

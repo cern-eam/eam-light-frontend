@@ -68,6 +68,7 @@ import ScreenContainers from "../../layout/ScreenContainers";
 import ScreenBlock, { getScreenBlockRegionFlags } from "../../layout/ScreenBlock";
 import EquipmentNCRs from "../../pages/equipment/components/EquipmentNCRs";
 import { stubFalse } from "lodash";
+import Entities from "@/enums/Entities";
 
 const getEquipmentStandardWOMaxStep = async (eqCode, swoCode) => {
   if (!eqCode || !swoCode) {
@@ -346,7 +347,8 @@ const Workorder = () => {
         getTabInitialVisibility(tabs, TAB_CODES.PARTS_ASSOCIATED),
         1,
         30,
-        readOnly
+        false,
+        "EVNT"
       ),
       {
         id: "ADDITIONALCOSTS",
