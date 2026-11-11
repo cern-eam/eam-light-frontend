@@ -117,8 +117,7 @@ const PartsAssociatedContainer = (
   const handleDelete = (value) => {
     if (!value) return;
     setLoading(true);
-
-    WSEquipment.deletePartAssociated(value.PARTID?.PARTCODE ?? value.valuecode, value.PARTASSOCIATEDID?.PARTASSOCIATEDPK ?? value.partassociatedpk).then(()=> {
+    WSEquipment.deletePartAssociated(value.PARTASSOCIATEDCODE ?? value.valuecode, value.PARTASSOCIATEDID?.PARTASSOCIATEDPK ?? value.partassociatedpk).then(()=> {
       fetchData(code, parentEntity, associationEntity)
       setLoading(false);
     }).catch((e) => {
