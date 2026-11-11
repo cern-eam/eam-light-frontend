@@ -1,4 +1,3 @@
-import React, {Component} from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -6,42 +5,37 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 
-export default class ConfirmationDialog extends Component {
-    state = {
-        open: false,
+const ConfirmationDialog = ({
+    open,
+    onClose,
+    onConfirm,
+    title,
+    content,
+    confirmButtonText = 'Yes',
+}) => {
+    const handleConfirm = () => {
+        onConfirm();
+        onClose();
     };
 
-    show() {
-        this.setState({
-            open: true
-        })
-    }
+    return (
+        <Dialog
+            open={open}
+            onClose={onClose}>
+            <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+            <DialogContent>
+                <DialogContentText id="alert-dialog-description">{content}</DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onClose} color="primary">
+                    Cancel
+                </Button>
+                <Button onClick={handleConfirm} color="primary" autoFocus>
+                    {confirmButtonText}
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
+};
 
-    handleClose = (confirm) => {
-        if (confirm === true) {
-            this.props.onConfirm()
-        }
-        this.setState({open: false});
-    };
-
-    render() {
-        return (
-            <Dialog
-                open={this.state.open}
-                onClose={this.handleClose}>
-                <DialogTitle id="alert-dialog-title">{this.props.title}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">{this.props.content}</DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => this.handleClose(false)} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={() => this.handleClose(true)} color="primary" autoFocus>
-                        {this.props.confirmButtonText || 'Yes'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        )
-    }
-}
+export default ConfirmationDialog;

@@ -39,6 +39,8 @@ class EamlightToolbarOld extends Component {
     open: false,
     compactMenu: false,
     smallScreenMode: false,
+    deleteConfirmationOpen: false,
+    newConfirmationOpen: false,
   };
 
   iconMenuStyle = {
@@ -71,7 +73,7 @@ class EamlightToolbarOld extends Component {
 
   newHandler = () => {
     if (this.props.isModified) {
-      this.newConfirmation.show();
+      this.setState({ newConfirmationOpen: true });
     } else {
       this.props.newHandler();
     }
@@ -260,7 +262,7 @@ class EamlightToolbarOld extends Component {
             <div style={this.menuLabelStyle}> New</div>
           </MenuItem>
           <MenuItem
-            onClick={() => this.deleteConfirmation.show()}
+            onClick={() => this.setState({ deleteConfirmationOpen: true })}
             disabled={this.isDeleteButtonDisabled()}
           >
             <DeleteOutlineIcon
@@ -297,7 +299,7 @@ class EamlightToolbarOld extends Component {
           New
         </Button>
         <Button
-          onClick={() => this.deleteConfirmation.show()}
+          onClick={() => this.setState({ deleteConfirmationOpen: true })}
           disabled={this.isDeleteButtonDisabled()}
           startIcon={<DeleteOutlineIcon />}
         >
@@ -376,9 +378,8 @@ class EamlightToolbarOld extends Component {
         </div>
 
         <ConfirmationDialog
-          ref={(deleteConfirmation) =>
-            (this.deleteConfirmation = deleteConfirmation)
-          }
+          open={this.state.deleteConfirmationOpen}
+          onClose={() => this.setState({ deleteConfirmationOpen: false })}
           onConfirm={this.props.deleteHandler}
           title={"Delete " + this.props.entityName + "?"}
           content={
@@ -390,7 +391,8 @@ class EamlightToolbarOld extends Component {
         />
 
         <ConfirmationDialog
-          ref={(newConfirmation) => (this.newConfirmation = newConfirmation)}
+          open={this.state.newConfirmationOpen}
+          onClose={() => this.setState({ newConfirmationOpen: false })}
           onConfirm={this.props.newHandler}
           title={"New " + this.props.entityName + "?"}
           content={

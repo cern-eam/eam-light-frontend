@@ -3,7 +3,7 @@ import { isMultiOrg } from "@/ui/pages/EntityTools";
 import Button from "@mui/material/Button";
 import ConfirmationDialog from "./ConfirmationDialog";
 import SaveIcon from "@mui/icons-material/Save";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import queryString from "query-string";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
@@ -42,6 +42,8 @@ const EamlightToolbar = ({
   const [smallScreenMode, setSmallScreenMode] = useState(false);
   const [moreMenu, setMoreMenu] = useState(null);
   const [visibilityMenu, setVisibilityMenu] = useState(null);
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  const [newConfirmationOpen, setNewConfirmationOpen] = useState(false);
 
   const { applicationData: { translations } } = useApplicationDataStore();
 
@@ -59,11 +61,8 @@ const EamlightToolbar = ({
 
   if (hideEntityMenu) return <></>;
 
-  const newConfirmation = useRef();
-  const deleteConfirmation = useRef();
-
   const localNewHandler = useCallback(
-    () => (isModified ? newConfirmation.current.show() : newHandler()),
+    () => (isModified ? setNewConfirmationOpen(true) : newHandler()),
 
     [isModified, newHandler]
   );
@@ -190,7 +189,7 @@ const EamlightToolbar = ({
             <div> {translations?.DTNEW ?? 'New'}</div>
           </MenuItem>
           <MenuItem
-            onClick={() => deleteConfirmation.current.show()}
+            onClick={() => setDeleteConfirmationOpen(true)}
             disabled={isDeleteButtonDisabled}
           >
             <DeleteOutlineIcon className="iconButton iconMenuStyle" />
@@ -214,7 +213,7 @@ const EamlightToolbar = ({
           {translations?.DTNEW ?? 'New'}
         </Button>
         <Button
-          onClick={() => deleteConfirmation.current.show()}
+          onClick={() => setDeleteConfirmationOpen(true)}
           disabled={isDeleteButtonDisabled}
           startIcon={<DeleteOutlineIcon />}
         >
@@ -269,7 +268,8 @@ const EamlightToolbar = ({
       </div>
 
       <ConfirmationDialog
-        ref={deleteConfirmation}
+        open={deleteConfirmationOpen}
+        onClose={() => setDeleteConfirmationOpen(false)}
         onConfirm={deleteHandler}
         title={"Delete " + entityName + "?"}
         content={
@@ -279,7 +279,8 @@ const EamlightToolbar = ({
       />
 
       <ConfirmationDialog
-        ref={newConfirmation}
+        open={newConfirmationOpen}
+        onClose={() => setNewConfirmationOpen(false)}
         onConfirm={newHandler}
         title={"New " + entityName + "?"}
         content={

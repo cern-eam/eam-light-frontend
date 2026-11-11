@@ -6,6 +6,7 @@ import useSnackbarStore from '@/state/useSnackbarStore';
 import EISTable from 'eam-components/dist/ui/components/table';
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from '@mui/icons-material/Delete';
+import ConfirmationDialog from "../../components/ConfirmationDialog";
 
 const PartsAssociatedContainer = (
     { code, associationEntity, disabled }
@@ -21,6 +22,7 @@ const PartsAssociatedContainer = (
   const headers = ['Part', 'Description', 'Quantity', 'UOM', 'Delete'];
   const propCodes = ['papartcode', 'description', 'quantity', 'partuom', 'delete'];
   const [data, setData] = useState([]);
+  const [rowToDelete, setRowToDelete] = useState(null);
 
   useEffect(() => {
     if (code) {
@@ -39,7 +41,7 @@ const PartsAssociatedContainer = (
                           size="small"
                           color="error"
                           disabled={disabled}
-                          onClick={() => handleDelete(row)}
+                          onClick={() => setRowToDelete(row)}
                       >
                           <DeleteIcon fontSize="small" />
                       </IconButton>
@@ -110,7 +112,7 @@ const PartsAssociatedContainer = (
   }
 
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       {data?.length > 0 &&
         <EISTable
             data={data}
@@ -130,6 +132,18 @@ const PartsAssociatedContainer = (
           partAssociated={partAssociated}
           isLoading={isLoading}
           updatePartAssociatedProperty={updatePartAssociatedProperty}/>
+        <ConfirmationDialog
+          open={rowToDelete !== null}
+          onClose={() => setRowToDelete(null)}
+          onConfirm={() => handleDelete(rowToDelete)}
+          title="Delete parts association?"
+          content={
+            rowToDelete
+              ? `Are you sure you would like to delete the association with part ${rowToDelete.papartcode}?`
+              : "Are you sure you would like to delete this parts association?"
+          }
+          confirmButtonText="Delete"
+        />
       </div>
   );
 }
