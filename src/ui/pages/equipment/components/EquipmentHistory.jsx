@@ -56,6 +56,7 @@ function EquipmentHistory(props) {
   ) : (
     <BlockUi blocking={blocking} style={{ width: "100%" }}>
       <EISTable
+        stickyHeader
         data={historyData}
         headers={headers}
         propCodes={propCodes}
