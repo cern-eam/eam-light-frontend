@@ -157,6 +157,7 @@ export const getEquipment = async (equipmentIdentifier, config = {}) => {
       case "P":
         return extract(await getPosition(equipmentIdentifier, config)).PositionEquipment;
       case "S":
+      case "R":
         return extract(await getSystem(equipmentIdentifier, config)).SystemEquipment;
       case "L":
         return extract(await getLocation(equipmentIdentifier, config)).Location;

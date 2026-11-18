@@ -19,6 +19,7 @@ const urlTypeMap = {
   P: "position",
   S: "system",
   L: "location",
+  R: "system",
   LOT: "lot",
   PART: "part"
 };
@@ -140,7 +141,7 @@ export default function EAMTree(props) {
   const nodeClickHandler = (rowInfo) => (event) => {
     if (
       event.target.className === `rowTitle` &&
-      ["A", "P", "S", "L", "LOT"].includes(rowInfo.node.type) 
+      ["A", "P", "S", "L", "R", "LOT"].includes(rowInfo.node.type) 
     ) {
       setCurrentRow(rowInfo);
 

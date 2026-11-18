@@ -54,6 +54,7 @@ function EquipmentRedirect(props) {
                         case "P":
                             props.history.replace(`/position/${codeFromRoute}`);
                             break;
+                        case "R":
                         case "S":
                             props.history.replace(`/system/${codeFromRoute}`);
                             break;
