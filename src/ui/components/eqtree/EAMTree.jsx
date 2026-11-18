@@ -31,6 +31,8 @@ const _getColorForType = (type) => {
       return "#F5BE27";
     case "P":
       return "#0D47A1";
+    case "R":
+      return "#00695C";
     default:
       return "#757575";
   }
