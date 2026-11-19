@@ -5,6 +5,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
 import BlockUi from "react-block-ui";
+import Comments from "eam-components/dist/ui/components/comments/Comments";
 import LightDialog from "@/ui/components/LightDialog";
 import useEntity from "@/hooks/useEntity";
 import CustomFields from "../../../components/customfields/CustomFields.jsx";
@@ -18,7 +19,7 @@ import {
   getEquipmentRevisionsByEquipment,
   updateEquipmentRevision,
 } from "../../../../tools/WSEquipmentRevisions";
-import { getOrg } from "../../../../hooks/tools";
+import { getCodeOrg, getOrg } from "../../../../hooks/tools";
 import ScreenBlock from "../../../layout/ScreenBlock.jsx";
 import RegionPanel from "../../../components/entityregions/regionpanel/RegionPanel";
 
@@ -43,6 +44,9 @@ const EquipmentRevisionDialogContent = ({ revisionIdentifier, onClose }) => {
     screenLayout,
     entity,
     loading,
+    readOnly,
+    userData,
+    handleError,
     saveHandler,
     register,
     setEntity,
@@ -68,7 +72,6 @@ const EquipmentRevisionDialogContent = ({ revisionIdentifier, onClose }) => {
     },
     pageMode: false,
   });
-
 
   const screenContainerProps = {
     register,
@@ -126,6 +129,20 @@ const EquipmentRevisionDialogContent = ({ revisionIdentifier, onClose }) => {
                   <CustomFields
                     customFields={entity.USERDEFINEDAREA?.CUSTOMFIELD}
                     register={register}
+                  />
+                </RegionPanel>
+                <RegionPanel
+                  heading="COMMENTS"
+                  initiallyExpanded
+                  detailsStyle={{ padding: 0 }}
+                >
+                  <Comments
+                    entityCode="OBRV"
+                    entityKeyCode={getCodeOrg(revisionIdentifier).code}
+                    handleError={handleError}
+                    userCode={userData.eamAccount.userCode}
+                    allowHtml={true}
+                    disabled={readOnly}
                   />
                 </RegionPanel>
               </Grid>
