@@ -456,6 +456,7 @@ const useEntity = (params) => {
     setLoading,
     setReadOnly,
     createEntity,
+    readEntity,
   };
 };
 

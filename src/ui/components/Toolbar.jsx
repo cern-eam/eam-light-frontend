@@ -17,6 +17,7 @@ import {
   Repeat,
 } from "mdi-material-ui";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { RadiationIcon } from "eam-components/dist/ui/components/icons";
 import { Link } from "react-router-dom";
 import { isCernMode } from "./CERNMode";
@@ -38,6 +39,7 @@ const VIEW_MODES = {
 
 export const BUTTON_KEYS = {
   COPY: "COPY",
+  REFRESH: "REFRESH",
   EMAIL: "EMAIL",
   SHOW_ON_MAP: "SHOW_ON_MAP",
   NEW_ENTITY: "NEW_ENTITY",
@@ -89,6 +91,7 @@ class Toolbar extends React.Component {
   getButtonDefinitions = () => {
     const {
       copyHandler,
+      readEntity,
       repeatStepHandler,
       newEntity,
       entityDesc,
@@ -118,6 +121,15 @@ class Toolbar extends React.Component {
         values: {
           icon: <ContentCopy />,
           text: "Copy",
+        },
+      },
+      [BUTTON_KEYS.REFRESH]: {
+        isVisible: () => !!readEntity && !newEntity,
+        onClick: readEntity,
+        isDisabled: () => false,
+        values: {
+          icon: <RefreshIcon />,
+          text: "Refresh",
         },
       },
       [BUTTON_KEYS.EMAIL]: {
@@ -370,6 +382,7 @@ class Toolbar extends React.Component {
       case ENTITY_TYPE.EQUIPMENT:
         buttonKeys = [
           BUTTON_KEYS.COPY,
+          BUTTON_KEYS.REFRESH,
           BUTTON_KEYS.EMAIL,
           BUTTON_KEYS.SHOW_ON_MAP,
           BUTTON_KEYS.CREATE_WORKORDER,

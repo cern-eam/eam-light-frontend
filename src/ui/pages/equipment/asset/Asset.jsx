@@ -79,6 +79,7 @@ const Asset = () => {
     copyHandler,
     updateEntityProperty: updateEquipmentProperty,
     register,
+    readEntity,
     showNotification,
     showWarning,
     showError,
@@ -535,6 +536,7 @@ const Asset = () => {
           extendedLink: applicationData.EL_ASSLI,
           screencode: screenCode,
           copyHandler,
+          readEntity,
           entityType: ENTITY_TYPE.EQUIPMENT,
           screens: screenPermissions,
           workorderScreencode: userData.workOrderScreen,
@@ -553,6 +555,7 @@ const Asset = () => {
         onClose={() => setRevisionDialogOpen(false)}
         equipmentCode={id?.code}
         equipmentOrg={id?.org}
+        readEntity={readEntity}
       />
       <EntityRegions
         showEqpTree={showEqpTree}

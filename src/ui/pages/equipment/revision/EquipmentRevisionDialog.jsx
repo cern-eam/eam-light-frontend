@@ -23,6 +23,8 @@ import { getCodeOrg, getOrg } from "../../../../hooks/tools";
 import ScreenBlock from "../../../layout/ScreenBlock.jsx";
 import RegionPanel from "../../../components/entityregions/regionpanel/RegionPanel";
 
+const APPROVED_STATUS_CODE = "A";
+
 const postReadEquipmentRevision = (entity, setEntity) => {
   if (!entity?.USERDEFINEDAREA?.CUSTOMFIELD) {
     return;
@@ -39,7 +41,7 @@ const postReadEquipmentRevision = (entity, setEntity) => {
   });
 };
 
-const EquipmentRevisionDialogContent = ({ revisionIdentifier, onClose }) => {
+const EquipmentRevisionDialogContent = ({ revisionIdentifier, onClose, readEntity }) => {
   const {
     screenLayout,
     entity,
@@ -68,10 +70,17 @@ const EquipmentRevisionDialogContent = ({ revisionIdentifier, onClose }) => {
     layoutPropertiesMap: equipmentRevisionLayoutPropertiesMap,
     postActions: {
       read: (revision) => postReadEquipmentRevision(revision, setEntity),
-      update: onClose,
+      update: onUpdate,
     },
     pageMode: false,
   });
+
+  function onUpdate(revision) {
+    if (revision?.STATUS?.STATUSCODE === APPROVED_STATUS_CODE) {
+      readEntity?.();
+    }
+    onClose();
+  }
 
   const screenContainerProps = {
     register,
@@ -170,7 +179,7 @@ const EquipmentRevisionDialogContent = ({ revisionIdentifier, onClose }) => {
   );
 };
 
-const EquipmentRevisionDialog = ({ open, onClose, equipmentCode, equipmentOrg }) => {
+const EquipmentRevisionDialog = ({ open, onClose, equipmentCode, equipmentOrg, readEntity }) => {
   const [revisionIdentifier, setRevisionIdentifier] = useState(null);
   const [initializing, setInitializing] = useState(false);
   const organization = equipmentOrg ?? getOrg();
@@ -241,6 +250,7 @@ const EquipmentRevisionDialog = ({ open, onClose, equipmentCode, equipmentOrg })
           <EquipmentRevisionDialogContent
             revisionIdentifier={revisionIdentifier}
             onClose={onClose}
+            readEntity={readEntity}
           />
         )}
       </BlockUi>
