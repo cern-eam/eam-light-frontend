@@ -71,6 +71,7 @@ export default Location = (props) => {
     newHandler,
     saveHandler,
     deleteHandler,
+    readEntity,
     updateEntityProperty: updateEquipmentProperty,
     register,
   } = useEntity({
@@ -425,6 +426,7 @@ export default Location = (props) => {
           extendedLink: applicationData.EL_LOCLI,
           screencode: screenCode,
           //copyHandler: this.copyEntity.bind(this),
+          readEntity,
           entityType: ENTITY_TYPE.LOCATION,
           screens: userData.screens,
           workorderScreencode: userData.workOrderScreen,

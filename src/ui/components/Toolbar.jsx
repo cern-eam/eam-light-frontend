@@ -368,6 +368,7 @@ class Toolbar extends React.Component {
       case ENTITY_TYPE.WORKORDER:
         buttonKeys = [
           BUTTON_KEYS.COPY,
+          BUTTON_KEYS.REFRESH,
           BUTTON_KEYS.EMAIL,
           BUTTON_KEYS.PRINT,
           BUTTON_KEYS.SHOW_ON_MAP,
@@ -394,6 +395,7 @@ class Toolbar extends React.Component {
       case ENTITY_TYPE.PART:
         buttonKeys = [
           BUTTON_KEYS.COPY,
+          BUTTON_KEYS.REFRESH,
           BUTTON_KEYS.EMAIL,
           BUTTON_KEYS.SHOW_IN_INFOR,
           BUTTON_KEYS.BARCODING,
@@ -402,6 +404,7 @@ class Toolbar extends React.Component {
       case ENTITY_TYPE.LOCATION:
         buttonKeys = [
           BUTTON_KEYS.COPY,
+          BUTTON_KEYS.REFRESH,
           BUTTON_KEYS.EMAIL,
           BUTTON_KEYS.SHOW_ON_MAP,
           BUTTON_KEYS.CREATE_WORKORDER,

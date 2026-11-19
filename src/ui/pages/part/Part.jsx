@@ -73,6 +73,7 @@ const Part = () => {
     saveHandler,
     deleteHandler,
     copyHandler,
+    readEntity,
     updateEntityProperty: updatePartProperty,
     register,
     handleError,
@@ -340,6 +341,7 @@ const Part = () => {
             showNotification: showNotification,
             showError: showError,
             copyHandler,
+            readEntity,
             entityType: ENTITY_TYPE.PART,
             entityDesc: "Part", // TODO: hardcoded (following Location example)
             screens: userData.screens,
