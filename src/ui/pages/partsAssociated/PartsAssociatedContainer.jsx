@@ -7,9 +7,11 @@ import EISTable from 'eam-components/dist/ui/components/table';
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmationDialog from "../../components/ConfirmationDialog";
+import { getPartsAssociatedByParent } from '../../../tools/WSParts';
+import Entities from "@/enums/Entities";
 
 const PartsAssociatedContainer = (
-    { code, associationEntity, disabled }
+    { code, isMaximized = false, associationEntity = "OBJ", disabled, hideAddPartAssociation = false, parentEntity = Entities.ASSET }
   ) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const initState = {
@@ -19,41 +21,60 @@ const PartsAssociatedContainer = (
   const {showError, showNotification} = useSnackbarStore();
   const [isLoading, setLoading] = useState(false);
   const [partAssociated, setPartAssociated] = useState(initState);
+      const isKnownEntity = Object.values(Entities).includes(parentEntity);
+    const useEquipmentEndpoint = !isKnownEntity;
   const headers = ['Part', 'Description', 'Quantity', 'UOM', 'Delete'];
-  const propCodes = ['papartcode', 'description', 'quantity', 'partuom', 'delete'];
+  const propCodes = ['partcode', 'description', 'quantity', 'partuom', 'delete'];
   const [data, setData] = useState([]);
   const [rowToDelete, setRowToDelete] = useState(null);
 
   useEffect(() => {
     if (code) {
-      fetchData(code, associationEntity);
+      fetchData(code, parentEntity, associationEntity);
     }
-  }, [code]);
+  }, [code, parentEntity, associationEntity]);
 
-  const fetchData = (code, associationEntity) => {
-      setLoading(true);
-      WSEquipment.getEquipmentPartsAssociated(code, associationEntity)
-          .then((response) => {
-              const enrichedData = response.body.data.map((row) => ({
-                  ...row,
-                  delete: (
-                      <IconButton
-                          size="small"
-                          color="error"
-                          disabled={disabled}
-                          onClick={() => setRowToDelete(row)}
-                      >
-                          <DeleteIcon fontSize="small" />
-                      </IconButton>
-                  ),
-              }));
-              setData(enrichedData);
-              setLoading(false);
-          })
-          .catch((error) => {
-              console.log(error);
-              setLoading(false);
-          });
+  const fetchData = (code, parentEntity, associationEntity) => {
+    setLoading(true);
+
+
+    const renderDelete = (row) => (
+      <IconButton size="small" color="error" onClick={() => setRowToDelete(row)}>
+        <DeleteIcon fontSize="small" />
+      </IconButton>
+    );
+
+    const request = useEquipmentEndpoint
+      ? WSEquipment.getEquipmentPartsAssociated(code, associationEntity)
+      : getPartsAssociatedByParent(code, { parentEntity });
+    request
+      .then((response) => {
+        let formattedData;
+
+        if (useEquipmentEndpoint) {
+          const rows = response.body?.data || [];
+          formattedData = rows.map((row) => ({
+            ...row,
+            partcode: row?.papartcode,
+            delete: renderDelete(row),
+          }));
+        } else {
+          const records = response.body?.Result?.ResultData?.DATARECORD || [];
+          formattedData = records.map((part) => ({
+            partcode: part.PARTID?.PARTCODE || "",
+            description: part.PARTID?.DESCRIPTION || "",
+            quantity: part.PARTQUANTITY?.VALUE || 0,
+            partuom: part.UOMCODE || part.partUoM || "",
+            delete: renderDelete(part),
+          }));
+        }
+        setData(formattedData);
+      })
+      .catch((error) => {
+        console.error(error);
+        setData([]);
+      })
+      .finally(() => setLoading(false));
   };
 
   const updatePartAssociatedProperty = (key, value) => {
@@ -82,7 +103,7 @@ const PartsAssociatedContainer = (
         setIsDialogOpen(false);
         setPartAssociated(initState);
         showNotification(`${value.part} has been associated to ${code} `)
-        fetchData(code, associationEntity)
+        fetchData(code, parentEntity, associationEntity)
       } else {
         showError(`The association has failed`)
       }
@@ -96,9 +117,8 @@ const PartsAssociatedContainer = (
   const handleDelete = (value) => {
     if (!value) return;
     setLoading(true);
-
-    WSEquipment.deletePartAssociated(value.valuecode, value.partassociatedpk).then(()=> {
-      fetchData(code, associationEntity)
+    WSEquipment.deletePartAssociated(value.PARTASSOCIATEDCODE ?? value.valuecode, value.PARTASSOCIATEDID?.PARTASSOCIATEDPK ?? value.partassociatedpk).then(()=> {
+      fetchData(code, parentEntity, associationEntity)
       setLoading(false);
     }).catch((e) => {
       setLoading(false);
@@ -112,19 +132,22 @@ const PartsAssociatedContainer = (
   }
 
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: '100%', height: '100%' }}>
       {data?.length > 0 &&
         <EISTable
             data={data}
             headers={headers}
             propCodes={propCodes} />
         }
+      {!hideAddPartAssociation &&
         <div style={{ marginTop: '16px' }}>
-          <Button onClick={() => setIsDialogOpen(true)} color="primary"
-                  disabled={disabled} variant="outlined">
-              Add Parts Association
-          </Button>
-        </div>
+            <Button onClick={() => setIsDialogOpen(true)} color="primary"
+                    disabled={disabled} variant="outlined">
+                Add Parts Association
+            </Button>
+          </div>
+        }
+
         <PartsAssociatedDialog
           isDialogOpen={isDialogOpen}
           handleCancel={()=>setIsDialogOpen(false)}

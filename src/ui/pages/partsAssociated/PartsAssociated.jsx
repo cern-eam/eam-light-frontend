@@ -1,6 +1,7 @@
 import * as React from "react";
 import { PartPlusIcon } from "eam-components/dist/ui/components/icons";
 import { PartsAssociatedContainer } from "./PartsAssociatedContainer"
+import Entities from "@/enums/Entities";
 
 const getPartsAssociated = (
   code,
@@ -9,7 +10,8 @@ const getPartsAssociated = (
   initialVisibility,
   column,
   order,
-  readOnly = false
+  readOnly = false,
+  parentEntity  =  Entities.ASSET
 ) => {
   return (
   {
@@ -23,6 +25,7 @@ const getPartsAssociated = (
       isMaximized={isMaximized}
       disabled={readOnly}
       associationEntity = {associationEntity}
+      parentEntity = {parentEntity}
     />
   ),
   column: column,
