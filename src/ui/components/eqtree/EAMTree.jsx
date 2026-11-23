@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import TreeWS from "./lib/TreeWS";
 import ErrorTypes from "eam-components/dist/ui/components/eamgrid/lib/GridErrorTypes";
@@ -9,10 +9,46 @@ import TreeSelectParent from "./components/TreeSelectParent";
 import BlockUi from "react-block-ui";
 import NodeSelectMenu from "./components/NodeSelectMenu";
 import { isMultiOrg } from "@/ui/pages/EntityTools";
-import { isEmpty } from "lodash";
 import useEquipmentTreeStore from "../../../state/useEquipmentTreeStore";
 import useSnackbarStore from "../../../state/useSnackbarStore";
 import { postMessage } from "../../../bridge/postMessage";
+
+const markLazyChildren = (node) => {
+  if (!node || node.lazy) {
+    return;
+  }
+  const realChildren = (node.children || []).filter((child) => !child.lazy);
+  if (node.hasChildren === "+" && realChildren.length === 0) {
+    node.children = [{ id: `${node.id}::lazy`, lazy: true, name: "" }];
+    return;
+  }
+  node.children = realChildren;
+  node.children.forEach(markLazyChildren);
+};
+
+const replaceNodeChildren = (nodes, nodeId, children) =>
+  nodes.map((node) => {
+    if (node.id === nodeId) {
+      return { ...node, children, expanded: true };
+    }
+    if (node.children?.length) {
+      return { ...node, children: replaceNodeChildren(node.children, nodeId, children) };
+    }
+    return node;
+  });
+
+// Going up fetches only the parent level. Put the tree already loaded back under that parent.
+const keepFetchedBranch = (node, fetchedRoot) => {
+  if (!node || !fetchedRoot || node.lazy) {
+    return;
+  }
+  if (node.id === fetchedRoot.id) {
+    node.children = fetchedRoot.children;
+    node.expanded = true;
+    return;
+  }
+  node.children?.forEach((child) => keepFetchedBranch(child, fetchedRoot));
+};
 
 const urlTypeMap = {
   A: "asset",
@@ -42,6 +78,8 @@ const _getColorForType = (type) => {
 export default function EAMTree(props) {
   const [loading, setLoading] = useState(false);
   const [treeData, setTreeData] = useState(null);
+  const treeDataRef = useRef(null);
+  treeDataRef.current = treeData;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [currentRow, setCurrentRow] = React.useState(null);
@@ -61,9 +99,16 @@ export default function EAMTree(props) {
       );
       const { data } = body;
 
+      if (!data?.length) {
+        setTreeData([]);
+        return;
+      }
+
+      markLazyChildren(data[0]);
       data[0].expanded = true; // expand root node
-      if (treeData) {
-        await _reExpandNodes(data);
+      const fetchedRoot = treeDataRef.current?.[0];
+      if (fetchedRoot && fetchedRoot.id !== data[0].id) {
+        keepFetchedBranch(data[0], fetchedRoot);
       }
       setTreeData(data);
       updateEquipmentTreeData({currentRoot: { code, organization, type }});
@@ -85,37 +130,6 @@ export default function EAMTree(props) {
       );
     }
   }, [equipment]);
-
-  const _reExpandNodes = async (newData) => {
-    if (newData && newData.length > 0) {
-      const expanded = await _getExpanded(treeData[0], []);
-      _expandTreeToCode(newData[0], expanded);
-    }
-  };
-
-  const _getExpanded = async (data, already) => {
-    if (data?.expanded) {
-      already.push(data.id);
-      data.children.forEach((c) => _getExpanded(c, already));
-    }
-    return already;
-  };
-
-  const _expandTreeToCode = (node, expandedNodes) => {
-    if (isEmpty(node) || !expandedNodes?.length) {
-      return;
-    }
-
-    if (expandedNodes.includes(node.id)) {
-      node.expanded = true;
-    }
-
-    if (node.children.length) {
-      node.children.forEach((childNode) =>
-        _expandTreeToCode(childNode, expandedNodes)
-      );
-    }
-  };
 
   const _isNodeSelected = (node) => {
     if (currentRow) {
@@ -158,6 +172,23 @@ export default function EAMTree(props) {
     setAnchorEl(null);
   };
 
+  const loadNodeChildren = async (node) => {
+    try {
+      const { body } = await TreeWS.getEquipmentStructure(
+        node.id,
+        node.idOrg,
+        node.type
+      );
+      const children = body?.data?.[0]?.children ?? [];
+      children.forEach(markLazyChildren);
+      setTreeData((current) => replaceNodeChildren(current, node.id, children));
+    } catch (error) {
+      if (error.type !== ErrorTypes.REQUEST_CANCELLED) {
+        handleError(error);
+      }
+    }
+  };
+
   if (!equipment) {
     return React.Fragment;
   }
@@ -175,9 +206,15 @@ export default function EAMTree(props) {
             canDrag={false}
             treeData={treeData}
             onChange={setTreeData}
+            onVisibilityToggle={({ node, expanded }) => {
+              if (expanded && node.children?.some((child) => child.lazy)) {
+                loadNodeChildren(node);
+              }
+            }}
             theme={TreeTheme}
             generateNodeProps={(rowInfo) => ({
               isNodeSelected: _isNodeSelected,
+              style: rowInfo.node.lazy ? { display: "none" } : undefined,
               onClick: nodeClickHandler(rowInfo),
               icons: rowInfo.node.isDirectory
                 ? [
